@@ -30,13 +30,19 @@ static const string HTML_SRC_ORIGINAL = "utf8HTML/src/original/";
 static const string HTML_OUTPUT = "utf8HTML/output/";
 static const string HTML_OUTPUT_ATTACHMENT = "utf8HTML/output/attachment/";
 static const string HTML_OUTPUT_ORIGINAL = "utf8HTML/output/original/";
+static const string HTML_SUFFIX = R"(.htm)";
 
-static const string BODY_TEXT_SRC = "bodyTexts/src/";
 static const string BODY_TEXT_OUTPUT = "bodyTexts/output/";
 static const string BODY_TEXT_FIX = "bodyTexts/afterFix/";
+static const string BODY_TEXT_SUFFIX = R"(.txt)";
 
-static const string topTab = R"(name="top")";       // of the whole file
-static const string bottomTab = R"(name="bottom")"; // of the whole file
+static const string topTab = R"(name="top")";       // of the body Text file
+static const string bottomTab = R"(name="bottom")"; // of the body Text file
+static const string final = R"(</html>)"; // last line of the html file
+static const string endOfHead = R"(/head)";
+static const string titleStart = R"(<title>)";
+static const string titleEnd = R"(</title>)";
+static const string keyNotFound = R"(KeyNotFound)";
 
 enum class FILE_TYPE { MAIN, ATTACHMENT, ORIGINAL };
 

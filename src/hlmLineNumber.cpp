@@ -17,15 +17,15 @@ void LineNumber::loadFromContainedLine(const string &containedLine) {
   auto linkBegin = containedLine.find(start);
   if (linkBegin != string::npos) // found name in lineName
   {
-    string end = R"(")";
+    string end = endOfLineNumber;
     string lineName = containedLine.substr(linkBegin + start.length());
     if (debug)
       cout << lineName << endl;
     auto linkEnd = lineName.find(end);
     if (debug)
       cout << lineName.substr(0, linkEnd) << endl;
-    if (lineName.substr(0, linkEnd) == "bottom")
-      readFromString(R"(P)" + TurnToString(Limit - 1));
+    if (lineName.substr(0, linkEnd) == bottomParagraphIndicator)
+      readFromString(leadingChar + TurnToString(Limit - 1));
     else
       readFromString(lineName.substr(0, linkEnd));
   }
@@ -37,8 +37,8 @@ void LineNumber::loadFromContainedLine(const string &containedLine) {
 string LineNumber::generateLinePrefix() {
   string result{""};
   if (lineNumber != 0)
-    result = LineNumberStart + asString() +
-             R"(">)";
+    result = LineNumberStart + asString() + endOfLineNumber +
+             endOfGeneratedLineNumber;
   return result;
 }
 
@@ -49,13 +49,13 @@ string LineNumber::generateLinePrefix() {
  * @param name a string of format "PxxLyy"
  */
 void LineNumber::readFromString(const string &name) {
-  auto lineNumberStart = name.find(R"(L)");
+  auto lineNumberStart = name.find(middleChar);
   if (lineNumberStart != string::npos) {
     // sign of already numbered
     lineNumber = TurnToInt(name.substr(lineNumberStart + 1));
-    if (name.substr(0, 1) == R"(P)")
+    if (name.substr(0, 1) == leadingChar)
       paraNumber = TurnToInt(name.substr(1, lineNumberStart - 1));
-  } else if (name.substr(0, 1) == R"(P)") {
+  } else if (name.substr(0, 1) == leadingChar) {
     paraNumber = TurnToInt(name.substr(1));
     if (paraNumber >= Limit) {
       cout << "too limit to hold such paragraph: " << paraNumber << endl;

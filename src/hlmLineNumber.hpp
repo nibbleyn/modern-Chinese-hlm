@@ -7,6 +7,16 @@ using namespace std;
 #define TurnToInt(x) stoi(x, nullptr, 10)
 #define TurnToString(x) to_string(x)
 
+static const string leadingChar = R"(P)";
+static const string middleChar = R"(L)";
+static const string invalidLineNumber = R"(P0L0)";
+static const string endOfLineNumber = R"(")"; // to try special case like "bottom"
+static const string endOfGeneratedLineNumber = R"(>)";
+static const string topParagraphIndicator =
+    R"(top)"; // of the body Text file
+static const string bottomParagraphIndicator =
+    R"(bottom)"; // of the body Text file
+
 static const int START_PARA_NUMBER = 90;
 class LineNumber {
   static const string LineNumberStart;
@@ -51,9 +61,9 @@ public:
   string asString() {
     string result{""};
     if (paraNumber != 0)
-      result = R"(P)" + TurnToString(paraNumber);
+      result = leadingChar + TurnToString(paraNumber);
     if (lineNumber != 0)
-      result += R"(L)" + TurnToString(lineNumber);
+      result += middleChar + TurnToString(lineNumber);
     return result;
   }
   bool equal(LineNumber &ln) {

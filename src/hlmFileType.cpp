@@ -202,7 +202,7 @@ void dissembleFromHTM(const string &inputHtmlFile,
     return;
   }
   ofstream outfile(outputBodyTextFile);
-  string line{"not found"};
+  string line{""};
   bool started = false, ended = false;
 
   string start = topTab;
@@ -311,8 +311,6 @@ void assembleBackToHTM(const string &inputHtmlFile,
     return;
   }
   ended = false;
-  string final = R"(</html>)"; // last line
-
   while (!inHtmlFile.eof()) // To get you all the lines.
   {
     getline(inHtmlFile, line); // Saves the line in line.
@@ -343,10 +341,10 @@ void dissembleOriginalHtmls(int minTarget, int maxTarget) {
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     string inputHtmlFile = HTML_SRC_ORIGINAL +
                            getFileNamePrefix(FILE_TYPE::ORIGINAL) + file +
-                           ".htm";
+                           HTML_SUFFIX;
     string outputBodyTextFile = BODY_TEXT_OUTPUT +
                                 getBodyTextFilePrefix(FILE_TYPE::ORIGINAL) +
-                                file + ".txt";
+                                file + BODY_TEXT_SUFFIX;
     dissembleFromHTM(inputHtmlFile, outputBodyTextFile);
   }
   if (debug)
@@ -362,12 +360,13 @@ void assembleOriginalHtmls(int minTarget, int maxTarget) {
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     string inputHtmlFile = HTML_SRC_ORIGINAL +
                            getFileNamePrefix(FILE_TYPE::ORIGINAL) + file +
-                           ".htm";
+                           HTML_SUFFIX;
     string inputBodyTextFile = BODY_TEXT_OUTPUT +
                                getBodyTextFilePrefix(FILE_TYPE::ORIGINAL) +
-                               file + ".txt";
+                               file + BODY_TEXT_SUFFIX;
     string outputFile = HTML_OUTPUT_ORIGINAL +
-                        getFileNamePrefix(FILE_TYPE::ORIGINAL) + file + ".htm";
+                        getFileNamePrefix(FILE_TYPE::ORIGINAL) + file +
+                        HTML_SUFFIX;
     assembleBackToHTM(inputHtmlFile, inputBodyTextFile, outputFile);
   }
   if (debug)
@@ -382,10 +381,10 @@ void assembleOriginalHtmls(int minTarget, int maxTarget) {
 void dissembleMainHtmls(int minTarget, int maxTarget) {
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     string inputHtmlFile =
-        HTML_SRC + getFileNamePrefix(FILE_TYPE::MAIN) + file + ".htm";
+        HTML_SRC + getFileNamePrefix(FILE_TYPE::MAIN) + file + HTML_SUFFIX;
     string outputBodyTextFile = BODY_TEXT_OUTPUT +
                                 getBodyTextFilePrefix(FILE_TYPE::MAIN) + file +
-                                ".txt";
+                                BODY_TEXT_SUFFIX;
     dissembleFromHTM(inputHtmlFile, outputBodyTextFile);
   }
   if (debug)
@@ -400,12 +399,12 @@ void dissembleMainHtmls(int minTarget, int maxTarget) {
 void assembleMainHtmls(int minTarget, int maxTarget) {
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     string inputHtmlFile =
-        HTML_SRC + getFileNamePrefix(FILE_TYPE::MAIN) + file + ".htm";
+        HTML_SRC + getFileNamePrefix(FILE_TYPE::MAIN) + file + HTML_SUFFIX;
     string inputBodyTextFile = BODY_TEXT_OUTPUT +
                                getBodyTextFilePrefix(FILE_TYPE::MAIN) + file +
-                               ".txt";
+                               BODY_TEXT_SUFFIX;
     string outputFile =
-        HTML_OUTPUT + getFileNamePrefix(FILE_TYPE::MAIN) + file + ".htm";
+        HTML_OUTPUT + getFileNamePrefix(FILE_TYPE::MAIN) + file + HTML_SUFFIX;
     assembleBackToHTM(inputHtmlFile, inputBodyTextFile, outputFile);
   }
   if (debug)
@@ -438,10 +437,10 @@ void dissembleAttachments(int minTarget, int maxTarget, int minAttachNo,
     for (const auto &attNo : targetAttachments) {
       string inputHtmlFile = HTML_SRC_ATTACHMENT +
                              getFileNamePrefix(FILE_TYPE::ATTACHMENT) + file +
-                             "_" + TurnToString(attNo) + ".htm";
-      string outputBodyTextFile = BODY_TEXT_OUTPUT +
-                                  getBodyTextFilePrefix(FILE_TYPE::ATTACHMENT) +
-                                  file + "_" + TurnToString(attNo) + ".txt";
+                             "_" + TurnToString(attNo) + HTML_SUFFIX;
+      string outputBodyTextFile =
+          BODY_TEXT_OUTPUT + getBodyTextFilePrefix(FILE_TYPE::ATTACHMENT) +
+          file + "_" + TurnToString(attNo) + BODY_TEXT_SUFFIX;
 
       dissembleFromHTM(inputHtmlFile, outputBodyTextFile);
     }
@@ -476,13 +475,13 @@ void assembleAttachments(int minTarget, int maxTarget, int minAttachNo,
     for (const auto &attNo : targetAttachments) {
       string inputHtmlFile = HTML_SRC_ATTACHMENT +
                              getFileNamePrefix(FILE_TYPE::ATTACHMENT) + file +
-                             "_" + TurnToString(attNo) + ".htm";
-      string inputBodyTextFile = BODY_TEXT_OUTPUT +
-                                 getBodyTextFilePrefix(FILE_TYPE::ATTACHMENT) +
-                                 file + "_" + TurnToString(attNo) + ".txt";
+                             "_" + TurnToString(attNo) + HTML_SUFFIX;
+      string inputBodyTextFile =
+          BODY_TEXT_OUTPUT + getBodyTextFilePrefix(FILE_TYPE::ATTACHMENT) +
+          file + "_" + TurnToString(attNo) + BODY_TEXT_SUFFIX;
       string outputFile = HTML_OUTPUT_ATTACHMENT +
                           getFileNamePrefix(FILE_TYPE::ATTACHMENT) + file +
-                          "_" + TurnToString(attNo) + ".htm";
+                          "_" + TurnToString(attNo) + HTML_SUFFIX;
       assembleBackToHTM(inputHtmlFile, inputBodyTextFile, outputFile);
     }
   }
@@ -506,9 +505,9 @@ string findKeyInFile(const string &key, const string &fullPath,
   ifstream infile(fullPath);
   if (!infile) {
     cout << "file doesn't exist:" << fullPath << endl;
-    return "KeyNotFound:" + key + ": bodytext file doesn't exist";
+    return keyNotFound + key + ": bodytext file doesn't exist";
   }
-  string line{"not found"};
+  string line{""};
   string lineName{""};
   bool found = false;
   LineNumber ln;
@@ -524,7 +523,7 @@ string findKeyInFile(const string &key, const string &fullPath,
     if (not ln.valid()) {
       cout << "file doesn't get numbered:" << fullPath << " at line:" << line
            << endl;
-      return "KeyNotFound:" + key + ": bodytext file doesn't get numbered";
+      return keyNotFound + key + ": bodytext file doesn't get numbered";
     }
     // special hack for ignoring one lineNumber
     if (not lineNumber.empty() and ln.equal(lineNumber))
@@ -534,7 +533,7 @@ string findKeyInFile(const string &key, const string &fullPath,
   }
   needChange = true;
   if (not found) {
-    return "KeyNotFound:" + key;
+    return keyNotFound + key;
   }
   // continue with lineName found
   lineNumber = ln.asString();
@@ -552,15 +551,14 @@ string findKeyInFile(const string &key, const string &fullPath,
  * @return the title found or error message
  */
 string getAttachmentTitle(const string &filename) {
-  string inputFile = HTML_SRC_ATTACHMENT + filename + ".htm";
+  string inputFile = HTML_SRC_ATTACHMENT + filename + HTML_SUFFIX;
   ifstream infile(inputFile);
   if (!infile) {
     return "file doesn't exist.";
   }
-  string inLine{"not found"};
-  string endOfHead = R"(/head)";
-  string start = R"(<title>)";
-  string end = R"(</title>)";
+  string inLine{""};
+  string start = titleStart;
+  string end = titleEnd;
   while (!infile.eof()) // To get all the lines.
   {
     getline(infile, inLine); // Saves the line in inLine.
@@ -604,47 +602,4 @@ vector<int> getAttachmentFileListForChapter(const string &referFile,
     }
   }
   return attList;
-}
-
-/**
- * unused now
- * @param minTarget
- * @param maxTarget
- */
-void assembleMainHtmlsAfterMannuallyChangeBodyText(int minTarget,
-                                                   int maxTarget) {
-  loadBodyTexts(BODY_TEXT_FIX, BODY_TEXT_OUTPUT);
-  assembleMainHtmls(minTarget, maxTarget);
-}
-
-/**
- * unused now
- */
-void backupAndOverwriteSrcForBodyTexts() {
-  string BACKUP = "bodyTexts/src" + currentTimeStamp();
-  cout << BACKUP << endl;
-
-  Poco::File BackupPath(BACKUP);
-  if (!BackupPath.exists())
-    BackupPath.createDirectories();
-
-  // backup whole src directory together with files to this directory
-  Poco::File dirToCopy(BODY_TEXT_SRC);
-  dirToCopy.copyTo(BACKUP);
-
-  // create a date file in this backup directory
-  string outputFile = BACKUP + "/info.txt";
-  cout << outputFile << endl;
-  ofstream outfile(outputFile);
-  outfile << "backup created: " << currentDateTime();
-
-  // save from fix to src
-  vector<string> filenameList;
-  Poco::File(BODY_TEXT_FIX).list(filenameList);
-  sort(filenameList.begin(), filenameList.end(), less<string>());
-  for (const auto &file : filenameList) {
-    cout << file << " " << endl;
-    Poco::File fileToCopy(BODY_TEXT_FIX + file);
-    fileToCopy.copyTo(BODY_TEXT_SRC + file);
-  }
 }

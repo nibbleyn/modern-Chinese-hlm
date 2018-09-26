@@ -25,14 +25,14 @@ void fixReturnLinkForAttachmentFile(const string &referFile,
       continue;
     } else {
       auto orgLine = line; // inLine would change in loop below
-      auto start = R"(<a)";
+      auto start = linkStartChars;
       string link{""};
       while (true) {
         auto linkBegin = line.find(start);
         if (linkBegin == string::npos) // no link any more, continue with next
                                        // line
           break;
-        auto linkEnd = line.find("</a>", linkBegin);
+        auto linkEnd = line.find(linkEndChars, linkBegin);
         link = line.substr(linkBegin, linkEnd + 4 - linkBegin);
         LinkFromAttachment lfm(referFile,
                                link); // get only type and annotation
@@ -45,6 +45,7 @@ void fixReturnLinkForAttachmentFile(const string &referFile,
         LinkFromAttachment lfm(referFile, link);
         auto num = getAttachmentNumber(
             getFileNamePrefix(FILE_TYPE::ATTACHMENT) + referFile);
+        // special hack to make sure using a0... as return file name
         lfm.setTypeThruFileNamePrefix("main"); // must return to main html
         lfm.fixReferFile(num.first);
         lfm.fixReferPara(LinkFromMain::getFromLineOfAttachment(num));
@@ -68,14 +69,14 @@ void fixReturnLinkForAttachmentFile(const string &referFile,
  */
 void fixMainLinksOverNumberedFiles(const string &referFile, fileSet files) {
   string inputFile = BODY_TEXT_OUTPUT + getBodyTextFilePrefix(FILE_TYPE::MAIN) +
-                     referFile + ".txt";
+                     referFile + BODY_TEXT_SUFFIX;
   ifstream infile(inputFile);
   if (!infile) {
     cout << "file doesn't exist:" << inputFile << endl;
     return;
   }
   string outputFile = BODY_TEXT_FIX + getBodyTextFilePrefix(FILE_TYPE::MAIN) +
-                      referFile + ".txt";
+                      referFile + BODY_TEXT_SUFFIX;
   ofstream outfile(outputFile);
   string inLine{"not found"};
   while (!infile.eof()) // To get all the lines.
@@ -92,14 +93,14 @@ void fixMainLinksOverNumberedFiles(const string &referFile, fileSet files) {
         ln.generateLinePrefix().length()); // skip line number link
     if (debug)
       cout << inLine << endl;
-    auto start = R"(<a)";
+    auto start = linkStartChars;
     string targetFile{""};
     do {
       auto linkBegin = inLine.find(start);
       if (linkBegin == string::npos) // no link any more, continue with next
                                      // line
         break;
-      auto linkEnd = inLine.find("</a>", linkBegin);
+      auto linkEnd = inLine.find(linkEndChars, linkBegin);
       auto link = inLine.substr(linkBegin, linkEnd + 4 - linkBegin);
       LinkFromMain lfm(referFile,
                        link); // get only type and annotation
@@ -127,7 +128,7 @@ void fixMainLinksOverNumberedFiles(const string &referFile, fileSet files) {
         {
           lfm.fixFromString(link); // third step of construction
           lfm.setSourcePara(ln);
-          string next = R"(（<a)";
+          string next = originalLinkStartChars + linkStartChars;
           bool needAddOrginalLink = true;
           // still have above "next" and </a>
           if (inLine.length() > (link.length() + next.length() + 4)) {
@@ -200,10 +201,10 @@ void fixReturnLinkForAttachments(int minTarget, int maxTarget) {
     for (const auto &attNo : targetAttachments) {
       string inputHtmlFile = HTML_SRC_ATTACHMENT +
                              getFileNamePrefix(FILE_TYPE::ATTACHMENT) + file +
-                             "_" + TurnToString(attNo) + ".htm";
+                             "_" + TurnToString(attNo) + HTML_SUFFIX;
       string outputFile = HTML_OUTPUT_ATTACHMENT +
                           getFileNamePrefix(FILE_TYPE::ATTACHMENT) + file +
-                          "_" + TurnToString(attNo) + ".htm";
+                          "_" + TurnToString(attNo) + HTML_SUFFIX;
       fixReturnLinkForAttachmentFile(file + "_" + TurnToString(attNo),
                                      inputHtmlFile, outputFile);
     }
@@ -244,7 +245,7 @@ void fixAttachmentLinksOverNumberedFiles(const string &referFile, fileSet files,
                                          int attachNo) {
   string inputFile = BODY_TEXT_OUTPUT +
                      getBodyTextFilePrefix(FILE_TYPE::ATTACHMENT) + referFile +
-                     "_" + TurnToString(attachNo) + ".txt";
+                     "_" + TurnToString(attachNo) + BODY_TEXT_SUFFIX;
 
   ifstream infile(inputFile);
   if (!infile) {
@@ -253,7 +254,7 @@ void fixAttachmentLinksOverNumberedFiles(const string &referFile, fileSet files,
   }
   string outputFile = BODY_TEXT_FIX +
                       getBodyTextFilePrefix(FILE_TYPE::ATTACHMENT) + referFile +
-                      "_" + TurnToString(attachNo) + ".txt";
+                      "_" + TurnToString(attachNo) + BODY_TEXT_SUFFIX;
   ofstream outfile(outputFile);
   string inLine{"not found"};
   while (!infile.eof()) // To get all the lines.
@@ -270,14 +271,14 @@ void fixAttachmentLinksOverNumberedFiles(const string &referFile, fileSet files,
         ln.generateLinePrefix().length()); // skip line number link
     if (debug)
       cout << inLine << endl;
-    auto start = R"(<a)";
+    auto start = linkStartChars;
     string targetFile{""};
     do {
       auto linkBegin = inLine.find(start);
       if (linkBegin == string::npos) // no link any more, continue with next
                                      // line
         break;
-      auto linkEnd = inLine.find("</a>", linkBegin);
+      auto linkEnd = inLine.find(linkEndChars, linkBegin);
       auto link = inLine.substr(linkBegin, linkEnd + 4 - linkBegin);
       // get only type and annotation
       LinkFromAttachment lfm(referFile + "_" + TurnToString(attachNo), link);
@@ -305,7 +306,7 @@ void fixAttachmentLinksOverNumberedFiles(const string &referFile, fileSet files,
         {
           lfm.fixFromString(link); // third step of construction
           lfm.setSourcePara(ln);
-          string next = R"(（<a)";
+          string next = originalLinkStartChars + linkStartChars;
           bool needAddOrginalLink = true;
           // still have above "next" and </a>
           if (inLine.length() > (link.length() + next.length() + 4)) {

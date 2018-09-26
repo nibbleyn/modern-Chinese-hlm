@@ -34,6 +34,24 @@ AttachmentNumber getAttachmentNumber(const string &filename);
 
 static const string HTML_SRC_REF_ATTACHMENT_LIST =
     "utf8HTML/src/RefAttachments.txt";
+static const string linkStartChars = R"(<a)";
+static const string linkEndChars = R"(</a>)";
+static const string charBeforeAnnotation = R"(>)";
+static const string attachmentFileMiddleChar = R"(_)";
+static const string referFileMiddleChar = R"(href=")";
+static const string referParaMiddleChar = R"(#)";
+static const string referParaEndChar = R"(">)";
+static const string keyStartChars = R"(<i hidden>)";
+static const string keyEndChars = R"(</i>)";
+static const string changeKey = R"(changeKey)";
+static const string citationStartChars = R"(<b hidden>)";
+static const string citationChapterNo = R"(第)";
+static const string citationChapter = R"(章)";
+static const string citationChapterParaSeparator = R"(.)";
+static const string citationPara = R"(节:)";
+static const string citationEndChars = R"(</b>)";
+static const string originalLinkStartChars = R"(（)";
+static const string originalLinkEndChars = R"(）)";
 
 class Link {
 public:
@@ -106,27 +124,27 @@ public:
     }
   }
   string asString() {
-    string part0 = R"(<a )" + displayPropertyAsString() + R"( href=")";
+    string part0 = linkStartChars + " " + displayPropertyAsString() + " " + referFileMiddleChar;
     string part1{""}, part2{""}, part3{""};
     if (type != LINK_TYPE::SAMEPAGE) {
       part1 =
           getPathOfReferenceFile() + getFileNamePrefix(type) + getChapterName();
       if (attachmentNumber != 0)
-        part2 = R"(_)" + TurnToString(attachmentNumber);
-      part3 = R"(.htm)";
+        part2 = attachmentFileMiddleChar + TurnToString(attachmentNumber);
+      part3 = HTML_SUFFIX;
     }
     string part4{""};
-    if (type != LINK_TYPE::ATTACHMENT or referPara != R"(P0L0)") {
-      part4 = R"(#)" + referPara;
+    if (type != LINK_TYPE::ATTACHMENT or referPara != invalidLineNumber) {
+      part4 = referParaMiddleChar + referPara;
     }
-    string part5 = R"(">)", part6{""}, part7{""};
+    string part5 = referParaEndChar, part6{""}, part7{""};
     if (type != LINK_TYPE::ATTACHMENT and not usedKey.empty()) {
-      part6 = R"(<i hidden>)" + getKey() + R"(</i>)";
+      part6 = keyStartChars + getKey() + keyEndChars;
       // easier to replace to <b unhidden> if want to display this
       if (type == LINK_TYPE::MAIN)
-        part7 = R"(<b hidden>)" + getReferSection() + R"(</b>)";
+        part7 = citationStartChars + getReferSection() + citationEndChars;
     }
-    string part8 = getAnnotation() + R"(</a>)";
+    string part8 = getAnnotation() + linkEndChars;
     return (part0 + part1 + part2 + part3 + part4 + part5 + part6 + part7 +
             part8 + getStringOfLinkToOrigin());
   }
@@ -137,14 +155,14 @@ public:
   };
   bool isTargetToOtherAttachmentHtm() {
     return (type == LINK_TYPE::ATTACHMENT and
-            (getChapterName() + R"(_)" + TurnToString(attachmentNumber)) !=
+            (getChapterName() + attachmentFileMiddleChar + TurnToString(attachmentNumber)) !=
                 fromFile);
   };
   bool isTargetToSelfHtm() {
     return ((type == LINK_TYPE::SAMEPAGE) or
             (type == LINK_TYPE::MAIN and getChapterName() == fromFile) or
             (type == LINK_TYPE::ATTACHMENT and
-             (getChapterName() + R"(_)" + TurnToString(attachmentNumber)) ==
+             (getChapterName() + attachmentFileMiddleChar + TurnToString(attachmentNumber)) ==
                  fromFile));
   };
   int getchapterNumer() { return chapterNumber; }
@@ -157,7 +175,7 @@ public:
     return formatIntoTwoDigitChapterNumber(chapterNumber);
   }
   void doStatistics() {
-    if (usedKey.find("KeyNotFound") != string::npos) {
+    if (usedKey.find(keyNotFound) != string::npos) {
       recordMissingKeyLink();
     } else
       logLink();
@@ -188,7 +206,7 @@ protected:
   }
   string getStringOfLinkToOrigin() {
     if (linkToOrigin != nullptr)
-      return R"(（)" + linkToOrigin->asString() + R"(）)";
+      return originalLinkStartChars + linkToOrigin->asString() + originalLinkEndChars;
     return "";
   }
   void recordMissingKeyLink();
@@ -215,6 +233,8 @@ protected:
   std::unique_ptr<Link> linkToOrigin{nullptr};
 };
 
+static const string attachmentDirForLinkFromMain = R"(attachment\)";
+static const string originalDirForLinkFromMain = R"(original\)";
 static const string HTML_OUTPUT_LINKS_FROM_MAIN_LIST =
     "utf8HTML/output/LinksFromMain.txt";
 static const string HTML_OUTPUT_ATTACHMENT_FROM_MAIN_LIST =
@@ -250,9 +270,9 @@ private:
   string getPathOfReferenceFile() const override {
     string result{""};
     if (type == LINK_TYPE::ATTACHMENT)
-      result = R"(attachment\)";
+      result = attachmentDirForLinkFromMain;
     if (type == LINK_TYPE::ORIGINAL)
-      result = R"(original\)";
+      result = originalDirForLinkFromMain;
     return result;
   }
   void logLink();
@@ -262,6 +282,8 @@ private:
   string getBodyTextFilePrefix(LINK_TYPE type);
 };
 
+static const string mainDirForLinkFromAttachment = R"(..\)";
+static const string originalDirForLinkFromAttachment = R"(..\original\)";
 static const string HTML_OUTPUT_LINKS_FROM_ATTACHMENT_LIST =
     "utf8HTML/output/LinksFromAttachment.txt";
 static const string HTML_OUTPUT_ATTACHMENT_FROM_ATTACHMENT_LIST =
@@ -294,9 +316,9 @@ private:
   string getPathOfReferenceFile() const override {
     string result{""};
     if (type == LINK_TYPE::MAIN)
-      result = R"(..\)";
+      result = mainDirForLinkFromAttachment;
     if (type == LINK_TYPE::ORIGINAL)
-      result = R"(..\original\)";
+      result = originalDirForLinkFromAttachment;
     return result;
   }
   void logLink();
