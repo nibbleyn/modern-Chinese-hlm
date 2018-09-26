@@ -225,7 +225,7 @@ protected:
   LineNumber fromLine;
   int chapterNumber{1};
   int attachmentNumber{0};
-  string referPara{"P0L0"}; // might be top bottom
+  string referPara{invalidLineNumber}; // might be top bottom
   string referSection{"0.0"};
   string usedKey{""};
   string annotation{""};

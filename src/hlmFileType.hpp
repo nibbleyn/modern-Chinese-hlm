@@ -83,8 +83,3 @@ string findKeyInFile(const string &key, const string &fullPath,
 string getAttachmentTitle(const string &filename);
 vector<int> getAttachmentFileListForChapter(const string &referFile,
                                             const string &fromDir);
-
-void assembleMainHtmlsAfterMannuallyChangeBodyText(int minTarget,
-                                                   int maxTarget);
-
-void backupAndOverwriteSrcForBodyTexts();
