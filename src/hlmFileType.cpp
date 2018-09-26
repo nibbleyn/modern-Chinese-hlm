@@ -437,10 +437,10 @@ void dissembleAttachments(int minTarget, int maxTarget, int minAttachNo,
     for (const auto &attNo : targetAttachments) {
       string inputHtmlFile = HTML_SRC_ATTACHMENT +
                              getFileNamePrefix(FILE_TYPE::ATTACHMENT) + file +
-                             "_" + TurnToString(attNo) + HTML_SUFFIX;
+                             attachmentFileMiddleChar + TurnToString(attNo) + HTML_SUFFIX;
       string outputBodyTextFile =
           BODY_TEXT_OUTPUT + getBodyTextFilePrefix(FILE_TYPE::ATTACHMENT) +
-          file + "_" + TurnToString(attNo) + BODY_TEXT_SUFFIX;
+          file + attachmentFileMiddleChar + TurnToString(attNo) + BODY_TEXT_SUFFIX;
 
       dissembleFromHTM(inputHtmlFile, outputBodyTextFile);
     }
@@ -475,13 +475,13 @@ void assembleAttachments(int minTarget, int maxTarget, int minAttachNo,
     for (const auto &attNo : targetAttachments) {
       string inputHtmlFile = HTML_SRC_ATTACHMENT +
                              getFileNamePrefix(FILE_TYPE::ATTACHMENT) + file +
-                             "_" + TurnToString(attNo) + HTML_SUFFIX;
+                             attachmentFileMiddleChar + TurnToString(attNo) + HTML_SUFFIX;
       string inputBodyTextFile =
           BODY_TEXT_OUTPUT + getBodyTextFilePrefix(FILE_TYPE::ATTACHMENT) +
-          file + "_" + TurnToString(attNo) + BODY_TEXT_SUFFIX;
+          file + attachmentFileMiddleChar + TurnToString(attNo) + BODY_TEXT_SUFFIX;
       string outputFile = HTML_OUTPUT_ATTACHMENT +
                           getFileNamePrefix(FILE_TYPE::ATTACHMENT) + file +
-                          "_" + TurnToString(attNo) + HTML_SUFFIX;
+                          attachmentFileMiddleChar + TurnToString(attNo) + HTML_SUFFIX;
       assembleBackToHTM(inputHtmlFile, inputBodyTextFile, outputFile);
     }
   }
@@ -593,7 +593,7 @@ vector<int> getAttachmentFileListForChapter(const string &referFile,
   for (const auto &file : filenameList) {
     if (file.find(getFileNamePrefix(FILE_TYPE::ATTACHMENT) + referFile) !=
         string::npos) {
-      string start = "_";
+      string start = attachmentFileMiddleChar;
       auto keyBegin = file.find(start);
       auto keyEnd = file.find(".");
       string attNo = file.substr(keyBegin + start.length(),

@@ -43,6 +43,7 @@ static const string endOfHead = R"(/head)";
 static const string titleStart = R"(<title>)";
 static const string titleEnd = R"(</title>)";
 static const string keyNotFound = R"(KeyNotFound)";
+static const string attachmentFileMiddleChar = R"(_)";
 
 enum class FILE_TYPE { MAIN, ATTACHMENT, ORIGINAL };
 

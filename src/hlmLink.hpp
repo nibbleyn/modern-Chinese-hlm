@@ -37,7 +37,6 @@ static const string HTML_SRC_REF_ATTACHMENT_LIST =
 static const string linkStartChars = R"(<a)";
 static const string linkEndChars = R"(</a>)";
 static const string charBeforeAnnotation = R"(>)";
-static const string attachmentFileMiddleChar = R"(_)";
 static const string referFileMiddleChar = R"(href=")";
 static const string referParaMiddleChar = R"(#)";
 static const string referParaEndChar = R"(">)";

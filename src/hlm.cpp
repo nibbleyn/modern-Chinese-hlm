@@ -9,11 +9,11 @@ void assembleContainerHTM(string outputHTMFilename, int containerNumber,
                           string title, string displayTitle,
                           int lastParaNumber) {
   string inputHtmlFile =
-      HTML_CONTAINER + TurnToString(containerNumber) + ".htm";
+      HTML_CONTAINER + TurnToString(containerNumber) + HTML_SUFFIX;
   ;
   cout << inputHtmlFile << endl;
   string inputBodyTextFile =
-      BODY_TEXT_CONTAINER + TurnToString(containerNumber) + ".txt";
+      BODY_TEXT_CONTAINER + TurnToString(containerNumber) + BODY_TEXT_SUFFIX;
   cout << inputBodyTextFile << endl;
   ifstream inHtmlFile(inputHtmlFile);
   if (!inHtmlFile) // doesn't exist
@@ -28,12 +28,10 @@ void assembleContainerHTM(string outputHTMFilename, int containerNumber,
     return;
   }
   ofstream outfile(outputHTMFilename);
-  string line{"not found"};
+  string line{""};
   bool started = false;
-  string start = R"(name="top")";  // first line
-  string end = R"(name="bottom")"; // last line
-  string defaultTitle = "XXX";
-  string defaultDisplayTitle = "YYY";
+  string start = topTab;  // first line
+  string end = bottomTab; // last line
   while (!inHtmlFile.eof()) // To get you all the lines.
   {
     getline(inHtmlFile, line); // Saves the line in line.
@@ -94,7 +92,7 @@ void assembleContainerHTM(string outputHTMFilename, int containerNumber,
  */
 void clearLinksInContainerBodyText(int containerNumber) {
   string outputFile =
-      BODY_TEXT_CONTAINER + TurnToString(containerNumber) + ".txt";
+      BODY_TEXT_CONTAINER + TurnToString(containerNumber) + BODY_TEXT_SUFFIX;
   cout << outputFile << endl;
   ofstream outfile(outputFile);
 }
@@ -106,7 +104,7 @@ void clearLinksInContainerBodyText(int containerNumber) {
  */
 void appendTextInContainerBodyText(string text, int containerNumber) {
   string outputFile =
-      BODY_TEXT_CONTAINER + TurnToString(containerNumber) + ".txt";
+      BODY_TEXT_CONTAINER + TurnToString(containerNumber) + BODY_TEXT_SUFFIX;
   cout << outputFile << endl;
   ofstream outfile;
   outfile.open(outputFile, std::ios_base::app);
@@ -117,7 +115,7 @@ void appendTextInContainerBodyText(string text, int containerNumber) {
 
 void appendNumberLineInContainerBodyText(string line, int containerNumber) {
   string outputFile =
-      BODY_TEXT_CONTAINER + TurnToString(containerNumber) + ".txt";
+      BODY_TEXT_CONTAINER + TurnToString(containerNumber) + BODY_TEXT_SUFFIX;
   cout << outputFile << endl;
   ofstream outfile;
   outfile.open(outputFile, std::ios_base::app);
@@ -132,7 +130,7 @@ void appendNumberLineInContainerBodyText(string line, int containerNumber) {
  */
 void appendLinkInContainerBodyText(string linkString, int containerNumber) {
   string outputFile =
-      BODY_TEXT_CONTAINER + TurnToString(containerNumber) + ".txt";
+      BODY_TEXT_CONTAINER + TurnToString(containerNumber) + BODY_TEXT_SUFFIX;
   cout << outputFile << endl;
   ofstream outfile;
   outfile.open(outputFile, std::ios_base::app);
@@ -142,7 +140,7 @@ void appendLinkInContainerBodyText(string linkString, int containerNumber) {
 void addFirstParagraphInContainerBodyText(int startNumber,
                                           int containerNumber) {
   string outputFile =
-      BODY_TEXT_CONTAINER + TurnToString(containerNumber) + ".txt";
+      BODY_TEXT_CONTAINER + TurnToString(containerNumber) + BODY_TEXT_SUFFIX;
   cout << outputFile << endl;
   ofstream outfile;
   outfile.open(outputFile, std::ios_base::app);
@@ -155,7 +153,7 @@ void addParagraphInContainerBodyText(int startNumber, int paraNumber,
 void addLastParagraphInContainerBodyText(int startNumber, int paraNumber,
                                          int containerNumber) {
   string outputFile =
-      BODY_TEXT_CONTAINER + TurnToString(containerNumber) + ".txt";
+      BODY_TEXT_CONTAINER + TurnToString(containerNumber) + BODY_TEXT_SUFFIX;
   cout << outputFile << endl;
   ofstream outfile;
   outfile.open(outputFile, std::ios_base::app);
@@ -178,9 +176,9 @@ void removePersonalCommentsOverNumberedFiles(string referFile,
   string attachmentPart{""};
   if (fileType ==
       FILE_TYPE::ATTACHMENT) // type is only used here in this function
-    attachmentPart = "_" + TurnToString(attachNo);
+    attachmentPart = attachmentFileMiddleChar + TurnToString(attachNo);
   string inputFile = BODY_TEXT_OUTPUT + getBodyTextFilePrefix(fileType) +
-                     referFile + attachmentPart + ".txt";
+                     referFile + attachmentPart + BODY_TEXT_SUFFIX;
 
   ifstream infile(inputFile);
   if (!infile) {
@@ -188,7 +186,7 @@ void removePersonalCommentsOverNumberedFiles(string referFile,
     return;
   }
   string outputFile = BODY_TEXT_FIX + getBodyTextFilePrefix(fileType) +
-                      referFile + attachmentPart + ".txt";
+                      referFile + attachmentPart + BODY_TEXT_SUFFIX;
   ofstream outfile(outputFile);
   string inLine{"not found"};
   while (!infile.eof()) // To get all the lines.
@@ -197,8 +195,8 @@ void removePersonalCommentsOverNumberedFiles(string referFile,
     if (debug)
       cout << inLine << endl;
     auto orgLine = inLine; // inLine would change in loop below
-    string start = R"(（<u unhidden)";
-    string end = R"(</u>）)";
+    string start = personalCommentStart;
+    string end = personalCommentEnd;
     string to_replace = "";
     // first loop to remove all personal Comments
     auto removePersonalCommentLine = orgLine;
@@ -220,8 +218,8 @@ void removePersonalCommentsOverNumberedFiles(string referFile,
     // the second loop to remove all expected attachment link from result
     // orgLine
     auto removeSpecialLinkLine = orgLine;
-    string linkStart = R"(<a)";
-    string linkEnd = R"(</a>)";
+    string linkStart = linkStartChars;
+    string linkEnd = linkEndChars;
     auto specialLinkBegin = removeSpecialLinkLine.find(linkStart);
     while (specialLinkBegin != string::npos) {
       auto specialLinkEnd = removeSpecialLinkLine.find(linkEnd);
@@ -360,7 +358,7 @@ void removePersonalViewpoints(int minTarget, int maxTarget,
                               FILE_TYPE fileType) {
   cout << "to be implemented." << endl;
   cout << "to remove <u> pairs." << endl;
-  cout << "and to remove attachment link with type of 感悟." << endl;
+  cout << "and to remove personal attachment link." << endl;
   for (const auto &file :
        buildFileSet(minTarget, maxTarget)) // files need to be fixed
   {

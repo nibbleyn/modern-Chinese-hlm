@@ -201,11 +201,11 @@ void fixReturnLinkForAttachments(int minTarget, int maxTarget) {
     for (const auto &attNo : targetAttachments) {
       string inputHtmlFile = HTML_SRC_ATTACHMENT +
                              getFileNamePrefix(FILE_TYPE::ATTACHMENT) + file +
-                             "_" + TurnToString(attNo) + HTML_SUFFIX;
+                             attachmentFileMiddleChar + TurnToString(attNo) + HTML_SUFFIX;
       string outputFile = HTML_OUTPUT_ATTACHMENT +
                           getFileNamePrefix(FILE_TYPE::ATTACHMENT) + file +
-                          "_" + TurnToString(attNo) + HTML_SUFFIX;
-      fixReturnLinkForAttachmentFile(file + "_" + TurnToString(attNo),
+                          attachmentFileMiddleChar + TurnToString(attNo) + HTML_SUFFIX;
+      fixReturnLinkForAttachmentFile(file + attachmentFileMiddleChar + TurnToString(attNo),
                                      inputHtmlFile, outputFile);
     }
   }
@@ -245,7 +245,7 @@ void fixAttachmentLinksOverNumberedFiles(const string &referFile, fileSet files,
                                          int attachNo) {
   string inputFile = BODY_TEXT_OUTPUT +
                      getBodyTextFilePrefix(FILE_TYPE::ATTACHMENT) + referFile +
-                     "_" + TurnToString(attachNo) + BODY_TEXT_SUFFIX;
+                     attachmentFileMiddleChar + TurnToString(attachNo) + BODY_TEXT_SUFFIX;
 
   ifstream infile(inputFile);
   if (!infile) {
@@ -254,7 +254,7 @@ void fixAttachmentLinksOverNumberedFiles(const string &referFile, fileSet files,
   }
   string outputFile = BODY_TEXT_FIX +
                       getBodyTextFilePrefix(FILE_TYPE::ATTACHMENT) + referFile +
-                      "_" + TurnToString(attachNo) + BODY_TEXT_SUFFIX;
+                      attachmentFileMiddleChar + TurnToString(attachNo) + BODY_TEXT_SUFFIX;
   ofstream outfile(outputFile);
   string inLine{"not found"};
   while (!infile.eof()) // To get all the lines.
@@ -281,7 +281,7 @@ void fixAttachmentLinksOverNumberedFiles(const string &referFile, fileSet files,
       auto linkEnd = inLine.find(linkEndChars, linkBegin);
       auto link = inLine.substr(linkBegin, linkEnd + 4 - linkBegin);
       // get only type and annotation
-      LinkFromAttachment lfm(referFile + "_" + TurnToString(attachNo), link);
+      LinkFromAttachment lfm(referFile + attachmentFileMiddleChar + TurnToString(attachNo), link);
       if (lfm.isTargetToOtherAttachmentHtm()) {
         lfm.readReferFileName(link); // second step of construction
         lfm.fixFromString(link);     // third step of construction

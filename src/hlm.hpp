@@ -3,6 +3,10 @@
 
 static const string HTML_CONTAINER = "container/";
 static const string BODY_TEXT_CONTAINER = "container/";
+static const string defaultTitle = "XXX";
+static const string defaultDisplayTitle = "YYY";
+static const string personalCommentStart = R"(（<u unhidden)";
+static const string personalCommentEnd = R"(</u>）)";
 
 // using container to display set of links separated by paragraphs
 void clearLinksInContainerBodyText(int containerNumber);

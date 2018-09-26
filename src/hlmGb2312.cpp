@@ -19,9 +19,9 @@ void convertFromGB2312ToUtf8(string referFile, string format, FILE_TYPE type,
   if (format == "htm") {
     string attachmentPart{""};
     if (type == FILE_TYPE::ATTACHMENT)
-      attachmentPart = "_" + TurnToString(attachNo);
+      attachmentPart = attachmentFileMiddleChar + TurnToString(attachNo);
     inputFile = GB2312_HTML_SRC + getFileNamePrefix(type) + referFile +
-                attachmentPart + ".htm";
+                attachmentPart + HTML_SUFFIX;
     cout << inputFile << endl;
     ifstream infile(inputFile);
     if (!infile) // doesn't exist
@@ -32,7 +32,7 @@ void convertFromGB2312ToUtf8(string referFile, string format, FILE_TYPE type,
     outputFile = HTML_OUTPUT;
     if (type == FILE_TYPE::ATTACHMENT)
       outputFile = HTML_OUTPUT_ATTACHMENT;
-    outputFile += getFileNamePrefix(type) + referFile + attachmentPart + ".htm";
+    outputFile += getFileNamePrefix(type) + referFile + attachmentPart + HTML_SUFFIX;
     cout << outputFile << endl;
   }
   convertFromGB2312ToUtf8(inputFile, outputFile);
@@ -103,9 +103,9 @@ void gb2312FixMain(int minTarget, int maxTarget) {
 void gb2312FixOriginal(int minTarget, int maxTarget) {
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     string inputFile = GB2312_HTML_SRC + "original/" +
-                       getFileNamePrefix(FILE_TYPE::MAIN) + file + ".htm";
+                       getFileNamePrefix(FILE_TYPE::MAIN) + file + HTML_SUFFIX;
     string outputFile = "utf8HTML/original/" +
-                        getFileNamePrefix(FILE_TYPE::MAIN) + file + ".htm";
+                        getFileNamePrefix(FILE_TYPE::MAIN) + file + HTML_SUFFIX;
     convertFromGB2312ToUtf8(inputFile, outputFile);
   }
 }
@@ -115,8 +115,8 @@ void gb2312FixOriginal(int minTarget, int maxTarget) {
  */
 void gb2312FixJPM() {
   for (int i = 1; i <= 100; i++) {
-    string inputFile = GB2312_HTML_SRC + "JPM/" + TurnToString(i) + ".html";
-    string outputFile = "utf8HTML/JPM/" + TurnToString(i) + ".html";
+    string inputFile = GB2312_HTML_SRC + "JPM/" + TurnToString(i) + HTML_SUFFIX;
+    string outputFile = "utf8HTML/JPM/" + TurnToString(i) + HTML_SUFFIX;
     convertFromGB2312ToUtf8(inputFile, outputFile);
   }
 }
