@@ -435,12 +435,13 @@ void dissembleAttachments(int minTarget, int maxTarget, int minAttachNo,
       targetAttachments =
           getAttachmentFileListForChapter(file, HTML_SRC_ATTACHMENT);
     for (const auto &attNo : targetAttachments) {
-      string inputHtmlFile = HTML_SRC_ATTACHMENT +
-                             getFileNamePrefix(FILE_TYPE::ATTACHMENT) + file +
-                             attachmentFileMiddleChar + TurnToString(attNo) + HTML_SUFFIX;
-      string outputBodyTextFile =
-          BODY_TEXT_OUTPUT + getBodyTextFilePrefix(FILE_TYPE::ATTACHMENT) +
-          file + attachmentFileMiddleChar + TurnToString(attNo) + BODY_TEXT_SUFFIX;
+      string inputHtmlFile =
+          HTML_SRC_ATTACHMENT + getFileNamePrefix(FILE_TYPE::ATTACHMENT) +
+          file + attachmentFileMiddleChar + TurnToString(attNo) + HTML_SUFFIX;
+      string outputBodyTextFile = BODY_TEXT_OUTPUT +
+                                  getBodyTextFilePrefix(FILE_TYPE::ATTACHMENT) +
+                                  file + attachmentFileMiddleChar +
+                                  TurnToString(attNo) + BODY_TEXT_SUFFIX;
 
       dissembleFromHTM(inputHtmlFile, outputBodyTextFile);
     }
@@ -473,15 +474,16 @@ void assembleAttachments(int minTarget, int maxTarget, int minAttachNo,
       targetAttachments =
           getAttachmentFileListForChapter(file, HTML_SRC_ATTACHMENT);
     for (const auto &attNo : targetAttachments) {
-      string inputHtmlFile = HTML_SRC_ATTACHMENT +
-                             getFileNamePrefix(FILE_TYPE::ATTACHMENT) + file +
-                             attachmentFileMiddleChar + TurnToString(attNo) + HTML_SUFFIX;
-      string inputBodyTextFile =
-          BODY_TEXT_OUTPUT + getBodyTextFilePrefix(FILE_TYPE::ATTACHMENT) +
-          file + attachmentFileMiddleChar + TurnToString(attNo) + BODY_TEXT_SUFFIX;
-      string outputFile = HTML_OUTPUT_ATTACHMENT +
-                          getFileNamePrefix(FILE_TYPE::ATTACHMENT) + file +
-                          attachmentFileMiddleChar + TurnToString(attNo) + HTML_SUFFIX;
+      string inputHtmlFile =
+          HTML_SRC_ATTACHMENT + getFileNamePrefix(FILE_TYPE::ATTACHMENT) +
+          file + attachmentFileMiddleChar + TurnToString(attNo) + HTML_SUFFIX;
+      string inputBodyTextFile = BODY_TEXT_OUTPUT +
+                                 getBodyTextFilePrefix(FILE_TYPE::ATTACHMENT) +
+                                 file + attachmentFileMiddleChar +
+                                 TurnToString(attNo) + BODY_TEXT_SUFFIX;
+      string outputFile =
+          HTML_OUTPUT_ATTACHMENT + getFileNamePrefix(FILE_TYPE::ATTACHMENT) +
+          file + attachmentFileMiddleChar + TurnToString(attNo) + HTML_SUFFIX;
       assembleBackToHTM(inputHtmlFile, inputBodyTextFile, outputFile);
     }
   }

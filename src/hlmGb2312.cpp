@@ -32,7 +32,8 @@ void convertFromGB2312ToUtf8(string referFile, string format, FILE_TYPE type,
     outputFile = HTML_OUTPUT;
     if (type == FILE_TYPE::ATTACHMENT)
       outputFile = HTML_OUTPUT_ATTACHMENT;
-    outputFile += getFileNamePrefix(type) + referFile + attachmentPart + HTML_SUFFIX;
+    outputFile +=
+        getFileNamePrefix(type) + referFile + attachmentPart + HTML_SUFFIX;
     cout << outputFile << endl;
   }
   convertFromGB2312ToUtf8(inputFile, outputFile);

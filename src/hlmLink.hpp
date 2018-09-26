@@ -123,7 +123,8 @@ public:
     }
   }
   string asString() {
-    string part0 = linkStartChars + " " + displayPropertyAsString() + " " + referFileMiddleChar;
+    string part0 = linkStartChars + " " + displayPropertyAsString() + " " +
+                   referFileMiddleChar;
     string part1{""}, part2{""}, part3{""};
     if (type != LINK_TYPE::SAMEPAGE) {
       part1 =
@@ -154,15 +155,15 @@ public:
   };
   bool isTargetToOtherAttachmentHtm() {
     return (type == LINK_TYPE::ATTACHMENT and
-            (getChapterName() + attachmentFileMiddleChar + TurnToString(attachmentNumber)) !=
-                fromFile);
+            (getChapterName() + attachmentFileMiddleChar +
+             TurnToString(attachmentNumber)) != fromFile);
   };
   bool isTargetToSelfHtm() {
     return ((type == LINK_TYPE::SAMEPAGE) or
             (type == LINK_TYPE::MAIN and getChapterName() == fromFile) or
             (type == LINK_TYPE::ATTACHMENT and
-             (getChapterName() + attachmentFileMiddleChar + TurnToString(attachmentNumber)) ==
-                 fromFile));
+             (getChapterName() + attachmentFileMiddleChar +
+              TurnToString(attachmentNumber)) == fromFile));
   };
   int getchapterNumer() { return chapterNumber; }
   int getattachmentNumber() { return attachmentNumber; }
@@ -205,7 +206,8 @@ protected:
   }
   string getStringOfLinkToOrigin() {
     if (linkToOrigin != nullptr)
-      return originalLinkStartChars + linkToOrigin->asString() + originalLinkEndChars;
+      return originalLinkStartChars + linkToOrigin->asString() +
+             originalLinkEndChars;
     return "";
   }
   void recordMissingKeyLink();

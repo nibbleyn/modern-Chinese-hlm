@@ -199,13 +199,14 @@ void fixReturnLinkForAttachments(int minTarget, int maxTarget) {
     auto targetAttachments =
         getAttachmentFileListForChapter(file, HTML_SRC_ATTACHMENT);
     for (const auto &attNo : targetAttachments) {
-      string inputHtmlFile = HTML_SRC_ATTACHMENT +
-                             getFileNamePrefix(FILE_TYPE::ATTACHMENT) + file +
-                             attachmentFileMiddleChar + TurnToString(attNo) + HTML_SUFFIX;
-      string outputFile = HTML_OUTPUT_ATTACHMENT +
-                          getFileNamePrefix(FILE_TYPE::ATTACHMENT) + file +
-                          attachmentFileMiddleChar + TurnToString(attNo) + HTML_SUFFIX;
-      fixReturnLinkForAttachmentFile(file + attachmentFileMiddleChar + TurnToString(attNo),
+      string inputHtmlFile =
+          HTML_SRC_ATTACHMENT + getFileNamePrefix(FILE_TYPE::ATTACHMENT) +
+          file + attachmentFileMiddleChar + TurnToString(attNo) + HTML_SUFFIX;
+      string outputFile =
+          HTML_OUTPUT_ATTACHMENT + getFileNamePrefix(FILE_TYPE::ATTACHMENT) +
+          file + attachmentFileMiddleChar + TurnToString(attNo) + HTML_SUFFIX;
+      fixReturnLinkForAttachmentFile(file + attachmentFileMiddleChar +
+                                         TurnToString(attNo),
                                      inputHtmlFile, outputFile);
     }
   }
@@ -245,16 +246,17 @@ void fixAttachmentLinksOverNumberedFiles(const string &referFile, fileSet files,
                                          int attachNo) {
   string inputFile = BODY_TEXT_OUTPUT +
                      getBodyTextFilePrefix(FILE_TYPE::ATTACHMENT) + referFile +
-                     attachmentFileMiddleChar + TurnToString(attachNo) + BODY_TEXT_SUFFIX;
+                     attachmentFileMiddleChar + TurnToString(attachNo) +
+                     BODY_TEXT_SUFFIX;
 
   ifstream infile(inputFile);
   if (!infile) {
     cout << "file doesn't exist:" << inputFile << endl;
     return;
   }
-  string outputFile = BODY_TEXT_FIX +
-                      getBodyTextFilePrefix(FILE_TYPE::ATTACHMENT) + referFile +
-                      attachmentFileMiddleChar + TurnToString(attachNo) + BODY_TEXT_SUFFIX;
+  string outputFile =
+      BODY_TEXT_FIX + getBodyTextFilePrefix(FILE_TYPE::ATTACHMENT) + referFile +
+      attachmentFileMiddleChar + TurnToString(attachNo) + BODY_TEXT_SUFFIX;
   ofstream outfile(outputFile);
   string inLine{"not found"};
   while (!infile.eof()) // To get all the lines.
@@ -281,7 +283,8 @@ void fixAttachmentLinksOverNumberedFiles(const string &referFile, fileSet files,
       auto linkEnd = inLine.find(linkEndChars, linkBegin);
       auto link = inLine.substr(linkBegin, linkEnd + 4 - linkBegin);
       // get only type and annotation
-      LinkFromAttachment lfm(referFile + attachmentFileMiddleChar + TurnToString(attachNo), link);
+      LinkFromAttachment lfm(
+          referFile + attachmentFileMiddleChar + TurnToString(attachNo), link);
       if (lfm.isTargetToOtherAttachmentHtm()) {
         lfm.readReferFileName(link); // second step of construction
         lfm.fixFromString(link);     // third step of construction

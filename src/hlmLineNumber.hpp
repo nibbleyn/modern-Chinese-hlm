@@ -10,7 +10,8 @@ using namespace std;
 static const string leadingChar = R"(P)";
 static const string middleChar = R"(L)";
 static const string invalidLineNumber = R"(P0L0)";
-static const string endOfLineNumber = R"(")"; // to try special case like "bottom"
+static const string endOfLineNumber =
+    R"(")"; // to try special case like "bottom"
 static const string endOfGeneratedLineNumber = R"(>)";
 static const string topParagraphIndicator =
     R"(top)"; // of the body Text file

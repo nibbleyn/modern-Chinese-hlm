@@ -212,8 +212,9 @@ void Link::displayFixedLinks() {
 }
 
 /**
- * personalAttachmentType means a personal review could be removed thru removePersonalViewpoints()
- * referenceAttachmentType means reference to other stories or about a person
+ * personalAttachmentType means a personal review could be removed thru
+ * removePersonalViewpoints() referenceAttachmentType means reference to other
+ * stories or about a person
  */
 static const string personalAttachmentType = R"(1)";
 static const string referenceAttachmentType = R"(0)";
@@ -224,7 +225,8 @@ static const string referenceAttachmentType = R"(0)";
  * @return corresponding string
  */
 string attachmentTypeAsString(ATTACHMENT_TYPE type) {
-  return (type == ATTACHMENT_TYPE::PERSONAL) ? personalAttachmentType : referenceAttachmentType;
+  return (type == ATTACHMENT_TYPE::PERSONAL) ? personalAttachmentType
+                                             : referenceAttachmentType;
 }
 
 /**
@@ -233,18 +235,20 @@ string attachmentTypeAsString(ATTACHMENT_TYPE type) {
  * @return REFERENCE or PERSONAL
  */
 ATTACHMENT_TYPE attachmentTypeFromString(const string &str) {
-  return (str == personalAttachmentType) ? ATTACHMENT_TYPE::PERSONAL : ATTACHMENT_TYPE::REFERENCE;
+  return (str == personalAttachmentType) ? ATTACHMENT_TYPE::PERSONAL
+                                         : ATTACHMENT_TYPE::REFERENCE;
 }
 
 /**
  * find the type of one attachment from refAttachmentTable
  * which is loaded from loadReferenceAttachmentList()
  * @param num pair of chapter number and attachment number
- * @return personalAttachmentType if found in refAttachmentTable with value personalAttachmentType
- *  otherwise, return referenceAttachmentType if founded with value referenceAttachmentType
- *  otherwise, return "2"
- *  personalAttachmentType means a personal review could be removed thru removePersonalViewpoints()
- *  referenceAttachmentType means reference to other stories or about a person
+ * @return personalAttachmentType if found in refAttachmentTable with value
+ * personalAttachmentType otherwise, return referenceAttachmentType if founded
+ * with value referenceAttachmentType otherwise, return "2"
+ *  personalAttachmentType means a personal review could be removed thru
+ * removePersonalViewpoints() referenceAttachmentType means reference to other
+ * stories or about a person
  */
 ATTACHMENT_TYPE Link::getAttachmentType(AttachmentNumber num) {
   ATTACHMENT_TYPE attachmentType = ATTACHMENT_TYPE::NON_EXISTED;
@@ -253,8 +257,8 @@ ATTACHMENT_TYPE Link::getAttachmentType(AttachmentNumber num) {
     attachmentType = GetTupleElement(entry, 2);
   } catch (exception &) {
     if (debug)
-      cout << "not found info about: " << num.first << attachmentFileMiddleChar << num.second
-           << endl;
+      cout << "not found info about: " << num.first << attachmentFileMiddleChar
+           << num.second << endl;
   }
   return attachmentType;
 }
@@ -519,10 +523,9 @@ void Link::readKey(const string &linkString) {
       cout << "line number found: " << lineNumber << endl;
     LineNumber ln(lineNumber);
     string expectedSection =
-    		citationChapterNo + TurnToString(chapterNumber) + citationChapter +
+        citationChapterNo + TurnToString(chapterNumber) + citationChapter +
         TurnToString(ln.getParaNumber()) + citationChapterParaSeparator +
-        TurnToString(ln.getlineNumber()) +
-		citationPara;
+        TurnToString(ln.getlineNumber()) + citationPara;
     fixReferPara(ln.asString());
     fixReferSection(expectedSection);
   } else {
@@ -612,8 +615,8 @@ string LinkFromMain::getFromLineOfAttachment(AttachmentNumber num) {
     result = attachmentTable.at(num).first;
   } catch (exception &) {
     if (debug)
-      cout << "fromLine not found about: " << num.first << attachmentFileMiddleChar << num.second
-           << endl;
+      cout << "fromLine not found about: " << num.first
+           << attachmentFileMiddleChar << num.second << endl;
   }
   return result;
 }
@@ -749,7 +752,8 @@ void LinkFromMain::logLink() {
   }
   if (isTargetToOtherAttachmentHtm()) {
     auto targetFile = getFileNamePrefix(type) + getChapterName() +
-                      attachmentFileMiddleChar + TurnToString(getattachmentNumber());
+                      attachmentFileMiddleChar +
+                      TurnToString(getattachmentNumber());
     auto num = make_pair(getchapterNumer(), getattachmentNumber());
     auto title = getAttachmentTitle(targetFile);
     auto type = getAttachmentType(num);
@@ -926,16 +930,18 @@ bool LinkFromAttachment::readReferFileName(const string &link) {
 void LinkFromAttachment::logLink() {
   if (isTargetToOtherMainHtm()) {
     try {
-      auto &entry = linksTable.at(std::make_tuple(
-          getChapterName() + attachmentFileMiddleChar + TurnToString(attachmentNumber), referPara,
-          usedKey));
+      auto &entry = linksTable.at(
+          std::make_tuple(getChapterName() + attachmentFileMiddleChar +
+                              TurnToString(attachmentNumber),
+                          referPara, usedKey));
       entry.push_back(
           std::make_tuple(fromFile, fromLine.asString(), asString()));
     } catch (exception &) {
       if (debug)
         cout << "not found link for: "
-             << getChapterName() + attachmentFileMiddleChar + TurnToString(attachmentNumber) << " "
-             << referPara << " " << usedKey << endl;
+             << getChapterName() + attachmentFileMiddleChar +
+                    TurnToString(attachmentNumber)
+             << " " << referPara << " " << usedKey << endl;
       vector<std::tuple<string, string, string>> list;
       list.push_back(
           std::make_tuple(fromFile, fromLine.asString(), asString()));

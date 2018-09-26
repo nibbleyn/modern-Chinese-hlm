@@ -30,8 +30,8 @@ void assembleContainerHTM(string outputHTMFilename, int containerNumber,
   ofstream outfile(outputHTMFilename);
   string line{""};
   bool started = false;
-  string start = topTab;  // first line
-  string end = bottomTab; // last line
+  string start = topTab;    // first line
+  string end = bottomTab;   // last line
   while (!inHtmlFile.eof()) // To get you all the lines.
   {
     getline(inHtmlFile, line); // Saves the line in line.
