@@ -1,4 +1,5 @@
 #pragma once
+#include "hlmNumbering.hpp"
 #include "hlmLinkFixing.hpp"
 
 static const string HTML_CONTAINER = "container/";
@@ -37,4 +38,9 @@ void findFirstInFiles(string key, FILE_TYPE targetFileType, int minTarget,
                       int maxTarget, string outputFilename);
 
 // main entry of calling above functions
-void testHLM();
+void testFunctions();
+void numberOriginalHtmls();
+void numberMainHtmls();
+void numberAttachmentHtmls();
+void fixLinksFromMain();
+void fixLinksFromAttachment();
