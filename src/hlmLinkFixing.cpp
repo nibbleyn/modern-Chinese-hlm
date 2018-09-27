@@ -160,8 +160,8 @@ void fixMainLinksOverNumberedFiles(const string &referFile, fileSet files) {
           if (lfm.needUpdate())    // replace old value
           {
             auto orglinkBegin = orgLine.find(link);
-            if(debug)
-            	SEPERATE("isTargetToOriginalHtm", orgLine + "\n" + link);
+            if (debug)
+              SEPERATE("isTargetToOriginalHtm", orgLine + "\n" + link);
             orgLine.replace(orglinkBegin, link.length(), lfm.asString());
           }
         }
@@ -452,7 +452,6 @@ void fixAttachments(int minTarget, int maxTarget, int minReference,
   assembleAttachments(minTarget, maxTarget, minAttachNo, maxAttachNo);
 }
 
-
 void fixLinksFromAttachmentHtmls() {
   int minTarget = 3, maxTarget = 3;
   int minReference = 1, maxReference = 80;
@@ -475,5 +474,3 @@ void fixLinksFromAttachment() {
   fixLinksFromAttachmentHtmls();
   LinkFromAttachment::outPutStatisticsToFiles();
 }
-
-

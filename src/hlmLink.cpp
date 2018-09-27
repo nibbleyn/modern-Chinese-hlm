@@ -185,6 +185,20 @@ string fixLinkFromAttachmentTemplate(const string &path, const string &filename,
   return link;
 }
 
+static const string charBeforeAnnotation = R"(>)";
+static const string referFileMiddleChar = R"(href=")";
+static const string referParaMiddleChar = R"(#)";
+static const string referParaEndChar = R"(">)";
+static const string keyStartChars = R"(<i hidden>)";
+static const string keyEndChars = R"(</i>)";
+static const string changeKey = R"(changeKey)";
+static const string citationStartChars = R"(<b hidden>)";
+static const string citationChapterNo = R"(第)";
+static const string citationChapter = R"(章)";
+static const string citationChapterParaSeparator = R"(.)";
+static const string citationPara = R"(节:)";
+static const string citationEndChars = R"(</b>)";
+
 /**
  * output linksTable to file HTML_OUTPUT_LINKS_LIST
  */
@@ -262,6 +276,9 @@ ATTACHMENT_TYPE Link::getAttachmentType(AttachmentNumber num) {
   return attachmentType;
 }
 
+static const string HTML_SRC_REF_ATTACHMENT_LIST =
+    "utf8HTML/src/RefAttachments.txt";
+
 /**
  * load refAttachmentTable from HTML_SRC_REF_ATTACHMENT
  * read file and add entry of attachment found before into target list.
@@ -334,6 +351,37 @@ void Link::resetStatisticsAndLoadReferenceAttachmentList() {
  * before calling this function, specifying output file
  */
 void Link::outPutStatisticsToFiles() { displayFixedLinks(); }
+
+/**
+ * generated the string of a link from its info like type, key, etc.
+ * @return the string of the link
+ */
+string Link::asString() {
+  string part0 = linkStartChars + " " + displayPropertyAsString() + " " +
+                 referFileMiddleChar;
+  string part1{""}, part2{""}, part3{""};
+  if (type != LINK_TYPE::SAMEPAGE) {
+    part1 =
+        getPathOfReferenceFile() + getFileNamePrefix(type) + getChapterName();
+    if (attachmentNumber != 0)
+      part2 = attachmentFileMiddleChar + TurnToString(attachmentNumber);
+    part3 = HTML_SUFFIX;
+  }
+  string part4{""};
+  if (type != LINK_TYPE::ATTACHMENT or referPara != invalidLineNumber) {
+    part4 = referParaMiddleChar + referPara;
+  }
+  string part5 = referParaEndChar, part6{""}, part7{""};
+  if (type != LINK_TYPE::ATTACHMENT and not usedKey.empty()) {
+    part6 = keyStartChars + getKey() + keyEndChars;
+    // easier to replace to <b unhidden> if want to display this
+    if (type == LINK_TYPE::MAIN)
+      part7 = citationStartChars + getReferSection() + citationEndChars;
+  }
+  string part8 = getAnnotation() + linkEndChars;
+  return (part0 + part1 + part2 + part3 + part4 + part5 + part6 + part7 +
+          part8 + getStringOfLinkToOrigin());
+}
 
 /**
  * get display type HIDDEN, UNHIDDEN, etc. from the link <a> tag attribute.
@@ -583,6 +631,11 @@ AttachmentNumber getAttachmentNumber(const string &filename) {
   return num;
 }
 
+static const string HTML_OUTPUT_LINKS_FROM_MAIN_LIST =
+    "utf8HTML/output/LinksFromMain.txt";
+static const string HTML_OUTPUT_ATTACHMENT_FROM_MAIN_LIST =
+    "utf8HTML/output/AttachmentsFromMain.txt";
+
 /**
  * output all attachment info into specified file
  */
@@ -816,6 +869,11 @@ string LinkFromMain::getBodyTextFilePrefix(LINK_TYPE _type) {
     prefix = bodyTextFilePrefix[3];
   return prefix;
 }
+
+static const string HTML_OUTPUT_LINKS_FROM_ATTACHMENT_LIST =
+    "utf8HTML/output/LinksFromAttachment.txt";
+static const string HTML_OUTPUT_ATTACHMENT_FROM_ATTACHMENT_LIST =
+    "utf8HTML/output/AttachmentsFromAttachment.txt";
 
 /**
  * reset statistics data structure for re-do it during link fixing

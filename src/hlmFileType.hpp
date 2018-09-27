@@ -42,10 +42,6 @@ static const string BODY_TEXT_SUFFIX = R"(.txt)";
 
 static const string topTab = R"(name="top")";       // of the body Text file
 static const string bottomTab = R"(name="bottom")"; // of the body Text file
-static const string final = R"(</html>)"; // last line of the html file
-static const string endOfHead = R"(/head)";
-static const string titleStart = R"(<title>)";
-static const string titleEnd = R"(</title>)";
 static const string keyNotFound = R"(KeyNotFound)";
 static const string attachmentFileMiddleChar = R"(_)";
 
@@ -62,17 +58,10 @@ string getBodyTextFilePrefix(FILE_TYPE type);
 string getSeparateLineColor(FILE_TYPE type);
 
 // backup or load files before operations
-string currentTimeStamp();
-string currentDateTime();
 void loadBodyTexts(const string &from, const string &to);
 void backupAndOverwriteSrcForHTML();
 
 // separate/merge body text from/back to Htm files
-void dissembleFromHTM(const string &inputHtmlFile,
-                      const string &outputBodyTextFile);
-void assembleBackToHTM(const string &inputHtmlFile,
-                       const string &inputBodyTextFile,
-                       const string &outputFile);
 void dissembleOriginalHtmls(int minTarget, int maxTarget);
 void assembleOriginalHtmls(int minTarget, int maxTarget);
 void dissembleMainHtmls(int minTarget, int maxTarget);

@@ -1,5 +1,10 @@
 #include "hlmFileType.hpp"
 
+static const string final = R"(</html>)"; // last line of the html file
+static const string endOfHead = R"(/head)";
+static const string titleStart = R"(<title>)";
+static const string titleEnd = R"(</title>)";
+
 /**
  * all file names like a077.htm, b003_8.htm
  * have a 2-digit string part "77", "03"

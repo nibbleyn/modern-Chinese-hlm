@@ -3,6 +3,10 @@
 
 extern bool debug;
 
+static const string endOfLineNumber =
+    R"(")"; // to try special case like "bottom"
+static const string endOfGeneratedLineNumber = R"(>)";
+
 const string LineNumber::LineNumberStart = R"(<a unhidden name=")";
 int LineNumber::StartNumber = START_PARA_NUMBER;
 int LineNumber::Limit = START_PARA_NUMBER * 2;

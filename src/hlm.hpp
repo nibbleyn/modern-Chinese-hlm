@@ -1,6 +1,6 @@
 #pragma once
-#include "hlmNumbering.hpp"
 #include "hlmLinkFixing.hpp"
+#include "hlmNumbering.hpp"
 
 static const string HTML_CONTAINER = "container/";
 static const string BODY_TEXT_CONTAINER = "container/";

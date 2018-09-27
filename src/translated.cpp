@@ -1,6 +1,6 @@
 //#include "hlm.hpp"
-#include "hlmNumbering.hpp"
 #include "hlmLinkFixing.hpp"
+#include "hlmNumbering.hpp"
 
 int main(int argc, char **argv) {
 //  testFunctions();
