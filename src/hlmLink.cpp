@@ -199,12 +199,11 @@ void Link::displayFixedLinks() {
     auto key = link.first;
     auto fromList = link.second;
     // link itself
-    outfile << "link:" << endl
-            << GetTupleElement(key, 0) << "," << GetTupleElement(key, 1) << ":"
-            << GetTupleElement(key, 2) << endl
-            << "linked from :" << endl;
+    outfile << "link:" << GetTupleElement(key, 0) << ","
+            << GetTupleElement(key, 1) << ":" << GetTupleElement(key, 2)
+            << endl;
     for (const auto &from : fromList) {
-      outfile << "    " << GetTupleElement(from, 0) << ","
+      outfile << "linked from:" << GetTupleElement(from, 0) << ","
               << GetTupleElement(from, 1) << ":" << endl
               << "    " << GetTupleElement(from, 2) << endl;
     }
