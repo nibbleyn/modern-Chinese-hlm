@@ -350,7 +350,10 @@ void Link::resetStatisticsAndLoadReferenceAttachmentList() {
  * output links to specified file
  * before calling this function, specifying output file
  */
-void Link::outPutStatisticsToFiles() { displayFixedLinks(); }
+void Link::outPutStatisticsToFiles() {
+  displayFixedLinks();
+  cout << "links information are written into: " << outPutFilePath << endl;
+}
 
 /**
  * generated the string of a link from its info like type, key, etc.
@@ -642,7 +645,6 @@ static const string HTML_OUTPUT_ATTACHMENT_FROM_MAIN_LIST =
 void LinkFromMain::displayAttachments() {
   if (attachmentTable.empty())
     return;
-  cout << HTML_OUTPUT_ATTACHMENT_FROM_MAIN_LIST << " is created." << endl;
   ofstream outfile(HTML_OUTPUT_ATTACHMENT_FROM_MAIN_LIST);
   for (const auto &attachment : attachmentTable) {
     AttachmentFileNameTitleAndType entry = attachment.second.second;
@@ -653,6 +655,8 @@ void LinkFromMain::displayAttachments() {
             << " type:" << attachmentTypeAsString(GetTupleElement(entry, 2))
             << endl;
   }
+  cout << "attachment information are written into: "
+       << HTML_OUTPUT_ATTACHMENT_FROM_MAIN_LIST << endl;
 }
 
 /**
