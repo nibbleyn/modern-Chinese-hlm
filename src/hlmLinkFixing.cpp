@@ -78,7 +78,7 @@ void fixMainLinksOverNumberedFiles(const string &referFile, fileSet files) {
   string outputFile = BODY_TEXT_FIX + getBodyTextFilePrefix(FILE_TYPE::MAIN) +
                       referFile + BODY_TEXT_SUFFIX;
   ofstream outfile(outputFile);
-  string inLine{"not found"};
+  string inLine{""};
   while (!infile.eof()) // To get all the lines.
   {
     getline(infile, inLine); // Saves the line in inLine.
@@ -103,15 +103,15 @@ void fixMainLinksOverNumberedFiles(const string &referFile, fileSet files) {
       auto linkEnd = inLine.find(linkEndChars, linkBegin);
       auto link = inLine.substr(linkBegin, linkEnd + 4 - linkBegin);
       LinkFromMain lfm(referFile,
-                       link); // get only type and annotation
+                       link);      // get only type and annotation
+      lfm.readReferFileName(link); // second step of construction, this is
+                                   // needed to check isTargetToSelfHtm
       if (lfm.isTargetToOtherAttachmentHtm()) {
-        lfm.readReferFileName(link); // second step of construction
-        lfm.fixFromString(link);     // third step of construction
+        lfm.fixFromString(link); // third step of construction
         lfm.setSourcePara(ln);
         lfm.doStatistics();
       }
       if (lfm.isTargetToSelfHtm()) {
-        lfm.readReferFileName(link); // second step of construction
         lfm.setSourcePara(ln);
         lfm.fixFromString(link); // third step of construction
         if (lfm.needUpdate())    // replace old value
@@ -121,7 +121,6 @@ void fixMainLinksOverNumberedFiles(const string &referFile, fileSet files) {
         }
       }
       if (lfm.isTargetToOtherMainHtm()) {
-        lfm.readReferFileName(link); // second step of construction
         targetFile = lfm.getChapterName();
         auto e = find(files.begin(), files.end(), targetFile);
         if (e != files.end()) // need to check and fix
@@ -148,12 +147,12 @@ void fixMainLinksOverNumberedFiles(const string &referFile, fileSet files) {
           if (lfm.needUpdate()) // replace old value
           {
             auto orglinkBegin = orgLine.find(link);
+            SEPERATE("isTargetToOtherMainHtm", orgLine + "\n" + link);
             orgLine.replace(orglinkBegin, link.length(), lfm.asString());
           }
         }
       }
       if (lfm.isTargetToOriginalHtm()) {
-        lfm.readReferFileName(link); // second step of construction
         targetFile = lfm.getChapterName();
         auto e = find(files.begin(), files.end(), targetFile);
         if (e != files.end()) // need to check and fix
@@ -162,6 +161,7 @@ void fixMainLinksOverNumberedFiles(const string &referFile, fileSet files) {
           if (lfm.needUpdate())    // replace old value
           {
             auto orglinkBegin = orgLine.find(link);
+            SEPERATE("isTargetToOriginalHtm", orgLine + "\n" + link);
             orgLine.replace(orglinkBegin, link.length(), lfm.asString());
           }
         }
@@ -258,7 +258,7 @@ void fixAttachmentLinksOverNumberedFiles(const string &referFile, fileSet files,
       BODY_TEXT_FIX + getBodyTextFilePrefix(FILE_TYPE::ATTACHMENT) + referFile +
       attachmentFileMiddleChar + TurnToString(attachNo) + BODY_TEXT_SUFFIX;
   ofstream outfile(outputFile);
-  string inLine{"not found"};
+  string inLine{""};
   while (!infile.eof()) // To get all the lines.
   {
     getline(infile, inLine); // Saves the line in inLine.
@@ -285,14 +285,14 @@ void fixAttachmentLinksOverNumberedFiles(const string &referFile, fileSet files,
       // get only type and annotation
       LinkFromAttachment lfm(
           referFile + attachmentFileMiddleChar + TurnToString(attachNo), link);
+      lfm.readReferFileName(link); // second step of construction, this is
+                                   // needed to check isTargetToSelfHtm
       if (lfm.isTargetToOtherAttachmentHtm()) {
-        lfm.readReferFileName(link); // second step of construction
-        lfm.fixFromString(link);     // third step of construction
+        lfm.fixFromString(link); // third step of construction
         lfm.setSourcePara(ln);
         lfm.doStatistics();
       }
       if (lfm.isTargetToSelfHtm()) {
-        lfm.readReferFileName(link); // second step of construction
         lfm.setSourcePara(ln);
         lfm.fixFromString(link); // third step of construction
         if (lfm.needUpdate())    // replace old value
@@ -302,7 +302,6 @@ void fixAttachmentLinksOverNumberedFiles(const string &referFile, fileSet files,
         }
       }
       if (lfm.isTargetToOtherMainHtm()) {
-        lfm.readReferFileName(link); // second step of construction
         targetFile = lfm.getChapterName();
         auto e = find(files.begin(), files.end(), targetFile);
         if (e != files.end()) // need to check and fix
@@ -334,7 +333,6 @@ void fixAttachmentLinksOverNumberedFiles(const string &referFile, fileSet files,
         }
       }
       if (lfm.isTargetToOriginalHtm()) {
-        lfm.readReferFileName(link); // second step of construction
         targetFile = lfm.getChapterName();
         auto e = find(files.begin(), files.end(), targetFile);
         if (e != files.end()) // need to check and fix

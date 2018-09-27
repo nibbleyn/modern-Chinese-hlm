@@ -23,6 +23,10 @@ using namespace std;
 extern bool debug;
 #define GetTupleElement(x, y) std::get<y>(x)
 
+#define SEPERATE(x, y)                                                         \
+  cout << "*************************line " << __LINE__ << ": " << x << y       \
+       << "*************************" << endl; //<< __func__<< __FILE__
+
 static const string HTML_SRC = "utf8HTML/src/";
 static const string HTML_SRC_ATTACHMENT = "utf8HTML/src/attachment/";
 static const string HTML_SRC_ORIGINAL = "utf8HTML/src/original/";

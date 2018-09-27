@@ -4,10 +4,6 @@
 
 bool debug = true;
 
-#define SEPERATE(x, y)                                                         \
-  cout << "*************************line " << __LINE__ << ": " << x << y       \
-       << "*************************" << endl; //<< __func__<< __FILE__
-
 void testLineHeader(string lnStr) {
   cout << "original: " << endl << lnStr << endl;
   LineNumber ln(lnStr);
@@ -398,10 +394,10 @@ void testHLM() {
 
   cout << "refer to readme about how to use this tool." << endl;
 
-  //  numberOriginalHtmls();
-  //    numberMainHtmls();
-  //    numberAttachmentHtmls();
+//  numberOriginalHtmls();
+//  numberMainHtmls();
+//  numberAttachmentHtmls();
 
   fixLinksFromMain();
-  //  fixLinksFromAttachment();
+//  fixLinksFromAttachment();
 }
