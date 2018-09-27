@@ -39,8 +39,3 @@ void findFirstInFiles(string key, FILE_TYPE targetFileType, int minTarget,
 
 // main entry of calling above functions
 void testFunctions();
-void numberOriginalHtmls();
-void numberMainHtmls();
-void numberAttachmentHtmls();
-void fixLinksFromMain();
-void fixLinksFromAttachment();

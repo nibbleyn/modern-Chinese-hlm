@@ -147,7 +147,6 @@ void fixMainLinksOverNumberedFiles(const string &referFile, fileSet files) {
           if (lfm.needUpdate()) // replace old value
           {
             auto orglinkBegin = orgLine.find(link);
-            SEPERATE("isTargetToOtherMainHtm", orgLine + "\n" + link);
             orgLine.replace(orglinkBegin, link.length(), lfm.asString());
           }
         }
@@ -161,7 +160,8 @@ void fixMainLinksOverNumberedFiles(const string &referFile, fileSet files) {
           if (lfm.needUpdate())    // replace old value
           {
             auto orglinkBegin = orgLine.find(link);
-            SEPERATE("isTargetToOriginalHtm", orgLine + "\n" + link);
+            if(debug)
+            	SEPERATE("isTargetToOriginalHtm", orgLine + "\n" + link);
             orgLine.replace(orglinkBegin, link.length(), lfm.asString());
           }
         }
@@ -234,6 +234,56 @@ void fixMainHtml(int minTarget, int maxTarget, int minReference,
   loadBodyTexts(BODY_TEXT_FIX, BODY_TEXT_OUTPUT);
   assembleMainHtmls(minTarget, maxTarget);
   fixReturnLinkForAttachments(minTarget, maxTarget);
+}
+
+void fixLinksFromMainHtmls() {
+  int minTarget = 1, maxTarget = 80;
+  int minReference = 1, maxReference = 80;
+  fixMainHtml(minTarget, maxTarget, minReference, maxReference);
+}
+
+fileSet keyMissingChapters;
+fileSet newAttachmentList;
+
+/**
+ *
+ */
+void clearReport() {
+  keyMissingChapters.clear();
+  newAttachmentList.clear();
+}
+
+/**
+ *
+ */
+void displayMainFilesOfMissingKey() {
+  if (keyMissingChapters.empty())
+    return;
+  cout << "files which has missing key links:" << endl;
+  for (const auto &file : keyMissingChapters) {
+    cout << getFileNamePrefix(FILE_TYPE::MAIN) + file + ".htm" << endl;
+  }
+}
+
+/**
+ *
+ */
+void displayNewlyAddedAttachments() {
+  if (newAttachmentList.empty())
+    return;
+  cout << "Newly Added Attachments:" << endl;
+  for (const auto &file : newAttachmentList) {
+    cout << file + ".htm" << endl;
+  }
+}
+
+void fixLinksFromMain() {
+  clearReport();
+  LinkFromMain::resetStatisticsAndLoadReferenceAttachmentList();
+  fixLinksFromMainHtmls();
+  LinkFromMain::outPutStatisticsToFiles();
+  displayMainFilesOfMissingKey();
+  displayNewlyAddedAttachments();
 }
 
 /**
@@ -401,3 +451,29 @@ void fixAttachments(int minTarget, int maxTarget, int minReference,
   loadBodyTexts(BODY_TEXT_FIX, BODY_TEXT_OUTPUT);
   assembleAttachments(minTarget, maxTarget, minAttachNo, maxAttachNo);
 }
+
+
+void fixLinksFromAttachmentHtmls() {
+  int minTarget = 3, maxTarget = 3;
+  int minReference = 1, maxReference = 80;
+  int minAttachNo = 1, maxAttachNo = 1;
+  fixAttachments(minTarget, maxTarget, minReference, maxReference, minAttachNo,
+                 maxAttachNo);
+}
+
+void fixLinksFromAllAttachmentHtmls() {
+  int minTarget = 3, maxTarget = 3;
+  int minReference = 1, maxReference = 80;
+  int minAttachNo = 0, maxAttachNo = 0;
+  // fix all attachments
+  fixAttachments(minTarget, maxTarget, minReference, maxReference, minAttachNo,
+                 maxAttachNo);
+}
+
+void fixLinksFromAttachment() {
+  LinkFromAttachment::resetStatisticsAndLoadReferenceAttachmentList();
+  fixLinksFromAttachmentHtmls();
+  LinkFromAttachment::outPutStatisticsToFiles();
+}
+
+

@@ -420,3 +420,30 @@ void NumberingAttachmentHtml(int minTarget, int maxTarget, int minAttachNo,
   loadBodyTexts(BODY_TEXT_FIX, BODY_TEXT_OUTPUT);
   assembleAttachments(minTarget, maxTarget, minAttachNo, maxAttachNo);
 }
+
+/**
+ * copy main files into HTML_OUTPUT
+ * before run this
+ */
+void numberMainHtmls() {
+  int minTarget = 1, maxTarget = 80;
+  NumberingMainHtml(minTarget, maxTarget);
+}
+/**
+ * copy original files into HTML_SRC_ORIGINAL
+ * before run this
+ */
+void numberOriginalHtmls() {
+  int minTarget = 1, maxTarget = 80;
+  NumberingOriginalHtml(minTarget, maxTarget);
+}
+
+/**
+ * copy attachment files into HTML_SRC_ATTACHMENT
+ * before run this
+ */
+void numberAttachmentHtmls() {
+  int minTarget = 1, maxTarget = 80;
+  int minAttachNo = 0, maxAttachNo = 50;
+  NumberingAttachmentHtml(minTarget, maxTarget, minAttachNo, maxAttachNo);
+}
