@@ -51,7 +51,7 @@ void fixReturnLinkForAttachmentFile(const string &referFile,
         lfm.fixReferPara(LinkFromMain::getFromLineOfAttachment(num));
         if (lfm.needUpdate()) // replace old value
         {
-          if (debug)
+          if (debug >= LOG_INFO)
             cout << lfm.asString() << endl;
           auto orglinkBegin = orgLine.find(link);
           orgLine.replace(orglinkBegin, link.length(), lfm.asString());
@@ -91,7 +91,7 @@ void fixMainLinksOverNumberedFiles(const string &referFile, fileSet files) {
     }
     inLine = inLine.substr(
         ln.generateLinePrefix().length()); // skip line number link
-    if (debug)
+    if (debug >= LOG_INFO)
       cout << inLine << endl;
     auto start = linkStartChars;
     string targetFile{""};
@@ -160,7 +160,7 @@ void fixMainLinksOverNumberedFiles(const string &referFile, fileSet files) {
           if (lfm.needUpdate())    // replace old value
           {
             auto orglinkBegin = orgLine.find(link);
-            if (debug)
+            if (debug >= LOG_INFO)
               SEPERATE("isTargetToOriginalHtm", orgLine + "\n" + link);
             orgLine.replace(orglinkBegin, link.length(), lfm.asString());
           }
@@ -210,7 +210,7 @@ void fixReturnLinkForAttachments(int minTarget, int maxTarget) {
                                      inputHtmlFile, outputFile);
     }
   }
-  if (debug)
+  if (debug >= LOG_INFO)
     cout << "fix Return Link finished. " << endl;
 }
 
@@ -321,7 +321,7 @@ void fixAttachmentLinksOverNumberedFiles(const string &referFile, fileSet files,
     }
     inLine = inLine.substr(
         ln.generateLinePrefix().length()); // skip line number link
-    if (debug)
+    if (debug >= LOG_INFO)
       cout << inLine << endl;
     auto start = linkStartChars;
     string targetFile{""};

@@ -20,7 +20,7 @@
 #include "hlmLineNumber.hpp"
 
 using namespace std;
-extern bool debug;
+extern int debug;
 #define GetTupleElement(x, y) std::get<y>(x)
 
 #define SEPERATE(x, y)                                                         \

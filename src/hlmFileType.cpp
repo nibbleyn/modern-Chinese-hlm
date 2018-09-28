@@ -140,7 +140,7 @@ void loadBodyTexts(const string &from, const string &to) {
   Poco::File(from).list(filenameList);
   sort(filenameList.begin(), filenameList.end(), less<string>());
   for (const auto &file : filenameList) {
-    if (debug)
+    if (debug >= LOG_INFO)
       cout << "loading " << file << ".. " << endl;
     Poco::File fileToCopy(from + file);
     fileToCopy.copyTo(to + file);
@@ -242,7 +242,7 @@ void dissembleFromHTM(const string &inputHtmlFile,
   else if (not ended)
     cout << "no end paragraph found for " << inputHtmlFile << "as " << end
          << endl;
-  else if (debug)
+  else if (debug >= LOG_INFO)
     cout << "dissemble finished for " << inputHtmlFile << endl;
 }
 
@@ -333,7 +333,7 @@ void assembleBackToHTM(const string &inputHtmlFile,
       }
     }
   }
-  if (debug)
+  if (debug >= LOG_INFO)
     cout << "assemble finished for " << outputFile << endl;
 }
 
@@ -352,7 +352,7 @@ void dissembleOriginalHtmls(int minTarget, int maxTarget) {
                                 file + BODY_TEXT_SUFFIX;
     dissembleFromHTM(inputHtmlFile, outputBodyTextFile);
   }
-  if (debug)
+  if (debug >= LOG_INFO)
     cout << "Original Htmls dissemble finished. " << endl;
 }
 
@@ -374,7 +374,7 @@ void assembleOriginalHtmls(int minTarget, int maxTarget) {
                         HTML_SUFFIX;
     assembleBackToHTM(inputHtmlFile, inputBodyTextFile, outputFile);
   }
-  if (debug)
+  if (debug >= LOG_INFO)
     cout << "Original Htmls assemble finished. " << endl;
 }
 
@@ -392,7 +392,7 @@ void dissembleMainHtmls(int minTarget, int maxTarget) {
                                 BODY_TEXT_SUFFIX;
     dissembleFromHTM(inputHtmlFile, outputBodyTextFile);
   }
-  if (debug)
+  if (debug >= LOG_INFO)
     cout << "Main Htmls dissemble finished. " << endl;
 }
 
@@ -412,7 +412,7 @@ void assembleMainHtmls(int minTarget, int maxTarget) {
         HTML_OUTPUT + getFileNamePrefix(FILE_TYPE::MAIN) + file + HTML_SUFFIX;
     assembleBackToHTM(inputHtmlFile, inputBodyTextFile, outputFile);
   }
-  if (debug)
+  if (debug >= LOG_INFO)
     cout << "Main Htmls assemble finished. " << endl;
 }
 
@@ -451,7 +451,7 @@ void dissembleAttachments(int minTarget, int maxTarget, int minAttachNo,
       dissembleFromHTM(inputHtmlFile, outputBodyTextFile);
     }
   }
-  if (debug)
+  if (debug >= LOG_INFO)
     cout << "Attachments dissemble finished. " << endl;
 }
 
@@ -492,7 +492,7 @@ void assembleAttachments(int minTarget, int maxTarget, int minAttachNo,
       assembleBackToHTM(inputHtmlFile, inputBodyTextFile, outputFile);
     }
   }
-  if (debug)
+  if (debug >= LOG_INFO)
     cout << "assemble finished. " << endl;
 }
 

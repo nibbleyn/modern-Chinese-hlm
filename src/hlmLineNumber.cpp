@@ -23,10 +23,10 @@ void LineNumber::loadFromContainedLine(const string &containedLine) {
   {
     string end = endOfLineNumber;
     string lineName = containedLine.substr(linkBegin + start.length());
-    if (debug)
+    if (debug >= LOG_INFO)
       cout << lineName << endl;
     auto linkEnd = lineName.find(end);
-    if (debug)
+    if (debug >= LOG_INFO)
       cout << lineName.substr(0, linkEnd) << endl;
     if (lineName.substr(0, linkEnd) == bottomParagraphIndicator)
       readFromString(leadingChar + TurnToString(Limit - 1));

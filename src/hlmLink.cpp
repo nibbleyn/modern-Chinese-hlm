@@ -269,7 +269,7 @@ ATTACHMENT_TYPE Link::getAttachmentType(AttachmentNumber num) {
     auto entry = refAttachmentTable.at(num).second;
     attachmentType = GetTupleElement(entry, 2);
   } catch (exception &) {
-    if (debug)
+    if (debug >= LOG_EXCEPTION)
       cout << "not found info about: " << num.first << attachmentFileMiddleChar
            << num.second << endl;
   }
@@ -322,7 +322,7 @@ void Link::loadReferenceAttachmentList() {
     auto fromBegin = line.find(start);
     string fromLine = line.substr(fromBegin + start.length(),
                                   nameBegin - fromBegin - start.length());
-    if (debug)
+    if (debug >= LOG_INFO)
       cout << "from:" << fromLine << " name:" << targetFile
            << " title:" << title << " type:" << type << endl;
     fromLine.erase(remove(fromLine.begin(), fromLine.end(), ' '),
@@ -406,7 +406,7 @@ void Link::readDisplayType(const string &linkString) {
   if (copy.find("ahiddenhref") != string::npos) {
     displayType = LINK_DISPLAY_TYPE::HIDDEN;
   }
-  if (debug)
+  if (debug >= LOG_INFO)
     cout << "display Type:" << displayPropertyAsString() << endl;
 }
 
@@ -433,7 +433,7 @@ void Link::readType(const string &linkString) {
   string refereFileName = linkString.substr(
       fileBegin + start.length(), fileEnd - fileBegin - start.length());
   type = getLinKTypeFromReferFileName(refereFileName);
-  if (debug)
+  if (debug >= LOG_INFO)
     cout << "type seen from prefix: " << refereFileName << endl;
 }
 
@@ -451,7 +451,7 @@ void Link::readReferPara(const string &linkString) {
   auto processStart = linkString.find(htmStart);
   if (processStart == string::npos) // no file to refer
   {
-    if (debug)
+    if (debug >= LOG_EXCEPTION)
       cout << "no # found to read referPara from link: " << linkString << endl;
     return;
   }
@@ -460,7 +460,7 @@ void Link::readReferPara(const string &linkString) {
   string end = referParaEndChar;
   auto processEnd = afterLink.find(end);
   referPara = afterLink.substr(0, processEnd);
-  if (debug)
+  if (debug >= LOG_INFO)
     cout << "referPara: " << referPara << endl;
 }
 
@@ -493,7 +493,7 @@ bool Link::readAnnotation(const string &linkString) {
   annotation =
       afterLink.substr(afterLinkBegin + start.length(),
                        afterLink.length() - afterLinkBegin - start.length());
-  if (debug)
+  if (debug >= LOG_INFO)
     cout << "annotation: " << annotation << endl;
   return true;
 }
@@ -534,7 +534,7 @@ void Link::readKey(const string &linkString) {
       needChange = true;
       usedKey = keyNotFound;
     }
-    if (debug) {
+    if (debug >= LOG_EXCEPTION) {
       string output = usedKey.empty() ? "EMPTY" : usedKey;
       cout << "key string not found, so use key: " << output << endl;
     }
@@ -565,11 +565,11 @@ void Link::readKey(const string &linkString) {
                      getChapterName() + attachmentPart + BODY_TEXT_SUFFIX;
   string newKey =
       findKeyInFile(stringForSearch, referFile, lineNumber, needChange);
-  if (debug)
+  if (debug >= LOG_INFO)
     cout << "key found: " << newKey << endl;
   if (newKey.find(keyNotFound) == string::npos) {
     usedKey = stringForSearch;
-    if (debug)
+    if (debug >= LOG_INFO)
       cout << "line number found: " << lineNumber << endl;
     LineNumber ln(lineNumber);
     string expectedSection =
@@ -584,7 +584,7 @@ void Link::readKey(const string &linkString) {
     needChange = true;
   }
 
-  if (debug)
+  if (debug >= LOG_INFO)
     cout << "key: " << usedKey << endl;
 }
 
@@ -670,7 +670,7 @@ string LinkFromMain::getFromLineOfAttachment(AttachmentNumber num) {
   try {
     result = attachmentTable.at(num).first;
   } catch (exception &) {
-    if (debug)
+    if (debug >= LOG_EXCEPTION)
       cout << "fromLine not found about: " << num.first
            << attachmentFileMiddleChar << num.second << endl;
   }
@@ -698,7 +698,7 @@ void LinkFromMain::outPutStatisticsToFiles() {
  * generate the link to original file after a link to main file from main
  */
 void LinkFromMain::generateLinkToOrigin() {
-  if (debug)
+  if (debug >= LOG_INFO)
     cout << "create link to original main html thru key: " << usedKey << endl;
   auto reservedType = type;   // only LINK_TYPE::MAIN has origin member
   type = LINK_TYPE::ORIGINAL; // temporarily change type to get right path
@@ -763,7 +763,7 @@ bool LinkFromMain::readReferFileName(const string &link) {
       cout << "no attachment number in link: " << linkString << endl;
       return false;
     }
-    if (debug)
+    if (debug >= LOG_INFO)
       cout << "chapterNumber: "
            << refereFileName.substr(0, attachmentNumberStart)
            << ", attachmentNumber: "
@@ -774,7 +774,7 @@ bool LinkFromMain::readReferFileName(const string &link) {
   } else {
     chapterNumber = TurnToInt(refereFileName);
   }
-  if (debug)
+  if (debug >= LOG_INFO)
     cout << "chapterNumber: " << chapterNumber
          << ", attachmentNumber: " << attachmentNumber << endl;
   return true;
@@ -792,12 +792,12 @@ void LinkFromMain::logLink() {
           linksTable.at(std::make_tuple(getChapterName(), referPara, usedKey));
       entry.push_back(
           std::make_tuple(fromFile, fromLine.asString(), asString()));
-      if (debug)
+      if (debug >= LOG_INFO)
         cout << "entry.size: " << entry.size()
              << " more reference to link: " << getChapterName() << " "
              << referPara << " " << usedKey << endl;
     } catch (exception &) {
-      if (debug)
+      if (debug >= LOG_EXCEPTION)
         cout << "not found link for: " << getChapterName() << " " << referPara
              << " " << usedKey << endl;
       vector<std::tuple<string, string, string>> list;
@@ -898,7 +898,7 @@ void LinkFromAttachment::outPutStatisticsToFiles() {
  * generate the link to original file after a link to main file from attachment
  */
 void LinkFromAttachment::generateLinkToOrigin() {
-  if (debug)
+  if (debug >= LOG_INFO)
     cout << "create link to original main html thru key: " << usedKey << endl;
   auto reservedType = type;
   type = LINK_TYPE::ORIGINAL; // temporarily change type to get right path
@@ -966,7 +966,7 @@ bool LinkFromAttachment::readReferFileName(const string &link) {
       cout << "no attachment number in link: " << linkString << endl;
       return false;
     }
-    if (debug)
+    if (debug >= LOG_INFO)
       cout << "chapterNumber: "
            << refereFileName.substr(0, attachmentNumberStart)
            << ", attachmentNumber: "
@@ -978,7 +978,7 @@ bool LinkFromAttachment::readReferFileName(const string &link) {
   } else {
     chapterNumber = TurnToInt(refereFileName);
   }
-  if (debug)
+  if (debug >= LOG_INFO)
     cout << "chapterNumber: " << chapterNumber
          << ", attachmentNumber: " << attachmentNumber << endl;
   return true;
@@ -998,7 +998,7 @@ void LinkFromAttachment::logLink() {
       entry.push_back(
           std::make_tuple(fromFile, fromLine.asString(), asString()));
     } catch (exception &) {
-      if (debug)
+      if (debug >= LOG_EXCEPTION)
         cout << "not found link for: "
              << getChapterName() + attachmentFileMiddleChar +
                     TurnToString(attachmentNumber)

@@ -4,6 +4,9 @@
 
 using namespace std;
 
+const int LOG_EXCEPTION = 1;
+const int LOG_INFO = 2;
+
 #define TurnToInt(x) stoi(x, nullptr, 10)
 #define TurnToString(x) to_string(x)
 

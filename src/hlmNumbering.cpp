@@ -144,7 +144,7 @@ void addLineNumber(const string &inputFile, const string &outputFile,
   auto numberOfMiddleParaHeader = GetTupleElement(res, 1);
   auto numberOfLastParaHeader = GetTupleElement(res, 2);
 
-  if (debug)
+  if (debug >= LOG_INFO)
     cout << "numberOfFirstParaHeader: " << numberOfFirstParaHeader
          << "numberOfMiddleParaHeader: " << numberOfMiddleParaHeader
          << "numberOfLastParaHeader: " << numberOfLastParaHeader << endl;
@@ -167,7 +167,7 @@ void addLineNumber(const string &inputFile, const string &outputFile,
     LineNumber ln;
     ln.loadFromContainedLine(inLine);
     if (ln.isParagraphHeader()) {
-      if (debug)
+      if (debug >= LOG_INFO)
         cout << "paragraph header found as:" << ln.asString() << endl;
       line = fixFirstParaHeaderFromTemplate(LineNumber::getStartNumber(),
                                             separatorColor);
@@ -189,7 +189,7 @@ void addLineNumber(const string &inputFile, const string &outputFile,
     ln.loadFromContainedLine(inLine);
     if (enterLastPara == true) {
       if (ln.isParagraphHeader()) {
-        if (debug)
+        if (debug >= LOG_INFO)
           cout << ln.asString() << endl;
         outfile << fixLastParaHeaderFromTemplate(LineNumber::getStartNumber(),
                                                  numberOfMiddleParaHeader + 1,
@@ -202,7 +202,7 @@ void addLineNumber(const string &inputFile, const string &outputFile,
     // can keep STATE::EXPECT_MIDDLE_PARA_HEADER or enter STATE::LINEFOUND
     if (state == STATE::EXPECT_MIDDLE_PARA_HEADER) {
       if (ln.isParagraphHeader()) {
-        if (debug)
+        if (debug >= LOG_INFO)
           cout << "paragraph header found as:" << ln.asString() << endl;
 
         if (para == numberOfMiddleParaHeader) {
@@ -241,7 +241,7 @@ void addLineNumber(const string &inputFile, const string &outputFile,
         exit(1);
         break;
       }
-      if (debug)
+      if (debug >= LOG_INFO)
         cout << "processing paragraph:" << para << " line: " << lineNo << endl;
       LineNumber newLn(para, lineNo);
       if (not ln.equal(newLn)) {
@@ -255,7 +255,7 @@ void addLineNumber(const string &inputFile, const string &outputFile,
                 << "    " << inLine << endl; // Prints our line
       } else
         outfile << inLine << endl;
-      if (debug)
+      if (debug >= LOG_INFO)
         cout << "processed :" << inLine << endl;
       lineNo++;
       state = STATE::LINECOMPLETED;
@@ -265,7 +265,7 @@ void addLineNumber(const string &inputFile, const string &outputFile,
     // can enter STATE::LINEFOUND or STATE::EXPECT_MIDDLE_PARA_HEADER
     if (state == STATE::LINECOMPLETED) {
       if (ln.isParagraphHeader()) {
-        if (debug)
+        if (debug >= LOG_INFO)
           cout << "paragraph header found as:" << ln.asString() << endl;
 
         if (para == numberOfMiddleParaHeader) {
@@ -293,7 +293,7 @@ void addLineNumber(const string &inputFile, const string &outputFile,
       continue;
     }
   }
-  if (debug)
+  if (debug >= LOG_INFO)
     cout << "numbering finished." << endl;
 }
 
@@ -357,7 +357,7 @@ void addLineNumbersForAttachmentHtml(int minTarget, int maxTarget,
           getAttachmentFileListForChapter(file, HTML_SRC_ATTACHMENT);
     for (const auto &attNo : targetAttachments) {
       string attach_file = file + R"(_)" + TurnToString(attNo);
-      if (debug)
+      if (debug >= LOG_INFO)
         cout << "line numbering for: b0" << attach_file << ".htm" << endl;
       string inputFile = BODY_TEXT_OUTPUT +
                          getBodyTextFilePrefix(FILE_TYPE::ATTACHMENT) +

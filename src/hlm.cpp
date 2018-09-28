@@ -51,7 +51,7 @@ void assembleContainerHTM(string outputHTMFilename, int containerNumber,
         if (titleBegin != string::npos)
           line.replace(titleBegin, defaultDisplayTitle.length(), displayTitle);
       }
-      if (debug)
+      if (debug >= LOG_INFO)
         cout << line << endl;  // including end line
       outfile << line << endl; // excluding start line
     }
@@ -65,7 +65,7 @@ void assembleContainerHTM(string outputHTMFilename, int containerNumber,
   while (!inBodyTextFile.eof()) // To get you all the lines.
   {
     getline(inBodyTextFile, line); // Saves the line in line.
-    if (debug)
+    if (debug >= LOG_INFO)
       cout << line << endl;  // including end line
     outfile << line << endl; // including end line
   }
@@ -79,7 +79,7 @@ void assembleContainerHTM(string outputHTMFilename, int containerNumber,
         continue;
       }
     } else {
-      if (debug)
+      if (debug >= LOG_INFO)
         cout << line << endl;  // including end line
       outfile << line << endl; // excluding end line
     }
@@ -192,7 +192,7 @@ void removePersonalCommentsOverNumberedFiles(string referFile,
   while (!infile.eof()) // To get all the lines.
   {
     getline(infile, inLine); // Saves the line in inLine.
-    if (debug)
+    if (debug >= LOG_INFO)
       cout << inLine << endl;
     auto orgLine = inLine; // inLine would change in loop below
     string start = personalCommentStart;
