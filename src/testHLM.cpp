@@ -123,6 +123,7 @@ void testLinkFromAttachment(string fromFile, string linkString,
 }
 
 void testLinkOperation() {
+
   string linkString =
       R"(<a hidden href="a080.htm#top">原是老奶奶（薛姨妈）使唤的</a>)";
   cout << "original link: " << endl << linkString << endl;
@@ -195,6 +196,10 @@ void testLinkOperation() {
   cout << "need Update: " << lfm1.needUpdate() << endl;
   cout << "after fixed: " << endl << fixed2 << endl;
   SEPERATE("fixReferFile", " finished ");
+  testLinkFromAttachment("1_0",
+                         R"(<a unhidden href="..\aindex.htm">回目录</a>)",
+                         false);
+  SEPERATE("回目录", " finished ");
 
   testLinkFromAttachment(
       "03_9",

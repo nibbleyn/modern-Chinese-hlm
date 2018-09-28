@@ -24,6 +24,8 @@ string fixLinkFromAttachmentTemplate(const string &path, const string &filename,
 
 static const string returnLinkFromAttachmentHeader = R"(返回本章原文)";
 static const string returnLink = R"(被引用)";
+static const string returnToContentTable = R"(回目录)";
+static const string contentTableFilename = R"(aindex.htm)";
 
 enum class ATTACHMENT_TYPE { PERSONAL, REFERENCE, NON_EXISTED };
 
@@ -73,7 +75,7 @@ public:
     readReferPara(linkString);
     // no need for key for these links
     if (annotation != returnLinkFromAttachmentHeader and
-        annotation != returnLink)
+        annotation != returnLink and annotation != returnToContentTable)
       readKey(linkString); // key would be searched here and replaced
   }
   virtual ~Link(){};
@@ -263,7 +265,7 @@ private:
    */
   string getPathOfReferenceFile() const override {
     string result{""};
-    if (type == LINK_TYPE::MAIN)
+    if (type == LINK_TYPE::MAIN or annotation == returnToContentTable)
       result = mainDirForLinkFromAttachment;
     if (type == LINK_TYPE::ORIGINAL)
       result = originalDirForLinkFromAttachment;

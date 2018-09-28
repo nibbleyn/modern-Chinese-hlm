@@ -270,8 +270,8 @@ ATTACHMENT_TYPE Link::getAttachmentType(AttachmentNumber num) {
     attachmentType = GetTupleElement(entry, 2);
   } catch (exception &) {
     if (debug >= LOG_EXCEPTION)
-      cout << "not found info about: " << num.first << attachmentFileMiddleChar
-           << num.second << endl;
+      cout << "not found info in refAttachmentTable about: " << num.first
+           << attachmentFileMiddleChar << num.second << endl;
   }
   return attachmentType;
 }
@@ -363,7 +363,10 @@ string Link::asString() {
   string part0 = linkStartChars + " " + displayPropertyAsString() + " " +
                  referFileMiddleChar;
   string part1{""}, part2{""}, part3{""};
-  if (type != LINK_TYPE::SAMEPAGE) {
+  if (annotation == returnToContentTable) // type would be SAMEPAGE
+  {
+    part1 = getPathOfReferenceFile() + contentTableFilename;
+  } else if (type != LINK_TYPE::SAMEPAGE) {
     part1 =
         getPathOfReferenceFile() + getFileNamePrefix(type) + getChapterName();
     if (attachmentNumber != 0)
@@ -372,7 +375,8 @@ string Link::asString() {
   }
   string part4{""};
   if (type != LINK_TYPE::ATTACHMENT or referPara != invalidLineNumber) {
-    part4 = referParaMiddleChar + referPara;
+    if (annotation != returnToContentTable)
+      part4 = referParaMiddleChar + referPara;
   }
   string part5 = referParaEndChar, part6{""}, part7{""};
   if (type != LINK_TYPE::ATTACHMENT and not usedKey.empty()) {
@@ -451,7 +455,7 @@ void Link::readReferPara(const string &linkString) {
   auto processStart = linkString.find(htmStart);
   if (processStart == string::npos) // no file to refer
   {
-    if (debug >= LOG_EXCEPTION)
+    if (debug >= LOG_EXCEPTION and type != LINK_TYPE::ATTACHMENT)
       cout << "no # found to read referPara from link: " << linkString << endl;
     return;
   }
@@ -479,9 +483,15 @@ bool Link::readAnnotation(const string &linkString) {
   auto processStart = linkString.find(htmStart);
   if (processStart == string::npos) // no file to refer
   {
-    cout << "no htm or # is found to read annotation from link: " << linkString
-         << endl;
-    return false;
+    if (linkString.find(returnToContentTable) == string::npos) {
+      cout << "no htm or # is found to read annotation from link: "
+           << linkString << endl;
+      return false;
+    } else {
+      // type would be ignored in this case
+      annotation = returnToContentTable;
+      return true;
+    }
   }
   string afterLink =
       linkString.substr(processStart, linkString.length() - processStart);
@@ -534,7 +544,7 @@ void Link::readKey(const string &linkString) {
       needChange = true;
       usedKey = keyNotFound;
     }
-    if (debug >= LOG_EXCEPTION) {
+    if (debug >= LOG_EXCEPTION and type != LINK_TYPE::ATTACHMENT) {
       string output = usedKey.empty() ? "EMPTY" : usedKey;
       cout << "key string not found, so use key: " << output << endl;
     }
@@ -670,8 +680,8 @@ string LinkFromMain::getFromLineOfAttachment(AttachmentNumber num) {
   try {
     result = attachmentTable.at(num).first;
   } catch (exception &) {
-    if (debug >= LOG_EXCEPTION)
-      cout << "fromLine not found about: " << num.first
+    if (debug >= LOG_INFO and num.first == 1 and num.second == 1)
+      cout << "fromLine not found in attachmentTable about: " << num.first
            << attachmentFileMiddleChar << num.second << endl;
   }
   return result;
@@ -797,8 +807,8 @@ void LinkFromMain::logLink() {
              << " more reference to link: " << getChapterName() << " "
              << referPara << " " << usedKey << endl;
     } catch (exception &) {
-      if (debug >= LOG_EXCEPTION)
-        cout << "not found link for: " << getChapterName() << " " << referPara
+      if (debug >= LOG_INFO)
+        cout << "create vector for : " << getChapterName() << " " << referPara
              << " " << usedKey << endl;
       vector<std::tuple<string, string, string>> list;
       list.push_back(
