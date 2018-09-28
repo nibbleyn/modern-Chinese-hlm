@@ -680,7 +680,7 @@ string LinkFromMain::getFromLineOfAttachment(AttachmentNumber num) {
   try {
     result = attachmentTable.at(num).first;
   } catch (exception &) {
-    if (debug >= LOG_INFO and num.first == 1 and num.second == 1)
+    if (debug >= LOG_INFO)
       cout << "fromLine not found in attachmentTable about: " << num.first
            << attachmentFileMiddleChar << num.second << endl;
   }
