@@ -284,6 +284,7 @@ void fixLinksFromMain() {
   LinkFromMain::outPutStatisticsToFiles();
   displayMainFilesOfMissingKey();
   displayNewlyAddedAttachments();
+  cout << "fixLinksFromMain finished. " << endl;
 }
 
 /**
@@ -473,4 +474,5 @@ void fixLinksFromAttachment() {
   LinkFromAttachment::resetStatisticsAndLoadReferenceAttachmentList();
   fixLinksFromAttachmentHtmls();
   LinkFromAttachment::outPutStatisticsToFiles();
+  cout << "fixLinksFromAttachment finished. " << endl;
 }

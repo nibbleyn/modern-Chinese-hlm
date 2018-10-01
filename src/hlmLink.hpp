@@ -42,8 +42,13 @@ public:
   // statistics about links
   // chapter number (added with attachment number if over fromAttachmentLinks),
   // referPara, key -> vector<fromFile, fromLine, Link string>
-  using LinksTable = map<std::tuple<string, string, string>,
-                         vector<std::tuple<string, string, string>>>;
+  struct LinkDetails {
+    string key{""};
+    string fromFile{""};
+    string fromLine{""};
+    string link{""};
+  };
+  using LinksTable = map<std::pair<string, string>, vector<LinkDetails>>;
   static string outPutFilePath;
   static LinksTable linksTable;
   static void displayFixedLinks();

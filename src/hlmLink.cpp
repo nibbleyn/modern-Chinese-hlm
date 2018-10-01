@@ -210,16 +210,14 @@ void Link::displayFixedLinks() {
   outfile << "all links processed:" << endl;
   outfile << "---------------------------------" << endl;
   for (const auto &link : linksTable) {
-    auto key = link.first;
+    auto target = link.first;
     auto fromList = link.second;
     // link itself
-    outfile << "link:" << GetTupleElement(key, 0) << ","
-            << GetTupleElement(key, 1) << ":" << GetTupleElement(key, 2)
-            << endl;
+    outfile << "link:" << target.first << "," << target.second << endl;
     for (const auto &from : fromList) {
-      outfile << "linked from:" << GetTupleElement(from, 0) << ","
-              << GetTupleElement(from, 1) << ":" << endl
-              << "    " << GetTupleElement(from, 2) << endl;
+      outfile << "key: " << from.key << ",linked from:" << from.fromFile << ","
+              << from.fromLine << ":" << endl
+              << "    " << from.link << endl;
     }
   }
 }
@@ -797,11 +795,10 @@ bool LinkFromMain::readReferFileName(const string &link) {
 void LinkFromMain::logLink() {
 
   if (isTargetToOtherMainHtm()) {
+    LinkDetails detail{usedKey, fromFile, fromLine.asString(), asString()};
     try {
-      auto &entry =
-          linksTable.at(std::make_tuple(getChapterName(), referPara, usedKey));
-      entry.push_back(
-          std::make_tuple(fromFile, fromLine.asString(), asString()));
+      auto &entry = linksTable.at(std::make_pair(getChapterName(), referPara));
+      entry.push_back(detail);
       if (debug >= LOG_INFO)
         cout << "entry.size: " << entry.size()
              << " more reference to link: " << getChapterName() << " "
@@ -809,11 +806,10 @@ void LinkFromMain::logLink() {
     } catch (exception &) {
       if (debug >= LOG_INFO)
         cout << "create vector for : " << getChapterName() << " " << referPara
-             << " " << usedKey << endl;
-      vector<std::tuple<string, string, string>> list;
-      list.push_back(
-          std::make_tuple(fromFile, fromLine.asString(), asString()));
-      linksTable[std::make_tuple(getChapterName(), referPara, usedKey)] = list;
+             << endl;
+      vector<LinkDetails> list;
+      list.push_back(detail);
+      linksTable[std::make_pair(getChapterName(), referPara)] = list;
     }
   }
   if (isTargetToOtherAttachmentHtm()) {
@@ -1000,23 +996,24 @@ bool LinkFromAttachment::readReferFileName(const string &link) {
  */
 void LinkFromAttachment::logLink() {
   if (isTargetToOtherMainHtm()) {
+    LinkDetails detail{usedKey, fromFile, fromLine.asString(), asString()};
     try {
       auto &entry = linksTable.at(
-          std::make_tuple(getChapterName() + attachmentFileMiddleChar +
-                              TurnToString(attachmentNumber),
-                          referPara, usedKey));
-      entry.push_back(
-          std::make_tuple(fromFile, fromLine.asString(), asString()));
+          std::make_pair(getChapterName() + attachmentFileMiddleChar +
+                             TurnToString(attachmentNumber),
+                         referPara));
+      entry.push_back(detail);
     } catch (exception &) {
       if (debug >= LOG_EXCEPTION)
         cout << "not found link for: "
              << getChapterName() + attachmentFileMiddleChar +
                     TurnToString(attachmentNumber)
              << " " << referPara << " " << usedKey << endl;
-      vector<std::tuple<string, string, string>> list;
-      list.push_back(
-          std::make_tuple(fromFile, fromLine.asString(), asString()));
-      linksTable[std::make_tuple(getChapterName(), referPara, usedKey)] = list;
+      vector<LinkDetails> list;
+      list.push_back(detail);
+      linksTable[std::make_pair(getChapterName() + attachmentFileMiddleChar +
+                                    TurnToString(attachmentNumber),
+                                referPara)] = list;
     }
   }
 }

@@ -398,6 +398,7 @@ void NumberingMainHtml(int minTarget, int maxTarget) {
       minTarget, maxTarget); // reformat bodytext by adding line number
   loadBodyTexts(BODY_TEXT_FIX, BODY_TEXT_OUTPUT);
   assembleMainHtmls(minTarget, maxTarget);
+  cout << "Numbering Main Html finished. " << endl;
 }
 
 /**
@@ -436,6 +437,7 @@ void numberMainHtmls() {
 void numberOriginalHtmls() {
   int minTarget = 1, maxTarget = 80;
   NumberingOriginalHtml(minTarget, maxTarget);
+  cout << "Numbering Original Html finished. " << endl;
 }
 
 /**
@@ -446,4 +448,5 @@ void numberAttachmentHtmls() {
   int minTarget = 1, maxTarget = 80;
   int minAttachNo = 0, maxAttachNo = 50;
   NumberingAttachmentHtml(minTarget, maxTarget, minAttachNo, maxAttachNo);
+  cout << "Numbering Attachment Html finished. " << endl;
 }
