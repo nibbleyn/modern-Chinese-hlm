@@ -39,15 +39,15 @@ static const string originalLinkEndChars = R"(）)";
 
 class Link {
 public:
-  // statistics about links
-  // chapter number (added with attachment number if over fromAttachmentLinks),
-  // referPara, key -> vector<fromFile, fromLine, Link string>
   struct LinkDetails {
     string key{""};
     string fromFile{""};
     string fromLine{""};
     string link{""};
   };
+  // statistics about links
+  // chapter number (added with attachment number if over fromAttachmentLinks),
+  // referPara -> vector<key, fromFile, fromLine, Link string>
   using LinksTable = map<std::pair<string, string>, vector<LinkDetails>>;
   static string outPutFilePath;
   static LinksTable linksTable;

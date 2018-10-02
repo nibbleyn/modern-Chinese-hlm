@@ -214,6 +214,8 @@ void Link::displayFixedLinks() {
     auto fromList = link.second;
     // link itself
     outfile << "link:" << target.first << "," << target.second << endl;
+    sort(fromList.begin(), fromList.end(),
+         [](LinkDetails a, LinkDetails b) { return a.key < b.key; });
     for (const auto &from : fromList) {
       outfile << "key: " << from.key << ",linked from:" << from.fromFile << ","
               << from.fromLine << ":" << endl
