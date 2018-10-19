@@ -45,6 +45,11 @@ static const string bottomTab = R"(name="bottom")"; // of the body Text file
 static const string keyNotFound = R"(KeyNotFound)";
 static const string attachmentFileMiddleChar = R"(_)";
 
+static const string defaultTitle = "XXX";
+static const string defaultDisplayTitle = "YYY";
+static const string HTML_CONTAINER = "container/container";
+static const string BODY_TEXT_CONTAINER = "container/";
+
 enum class FILE_TYPE { MAIN, ATTACHMENT, ORIGINAL };
 
 string formatIntoTwoDigitChapterNumber(int chapterNumber);
@@ -62,6 +67,10 @@ void loadBodyTexts(const string &from, const string &to);
 void backupAndOverwriteSrcForHTML();
 
 // separate/merge body text from/back to Htm files
+void assembleBackToHTM(const string &inputHtmlFile,
+                       const string &inputBodyTextFile,
+                       const string &outputFile, string title = "",
+                       string displayTitle = "");
 void dissembleOriginalHtmls(int minTarget, int maxTarget);
 void assembleOriginalHtmls(int minTarget, int maxTarget);
 void dissembleMainHtmls(int minTarget, int maxTarget);

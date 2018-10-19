@@ -259,7 +259,8 @@ void dissembleFromHTM(const string &inputHtmlFile,
  */
 void assembleBackToHTM(const string &inputHtmlFile,
                        const string &inputBodyTextFile,
-                       const string &outputFile) {
+                       const string &outputFile, string title,
+                       string displayTitle) {
 
   ifstream inHtmlFile(inputHtmlFile);
   if (!inHtmlFile) // doesn't exist
@@ -288,6 +289,16 @@ void assembleBackToHTM(const string &inputHtmlFile,
       if (linkBegin != string::npos) {
         started = true;
         break;
+      }
+      if (not title.empty()) {
+        auto titleBegin = line.find(defaultTitle);
+        if (titleBegin != string::npos)
+          line.replace(titleBegin, defaultTitle.length(), title);
+      }
+      if (not displayTitle.empty()) {
+        auto titleBegin = line.find(defaultDisplayTitle);
+        if (titleBegin != string::npos)
+          line.replace(titleBegin, defaultDisplayTitle.length(), displayTitle);
       }
       outfile << line << endl; // excluding start line
     }

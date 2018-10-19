@@ -5,16 +5,10 @@
  *
  * @param outputHTMFilename
  */
-void assembleContainerHTM(string outputHTMFilename, int containerNumber,
-                          string title, string displayTitle,
-                          int lastParaNumber) {
-  string inputHtmlFile =
-      HTML_CONTAINER + TurnToString(containerNumber) + HTML_SUFFIX;
-  ;
-  cout << inputHtmlFile << endl;
-  string inputBodyTextFile =
-      BODY_TEXT_CONTAINER + TurnToString(containerNumber) + BODY_TEXT_SUFFIX;
-  cout << inputBodyTextFile << endl;
+void assembleContainerHTM(const string &inputHtmlFile,
+        const string &inputBodyTextFile,
+        const string &outputFile, string title = "",
+        string displayTitle = "") {
   ifstream inHtmlFile(inputHtmlFile);
   if (!inHtmlFile) // doesn't exist
   {
@@ -27,7 +21,7 @@ void assembleContainerHTM(string outputHTMFilename, int containerNumber,
     cout << "file doesn't exist:" << inputBodyTextFile << endl;
     return;
   }
-  ofstream outfile(outputHTMFilename);
+  ofstream outfile(outputFile);
   string line{""};
   bool started = false;
   string start = topTab;    // first line
