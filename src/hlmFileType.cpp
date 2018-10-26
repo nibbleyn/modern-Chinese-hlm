@@ -519,7 +519,8 @@ void assembleAttachments(int minTarget, int maxTarget, int minAttachNo,
  * otherwise the original key
  */
 string findKeyInFile(const string &key, const string &fullPath,
-                     string &lineNumber, bool &needChange) {
+                     lineNumberSet ignorelineNumberSet, string &lineNumber,
+                     bool &needChange) {
   ifstream infile(fullPath);
   if (!infile) {
     cout << "file doesn't exist:" << fullPath << endl;
@@ -543,8 +544,10 @@ string findKeyInFile(const string &key, const string &fullPath,
            << endl;
       return keyNotFound + key + ": bodytext file doesn't get numbered";
     }
+
     // special hack for ignoring one lineNumber
-    if (not lineNumber.empty() and ln.equal(lineNumber))
+    if (not ignorelineNumberSet.empty() and
+        ignorelineNumberSet.find(ln.asString()) != ignorelineNumberSet.end())
       continue;
     found = true;
     break;

@@ -561,9 +561,10 @@ void Link::readKey(const string &linkString) {
     return;
   }
   string lineNumber = "";
+  lineNumberSet ignorelineNumberSet;
   // special hack to ignore itself
   if (type == LINK_TYPE::SAMEPAGE)
-    lineNumber = fromLine.asString();
+    ignorelineNumberSet.insert(fromLine.asString());
 
   needChange = false;
   string attachmentPart{""};
@@ -573,8 +574,8 @@ void Link::readKey(const string &linkString) {
   // search key in referred file
   string referFile = BODY_TEXT_OUTPUT + getBodyTextFilePrefix(type) +
                      getChapterName() + attachmentPart + BODY_TEXT_SUFFIX;
-  string newKey =
-      findKeyInFile(stringForSearch, referFile, lineNumber, needChange);
+  string newKey = findKeyInFile(stringForSearch, referFile, ignorelineNumberSet,
+                                lineNumber, needChange);
   if (debug >= LOG_INFO)
     cout << "key found: " << newKey << endl;
   if (newKey.find(keyNotFound) == string::npos) {

@@ -80,8 +80,10 @@ void dissembleAttachments(int minTarget, int maxTarget, int minAttachNo,
 void assembleAttachments(int minTarget, int maxTarget, int minAttachNo,
                          int maxAttachNo);
 // search in body text files
+using lineNumberSet = set<string>;
 string findKeyInFile(const string &key, const string &fullPath,
-                     string &lineNumber, bool &needChange);
+                     lineNumberSet ignorelineNumberSet, string &lineNumber,
+                     bool &needChange);
 
 string getAttachmentTitle(const string &filename);
 vector<int> getAttachmentFileListForChapter(const string &referFile,
