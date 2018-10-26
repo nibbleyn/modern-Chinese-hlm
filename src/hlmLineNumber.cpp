@@ -7,7 +7,8 @@ static const string endOfLineNumber =
     R"(")"; // to try special case like "bottom"
 static const string endOfGeneratedLineNumber = R"(>)";
 
-const string LineNumber::LineNumberStart = R"(<a unhidden name=")";
+const string LineNumber::UnhiddenLineNumberStart = R"(<a unhidden name=")";
+const string LineNumber::HiddenLineNumberStart = R"(<a hidden name=")";
 int LineNumber::StartNumber = START_PARA_NUMBER;
 int LineNumber::Limit = START_PARA_NUMBER * 2;
 
@@ -17,8 +18,12 @@ int LineNumber::Limit = START_PARA_NUMBER * 2;
  * @param containedLine the numbered line of one body text file
  */
 void LineNumber::loadFromContainedLine(const string &containedLine) {
-  string start = LineNumberStart;
+  string start = UnhiddenLineNumberStart;
   auto linkBegin = containedLine.find(start);
+  if (linkBegin == string::npos) {
+    start = HiddenLineNumberStart;
+    linkBegin = containedLine.find(start);
+  }
   if (linkBegin != string::npos) // found name in lineName
   {
     string end = endOfLineNumber;
@@ -41,7 +46,7 @@ void LineNumber::loadFromContainedLine(const string &containedLine) {
 string LineNumber::generateLinePrefix() {
   string result{""};
   if (lineNumber != 0)
-    result = LineNumberStart + asString() + endOfLineNumber +
+    result = UnhiddenLineNumberStart + asString() + endOfLineNumber +
              endOfGeneratedLineNumber;
   return result;
 }

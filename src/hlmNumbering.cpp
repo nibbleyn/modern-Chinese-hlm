@@ -14,11 +14,17 @@ static const string lastParaHeader =
  * @param startNumber the start number as the name of first paragraph
  * @return first Paragragh header after fixed
  */
-string fixFirstParaHeaderFromTemplate(int startNumber, const string &color) {
+string fixFirstParaHeaderFromTemplate(int startNumber, const string &color,
+                                      bool hidden) {
   string link = firstParaHeader;
+  if (hidden) {
+    link = replacePart(link, "unhidden", "hidden");
+    link = replacePart(link, R"(<hr color="#COLOR">)", "<br>");
+  } else
+    link = replacePart(link, "COLOR", color);
   link = replacePart(link, "XX", TurnToString(startNumber));
   link = replacePart(link, "YY", TurnToString(startNumber + 1));
-  link = replacePart(link, "COLOR", color);
+
   return link;
 }
 
@@ -37,9 +43,14 @@ string fixFirstParaHeaderFromTemplate(int startNumber, const string &color) {
  * @return Paragragh header after fixed
  */
 string fixMiddleParaHeaderFromTemplate(int startNumber, int currentParaNo,
-                                       const string &color, bool lastPara) {
+                                       const string &color, bool hidden,
+                                       bool lastPara) {
   string link = MiddleParaHeader;
-  link = replacePart(link, "COLOR", color);
+  if (hidden) {
+    link = replacePart(link, "unhidden", "hidden");
+    link = replacePart(link, R"(<hr color="#COLOR">)", "<br>");
+  } else
+    link = replacePart(link, "COLOR", color);
   link = replacePart(link, "XX", TurnToString(startNumber + currentParaNo));
   if (lastPara == true) {
     link = replacePart(link, "PYY", R"(bottom)");
@@ -62,9 +73,13 @@ string fixMiddleParaHeaderFromTemplate(int startNumber, int currentParaNo,
  * @return last Paragragh header after fixed
  */
 string fixLastParaHeaderFromTemplate(int startNumber, int lastParaNo,
-                                     const string &color) {
+                                     const string &color, bool hidden) {
   string link = lastParaHeader;
-  link = replacePart(link, "COLOR", color);
+  if (hidden) {
+    link = replacePart(link, "unhidden", "hidden");
+    link = replacePart(link, R"(<hr color="#COLOR">)", "<br>");
+  } else
+    link = replacePart(link, "COLOR", color);
   link = replacePart(link, "XX", TurnToString(startNumber - lastParaNo));
   link = replacePart(link, "YY", TurnToString(startNumber - lastParaNo + 1));
   return link;
@@ -131,7 +146,7 @@ ParaStruct getNumberOfPara(const string &inputFile) {
  * @param separatorColor the color to separate paragraphs
  */
 void addLineNumber(const string &inputFile, const string &outputFile,
-                   const string &separatorColor) {
+                   const string &separatorColor, bool hidden = false) {
   ifstream infile(inputFile);
   if (!infile) {
     cout << "file doesn't exist:" << inputFile << endl;
@@ -170,7 +185,7 @@ void addLineNumber(const string &inputFile, const string &outputFile,
       if (debug >= LOG_INFO)
         cout << "paragraph header found as:" << ln.asString() << endl;
       line = fixFirstParaHeaderFromTemplate(LineNumber::getStartNumber(),
-                                            separatorColor);
+                                            separatorColor, hidden);
       stop = true;
     }
     // incl. above header
@@ -193,7 +208,7 @@ void addLineNumber(const string &inputFile, const string &outputFile,
           cout << ln.asString() << endl;
         outfile << fixLastParaHeaderFromTemplate(LineNumber::getStartNumber(),
                                                  numberOfMiddleParaHeader + 1,
-                                                 separatorColor)
+                                                 separatorColor, hidden)
                 << endl;
         break; // end of whole file
       }
@@ -209,12 +224,12 @@ void addLineNumber(const string &inputFile, const string &outputFile,
           enterLastPara = true;
           outfile << fixMiddleParaHeaderFromTemplate(
                          LineNumber::getStartNumber(), para++, separatorColor,
-                         true)
+                         hidden, true)
                   << endl;
         } else
           outfile << fixMiddleParaHeaderFromTemplate(
                          LineNumber::getStartNumber(), para++, separatorColor,
-                         false)
+                         hidden, false)
                   << endl;
         lineNo = 1; // LINE index within each group
         continue;
@@ -272,12 +287,12 @@ void addLineNumber(const string &inputFile, const string &outputFile,
           enterLastPara = true;
           outfile << fixMiddleParaHeaderFromTemplate(
                          LineNumber::getStartNumber(), para++, separatorColor,
-                         true)
+                         hidden, true)
                   << endl;
         } else {
           outfile << fixMiddleParaHeaderFromTemplate(
                          LineNumber::getStartNumber(), para++, separatorColor,
-                         false)
+                         hidden, false)
                   << endl;
           state = STATE::EXPECT_MIDDLE_PARA_HEADER;
         }
@@ -302,7 +317,8 @@ void addLineNumber(const string &inputFile, const string &outputFile,
  * @param minTarget starting from this file
  * @param maxTarget until this file
  */
-void addLineNumbersForOriginalHtml(int minTarget, int maxTarget) {
+void addLineNumbersForOriginalHtml(int minTarget, int maxTarget,
+                                   bool hidden = false) {
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     string inputFile = BODY_TEXT_OUTPUT +
                        getBodyTextFilePrefix(FILE_TYPE::ORIGINAL) + file +
@@ -311,7 +327,7 @@ void addLineNumbersForOriginalHtml(int minTarget, int maxTarget) {
                         getBodyTextFilePrefix(FILE_TYPE::ORIGINAL) + file +
                         ".txt";
     string separatorColor = getSeparateLineColor(FILE_TYPE::ORIGINAL);
-    addLineNumber(inputFile, outputFile, separatorColor);
+    addLineNumber(inputFile, outputFile, separatorColor, hidden);
   }
 }
 
@@ -320,14 +336,15 @@ void addLineNumbersForOriginalHtml(int minTarget, int maxTarget) {
  * @param minTarget starting from this file
  * @param maxTarget until this file
  */
-void addLineNumbersForMainHtml(int minTarget, int maxTarget) {
+void addLineNumbersForMainHtml(int minTarget, int maxTarget,
+                               bool hidden = false) {
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     string inputFile = BODY_TEXT_OUTPUT +
                        getBodyTextFilePrefix(FILE_TYPE::MAIN) + file + ".txt";
     string outputFile =
         BODY_TEXT_FIX + getBodyTextFilePrefix(FILE_TYPE::MAIN) + file + ".txt";
     string separatorColor = getSeparateLineColor(FILE_TYPE::MAIN);
-    addLineNumber(inputFile, outputFile, separatorColor);
+    addLineNumber(inputFile, outputFile, separatorColor, hidden);
   }
 }
 
@@ -341,7 +358,8 @@ void addLineNumbersForMainHtml(int minTarget, int maxTarget) {
  * @param maxAttachNo for each chapter, until this attachment
  */
 void addLineNumbersForAttachmentHtml(int minTarget, int maxTarget,
-                                     int minAttachNo, int maxAttachNo) {
+                                     int minAttachNo, int maxAttachNo,
+                                     bool hidden = false) {
 
   vector<int> targetAttachments;
   bool overAllAttachments = true;
@@ -367,7 +385,7 @@ void addLineNumbersForAttachmentHtml(int minTarget, int maxTarget,
                           getBodyTextFilePrefix(FILE_TYPE::ATTACHMENT) +
                           attach_file + ".txt";
       string separatorColor = getSeparateLineColor(FILE_TYPE::ATTACHMENT);
-      addLineNumber(inputFile, outputFile, separatorColor);
+      addLineNumber(inputFile, outputFile, separatorColor, hidden);
     }
   }
 }
@@ -377,11 +395,11 @@ void addLineNumbersForAttachmentHtml(int minTarget, int maxTarget,
  * @param minTarget starting from this file
  * @param maxTarget until this file
  */
-void NumberingOriginalHtml(int minTarget, int maxTarget) {
+void NumberingOriginalHtml(int minTarget, int maxTarget, bool hidden = false) {
   backupAndOverwriteSrcForHTML();               // update html src
   dissembleOriginalHtmls(minTarget, maxTarget); // dissemble html to bodytext
   addLineNumbersForOriginalHtml(
-      minTarget, maxTarget); // reformat bodytext by adding line number
+      minTarget, maxTarget, hidden); // reformat bodytext by adding line number
   loadBodyTexts(BODY_TEXT_FIX, BODY_TEXT_OUTPUT);
   assembleOriginalHtmls(minTarget, maxTarget);
 }
@@ -391,11 +409,11 @@ void NumberingOriginalHtml(int minTarget, int maxTarget) {
  * @param minTarget starting from this file
  * @param maxTarget until this file
  */
-void NumberingMainHtml(int minTarget, int maxTarget) {
+void NumberingMainHtml(int minTarget, int maxTarget, bool hidden = false) {
   backupAndOverwriteSrcForHTML();           // update html src
   dissembleMainHtmls(minTarget, maxTarget); // dissemble html to bodytext
-  addLineNumbersForMainHtml(
-      minTarget, maxTarget); // reformat bodytext by adding line number
+  addLineNumbersForMainHtml(minTarget, maxTarget,
+                            hidden); // reformat bodytext by adding line number
   loadBodyTexts(BODY_TEXT_FIX, BODY_TEXT_OUTPUT);
   assembleMainHtmls(minTarget, maxTarget);
   cout << "Numbering Main Html finished. " << endl;
@@ -411,13 +429,13 @@ void NumberingMainHtml(int minTarget, int maxTarget) {
  * @param maxAttachNo for each chapter, until this attachment
  */
 void NumberingAttachmentHtml(int minTarget, int maxTarget, int minAttachNo,
-                             int maxAttachNo) {
+                             int maxAttachNo, bool hidden = false) {
   backupAndOverwriteSrcForHTML(); // update html src
   dissembleAttachments(minTarget, maxTarget, minAttachNo,
                        maxAttachNo); // dissemble html to bodytext
   addLineNumbersForAttachmentHtml(
-      minTarget, maxTarget, minAttachNo,
-      maxAttachNo); // reformat bodytext by adding line number
+      minTarget, maxTarget, minAttachNo, maxAttachNo,
+      hidden); // reformat bodytext by adding line number
   loadBodyTexts(BODY_TEXT_FIX, BODY_TEXT_OUTPUT);
   assembleAttachments(minTarget, maxTarget, minAttachNo, maxAttachNo);
 }
@@ -426,17 +444,17 @@ void NumberingAttachmentHtml(int minTarget, int maxTarget, int minAttachNo,
  * copy main files into HTML_OUTPUT
  * before run this
  */
-void numberMainHtmls() {
-  int minTarget = 1, maxTarget = 80;
-  NumberingMainHtml(minTarget, maxTarget);
+void numberMainHtmls(bool hidden) {
+  int minTarget = 80, maxTarget = 80;
+  NumberingMainHtml(minTarget, maxTarget, hidden);
 }
 /**
  * copy original files into HTML_SRC_ORIGINAL
  * before run this
  */
-void numberOriginalHtmls() {
+void numberOriginalHtmls(bool hidden) {
   int minTarget = 1, maxTarget = 80;
-  NumberingOriginalHtml(minTarget, maxTarget);
+  NumberingOriginalHtml(minTarget, maxTarget, hidden);
   cout << "Numbering Original Html finished. " << endl;
 }
 
@@ -444,9 +462,10 @@ void numberOriginalHtmls() {
  * copy attachment files into HTML_SRC_ATTACHMENT
  * before run this
  */
-void numberAttachmentHtmls() {
+void numberAttachmentHtmls(bool hidden) {
   int minTarget = 1, maxTarget = 80;
   int minAttachNo = 0, maxAttachNo = 50;
-  NumberingAttachmentHtml(minTarget, maxTarget, minAttachNo, maxAttachNo);
+  NumberingAttachmentHtml(minTarget, maxTarget, minAttachNo, maxAttachNo,
+                          hidden);
   cout << "Numbering Attachment Html finished. " << endl;
 }

@@ -20,7 +20,8 @@ static const string bottomParagraphIndicator =
 
 static const int START_PARA_NUMBER = 90;
 class LineNumber {
-  static const string LineNumberStart;
+  static const string UnhiddenLineNumberStart;
+  static const string HiddenLineNumberStart;
   static int StartNumber;
   static int Limit;
 

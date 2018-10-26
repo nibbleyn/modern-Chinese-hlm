@@ -6,9 +6,9 @@
  * @param outputHTMFilename
  */
 void assembleContainerHTM(const string &inputHtmlFile,
-        const string &inputBodyTextFile,
-        const string &outputFile, string title = "",
-        string displayTitle = "") {
+                          const string &inputBodyTextFile,
+                          const string &outputFile, string title = "",
+                          string displayTitle = "") {
   ifstream inHtmlFile(inputHtmlFile);
   if (!inHtmlFile) // doesn't exist
   {

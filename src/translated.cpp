@@ -11,6 +11,11 @@ int main(int argc, char **argv) {
 //  numberMainHtmls();
 //  numberAttachmentHtmls();
 
+  // hidden paragraph headers
+//  numberOriginalHtmls(true);
+//  numberMainHtmls(true);
+//  numberAttachmentHtmls(true);
+
   fixLinksFromMain();
 //  fixLinksFromAttachment();
   return 0;
