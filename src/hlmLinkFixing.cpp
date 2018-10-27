@@ -67,7 +67,9 @@ void fixReturnLinkForAttachmentFile(const string &referFile,
  * @param referFile
  * @param files
  */
-void fixMainLinksOverNumberedFiles(const string &referFile, fileSet files) {
+void fixMainLinksOverNumberedFiles(const string &referFile, fileSet files,
+                                   int minPara = 0, int maxPara = 0,
+                                   int minLine = 0, int maxLine = 0) {
   string inputFile = BODY_TEXT_OUTPUT + getBodyTextFilePrefix(FILE_TYPE::MAIN) +
                      referFile + BODY_TEXT_SUFFIX;
   ifstream infile(inputFile);
@@ -85,7 +87,8 @@ void fixMainLinksOverNumberedFiles(const string &referFile, fileSet files) {
     auto orgLine = inLine;   // inLine would change in loop below
     LineNumber ln;
     ln.loadFromContainedLine(orgLine);
-    if (ln.isParagraphHeader() or not ln.valid()) {
+    if (ln.isParagraphHeader() or not ln.valid() or
+        not ln.isWithinLineRange(minPara, maxPara, minLine, maxLine)) {
       outfile << orgLine << endl;
       continue; // not fix headers or non-numbered lines
     }

@@ -68,6 +68,17 @@ public:
       result += middleChar + TurnToString(lineNumber);
     return result;
   }
+  bool isWithinLineRange(int minPara = 0, int maxPara = 0, int minLine = 0,
+                         int maxLine = 0) {
+    bool biggerThanMin = true;
+    bool lessThanMax = true;
+    // only support para now
+    if (minPara != 0)
+      biggerThanMin = paraNumber >= minPara; // inclusive
+    if (maxPara != 0)
+      lessThanMax = paraNumber <= maxPara; // inclusive
+    return (biggerThanMin and lessThanMax);
+  }
   bool equal(LineNumber &ln) {
     return (lineNumber == ln.getlineNumber() and
             paraNumber == ln.getParaNumber());

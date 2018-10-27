@@ -445,7 +445,7 @@ void NumberingAttachmentHtml(int minTarget, int maxTarget, int minAttachNo,
  * before run this
  */
 void numberMainHtmls(bool hidden) {
-  int minTarget = 80, maxTarget = 80;
+  int minTarget = 1, maxTarget = 80;
   NumberingMainHtml(minTarget, maxTarget, hidden);
 }
 /**
