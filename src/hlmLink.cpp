@@ -186,6 +186,8 @@ string fixLinkFromAttachmentTemplate(const string &path, const string &filename,
 }
 
 static const string charBeforeAnnotation = R"(>)";
+static const string commentBeginChars = R"(<i unhidden)";
+static const string commentEndChars = R"(</i>）)";
 static const string referFileMiddleChar = R"(href=")";
 static const string referParaMiddleChar = R"(#)";
 static const string referParaEndChar = R"(">)";
@@ -500,6 +502,18 @@ bool Link::readAnnotation(const string &linkString) {
   afterLink = afterLink.substr(0, afterLinkEnd);
   string start = charBeforeAnnotation;
   auto afterLinkBegin = afterLink.find_last_of(start);
+  while (afterLinkBegin >= keyEndChars.length() - 1) {
+    if (afterLink.substr(afterLinkBegin - keyEndChars.length() + 1,
+                         commentEndChars.length()) != commentEndChars)
+      break;
+    else {
+      // skip this whole comment
+      auto commentStart = afterLink.find_last_of(
+          commentBeginChars, afterLinkBegin - keyEndChars.length());
+      afterLinkBegin = afterLink.find_last_of(
+          start, commentStart - commentBeginChars.length());
+    }
+  }
   annotation =
       afterLink.substr(afterLinkBegin + start.length(),
                        afterLink.length() - afterLinkBegin - start.length());

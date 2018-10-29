@@ -125,7 +125,7 @@ void testLinkFromAttachment(string fromFile, string linkString,
 void testLinkOperation() {
 
   string linkString =
-      R"(<a hidden href="a080.htm#top">原是老奶奶（薛姨妈）使唤的</a>)";
+      R"(<a hidden href="a080.htm#top">原是（<i unhidden>薛姨妈1</i>）老奶奶（<i unhidden>薛姨妈2</i>）使唤的</a>)";
   cout << "original link: " << endl << linkString << endl;
   LinkFromMain lfm("75", linkString);
   lfm.readReferFileName(linkString); // second step of construction
@@ -138,7 +138,7 @@ void testLinkOperation() {
   SEPERATE("fixReferFile", " finished ");
 
   testLinkFromMain("07", R"(<a hidden
-        href="a080.htm#top">原是老奶奶（薛姨妈）使唤的</a>)",
+        href="a080.htm#top">原是（<i unhidden>薛姨妈1</i>）老奶奶（<i unhidden>薛姨妈2</i>）使唤的</a>)",
                    false);
   SEPERATE("#top", " finished ");
 
@@ -287,7 +287,7 @@ void testConvertToUtf8() {
 void testFunctions() {
   SEPERATE("HLM test", " started ");
   //    testLineNumber();
-  //  testLinkOperation();
+  testLinkOperation();
   //  testAttachmentOperations();
   //  testContainer();
   //  testConstructSubStory();
