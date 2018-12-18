@@ -469,3 +469,95 @@ void numberAttachmentHtmls(bool hidden) {
                           hidden);
   cout << "Numbering Attachment Html finished. " << endl;
 }
+
+int utf8length(std::string originalString) {
+  size_t len = 0, byteIndex = 0;
+  const char *aStr = originalString.c_str();
+  for (; byteIndex < originalString.size(); byteIndex++) {
+    if ((aStr[byteIndex] & 0xc0) != 0x80)
+      len += 1;
+  }
+  return len;
+}
+
+std::string utf8substr(std::string originalString, size_t begin, size_t &end,
+                       size_t SubStrLength) {
+  const char *aStr = originalString.c_str();
+  size_t origSize = originalString.size();
+  size_t byteIndex = begin;
+  size_t len = 0;
+
+  end = begin;
+  for (; byteIndex < origSize; byteIndex++) {
+    if ((aStr[byteIndex] & 0xc0) != 0x80)
+      len += 1;
+    if (len >= SubStrLength) {
+      end = byteIndex - 1;
+      break;
+    }
+  }
+
+  return originalString.substr(begin, byteIndex - begin);
+}
+
+void reformatFile(const string &inputFile, const string &outputFile,
+                  const string &example) {
+  ifstream infile(inputFile);
+  if (!infile) {
+    cout << "file doesn't exist:" << inputFile << endl;
+    return;
+  }
+  ofstream outfile(outputFile);
+  cout << utf8length(example) << endl;
+  cout << example << endl;
+  // continue reading
+  string inLine;
+  string CR{0x0D};
+  string LF{0x0A};
+  string CRLF{0x0D, 0x0A};
+  while (!infile.eof()) {
+    getline(infile, inLine); // Saves the line in inLine.
+    size_t end = -1;
+    do {
+      string line = utf8substr(inLine, end + 1, end, utf8length(example));
+      if (not line.empty()) {
+        auto outputLine = line + CRLF;
+        if (debug >= LOG_INFO)
+          cout << outputLine << CR << CRLF;
+        outfile << outputLine << CR << CRLF;
+      }
+      if (utf8length(line) < utf8length(example) - 1)
+        break;
+    } while (true);
+  }
+  if (debug >= LOG_INFO)
+    cout << "reformatting finished." << endl;
+}
+
+/**
+ *
+ */
+void reformatTxtFiles(int minTarget, int maxTarget, const string &example) {
+  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
+    string filename = file;
+    if (filename.length() == 2) {
+      filename = "0" + filename;
+    }
+    string inputFile = BODY_TEXT_OUTPUT + "pjpm" + filename + ".txt";
+    string outputFile = BODY_TEXT_FIX + "pjpm" + filename + ".txt";
+    reformatFile(inputFile, outputFile, example);
+  }
+}
+
+/**
+ *
+ */
+void reformatTxtFilesForReader() {
+  const string example =
+      R"(话说安童领着书信，辞了黄通判，径往山东大道而来。打听巡按御史在东昌府住扎，姓曾，双名孝序，【夹批：曾者，争也。序即天叙有典之叙，盖作者为世所厄不能自全其孝，故抑郁愤懑)";
+
+  int minTarget = 1, maxTarget = 100;
+  reformatTxtFiles(minTarget, maxTarget, example);
+  cout << "reformat files from " << minTarget << " to " << maxTarget
+       << " finished. " << endl;
+}

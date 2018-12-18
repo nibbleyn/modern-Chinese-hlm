@@ -34,8 +34,11 @@ string formatIntoTwoDigitChapterNumber(int chapterNumber) {
  */
 fileSet buildFileSet(int min, int max) {
   fileSet fs;
-  for (int i = min; i <= max; i++) {
+  for (int i = min; i <= std::min(99, max); i++) {
     fs.insert(formatIntoTwoDigitChapterNumber(i));
+  }
+  for (int i = 100; i <= max; i++) {
+    fs.insert(TurnToString(i));
   }
   return fs;
 }

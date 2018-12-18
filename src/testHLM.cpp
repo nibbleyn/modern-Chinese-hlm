@@ -1,7 +1,8 @@
 #include "hlm.hpp"
 #include "hlmGb2312.hpp"
 
-int debug = LOG_EXCEPTION;
+int debug = LOG_INFO;
+// int debug = LOG_EXCEPTION;
 
 void testLineHeader(string lnStr) {
   cout << "original: " << endl << lnStr << endl;

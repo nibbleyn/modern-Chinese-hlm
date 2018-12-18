@@ -15,3 +15,5 @@ ParaStruct getNumberOfPara(const string &referFile);
 void numberOriginalHtmls(bool hidden = false);
 void numberMainHtmls(bool hidden = false);
 void numberAttachmentHtmls(bool hidden = false);
+
+void reformatTxtFilesForReader();
