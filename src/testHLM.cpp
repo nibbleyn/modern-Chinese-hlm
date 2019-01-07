@@ -4,6 +4,15 @@
 int debug = LOG_INFO;
 // int debug = LOG_EXCEPTION;
 
+void testSearchTextIsOnlyPartOfOtherKeys() {
+  string line =
+      R"(秋水眼又对秋水鸳鸯剑，埋下<a unhidden href="#P94"><i hidden>春色</i>“倒底是不标致的好”</a>的悲剧结局)";
+  line =
+      R"(满脸春色，比白日更增了颜色（<i unhidden>美丽</i>）。贾琏搂她笑道：“人人都说我们那<a href="a044.htm#P94"><i hidden>夜叉星</i>夜叉婆</a>（<i unhidden>凤姐</i>）齐整（<i unhidden>标致</i>），如今我看来，（<i unhidden>俯就你</i>）给你拾鞋也不要。”尤二姐道：“我虽标致，却无<a href="a066.htm#P94"><i hidden>品行</i>品行</a>。看来倒底是不标致的好。)";
+  string key = R"(春色)";
+  cout << isOnlyPartOfOtherKeys(line, key);
+}
+
 void testLineHeader(string lnStr) {
   cout << "original: " << endl << lnStr << endl;
   LineNumber ln(lnStr);
@@ -287,8 +296,9 @@ void testConvertToUtf8() {
 
 void testFunctions() {
   SEPERATE("HLM test", " started ");
+  testSearchTextIsOnlyPartOfOtherKeys();
   //    testLineNumber();
-  testLinkOperation();
+  //  testLinkOperation();
   //  testAttachmentOperations();
   //  testContainer();
   //  testConstructSubStory();

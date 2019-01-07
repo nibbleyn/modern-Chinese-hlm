@@ -186,13 +186,10 @@ string fixLinkFromAttachmentTemplate(const string &path, const string &filename,
 }
 
 static const string charBeforeAnnotation = R"(>)";
-static const string commentBeginChars = R"(<i unhidden)";
 static const string commentEndChars = R"(</i>）)";
 static const string referFileMiddleChar = R"(href=")";
 static const string referParaMiddleChar = R"(#)";
 static const string referParaEndChar = R"(">)";
-static const string keyStartChars = R"(<i hidden>)";
-static const string keyEndChars = R"(</i>)";
 static const string changeKey = R"(changeKey)";
 static const string citationStartChars = R"(<b hidden>)";
 static const string citationChapterNo = R"(第)";

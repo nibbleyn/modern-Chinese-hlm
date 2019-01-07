@@ -510,6 +510,42 @@ void assembleAttachments(int minTarget, int maxTarget, int minAttachNo,
     cout << "assemble finished. " << endl;
 }
 
+bool KeyStartAndCommentStartNotFound(const string &testStr, const string &key) {
+  if (debug >= LOG_INFO)
+    cout << testStr << " and key: " << key << endl;
+  auto keyStartBegin = testStr.find(keyStartChars);
+  auto commentStartBegin = testStr.find(commentBeginChars);
+  if (keyStartBegin == string::npos and commentStartBegin == string::npos)
+    return true;
+  return false;
+}
+
+bool isOnlyPartOfOtherKeys(const string &orgLine, const string &key) {
+  string line = orgLine;
+  while (true) {
+    auto keyBegin = line.find(key);
+    if (keyBegin == string::npos) // no key any more
+      break;
+    auto keyEnd = line.find(keyEndChars, keyBegin);
+    if (keyEnd == string::npos) // no keyEnd any more
+      return false;
+    string testStr = line.substr(keyBegin, keyEnd - keyBegin);
+    if (not KeyStartAndCommentStartNotFound(testStr, key))
+      return false;
+    else {
+      string beforeKey = line.substr(0, keyBegin);
+      if (debug >= LOG_INFO)
+        cout << beforeKey << endl;
+      // if only part of comment
+      if (beforeKey.find(keyStartChars) == string::npos)
+        return false;
+    }
+    line = line.substr(keyEnd + keyEndChars.length());
+    if (debug >= LOG_INFO)
+      cout << line << endl;
+  }
+  return true;
+}
 /**
  * find a keyword in a numbered bodytext file
  * whose name is specified as fullPath
@@ -538,6 +574,10 @@ string findKeyInFile(const string &key, const string &fullPath,
     getline(infile, line);              // Saves the line
     if (line.find(key) == string::npos) // not appear in this line
     {
+      continue;
+    }
+    // if "key" is only part of the key of another link, skip this line
+    if (isOnlyPartOfOtherKeys(line, key)) {
       continue;
     }
     // find the key in current line

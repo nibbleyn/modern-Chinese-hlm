@@ -45,6 +45,10 @@ static const string bottomTab = R"(name="bottom")"; // of the body Text file
 static const string keyNotFound = R"(KeyNotFound)";
 static const string attachmentFileMiddleChar = R"(_)";
 
+static const string commentBeginChars = R"(<i unhidden)";
+static const string keyStartChars = R"(<i hidden>)";
+static const string keyEndChars = R"(</i>)";
+
 static const string defaultTitle = "XXX";
 static const string defaultDisplayTitle = "YYY";
 static const string HTML_CONTAINER = "container/container";
@@ -88,3 +92,5 @@ string findKeyInFile(const string &key, const string &fullPath,
 string getAttachmentTitle(const string &filename);
 vector<int> getAttachmentFileListForChapter(const string &referFile,
                                             const string &fromDir);
+
+bool isOnlyPartOfOtherKeys(const string &orgLine, const string &key);
