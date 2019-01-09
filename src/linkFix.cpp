@@ -1,4 +1,4 @@
-#include "hlmLinkFixing.hpp"
+#include "linkFix.hpp"
 /**
  * check lineNumber from refAttachmentList about a link to attachment
  * and put that lineNumber in that attachment file header

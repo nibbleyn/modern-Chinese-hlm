@@ -17,7 +17,7 @@
 
 #include "Poco/File.h"
 
-#include "hlmLineNumber.hpp"
+#include "lineNumber.hpp"
 
 using namespace std;
 extern int debug;

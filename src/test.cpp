@@ -1,6 +1,6 @@
-#include "hlmGb2312.hpp"
-#include "hlmLinkFixing.hpp"
-#include "hlmNumbering.hpp"
+#include "gb2312ToUtf8.hpp"
+#include "linkFix.hpp"
+#include "numbering.hpp"
 
 int debug = LOG_INFO;
 // int debug = LOG_EXCEPTION;

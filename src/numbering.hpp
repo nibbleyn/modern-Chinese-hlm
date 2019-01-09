@@ -1,6 +1,6 @@
 #pragma once
-#include "hlmContainer.hpp"
-#include "hlmFileType.hpp"
+#include "container.hpp"
+#include "fileUtil.hpp"
 
 string fixFirstParaHeaderFromTemplate(int startNumber, const string &color,
                                       bool hidden = false);

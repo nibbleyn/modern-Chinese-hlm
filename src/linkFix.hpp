@@ -1,6 +1,6 @@
 #pragma once
-#include "hlmContainer.hpp"
-#include "hlmLink.hpp"
+#include "container.hpp"
+#include "link.hpp"
 
 // link fixing for main files
 void fixLinksFromMain();

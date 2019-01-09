@@ -1,4 +1,4 @@
-#include "hlmGb2312.hpp"
+#include "gb2312ToUtf8.hpp"
 #include "Poco/File.h"
 #include "Poco/PipeStream.h"
 #include "Poco/Process.h"

@@ -1,7 +1,7 @@
-#include "hlmLineNumber.hpp"
+#include "lineNumber.hpp"
 #include <regex>
 
-extern bool debug;
+extern int debug;
 
 static const string endOfLineNumber =
     R"(")"; // to try special case like "bottom"

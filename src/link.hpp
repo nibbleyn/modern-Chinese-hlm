@@ -1,5 +1,5 @@
 #pragma once
-#include "hlmFileType.hpp"
+#include "fileUtil.hpp"
 
 enum class LINK_TYPE { MAIN, ATTACHMENT, ORIGINAL, SAMEPAGE };
 enum class LINK_DISPLAY_TYPE { DIRECT, HIDDEN, UNHIDDEN };

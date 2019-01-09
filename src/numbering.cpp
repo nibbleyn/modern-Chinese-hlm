@@ -1,4 +1,4 @@
-#include "hlmNumbering.hpp"
+#include "numbering.hpp"
 
 static const string firstParaHeader =
     R"(<b unhidden> 第1段 </b><a unhidden name="PXX" href="#PYY">v向下</a>&nbsp;&nbsp;&nbsp;&nbsp;<a unhidden name="top" href="#bottom">页面底部->||</a><hr color="#COLOR">)";
