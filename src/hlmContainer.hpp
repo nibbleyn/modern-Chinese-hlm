@@ -56,14 +56,13 @@ public:
     bodyTextInputFilePath = BODY_TEXT_CONTAINER;
     bodyTextOutputFilePath = BODY_TEXT_CONTAINER;
   }
-};
+  virtual ~GenericContainer(){};
+  virtual string getInputFileName() const = 0;
+  void assembleBackToHTM(const string &title = "",
+                         const string &displayTitle = "");
 
-/**
- * used for features like updateIndexTable etc.
- */
-class TableContainer : public GenericContainer {
-public:
-  TableContainer() = default;
+protected:
+  string outputFilename{"output"};
 };
 
 /**
@@ -72,12 +71,21 @@ public:
 class ListContainer : public GenericContainer {
 public:
   ListContainer() = default;
-  ListContainer(string filename) : outputFilename(filename) {}
-  void assembleBackToHTM(const string &title = "",
-                         const string &displayTitle = "");
+  ListContainer(string filename) { outputFilename = filename; }
 
 private:
-  string outputFilename{"output"};
+  string getInputFileName() const override { return "1"; }
+};
+
+/**
+ * used for features like updateIndexTable etc.
+ */
+class TableContainer : public GenericContainer {
+public:
+  TableContainer() = default;
+
+private:
+  string getInputFileName() const override { return "2"; }
 };
 
 void dissembleAttachments(int minTarget, int maxTarget, int minAttachNo,

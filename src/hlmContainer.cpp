@@ -221,12 +221,12 @@ void assembleAttachments(int minTarget, int maxTarget, int minAttachNo,
     cout << "assemble finished. " << endl;
 }
 
-void ListContainer::assembleBackToHTM(const string &title,
-                                      const string &displayTitle) {
+void GenericContainer::assembleBackToHTM(const string &title,
+                                         const string &displayTitle) {
 
-  string inputHtmlFile = htmlInputFilePath + TurnToString(1) + HTML_SUFFIX;
+  string inputHtmlFile = htmlInputFilePath + getInputFileName() + HTML_SUFFIX;
   string inputBodyTextFile =
-      bodyTextInputFilePath + TurnToString(1) + BODY_TEXT_SUFFIX;
+      bodyTextInputFilePath + getInputFileName() + BODY_TEXT_SUFFIX;
   string outputFile = htmlOutputFilePath + outputFilename + HTML_SUFFIX;
 
   ifstream inHtmlFile(inputHtmlFile);

@@ -544,7 +544,6 @@ void findFirstInNoAttachmentFiles(const string key, FILE_TYPE targetFileType,
 
 void findFirstInNoAttachmentFiles(const string &key, const string &fileType,
                                   const string &outputFilename) {
-  ListContainer container;
   int minTarget = 1, maxTarget = 80;
   findFirstInNoAttachmentFiles(key, getFileTypeFromString(fileType), minTarget,
                                maxTarget, outputFilename);
