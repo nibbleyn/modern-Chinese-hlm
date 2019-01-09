@@ -1,5 +1,5 @@
 #include "hlmLinkFixing.hpp"
-
+#include "hlmContainer.hpp"
 /**
  * check lineNumber from refAttachmentList about a link to attachment
  * and put that lineNumber in that attachment file header
@@ -231,6 +231,7 @@ void fixReturnLinkForAttachments(int minTarget, int maxTarget) {
  */
 void fixMainHtml(int minTarget, int maxTarget, int minReference,
                  int maxReference) {
+  CoupledContainer container("main");
   backupAndOverwriteSrcForHTML();           // update html src
   dissembleMainHtmls(minTarget, maxTarget); // dissemble html to bodytext
   fixMainLinks(minTarget, maxTarget, minReference, maxReference);
@@ -446,7 +447,7 @@ void fixLinksToMainForAttachments(int minTarget, int maxTarget,
  */
 void fixAttachments(int minTarget, int maxTarget, int minReference,
                     int maxReference, int minAttachNo, int maxAttachNo) {
-
+  CoupledContainer container("attachment");
   backupAndOverwriteSrcForHTML(); // update html src
   dissembleAttachments(minTarget, maxTarget, minAttachNo,
                        maxAttachNo); // dissemble html to bodytext
@@ -499,7 +500,7 @@ void findFirstInNoAttachmentFiles(const string key, FILE_TYPE targetFileType,
                       ignoreChange); // continue using same key
     if (newKey.find("KeyNotFound") == string::npos) {
       if (targetFileType == FILE_TYPE::ORIGINAL) {
-        // output HTML file is always under HTML_OUTPUT
+        // output HTML file is always under HTML_OUTPUT_MAIN
         Link::LinkDetails detail{
             key, file, referPara,
             fixLinkFromOriginalTemplate(R"(original\)", file, key, referPara)};
@@ -537,18 +538,19 @@ void findFirstInNoAttachmentFiles(const string key, FILE_TYPE targetFileType,
   string inputHtmlFile = HTML_CONTAINER + TurnToString(1) + HTML_SUFFIX;
   string inputBodyTextFile =
       BODY_TEXT_CONTAINER + TurnToString(1) + BODY_TEXT_SUFFIX;
-  string outputFile = HTML_OUTPUT + outputFilename + HTML_SUFFIX;
+  string outputFile = HTML_OUTPUT_MAIN + outputFilename + HTML_SUFFIX;
   assembleContainerHTM(inputHtmlFile, inputBodyTextFile, outputFile,
                        "search  results", "searchInFiles for key: " + key);
 }
 
 void findFirstInNoAttachmentFiles(const string &key, const string &fileType,
                                   const string &outputFilename) {
+  ListContainer container;
   int minTarget = 1, maxTarget = 80;
   findFirstInNoAttachmentFiles(key, getFileTypeFromString(fileType), minTarget,
                                maxTarget, outputFilename);
-  cout << "result is in file " << HTML_OUTPUT + outputFilename + HTML_SUFFIX
-       << endl;
+  cout << "result is in file "
+       << HTML_OUTPUT_MAIN + outputFilename + HTML_SUFFIX << endl;
 }
 
 static const string personalCommentStart = R"(（<u unhidden)";

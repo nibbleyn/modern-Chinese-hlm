@@ -1,4 +1,5 @@
 #include "hlmNumbering.hpp"
+#include "hlmContainer.hpp"
 
 static const string firstParaHeader =
     R"(<b unhidden> 第1段 </b><a unhidden name="PXX" href="#PYY">v向下</a>&nbsp;&nbsp;&nbsp;&nbsp;<a unhidden name="top" href="#bottom">页面底部->||</a><hr color="#COLOR">)";
@@ -396,6 +397,7 @@ void addLineNumbersForAttachmentHtml(int minTarget, int maxTarget,
  * @param maxTarget until this file
  */
 void NumberingOriginalHtml(int minTarget, int maxTarget, bool hidden = false) {
+  CoupledContainer container("original");
   backupAndOverwriteSrcForHTML();               // update html src
   dissembleOriginalHtmls(minTarget, maxTarget); // dissemble html to bodytext
   addLineNumbersForOriginalHtml(

@@ -27,11 +27,11 @@ extern int debug;
   cout << "*************************line " << __LINE__ << ": " << x << y       \
        << "*************************" << endl; //<< __func__<< __FILE__
 
-static const string HTML_SRC = "utf8HTML/src/";
+static const string HTML_SRC_MAIN = "utf8HTML/src/";
 static const string HTML_SRC_ATTACHMENT = "utf8HTML/src/attachment/";
 static const string HTML_SRC_ORIGINAL = "utf8HTML/src/original/";
 
-static const string HTML_OUTPUT = "utf8HTML/output/";
+static const string HTML_OUTPUT_MAIN = "utf8HTML/output/";
 static const string HTML_OUTPUT_ATTACHMENT = "utf8HTML/output/attachment/";
 static const string HTML_OUTPUT_ORIGINAL = "utf8HTML/output/original/";
 static const string HTML_SUFFIX = R"(.htm)";

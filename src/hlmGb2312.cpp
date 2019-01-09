@@ -29,7 +29,7 @@ void convertFromGB2312ToUtf8(string referFile, string format, FILE_TYPE type,
       cout << "file doesn't exist:" << inputFile << endl;
       return;
     }
-    outputFile = HTML_OUTPUT;
+    outputFile = HTML_OUTPUT_MAIN;
     if (type == FILE_TYPE::ATTACHMENT)
       outputFile = HTML_OUTPUT_ATTACHMENT;
     outputFile +=
@@ -68,7 +68,7 @@ void convertFromGB2312ToUtf8(string inputFile, string outputFile) {
 void convertMainMenuFromGB2312ToUtf8() {
   string inputFile{""}, outputFile{""};
   inputFile = GB2312_HTML_SRC + "aindex.htm";
-  outputFile = HTML_OUTPUT + "aindex.htm";
+  outputFile = HTML_OUTPUT_MAIN + "aindex.htm";
   convertFromGB2312ToUtf8(inputFile, outputFile);
 }
 

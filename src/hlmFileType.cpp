@@ -159,11 +159,11 @@ void loadBodyTexts(const string &from, const string &to) {
 
 /**
  * to numbering or linkfixing main or attachment files
- * copy them to HTML_OUTPUT or HTML_OUTPUT_ATTACHMENT
+ * copy them to HTML_OUTPUT_MAIN or HTML_OUTPUT_ATTACHMENT
  * and this function would backup current files
- * (incl. sub-dirs) under HTML_SRC
- * and load newly copied files from HTML_OUTPUT to HTML_SRC
- * then dissemble would happen from HTML_SRC afterwards
+ * (incl. sub-dirs) under HTML_SRC_MAIN
+ * and load newly copied files from HTML_OUTPUT_MAIN to HTML_SRC_MAIN
+ * then dissemble would happen from HTML_SRC_MAIN afterwards
  */
 void backupAndOverwriteSrcForHTML() {
   string BACKUP = "utf8HTML/src" + currentTimeStamp();
@@ -174,7 +174,7 @@ void backupAndOverwriteSrcForHTML() {
     BackupPath.createDirectories();
 
   // backup whole src directory together with files to this directory
-  Poco::File dirToCopy(HTML_SRC);
+  Poco::File dirToCopy(HTML_SRC_MAIN);
   dirToCopy.copyTo(BACKUP);
 
   // create a date file in this backup directory
@@ -185,21 +185,21 @@ void backupAndOverwriteSrcForHTML() {
   // save from output to src
   // just put attachment under this directory and would be copied together
   vector<string> filenameList;
-  Poco::File(HTML_OUTPUT).list(filenameList);
+  Poco::File(HTML_OUTPUT_MAIN).list(filenameList);
   sort(filenameList.begin(), filenameList.end(), less<string>());
   for (const auto &file : filenameList) {
-    Poco::File fileToClear(HTML_SRC + file);
+    Poco::File fileToClear(HTML_SRC_MAIN + file);
     if (fileToClear.exists())
       fileToClear.remove(true);
-    Poco::File fileToCopy(HTML_OUTPUT + file);
-    fileToCopy.copyTo(HTML_SRC + file);
+    Poco::File fileToCopy(HTML_OUTPUT_MAIN + file);
+    fileToCopy.copyTo(HTML_SRC_MAIN + file);
   }
 }
 
 /**
- * read a .htm file under HTML_SRC or HTML_SRC_ORIGINAL or HTML_SRC_ATTACHMENT
- * and get body text starting from the line containing name="top" inclusively
- * till the line containing  name="bottom" inclusively
+ * read a .htm file under HTML_SRC_MAIN or HTML_SRC_ORIGINAL or
+ * HTML_SRC_ATTACHMENT and get body text starting from the line containing
+ * name="top" inclusively till the line containing  name="bottom" inclusively
  * and store that body texts into corresponding file under BODY_TEXT_OUTPUT
  * @param referFile 2-digit string chapter number
  * @param type target file type
@@ -257,9 +257,9 @@ void dissembleFromHTM(const string &inputHtmlFile,
 }
 
 /**
- * read header and tail of a .htm file under HTML_SRC or HTML_SRC_ORIGINAL or
- * HTML_SRC_ATTACHMENT and put its corresponding body text in-between to form a
- * new .htm file and store under HTML_OUTPUT
+ * read header and tail of a .htm file under HTML_SRC_MAIN or HTML_SRC_ORIGINAL
+ * or HTML_SRC_ATTACHMENT and put its corresponding body text in-between to form
+ * a new .htm file and store under HTML_OUTPUT_MAIN
  * @param referFile 2-digit string chapter number
  * @param type target file type
  * main files are a0XX.htm
@@ -407,7 +407,7 @@ void assembleOriginalHtmls(int minTarget, int maxTarget) {
 void dissembleMainHtmls(int minTarget, int maxTarget) {
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     string inputHtmlFile =
-        HTML_SRC + getFileNamePrefix(FILE_TYPE::MAIN) + file + HTML_SUFFIX;
+        HTML_SRC_MAIN + getFileNamePrefix(FILE_TYPE::MAIN) + file + HTML_SUFFIX;
     string outputBodyTextFile = BODY_TEXT_OUTPUT +
                                 getBodyTextFilePrefix(FILE_TYPE::MAIN) + file +
                                 BODY_TEXT_SUFFIX;
@@ -425,12 +425,12 @@ void dissembleMainHtmls(int minTarget, int maxTarget) {
 void assembleMainHtmls(int minTarget, int maxTarget) {
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     string inputHtmlFile =
-        HTML_SRC + getFileNamePrefix(FILE_TYPE::MAIN) + file + HTML_SUFFIX;
+        HTML_SRC_MAIN + getFileNamePrefix(FILE_TYPE::MAIN) + file + HTML_SUFFIX;
     string inputBodyTextFile = BODY_TEXT_OUTPUT +
                                getBodyTextFilePrefix(FILE_TYPE::MAIN) + file +
                                BODY_TEXT_SUFFIX;
-    string outputFile =
-        HTML_OUTPUT + getFileNamePrefix(FILE_TYPE::MAIN) + file + HTML_SUFFIX;
+    string outputFile = HTML_OUTPUT_MAIN + getFileNamePrefix(FILE_TYPE::MAIN) +
+                        file + HTML_SUFFIX;
     assembleBackToHTM(inputHtmlFile, inputBodyTextFile, outputFile);
   }
   if (debug >= LOG_INFO)
