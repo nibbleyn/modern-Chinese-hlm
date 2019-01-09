@@ -65,6 +65,7 @@ fileSet buildFileSet(int min, int max);
 string getFileNamePrefix(FILE_TYPE type);
 string getBodyTextFilePrefix(FILE_TYPE type);
 string getSeparateLineColor(FILE_TYPE type);
+FILE_TYPE getFileTypeFromString(const string &fileType);
 
 // backup or load files before operations
 void loadBodyTexts(const string &from, const string &to);
@@ -94,3 +95,23 @@ vector<int> getAttachmentFileListForChapter(const string &referFile,
                                             const string &fromDir);
 
 bool isOnlyPartOfOtherKeys(const string &orgLine, const string &key);
+
+int utf8length(std::string originalString);
+std::string utf8substr(std::string originalString, size_t begin, size_t &end,
+                       size_t SubStrLength);
+
+// using container to display set of links separated by paragraphs
+void clearLinksInContainerBodyText(int containerNumber);
+void appendLinkInContainerBodyText(string linkString, int containerNumber);
+void assembleContainerHTM(const string &inputHtmlFile,
+                          const string &inputBodyTextFile,
+                          const string &outputFile, const string &title = "",
+                          const string &displayTitle = "");
+
+void appendTextInContainerBodyText(string text, int containerNumber);
+void appendNumberLineInContainerBodyText(string line, int containerNumber);
+void addFirstParagraphInContainerBodyText(int startNumber, int containerNumber);
+void addParagraphInContainerBodyText(int startNumber, int paraNumber,
+                                     int containerNumber);
+void addLastParagraphInContainerBodyText(int startNumber, int paraNumber,
+                                         int containerNumber);

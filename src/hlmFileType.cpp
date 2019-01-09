@@ -83,6 +83,13 @@ string getBodyTextFilePrefix(FILE_TYPE type) {
   return "unsupported";
 }
 
+FILE_TYPE getFileTypeFromString(const string &fileType) {
+  if (fileType == "attachment")
+    return FILE_TYPE::ATTACHMENT;
+  if (fileType == "original")
+    return FILE_TYPE::ORIGINAL;
+  return FILE_TYPE::MAIN;
+}
 /**
  * the background of original file is different from main file
  * and so their separator line between paragraphs
@@ -666,4 +673,186 @@ vector<int> getAttachmentFileListForChapter(const string &referFile,
     }
   }
   return attList;
+}
+
+int utf8length(std::string originalString) {
+  size_t len = 0, byteIndex = 0;
+  const char *aStr = originalString.c_str();
+  for (; byteIndex < originalString.size(); byteIndex++) {
+    if ((aStr[byteIndex] & 0xc0) != 0x80)
+      len += 1;
+  }
+  return len;
+}
+
+std::string utf8substr(std::string originalString, size_t begin, size_t &end,
+                       size_t SubStrLength) {
+  const char *aStr = originalString.c_str();
+  size_t origSize = originalString.size();
+  size_t byteIndex = begin;
+  size_t len = 0;
+
+  end = begin;
+  for (; byteIndex < origSize; byteIndex++) {
+    if ((aStr[byteIndex] & 0xc0) != 0x80)
+      len += 1;
+    if (len >= SubStrLength) {
+      end = byteIndex - 1;
+      break;
+    }
+  }
+  return originalString.substr(begin, byteIndex - begin);
+}
+
+/**
+ * to get ready to write new text in this file which would be composed into
+ * container htm
+ */
+void clearLinksInContainerBodyText(int containerNumber) {
+  string outputFile =
+      BODY_TEXT_CONTAINER + TurnToString(containerNumber) + BODY_TEXT_SUFFIX;
+  cout << outputFile << endl;
+  ofstream outfile(outputFile);
+}
+
+/**
+ * append a link string in the body text of final htm file
+ * @param linkString the string to put into
+ * @param containerNumber the selected container to put into
+ */
+void appendLinkInContainerBodyText(string linkString, int containerNumber) {
+  string outputFile =
+      BODY_TEXT_CONTAINER + TurnToString(containerNumber) + BODY_TEXT_SUFFIX;
+  cout << outputFile << endl;
+  ofstream outfile;
+  outfile.open(outputFile, std::ios_base::app);
+  outfile << "<br>" << linkString << "</br>" << endl;
+}
+/**
+ * append a text string in the body text of final htm file
+ * @param text the string to put into
+ * @param containerNumber the selected container to put into
+ */
+void appendTextInContainerBodyText(string text, int containerNumber) {
+  string outputFile =
+      BODY_TEXT_CONTAINER + TurnToString(containerNumber) + BODY_TEXT_SUFFIX;
+  cout << outputFile << endl;
+  ofstream outfile;
+  outfile.open(outputFile, std::ios_base::app);
+  outfile << "<br>"
+          << R"(<b>)" << text << "</b>"
+          << "</br>" << endl;
+}
+
+void appendNumberLineInContainerBodyText(string line, int containerNumber) {
+  string outputFile =
+      BODY_TEXT_CONTAINER + TurnToString(containerNumber) + BODY_TEXT_SUFFIX;
+  cout << outputFile << endl;
+  ofstream outfile;
+  outfile.open(outputFile, std::ios_base::app);
+  outfile << "<br>" << endl;
+  outfile << line << endl;
+}
+
+void addFirstParagraphInContainerBodyText(int startNumber,
+                                          int containerNumber) {
+  string outputFile =
+      BODY_TEXT_CONTAINER + TurnToString(containerNumber) + BODY_TEXT_SUFFIX;
+  cout << outputFile << endl;
+  ofstream outfile;
+  outfile.open(outputFile, std::ios_base::app);
+  //  outfile << firstParaHeader << endl;
+}
+
+void addParagraphInContainerBodyText(int startNumber, int paraNumber,
+                                     int containerNumber) {}
+
+void addLastParagraphInContainerBodyText(int startNumber, int paraNumber,
+                                         int containerNumber) {
+  string outputFile =
+      BODY_TEXT_CONTAINER + TurnToString(containerNumber) + BODY_TEXT_SUFFIX;
+  cout << outputFile << endl;
+  ofstream outfile;
+  outfile.open(outputFile, std::ios_base::app);
+  outfile << R"(<hr color="#F0BEC0">)" << endl;
+  //  outfile << lastParaHeader << endl;
+}
+
+/**
+ *
+ * @param outputHTMFilename
+ */
+void assembleContainerHTM(const string &inputHtmlFile,
+                          const string &inputBodyTextFile,
+                          const string &outputFile, const string &title,
+                          const string &displayTitle) {
+  ifstream inHtmlFile(inputHtmlFile);
+  if (!inHtmlFile) // doesn't exist
+  {
+    cout << "file doesn't exist:" << inputHtmlFile << endl;
+    return;
+  }
+  ifstream inBodyTextFile(inputBodyTextFile);
+  if (!inBodyTextFile) // doesn't exist
+  {
+    cout << "file doesn't exist:" << inputBodyTextFile << endl;
+    return;
+  }
+  ofstream outfile(outputFile);
+  string line{""};
+  bool started = false;
+  string start = topTab;    // first line
+  string end = bottomTab;   // last line
+  while (!inHtmlFile.eof()) // To get you all the lines.
+  {
+    getline(inHtmlFile, line); // Saves the line in line.
+    if (not started) {
+      auto linkBegin = line.find(start);
+      if (linkBegin != string::npos) {
+        started = true;
+        break;
+      }
+      if (not title.empty()) {
+        auto titleBegin = line.find(defaultTitle);
+        if (titleBegin != string::npos)
+          line.replace(titleBegin, defaultTitle.length(), title);
+      }
+      if (not displayTitle.empty()) {
+        auto titleBegin = line.find(defaultDisplayTitle);
+        if (titleBegin != string::npos)
+          line.replace(titleBegin, defaultDisplayTitle.length(), displayTitle);
+      }
+      if (debug >= LOG_INFO)
+        cout << line << endl;  // including end line
+      outfile << line << endl; // excluding start line
+    }
+  }
+  if (inHtmlFile.eof() and not started) {
+    cout << "source htm" << inputBodyTextFile << "has no start mark:" << start
+         << endl;
+    return;
+  }
+  bool ended = false;
+  while (!inBodyTextFile.eof()) // To get you all the lines.
+  {
+    getline(inBodyTextFile, line); // Saves the line in line.
+    if (debug >= LOG_INFO)
+      cout << line << endl;  // including end line
+    outfile << line << endl; // including end line
+  }
+  while (!inHtmlFile.eof()) // To get you all the lines.
+  {
+    getline(inHtmlFile, line); // Saves the line in line.
+    if (not ended) {
+      auto linkEnd = line.find(end);
+      if (linkEnd != string::npos) {
+        ended = true;
+        continue;
+      }
+    } else {
+      if (debug >= LOG_INFO)
+        cout << line << endl;  // including end line
+      outfile << line << endl; // excluding end line
+    }
+  }
 }

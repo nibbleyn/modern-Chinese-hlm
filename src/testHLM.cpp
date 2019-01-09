@@ -1,5 +1,6 @@
-#include "hlm.hpp"
 #include "hlmGb2312.hpp"
+#include "hlmLinkFixing.hpp"
+#include "hlmNumbering.hpp"
 
 int debug = LOG_INFO;
 // int debug = LOG_EXCEPTION;
@@ -255,17 +256,19 @@ void testAttachmentOperations() {
 
 void testContainer() {
   clearLinksInContainerBodyText(1);
-  addFirstParagraphInContainerBodyText(LineNumber::getStartNumber(), 1);
-  appendNumberLineInContainerBodyText(
-      R"(<a unhidden name="91202">2.2</a>　　不多日，黛玉、贾雨村一行便抵达京城。贾雨村整了整衣冠，带了小童，拿着自己的名帖，到荣国府门前便投了上去。贾政看了妹夫的来信，立刻请入相见。这贾政本就最喜欢读书之人，礼贤下士，济弱扶危，见贾雨村相貌魁伟，言语不俗，又有妹夫的面子，因此不敢怠慢，特别照顾优待贾雨村，竭心尽力地在幕后协助，写了一本折子，奏请皇上应准一个起复旧吏的位置。不到两个月，南京应天府刚好缺人，便让贾雨村去做了应天府府尹。贾雨村拜辞了贾政，择日上任去了，不在话下。（<i unhidden>贾政不同于冷子兴。虽附庸风雅，其人自己则风流潇洒。</i>）<br>)",
-      1);
-  appendTextInContainerBodyText("聚赌嫖娼", 1);
-  appendLinkInContainerBodyText(
-      R"(<a href="a043.htm"><i hidden>KeyNotFound</i><i
-	        hidden>头2社</i><bunhidden>第43章7.5节:</b>头一社</a>)",
-      1);
-  addLastParagraphInContainerBodyText(LineNumber::getStartNumber(),
-                                      LineNumber::getStartNumber(), 1);
+  //  addFirstParagraphInContainerBodyText(LineNumber::getStartNumber(), 1);
+  //  appendNumberLineInContainerBodyText(
+  //      R"(<a unhidden
+  //      name="91202">2.2</a>　　不多日，黛玉、贾雨村一行便抵达京城。贾雨村整了整衣冠，带了小童，拿着自己的名帖，到荣国府门前便投了上去。贾政看了妹夫的来信，立刻请入相见。这贾政本就最喜欢读书之人，礼贤下士，济弱扶危，见贾雨村相貌魁伟，言语不俗，又有妹夫的面子，因此不敢怠慢，特别照顾优待贾雨村，竭心尽力地在幕后协助，写了一本折子，奏请皇上应准一个起复旧吏的位置。不到两个月，南京应天府刚好缺人，便让贾雨村去做了应天府府尹。贾雨村拜辞了贾政，择日上任去了，不在话下。（<i
+  //      unhidden>贾政不同于冷子兴。虽附庸风雅，其人自己则风流潇洒。</i>）<br>)",
+  //      1);
+  //  appendTextInContainerBodyText("聚赌嫖娼", 1);
+  //  appendLinkInContainerBodyText(
+  //      R"(<a href="a043.htm"><i hidden>KeyNotFound</i><i
+  //	        hidden>头2社</i><bunhidden>第43章7.5节:</b>头一社</a>)",
+  //      1);
+  //  addLastParagraphInContainerBodyText(LineNumber::getStartNumber(),
+  //                                      LineNumber::getStartNumber(), 1);
   string inputHtmlFile = HTML_CONTAINER + "1" + HTML_SUFFIX;
   string inputBodyTextFile = BODY_TEXT_CONTAINER + "1" + BODY_TEXT_SUFFIX;
   string outputFile = HTML_CONTAINER + "1_gen" + HTML_SUFFIX;
@@ -279,8 +282,8 @@ void testConstructSubStory() {
 }
 
 void testFindFirstInFiles() {
-  //  findFirstInFiles("聚赌嫖娼", MAIN, 1, 80, "xxx2.htm");
-  //  findFirstInFiles("头一社", MAIN, 43, 43, "xxx2.htm");
+  findFirstInNoAttachmentFiles(R"("聚赌嫖娼")", "main", "xxx3");
+  findFirstInNoAttachmentFiles(R"("头一社")", "original", "xxx4");
 }
 
 void testRemovePersonalViewpoints() {
@@ -296,11 +299,11 @@ void testConvertToUtf8() {
 
 void testFunctions() {
   SEPERATE("HLM test", " started ");
-  testSearchTextIsOnlyPartOfOtherKeys();
+  //  testSearchTextIsOnlyPartOfOtherKeys();
   //    testLineNumber();
   //  testLinkOperation();
   //  testAttachmentOperations();
-  //  testContainer();
+  testContainer();
   //  testConstructSubStory();
   //  testFindFirstInFiles();
   //  testRemovePersonalViewpoints();

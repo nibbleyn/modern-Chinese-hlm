@@ -470,36 +470,6 @@ void numberAttachmentHtmls(bool hidden) {
   cout << "Numbering Attachment Html finished. " << endl;
 }
 
-int utf8length(std::string originalString) {
-  size_t len = 0, byteIndex = 0;
-  const char *aStr = originalString.c_str();
-  for (; byteIndex < originalString.size(); byteIndex++) {
-    if ((aStr[byteIndex] & 0xc0) != 0x80)
-      len += 1;
-  }
-  return len;
-}
-
-std::string utf8substr(std::string originalString, size_t begin, size_t &end,
-                       size_t SubStrLength) {
-  const char *aStr = originalString.c_str();
-  size_t origSize = originalString.size();
-  size_t byteIndex = begin;
-  size_t len = 0;
-
-  end = begin;
-  for (; byteIndex < origSize; byteIndex++) {
-    if ((aStr[byteIndex] & 0xc0) != 0x80)
-      len += 1;
-    if (len >= SubStrLength) {
-      end = byteIndex - 1;
-      break;
-    }
-  }
-
-  return originalString.substr(begin, byteIndex - begin);
-}
-
 void reformatFile(const string &inputFile, const string &outputFile,
                   const string &example) {
   ifstream infile(inputFile);
@@ -560,4 +530,18 @@ void reformatTxtFilesForReader() {
   reformatTxtFiles(minTarget, maxTarget, example);
   cout << "reformat files from " << minTarget << " to " << maxTarget
        << " finished. " << endl;
+}
+
+void splitFile(const string &sampleBlock, const string &sampleFirstLine,
+               const string &sampleWholeLine) {
+  string file = "01";
+  string inputFile =
+      BODY_TEXT_OUTPUT + getBodyTextFilePrefix(FILE_TYPE::MAIN) + file + ".txt";
+}
+
+void autoSplitBodyText() {
+  const string sampleBlock = R"()";
+  const string sampleFirstLine = R"()";
+  const string sampleWholeLine = R"()";
+  splitFile(sampleBlock, sampleFirstLine, sampleWholeLine);
 }

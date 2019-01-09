@@ -1,22 +1,22 @@
-//#include "hlm.hpp"
 #include "hlmLinkFixing.hpp"
 #include "hlmNumbering.hpp"
+#include "hlmTest.hpp"
 
 int main(int argc, char **argv) {
-//  testFunctions();
+  testFunctions();
 
   //  cout << "refer to readme about how to use this tool." << endl;
-  reformatTxtFilesForReader();
-//  numberOriginalHtmls();
-//  numberMainHtmls();
-//  numberAttachmentHtmls();
+  //  reformatTxtFilesForReader();
+  //  numberOriginalHtmls();
+  //  numberMainHtmls();
+  //  numberAttachmentHtmls();
 
   // hidden paragraph headers
-//  numberOriginalHtmls(true);
-//  numberMainHtmls(true);
-//  numberAttachmentHtmls(true);
+  //  numberOriginalHtmls(true);
+  //  numberMainHtmls(true);
+  //  numberAttachmentHtmls(true);
 
-  fixLinksFromMain();
-//  fixLinksFromAttachment();
+  //  fixLinksFromMain();
+  //  fixLinksFromAttachment();
   return 0;
 }
