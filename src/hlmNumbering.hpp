@@ -1,4 +1,5 @@
 #pragma once
+#include "hlmContainer.hpp"
 #include "hlmFileType.hpp"
 
 string fixFirstParaHeaderFromTemplate(int startNumber, const string &color,

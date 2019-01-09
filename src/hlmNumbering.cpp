@@ -1,5 +1,4 @@
 #include "hlmNumbering.hpp"
-#include "hlmContainer.hpp"
 
 static const string firstParaHeader =
     R"(<b unhidden> 第1段 </b><a unhidden name="PXX" href="#PYY">v向下</a>&nbsp;&nbsp;&nbsp;&nbsp;<a unhidden name="top" href="#bottom">页面底部->||</a><hr color="#COLOR">)";
@@ -397,13 +396,20 @@ void addLineNumbersForAttachmentHtml(int minTarget, int maxTarget,
  * @param maxTarget until this file
  */
 void NumberingOriginalHtml(int minTarget, int maxTarget, bool hidden = false) {
-  CoupledContainer container("original");
-  backupAndOverwriteSrcForHTML();               // update html src
-  dissembleOriginalHtmls(minTarget, maxTarget); // dissemble html to bodytext
+  CoupledContainer container(FILE_TYPE::ORIGINAL);
+  backupAndOverwriteSrcForHTML(); // update html src
+  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
+    container.dissembleFromHTM(file);
+  }
   addLineNumbersForOriginalHtml(
       minTarget, maxTarget, hidden); // reformat bodytext by adding line number
   loadBodyTexts(BODY_TEXT_FIX, BODY_TEXT_OUTPUT);
-  assembleOriginalHtmls(minTarget, maxTarget);
+  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
+    container.assembleBackToHTM(file);
+  }
+  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
+    container.assembleBackToHTM(file);
+  }
 }
 
 /**
@@ -412,12 +418,17 @@ void NumberingOriginalHtml(int minTarget, int maxTarget, bool hidden = false) {
  * @param maxTarget until this file
  */
 void NumberingMainHtml(int minTarget, int maxTarget, bool hidden = false) {
-  backupAndOverwriteSrcForHTML();           // update html src
-  dissembleMainHtmls(minTarget, maxTarget); // dissemble html to bodytext
+  CoupledContainer container(FILE_TYPE::MAIN);
+  backupAndOverwriteSrcForHTML(); // update html src
+  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
+    container.dissembleFromHTM(file);
+  }
   addLineNumbersForMainHtml(minTarget, maxTarget,
                             hidden); // reformat bodytext by adding line number
   loadBodyTexts(BODY_TEXT_FIX, BODY_TEXT_OUTPUT);
-  assembleMainHtmls(minTarget, maxTarget);
+  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
+    container.assembleBackToHTM(file);
+  }
   cout << "Numbering Main Html finished. " << endl;
 }
 

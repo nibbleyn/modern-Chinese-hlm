@@ -1,5 +1,4 @@
 #include "hlmLinkFixing.hpp"
-#include "hlmContainer.hpp"
 /**
  * check lineNumber from refAttachmentList about a link to attachment
  * and put that lineNumber in that attachment file header
@@ -231,12 +230,16 @@ void fixReturnLinkForAttachments(int minTarget, int maxTarget) {
  */
 void fixMainHtml(int minTarget, int maxTarget, int minReference,
                  int maxReference) {
-  CoupledContainer container("main");
-  backupAndOverwriteSrcForHTML();           // update html src
-  dissembleMainHtmls(minTarget, maxTarget); // dissemble html to bodytext
+  CoupledContainer container(FILE_TYPE::MAIN);
+  backupAndOverwriteSrcForHTML(); // update html src
+  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
+    container.dissembleFromHTM(file);
+  }
   fixMainLinks(minTarget, maxTarget, minReference, maxReference);
   loadBodyTexts(BODY_TEXT_FIX, BODY_TEXT_OUTPUT);
-  assembleMainHtmls(minTarget, maxTarget);
+  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
+    container.assembleBackToHTM(file);
+  }
   fixReturnLinkForAttachments(minTarget, maxTarget);
 }
 
@@ -447,7 +450,6 @@ void fixLinksToMainForAttachments(int minTarget, int maxTarget,
  */
 void fixAttachments(int minTarget, int maxTarget, int minReference,
                     int maxReference, int minAttachNo, int maxAttachNo) {
-  CoupledContainer container("attachment");
   backupAndOverwriteSrcForHTML(); // update html src
   dissembleAttachments(minTarget, maxTarget, minAttachNo,
                        maxAttachNo); // dissemble html to bodytext
@@ -535,12 +537,9 @@ void findFirstInNoAttachmentFiles(const string key, FILE_TYPE targetFileType,
     }
   }
   appendLinkInContainerBodyText(TurnToString(total) + " links are found.", 1);
-  string inputHtmlFile = HTML_CONTAINER + TurnToString(1) + HTML_SUFFIX;
-  string inputBodyTextFile =
-      BODY_TEXT_CONTAINER + TurnToString(1) + BODY_TEXT_SUFFIX;
-  string outputFile = HTML_OUTPUT_MAIN + outputFilename + HTML_SUFFIX;
-  assembleContainerHTM(inputHtmlFile, inputBodyTextFile, outputFile,
-                       "search  results", "searchInFiles for key: " + key);
+  ListContainer container(outputFilename);
+  container.assembleBackToHTM("search  results",
+                              "searchInFiles for key: " + key);
 }
 
 void findFirstInNoAttachmentFiles(const string &key, const string &fileType,

@@ -272,7 +272,7 @@ void testContainer() {
   string inputHtmlFile = HTML_CONTAINER + "1" + HTML_SUFFIX;
   string inputBodyTextFile = BODY_TEXT_CONTAINER + "1" + BODY_TEXT_SUFFIX;
   string outputFile = HTML_CONTAINER + "1_gen" + HTML_SUFFIX;
-  assembleBackToHTM(inputHtmlFile, inputBodyTextFile, outputFile);
+  //  assembleBackToHTM(inputHtmlFile, inputBodyTextFile, outputFile);
 }
 
 void testConstructSubStory() {

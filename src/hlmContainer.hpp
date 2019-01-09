@@ -1,3 +1,4 @@
+#pragma once
 #include "hlmFileType.hpp"
 
 class Container {
@@ -12,7 +13,8 @@ protected:
 };
 
 /**
- * used for features like removePersonalViewpoints, numbering and linkfixing  etc.
+ * used for features like removePersonalViewpoints, numbering and linkfixing
+ * etc.
  */
 class CoupledContainer : public Container {
 
@@ -23,14 +25,13 @@ public:
     bodyTextInputFilePath = BODY_TEXT_OUTPUT;
     bodyTextOutputFilePath = BODY_TEXT_FIX;
   }
-  CoupledContainer(const string &fileType) : fileType(fileType) {
-    if (fileType == "attachment") {
+  CoupledContainer(FILE_TYPE fileType) : fileType(fileType) {
+    if (fileType == FILE_TYPE::ATTACHMENT) {
       htmlInputFilePath = HTML_SRC_ATTACHMENT;
       htmlOutputFilePath = HTML_OUTPUT_ATTACHMENT;
-    } else if (fileType == "original") {
+    } else if (fileType == FILE_TYPE::ORIGINAL) {
       htmlInputFilePath = HTML_SRC_ORIGINAL;
       htmlOutputFilePath = HTML_OUTPUT_ORIGINAL;
-
     } else {
       htmlInputFilePath = HTML_SRC_MAIN;
       htmlOutputFilePath = HTML_OUTPUT_MAIN;
@@ -38,9 +39,13 @@ public:
     bodyTextInputFilePath = BODY_TEXT_OUTPUT;
     bodyTextOutputFilePath = BODY_TEXT_FIX;
   }
+  void dissembleFromHTM(const string &file, int attachNo = 1);
+  void assembleBackToHTM(const string &file, int attachNo = 1,
+                         const string &title = "",
+                         const string &displayTitle = "");
 
 private:
-  string fileType{""};
+  FILE_TYPE fileType{FILE_TYPE::MAIN};
 };
 
 class GenericContainer : public Container {
@@ -67,4 +72,15 @@ public:
 class ListContainer : public GenericContainer {
 public:
   ListContainer() = default;
+  ListContainer(string filename) : outputFilename(filename) {}
+  void assembleBackToHTM(const string &title = "",
+                         const string &displayTitle = "");
+
+private:
+  string outputFilename{"output"};
 };
+
+void dissembleAttachments(int minTarget, int maxTarget, int minAttachNo,
+                          int maxAttachNo);
+void assembleAttachments(int minTarget, int maxTarget, int minAttachNo,
+                         int maxAttachNo);

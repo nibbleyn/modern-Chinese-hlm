@@ -40,7 +40,8 @@ static const string BODY_TEXT_OUTPUT = "bodyTexts/output/";
 static const string BODY_TEXT_FIX = "bodyTexts/afterFix/";
 static const string BODY_TEXT_SUFFIX = R"(.txt)";
 
-static const string topTab = R"(name="top")";       // of the body Text file
+static const string final = R"(</html>)";     // last line of the html file
+static const string topTab = R"(name="top")"; // of the body Text file
 static const string bottomTab = R"(name="bottom")"; // of the body Text file
 static const string keyNotFound = R"(KeyNotFound)";
 static const string attachmentFileMiddleChar = R"(_)";
@@ -71,19 +72,6 @@ FILE_TYPE getFileTypeFromString(const string &fileType);
 void loadBodyTexts(const string &from, const string &to);
 void backupAndOverwriteSrcForHTML();
 
-// separate/merge body text from/back to Htm files
-void assembleBackToHTM(const string &inputHtmlFile,
-                       const string &inputBodyTextFile,
-                       const string &outputFile, string title = "",
-                       string displayTitle = "");
-void dissembleOriginalHtmls(int minTarget, int maxTarget);
-void assembleOriginalHtmls(int minTarget, int maxTarget);
-void dissembleMainHtmls(int minTarget, int maxTarget);
-void assembleMainHtmls(int minTarget, int maxTarget);
-void dissembleAttachments(int minTarget, int maxTarget, int minAttachNo,
-                          int maxAttachNo);
-void assembleAttachments(int minTarget, int maxTarget, int minAttachNo,
-                         int maxAttachNo);
 // search in body text files
 using lineNumberSet = set<string>;
 string findKeyInFile(const string &key, const string &fullPath,
