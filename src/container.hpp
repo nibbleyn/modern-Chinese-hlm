@@ -19,7 +19,7 @@ protected:
   string bodyTextOutputFilePath{""};
 };
 
-static const string final = R"(</html>)";     // last line of the html file
+static const string final = R"(</html>)"; // last line of the html file
 
 /**
  * used for features like removePersonalViewpoints, numbering and linkfixing

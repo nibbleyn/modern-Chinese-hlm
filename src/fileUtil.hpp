@@ -34,7 +34,7 @@ static const string BODY_TEXT_OUTPUT = "bodyTexts/output/";
 static const string BODY_TEXT_FIX = "bodyTexts/afterFix/";
 static const string BODY_TEXT_SUFFIX = R"(.txt)";
 
-static const string topTab = R"(name="top")"; // of the body Text file
+static const string topTab = R"(name="top")";       // of the body Text file
 static const string bottomTab = R"(name="bottom")"; // of the body Text file
 static const string keyNotFound = R"(KeyNotFound)";
 static const string attachmentFileMiddleChar = R"(_)";
@@ -46,7 +46,6 @@ static const string keyEndChars = R"(</i>)";
 enum class FILE_TYPE { MAIN, ATTACHMENT, ORIGINAL };
 
 class BodyText {
-  using lineNumberSet = set<string>;
 
 public:
   BodyText(string filePrefix) : filePrefix(filePrefix) {}
@@ -68,16 +67,20 @@ public:
       fileToCopy.copyTo(BODY_TEXT_OUTPUT + file);
     }
   }
+  using lineNumberSet = set<string>;
+  // set options before search
   void resetBeforeSearch() {
     ignoreSet.clear();
     result.clear();
     searchError = "";
   }
   void addIgnoreLines(const string &line);
-  void searchForAll(){
-	  onlyFirst = false;
-  }
+  void searchForAll() { onlyFirst = false; }
+
+  // search
   bool findKey(const string &key, const string &file, int attachNo = 0);
+
+  // get search results
   string getFirstResultLine() {
     if (not result.empty())
       return *(result.begin());
@@ -104,9 +107,6 @@ string getBodyTextFilePrefix(FILE_TYPE type);
 string getSeparateLineColor(FILE_TYPE type);
 FILE_TYPE getFileTypeFromString(const string &fileType);
 
-// backup or load files before operations
-void loadBodyTexts(const string &from, const string &to);
-
 string getAttachmentTitle(const string &filename);
 vector<int> getAttachmentFileListForChapter(const string &referFile,
                                             const string &fromDir);
@@ -116,13 +116,3 @@ bool isOnlyPartOfOtherKeys(const string &orgLine, const string &key);
 int utf8length(std::string originalString);
 std::string utf8substr(std::string originalString, size_t begin, size_t &end,
                        size_t SubStrLength);
-
-// using container to display set of links separated by paragraphs
-
-void appendTextInContainerBodyText(string text, int containerNumber);
-void appendNumberLineInContainerBodyText(string line, int containerNumber);
-void addFirstParagraphInContainerBodyText(int startNumber, int containerNumber);
-void addParagraphInContainerBodyText(int startNumber, int paraNumber,
-                                     int containerNumber);
-void addLastParagraphInContainerBodyText(int startNumber, int paraNumber,
-                                         int containerNumber);

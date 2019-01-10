@@ -171,12 +171,12 @@ bool BodyText::findKey(const string &key, const string &file, int attachNo) {
     cout << searchError << endl;
     return false;
   }
-  string line{""};
   bool found = false;
-  LineNumber ln;
   // To search in all the lines in referred file
   while (!infile.eof()) {
-    getline(infile, line);              // Saves the line
+    string line{""};
+    getline(infile, line); // Saves the line
+
     if (line.find(key) == string::npos) // not appear in this line
     {
       continue;
@@ -185,7 +185,8 @@ bool BodyText::findKey(const string &key, const string &file, int attachNo) {
     if (isOnlyPartOfOtherKeys(line, key)) {
       continue;
     }
-    // find the key in current line
+
+    LineNumber ln;
     ln.loadFromContainedLine(line);
     if (not ln.valid()) {
       searchError =
@@ -196,17 +197,17 @@ bool BodyText::findKey(const string &key, const string &file, int attachNo) {
 
     // special hack for ignoring one lineNumber
     if (not ignoreSet.empty() and
-        ignoreSet.find(ln.asString()) != ignoreSet.end())
+        ignoreSet.find(ln.asString()) != ignoreSet.end()) {
       continue;
+    }
+
     found = true;
-    break;
+    result.insert(ln.asString());
+    if (onlyFirst) {
+      break;
+    }
   }
-  if (not found) {
-    return false;
-  }
-  // continue with lineName found
-  result.insert(ln.asString());
-  return true;
+  return found;
 }
 
 /**
@@ -301,4 +302,3 @@ std::string utf8substr(std::string originalString, size_t begin, size_t &end,
   }
   return originalString.substr(begin, byteIndex - begin);
 }
-
