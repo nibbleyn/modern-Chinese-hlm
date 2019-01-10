@@ -1,5 +1,6 @@
 #pragma once
 #include "fileUtil.hpp"
+#include "bodyText.hpp"
 
 enum class LINK_TYPE { MAIN, ATTACHMENT, ORIGINAL, SAMEPAGE };
 enum class LINK_DISPLAY_TYPE { DIRECT, HIDDEN, UNHIDDEN };

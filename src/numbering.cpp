@@ -485,6 +485,7 @@ void numberAttachmentHtmls(bool hidden) {
   cout << "Numbering Attachment Html finished. " << endl;
 }
 
+#include "utf8StringUtil.hpp"
 void reformatFile(const string &inputFile, const string &outputFile,
                   const string &example) {
   ifstream infile(inputFile);

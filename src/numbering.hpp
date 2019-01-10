@@ -1,6 +1,7 @@
 #pragma once
 #include "container.hpp"
 #include "fileUtil.hpp"
+#include "bodyText.hpp"
 
 string fixFirstParaHeaderFromTemplate(int startNumber, const string &color,
                                       bool hidden = false);
