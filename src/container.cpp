@@ -310,7 +310,7 @@ void GenericContainer::appendParagraphInBodyText(const string &text) {
   string inputBodyTextFile =
       bodyTextInputFilePath + getInputFileName() + BODY_TEXT_SUFFIX;
   if (debug >= LOG_INFO)
-    cout << "clear content in: " << inputBodyTextFile << endl;
+    cout << "append Paragraph In BodyText: " << inputBodyTextFile << endl;
   ofstream outfile;
   outfile.open(inputBodyTextFile, std::ios_base::app);
   outfile << "<br>" << text << "</br>" << endl;

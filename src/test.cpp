@@ -275,6 +275,7 @@ void testContainer() {
   container.appendParagraphInBodyText(link);
   container.appendParagraphInBodyText("18 links are found.");
   container.assembleBackToHTM("test", "test container");
+  cout << "result is in file " << container.getOutputFilePath() << endl;
 }
 
 void testConstructSubStory() {
@@ -284,8 +285,8 @@ void testConstructSubStory() {
 }
 
 void testFindFirstInFiles() {
-  searchKeywordInNoAttachmentFiles(R"("聚赌嫖娼")", "main", "xxx3");
-  searchKeywordInNoAttachmentFiles(R"("头一社")", "original", "xxx4");
+  searchKeywordInNoAttachmentFiles(R"(聚赌嫖娼)", "main", "xxx3");
+  searchKeywordInNoAttachmentFiles(R"(头一社)", "original", "xxx4");
 }
 
 void testRemovePersonalViewpoints() {
@@ -302,10 +303,10 @@ void testConvertToUtf8() {
 void testFunctions() {
   SEPERATE("HLM test", " started ");
   //  testSearchTextIsOnlyPartOfOtherKeys();
-  //    testLineNumber();
+  //  testLineNumber();
   //  testLinkOperation();
   //  testAttachmentOperations();
-  testContainer();
+  //  testContainer();
   //  testConstructSubStory();
   //  testFindFirstInFiles();
   //  testRemovePersonalViewpoints();

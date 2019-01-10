@@ -183,6 +183,8 @@ bool BodyText::findKey(const string &key, const string &file, int attachNo) {
     }
     // if "key" is only part of the key of another link, skip this line
     if (isOnlyPartOfOtherKeys(line, key)) {
+      if (debug >= LOG_INFO)
+        cout << "found as key only: " << line << endl;
       continue;
     }
 

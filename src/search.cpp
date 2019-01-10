@@ -6,6 +6,7 @@ void findFirstInNoAttachmentFiles(const string key, FILE_TYPE targetFileType,
 
   using LinksList = map<string, vector<Link::LinkDetails>>;
   LinksList resultLinkList;
+  resultLinkList.clear();
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
 
     BodyText bodyText(getBodyTextFilePrefix(targetFileType));
@@ -51,8 +52,9 @@ void findFirstInNoAttachmentFiles(const string key, FILE_TYPE targetFileType,
       container.appendParagraphInBodyText(detail.link);
     }
   }
-  container.appendParagraphInBodyText(TurnToString(total) +
-                                      " links are found.");
+  string verb = (total > 1) ? "s are" : " is";
+  container.appendParagraphInBodyText(TurnToString(total) + " link" + verb +
+                                      " found.");
   container.assembleBackToHTM("search  results",
                               "searchInFiles for key: " + key);
   cout << "result is in file " << container.getOutputFilePath() << endl;
