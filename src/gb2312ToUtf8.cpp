@@ -6,6 +6,9 @@
 using Poco::Process;
 using Poco::ProcessHandle;
 
+static const string HTML_OUTPUT_MAIN = "utf8HTML/output/";
+static const string HTML_OUTPUT_ATTACHMENT = "utf8HTML/output/attachment/";
+
 /**
  * convert gb2312 format FILE_TYPE::MAIN files to utf8 format
  * @param referFile
