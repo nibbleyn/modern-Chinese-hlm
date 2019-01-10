@@ -1,6 +1,9 @@
 #include "gb2312ToUtf8.hpp"
 #include "linkFix.hpp"
 #include "numbering.hpp"
+#include "search.hpp"
+#include "story.hpp"
+#include "personal.hpp"
 
 int debug = LOG_INFO;
 // int debug = LOG_EXCEPTION;
