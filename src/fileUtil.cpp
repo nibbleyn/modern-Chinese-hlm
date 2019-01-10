@@ -108,93 +108,6 @@ string getSeparateLineColor(FILE_TYPE type) {
   return "unsupported";
 }
 
-/**
- * seconds from EPOCH as the timestamp
- * used for unique name in backup etc.
- * @return current timestamp from EPOCH
- */
-string currentTimeStamp() {
-  return TurnToString(chrono::duration_cast<chrono::milliseconds>(
-                          chrono::system_clock::now().time_since_epoch())
-                          .count());
-}
-
-/**
- * current Date and Time
- * to log for backup time
- * @return current Date and Time
- */
-string currentDateTime() {
-  time_t t = time(0); // get time now
-  tm *now = localtime(&t);
-
-  ostringstream ss_msg;
-  ss_msg << (now->tm_year + 1900) << '-' << (now->tm_mon + 1) << '-'
-         << now->tm_mday << " " << now->tm_hour << ":" << now->tm_min << ":"
-         << now->tm_sec << "\n";
-  return ss_msg.str();
-}
-
-/**
- * load files under "to" directory with files under "from"
- * currently only called from BODY_TEXT_FIX to BODY_TEXT_OUTPUT
- * i.e. from afterFix to output
- * for continue link fixing after numbering..
- * BODY_TEXT_OUTPUT currently is only to output, no backup would be done for it
- * @param from the source directory to load files
- * @param to the target directory to load files
- */
-void loadBodyTexts(const string &from, const string &to) {
-  vector<string> filenameList;
-  Poco::File(from).list(filenameList);
-  sort(filenameList.begin(), filenameList.end(), less<string>());
-  for (const auto &file : filenameList) {
-    if (debug >= LOG_INFO)
-      cout << "loading " << file << ".. " << endl;
-    Poco::File fileToCopy(from + file);
-    fileToCopy.copyTo(to + file);
-  }
-}
-
-/**
- * to numbering or linkfixing main or attachment files
- * copy them to HTML_OUTPUT_MAIN or HTML_OUTPUT_ATTACHMENT
- * and this function would backup current files
- * (incl. sub-dirs) under HTML_SRC_MAIN
- * and load newly copied files from HTML_OUTPUT_MAIN to HTML_SRC_MAIN
- * then dissemble would happen from HTML_SRC_MAIN afterwards
- */
-void backupAndOverwriteSrcForHTML() {
-  string BACKUP = "utf8HTML/src" + currentTimeStamp();
-  cout << "backup of current src is created under : " << BACKUP << endl;
-
-  Poco::File BackupPath(BACKUP);
-  if (!BackupPath.exists())
-    BackupPath.createDirectories();
-
-  // backup whole src directory together with files to this directory
-  Poco::File dirToCopy(HTML_SRC_MAIN);
-  dirToCopy.copyTo(BACKUP);
-
-  // create a date file in this backup directory
-  string outputFile = BACKUP + "/info.txt";
-  ofstream outfile(outputFile);
-  outfile << "backup created: " << currentDateTime();
-
-  // save from output to src
-  // just put attachment under this directory and would be copied together
-  vector<string> filenameList;
-  Poco::File(HTML_OUTPUT_MAIN).list(filenameList);
-  sort(filenameList.begin(), filenameList.end(), less<string>());
-  for (const auto &file : filenameList) {
-    Poco::File fileToClear(HTML_SRC_MAIN + file);
-    if (fileToClear.exists())
-      fileToClear.remove(true);
-    Poco::File fileToCopy(HTML_OUTPUT_MAIN + file);
-    fileToCopy.copyTo(HTML_SRC_MAIN + file);
-  }
-}
-
 bool KeyStartAndCommentStartNotFound(const string &testStr, const string &key) {
   if (debug >= LOG_INFO)
     cout << testStr << " and key: " << key << endl;
@@ -242,16 +155,23 @@ bool isOnlyPartOfOtherKeys(const string &orgLine, const string &key) {
  * @return changed key (to KeyNotFound + key + reason) if it is not found,
  * otherwise the original key
  */
-string findKeyInFile(const string &key, const string &fullPath,
-                     lineNumberSet ignorelineNumberSet, string &lineNumber,
-                     bool &needChange) {
+
+void BodyText::addIgnoreLines(const string &line) { ignoreSet.insert(line); }
+
+bool BodyText::findKey(const string &key, const string &file, int attachNo) {
+  string attachmentPart{""};
+  if (attachNo != 0)
+    attachmentPart = attachmentFileMiddleChar + TurnToString(attachNo);
+  string fullPath =
+      BODY_TEXT_OUTPUT + filePrefix + file + attachmentPart + BODY_TEXT_SUFFIX;
+
   ifstream infile(fullPath);
   if (!infile) {
-    cout << "file doesn't exist:" << fullPath << endl;
-    return keyNotFound + key + ": bodytext file doesn't exist";
+    searchError = "file doesn't exist:" + fullPath;
+    cout << searchError << endl;
+    return false;
   }
   string line{""};
-  string lineName{""};
   bool found = false;
   LineNumber ln;
   // To search in all the lines in referred file
@@ -268,25 +188,25 @@ string findKeyInFile(const string &key, const string &fullPath,
     // find the key in current line
     ln.loadFromContainedLine(line);
     if (not ln.valid()) {
-      cout << "file doesn't get numbered:" << fullPath << " at line:" << line
-           << endl;
-      return keyNotFound + key + ": bodytext file doesn't get numbered";
+      searchError =
+          "file doesn't get numbered:" + fullPath + " at line:" + line;
+      cout << searchError << endl;
+      return false;
     }
 
     // special hack for ignoring one lineNumber
-    if (not ignorelineNumberSet.empty() and
-        ignorelineNumberSet.find(ln.asString()) != ignorelineNumberSet.end())
+    if (not ignoreSet.empty() and
+        ignoreSet.find(ln.asString()) != ignoreSet.end())
       continue;
     found = true;
     break;
   }
-  needChange = true;
   if (not found) {
-    return keyNotFound + key;
+    return false;
   }
   // continue with lineName found
-  lineNumber = ln.asString();
-  return key;
+  result.insert(ln.asString());
+  return true;
 }
 
 /**
@@ -382,30 +302,6 @@ std::string utf8substr(std::string originalString, size_t begin, size_t &end,
   return originalString.substr(begin, byteIndex - begin);
 }
 
-/**
- * to get ready to write new text in this file which would be composed into
- * container htm
- */
-void clearLinksInContainerBodyText(int containerNumber) {
-  string outputFile =
-      BODY_TEXT_CONTAINER + TurnToString(containerNumber) + BODY_TEXT_SUFFIX;
-  cout << outputFile << endl;
-  ofstream outfile(outputFile);
-}
-
-/**
- * append a link string in the body text of final htm file
- * @param linkString the string to put into
- * @param containerNumber the selected container to put into
- */
-void appendLinkInContainerBodyText(string linkString, int containerNumber) {
-  string outputFile =
-      BODY_TEXT_CONTAINER + TurnToString(containerNumber) + BODY_TEXT_SUFFIX;
-  cout << outputFile << endl;
-  ofstream outfile;
-  outfile.open(outputFile, std::ios_base::app);
-  outfile << "<br>" << linkString << "</br>" << endl;
-}
 /**
  * append a text string in the body text of final htm file
  * @param text the string to put into

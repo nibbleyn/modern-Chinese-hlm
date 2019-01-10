@@ -571,26 +571,22 @@ void Link::readKey(const string &linkString) {
     usedKey = stringForSearch;
     return;
   }
-  string lineNumber = "";
-  lineNumberSet ignorelineNumberSet;
+  BodyText bodyText(getBodyTextFilePrefix(type));
+  bodyText.resetBeforeSearch();
   // special hack to ignore itself
-  if (type == LINK_TYPE::SAMEPAGE)
-    ignorelineNumberSet.insert(fromLine.asString());
-
-  needChange = false;
-  string attachmentPart{""};
-  if (attachmentNumber != 0) {
-    attachmentPart = attachmentFileMiddleChar + TurnToString(attachmentNumber);
+  if (type == LINK_TYPE::SAMEPAGE) {
+    bodyText.addIgnoreLines(fromLine.asString());
   }
-  // search key in referred file
-  string referFile = BODY_TEXT_OUTPUT + getBodyTextFilePrefix(type) +
-                     getChapterName() + attachmentPart + BODY_TEXT_SUFFIX;
-  string newKey = findKeyInFile(stringForSearch, referFile, ignorelineNumberSet,
-                                lineNumber, needChange);
-  if (debug >= LOG_INFO)
-    cout << "key found: " << newKey << endl;
-  if (newKey.find(keyNotFound) == string::npos) {
+  bool found =
+      bodyText.findKey(stringForSearch, getChapterName(), attachmentNumber);
+  if (not found) {
+    usedKey = keyNotFound + " " + stringForSearch;
+    fixReferPara(changeKey);
+    needChange = true;
+  } else {
     usedKey = stringForSearch;
+    // only use the first line found
+    string lineNumber = bodyText.getFirstResultLine();
     if (debug >= LOG_INFO)
       cout << "line number found: " << lineNumber << endl;
     LineNumber ln(lineNumber);
@@ -598,14 +594,10 @@ void Link::readKey(const string &linkString) {
         citationChapterNo + TurnToString(chapterNumber) + citationChapter +
         TurnToString(ln.getParaNumber()) + citationChapterParaSeparator +
         TurnToString(ln.getlineNumber()) + citationPara;
-    fixReferPara(ln.asString());
+    fixReferPara(
+        ln.asString()); // will set needChange if found line is different
     fixReferSection(expectedSection);
-  } else {
-    usedKey = keyNotFound + stringForSearch;
-    fixReferPara(changeKey);
-    needChange = true;
   }
-
   if (debug >= LOG_INFO)
     cout << "key: " << usedKey << endl;
 }

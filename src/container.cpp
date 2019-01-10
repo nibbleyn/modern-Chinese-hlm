@@ -1,5 +1,32 @@
 #include "container.hpp"
 
+/**
+ * seconds from EPOCH as the timestamp
+ * used for unique name in backup etc.
+ * @return current timestamp from EPOCH
+ */
+string currentTimeStamp() {
+  return TurnToString(chrono::duration_cast<chrono::milliseconds>(
+                          chrono::system_clock::now().time_since_epoch())
+                          .count());
+}
+
+/**
+ * current Date and Time
+ * to log for backup time
+ * @return current Date and Time
+ */
+string currentDateTime() {
+  time_t t = time(0); // get time now
+  tm *now = localtime(&t);
+
+  ostringstream ss_msg;
+  ss_msg << (now->tm_year + 1900) << '-' << (now->tm_mon + 1) << '-'
+         << now->tm_mday << " " << now->tm_hour << ":" << now->tm_min << ":"
+         << now->tm_sec << "\n";
+  return ss_msg.str();
+}
+
 void CoupledContainer::assembleBackToHTM(const string &file, int attachNo,
                                          const string &title,
                                          const string &displayTitle) {
@@ -98,6 +125,47 @@ void CoupledContainer::assembleBackToHTM(const string &file, int attachNo,
   }
   if (debug >= LOG_INFO)
     cout << "assemble finished for " << outputFile << endl;
+}
+
+/**
+ * to numbering or linkfixing main or attachment files
+ * just copy them to HTML_OUTPUT_MAIN or HTML_OUTPUT_ATTACHMENT
+ * and this function would backup current files
+ * (incl. sub-dirs) under HTML_SRC_MAIN
+ * and load newly copied files from HTML_OUTPUT_MAIN to HTML_SRC_MAIN
+ * then dissemble would happen from HTML_SRC_MAIN afterwards
+ */
+void CoupledContainer::backupAndOverwriteAllInputHtmlFiles() {
+  std::string dir = HTML_SRC_MAIN.substr(0, HTML_SRC_MAIN.find_last_of('/'));
+  string BACKUP = dir + currentTimeStamp();
+  if (debug >= LOG_INFO)
+    cout << "backup of current src is created under : " << BACKUP << endl;
+
+  Poco::File BackupPath(BACKUP);
+  if (!BackupPath.exists())
+    BackupPath.createDirectories();
+
+  // backup whole src directory together with files to this directory
+  Poco::File dirToCopy(HTML_SRC_MAIN);
+  dirToCopy.copyTo(BACKUP);
+
+  // create a date file in this backup directory
+  string outputFile = BACKUP + "/info.txt";
+  ofstream outfile(outputFile);
+  outfile << "backup created: " << currentDateTime();
+
+  // save from output to src
+  // just put attachment under this directory and would be copied together
+  vector<string> filenameList;
+  Poco::File(HTML_OUTPUT_MAIN).list(filenameList);
+  sort(filenameList.begin(), filenameList.end(), less<string>());
+  for (const auto &file : filenameList) {
+    Poco::File fileToClear(HTML_SRC_MAIN + file);
+    if (fileToClear.exists())
+      fileToClear.remove(true);
+    Poco::File fileToCopy(HTML_OUTPUT_MAIN + file);
+    fileToCopy.copyTo(HTML_SRC_MAIN + file);
+  }
 }
 
 void CoupledContainer::dissembleFromHTM(const string &file, int attachNo) {
@@ -219,6 +287,33 @@ void assembleAttachments(int minTarget, int maxTarget, int minAttachNo,
   }
   if (debug >= LOG_INFO)
     cout << "assemble finished. " << endl;
+}
+
+/**
+ * to get ready to write new text in this file which would be composed into
+ * container htm
+ */
+void GenericContainer::clearBodyTextFile() {
+  string inputBodyTextFile =
+      bodyTextInputFilePath + getInputFileName() + BODY_TEXT_SUFFIX;
+  if (debug >= LOG_INFO)
+    cout << "clear content in: " << inputBodyTextFile << endl;
+  ofstream outfile(inputBodyTextFile);
+}
+
+/**
+ * append a link string in the body text of final htm file
+ * @param linkString the string to put into
+ * @param containerNumber the selected container to put into
+ */
+void GenericContainer::appendParagraphInBodyText(const string &text) {
+  string inputBodyTextFile =
+      bodyTextInputFilePath + getInputFileName() + BODY_TEXT_SUFFIX;
+  if (debug >= LOG_INFO)
+    cout << "clear content in: " << inputBodyTextFile << endl;
+  ofstream outfile;
+  outfile.open(inputBodyTextFile, std::ios_base::app);
+  outfile << "<br>" << text << "</br>" << endl;
 }
 
 void GenericContainer::assembleBackToHTM(const string &title,

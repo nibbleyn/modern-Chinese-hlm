@@ -57,6 +57,50 @@ static const string BODY_TEXT_CONTAINER = "container/";
 
 enum class FILE_TYPE { MAIN, ATTACHMENT, ORIGINAL };
 
+class BodyText {
+  using lineNumberSet = set<string>;
+
+public:
+  BodyText(string filePrefix) : filePrefix(filePrefix) {}
+  /**
+   * load files under BODY_TEXT_OUTPUT directory with files under BODY_TEXT_FIX
+   * i.e. from afterFix to output
+   * for continue link fixing after numbering..
+   * BODY_TEXT_OUTPUT currently is only to output, no backup would be done for
+   * it
+   */
+  static void loadBodyTextsFromFixBackToOutput() {
+    vector<string> filenameList;
+    Poco::File(BODY_TEXT_FIX).list(filenameList);
+    sort(filenameList.begin(), filenameList.end(), less<string>());
+    for (const auto &file : filenameList) {
+      if (debug >= LOG_INFO)
+        cout << "loading " << file << ".. " << endl;
+      Poco::File fileToCopy(BODY_TEXT_FIX + file);
+      fileToCopy.copyTo(BODY_TEXT_OUTPUT + file);
+    }
+  }
+  void resetBeforeSearch() {
+    ignoreSet.clear();
+    result.clear();
+    searchError = "";
+  }
+  void addIgnoreLines(const string &line);
+  bool findKey(const string &key, const string &file, int attachNo = 0);
+  string getFirstResultLine() {
+    if (not result.empty())
+      return *(result.begin());
+    return "";
+  }
+  lineNumberSet getResultLineSet() { return result; };
+
+private:
+  string filePrefix{"Main"};
+  lineNumberSet ignoreSet;
+  lineNumberSet result;
+  string searchError{""};
+};
+
 string formatIntoTwoDigitChapterNumber(int chapterNumber);
 
 // operations to construct a group of file names
@@ -70,13 +114,6 @@ FILE_TYPE getFileTypeFromString(const string &fileType);
 
 // backup or load files before operations
 void loadBodyTexts(const string &from, const string &to);
-void backupAndOverwriteSrcForHTML();
-
-// search in body text files
-using lineNumberSet = set<string>;
-string findKeyInFile(const string &key, const string &fullPath,
-                     lineNumberSet ignorelineNumberSet, string &lineNumber,
-                     bool &needChange);
 
 string getAttachmentTitle(const string &filename);
 vector<int> getAttachmentFileListForChapter(const string &referFile,
@@ -89,12 +126,6 @@ std::string utf8substr(std::string originalString, size_t begin, size_t &end,
                        size_t SubStrLength);
 
 // using container to display set of links separated by paragraphs
-void clearLinksInContainerBodyText(int containerNumber);
-void appendLinkInContainerBodyText(string linkString, int containerNumber);
-void assembleContainerHTM(const string &inputHtmlFile,
-                          const string &inputBodyTextFile,
-                          const string &outputFile, const string &title = "",
-                          const string &displayTitle = "");
 
 void appendTextInContainerBodyText(string text, int containerNumber);
 void appendNumberLineInContainerBodyText(string line, int containerNumber);

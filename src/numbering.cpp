@@ -397,13 +397,13 @@ void addLineNumbersForAttachmentHtml(int minTarget, int maxTarget,
  */
 void NumberingOriginalHtml(int minTarget, int maxTarget, bool hidden = false) {
   CoupledContainer container(FILE_TYPE::ORIGINAL);
-  backupAndOverwriteSrcForHTML(); // update html src
+  container.backupAndOverwriteAllInputHtmlFiles();
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     container.dissembleFromHTM(file);
   }
   addLineNumbersForOriginalHtml(
       minTarget, maxTarget, hidden); // reformat bodytext by adding line number
-  loadBodyTexts(BODY_TEXT_FIX, BODY_TEXT_OUTPUT);
+  BodyText::loadBodyTextsFromFixBackToOutput();
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     container.assembleBackToHTM(file);
   }
@@ -419,13 +419,14 @@ void NumberingOriginalHtml(int minTarget, int maxTarget, bool hidden = false) {
  */
 void NumberingMainHtml(int minTarget, int maxTarget, bool hidden = false) {
   CoupledContainer container(FILE_TYPE::MAIN);
-  backupAndOverwriteSrcForHTML(); // update html src
+  container.backupAndOverwriteAllInputHtmlFiles();
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     container.dissembleFromHTM(file);
   }
   addLineNumbersForMainHtml(minTarget, maxTarget,
                             hidden); // reformat bodytext by adding line number
-  loadBodyTexts(BODY_TEXT_FIX, BODY_TEXT_OUTPUT);
+
+  BodyText::loadBodyTextsFromFixBackToOutput();
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     container.assembleBackToHTM(file);
   }
@@ -443,13 +444,14 @@ void NumberingMainHtml(int minTarget, int maxTarget, bool hidden = false) {
  */
 void NumberingAttachmentHtml(int minTarget, int maxTarget, int minAttachNo,
                              int maxAttachNo, bool hidden = false) {
-  backupAndOverwriteSrcForHTML(); // update html src
+  CoupledContainer container(FILE_TYPE::ATTACHMENT);
+  container.backupAndOverwriteAllInputHtmlFiles();
   dissembleAttachments(minTarget, maxTarget, minAttachNo,
                        maxAttachNo); // dissemble html to bodytext
   addLineNumbersForAttachmentHtml(
       minTarget, maxTarget, minAttachNo, maxAttachNo,
       hidden); // reformat bodytext by adding line number
-  loadBodyTexts(BODY_TEXT_FIX, BODY_TEXT_OUTPUT);
+  BodyText::loadBodyTextsFromFixBackToOutput();
   assembleAttachments(minTarget, maxTarget, minAttachNo, maxAttachNo);
 }
 

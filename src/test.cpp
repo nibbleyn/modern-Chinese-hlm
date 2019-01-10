@@ -255,7 +255,8 @@ void testAttachmentOperations() {
 }
 
 void testContainer() {
-  clearLinksInContainerBodyText(1);
+  ListContainer container("1_gen");
+  container.clearBodyTextFile();
   //  addFirstParagraphInContainerBodyText(LineNumber::getStartNumber(), 1);
   //  appendNumberLineInContainerBodyText(
   //      R"(<a unhidden
@@ -269,10 +270,8 @@ void testContainer() {
   //      1);
   //  addLastParagraphInContainerBodyText(LineNumber::getStartNumber(),
   //                                      LineNumber::getStartNumber(), 1);
-  string inputHtmlFile = HTML_CONTAINER + "1" + HTML_SUFFIX;
-  string inputBodyTextFile = BODY_TEXT_CONTAINER + "1" + BODY_TEXT_SUFFIX;
-  string outputFile = HTML_CONTAINER + "1_gen" + HTML_SUFFIX;
   //  assembleBackToHTM(inputHtmlFile, inputBodyTextFile, outputFile);
+  container.assembleBackToHTM();
 }
 
 void testConstructSubStory() {

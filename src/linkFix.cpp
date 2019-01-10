@@ -231,12 +231,12 @@ void fixReturnLinkForAttachments(int minTarget, int maxTarget) {
 void fixMainHtml(int minTarget, int maxTarget, int minReference,
                  int maxReference) {
   CoupledContainer container(FILE_TYPE::MAIN);
-  backupAndOverwriteSrcForHTML(); // update html src
+  container.backupAndOverwriteAllInputHtmlFiles();
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     container.dissembleFromHTM(file);
   }
   fixMainLinks(minTarget, maxTarget, minReference, maxReference);
-  loadBodyTexts(BODY_TEXT_FIX, BODY_TEXT_OUTPUT);
+  BodyText::loadBodyTextsFromFixBackToOutput();
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     container.assembleBackToHTM(file);
   }
@@ -450,12 +450,13 @@ void fixLinksToMainForAttachments(int minTarget, int maxTarget,
  */
 void fixAttachments(int minTarget, int maxTarget, int minReference,
                     int maxReference, int minAttachNo, int maxAttachNo) {
-  backupAndOverwriteSrcForHTML(); // update html src
+  CoupledContainer container(FILE_TYPE::ATTACHMENT);
+  container.backupAndOverwriteAllInputHtmlFiles();
   dissembleAttachments(minTarget, maxTarget, minAttachNo,
                        maxAttachNo); // dissemble html to bodytext
   fixLinksToMainForAttachments(minTarget, maxTarget, minReference, maxReference,
                                minAttachNo, maxAttachNo);
-  loadBodyTexts(BODY_TEXT_FIX, BODY_TEXT_OUTPUT);
+  BodyText::loadBodyTextsFromFixBackToOutput();
   assembleAttachments(minTarget, maxTarget, minAttachNo, maxAttachNo);
 }
 
@@ -483,6 +484,48 @@ void fixLinksFromAttachment() {
   cout << "fixLinksFromAttachment finished. " << endl;
 }
 
+string findKeyInFile(const string &key, const string &fullPath,
+                     string &lineNumber, bool &needChange) {
+  ifstream infile(fullPath);
+  if (!infile) {
+    cout << "file doesn't exist:" << fullPath << endl;
+    return keyNotFound + key + ": bodytext file doesn't exist";
+  }
+  string line{""};
+  string lineName{""};
+  bool found = false;
+  LineNumber ln;
+  // To search in all the lines in referred file
+  while (!infile.eof()) {
+    getline(infile, line);              // Saves the line
+    if (line.find(key) == string::npos) // not appear in this line
+    {
+      continue;
+    }
+    // if "key" is only part of the key of another link, skip this line
+    if (isOnlyPartOfOtherKeys(line, key)) {
+      continue;
+    }
+    // find the key in current line
+    ln.loadFromContainedLine(line);
+    if (not ln.valid()) {
+      cout << "file doesn't get numbered:" << fullPath << " at line:" << line
+           << endl;
+      return keyNotFound + key + ": bodytext file doesn't get numbered";
+    }
+
+    found = true;
+    break;
+  }
+  needChange = true;
+  if (not found) {
+    return keyNotFound + key;
+  }
+  // continue with lineName found
+  lineNumber = ln.asString();
+  return key;
+}
+
 void findFirstInNoAttachmentFiles(const string key, FILE_TYPE targetFileType,
                                   int minTarget, int maxTarget,
                                   const string &outputFilename) {
@@ -496,10 +539,8 @@ void findFirstInNoAttachmentFiles(const string key, FILE_TYPE targetFileType,
     string referFile = BODY_TEXT_OUTPUT +
                        getBodyTextFilePrefix(targetFileType) + file +
                        BODY_TEXT_SUFFIX;
-    lineNumberSet ignorelineNumberSet;
-    string newKey =
-        findKeyInFile(key, referFile, ignorelineNumberSet, referPara,
-                      ignoreChange); // continue using same key
+    string newKey = findKeyInFile(key, referFile, referPara,
+                                  ignoreChange); // continue using same key
     if (newKey.find("KeyNotFound") == string::npos) {
       if (targetFileType == FILE_TYPE::ORIGINAL) {
         // output HTML file is always under HTML_OUTPUT_MAIN
@@ -522,22 +563,21 @@ void findFirstInNoAttachmentFiles(const string key, FILE_TYPE targetFileType,
       }
     }
   }
-  // use default no. 1 container to output
-  clearLinksInContainerBodyText(1);
+  ListContainer container(outputFilename);
+  container.clearBodyTextFile();
   int total = 0;
   for (const auto &chapter : resultLinkList) {
-    appendLinkInContainerBodyText("found in " +
-                                      getBodyTextFilePrefix(targetFileType) +
-                                      chapter.first + HTML_SUFFIX + " :",
-                                  1);
+    container.appendParagraphInBodyText("found in " +
+                                        getBodyTextFilePrefix(targetFileType) +
+                                        chapter.first + HTML_SUFFIX + " :");
     auto list = chapter.second;
     for (const auto &detail : list) {
       total++;
-      appendLinkInContainerBodyText(detail.link, 1);
+      container.appendParagraphInBodyText(detail.link);
     }
   }
-  appendLinkInContainerBodyText(TurnToString(total) + " links are found.", 1);
-  ListContainer container(outputFilename);
+  container.appendParagraphInBodyText(TurnToString(total) +
+                                      " links are found.");
   container.assembleBackToHTM("search  results",
                               "searchInFiles for key: " + key);
 }

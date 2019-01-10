@@ -39,6 +39,7 @@ public:
     bodyTextInputFilePath = BODY_TEXT_OUTPUT;
     bodyTextOutputFilePath = BODY_TEXT_FIX;
   }
+  void backupAndOverwriteAllInputHtmlFiles();
   void dissembleFromHTM(const string &file, int attachNo = 1);
   void assembleBackToHTM(const string &file, int attachNo = 1,
                          const string &title = "",
@@ -60,6 +61,8 @@ public:
   virtual string getInputFileName() const = 0;
   void assembleBackToHTM(const string &title = "",
                          const string &displayTitle = "");
+  void clearBodyTextFile();
+  void appendParagraphInBodyText(const string &text);
 
 protected:
   string outputFilename{"output"};
