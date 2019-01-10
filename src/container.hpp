@@ -65,9 +65,10 @@ static const string BODY_TEXT_CONTAINER = "container/";
 
 class GenericContainer : public Container {
 public:
-  GenericContainer() {
+  GenericContainer() = default;
+  GenericContainer(const string &filename) : outputFilename(filename) {
     htmlInputFilePath = HTML_CONTAINER;
-    htmlOutputFilePath = HTML_CONTAINER;
+    htmlOutputFilePath = HTML_OUTPUT_MAIN;
     bodyTextInputFilePath = BODY_TEXT_CONTAINER;
     bodyTextOutputFilePath = BODY_TEXT_CONTAINER;
   }
@@ -77,6 +78,9 @@ public:
                          const string &displayTitle = "");
   void clearBodyTextFile();
   void appendParagraphInBodyText(const string &text);
+  string getOutputFilePath() {
+    return htmlOutputFilePath + outputFilename + HTML_SUFFIX;
+  }
 
 protected:
   string outputFilename{"output"};
@@ -88,10 +92,7 @@ protected:
 class ListContainer : public GenericContainer {
 public:
   ListContainer() = default;
-  ListContainer(string filename) { outputFilename = filename; }
-  string getOutputFilePath() {
-    return htmlOutputFilePath + outputFilename + HTML_SUFFIX;
-  }
+  ListContainer(const string &filename) : GenericContainer(filename) {}
 
 private:
   string getInputFileName() const override { return "1"; }
