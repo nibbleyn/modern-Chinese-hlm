@@ -11,11 +11,10 @@ string fixMiddleParaHeaderFromTemplate(int startNumber, int currentParaNo,
 string fixLastParaHeaderFromTemplate(int startNumber, int lastParaNo,
                                      const string &color, bool hidden = false);
 
-using ParaStruct = std::tuple<int, int, int>;
-ParaStruct getNumberOfPara(const string &referFile);
 
 void numberOriginalHtmls(bool hidden = false);
 void numberMainHtmls(bool hidden = false);
 void numberAttachmentHtmls(bool hidden = false);
 
 void reformatTxtFilesForReader();
+void autoSplitBodyText(const string &fileType);

@@ -1,5 +1,9 @@
 #pragma once
 #include "fileUtil.hpp"
+#include "utf8StringUtil.hpp"
+
+using ParaStruct = std::tuple<int, int, int>;
+ParaStruct getNumberOfPara(const string &referFile);
 
 class BodyText {
 
@@ -45,14 +49,14 @@ public:
   lineNumberSet getResultLineSet() { return result; };
 
   // reformat to smaller paragraphs
-  void reformatParagraphToSmallerSize(const string &sampleBlock);
+  void reformatParagraphToSmallerSize(const string &sampleBlock, const string &file);
 
   // regrouping to make total size smaller
   void regroupingParagraphs(const string &sampleBlock, const string &sampleFirstLine,
-          const string &sampleWholeLine);
+          const string &sampleWholeLine, const string &file);
 
   // add line number before each paragraph
-  void addLineNumber(const string &separatorColor, bool hidden = false);
+  void addLineNumber(const string &separatorColor, const string &file, int attachNo = 0, bool hidden = false);
 
 private:
   string filePrefix{"Main"};
