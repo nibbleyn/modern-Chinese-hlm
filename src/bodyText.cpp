@@ -1,4 +1,5 @@
 #include "bodyText.hpp"
+#include "link.hpp"
 
 bool KeyStartAndCommentStartNotFound(const string &testStr, const string &key) {
   if (debug >= LOG_INFO)
@@ -103,50 +104,51 @@ bool BodyText::findKey(const string &key, const string &file, int attachNo) {
 }
 
 // reformat to smaller paragraphs
-void BodyText::reformatParagraphToSmallerSize(const string &sampleBlock, const string &file){
-    string inputFile = BODY_TEXT_OUTPUT + filePrefix + file + BODY_TEXT_SUFFIX;
-    string outputFile = BODY_TEXT_FIX + filePrefix + file + BODY_TEXT_SUFFIX;
+void BodyText::reformatParagraphToSmallerSize(const string &sampleBlock,
+                                              const string &file) {
+  string inputFile = BODY_TEXT_OUTPUT + filePrefix + file + BODY_TEXT_SUFFIX;
+  string outputFile = BODY_TEXT_FIX + filePrefix + file + BODY_TEXT_SUFFIX;
 
-    ifstream infile(inputFile);
-    if (!infile) {
-      cout << "file doesn't exist:" << inputFile << endl;
-      return;
-    }
-    ofstream outfile(outputFile);
-    cout << utf8length(sampleBlock) << endl;
-    cout << sampleBlock << endl;
-    // continue reading
-    string inLine;
-    string CR{0x0D};
-    string LF{0x0A};
-    string CRLF{0x0D, 0x0A};
-    while (!infile.eof()) {
-      getline(infile, inLine); // Saves the line in inLine.
-      size_t end = -1;
-      do {
-        string line = utf8substr(inLine, end + 1, end, utf8length(sampleBlock));
-        if (not line.empty()) {
-          auto outputLine = line + CRLF;
-          if (debug >= LOG_INFO)
-            cout << outputLine << CR << CRLF;
-          outfile << outputLine << CR << CRLF;
-        }
-        if (utf8length(line) < utf8length(sampleBlock) - 1)
-          break;
-      } while (true);
-    }
-    if (debug >= LOG_INFO)
-      cout << "reformatting finished." << endl;
+  ifstream infile(inputFile);
+  if (!infile) {
+    cout << "file doesn't exist:" << inputFile << endl;
+    return;
+  }
+  ofstream outfile(outputFile);
+  cout << utf8length(sampleBlock) << endl;
+  cout << sampleBlock << endl;
+  // continue reading
+  string inLine;
+  string CR{0x0D};
+  string LF{0x0A};
+  string CRLF{0x0D, 0x0A};
+  while (!infile.eof()) {
+    getline(infile, inLine); // Saves the line in inLine.
+    size_t end = -1;
+    do {
+      string line = utf8substr(inLine, end + 1, end, utf8length(sampleBlock));
+      if (not line.empty()) {
+        auto outputLine = line + CRLF;
+        if (debug >= LOG_INFO)
+          cout << outputLine << CR << CRLF;
+        outfile << outputLine << CR << CRLF;
+      }
+      if (utf8length(line) < utf8length(sampleBlock) - 1)
+        break;
+    } while (true);
+  }
+  if (debug >= LOG_INFO)
+    cout << "reformatting finished." << endl;
 }
 
 // regrouping to make total size smaller
-void BodyText::regroupingParagraphs(const string &sampleBlock, const string &sampleFirstLine,
-        const string &sampleWholeLine, const string &file){
-    if (debug >= LOG_INFO)
-      cout << "regrouping finished." << endl;
-
+void BodyText::regroupingParagraphs(const string &sampleBlock,
+                                    const string &sampleFirstLine,
+                                    const string &sampleWholeLine,
+                                    const string &file) {
+  if (debug >= LOG_INFO)
+    cout << "regrouping finished." << endl;
 }
-
 
 static const string firstParaHeader =
     R"(<b unhidden> 第1段 </b><a unhidden name="PXX" href="#PYY">v向下</a>&nbsp;&nbsp;&nbsp;&nbsp;<a unhidden name="top" href="#bottom">页面底部->||</a><hr color="#COLOR">)";
@@ -240,7 +242,15 @@ string fixLastParaHeaderFromTemplate(int startNumber, int lastParaNo,
  * @param fullPath of target file
  * @return a tuple of numbers
  */
-ParaStruct getNumberOfPara(const string &inputFile) {
+BodyText::ParaStruct BodyText::getNumberOfPara(const string &file,
+                                               int attachNo) {
+  string attachmentPart{""};
+  if (attachNo != 0)
+    attachmentPart = attachmentFileMiddleChar + TurnToString(attachNo);
+
+  string inputFile =
+      BODY_TEXT_OUTPUT + filePrefix + file + attachmentPart + BODY_TEXT_SUFFIX;
+
   int first = 0, middle = 0, last = 0;
   string paraTab =
       R"(name=")"; // of each paragraph
@@ -294,175 +304,315 @@ ParaStruct getNumberOfPara(const string &inputFile) {
  * @param outputFile the output file after numbering
  * @param separatorColor the color to separate paragraphs
  */
-void BodyText::addLineNumber(const string &separatorColor, const string &file, int attachNo, bool hidden){
-	  string attachmentPart{""};
-	  if (attachNo != 0)
-	    attachmentPart = attachmentFileMiddleChar + TurnToString(attachNo);
+void BodyText::addLineNumber(const string &separatorColor, const string &file,
+                             int attachNo, bool hidden) {
+  string attachmentPart{""};
+  if (attachNo != 0)
+    attachmentPart = attachmentFileMiddleChar + TurnToString(attachNo);
 
-    string inputFile = BODY_TEXT_OUTPUT + filePrefix + file + attachmentPart + BODY_TEXT_SUFFIX;
-    string outputFile = BODY_TEXT_FIX  + filePrefix + file + attachmentPart + BODY_TEXT_SUFFIX;
+  string inputFile =
+      BODY_TEXT_OUTPUT + filePrefix + file + attachmentPart + BODY_TEXT_SUFFIX;
+  string outputFile =
+      BODY_TEXT_FIX + filePrefix + file + attachmentPart + BODY_TEXT_SUFFIX;
 
-    ifstream infile(inputFile);
-    if (!infile) {
-      cout << "file doesn't exist:" << inputFile << endl;
-      return;
-    }
-    LineNumber::setStartNumber(START_PARA_NUMBER);
+  ifstream infile(inputFile);
+  if (!infile) {
+    cout << "file doesn't exist:" << inputFile << endl;
+    return;
+  }
 
-    ParaStruct res = getNumberOfPara(inputFile); // first scan
-    auto numberOfFirstParaHeader = GetTupleElement(res, 0);
-    auto numberOfMiddleParaHeader = GetTupleElement(res, 1);
-    auto numberOfLastParaHeader = GetTupleElement(res, 2);
+  int numberOfFirstParaHeader{1};
+  int numberOfMiddleParaHeader{0};
+  int numberOfLastParaHeader{1};
+  if (not autoNumbering) {
+    ParaStruct res;
+    res = getNumberOfPara(inputFile, attachNo); // first scan
+    numberOfFirstParaHeader = GetTupleElement(res, 0);
+    numberOfMiddleParaHeader = GetTupleElement(res, 1);
+    numberOfLastParaHeader = GetTupleElement(res, 2);
 
     if (debug >= LOG_INFO)
       cout << "numberOfFirstParaHeader: " << numberOfFirstParaHeader
            << "numberOfMiddleParaHeader: " << numberOfMiddleParaHeader
            << "numberOfLastParaHeader: " << numberOfLastParaHeader << endl;
-
     if (numberOfFirstParaHeader == 0 or numberOfLastParaHeader == 0) {
       cout << "no top or bottom paragraph found:" << inputFile << endl;
       return;
+      LineNumber::setStartNumber(START_PARA_NUMBER);
     }
 
-    ofstream outfile(outputFile);
+  } else {
+    cout << "not supported now." << endl;
+    return;
+  }
 
-    // continue reading till first paragraph header
-    string inLine;
-    bool stop = false; // need to output line even try to stop
-    while (!infile.eof() and
-           not stop) // To get all the lines till first paragraph header
-    {
-      getline(infile, inLine); // Saves the line in inLine.
-      string line = inLine;
-      LineNumber ln;
-      ln.loadFromContainedLine(inLine);
+  ofstream outfile(outputFile);
+
+  // continue reading till first paragraph header
+  string inLine;
+  bool stop = false; // need to output line even try to stop
+  while (!infile.eof() and
+         not stop) // To get all the lines till first paragraph header
+  {
+    getline(infile, inLine); // Saves the line in inLine.
+    string line = inLine;
+    LineNumber ln;
+    ln.loadFromContainedLine(inLine);
+    if (ln.isParagraphHeader()) {
+      if (debug >= LOG_INFO)
+        cout << "paragraph header found as:" << ln.asString() << endl;
+      line = fixFirstParaHeaderFromTemplate(LineNumber::getStartNumber(),
+                                            separatorColor, hidden);
+      stop = true;
+    }
+    // incl. above header
+    outfile << line << endl;
+  }
+
+  enum class STATE { EXPECT_MIDDLE_PARA_HEADER, LINEFOUND, LINECOMPLETED };
+  STATE state = STATE::EXPECT_MIDDLE_PARA_HEADER;
+  int para = 1;          // paragraph index
+  int lineNo = 1;        // LINE index within each group
+  string brTab = "<br>"; // start and end of each LINE
+  bool enterLastPara = (numberOfMiddleParaHeader == 0);
+  while (!infile.eof()) {
+    getline(infile, inLine); // Saves the line in inLine.
+    LineNumber ln;
+    ln.loadFromContainedLine(inLine);
+    if (enterLastPara == true) {
+      if (ln.isParagraphHeader()) {
+        if (debug >= LOG_INFO)
+          cout << ln.asString() << endl;
+        outfile << fixLastParaHeaderFromTemplate(LineNumber::getStartNumber(),
+                                                 numberOfMiddleParaHeader + 1,
+                                                 separatorColor, hidden)
+                << endl;
+        break; // end of whole file
+      }
+    }
+
+    // can keep STATE::EXPECT_MIDDLE_PARA_HEADER or enter STATE::LINEFOUND
+    if (state == STATE::EXPECT_MIDDLE_PARA_HEADER) {
       if (ln.isParagraphHeader()) {
         if (debug >= LOG_INFO)
           cout << "paragraph header found as:" << ln.asString() << endl;
-        line = fixFirstParaHeaderFromTemplate(LineNumber::getStartNumber(),
-                                              separatorColor, hidden);
-        stop = true;
-      }
-      // incl. above header
-      outfile << line << endl;
-    }
 
-    enum class STATE { EXPECT_MIDDLE_PARA_HEADER, LINEFOUND, LINECOMPLETED };
-    STATE state = STATE::EXPECT_MIDDLE_PARA_HEADER;
-    int para = 1;          // paragraph index
-    int lineNo = 1;        // LINE index within each group
-    string brTab = "<br>"; // start and end of each LINE
-    bool enterLastPara = (numberOfMiddleParaHeader == 0);
-    while (!infile.eof()) {
-      getline(infile, inLine); // Saves the line in inLine.
-      LineNumber ln;
-      ln.loadFromContainedLine(inLine);
-      if (enterLastPara == true) {
-        if (ln.isParagraphHeader()) {
-          if (debug >= LOG_INFO)
-            cout << ln.asString() << endl;
-          outfile << fixLastParaHeaderFromTemplate(LineNumber::getStartNumber(),
-                                                   numberOfMiddleParaHeader + 1,
-                                                   separatorColor, hidden)
+        if (para == numberOfMiddleParaHeader) {
+          enterLastPara = true;
+          outfile << fixMiddleParaHeaderFromTemplate(
+                         LineNumber::getStartNumber(), para++, separatorColor,
+                         hidden, true)
                   << endl;
-          break; // end of whole file
-        }
-      }
-
-      // can keep STATE::EXPECT_MIDDLE_PARA_HEADER or enter STATE::LINEFOUND
-      if (state == STATE::EXPECT_MIDDLE_PARA_HEADER) {
-        if (ln.isParagraphHeader()) {
-          if (debug >= LOG_INFO)
-            cout << "paragraph header found as:" << ln.asString() << endl;
-
-          if (para == numberOfMiddleParaHeader) {
-            enterLastPara = true;
-            outfile << fixMiddleParaHeaderFromTemplate(
-                           LineNumber::getStartNumber(), para++, separatorColor,
-                           hidden, true)
-                    << endl;
-          } else
-            outfile << fixMiddleParaHeaderFromTemplate(
-                           LineNumber::getStartNumber(), para++, separatorColor,
-                           hidden, false)
-                    << endl;
-          lineNo = 1; // LINE index within each group
-          continue;
-        }
-        // search for LINE start
-        if (inLine.find(brTab) != string::npos) {
-          state = STATE::LINEFOUND; // the LINE start
-        }
-        // also incl. non-LINE start line
-        outfile << inLine << endl;
-        continue;
-      }
-
-      // can only enter STATE::LINECOMPLETED,
-      // otherwise a line error reported and abort
-      if (state == STATE::LINEFOUND) {
-        if (ln.isParagraphHeader() or
-            inLine.find(brTab) ==
-                string::npos) // search for LINE end, even an empty line
-        {
-          cout << "wrong without " << brTab
-               << " at line: " << TurnToString(para) + "." + TurnToString(lineNo)
-               << " of file: " << inputFile << "content: " << inLine << endl;
-          exit(1);
-          break;
-        }
-        if (debug >= LOG_INFO)
-          cout << "processing paragraph:" << para << " line: " << lineNo << endl;
-        LineNumber newLn(para, lineNo);
-        if (not ln.equal(newLn)) {
-          if (ln.valid()) // remove old one
-          {
-            auto linkEnd = inLine.find("</a>");
-            inLine = inLine.substr(linkEnd + 4);
-          }
-          outfile << newLn.generateLinePrefix() + TurnToString(para) + "." +
-                         TurnToString(lineNo) + "</a>"
-                  << "    " << inLine << endl; // Prints our line
         } else
-          outfile << inLine << endl;
-        if (debug >= LOG_INFO)
-          cout << "processed :" << inLine << endl;
-        lineNo++;
-        state = STATE::LINECOMPLETED;
+          outfile << fixMiddleParaHeaderFromTemplate(
+                         LineNumber::getStartNumber(), para++, separatorColor,
+                         hidden, false)
+                  << endl;
+        lineNo = 1; // LINE index within each group
         continue;
       }
-
-      // can enter STATE::LINEFOUND or STATE::EXPECT_MIDDLE_PARA_HEADER
-      if (state == STATE::LINECOMPLETED) {
-        if (ln.isParagraphHeader()) {
-          if (debug >= LOG_INFO)
-            cout << "paragraph header found as:" << ln.asString() << endl;
-
-          if (para == numberOfMiddleParaHeader) {
-            enterLastPara = true;
-            outfile << fixMiddleParaHeaderFromTemplate(
-                           LineNumber::getStartNumber(), para++, separatorColor,
-                           hidden, true)
-                    << endl;
-          } else {
-            outfile << fixMiddleParaHeaderFromTemplate(
-                           LineNumber::getStartNumber(), para++, separatorColor,
-                           hidden, false)
-                    << endl;
-            state = STATE::EXPECT_MIDDLE_PARA_HEADER;
-          }
-          lineNo = 1; // LINE index within each group
-          continue;
-        }
-        if (inLine.find(brTab) != string::npos) // another LINE start
-        {
-          state = STATE::LINEFOUND;
-        }
-        // also incl. non-LINE start
-        outfile << inLine << endl;
-        continue;
+      // search for LINE start
+      if (inLine.find(brTab) != string::npos) {
+        state = STATE::LINEFOUND; // the LINE start
       }
+      // also incl. non-LINE start line
+      outfile << inLine << endl;
+      continue;
     }
+
+    // can only enter STATE::LINECOMPLETED,
+    // otherwise a line error reported and abort
+    if (state == STATE::LINEFOUND) {
+      if (ln.isParagraphHeader() or
+          inLine.find(brTab) ==
+              string::npos) // search for LINE end, even an empty line
+      {
+        cout << "wrong without " << brTab
+             << " at line: " << TurnToString(para) + "." + TurnToString(lineNo)
+             << " of file: " << inputFile << "content: " << inLine << endl;
+        exit(1);
+        break;
+      }
+      if (debug >= LOG_INFO)
+        cout << "processing paragraph:" << para << " line: " << lineNo << endl;
+      LineNumber newLn(para, lineNo);
+      if (not ln.equal(newLn)) {
+        if (ln.valid()) // remove old one
+        {
+          auto linkEnd = inLine.find("</a>");
+          inLine = inLine.substr(linkEnd + 4);
+        }
+        outfile << newLn.generateLinePrefix() + TurnToString(para) + "." +
+                       TurnToString(lineNo) + "</a>"
+                << "    " << inLine << endl; // Prints our line
+      } else
+        outfile << inLine << endl;
+      if (debug >= LOG_INFO)
+        cout << "processed :" << inLine << endl;
+      lineNo++;
+      state = STATE::LINECOMPLETED;
+      continue;
+    }
+
+    // can enter STATE::LINEFOUND or STATE::EXPECT_MIDDLE_PARA_HEADER
+    if (state == STATE::LINECOMPLETED) {
+      if (ln.isParagraphHeader()) {
+        if (debug >= LOG_INFO)
+          cout << "paragraph header found as:" << ln.asString() << endl;
+
+        if (para == numberOfMiddleParaHeader) {
+          enterLastPara = true;
+          outfile << fixMiddleParaHeaderFromTemplate(
+                         LineNumber::getStartNumber(), para++, separatorColor,
+                         hidden, true)
+                  << endl;
+        } else {
+          outfile << fixMiddleParaHeaderFromTemplate(
+                         LineNumber::getStartNumber(), para++, separatorColor,
+                         hidden, false)
+                  << endl;
+          state = STATE::EXPECT_MIDDLE_PARA_HEADER;
+        }
+        lineNo = 1; // LINE index within each group
+        continue;
+      }
+      if (inLine.find(brTab) != string::npos) // another LINE start
+      {
+        state = STATE::LINEFOUND;
+      }
+      // also incl. non-LINE start
+      outfile << inLine << endl;
+      continue;
+    }
+  }
+  if (debug >= LOG_INFO)
+    cout << "numbering finished." << endl;
+}
+
+/**
+ * fix links of certain type in referFile which refer to one of file in files
+ * @param referFile
+ * @param files
+ */
+void BodyText::fixLinksFromFile(const string &file, fileSet files, int attachNo,
+                                int minPara, int maxPara, int minLine,
+                                int maxLine) {
+  string attachmentPart{""};
+  if (attachNo != 0)
+    attachmentPart = attachmentFileMiddleChar + TurnToString(attachNo);
+
+  string inputFile =
+      BODY_TEXT_OUTPUT + filePrefix + file + attachmentPart + BODY_TEXT_SUFFIX;
+  string outputFile =
+      BODY_TEXT_FIX + filePrefix + file + attachmentPart + BODY_TEXT_SUFFIX;
+
+  ifstream infile(inputFile);
+  if (!infile) {
+    cout << "file doesn't exist:" << inputFile << endl;
+    return;
+  }
+  ofstream outfile(outputFile);
+  string inLine{""};
+  while (!infile.eof()) // To get all the lines.
+  {
+    getline(infile, inLine); // Saves the line in inLine.
+    auto orgLine = inLine;   // inLine would change in loop below
+    LineNumber ln;
+    ln.loadFromContainedLine(orgLine);
+    if (ln.isParagraphHeader() or not ln.valid() or
+        not ln.isWithinLineRange(minPara, maxPara, minLine, maxLine)) {
+      outfile << orgLine << endl;
+      continue; // not fix headers or non-numbered lines
+    }
+    inLine = inLine.substr(
+        ln.generateLinePrefix().length()); // skip line number link
     if (debug >= LOG_INFO)
-      cout << "numbering finished." << endl;
+      cout << inLine << endl;
+    auto start = linkStartChars;
+    string targetFile{""};
+    do {
+      auto linkBegin = inLine.find(start);
+      if (linkBegin == string::npos) // no link any more, continue with next
+                                     // line
+        break;
+      auto linkEnd = inLine.find(linkEndChars, linkBegin);
+      auto link = inLine.substr(linkBegin, linkEnd + 4 - linkBegin);
+      Link *lfm{nullptr};
+      if (attachNo != 0) {
+        lfm = new LinkFromMain(file, link);
+      } else {
+        lfm = new LinkFromAttachment(file + attachmentPart, link);
+      }
+      lfm->readReferFileName(link); // second step of construction, this is
+                                    // needed to check isTargetToSelfHtm
+      if (lfm->isTargetToOtherAttachmentHtm()) {
+        lfm->fixFromString(link); // third step of construction
+        lfm->setSourcePara(ln);
+        lfm->doStatistics();
+      }
+      if (lfm->isTargetToSelfHtm()) {
+        lfm->setSourcePara(ln);
+        lfm->fixFromString(link); // third step of construction
+        if (lfm->needUpdate())    // replace old value
+        {
+          auto orglinkBegin = orgLine.find(link);
+          orgLine.replace(orglinkBegin, link.length(), lfm->asString());
+        }
+      }
+      if (lfm->isTargetToOtherMainHtm()) {
+        targetFile = lfm->getChapterName();
+        auto e = find(files.begin(), files.end(), targetFile);
+        if (e != files.end()) // need to check and fix
+        {
+          lfm->fixFromString(link); // third step of construction
+          lfm->setSourcePara(ln);
+          string next = originalLinkStartChars + linkStartChars;
+          bool needAddOrginalLink = true;
+          // still have above "next" and </a>
+          if (inLine.length() > (link.length() + next.length() + 4)) {
+            if (inLine.substr(linkEnd + 4, next.length()) == next) {
+              // skip </a> and first parenthesis of next
+              auto followingLink = inLine.substr(
+                  linkEnd + next.length() + 2); // find next link in the inLine
+              Link *following{nullptr};
+              if (attachNo != 0) {
+                lfm = new LinkFromMain(file, followingLink);
+              } else {
+                lfm = new LinkFromAttachment(file + attachmentPart,
+                                             followingLink);
+              }
+              if (following->isTargetToOriginalHtm()) {
+                needAddOrginalLink = false;
+              }
+            }
+          }
+          if (needAddOrginalLink)
+            lfm->generateLinkToOrigin();
+          lfm->doStatistics();
+          if (lfm->needUpdate()) // replace old value
+          {
+            auto orglinkBegin = orgLine.find(link);
+            orgLine.replace(orglinkBegin, link.length(), lfm->asString());
+          }
+        }
+      }
+      if (lfm->isTargetToOriginalHtm()) {
+        targetFile = lfm->getChapterName();
+        auto e = find(files.begin(), files.end(), targetFile);
+        if (e != files.end()) // need to check and fix
+        {
+          lfm->fixFromString(link); // third step of construction
+          if (lfm->needUpdate())    // replace old value
+          {
+            auto orglinkBegin = orgLine.find(link);
+            if (debug >= LOG_INFO)
+              SEPERATE("isTargetToOriginalHtm", orgLine + "\n" + link);
+            orgLine.replace(orglinkBegin, link.length(), lfm->asString());
+          }
+        }
+      }
+      inLine = inLine.substr(linkEnd + 4); // find next link in the inLine
+    } while (1);
+    outfile << orgLine << endl;
+  }
 }

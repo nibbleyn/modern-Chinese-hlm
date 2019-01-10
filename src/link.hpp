@@ -1,6 +1,6 @@
 #pragma once
-#include "fileUtil.hpp"
 #include "bodyText.hpp"
+#include "fileUtil.hpp"
 
 enum class LINK_TYPE { MAIN, ATTACHMENT, ORIGINAL, SAMEPAGE };
 enum class LINK_DISPLAY_TYPE { DIRECT, HIDDEN, UNHIDDEN };
@@ -143,6 +143,7 @@ public:
       needChange = true;
     }
   }
+  virtual void generateLinkToOrigin() = 0;
 
 protected:
   LINK_DISPLAY_TYPE getDisplayType() { return displayType; }
@@ -179,7 +180,6 @@ protected:
   virtual string getFileNamePrefix(LINK_TYPE type) = 0;
   virtual string getBodyTextFilePrefix(LINK_TYPE type) = 0;
   virtual string getPathOfReferenceFile() const = 0;
-  virtual void generateLinkToOrigin() = 0;
   virtual void logLink() = 0;
 
 protected:

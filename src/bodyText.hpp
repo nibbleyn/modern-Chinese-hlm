@@ -2,9 +2,6 @@
 #include "fileUtil.hpp"
 #include "utf8StringUtil.hpp"
 
-using ParaStruct = std::tuple<int, int, int>;
-ParaStruct getNumberOfPara(const string &referFile);
-
 class BodyText {
 
 public:
@@ -49,14 +46,24 @@ public:
   lineNumberSet getResultLineSet() { return result; };
 
   // reformat to smaller paragraphs
-  void reformatParagraphToSmallerSize(const string &sampleBlock, const string &file);
+  void reformatParagraphToSmallerSize(const string &sampleBlock,
+                                      const string &file);
 
   // regrouping to make total size smaller
-  void regroupingParagraphs(const string &sampleBlock, const string &sampleFirstLine,
-          const string &sampleWholeLine, const string &file);
+  void regroupingParagraphs(const string &sampleBlock,
+                            const string &sampleFirstLine,
+                            const string &sampleWholeLine, const string &file);
+
+  using ParaStruct = std::tuple<int, int, int>;
+  ParaStruct getNumberOfPara(const string &file, int attachNo = 0);
 
   // add line number before each paragraph
-  void addLineNumber(const string &separatorColor, const string &file, int attachNo = 0, bool hidden = false);
+  void addLineNumber(const string &separatorColor, const string &file,
+                     int attachNo = 0, bool hidden = false);
+
+  void fixLinksFromFile(const string &file, fileSet files, int attachNo = 0,
+                        int minPara = 0, int maxPara = 0, int minLine = 0,
+                        int maxLine = 0);
 
 private:
   string filePrefix{"Main"};
@@ -64,7 +71,7 @@ private:
   lineNumberSet result;
   string searchError{""};
   bool onlyFirst{true};
+  bool autoNumbering{false};
 };
 
 bool isOnlyPartOfOtherKeys(const string &orgLine, const string &key);
-

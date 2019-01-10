@@ -1,4 +1,40 @@
 #include "linkFix.hpp"
+
+fileSet keyMissingChapters;
+fileSet newAttachmentList;
+
+/**
+ *
+ */
+void clearReport() {
+  keyMissingChapters.clear();
+  newAttachmentList.clear();
+}
+
+/**
+ *
+ */
+void displayMainFilesOfMissingKey() {
+  if (keyMissingChapters.empty())
+    return;
+  cout << "files which has missing key links:" << endl;
+  for (const auto &file : keyMissingChapters) {
+    cout << getFileNamePrefix(FILE_TYPE::MAIN) + file + ".htm" << endl;
+  }
+}
+
+/**
+ *
+ */
+void displayNewlyAddedAttachments() {
+  if (newAttachmentList.empty())
+    return;
+  cout << "Newly Added Attachments:" << endl;
+  for (const auto &file : newAttachmentList) {
+    cout << file + ".htm" << endl;
+  }
+}
+
 /**
  * check lineNumber from refAttachmentList about a link to attachment
  * and put that lineNumber in that attachment file header
@@ -62,119 +98,6 @@ void fixReturnLinkForAttachmentFile(const string &referFile,
 }
 
 /**
- * fix links of certain type in referFile which refer to one of file in files
- * @param referFile
- * @param files
- */
-void fixMainLinksOverNumberedFiles(const string &referFile, fileSet files,
-                                   int minPara = 0, int maxPara = 0,
-                                   int minLine = 0, int maxLine = 0) {
-  string inputFile = BODY_TEXT_OUTPUT + getBodyTextFilePrefix(FILE_TYPE::MAIN) +
-                     referFile + BODY_TEXT_SUFFIX;
-  ifstream infile(inputFile);
-  if (!infile) {
-    cout << "file doesn't exist:" << inputFile << endl;
-    return;
-  }
-  string outputFile = BODY_TEXT_FIX + getBodyTextFilePrefix(FILE_TYPE::MAIN) +
-                      referFile + BODY_TEXT_SUFFIX;
-  ofstream outfile(outputFile);
-  string inLine{""};
-  while (!infile.eof()) // To get all the lines.
-  {
-    getline(infile, inLine); // Saves the line in inLine.
-    auto orgLine = inLine;   // inLine would change in loop below
-    LineNumber ln;
-    ln.loadFromContainedLine(orgLine);
-    if (ln.isParagraphHeader() or not ln.valid() or
-        not ln.isWithinLineRange(minPara, maxPara, minLine, maxLine)) {
-      outfile << orgLine << endl;
-      continue; // not fix headers or non-numbered lines
-    }
-    inLine = inLine.substr(
-        ln.generateLinePrefix().length()); // skip line number link
-    if (debug >= LOG_INFO)
-      cout << inLine << endl;
-    auto start = linkStartChars;
-    string targetFile{""};
-    do {
-      auto linkBegin = inLine.find(start);
-      if (linkBegin == string::npos) // no link any more, continue with next
-                                     // line
-        break;
-      auto linkEnd = inLine.find(linkEndChars, linkBegin);
-      auto link = inLine.substr(linkBegin, linkEnd + 4 - linkBegin);
-      LinkFromMain lfm(referFile,
-                       link);      // get only type and annotation
-      lfm.readReferFileName(link); // second step of construction, this is
-                                   // needed to check isTargetToSelfHtm
-      if (lfm.isTargetToOtherAttachmentHtm()) {
-        lfm.fixFromString(link); // third step of construction
-        lfm.setSourcePara(ln);
-        lfm.doStatistics();
-      }
-      if (lfm.isTargetToSelfHtm()) {
-        lfm.setSourcePara(ln);
-        lfm.fixFromString(link); // third step of construction
-        if (lfm.needUpdate())    // replace old value
-        {
-          auto orglinkBegin = orgLine.find(link);
-          orgLine.replace(orglinkBegin, link.length(), lfm.asString());
-        }
-      }
-      if (lfm.isTargetToOtherMainHtm()) {
-        targetFile = lfm.getChapterName();
-        auto e = find(files.begin(), files.end(), targetFile);
-        if (e != files.end()) // need to check and fix
-        {
-          lfm.fixFromString(link); // third step of construction
-          lfm.setSourcePara(ln);
-          string next = originalLinkStartChars + linkStartChars;
-          bool needAddOrginalLink = true;
-          // still have above "next" and </a>
-          if (inLine.length() > (link.length() + next.length() + 4)) {
-            if (inLine.substr(linkEnd + 4, next.length()) == next) {
-              // skip </a> and first parenthesis of next
-              auto followingLink = inLine.substr(
-                  linkEnd + next.length() + 2); // find next link in the inLine
-              LinkFromMain following(referFile, followingLink);
-              if (following.isTargetToOriginalHtm()) {
-                needAddOrginalLink = false;
-              }
-            }
-          }
-          if (needAddOrginalLink)
-            lfm.generateLinkToOrigin();
-          lfm.doStatistics();
-          if (lfm.needUpdate()) // replace old value
-          {
-            auto orglinkBegin = orgLine.find(link);
-            orgLine.replace(orglinkBegin, link.length(), lfm.asString());
-          }
-        }
-      }
-      if (lfm.isTargetToOriginalHtm()) {
-        targetFile = lfm.getChapterName();
-        auto e = find(files.begin(), files.end(), targetFile);
-        if (e != files.end()) // need to check and fix
-        {
-          lfm.fixFromString(link); // third step of construction
-          if (lfm.needUpdate())    // replace old value
-          {
-            auto orglinkBegin = orgLine.find(link);
-            if (debug >= LOG_INFO)
-              SEPERATE("isTargetToOriginalHtm", orgLine + "\n" + link);
-            orgLine.replace(orglinkBegin, link.length(), lfm.asString());
-          }
-        }
-      }
-      inLine = inLine.substr(linkEnd + 4); // find next link in the inLine
-    } while (1);
-    outfile << orgLine << endl;
-  }
-}
-
-/**
  *
  * @param minTarget
  * @param maxTarget
@@ -186,8 +109,8 @@ void fixMainLinks(int minTarget, int maxTarget, int minReference,
   for (const auto &file :
        buildFileSet(minTarget, maxTarget)) // files need to be fixed
   {
-    fixMainLinksOverNumberedFiles(
-        file, buildFileSet(minReference, maxReference)); // reference files
+    BodyText bodyText(getBodyTextFilePrefix(FILE_TYPE::MAIN));
+    bodyText.fixLinksFromFile(file, buildFileSet(minReference, maxReference));
   }
 }
 
@@ -249,41 +172,6 @@ void fixLinksFromMainHtmls() {
   fixMainHtml(minTarget, maxTarget, minReference, maxReference);
 }
 
-fileSet keyMissingChapters;
-fileSet newAttachmentList;
-
-/**
- *
- */
-void clearReport() {
-  keyMissingChapters.clear();
-  newAttachmentList.clear();
-}
-
-/**
- *
- */
-void displayMainFilesOfMissingKey() {
-  if (keyMissingChapters.empty())
-    return;
-  cout << "files which has missing key links:" << endl;
-  for (const auto &file : keyMissingChapters) {
-    cout << getFileNamePrefix(FILE_TYPE::MAIN) + file + ".htm" << endl;
-  }
-}
-
-/**
- *
- */
-void displayNewlyAddedAttachments() {
-  if (newAttachmentList.empty())
-    return;
-  cout << "Newly Added Attachments:" << endl;
-  for (const auto &file : newAttachmentList) {
-    cout << file + ".htm" << endl;
-  }
-}
-
 void fixLinksFromMain() {
   clearReport();
   LinkFromMain::resetStatisticsAndLoadReferenceAttachmentList();
@@ -292,121 +180,6 @@ void fixLinksFromMain() {
   displayMainFilesOfMissingKey();
   displayNewlyAddedAttachments();
   cout << "fixLinksFromMain finished. " << endl;
-}
-
-/**
- *
- * @param referFile
- * @param files
- * @param attachNo
- */
-void fixAttachmentLinksOverNumberedFiles(const string &referFile, fileSet files,
-                                         int attachNo) {
-  string inputFile = BODY_TEXT_OUTPUT +
-                     getBodyTextFilePrefix(FILE_TYPE::ATTACHMENT) + referFile +
-                     attachmentFileMiddleChar + TurnToString(attachNo) +
-                     BODY_TEXT_SUFFIX;
-
-  ifstream infile(inputFile);
-  if (!infile) {
-    cout << "file doesn't exist:" << inputFile << endl;
-    return;
-  }
-  string outputFile =
-      BODY_TEXT_FIX + getBodyTextFilePrefix(FILE_TYPE::ATTACHMENT) + referFile +
-      attachmentFileMiddleChar + TurnToString(attachNo) + BODY_TEXT_SUFFIX;
-  ofstream outfile(outputFile);
-  string inLine{""};
-  while (!infile.eof()) // To get all the lines.
-  {
-    getline(infile, inLine); // Saves the line in inLine.
-    auto orgLine = inLine;   // inLine would change in loop below
-    LineNumber ln;
-    ln.loadFromContainedLine(orgLine);
-    if (ln.isParagraphHeader() or not ln.valid()) {
-      outfile << orgLine << endl;
-      continue; // not fix headers or non-numbered lines
-    }
-    inLine = inLine.substr(
-        ln.generateLinePrefix().length()); // skip line number link
-    if (debug >= LOG_INFO)
-      cout << inLine << endl;
-    auto start = linkStartChars;
-    string targetFile{""};
-    do {
-      auto linkBegin = inLine.find(start);
-      if (linkBegin == string::npos) // no link any more, continue with next
-                                     // line
-        break;
-      auto linkEnd = inLine.find(linkEndChars, linkBegin);
-      auto link = inLine.substr(linkBegin, linkEnd + 4 - linkBegin);
-      // get only type and annotation
-      LinkFromAttachment lfm(
-          referFile + attachmentFileMiddleChar + TurnToString(attachNo), link);
-      lfm.readReferFileName(link); // second step of construction, this is
-                                   // needed to check isTargetToSelfHtm
-      if (lfm.isTargetToOtherAttachmentHtm()) {
-        lfm.fixFromString(link); // third step of construction
-        lfm.setSourcePara(ln);
-        lfm.doStatistics();
-      }
-      if (lfm.isTargetToSelfHtm()) {
-        lfm.setSourcePara(ln);
-        lfm.fixFromString(link); // third step of construction
-        if (lfm.needUpdate())    // replace old value
-        {
-          auto orglinkBegin = orgLine.find(link);
-          orgLine.replace(orglinkBegin, link.length(), lfm.asString());
-        }
-      }
-      if (lfm.isTargetToOtherMainHtm()) {
-        targetFile = lfm.getChapterName();
-        auto e = find(files.begin(), files.end(), targetFile);
-        if (e != files.end()) // need to check and fix
-        {
-          lfm.fixFromString(link); // third step of construction
-          lfm.setSourcePara(ln);
-          string next = originalLinkStartChars + linkStartChars;
-          bool needAddOrginalLink = true;
-          // still have above "next" and </a>
-          if (inLine.length() > (link.length() + next.length() + 4)) {
-            if (inLine.substr(linkEnd + 4, next.length()) == next) {
-              // skip </a> and first parenthesis of next
-              auto followingLink = inLine.substr(
-                  linkEnd + next.length() + 2); // find next link in the inLine
-              LinkFromAttachment following(referFile, followingLink);
-              if (following.isTargetToOriginalHtm()) {
-                needAddOrginalLink = false;
-              }
-            }
-          }
-          if (needAddOrginalLink)
-            lfm.generateLinkToOrigin();
-          lfm.doStatistics();
-          if (lfm.needUpdate()) // replace old value
-          {
-            auto orglinkBegin = orgLine.find(link);
-            orgLine.replace(orglinkBegin, link.length(), lfm.asString());
-          }
-        }
-      }
-      if (lfm.isTargetToOriginalHtm()) {
-        targetFile = lfm.getChapterName();
-        auto e = find(files.begin(), files.end(), targetFile);
-        if (e != files.end()) // need to check and fix
-        {
-          lfm.fixFromString(link); // third step of construction
-          if (lfm.needUpdate())    // replace old value
-          {
-            auto orglinkBegin = orgLine.find(link);
-            orgLine.replace(orglinkBegin, link.length(), lfm.asString());
-          }
-        }
-      }
-      inLine = inLine.substr(linkEnd + 4); // find next link in the inLine
-    } while (1);
-    outfile << orgLine << endl;
-  }
 }
 
 /**
@@ -433,9 +206,11 @@ void fixLinksToMainForAttachments(int minTarget, int maxTarget,
     if (overAllAttachments == true)
       targetAttachments =
           getAttachmentFileListForChapter(file, HTML_SRC_ATTACHMENT);
-    for (const auto &attNo : targetAttachments)
-      fixAttachmentLinksOverNumberedFiles(
-          file, buildFileSet(minReference, maxReference), attNo);
+    for (const auto &attNo : targetAttachments) {
+      BodyText bodyText(getBodyTextFilePrefix(FILE_TYPE::ATTACHMENT));
+      bodyText.fixLinksFromFile(file, buildFileSet(minReference, maxReference),
+                                attNo);
+    }
   }
 }
 

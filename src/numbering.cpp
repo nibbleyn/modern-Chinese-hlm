@@ -6,7 +6,7 @@
  * @param maxTarget until this file
  */
 void addLineNumbers(int minTarget, int maxTarget, FILE_TYPE targetFileType,
-                                   bool hidden = false) {
+                    bool hidden = false) {
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     string separatorColor = getSeparateLineColor(targetFileType);
     BodyText bodyText(getBodyTextFilePrefix(targetFileType));
@@ -25,8 +25,7 @@ void NumberingOriginalHtml(int minTarget, int maxTarget, bool hidden = false) {
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     container.dissembleFromHTM(file);
   }
-  addLineNumbers(minTarget, maxTarget, FILE_TYPE::ORIGINAL,
-          hidden);
+  addLineNumbers(minTarget, maxTarget, FILE_TYPE::ORIGINAL, hidden);
   BodyText::loadBodyTextsFromFixBackToOutput();
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     container.assembleBackToHTM(file);
@@ -47,8 +46,7 @@ void NumberingMainHtml(int minTarget, int maxTarget, bool hidden = false) {
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     container.dissembleFromHTM(file);
   }
-  addLineNumbers(minTarget, maxTarget, FILE_TYPE::MAIN,
-          hidden);
+  addLineNumbers(minTarget, maxTarget, FILE_TYPE::MAIN, hidden);
   BodyText::loadBodyTextsFromFixBackToOutput();
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     container.assembleBackToHTM(file);
@@ -152,7 +150,7 @@ void reformatTxtFiles(int minTarget, int maxTarget, const string &example) {
       filename = "0" + filename;
     }
     BodyText bodyText("pjpm");
-    bodyText.reformatParagraphToSmallerSize(example,filename);
+    bodyText.reformatParagraphToSmallerSize(example, filename);
   }
 }
 
@@ -169,12 +167,14 @@ void reformatTxtFilesForReader() {
        << " finished. " << endl;
 }
 
-void splitFiles(int minTarget, int maxTarget, const string &fileType, const string &sampleBlock, const string &sampleFirstLine,
-               const string &sampleWholeLine) {
-	  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
-	    BodyText bodyText(getBodyTextFilePrefix(getFileTypeFromString(fileType)));
-	    bodyText.regroupingParagraphs(sampleBlock, sampleFirstLine, sampleWholeLine,file);
-	  }
+void splitFiles(int minTarget, int maxTarget, const string &fileType,
+                const string &sampleBlock, const string &sampleFirstLine,
+                const string &sampleWholeLine) {
+  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
+    BodyText bodyText(getBodyTextFilePrefix(getFileTypeFromString(fileType)));
+    bodyText.regroupingParagraphs(sampleBlock, sampleFirstLine, sampleWholeLine,
+                                  file);
+  }
 }
 
 void autoSplitBodyText(const string &fileType) {
@@ -182,5 +182,6 @@ void autoSplitBodyText(const string &fileType) {
   const string sampleFirstLine = R"()";
   const string sampleWholeLine = R"()";
   int minTarget = 1, maxTarget = 1;
-  splitFiles(minTarget, maxTarget, fileType, sampleBlock, sampleFirstLine, sampleWholeLine);
+  splitFiles(minTarget, maxTarget, fileType, sampleBlock, sampleFirstLine,
+             sampleWholeLine);
 }

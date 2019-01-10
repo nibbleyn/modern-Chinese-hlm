@@ -136,6 +136,19 @@ void testLinkFromAttachment(string fromFile, string linkString,
   cout << "after fixed: " << endl << fixed << endl;
 }
 
+void testLink(Link &lfm, string linkString, bool needToGenerateOrgLink) {
+  cout << "original link: " << endl << linkString << endl;
+
+  //
+  lfm.readReferFileName(linkString); // second step of construction
+  lfm.fixFromString(linkString);
+  if (needToGenerateOrgLink)
+    lfm.generateLinkToOrigin();
+  auto fixed = lfm.asString();
+  cout << "need Update: " << lfm.needUpdate() << endl;
+  cout << "after fixed: " << endl << fixed << endl;
+}
+
 void testLinkOperation() {
 
   string linkString =
@@ -170,11 +183,12 @@ void testLinkOperation() {
       false);
   SEPERATE("fixLinkFromSameFileTemplate", " finished ");
 
-  testLinkFromMain("07",
-                   fixLinkFromMainTemplate(
-                       "", "80", LINK_DISPLAY_TYPE::HIDDEN, "菱角菱花",
-                       "第80章1.1节:", "原是老奶奶（薛姨妈）使唤的", "94"),
-                   false);
+  linkString = fixLinkFromMainTemplate(
+      "", "80", LINK_DISPLAY_TYPE::HIDDEN, "菱角菱花",
+      "第80章1.1节:", "原是老奶奶（薛姨妈）使唤的", "94");
+  LinkFromMain link("07", linkString);
+  testLink(link, linkString, false);
+
   SEPERATE("fixLinkFromMainTemplate", " finished ");
 
   testLinkFromMain("03",
@@ -279,7 +293,9 @@ void testContainer() {
 }
 
 void testConstructSubStory() {
-  ParaStruct res = getNumberOfPara(BODY_TEXT_OUTPUT + "Main06.txt");
+  BodyText bodyText(getBodyTextFilePrefix(FILE_TYPE::MAIN));
+
+  BodyText::ParaStruct res = bodyText.getNumberOfPara("06");
   cout << GetTupleElement(res, 0) << " " << GetTupleElement(res, 1) << " "
        << GetTupleElement(res, 2) << endl;
 }
