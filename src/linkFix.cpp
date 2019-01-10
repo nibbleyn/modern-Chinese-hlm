@@ -461,18 +461,11 @@ void fixAttachments(int minTarget, int maxTarget, int minReference,
 }
 
 void fixLinksFromAttachmentHtmls() {
-  int minTarget = 3, maxTarget = 3;
+  int minTarget = 1, maxTarget = 80;
   int minReference = 1, maxReference = 80;
   int minAttachNo = 1, maxAttachNo = 1;
-  fixAttachments(minTarget, maxTarget, minReference, maxReference, minAttachNo,
-                 maxAttachNo);
-}
-
-void fixLinksFromAllAttachmentHtmls() {
-  int minTarget = 3, maxTarget = 3;
-  int minReference = 1, maxReference = 80;
-  int minAttachNo = 0, maxAttachNo = 0;
-  // fix all attachments
+  // if to fix all attachments
+  //  int minAttachNo = 0, maxAttachNo = 0;
   fixAttachments(minTarget, maxTarget, minReference, maxReference, minAttachNo,
                  maxAttachNo);
 }

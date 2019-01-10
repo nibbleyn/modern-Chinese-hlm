@@ -89,6 +89,9 @@ class ListContainer : public GenericContainer {
 public:
   ListContainer() = default;
   ListContainer(string filename) { outputFilename = filename; }
+  string getOutputFilePath() {
+    return htmlOutputFilePath + outputFilename + HTML_SUFFIX;
+  }
 
 private:
   string getInputFileName() const override { return "1"; }

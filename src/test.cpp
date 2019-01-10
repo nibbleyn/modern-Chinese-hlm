@@ -1,9 +1,9 @@
 #include "gb2312ToUtf8.hpp"
 #include "linkFix.hpp"
 #include "numbering.hpp"
+#include "personal.hpp"
 #include "search.hpp"
 #include "story.hpp"
-#include "personal.hpp"
 
 int debug = LOG_INFO;
 // int debug = LOG_EXCEPTION;
@@ -284,8 +284,8 @@ void testConstructSubStory() {
 }
 
 void testFindFirstInFiles() {
-  findFirstInNoAttachmentFiles(R"("聚赌嫖娼")", "main", "xxx3");
-  findFirstInNoAttachmentFiles(R"("头一社")", "original", "xxx4");
+  searchKeywordInNoAttachmentFiles(R"("聚赌嫖娼")", "main", "xxx3");
+  searchKeywordInNoAttachmentFiles(R"("头一社")", "original", "xxx4");
 }
 
 void testRemovePersonalViewpoints() {

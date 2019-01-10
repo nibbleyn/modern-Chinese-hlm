@@ -2,5 +2,6 @@
 #include "container.hpp"
 #include "link.hpp"
 
-void findFirstInNoAttachmentFiles(const string &key, const string &fileType,
-                                  const string &outputFilename);
+void searchKeywordInNoAttachmentFiles(const string &key, const string &fileType,
+                                      const string &outputFilename,
+                                      bool searchForAll = true);

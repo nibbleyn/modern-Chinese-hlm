@@ -581,8 +581,7 @@ void Link::readKey(const string &linkString) {
       bodyText.findKey(stringForSearch, getChapterName(), attachmentNumber);
   if (not found) {
     usedKey = keyNotFound + " " + stringForSearch;
-    fixReferPara(changeKey);
-    needChange = true;
+    fixReferPara(changeKey); // will set needChange if found line is different
   } else {
     usedKey = stringForSearch;
     // only use the first line found

@@ -94,4 +94,3 @@ void removePersonalViewpoints(int minTarget, int maxTarget,
     removePersonalCommentsOverNumberedFiles(file, fileType); // reference files
   }
 }
-
