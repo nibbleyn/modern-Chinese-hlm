@@ -30,25 +30,25 @@ public:
 
   LineNumber() = default;
   LineNumber(int paraNumber, int lineNumber)
-      : paraNumber(paraNumber), lineNumber(lineNumber) {}
+      : m_paraNumber(paraNumber), m_lineNumber(lineNumber) {}
   LineNumber(const string &name) { readFromString(name); }
 
   LineNumber(const LineNumber &) = default;
   LineNumber &operator=(const LineNumber &) = default;
 
   void loadFromContainedLine(const string &containedLine);
-  bool valid() { return (paraNumber != 0 and lineNumber != 0); }
+  bool valid() { return (m_paraNumber != 0 and m_lineNumber != 0); }
   bool isParagraphHeader() {
-    return (paraNumber != 0 and paraNumber < Limit and lineNumber == 0);
+    return (m_paraNumber != 0 and m_paraNumber < Limit and m_lineNumber == 0);
   }
-  bool isPureTextOnly() { return (paraNumber == 0); }
+  bool isPureTextOnly() { return (m_paraNumber == 0); }
   string generateLinePrefix();
   string asString() {
     string result{""};
-    if (paraNumber != 0)
-      result = leadingChar + TurnToString(paraNumber);
-    if (lineNumber != 0)
-      result += middleChar + TurnToString(lineNumber);
+    if (m_paraNumber != 0)
+      result = leadingChar + TurnToString(m_paraNumber);
+    if (m_lineNumber != 0)
+      result += middleChar + TurnToString(m_lineNumber);
     return result;
   }
   bool isWithinLineRange(int minPara = 0, int maxPara = 0, int minLine = 0,
@@ -57,23 +57,23 @@ public:
     bool lessThanMax = true;
     // only support para now
     if (minPara != 0)
-      biggerThanMin = paraNumber >= minPara; // inclusive
+      biggerThanMin = m_paraNumber >= minPara; // inclusive
     if (maxPara != 0)
-      lessThanMax = paraNumber <= maxPara; // inclusive
+      lessThanMax = m_paraNumber <= maxPara; // inclusive
     return (biggerThanMin and lessThanMax);
   }
   bool equal(LineNumber &ln) {
-    return (lineNumber == ln.getlineNumber() and
-            paraNumber == ln.getParaNumber());
+    return (m_lineNumber == ln.getlineNumber() and
+            m_paraNumber == ln.getParaNumber());
   }
   bool equal(const string &lnStr) { return (lnStr == asString()); }
-  int getParaNumber() { return paraNumber; }
-  int getlineNumber() { return lineNumber; }
+  int getParaNumber() { return m_paraNumber; }
+  int getlineNumber() { return m_lineNumber; }
 
 private:
   void readFromString(const string &name);
-  int paraNumber{0};
-  int lineNumber{0};
+  int m_paraNumber{0};
+  int m_lineNumber{0};
 };
 
 string replacePart(string &linkString, const string &key,

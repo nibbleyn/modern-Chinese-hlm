@@ -45,7 +45,7 @@ void LineNumber::loadFromContainedLine(const string &containedLine) {
  */
 string LineNumber::generateLinePrefix() {
   string result{""};
-  if (lineNumber != 0)
+  if (m_lineNumber != 0)
     result = UnhiddenLineNumberStart + asString() + endOfLineNumber +
              endOfGeneratedLineNumber;
   return result;
@@ -61,14 +61,14 @@ void LineNumber::readFromString(const string &name) {
   auto lineNumberStart = name.find(middleChar);
   if (lineNumberStart != string::npos) {
     // sign of already numbered
-    lineNumber = TurnToInt(name.substr(lineNumberStart + 1));
+    m_lineNumber = TurnToInt(name.substr(lineNumberStart + 1));
     if (name.substr(0, 1) == leadingChar)
-      paraNumber = TurnToInt(name.substr(1, lineNumberStart - 1));
+      m_paraNumber = TurnToInt(name.substr(1, lineNumberStart - 1));
   } else if (name.substr(0, 1) == leadingChar) {
-    paraNumber = TurnToInt(name.substr(1));
-    if (paraNumber >= Limit) {
-      cout << "too limit to hold such paragraph: " << paraNumber << endl;
+    m_paraNumber = TurnToInt(name.substr(1));
+    if (m_paraNumber >= Limit) {
+      cout << "too limit to hold such paragraph: " << m_paraNumber << endl;
     }
   } else
-    paraNumber = TurnToInt(name.substr(0)); // temporarily accept non-P number
+    m_paraNumber = TurnToInt(name.substr(0)); // temporarily accept non-P number
 }
