@@ -5,7 +5,7 @@
 class BodyText {
 
 public:
-  BodyText(string filePrefix) : filePrefix(filePrefix) {}
+  BodyText(const string &filePrefix) : filePrefix(filePrefix) {}
   /**
    * load files under BODY_TEXT_OUTPUT directory with files under BODY_TEXT_FIX
    * i.e. from afterFix to output
@@ -61,11 +61,7 @@ public:
   void addLineNumber(const string &separatorColor, const string &file,
                      int attachNo = 0, bool hidden = false);
 
-  void fixLinksFromFile(const string &file, fileSet files, int attachNo = 0,
-                        int minPara = 0, int maxPara = 0, int minLine = 0,
-                        int maxLine = 0);
-
-private:
+protected:
   string filePrefix{"Main"};
   lineNumberSet ignoreSet;
   lineNumberSet result;

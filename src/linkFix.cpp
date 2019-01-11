@@ -109,7 +109,7 @@ void fixMainLinks(int minTarget, int maxTarget, int minReference,
   for (const auto &file :
        buildFileSet(minTarget, maxTarget)) // files need to be fixed
   {
-    BodyText bodyText(getBodyTextFilePrefix(FILE_TYPE::MAIN));
+    BodyTextWithLink bodyText(getBodyTextFilePrefix(FILE_TYPE::MAIN));
     bodyText.fixLinksFromFile(file, buildFileSet(minReference, maxReference));
   }
 }
@@ -207,7 +207,7 @@ void fixLinksToMainForAttachments(int minTarget, int maxTarget,
       targetAttachments =
           getAttachmentFileListForChapter(file, HTML_SRC_ATTACHMENT);
     for (const auto &attNo : targetAttachments) {
-      BodyText bodyText(getBodyTextFilePrefix(FILE_TYPE::ATTACHMENT));
+      BodyTextWithLink bodyText(getBodyTextFilePrefix(FILE_TYPE::ATTACHMENT));
       bodyText.fixLinksFromFile(file, buildFileSet(minReference, maxReference),
                                 attNo);
     }
