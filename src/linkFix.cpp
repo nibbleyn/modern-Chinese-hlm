@@ -187,20 +187,27 @@ void fixLinksFromMain() {
 
 void generateContentIndexTableForAttachments() {
   LinkFromMain::loadReferenceAttachmentList();
-  ListContainer container("bindex1.htm");
+  ListContainer container("bindex1");
   container.clearBodyTextFile();
   auto table = Link::refAttachmentTable;
   for (const auto &attachment : table) {
     auto attachmentName = attachment.first;
     auto entry = attachment.second.second;
     ATTACHMENT_TYPE attachmentType = GetTupleElement(entry, 2);
-    if (attachmentType == ATTACHMENT_TYPE::PERSONAL)
-      container.appendParagraphInBodyText(TurnToString(attachmentName.first) +
-                                          "_" +
-                                          TurnToString(attachmentName.second) +
-                                          ": " + GetTupleElement(entry, 1));
+
+    if (attachmentType == ATTACHMENT_TYPE::PERSONAL) {
+      string name =
+          R"(第)" + TurnToString(attachmentName.first) + R"(章附件)" +
+          TurnToString(attachmentName.second) + R"(: )";
+      container.appendParagraphInBodyText(fixLinkFromAttachmentTemplate(
+          R"(attachment\)",
+          formatIntoTwoDigitChapterNumber(attachmentName.first),
+          TurnToString(attachmentName.second),
+          name + GetTupleElement(entry, 1)));
+    }
   }
   container.assembleBackToHTM("personal attachments", "personal attachments");
+  cout << "result is in file " << container.getOutputFilePath() << endl;
 }
 
 /**
