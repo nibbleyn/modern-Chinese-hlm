@@ -5,6 +5,7 @@
 class BodyText {
 
 public:
+  BodyText() = default;
   BodyText(const string &filePrefix) : filePrefix(filePrefix) {}
   /**
    * load files under BODY_TEXT_OUTPUT directory with files under BODY_TEXT_FIX
@@ -24,6 +25,8 @@ public:
       fileToCopy.copyTo(BODY_TEXT_OUTPUT + file);
     }
   }
+
+  void setFilePrefixFromFileType(FILE_TYPE type);
   using lineNumberSet = set<string>;
   // set options before search
   void resetBeforeSearch() {

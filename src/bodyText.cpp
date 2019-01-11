@@ -37,6 +37,15 @@ bool isOnlyPartOfOtherKeys(const string &orgLine, const string &key) {
   return true;
 }
 
+void BodyText::setFilePrefixFromFileType(FILE_TYPE type) {
+  string bodyTextFilePrefix[] = {"Main", "Attach", "Org"};
+  if (type == FILE_TYPE::MAIN)
+    filePrefix = bodyTextFilePrefix[0];
+  if (type == FILE_TYPE::ATTACHMENT)
+    filePrefix = bodyTextFilePrefix[1];
+  if (type == FILE_TYPE::ORIGINAL)
+    filePrefix = bodyTextFilePrefix[2];
+}
 /**
  * find a keyword in a numbered bodytext file
  * whose name is specified as fullPath

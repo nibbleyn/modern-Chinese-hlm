@@ -1,15 +1,17 @@
 #include "search.hpp"
 
-void findFirstInNoAttachmentFiles(const string key, FILE_TYPE targetFileType,
+void findFirstInNoAttachmentFiles(const string key, const string &fileType,
                                   int minTarget, int maxTarget,
                                   const string &outputFilename) {
-
+  FILE_TYPE targetFileType = getFileTypeFromString(fileType);
   using LinksList = map<string, vector<Link::LinkDetails>>;
   LinksList resultLinkList;
   resultLinkList.clear();
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
 
-    BodyText bodyText(getBodyTextFilePrefixFromFileType(targetFileType));
+    BodyText bodyText;
+    bodyText.setFilePrefixFromFileType(targetFileType);
+
     bodyText.resetBeforeSearch();
     bodyText.searchForAll();
     bool found = bodyText.findKey(key, file);
@@ -43,8 +45,7 @@ void findFirstInNoAttachmentFiles(const string key, FILE_TYPE targetFileType,
   container.clearBodyTextFile();
   int total = 0;
   for (const auto &chapter : resultLinkList) {
-    container.appendParagraphInBodyText("found in " +
-                                        getBodyTextFilePrefixFromFileType(targetFileType) +
+    container.appendParagraphInBodyText("found in " + fileType + " : " +
                                         chapter.first + HTML_SUFFIX + " :");
     auto list = chapter.second;
     for (const auto &detail : list) {
@@ -64,6 +65,6 @@ void searchKeywordInNoAttachmentFiles(const string &key, const string &fileType,
                                       const string &outputFilename,
                                       bool searchForAll) {
   int minTarget = 1, maxTarget = 80;
-  findFirstInNoAttachmentFiles(key, getFileTypeFromString(fileType), minTarget,
-                               maxTarget, outputFilename);
+  findFirstInNoAttachmentFiles(key, fileType, minTarget, maxTarget,
+                               outputFilename);
 }

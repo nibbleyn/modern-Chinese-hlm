@@ -365,23 +365,22 @@ string Link::asString() {
   if (annotation == returnToContentTable) // type would be SAMEPAGE
   {
     part1 = getPathOfReferenceFile() + contentTableFilename;
-  } else if (type != LINK_TYPE::SAMEPAGE) {
-    part1 =
-        getPathOfReferenceFile() + getFileNamePrefixFromlinkType(type) + getChapterName();
+  } else if (m_type != LINK_TYPE::SAMEPAGE) {
+    part1 = getPathOfReferenceFile() + getFileNamePrefix() + getChapterName();
     if (attachmentNumber != 0)
       part2 = attachmentFileMiddleChar + TurnToString(attachmentNumber);
     part3 = HTML_SUFFIX;
   }
   string part4{""};
-  if (type != LINK_TYPE::ATTACHMENT or referPara != invalidLineNumber) {
+  if (m_type != LINK_TYPE::ATTACHMENT or referPara != invalidLineNumber) {
     if (annotation != returnToContentTable)
       part4 = referParaMiddleChar + referPara;
   }
   string part5 = referParaEndChar, part6{""}, part7{""};
-  if (type != LINK_TYPE::ATTACHMENT and not usedKey.empty()) {
+  if (m_type != LINK_TYPE::ATTACHMENT and not usedKey.empty()) {
     part6 = keyStartChars + getKey() + keyEndChars;
     // easier to replace to <b unhidden> if want to display this
-    if (type == LINK_TYPE::MAIN)
+    if (m_type == LINK_TYPE::MAIN)
       part7 = citationStartChars + getReferSection() + citationEndChars;
   }
   string part8 = getAnnotation() + linkEndChars;
@@ -421,7 +420,7 @@ void Link::readDisplayType(const string &linkString) {
  * @param linkString the link to check
  */
 void Link::readType(const string &linkString) {
-  type = LINK_TYPE::SAMEPAGE;
+  m_type = LINK_TYPE::SAMEPAGE;
   auto fileEnd = linkString.find(HTML_SUFFIX);
   if (fileEnd == string::npos) // no file to refer
   {
@@ -435,7 +434,7 @@ void Link::readType(const string &linkString) {
   }
   string refereFileName = linkString.substr(
       fileBegin + start.length(), fileEnd - fileBegin - start.length());
-  type = getLinKTypeFromReferFileName(refereFileName);
+  m_type = getLinKTypeFromReferFileName(refereFileName);
   if (debug >= LOG_INFO)
     cout << "type seen from prefix: " << refereFileName << endl;
 }
@@ -449,12 +448,12 @@ void Link::readType(const string &linkString) {
  */
 void Link::readReferPara(const string &linkString) {
   string htmStart = HTML_SUFFIX + referParaMiddleChar;
-  if (type == LINK_TYPE::SAMEPAGE)
+  if (m_type == LINK_TYPE::SAMEPAGE)
     htmStart = referParaMiddleChar;
   auto processStart = linkString.find(htmStart);
   if (processStart == string::npos) // no file to refer
   {
-    if (debug >= LOG_EXCEPTION and type != LINK_TYPE::ATTACHMENT)
+    if (debug >= LOG_EXCEPTION and m_type != LINK_TYPE::ATTACHMENT)
       cout << "no # found to read referPara from link: " << linkString << endl;
     return;
   }
@@ -477,7 +476,7 @@ void Link::readReferPara(const string &linkString) {
  */
 bool Link::readAnnotation(const string &linkString) {
   string htmStart = HTML_SUFFIX;
-  if (type == LINK_TYPE::SAMEPAGE)
+  if (m_type == LINK_TYPE::SAMEPAGE)
     htmStart = referParaMiddleChar;
   auto processStart = linkString.find(htmStart);
   if (processStart == string::npos) // no file to refer
@@ -550,12 +549,13 @@ void Link::readKey(const string &linkString) {
   if (keyBegin == string::npos) {
     // not a link to top/bottom and no key was found, add a "KeyNotFound" key
     // and return
-    if (type != LINK_TYPE::ATTACHMENT and referPara != topParagraphIndicator and
+    if (m_type != LINK_TYPE::ATTACHMENT and
+        referPara != topParagraphIndicator and
         referPara != bottomParagraphIndicator) {
       needChange = true;
       usedKey = keyNotFound;
     }
-    if (debug >= LOG_EXCEPTION and type != LINK_TYPE::ATTACHMENT) {
+    if (debug >= LOG_EXCEPTION and m_type != LINK_TYPE::ATTACHMENT) {
       string output = usedKey.empty() ? "EMPTY" : usedKey;
       cout << "key string not found, so use key: " << output << endl;
     }
@@ -571,10 +571,10 @@ void Link::readKey(const string &linkString) {
     usedKey = stringForSearch;
     return;
   }
-  BodyText bodyText(getBodyTextFilePrefixFromLinkType(type));
+  BodyText bodyText(getBodyTextFilePrefix());
   bodyText.resetBeforeSearch();
   // special hack to ignore itself
-  if (type == LINK_TYPE::SAMEPAGE) {
+  if (m_type == LINK_TYPE::SAMEPAGE) {
     bodyText.addIgnoreLines(fromLine.asString());
   }
   bool found =
@@ -713,15 +713,15 @@ void LinkFromMain::outPutStatisticsToFiles() {
 void LinkFromMain::generateLinkToOrigin() {
   if (debug >= LOG_INFO)
     cout << "create link to original main html thru key: " << usedKey << endl;
-  auto reservedType = type;   // only LINK_TYPE::MAIN has origin member
-  type = LINK_TYPE::ORIGINAL; // temporarily change type to get right path
+  auto reservedType = m_type;   // only LINK_TYPE::MAIN has origin member
+  m_type = LINK_TYPE::ORIGINAL; // temporarily change type to get right path
   string to = fixLinkFromOriginalTemplate(getPathOfReferenceFile(),
                                           getChapterName(), usedKey, referPara);
   linkToOrigin = std::make_unique<LinkFromMain>(fromFile, to);
   linkToOrigin->readReferFileName(to);
   linkToOrigin->fixFromString(to);
   needChange = true;
-  type = reservedType;
+  m_type = reservedType;
 }
 
 /**
@@ -739,7 +739,7 @@ void LinkFromMain::generateLinkToOrigin() {
 bool LinkFromMain::readReferFileName(const string &link) {
   string linkString = link;
   string refereFileName = fromFile;
-  if (type != LINK_TYPE::SAMEPAGE) {
+  if (m_type != LINK_TYPE::SAMEPAGE) {
     // remove space in the input linkString
     linkString.erase(remove(linkString.begin(), linkString.end(), ' '),
                      linkString.end());
@@ -757,7 +757,7 @@ bool LinkFromMain::readReferFileName(const string &link) {
     }
     refereFileName = linkString.substr(fileBegin + start.length(),
                                        fileEnd - fileBegin - start.length());
-    fileBegin = refereFileName.find(getFileNamePrefixFromlinkType(type));
+    fileBegin = refereFileName.find(getFileNamePrefix());
     if (fileBegin == string::npos) // not find a right file type to refer
     {
       cout << "unsupported type in refer file name in link: " << linkString
@@ -766,11 +766,11 @@ bool LinkFromMain::readReferFileName(const string &link) {
     }
     refereFileName = refereFileName.substr(
         fileBegin); // in case there is a ..\ before file name
-    refereFileName = refereFileName.substr(getFileNamePrefixFromlinkType(type).length());
+    refereFileName = refereFileName.substr(getFileNamePrefix().length());
   }
 
   // get chapter number and attachment number if type is LINK_TYPE::ATTACHMENT
-  if (type == LINK_TYPE::ATTACHMENT) {
+  if (m_type == LINK_TYPE::ATTACHMENT) {
     auto attachmentNumberStart = refereFileName.find(attachmentFileMiddleChar);
     if (attachmentNumberStart == string::npos) {
       cout << "no attachment number in link: " << linkString << endl;
@@ -818,7 +818,7 @@ void LinkFromMain::logLink() {
     }
   }
   if (isTargetToOtherAttachmentHtm()) {
-    auto targetFile = getFileNamePrefixFromlinkType(type) + getChapterName() +
+    auto targetFile = getFileNamePrefix() + getChapterName() +
                       attachmentFileMiddleChar +
                       TurnToString(getattachmentNumber());
     auto num = make_pair(getchapterNumer(), getattachmentNumber());
@@ -849,16 +849,16 @@ void LinkFromMain::logLink() {
  * @param type type of link
  * @return filename prefix of target file
  */
-string LinkFromMain::getFileNamePrefixFromlinkType(LINK_TYPE _type) {
+string LinkFromMain::getFileNamePrefix() {
   string filenamePrefix[] = {"a0", "b0", "c0", "a0"};
   string prefix = "unsupported";
-  if (type == LINK_TYPE::MAIN)
+  if (m_type == LINK_TYPE::MAIN)
     prefix = filenamePrefix[0];
-  if (type == LINK_TYPE::ATTACHMENT)
+  if (m_type == LINK_TYPE::ATTACHMENT)
     prefix = filenamePrefix[1];
-  if (type == LINK_TYPE::ORIGINAL)
+  if (m_type == LINK_TYPE::ORIGINAL)
     prefix = filenamePrefix[2];
-  if (type == LINK_TYPE::SAMEPAGE)
+  if (m_type == LINK_TYPE::SAMEPAGE)
     prefix = filenamePrefix[3];
   return prefix;
 }
@@ -871,16 +871,16 @@ string LinkFromMain::getFileNamePrefixFromlinkType(LINK_TYPE _type) {
  * @param type type of link
  * @return filename prefix of bodytext file
  */
-string LinkFromMain::getBodyTextFilePrefixFromLinkType(LINK_TYPE _type) {
+string LinkFromMain::getBodyTextFilePrefix() {
   string bodyTextFilePrefix[] = {"Main", "Attach", "Org", "Main"};
   string prefix = "unsupported";
-  if (type == LINK_TYPE::MAIN)
+  if (m_type == LINK_TYPE::MAIN)
     prefix = bodyTextFilePrefix[0];
-  if (type == LINK_TYPE::ATTACHMENT)
+  if (m_type == LINK_TYPE::ATTACHMENT)
     prefix = bodyTextFilePrefix[1];
-  if (type == LINK_TYPE::ORIGINAL)
+  if (m_type == LINK_TYPE::ORIGINAL)
     prefix = bodyTextFilePrefix[2];
-  if (type == LINK_TYPE::SAMEPAGE)
+  if (m_type == LINK_TYPE::SAMEPAGE)
     prefix = bodyTextFilePrefix[3];
   return prefix;
 }
@@ -911,15 +911,15 @@ void LinkFromAttachment::outPutStatisticsToFiles() {
 void LinkFromAttachment::generateLinkToOrigin() {
   if (debug >= LOG_INFO)
     cout << "create link to original main html thru key: " << usedKey << endl;
-  auto reservedType = type;
-  type = LINK_TYPE::ORIGINAL; // temporarily change type to get right path
+  auto reservedType = m_type;
+  m_type = LINK_TYPE::ORIGINAL; // temporarily change type to get right path
   string to = fixLinkFromOriginalTemplate(getPathOfReferenceFile(),
                                           getChapterName(), usedKey, referPara);
   linkToOrigin = std::make_unique<LinkFromAttachment>(fromFile, to);
   linkToOrigin->readReferFileName(to);
   linkToOrigin->fixFromString(to);
   needChange = true;
-  type = reservedType;
+  m_type = reservedType;
 }
 
 /**
@@ -940,7 +940,7 @@ void LinkFromAttachment::generateLinkToOrigin() {
 bool LinkFromAttachment::readReferFileName(const string &link) {
   string linkString = link;
   string refereFileName = fromFile;
-  if (type != LINK_TYPE::SAMEPAGE) {
+  if (m_type != LINK_TYPE::SAMEPAGE) {
     // remove space in the input linkString
     linkString.erase(remove(linkString.begin(), linkString.end(), ' '),
                      linkString.end());
@@ -958,7 +958,7 @@ bool LinkFromAttachment::readReferFileName(const string &link) {
     }
     refereFileName = linkString.substr(fileBegin + start.length(),
                                        fileEnd - fileBegin - start.length());
-    fileBegin = refereFileName.find(getFileNamePrefixFromlinkType(type));
+    fileBegin = refereFileName.find(getFileNamePrefix());
     if (fileBegin == string::npos) // not find a right file type to refer
     {
       cout << "unsupported type in refer file name in link: " << linkString
@@ -967,11 +967,11 @@ bool LinkFromAttachment::readReferFileName(const string &link) {
     }
     refereFileName = refereFileName.substr(
         fileBegin); // in case there is a ..\ before file name
-    refereFileName = refereFileName.substr(getFileNamePrefixFromlinkType(type).length());
+    refereFileName = refereFileName.substr(getFileNamePrefix().length());
   }
 
   // get chapter number and attachment number if type is LINK_TYPE::ATTACHMENT
-  if (type == LINK_TYPE::SAMEPAGE or type == LINK_TYPE::ATTACHMENT) {
+  if (m_type == LINK_TYPE::SAMEPAGE or m_type == LINK_TYPE::ATTACHMENT) {
     auto attachmentNumberStart = refereFileName.find(attachmentFileMiddleChar);
     if (attachmentNumberStart == string::npos) {
       cout << "no attachment number in link: " << linkString << endl;
@@ -1029,7 +1029,7 @@ void LinkFromAttachment::logLink() {
  */
 void LinkFromAttachment::setTypeThruFileNamePrefix(const string &prefix) {
   if (prefix == "main")
-    type = LINK_TYPE::MAIN;
+    m_type = LINK_TYPE::MAIN;
 }
 
 /**
@@ -1040,16 +1040,16 @@ void LinkFromAttachment::setTypeThruFileNamePrefix(const string &prefix) {
  * @param type type of link
  * @return filename prefix of target file
  */
-string LinkFromAttachment::getFileNamePrefixFromlinkType(LINK_TYPE type) {
+string LinkFromAttachment::getFileNamePrefix() {
   string filenamePrefix[] = {"a0", "b0", "c0", "b0"};
   string prefix = "unsupported";
-  if (type == LINK_TYPE::MAIN)
+  if (m_type == LINK_TYPE::MAIN)
     prefix = filenamePrefix[0];
-  if (type == LINK_TYPE::ATTACHMENT)
+  if (m_type == LINK_TYPE::ATTACHMENT)
     prefix = filenamePrefix[1];
-  if (type == LINK_TYPE::ORIGINAL)
+  if (m_type == LINK_TYPE::ORIGINAL)
     prefix = filenamePrefix[2];
-  if (type == LINK_TYPE::SAMEPAGE)
+  if (m_type == LINK_TYPE::SAMEPAGE)
     prefix = filenamePrefix[3];
   return prefix;
 }
@@ -1062,16 +1062,16 @@ string LinkFromAttachment::getFileNamePrefixFromlinkType(LINK_TYPE type) {
  * @param type type of link
  * @return filename prefix of bodytext file
  */
-string LinkFromAttachment::getBodyTextFilePrefixFromLinkType(LINK_TYPE type) {
+string LinkFromAttachment::getBodyTextFilePrefix() {
   string bodyTextFilePrefix[] = {"Main", "Attach", "Org", "Attach"};
   string prefix = "unsupported";
-  if (type == LINK_TYPE::MAIN)
+  if (m_type == LINK_TYPE::MAIN)
     prefix = bodyTextFilePrefix[0];
-  if (type == LINK_TYPE::ATTACHMENT)
+  if (m_type == LINK_TYPE::ATTACHMENT)
     prefix = bodyTextFilePrefix[1];
-  if (type == LINK_TYPE::ORIGINAL)
+  if (m_type == LINK_TYPE::ORIGINAL)
     prefix = bodyTextFilePrefix[2];
-  if (type == LINK_TYPE::SAMEPAGE)
+  if (m_type == LINK_TYPE::SAMEPAGE)
     prefix = bodyTextFilePrefix[3];
   return prefix;
 }

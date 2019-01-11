@@ -159,8 +159,8 @@ vector<int> getAttachmentFileListForChapter(const string &referFile,
   vector<int> attList;
   Poco::File(fromDir).list(filenameList);
   for (const auto &file : filenameList) {
-    if (file.find(getFileNamePrefixFromFileType(FILE_TYPE::ATTACHMENT) + referFile) !=
-        string::npos) {
+    if (file.find(getFileNamePrefixFromFileType(FILE_TYPE::ATTACHMENT) +
+                  referFile) != string::npos) {
       string start = attachmentFileMiddleChar;
       auto keyBegin = file.find(start);
       auto keyEnd = file.find(".");

@@ -19,7 +19,8 @@ void displayMainFilesOfMissingKey() {
     return;
   cout << "files which has missing key links:" << endl;
   for (const auto &file : keyMissingChapters) {
-    cout << getFileNamePrefixFromFileType(FILE_TYPE::MAIN) + file + ".htm" << endl;
+    cout << getFileNamePrefixFromFileType(FILE_TYPE::MAIN) + file + ".htm"
+         << endl;
   }
 }
 
@@ -109,7 +110,8 @@ void fixMainLinks(int minTarget, int maxTarget, int minReference,
   for (const auto &file :
        buildFileSet(minTarget, maxTarget)) // files need to be fixed
   {
-    BodyTextWithLink bodyText(getBodyTextFilePrefixFromFileType(FILE_TYPE::MAIN));
+    BodyTextWithLink bodyText;
+    bodyText.setFilePrefixFromFileType(FILE_TYPE::MAIN);
     bodyText.fixLinksFromFile(file, buildFileSet(minReference, maxReference));
   }
 }
@@ -125,11 +127,13 @@ void fixReturnLinkForAttachments(int minTarget, int maxTarget) {
         getAttachmentFileListForChapter(file, HTML_SRC_ATTACHMENT);
     for (const auto &attNo : targetAttachments) {
       string inputHtmlFile =
-          HTML_SRC_ATTACHMENT + getFileNamePrefixFromFileType(FILE_TYPE::ATTACHMENT) +
-          file + attachmentFileMiddleChar + TurnToString(attNo) + HTML_SUFFIX;
-      string outputFile =
-          HTML_OUTPUT_ATTACHMENT + getFileNamePrefixFromFileType(FILE_TYPE::ATTACHMENT) +
-          file + attachmentFileMiddleChar + TurnToString(attNo) + HTML_SUFFIX;
+          HTML_SRC_ATTACHMENT +
+          getFileNamePrefixFromFileType(FILE_TYPE::ATTACHMENT) + file +
+          attachmentFileMiddleChar + TurnToString(attNo) + HTML_SUFFIX;
+      string outputFile = HTML_OUTPUT_ATTACHMENT +
+                          getFileNamePrefixFromFileType(FILE_TYPE::ATTACHMENT) +
+                          file + attachmentFileMiddleChar +
+                          TurnToString(attNo) + HTML_SUFFIX;
       fixReturnLinkForAttachmentFile(file + attachmentFileMiddleChar +
                                          TurnToString(attNo),
                                      inputHtmlFile, outputFile);
@@ -207,7 +211,8 @@ void fixLinksToMainForAttachments(int minTarget, int maxTarget,
       targetAttachments =
           getAttachmentFileListForChapter(file, HTML_SRC_ATTACHMENT);
     for (const auto &attNo : targetAttachments) {
-      BodyTextWithLink bodyText(getBodyTextFilePrefixFromFileType(FILE_TYPE::ATTACHMENT));
+      BodyTextWithLink bodyText;
+      bodyText.setFilePrefixFromFileType(FILE_TYPE::ATTACHMENT);
       bodyText.fixLinksFromFile(file, buildFileSet(minReference, maxReference),
                                 attNo);
     }

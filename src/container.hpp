@@ -56,6 +56,8 @@ public:
 
 private:
   FILE_TYPE fileType{FILE_TYPE::MAIN};
+  string getHtmlFileNamePrefix();
+  string getBodyTextFilePrefix();
 };
 
 static const string defaultTitle = "XXX";

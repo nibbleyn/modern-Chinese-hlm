@@ -27,6 +27,27 @@ string currentDateTime() {
   return ss_msg.str();
 }
 
+string CoupledContainer::getHtmlFileNamePrefix() {
+  string filenamePrefix[] = {"a0", "b0", "c0"};
+  if (fileType == FILE_TYPE::MAIN)
+    return filenamePrefix[0];
+  if (fileType == FILE_TYPE::ATTACHMENT)
+    return filenamePrefix[1];
+  if (fileType == FILE_TYPE::ORIGINAL)
+    return filenamePrefix[2];
+  return "unsupported";
+}
+
+string CoupledContainer::getBodyTextFilePrefix() {
+  string bodyTextFilePrefix[] = {"Main", "Attach", "Org"};
+  if (fileType == FILE_TYPE::MAIN)
+    return bodyTextFilePrefix[0];
+  if (fileType == FILE_TYPE::ATTACHMENT)
+    return bodyTextFilePrefix[1];
+  if (fileType == FILE_TYPE::ORIGINAL)
+    return bodyTextFilePrefix[2];
+  return "unsupported";
+}
 void CoupledContainer::assembleBackToHTM(const string &file, int attachNo,
                                          const string &title,
                                          const string &displayTitle) {
@@ -34,11 +55,11 @@ void CoupledContainer::assembleBackToHTM(const string &file, int attachNo,
   if (fileType == FILE_TYPE::ATTACHMENT)
     attachmentPart = attachmentFileMiddleChar + TurnToString(attachNo);
 
-  string inputHtmlFile = htmlInputFilePath + getFileNamePrefixFromFileType(fileType) +
-                         file + attachmentPart + HTML_SUFFIX;
-  string inputBodyTextFile = htmlInputFilePath + getFileNamePrefixFromFileType(fileType) +
+  string inputHtmlFile = htmlInputFilePath + getHtmlFileNamePrefix() + file +
+                         attachmentPart + HTML_SUFFIX;
+  string inputBodyTextFile = bodyTextInputFilePath + getBodyTextFilePrefix() +
                              file + attachmentPart + BODY_TEXT_SUFFIX;
-  string outputFile = htmlOutputFilePath + getFileNamePrefixFromFileType(fileType) + file +
+  string outputFile = htmlOutputFilePath + getHtmlFileNamePrefix() + file +
                       attachmentPart + HTML_SUFFIX;
 
   ifstream inHtmlFile(inputHtmlFile);
@@ -173,11 +194,10 @@ void CoupledContainer::dissembleFromHTM(const string &file, int attachNo) {
   if (fileType == FILE_TYPE::ATTACHMENT)
     attachmentPart = attachmentFileMiddleChar + TurnToString(attachNo);
 
-  string inputHtmlFile = htmlInputFilePath + getFileNamePrefixFromFileType(fileType) +
-                         file + attachmentPart + HTML_SUFFIX;
-  string outputBodyTextFile = bodyTextInputFilePath +
-                              getFileNamePrefixFromFileType(fileType) + file +
-                              attachmentPart + BODY_TEXT_SUFFIX;
+  string inputHtmlFile = htmlInputFilePath + getHtmlFileNamePrefix() + file +
+                         attachmentPart + HTML_SUFFIX;
+  string outputBodyTextFile = bodyTextInputFilePath + getBodyTextFilePrefix() +
+                              file + attachmentPart + BODY_TEXT_SUFFIX;
 
   ifstream infile(inputHtmlFile);
   if (!infile) // doesn't exist

@@ -88,20 +88,20 @@ public:
   Link(const Link &) = delete;
   Link &operator=(const Link &) = delete;
   string asString();
-  LINK_TYPE getType() { return type; }
-  bool isTargetToOriginalHtm() { return (type == LINK_TYPE::ORIGINAL); };
+  LINK_TYPE getType() { return m_type; }
+  bool isTargetToOriginalHtm() { return (m_type == LINK_TYPE::ORIGINAL); };
   bool isTargetToOtherMainHtm() {
-    return (type == LINK_TYPE::MAIN and getChapterName() != fromFile);
+    return (m_type == LINK_TYPE::MAIN and getChapterName() != fromFile);
   };
   bool isTargetToOtherAttachmentHtm() {
-    return (type == LINK_TYPE::ATTACHMENT and
+    return (m_type == LINK_TYPE::ATTACHMENT and
             (getChapterName() + attachmentFileMiddleChar +
              TurnToString(attachmentNumber)) != fromFile);
   };
   bool isTargetToSelfHtm() {
-    return ((type == LINK_TYPE::SAMEPAGE) or
-            (type == LINK_TYPE::MAIN and getChapterName() == fromFile) or
-            (type == LINK_TYPE::ATTACHMENT and
+    return ((m_type == LINK_TYPE::SAMEPAGE) or
+            (m_type == LINK_TYPE::MAIN and getChapterName() == fromFile) or
+            (m_type == LINK_TYPE::ATTACHMENT and
              (getChapterName() + attachmentFileMiddleChar +
               TurnToString(attachmentNumber)) == fromFile));
   };
@@ -177,13 +177,13 @@ protected:
   void recordMissingKeyLink();
 
   // utility to convert link type with filename
-  virtual string getFileNamePrefixFromlinkType(LINK_TYPE type) = 0;
-  virtual string getBodyTextFilePrefixFromLinkType(LINK_TYPE type) = 0;
+  virtual string getFileNamePrefix() = 0;
+  virtual string getBodyTextFilePrefix() = 0;
   virtual string getPathOfReferenceFile() const = 0;
   virtual void logLink() = 0;
 
 protected:
-  LINK_TYPE type{LINK_TYPE::MAIN};
+  LINK_TYPE m_type{LINK_TYPE::MAIN};
   LINK_DISPLAY_TYPE displayType{LINK_DISPLAY_TYPE::UNHIDDEN};
   string fromFile{"81"};
   LineNumber fromLine;
@@ -229,17 +229,17 @@ private:
    */
   string getPathOfReferenceFile() const override {
     string result{""};
-    if (type == LINK_TYPE::ATTACHMENT)
+    if (m_type == LINK_TYPE::ATTACHMENT)
       result = attachmentDirForLinkFromMain;
-    if (type == LINK_TYPE::ORIGINAL)
+    if (m_type == LINK_TYPE::ORIGINAL)
       result = originalDirForLinkFromMain;
     return result;
   }
   void logLink();
 
   // utility to convert link type with filename
-  string getFileNamePrefixFromlinkType(LINK_TYPE type);
-  string getBodyTextFilePrefixFromLinkType(LINK_TYPE type);
+  string getFileNamePrefix();
+  string getBodyTextFilePrefix();
 };
 
 static const string mainDirForLinkFromAttachment = R"(..\)";
@@ -271,15 +271,15 @@ private:
    */
   string getPathOfReferenceFile() const override {
     string result{""};
-    if (type == LINK_TYPE::MAIN or annotation == returnToContentTable)
+    if (m_type == LINK_TYPE::MAIN or annotation == returnToContentTable)
       result = mainDirForLinkFromAttachment;
-    if (type == LINK_TYPE::ORIGINAL)
+    if (m_type == LINK_TYPE::ORIGINAL)
       result = originalDirForLinkFromAttachment;
     return result;
   }
   void logLink();
 
   // utility to convert link type with filename
-  string getFileNamePrefixFromlinkType(LINK_TYPE type);
-  string getBodyTextFilePrefixFromLinkType(LINK_TYPE type);
+  string getFileNamePrefix();
+  string getBodyTextFilePrefix();
 };
