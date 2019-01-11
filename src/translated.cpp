@@ -3,20 +3,39 @@
 #include "test.hpp"
 
 int main(int argc, char **argv) {
-  testFunctions();
-
-  //  cout << "refer to readme about how to use this tool." << endl;
-  reformatTxtFilesForReader();
-  numberOriginalHtmls();
-  numberMainHtmls();
-  numberAttachmentHtmls();
-
-  //   hidden paragraph headers
-  numberOriginalHtmls(true);
-  numberMainHtmls(true);
-  numberAttachmentHtmls(true);
-
-  fixLinksFromMain();
-  fixLinksFromAttachment();
+  // change this number to run different functions
+  int num = 0;
+  switch (num) {
+  case 1:
+    testFunctions();
+    break;
+  case 2:
+    numberOriginalHtmls();
+    break;
+  case 3:
+    numberMainHtmls();
+    break;
+  case 4:
+    numberAttachmentHtmls();
+    break;
+  case 5:
+    fixLinksFromMain();
+    break;
+  case 6:
+    fixLinksFromAttachment();
+    break;
+    //   hidden paragraph headers
+  case 7:
+    numberOriginalHtmls(true);
+    break;
+  case 8:
+    numberMainHtmls(true);
+    break;
+  case 9:
+    numberAttachmentHtmls(true);
+    break;
+  default:
+    cout << "nothing gets executed." << endl;
+  }
   return 0;
 }

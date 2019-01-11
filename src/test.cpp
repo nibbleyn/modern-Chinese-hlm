@@ -7,15 +7,37 @@
 int debug = LOG_INFO;
 // int debug = LOG_EXCEPTION;
 
-void testFunctions() {
+void testFunctions(int num) {
   SEPERATE("HLM test", " started ");
-  testSearchTextIsOnlyPartOfOtherKeys();
-  testLineNumber();
-  testLinkOperation();
-  testAttachmentOperations();
-  testContainer();
-  testConstructSubStory();
-  testFindFirstInFiles();
-  testRemovePersonalViewpoints();
-  testConvertToUtf8();
+  switch (num) {
+  case 1:
+    testSearchTextIsOnlyPartOfOtherKeys();
+    break;
+  case 2:
+    testLineNumber();
+    break;
+  case 3:
+    testLinkOperation();
+    break;
+  case 4:
+    testAttachmentOperations();
+    break;
+  case 5:
+    testContainer();
+    break;
+  case 6:
+    testConstructSubStory();
+    break;
+  case 7:
+    testFindFirstInFiles();
+    break;
+  case 8:
+    testRemovePersonalViewpoints();
+    break;
+  case 9:
+    testConvertToUtf8();
+    break;
+  default:
+    cout << "no test executed." << endl;
+  }
 }

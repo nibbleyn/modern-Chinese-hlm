@@ -1,4 +1,4 @@
 #pragma once
 
 // main entry of calling above functions
-void testFunctions();
+void testFunctions(int num = 0);
