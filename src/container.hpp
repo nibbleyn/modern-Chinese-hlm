@@ -15,10 +15,10 @@ public:
   Container() = default;
 
 protected:
-  string htmlInputFilePath{""};
-  string htmlOutputFilePath{""};
-  string bodyTextInputFilePath{""};
-  string bodyTextOutputFilePath{""};
+  string m_htmlInputFilePath{""};
+  string m_htmlOutputFilePath{""};
+  string m_bodyTextInputFilePath{""};
+  string m_bodyTextOutputFilePath{""};
 };
 
 static const string final = R"(</html>)"; // last line of the html file
@@ -31,24 +31,24 @@ class CoupledContainer : public Container {
 
 public:
   CoupledContainer() {
-    htmlInputFilePath = HTML_SRC_MAIN;
-    htmlOutputFilePath = HTML_OUTPUT_MAIN;
-    bodyTextInputFilePath = BODY_TEXT_OUTPUT;
-    bodyTextOutputFilePath = BODY_TEXT_FIX;
+    m_htmlInputFilePath = HTML_SRC_MAIN;
+    m_htmlOutputFilePath = HTML_OUTPUT_MAIN;
+    m_bodyTextInputFilePath = BODY_TEXT_OUTPUT;
+    m_bodyTextOutputFilePath = BODY_TEXT_FIX;
   }
-  CoupledContainer(FILE_TYPE fileType) : fileType(fileType) {
+  CoupledContainer(FILE_TYPE fileType) : m_fileType(fileType) {
     if (fileType == FILE_TYPE::ATTACHMENT) {
-      htmlInputFilePath = HTML_SRC_ATTACHMENT;
-      htmlOutputFilePath = HTML_OUTPUT_ATTACHMENT;
+      m_htmlInputFilePath = HTML_SRC_ATTACHMENT;
+      m_htmlOutputFilePath = HTML_OUTPUT_ATTACHMENT;
     } else if (fileType == FILE_TYPE::ORIGINAL) {
-      htmlInputFilePath = HTML_SRC_ORIGINAL;
-      htmlOutputFilePath = HTML_OUTPUT_ORIGINAL;
+      m_htmlInputFilePath = HTML_SRC_ORIGINAL;
+      m_htmlOutputFilePath = HTML_OUTPUT_ORIGINAL;
     } else {
-      htmlInputFilePath = HTML_SRC_MAIN;
-      htmlOutputFilePath = HTML_OUTPUT_MAIN;
+      m_htmlInputFilePath = HTML_SRC_MAIN;
+      m_htmlOutputFilePath = HTML_OUTPUT_MAIN;
     }
-    bodyTextInputFilePath = BODY_TEXT_OUTPUT;
-    bodyTextOutputFilePath = BODY_TEXT_FIX;
+    m_bodyTextInputFilePath = BODY_TEXT_OUTPUT;
+    m_bodyTextOutputFilePath = BODY_TEXT_FIX;
   }
   void backupAndOverwriteAllInputHtmlFiles();
   void dissembleFromHTM(const string &file, int attachNo = 1);
@@ -57,7 +57,7 @@ public:
                          const string &displayTitle = "");
 
 private:
-  FILE_TYPE fileType{FILE_TYPE::MAIN};
+  FILE_TYPE m_fileType{FILE_TYPE::MAIN};
   string getHtmlFileNamePrefix();
   string getBodyTextFilePrefix();
 };
@@ -70,11 +70,11 @@ static const string BODY_TEXT_CONTAINER = "container/";
 class GenericContainer : public Container {
 public:
   GenericContainer() = default;
-  GenericContainer(const string &filename) : outputFilename(filename) {
-    htmlInputFilePath = HTML_CONTAINER;
-    htmlOutputFilePath = HTML_OUTPUT_MAIN;
-    bodyTextInputFilePath = BODY_TEXT_CONTAINER;
-    bodyTextOutputFilePath = BODY_TEXT_CONTAINER;
+  GenericContainer(const string &filename) : m_outputFilename(filename) {
+    m_htmlInputFilePath = HTML_CONTAINER;
+    m_htmlOutputFilePath = HTML_OUTPUT_MAIN;
+    m_bodyTextInputFilePath = BODY_TEXT_CONTAINER;
+    m_bodyTextOutputFilePath = BODY_TEXT_CONTAINER;
   }
   virtual ~GenericContainer(){};
   virtual string getInputFileName() const = 0;
@@ -83,11 +83,11 @@ public:
   void clearBodyTextFile();
   void appendParagraphInBodyText(const string &text);
   string getOutputFilePath() {
-    return htmlOutputFilePath + outputFilename + HTML_SUFFIX;
+    return m_htmlOutputFilePath + m_outputFilename + HTML_SUFFIX;
   }
 
 protected:
-  string outputFilename{"output"};
+  string m_outputFilename{"output"};
 };
 
 /**

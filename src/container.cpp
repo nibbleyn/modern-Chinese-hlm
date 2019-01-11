@@ -29,22 +29,22 @@ string currentDateTime() {
 
 string CoupledContainer::getHtmlFileNamePrefix() {
   string filenamePrefix[] = {"a0", "b0", "c0"};
-  if (fileType == FILE_TYPE::MAIN)
+  if (m_fileType == FILE_TYPE::MAIN)
     return filenamePrefix[0];
-  if (fileType == FILE_TYPE::ATTACHMENT)
+  if (m_fileType == FILE_TYPE::ATTACHMENT)
     return filenamePrefix[1];
-  if (fileType == FILE_TYPE::ORIGINAL)
+  if (m_fileType == FILE_TYPE::ORIGINAL)
     return filenamePrefix[2];
   return "unsupported";
 }
 
 string CoupledContainer::getBodyTextFilePrefix() {
   string bodyTextFilePrefix[] = {"Main", "Attach", "Org"};
-  if (fileType == FILE_TYPE::MAIN)
+  if (m_fileType == FILE_TYPE::MAIN)
     return bodyTextFilePrefix[0];
-  if (fileType == FILE_TYPE::ATTACHMENT)
+  if (m_fileType == FILE_TYPE::ATTACHMENT)
     return bodyTextFilePrefix[1];
-  if (fileType == FILE_TYPE::ORIGINAL)
+  if (m_fileType == FILE_TYPE::ORIGINAL)
     return bodyTextFilePrefix[2];
   return "unsupported";
 }
@@ -52,14 +52,14 @@ void CoupledContainer::assembleBackToHTM(const string &file, int attachNo,
                                          const string &title,
                                          const string &displayTitle) {
   string attachmentPart{""};
-  if (fileType == FILE_TYPE::ATTACHMENT)
+  if (m_fileType == FILE_TYPE::ATTACHMENT)
     attachmentPart = attachmentFileMiddleChar + TurnToString(attachNo);
 
-  string inputHtmlFile = htmlInputFilePath + getHtmlFileNamePrefix() + file +
+  string inputHtmlFile = m_htmlInputFilePath + getHtmlFileNamePrefix() + file +
                          attachmentPart + HTML_SUFFIX;
-  string inputBodyTextFile = bodyTextInputFilePath + getBodyTextFilePrefix() +
+  string inputBodyTextFile = m_bodyTextInputFilePath + getBodyTextFilePrefix() +
                              file + attachmentPart + BODY_TEXT_SUFFIX;
-  string outputFile = htmlOutputFilePath + getHtmlFileNamePrefix() + file +
+  string outputFile = m_htmlOutputFilePath + getHtmlFileNamePrefix() + file +
                       attachmentPart + HTML_SUFFIX;
 
   ifstream inHtmlFile(inputHtmlFile);
@@ -191,13 +191,14 @@ void CoupledContainer::backupAndOverwriteAllInputHtmlFiles() {
 
 void CoupledContainer::dissembleFromHTM(const string &file, int attachNo) {
   string attachmentPart{""};
-  if (fileType == FILE_TYPE::ATTACHMENT)
+  if (m_fileType == FILE_TYPE::ATTACHMENT)
     attachmentPart = attachmentFileMiddleChar + TurnToString(attachNo);
 
-  string inputHtmlFile = htmlInputFilePath + getHtmlFileNamePrefix() + file +
+  string inputHtmlFile = m_htmlInputFilePath + getHtmlFileNamePrefix() + file +
                          attachmentPart + HTML_SUFFIX;
-  string outputBodyTextFile = bodyTextInputFilePath + getBodyTextFilePrefix() +
-                              file + attachmentPart + BODY_TEXT_SUFFIX;
+  string outputBodyTextFile = m_bodyTextInputFilePath +
+                              getBodyTextFilePrefix() + file + attachmentPart +
+                              BODY_TEXT_SUFFIX;
 
   ifstream infile(inputHtmlFile);
   if (!infile) // doesn't exist
@@ -315,7 +316,7 @@ void assembleAttachments(int minTarget, int maxTarget, int minAttachNo,
  */
 void GenericContainer::clearBodyTextFile() {
   string inputBodyTextFile =
-      bodyTextInputFilePath + getInputFileName() + BODY_TEXT_SUFFIX;
+      m_bodyTextInputFilePath + getInputFileName() + BODY_TEXT_SUFFIX;
   if (debug >= LOG_INFO)
     cout << "clear content in: " << inputBodyTextFile << endl;
   ofstream outfile(inputBodyTextFile);
@@ -328,7 +329,7 @@ void GenericContainer::clearBodyTextFile() {
  */
 void GenericContainer::appendParagraphInBodyText(const string &text) {
   string inputBodyTextFile =
-      bodyTextInputFilePath + getInputFileName() + BODY_TEXT_SUFFIX;
+      m_bodyTextInputFilePath + getInputFileName() + BODY_TEXT_SUFFIX;
   if (debug >= LOG_INFO)
     cout << "append Paragraph In BodyText: " << inputBodyTextFile << endl;
   ofstream outfile;
@@ -339,10 +340,10 @@ void GenericContainer::appendParagraphInBodyText(const string &text) {
 void GenericContainer::assembleBackToHTM(const string &title,
                                          const string &displayTitle) {
 
-  string inputHtmlFile = htmlInputFilePath + getInputFileName() + HTML_SUFFIX;
+  string inputHtmlFile = m_htmlInputFilePath + getInputFileName() + HTML_SUFFIX;
   string inputBodyTextFile =
-      bodyTextInputFilePath + getInputFileName() + BODY_TEXT_SUFFIX;
-  string outputFile = htmlOutputFilePath + outputFilename + HTML_SUFFIX;
+      m_bodyTextInputFilePath + getInputFileName() + BODY_TEXT_SUFFIX;
+  string outputFile = m_htmlOutputFilePath + m_outputFilename + HTML_SUFFIX;
 
   ifstream inHtmlFile(inputHtmlFile);
   if (!inHtmlFile) // doesn't exist
