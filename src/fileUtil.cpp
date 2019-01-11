@@ -9,41 +9,18 @@
  * @return filename prefix of target file
  */
 
-string getFileNamePrefixFromFileType(FILE_TYPE type) {
-  string filenamePrefix[] = {"a0", "b0", "c0"};
-  if (type == FILE_TYPE::MAIN)
-    return filenamePrefix[0];
-  if (type == FILE_TYPE::ATTACHMENT)
-    return filenamePrefix[1];
+string getHtmlFileNamePrefix(FILE_TYPE type) {
   if (type == FILE_TYPE::ORIGINAL)
-    return filenamePrefix[2];
-  return "unsupported";
-}
-
-/**
- * from the type of link to get the filename prefix of bodytext file
- * all main bodytext files are MainXX.txt
- * all attachment bodytext files are AttachXX.txt
- * all original bodytext files are OrgXX.txt
- * never get called for type SAMEPAGE
- * @param type type of file
- * @return filename prefix of bodytext file
- */
-string getBodyTextFilePrefixFromFileType(FILE_TYPE type) {
-  string bodyTextFilePrefix[] = {"Main", "Attach", "Org"};
-  if (type == FILE_TYPE::MAIN)
-    return bodyTextFilePrefix[0];
+    return ORIGINAL_HTML_PREFIX;
   if (type == FILE_TYPE::ATTACHMENT)
-    return bodyTextFilePrefix[1];
-  if (type == FILE_TYPE::ORIGINAL)
-    return bodyTextFilePrefix[2];
-  return "unsupported";
+    return ATTACHMENT_HTML_PREFIX;
+  return MAIN_HTML_PREFIX;
 }
 
 FILE_TYPE getFileTypeFromString(const string &fileType) {
-  if (fileType == "attachment")
+  if (fileType == ATTACHMENT)
     return FILE_TYPE::ATTACHMENT;
-  if (fileType == "original")
+  if (fileType == ORIGINAL)
     return FILE_TYPE::ORIGINAL;
   return FILE_TYPE::MAIN;
 }
@@ -56,12 +33,11 @@ FILE_TYPE getFileTypeFromString(const string &fileType) {
  * @return corresponding color of separator line between paragraphs
  */
 string getSeparateLineColor(FILE_TYPE type) {
-  string bodyTextFilePrefix[] = {"Main", "Attach", "Org"};
   if (type == FILE_TYPE::MAIN)
-    return "F0BEC0";
+    return MAIN_SEPERATOR_COLOR;
   if (type == FILE_TYPE::ATTACHMENT)
-    return "F0BEC0";
+    return MAIN_SEPERATOR_COLOR;
   if (type == FILE_TYPE::ORIGINAL)
-    return "004040";
+    return ORIGINAL_SEPERATOR_COLOR;
   return "unsupported";
 }

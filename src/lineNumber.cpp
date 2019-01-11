@@ -51,6 +51,18 @@ string LineNumber::generateLinePrefix() {
   return result;
 }
 
+bool LineNumber::isWithinLineRange(int minPara, int maxPara, int minLine,
+                                   int maxLine) {
+  bool biggerThanMin = true;
+  bool lessThanMax = true;
+  // only support para now
+  if (minPara != 0)
+    biggerThanMin = m_paraNumber >= minPara; // inclusive
+  if (maxPara != 0)
+    lessThanMax = m_paraNumber <= maxPara; // inclusive
+  return (biggerThanMin and lessThanMax);
+}
+
 /**
  * read from a string of format "PxxLyy"
  * and assign xx to paraNumber

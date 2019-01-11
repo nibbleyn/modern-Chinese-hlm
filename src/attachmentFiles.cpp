@@ -11,7 +11,7 @@ static const string titleEnd = R"(</title>)";
  */
 AttachmentNumber getAttachmentNumber(const string &filename) {
   AttachmentNumber num(0, 0);
-  string start = getFileNamePrefixFromFileType(FILE_TYPE::ATTACHMENT);
+  string start = getHtmlFileNamePrefix(FILE_TYPE::ATTACHMENT);
   auto fileBegin = filename.find(start);
   if (fileBegin == string::npos) // referred file not found
   {
@@ -81,8 +81,8 @@ vector<int> getAttachmentFileListForChapter(const string &referFile,
   vector<int> attList;
   Poco::File(fromDir).list(filenameList);
   for (const auto &file : filenameList) {
-    if (file.find(getFileNamePrefixFromFileType(FILE_TYPE::ATTACHMENT) +
-                  referFile) != string::npos) {
+    if (file.find(getHtmlFileNamePrefix(FILE_TYPE::ATTACHMENT) + referFile) !=
+        string::npos) {
       string start = attachmentFileMiddleChar;
       auto keyBegin = file.find(start);
       auto keyEnd = file.find(".");

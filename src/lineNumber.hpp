@@ -2,6 +2,7 @@
 #include "utf8StringUtil.hpp"
 
 static const int START_PARA_NUMBER = 90;
+
 class LineNumber {
   static const string UnhiddenLineNumberStart;
   static const string HiddenLineNumberStart;
@@ -52,16 +53,7 @@ public:
     return result;
   }
   bool isWithinLineRange(int minPara = 0, int maxPara = 0, int minLine = 0,
-                         int maxLine = 0) {
-    bool biggerThanMin = true;
-    bool lessThanMax = true;
-    // only support para now
-    if (minPara != 0)
-      biggerThanMin = m_paraNumber >= minPara; // inclusive
-    if (maxPara != 0)
-      lessThanMax = m_paraNumber <= maxPara; // inclusive
-    return (biggerThanMin and lessThanMax);
-  }
+                         int maxLine = 0);
   bool equal(LineNumber &ln) {
     return (m_lineNumber == ln.getlineNumber() and
             m_paraNumber == ln.getParaNumber());
@@ -75,6 +67,3 @@ private:
   int m_paraNumber{0};
   int m_lineNumber{0};
 };
-
-string replacePart(string &linkString, const string &key,
-                   const string &toReplace);

@@ -15,7 +15,21 @@ extern int debug;
 
 enum class FILE_TYPE { MAIN, ATTACHMENT, ORIGINAL };
 
-string getFileNamePrefixFromFileType(FILE_TYPE type);
-string getBodyTextFilePrefixFromFileType(FILE_TYPE type);
+static const string MAIN_HTML_PREFIX = "a0";
+static const string ORIGINAL_HTML_PREFIX = "c0";
+static const string ATTACHMENT_HTML_PREFIX = "b0";
+
+static const string MAIN_BODYTEXT_PREFIX = "Main";
+static const string ORIGINAL_BODYTEXT_PREFIX = "Org";
+static const string ATTACHMENT_BODYTEXT_PREFIX = "Attach";
+
+static const string MAIN = "main";
+static const string ORIGINAL = "original";
+static const string ATTACHMENT = "attachment";
+
+static const string MAIN_SEPERATOR_COLOR = "F0BEC0";
+static const string ORIGINAL_SEPERATOR_COLOR = "004040";
+
+string getHtmlFileNamePrefix(FILE_TYPE type);
 string getSeparateLineColor(FILE_TYPE type);
 FILE_TYPE getFileTypeFromString(const string &fileType);

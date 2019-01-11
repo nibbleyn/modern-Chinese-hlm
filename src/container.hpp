@@ -10,6 +10,9 @@ static const string HTML_OUTPUT_MAIN = "utf8HTML/output/";
 static const string HTML_OUTPUT_ATTACHMENT = "utf8HTML/output/attachment/";
 static const string HTML_OUTPUT_ORIGINAL = "utf8HTML/output/original/";
 
+static const string LIST_CONTAINER_FILENAME = "1";
+static const string TABLE_CONTAINER_FILENAME = "2";
+
 class Container {
 public:
   Container() = default;
@@ -58,7 +61,6 @@ public:
 
 private:
   FILE_TYPE m_fileType{FILE_TYPE::MAIN};
-  string getHtmlFileNamePrefix();
   string getBodyTextFilePrefix();
 };
 
@@ -99,7 +101,7 @@ public:
   ListContainer(const string &filename) : GenericContainer(filename) {}
 
 private:
-  string getInputFileName() const override { return "1"; }
+  string getInputFileName() const override { return LIST_CONTAINER_FILENAME; }
 };
 
 /**
@@ -110,7 +112,7 @@ public:
   TableContainer() = default;
 
 private:
-  string getInputFileName() const override { return "2"; }
+  string getInputFileName() const override { return TABLE_CONTAINER_FILENAME; }
 };
 
 void dissembleAttachments(int minTarget, int maxTarget, int minAttachNo,

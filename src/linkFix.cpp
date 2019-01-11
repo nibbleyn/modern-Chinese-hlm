@@ -19,8 +19,7 @@ void displayMainFilesOfMissingKey() {
     return;
   cout << "files which has missing key links:" << endl;
   for (const auto &file : keyMissingChapters) {
-    cout << getFileNamePrefixFromFileType(FILE_TYPE::MAIN) + file + ".htm"
-         << endl;
+    cout << getHtmlFileNamePrefix(FILE_TYPE::MAIN) + file + ".htm" << endl;
   }
 }
 
@@ -80,7 +79,7 @@ void fixReturnLinkForAttachmentFile(const string &referFile,
       if (not link.empty()) {
         LinkFromAttachment lfm(referFile, link);
         auto num = getAttachmentNumber(
-            getFileNamePrefixFromFileType(FILE_TYPE::ATTACHMENT) + referFile);
+            getHtmlFileNamePrefix(FILE_TYPE::ATTACHMENT) + referFile);
         // special hack to make sure using a0... as return file name
         lfm.setTypeThruFileNamePrefix("main"); // must return to main html
         lfm.fixReferFile(num.first);
@@ -127,13 +126,12 @@ void fixReturnLinkForAttachments(int minTarget, int maxTarget) {
         getAttachmentFileListForChapter(file, HTML_SRC_ATTACHMENT);
     for (const auto &attNo : targetAttachments) {
       string inputHtmlFile =
-          HTML_SRC_ATTACHMENT +
-          getFileNamePrefixFromFileType(FILE_TYPE::ATTACHMENT) + file +
-          attachmentFileMiddleChar + TurnToString(attNo) + HTML_SUFFIX;
+          HTML_SRC_ATTACHMENT + getHtmlFileNamePrefix(FILE_TYPE::ATTACHMENT) +
+          file + attachmentFileMiddleChar + TurnToString(attNo) + HTML_SUFFIX;
       string outputFile = HTML_OUTPUT_ATTACHMENT +
-                          getFileNamePrefixFromFileType(FILE_TYPE::ATTACHMENT) +
-                          file + attachmentFileMiddleChar +
-                          TurnToString(attNo) + HTML_SUFFIX;
+                          getHtmlFileNamePrefix(FILE_TYPE::ATTACHMENT) + file +
+                          attachmentFileMiddleChar + TurnToString(attNo) +
+                          HTML_SUFFIX;
       fixReturnLinkForAttachmentFile(file + attachmentFileMiddleChar +
                                          TurnToString(attNo),
                                      inputHtmlFile, outputFile);

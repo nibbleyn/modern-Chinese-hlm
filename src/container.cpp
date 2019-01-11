@@ -27,27 +27,23 @@ string currentDateTime() {
   return ss_msg.str();
 }
 
-string CoupledContainer::getHtmlFileNamePrefix() {
-  string filenamePrefix[] = {"a0", "b0", "c0"};
-  if (m_fileType == FILE_TYPE::MAIN)
-    return filenamePrefix[0];
-  if (m_fileType == FILE_TYPE::ATTACHMENT)
-    return filenamePrefix[1];
+/**
+ * from the type of link to get the filename prefix of bodytext file
+ * all main bodytext files are MainXX.txt
+ * all attachment bodytext files are AttachXX.txt
+ * all original bodytext files are OrgXX.txt
+ * never get called for type SAMEPAGE
+ * @param type type of file
+ * @return filename prefix of bodytext file
+ */
+string CoupledContainer::getBodyTextFilePrefix() {
   if (m_fileType == FILE_TYPE::ORIGINAL)
-    return filenamePrefix[2];
-  return "unsupported";
+    return ORIGINAL_BODYTEXT_PREFIX;
+  if (m_fileType == FILE_TYPE::ATTACHMENT)
+    return ATTACHMENT_BODYTEXT_PREFIX;
+  return MAIN_BODYTEXT_PREFIX;
 }
 
-string CoupledContainer::getBodyTextFilePrefix() {
-  string bodyTextFilePrefix[] = {"Main", "Attach", "Org"};
-  if (m_fileType == FILE_TYPE::MAIN)
-    return bodyTextFilePrefix[0];
-  if (m_fileType == FILE_TYPE::ATTACHMENT)
-    return bodyTextFilePrefix[1];
-  if (m_fileType == FILE_TYPE::ORIGINAL)
-    return bodyTextFilePrefix[2];
-  return "unsupported";
-}
 void CoupledContainer::assembleBackToHTM(const string &file, int attachNo,
                                          const string &title,
                                          const string &displayTitle) {
@@ -55,12 +51,13 @@ void CoupledContainer::assembleBackToHTM(const string &file, int attachNo,
   if (m_fileType == FILE_TYPE::ATTACHMENT)
     attachmentPart = attachmentFileMiddleChar + TurnToString(attachNo);
 
-  string inputHtmlFile = m_htmlInputFilePath + getHtmlFileNamePrefix() + file +
+  string inputHtmlFile = m_htmlInputFilePath +
+                         getHtmlFileNamePrefix(m_fileType) + file +
                          attachmentPart + HTML_SUFFIX;
   string inputBodyTextFile = m_bodyTextInputFilePath + getBodyTextFilePrefix() +
                              file + attachmentPart + BODY_TEXT_SUFFIX;
-  string outputFile = m_htmlOutputFilePath + getHtmlFileNamePrefix() + file +
-                      attachmentPart + HTML_SUFFIX;
+  string outputFile = m_htmlOutputFilePath + getHtmlFileNamePrefix(m_fileType) +
+                      file + attachmentPart + HTML_SUFFIX;
 
   ifstream inHtmlFile(inputHtmlFile);
   if (!inHtmlFile) // doesn't exist
@@ -194,7 +191,8 @@ void CoupledContainer::dissembleFromHTM(const string &file, int attachNo) {
   if (m_fileType == FILE_TYPE::ATTACHMENT)
     attachmentPart = attachmentFileMiddleChar + TurnToString(attachNo);
 
-  string inputHtmlFile = m_htmlInputFilePath + getHtmlFileNamePrefix() + file +
+  string inputHtmlFile = m_htmlInputFilePath +
+                         getHtmlFileNamePrefix(m_fileType) + file +
                          attachmentPart + HTML_SUFFIX;
   string outputBodyTextFile = m_bodyTextInputFilePath +
                               getBodyTextFilePrefix() + file + attachmentPart +

@@ -174,8 +174,11 @@ protected:
   void recordMissingKeyLink();
 
   // utility to convert link type with filename
-  virtual string getFileNamePrefix() = 0;
+  // samepage link would refer to different file prefix
+  virtual string getHtmlFileNamePrefix() = 0;
   virtual string getBodyTextFilePrefix() = 0;
+
+  // main and attachment html files are in different directories
   virtual string getPathOfReferenceFile() const = 0;
   virtual void logLink() = 0;
 
@@ -216,7 +219,7 @@ private:
   void logLink();
 
   // utility to convert link type with filename
-  string getFileNamePrefix();
+  string getHtmlFileNamePrefix();
   string getBodyTextFilePrefix();
 };
 
@@ -238,7 +241,7 @@ private:
   void logLink();
 
   // utility to convert link type with filename
-  string getFileNamePrefix();
+  string getHtmlFileNamePrefix();
   string getBodyTextFilePrefix();
 };
 
