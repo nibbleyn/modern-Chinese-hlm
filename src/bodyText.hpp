@@ -16,17 +16,7 @@ public:
    * BODY_TEXT_OUTPUT currently is only to output, no backup would be done for
    * it
    */
-  static void loadBodyTextsFromFixBackToOutput() {
-    vector<string> filenameList;
-    Poco::File(BODY_TEXT_FIX).list(filenameList);
-    sort(filenameList.begin(), filenameList.end(), less<string>());
-    for (const auto &file : filenameList) {
-      if (debug >= LOG_INFO)
-        cout << "loading " << file << ".. " << endl;
-      Poco::File fileToCopy(BODY_TEXT_FIX + file);
-      fileToCopy.copyTo(BODY_TEXT_OUTPUT + file);
-    }
-  }
+  static void loadBodyTextsFromFixBackToOutput();
 
   void setFilePrefixFromFileType(FILE_TYPE type);
   void setFileAndAttachmentNumber(const string &file, int attachNo = 0) {

@@ -4,7 +4,7 @@
 
 int main(int argc, char **argv) {
   // change this number to run different functions
-  int num = 0;
+  int num = 10;
   switch (num) {
   case 1:
     testFunctions();
@@ -33,6 +33,9 @@ int main(int argc, char **argv) {
     break;
   case 9:
     numberAttachmentHtmls(true);
+    break;
+  case 10:
+    generateContentIndexTableForAttachments();
     break;
   default:
     cout << "nothing gets executed." << endl;

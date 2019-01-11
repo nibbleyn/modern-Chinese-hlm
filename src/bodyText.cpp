@@ -37,6 +37,18 @@ bool isOnlyPartOfOtherKeys(const string &orgLine, const string &key) {
   return true;
 }
 
+void BodyText::loadBodyTextsFromFixBackToOutput() {
+  vector<string> filenameList;
+  Poco::File(BODY_TEXT_FIX).list(filenameList);
+  sort(filenameList.begin(), filenameList.end(), less<string>());
+  for (const auto &file : filenameList) {
+    if (debug >= LOG_INFO)
+      cout << "loading " << file << ".. " << endl;
+    Poco::File fileToCopy(BODY_TEXT_FIX + file);
+    fileToCopy.copyTo(BODY_TEXT_OUTPUT + file);
+  }
+}
+
 void BodyText::setFilePrefixFromFileType(FILE_TYPE type) {
   string bodyTextFilePrefix[] = {"Main", "Attach", "Org"};
   if (type == FILE_TYPE::MAIN)

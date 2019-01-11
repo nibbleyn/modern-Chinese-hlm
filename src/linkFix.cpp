@@ -156,7 +156,7 @@ void fixReturnLinkForAttachments(int minTarget, int maxTarget) {
 void fixMainHtml(int minTarget, int maxTarget, int minReference,
                  int maxReference) {
   CoupledContainer container(FILE_TYPE::MAIN);
-  container.backupAndOverwriteAllInputHtmlFiles();
+  CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     container.setFileAndAttachmentNumber(file);
     container.dissembleFromHTM();
@@ -183,6 +183,24 @@ void fixLinksFromMain() {
   displayMainFilesOfMissingKey();
   displayNewlyAddedAttachments();
   cout << "fixLinksFromMain finished. " << endl;
+}
+
+void generateContentIndexTableForAttachments() {
+  LinkFromMain::loadReferenceAttachmentList();
+  ListContainer container("bindex1.htm");
+  container.clearBodyTextFile();
+  auto table = Link::refAttachmentTable;
+  for (const auto &attachment : table) {
+    auto attachmentName = attachment.first;
+    auto entry = attachment.second.second;
+    ATTACHMENT_TYPE attachmentType = GetTupleElement(entry, 2);
+    if (attachmentType == ATTACHMENT_TYPE::PERSONAL)
+      container.appendParagraphInBodyText(TurnToString(attachmentName.first) +
+                                          "_" +
+                                          TurnToString(attachmentName.second) +
+                                          ": " + GetTupleElement(entry, 1));
+  }
+  container.assembleBackToHTM("personal attachments", "personal attachments");
 }
 
 /**
@@ -230,7 +248,7 @@ void fixLinksToMainForAttachments(int minTarget, int maxTarget,
 void fixAttachments(int minTarget, int maxTarget, int minReference,
                     int maxReference, int minAttachNo, int maxAttachNo) {
   CoupledContainer container(FILE_TYPE::ATTACHMENT);
-  container.backupAndOverwriteAllInputHtmlFiles();
+  CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
   dissembleAttachments(minTarget, maxTarget, minAttachNo,
                        maxAttachNo); // dissemble html to bodytext
   fixLinksToMainForAttachments(minTarget, maxTarget, minReference, maxReference,

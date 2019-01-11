@@ -23,7 +23,7 @@ void addLineNumbers(int minTarget, int maxTarget, FILE_TYPE targetFileType,
  */
 void NumberingOriginalHtml(int minTarget, int maxTarget, bool hidden = false) {
   CoupledContainer container(FILE_TYPE::ORIGINAL);
-  container.backupAndOverwriteAllInputHtmlFiles();
+  CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     container.setFileAndAttachmentNumber(file);
     container.dissembleFromHTM();
@@ -45,7 +45,7 @@ void NumberingOriginalHtml(int minTarget, int maxTarget, bool hidden = false) {
  */
 void NumberingMainHtml(int minTarget, int maxTarget, bool hidden = false) {
   CoupledContainer container(FILE_TYPE::MAIN);
-  container.backupAndOverwriteAllInputHtmlFiles();
+  CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     container.setFileAndAttachmentNumber(file);
     container.dissembleFromHTM();
@@ -106,7 +106,7 @@ void addLineNumbersForAttachmentHtml(int minTarget, int maxTarget,
 void NumberingAttachmentHtml(int minTarget, int maxTarget, int minAttachNo,
                              int maxAttachNo, bool hidden = false) {
   CoupledContainer container(FILE_TYPE::ATTACHMENT);
-  container.backupAndOverwriteAllInputHtmlFiles();
+  CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
   dissembleAttachments(minTarget, maxTarget, minAttachNo,
                        maxAttachNo); // dissemble html to bodytext
   addLineNumbersForAttachmentHtml(
