@@ -362,22 +362,22 @@ string Link::asString() {
   string part0 = linkStartChars + " " + displayPropertyAsString() + " " +
                  referFileMiddleChar;
   string part1{""}, part2{""}, part3{""};
-  if (annotation == returnToContentTable) // type would be SAMEPAGE
+  if (m_annotation == returnToContentTable) // type would be SAMEPAGE
   {
     part1 = getPathOfReferenceFile() + contentTableFilename;
   } else if (m_type != LINK_TYPE::SAMEPAGE) {
     part1 = getPathOfReferenceFile() + getFileNamePrefix() + getChapterName();
-    if (attachmentNumber != 0)
-      part2 = attachmentFileMiddleChar + TurnToString(attachmentNumber);
+    if (m_attachmentNumber != 0)
+      part2 = attachmentFileMiddleChar + TurnToString(m_attachmentNumber);
     part3 = HTML_SUFFIX;
   }
   string part4{""};
-  if (m_type != LINK_TYPE::ATTACHMENT or referPara != invalidLineNumber) {
-    if (annotation != returnToContentTable)
-      part4 = referParaMiddleChar + referPara;
+  if (m_type != LINK_TYPE::ATTACHMENT or m_referPara != invalidLineNumber) {
+    if (m_annotation != returnToContentTable)
+      part4 = referParaMiddleChar + m_referPara;
   }
   string part5 = referParaEndChar, part6{""}, part7{""};
-  if (m_type != LINK_TYPE::ATTACHMENT and not usedKey.empty()) {
+  if (m_type != LINK_TYPE::ATTACHMENT and not m_usedKey.empty()) {
     part6 = keyStartChars + getKey() + keyEndChars;
     // easier to replace to <b unhidden> if want to display this
     if (m_type == LINK_TYPE::MAIN)
@@ -400,13 +400,13 @@ void Link::readDisplayType(const string &linkString) {
   // remove space in the linkString
   copy.erase(remove(copy.begin(), copy.end(), ' '), copy.end());
   if (copy.find("aunhiddenhref") != string::npos) {
-    displayType = LINK_DISPLAY_TYPE::UNHIDDEN;
+    m_displayType = LINK_DISPLAY_TYPE::UNHIDDEN;
   }
   if (copy.find("ahref") != string::npos) {
-    displayType = LINK_DISPLAY_TYPE::DIRECT;
+    m_displayType = LINK_DISPLAY_TYPE::DIRECT;
   }
   if (copy.find("ahiddenhref") != string::npos) {
-    displayType = LINK_DISPLAY_TYPE::HIDDEN;
+    m_displayType = LINK_DISPLAY_TYPE::HIDDEN;
   }
   if (debug >= LOG_INFO)
     cout << "display Type:" << displayPropertyAsString() << endl;
@@ -461,9 +461,9 @@ void Link::readReferPara(const string &linkString) {
                                        linkString.length() - processStart);
   string end = referParaEndChar;
   auto processEnd = afterLink.find(end);
-  referPara = afterLink.substr(0, processEnd);
+  m_referPara = afterLink.substr(0, processEnd);
   if (debug >= LOG_INFO)
-    cout << "referPara: " << referPara << endl;
+    cout << "referPara: " << m_referPara << endl;
 }
 
 /**
@@ -487,7 +487,7 @@ bool Link::readAnnotation(const string &linkString) {
       return false;
     } else {
       // type would be ignored in this case
-      annotation = returnToContentTable;
+      m_annotation = returnToContentTable;
       return true;
     }
   }
@@ -510,11 +510,11 @@ bool Link::readAnnotation(const string &linkString) {
           start, commentStart - commentBeginChars.length());
     }
   }
-  annotation =
+  m_annotation =
       afterLink.substr(afterLinkBegin + start.length(),
                        afterLink.length() - afterLinkBegin - start.length());
   if (debug >= LOG_INFO)
-    cout << "annotation: " << annotation << endl;
+    cout << "annotation: " << m_annotation << endl;
   return true;
 }
 
@@ -550,13 +550,13 @@ void Link::readKey(const string &linkString) {
     // not a link to top/bottom and no key was found, add a "KeyNotFound" key
     // and return
     if (m_type != LINK_TYPE::ATTACHMENT and
-        referPara != topParagraphIndicator and
-        referPara != bottomParagraphIndicator) {
-      needChange = true;
-      usedKey = keyNotFound;
+        m_referPara != topParagraphIndicator and
+        m_referPara != bottomParagraphIndicator) {
+      m_needChange = true;
+      m_usedKey = keyNotFound;
     }
     if (debug >= LOG_EXCEPTION and m_type != LINK_TYPE::ATTACHMENT) {
-      string output = usedKey.empty() ? "EMPTY" : usedKey;
+      string output = m_usedKey.empty() ? "EMPTY" : m_usedKey;
       cout << "key string not found, so use key: " << output << endl;
     }
     return;
@@ -567,30 +567,30 @@ void Link::readKey(const string &linkString) {
   if (stringForSearch.find(keyNotFound) !=
       string::npos) // still need manual change to a search-able key
   {
-    needChange = false;
-    usedKey = stringForSearch;
+    m_needChange = false;
+    m_usedKey = stringForSearch;
     return;
   }
   BodyText bodyText(getBodyTextFilePrefix());
   bodyText.resetBeforeSearch();
   // special hack to ignore itself
   if (m_type == LINK_TYPE::SAMEPAGE) {
-    bodyText.addIgnoreLines(fromLine.asString());
+    bodyText.addIgnoreLines(m_fromLine.asString());
   }
-  bodyText.setFileAndAttachmentNumber(getChapterName(), attachmentNumber);
+  bodyText.setFileAndAttachmentNumber(getChapterName(), m_attachmentNumber);
   bool found = bodyText.findKey(stringForSearch);
   if (not found) {
-    usedKey = keyNotFound + " " + stringForSearch;
+    m_usedKey = keyNotFound + " " + stringForSearch;
     fixReferPara(changeKey); // will set needChange if found line is different
   } else {
-    usedKey = stringForSearch;
+    m_usedKey = stringForSearch;
     // only use the first line found
     string lineNumber = bodyText.getFirstResultLine();
     if (debug >= LOG_INFO)
       cout << "line number found: " << lineNumber << endl;
     LineNumber ln(lineNumber);
     string expectedSection =
-        citationChapterNo + TurnToString(chapterNumber) + citationChapter +
+        citationChapterNo + TurnToString(m_chapterNumber) + citationChapter +
         TurnToString(ln.getParaNumber()) + citationChapterParaSeparator +
         TurnToString(ln.getlineNumber()) + citationPara;
     fixReferPara(
@@ -598,13 +598,13 @@ void Link::readKey(const string &linkString) {
     fixReferSection(expectedSection);
   }
   if (debug >= LOG_INFO)
-    cout << "key: " << usedKey << endl;
+    cout << "key: " << m_usedKey << endl;
 }
 
 /**
  * record this file as one who has links of wrong/un-found key
  */
-void Link::recordMissingKeyLink() { keyMissingChapters.insert(fromFile); }
+void Link::recordMissingKeyLink() { keyMissingChapters.insert(m_fromFile); }
 
 /**
  * check whether the annotation of a link to attachment
@@ -712,15 +712,15 @@ void LinkFromMain::outPutStatisticsToFiles() {
  */
 void LinkFromMain::generateLinkToOrigin() {
   if (debug >= LOG_INFO)
-    cout << "create link to original main html thru key: " << usedKey << endl;
+    cout << "create link to original main html thru key: " << m_usedKey << endl;
   auto reservedType = m_type;   // only LINK_TYPE::MAIN has origin member
   m_type = LINK_TYPE::ORIGINAL; // temporarily change type to get right path
-  string to = fixLinkFromOriginalTemplate(getPathOfReferenceFile(),
-                                          getChapterName(), usedKey, referPara);
-  linkToOrigin = std::make_unique<LinkFromMain>(fromFile, to);
-  linkToOrigin->readReferFileName(to);
-  linkToOrigin->fixFromString(to);
-  needChange = true;
+  string to = fixLinkFromOriginalTemplate(
+      getPathOfReferenceFile(), getChapterName(), m_usedKey, m_referPara);
+  m_linkPtrToOrigin = std::make_unique<LinkFromMain>(m_fromFile, to);
+  m_linkPtrToOrigin->readReferFileName(to);
+  m_linkPtrToOrigin->fixFromString(to);
+  m_needChange = true;
   m_type = reservedType;
 }
 
@@ -738,7 +738,7 @@ void LinkFromMain::generateLinkToOrigin() {
  */
 bool LinkFromMain::readReferFileName(const string &link) {
   string linkString = link;
-  string refereFileName = fromFile;
+  string refereFileName = m_fromFile;
   if (m_type != LINK_TYPE::SAMEPAGE) {
     // remove space in the input linkString
     linkString.erase(remove(linkString.begin(), linkString.end(), ' '),
@@ -781,15 +781,16 @@ bool LinkFromMain::readReferFileName(const string &link) {
            << refereFileName.substr(0, attachmentNumberStart)
            << ", attachmentNumber: "
            << refereFileName.substr(attachmentNumberStart + 1) << endl;
-    attachmentNumber =
+    m_attachmentNumber =
         TurnToInt(refereFileName.substr(attachmentNumberStart + 1));
-    chapterNumber = TurnToInt(refereFileName.substr(0, attachmentNumberStart));
+    m_chapterNumber =
+        TurnToInt(refereFileName.substr(0, attachmentNumberStart));
   } else {
-    chapterNumber = TurnToInt(refereFileName);
+    m_chapterNumber = TurnToInt(refereFileName);
   }
   if (debug >= LOG_INFO)
-    cout << "chapterNumber: " << chapterNumber
-         << ", attachmentNumber: " << attachmentNumber << endl;
+    cout << "chapterNumber: " << m_chapterNumber
+         << ", attachmentNumber: " << m_attachmentNumber << endl;
   return true;
 }
 
@@ -800,21 +801,23 @@ bool LinkFromMain::readReferFileName(const string &link) {
 void LinkFromMain::logLink() {
 
   if (isTargetToOtherMainHtm()) {
-    LinkDetails detail{usedKey, fromFile, fromLine.asString(), asString()};
+    LinkDetails detail{m_usedKey, m_fromFile, m_fromLine.asString(),
+                       asString()};
     try {
-      auto &entry = linksTable.at(std::make_pair(getChapterName(), referPara));
+      auto &entry =
+          linksTable.at(std::make_pair(getChapterName(), m_referPara));
       entry.push_back(detail);
       if (debug >= LOG_INFO)
         cout << "entry.size: " << entry.size()
              << " more reference to link: " << getChapterName() << " "
-             << referPara << " " << usedKey << endl;
+             << m_referPara << " " << m_usedKey << endl;
     } catch (exception &) {
       if (debug >= LOG_INFO)
-        cout << "create vector for : " << getChapterName() << " " << referPara
+        cout << "create vector for : " << getChapterName() << " " << m_referPara
              << endl;
       vector<LinkDetails> list;
       list.push_back(detail);
-      linksTable[std::make_pair(getChapterName(), referPara)] = list;
+      linksTable[std::make_pair(getChapterName(), m_referPara)] = list;
     }
   }
   if (isTargetToOtherAttachmentHtm()) {
@@ -828,13 +831,13 @@ void LinkFromMain::logLink() {
       if (type == ATTACHMENT_TYPE::NON_EXISTED)
         newAttachmentList.insert(targetFile);
       attachmentTable[num] = make_pair(
-          fromLine.asString(), make_tuple(targetFile, title,
-                                          (type == ATTACHMENT_TYPE::PERSONAL)
-                                              ? ATTACHMENT_TYPE::PERSONAL
-                                              : ATTACHMENT_TYPE::REFERENCE));
+          m_fromLine.asString(), make_tuple(targetFile, title,
+                                            (type == ATTACHMENT_TYPE::PERSONAL)
+                                                ? ATTACHMENT_TYPE::PERSONAL
+                                                : ATTACHMENT_TYPE::REFERENCE));
     }
     if (not isAnnotationMatch(getAnnotation(), title)) {
-      cout << fromFile << " has a link to " << targetFile
+      cout << m_fromFile << " has a link to " << targetFile
            << " with annotation: " << getAnnotation()
            << " differs from title: " << title << endl;
     }
@@ -910,15 +913,15 @@ void LinkFromAttachment::outPutStatisticsToFiles() {
  */
 void LinkFromAttachment::generateLinkToOrigin() {
   if (debug >= LOG_INFO)
-    cout << "create link to original main html thru key: " << usedKey << endl;
+    cout << "create link to original main html thru key: " << m_usedKey << endl;
   auto reservedType = m_type;
   m_type = LINK_TYPE::ORIGINAL; // temporarily change type to get right path
-  string to = fixLinkFromOriginalTemplate(getPathOfReferenceFile(),
-                                          getChapterName(), usedKey, referPara);
-  linkToOrigin = std::make_unique<LinkFromAttachment>(fromFile, to);
-  linkToOrigin->readReferFileName(to);
-  linkToOrigin->fixFromString(to);
-  needChange = true;
+  string to = fixLinkFromOriginalTemplate(
+      getPathOfReferenceFile(), getChapterName(), m_usedKey, m_referPara);
+  m_linkPtrToOrigin = std::make_unique<LinkFromAttachment>(m_fromFile, to);
+  m_linkPtrToOrigin->readReferFileName(to);
+  m_linkPtrToOrigin->fixFromString(to);
+  m_needChange = true;
   m_type = reservedType;
 }
 
@@ -939,7 +942,7 @@ void LinkFromAttachment::generateLinkToOrigin() {
  */
 bool LinkFromAttachment::readReferFileName(const string &link) {
   string linkString = link;
-  string refereFileName = fromFile;
+  string refereFileName = m_fromFile;
   if (m_type != LINK_TYPE::SAMEPAGE) {
     // remove space in the input linkString
     linkString.erase(remove(linkString.begin(), linkString.end(), ' '),
@@ -983,15 +986,16 @@ bool LinkFromAttachment::readReferFileName(const string &link) {
            << ", attachmentNumber: "
            << refereFileName.substr(attachmentNumberStart + 1) << endl;
 
-    attachmentNumber =
+    m_attachmentNumber =
         TurnToInt(refereFileName.substr(attachmentNumberStart + 1));
-    chapterNumber = TurnToInt(refereFileName.substr(0, attachmentNumberStart));
+    m_chapterNumber =
+        TurnToInt(refereFileName.substr(0, attachmentNumberStart));
   } else {
-    chapterNumber = TurnToInt(refereFileName);
+    m_chapterNumber = TurnToInt(refereFileName);
   }
   if (debug >= LOG_INFO)
-    cout << "chapterNumber: " << chapterNumber
-         << ", attachmentNumber: " << attachmentNumber << endl;
+    cout << "chapterNumber: " << m_chapterNumber
+         << ", attachmentNumber: " << m_attachmentNumber << endl;
   return true;
 }
 
@@ -1001,24 +1005,25 @@ bool LinkFromAttachment::readReferFileName(const string &link) {
  */
 void LinkFromAttachment::logLink() {
   if (isTargetToOtherMainHtm()) {
-    LinkDetails detail{usedKey, fromFile, fromLine.asString(), asString()};
+    LinkDetails detail{m_usedKey, m_fromFile, m_fromLine.asString(),
+                       asString()};
     try {
       auto &entry = linksTable.at(
           std::make_pair(getChapterName() + attachmentFileMiddleChar +
-                             TurnToString(attachmentNumber),
-                         referPara));
+                             TurnToString(m_attachmentNumber),
+                         m_referPara));
       entry.push_back(detail);
     } catch (exception &) {
       if (debug >= LOG_EXCEPTION)
         cout << "not found link for: "
              << getChapterName() + attachmentFileMiddleChar +
-                    TurnToString(attachmentNumber)
-             << " " << referPara << " " << usedKey << endl;
+                    TurnToString(m_attachmentNumber)
+             << " " << m_referPara << " " << m_usedKey << endl;
       vector<LinkDetails> list;
       list.push_back(detail);
       linksTable[std::make_pair(getChapterName() + attachmentFileMiddleChar +
-                                    TurnToString(attachmentNumber),
-                                referPara)] = list;
+                                    TurnToString(m_attachmentNumber),
+                                m_referPara)] = list;
     }
   }
 }

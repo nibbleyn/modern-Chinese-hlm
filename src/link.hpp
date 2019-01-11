@@ -71,7 +71,8 @@ public:
 public:
   Link() = default;
   // the first shallow step of construction
-  Link(const string &fromFile, const string &linkString) : fromFile(fromFile) {
+  Link(const string &fromFile, const string &linkString)
+      : m_fromFile(fromFile) {
     readTypeAndAnnotation(linkString);
   }
   // the second step to read target file name
@@ -81,8 +82,8 @@ public:
     readDisplayType(linkString);
     readReferPara(linkString);
     // no need for key for these links
-    if (annotation != returnLinkFromAttachmentHeader and
-        annotation != returnLink and annotation != returnToContentTable)
+    if (m_annotation != returnLinkFromAttachmentHeader and
+        m_annotation != returnLink and m_annotation != returnToContentTable)
       readKey(linkString); // key would be searched here and replaced
   }
   virtual ~Link(){};
@@ -92,64 +93,64 @@ public:
   LINK_TYPE getType() { return m_type; }
   bool isTargetToOriginalHtm() { return (m_type == LINK_TYPE::ORIGINAL); };
   bool isTargetToOtherMainHtm() {
-    return (m_type == LINK_TYPE::MAIN and getChapterName() != fromFile);
+    return (m_type == LINK_TYPE::MAIN and getChapterName() != m_fromFile);
   };
   bool isTargetToOtherAttachmentHtm() {
     return (m_type == LINK_TYPE::ATTACHMENT and
             (getChapterName() + attachmentFileMiddleChar +
-             TurnToString(attachmentNumber)) != fromFile);
+             TurnToString(m_attachmentNumber)) != m_fromFile);
   };
   bool isTargetToSelfHtm() {
     return ((m_type == LINK_TYPE::SAMEPAGE) or
-            (m_type == LINK_TYPE::MAIN and getChapterName() == fromFile) or
+            (m_type == LINK_TYPE::MAIN and getChapterName() == m_fromFile) or
             (m_type == LINK_TYPE::ATTACHMENT and
              (getChapterName() + attachmentFileMiddleChar +
-              TurnToString(attachmentNumber)) == fromFile));
+              TurnToString(m_attachmentNumber)) == m_fromFile));
   };
-  int getchapterNumer() { return chapterNumber; }
-  int getattachmentNumber() { return attachmentNumber; }
-  string getAnnotation() { return annotation; }
-  bool needUpdate() { return needChange; }
-  string getSourceChapterName() { return fromFile; }
-  void setSourcePara(LineNumber fp) { fromLine = fp; }
+  int getchapterNumer() { return m_chapterNumber; }
+  int getattachmentNumber() { return m_attachmentNumber; }
+  string getAnnotation() { return m_annotation; }
+  bool needUpdate() { return m_needChange; }
+  string getSourceChapterName() { return m_fromFile; }
+  void setSourcePara(LineNumber fp) { m_fromLine = fp; }
   string getChapterName() {
-    return formatIntoTwoDigitChapterNumber(chapterNumber);
+    return formatIntoTwoDigitChapterNumber(m_chapterNumber);
   }
   void doStatistics() {
-    if (usedKey.find(keyNotFound) != string::npos) {
+    if (m_usedKey.find(keyNotFound) != string::npos) {
       recordMissingKeyLink();
     } else
       logLink();
   }
 
   void fixReferFile(int chapter, int attachNo = 0) {
-    if (chapterNumber != chapter) {
-      chapterNumber = chapter;
-      needChange = true;
+    if (m_chapterNumber != chapter) {
+      m_chapterNumber = chapter;
+      m_needChange = true;
     }
-    if (attachmentNumber != 0 and attachmentNumber != attachNo) {
-      attachmentNumber = attachNo;
-      needChange = true;
+    if (m_attachmentNumber != 0 and m_attachmentNumber != attachNo) {
+      m_attachmentNumber = attachNo;
+      m_needChange = true;
     }
   }
   void fixReferPara(const string &lineNumber) {
-    if (referPara != lineNumber) {
-      referPara = lineNumber;
-      needChange = true;
+    if (m_referPara != lineNumber) {
+      m_referPara = lineNumber;
+      m_needChange = true;
     }
   }
   void fixReferSection(const string &expectedSection) {
-    if (referSection != expectedSection) {
-      referSection = expectedSection;
-      needChange = true;
+    if (m_referSection != expectedSection) {
+      m_referSection = expectedSection;
+      m_needChange = true;
     }
   }
   virtual void generateLinkToOrigin() = 0;
 
 protected:
-  LINK_DISPLAY_TYPE getDisplayType() { return displayType; }
-  string getKey() { return usedKey; }
-  string getReferSection() { return referSection; }
+  LINK_DISPLAY_TYPE getDisplayType() { return m_displayType; }
+  string getKey() { return m_usedKey; }
+  string getReferSection() { return m_referSection; }
 
   void readDisplayType(const string &linkString);
   void readType(const string &linkString);
@@ -163,15 +164,15 @@ protected:
 
   string displayPropertyAsString() {
     string result{""};
-    if (displayType == LINK_DISPLAY_TYPE::UNHIDDEN)
+    if (m_displayType == LINK_DISPLAY_TYPE::UNHIDDEN)
       result = R"(unhidden)";
-    if (displayType == LINK_DISPLAY_TYPE::HIDDEN)
+    if (m_displayType == LINK_DISPLAY_TYPE::HIDDEN)
       result = R"(hidden)";
     return result;
   }
   string getStringOfLinkToOrigin() {
-    if (linkToOrigin != nullptr)
-      return originalLinkStartChars + linkToOrigin->asString() +
+    if (m_linkPtrToOrigin != nullptr)
+      return originalLinkStartChars + m_linkPtrToOrigin->asString() +
              originalLinkEndChars;
     return "";
   }
@@ -185,17 +186,18 @@ protected:
 
 protected:
   LINK_TYPE m_type{LINK_TYPE::MAIN};
-  LINK_DISPLAY_TYPE displayType{LINK_DISPLAY_TYPE::UNHIDDEN};
-  string fromFile{"81"};
-  LineNumber fromLine;
-  int chapterNumber{0};
-  int attachmentNumber{0};
-  string referPara{invalidLineNumber}; // might be top bottom
-  string referSection{"0.0"};
-  string usedKey{""};
-  string annotation{""};
-  bool needChange{false};
-  std::unique_ptr<Link> linkToOrigin{nullptr};
+  LINK_DISPLAY_TYPE m_displayType{LINK_DISPLAY_TYPE::UNHIDDEN};
+  string m_fromFile{"81"};
+  LineNumber m_fromLine;
+  int m_chapterNumber{0};
+  int m_attachmentNumber{0};
+  string m_referPara{invalidLineNumber}; // might be top bottom
+  string m_referSection{"0.0"};
+  string m_usedKey{""};
+  string m_annotation{""};
+  bool m_needChange{false};
+  using LinkPtr = std::unique_ptr<Link>;
+  LinkPtr m_linkPtrToOrigin{nullptr};
 };
 
 static const string attachmentDirForLinkFromMain = R"(attachment\)";
@@ -272,7 +274,7 @@ private:
    */
   string getPathOfReferenceFile() const override {
     string result{""};
-    if (m_type == LINK_TYPE::MAIN or annotation == returnToContentTable)
+    if (m_type == LINK_TYPE::MAIN or m_annotation == returnToContentTable)
       result = mainDirForLinkFromAttachment;
     if (m_type == LINK_TYPE::ORIGINAL)
       result = originalDirForLinkFromAttachment;
