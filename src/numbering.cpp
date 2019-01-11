@@ -11,7 +11,8 @@ void addLineNumbers(int minTarget, int maxTarget, FILE_TYPE targetFileType,
     string separatorColor = getSeparateLineColor(targetFileType);
     BodyText bodyText;
     bodyText.setFilePrefixFromFileType(targetFileType);
-    bodyText.addLineNumber(separatorColor, file, hidden);
+    bodyText.setFileAndAttachmentNumber(file);
+    bodyText.addLineNumber(separatorColor, hidden);
   }
 }
 
@@ -85,7 +86,8 @@ void addLineNumbersForAttachmentHtml(int minTarget, int maxTarget,
       string separatorColor = getSeparateLineColor(targetFileType);
       BodyText bodyText;
       bodyText.setFilePrefixFromFileType(targetFileType);
-      bodyText.addLineNumber(separatorColor, file, attNo, hidden);
+      bodyText.setFileAndAttachmentNumber(file, attNo);
+      bodyText.addLineNumber(separatorColor, hidden);
     }
   }
 }
@@ -152,7 +154,8 @@ void reformatTxtFiles(int minTarget, int maxTarget, const string &example) {
       filename = "0" + filename;
     }
     BodyText bodyText("pjpm");
-    bodyText.reformatParagraphToSmallerSize(example, filename);
+    bodyText.setFileAndAttachmentNumber(filename);
+    bodyText.reformatParagraphToSmallerSize(example);
   }
 }
 
@@ -175,8 +178,9 @@ void splitFiles(int minTarget, int maxTarget, const string &fileType,
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     BodyText bodyText;
     bodyText.setFilePrefixFromFileType(getFileTypeFromString(fileType));
-    bodyText.regroupingParagraphs(sampleBlock, sampleFirstLine, sampleWholeLine,
-                                  file);
+    bodyText.setFileAndAttachmentNumber(file);
+    bodyText.regroupingParagraphs(sampleBlock, sampleFirstLine,
+                                  sampleWholeLine);
   }
 }
 

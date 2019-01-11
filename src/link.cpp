@@ -577,8 +577,8 @@ void Link::readKey(const string &linkString) {
   if (m_type == LINK_TYPE::SAMEPAGE) {
     bodyText.addIgnoreLines(fromLine.asString());
   }
-  bool found =
-      bodyText.findKey(stringForSearch, getChapterName(), attachmentNumber);
+  bodyText.setFileAndAttachmentNumber(getChapterName(), attachmentNumber);
+  bool found = bodyText.findKey(stringForSearch);
   if (not found) {
     usedKey = keyNotFound + " " + stringForSearch;
     fixReferPara(changeKey); // will set needChange if found line is different

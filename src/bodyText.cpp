@@ -58,12 +58,12 @@ void BodyText::setFilePrefixFromFileType(FILE_TYPE type) {
  * @return changed key (to KeyNotFound + key + reason) if it is not found,
  * otherwise the original key
  */
-bool BodyText::findKey(const string &key, const string &file, int attachNo) {
+bool BodyText::findKey(const string &key) {
   string attachmentPart{""};
-  if (attachNo != 0)
-    attachmentPart = attachmentFileMiddleChar + TurnToString(attachNo);
-  string fullPath =
-      BODY_TEXT_OUTPUT + filePrefix + file + attachmentPart + BODY_TEXT_SUFFIX;
+  if (m_attachNumber != 0)
+    attachmentPart = attachmentFileMiddleChar + TurnToString(m_attachNumber);
+  string fullPath = BODY_TEXT_OUTPUT + filePrefix + m_file + attachmentPart +
+                    BODY_TEXT_SUFFIX;
 
   ifstream infile(fullPath);
   if (!infile) {
@@ -113,10 +113,15 @@ bool BodyText::findKey(const string &key, const string &file, int attachNo) {
 }
 
 // reformat to smaller paragraphs
-void BodyText::reformatParagraphToSmallerSize(const string &sampleBlock,
-                                              const string &file) {
-  string inputFile = BODY_TEXT_OUTPUT + filePrefix + file + BODY_TEXT_SUFFIX;
-  string outputFile = BODY_TEXT_FIX + filePrefix + file + BODY_TEXT_SUFFIX;
+void BodyText::reformatParagraphToSmallerSize(const string &sampleBlock) {
+  string attachmentPart{""};
+  if (m_attachNumber != 0)
+    attachmentPart = attachmentFileMiddleChar + TurnToString(m_attachNumber);
+
+  string inputFile = BODY_TEXT_OUTPUT + filePrefix + m_file + attachmentPart +
+                     BODY_TEXT_SUFFIX;
+  string outputFile =
+      BODY_TEXT_FIX + filePrefix + m_file + attachmentPart + BODY_TEXT_SUFFIX;
 
   ifstream infile(inputFile);
   if (!infile) {
@@ -153,8 +158,7 @@ void BodyText::reformatParagraphToSmallerSize(const string &sampleBlock,
 // regrouping to make total size smaller
 void BodyText::regroupingParagraphs(const string &sampleBlock,
                                     const string &sampleFirstLine,
-                                    const string &sampleWholeLine,
-                                    const string &file) {
+                                    const string &sampleWholeLine) {
   if (debug >= LOG_INFO)
     cout << "regrouping finished." << endl;
 }
@@ -166,14 +170,13 @@ void BodyText::regroupingParagraphs(const string &sampleBlock,
  * @param fullPath of target file
  * @return a tuple of numbers
  */
-BodyText::ParaStruct BodyText::getNumberOfPara(const string &file,
-                                               int attachNo) {
+BodyText::ParaStruct BodyText::getNumberOfPara() {
   string attachmentPart{""};
-  if (attachNo != 0)
-    attachmentPart = attachmentFileMiddleChar + TurnToString(attachNo);
+  if (m_attachNumber != 0)
+    attachmentPart = attachmentFileMiddleChar + TurnToString(m_attachNumber);
 
-  string inputFile =
-      BODY_TEXT_OUTPUT + filePrefix + file + attachmentPart + BODY_TEXT_SUFFIX;
+  string inputFile = BODY_TEXT_OUTPUT + filePrefix + m_file + attachmentPart +
+                     BODY_TEXT_SUFFIX;
 
   int first = 0, middle = 0, last = 0;
   string paraTab =
@@ -227,16 +230,15 @@ BodyText::ParaStruct BodyText::getNumberOfPara(const string &file,
  * @param outputFile the output file after numbering
  * @param separatorColor the color to separate paragraphs
  */
-void BodyText::addLineNumber(const string &separatorColor, const string &file,
-                             int attachNo, bool hidden) {
+void BodyText::addLineNumber(const string &separatorColor, bool hidden) {
   string attachmentPart{""};
-  if (attachNo != 0)
-    attachmentPart = attachmentFileMiddleChar + TurnToString(attachNo);
+  if (m_attachNumber != 0)
+    attachmentPart = attachmentFileMiddleChar + TurnToString(m_attachNumber);
 
-  string inputFile =
-      BODY_TEXT_OUTPUT + filePrefix + file + attachmentPart + BODY_TEXT_SUFFIX;
+  string inputFile = BODY_TEXT_OUTPUT + filePrefix + m_file + attachmentPart +
+                     BODY_TEXT_SUFFIX;
   string outputFile =
-      BODY_TEXT_FIX + filePrefix + file + attachmentPart + BODY_TEXT_SUFFIX;
+      BODY_TEXT_FIX + filePrefix + m_file + attachmentPart + BODY_TEXT_SUFFIX;
 
   ifstream infile(inputFile);
   if (!infile) {
@@ -249,7 +251,7 @@ void BodyText::addLineNumber(const string &separatorColor, const string &file,
   int numberOfLastParaHeader{1};
   if (not autoNumbering) {
     ParaStruct res;
-    res = getNumberOfPara(inputFile, attachNo); // first scan
+    res = getNumberOfPara(); // first scan
     numberOfFirstParaHeader = GetTupleElement(res, 0);
     numberOfMiddleParaHeader = GetTupleElement(res, 1);
     numberOfLastParaHeader = GetTupleElement(res, 2);
@@ -512,8 +514,8 @@ void testLineNumber() {
 void testConstructSubStory() {
   BodyText bodyText;
   bodyText.setFilePrefixFromFileType(FILE_TYPE::MAIN);
-
-  BodyText::ParaStruct res = bodyText.getNumberOfPara("06");
+  bodyText.setFileAndAttachmentNumber("06");
+  BodyText::ParaStruct res = bodyText.getNumberOfPara();
   cout << GetTupleElement(res, 0) << " " << GetTupleElement(res, 1) << " "
        << GetTupleElement(res, 2) << endl;
 }

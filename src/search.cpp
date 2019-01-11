@@ -14,7 +14,8 @@ void findFirstInNoAttachmentFiles(const string key, const string &fileType,
 
     bodyText.resetBeforeSearch();
     bodyText.searchForAll();
-    bool found = bodyText.findKey(key, file);
+    bodyText.setFileAndAttachmentNumber(file);
+    bool found = bodyText.findKey(key);
     if (found) {
       BodyText::lineNumberSet lineSet = bodyText.getResultLineSet();
       if (targetFileType == FILE_TYPE::ORIGINAL) {

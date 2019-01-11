@@ -29,6 +29,10 @@ public:
   }
 
   void setFilePrefixFromFileType(FILE_TYPE type);
+  void setFileAndAttachmentNumber(const string &file, int attachNo = 0) {
+    m_file = file;
+    m_attachNumber = attachNo;
+  };
   using lineNumberSet = set<string>;
   // set options before search
   void resetBeforeSearch() {
@@ -40,7 +44,7 @@ public:
   void searchForAll() { onlyFirst = false; }
 
   // search
-  bool findKey(const string &key, const string &file, int attachNo = 0);
+  bool findKey(const string &key);
 
   // get search results
   string getFirstResultLine() {
@@ -51,23 +55,23 @@ public:
   lineNumberSet getResultLineSet() { return result; };
 
   // reformat to smaller paragraphs
-  void reformatParagraphToSmallerSize(const string &sampleBlock,
-                                      const string &file);
+  void reformatParagraphToSmallerSize(const string &sampleBlock);
 
   // regrouping to make total size smaller
   void regroupingParagraphs(const string &sampleBlock,
                             const string &sampleFirstLine,
-                            const string &sampleWholeLine, const string &file);
+                            const string &sampleWholeLine);
 
   using ParaStruct = std::tuple<int, int, int>;
-  ParaStruct getNumberOfPara(const string &file, int attachNo = 0);
+  ParaStruct getNumberOfPara();
 
   // add line number before each paragraph
-  void addLineNumber(const string &separatorColor, const string &file,
-                     int attachNo = 0, bool hidden = false);
+  void addLineNumber(const string &separatorColor, bool hidden = false);
 
 protected:
   string filePrefix{"Main"};
+  string m_file{"01"};
+  int m_attachNumber{0};
   lineNumberSet ignoreSet;
   lineNumberSet result;
   string searchError{""};
