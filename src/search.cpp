@@ -9,7 +9,7 @@ void findFirstInNoAttachmentFiles(const string key, FILE_TYPE targetFileType,
   resultLinkList.clear();
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
 
-    BodyText bodyText(getBodyTextFilePrefix(targetFileType));
+    BodyText bodyText(getBodyTextFilePrefixFromFileType(targetFileType));
     bodyText.resetBeforeSearch();
     bodyText.searchForAll();
     bool found = bodyText.findKey(key, file);
@@ -44,7 +44,7 @@ void findFirstInNoAttachmentFiles(const string key, FILE_TYPE targetFileType,
   int total = 0;
   for (const auto &chapter : resultLinkList) {
     container.appendParagraphInBodyText("found in " +
-                                        getBodyTextFilePrefix(targetFileType) +
+                                        getBodyTextFilePrefixFromFileType(targetFileType) +
                                         chapter.first + HTML_SUFFIX + " :");
     auto list = chapter.second;
     for (const auto &detail : list) {

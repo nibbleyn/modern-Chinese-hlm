@@ -51,8 +51,8 @@ string formatIntoTwoDigitChapterNumber(int chapterNumber);
 using fileSet = set<string>;
 fileSet buildFileSet(int min, int max);
 
-string getFileNamePrefix(FILE_TYPE type);
-string getBodyTextFilePrefix(FILE_TYPE type);
+string getFileNamePrefixFromFileType(FILE_TYPE type);
+string getBodyTextFilePrefixFromFileType(FILE_TYPE type);
 string getSeparateLineColor(FILE_TYPE type);
 FILE_TYPE getFileTypeFromString(const string &fileType);
 

@@ -177,8 +177,8 @@ protected:
   void recordMissingKeyLink();
 
   // utility to convert link type with filename
-  virtual string getFileNamePrefix(LINK_TYPE type) = 0;
-  virtual string getBodyTextFilePrefix(LINK_TYPE type) = 0;
+  virtual string getFileNamePrefixFromlinkType(LINK_TYPE type) = 0;
+  virtual string getBodyTextFilePrefixFromLinkType(LINK_TYPE type) = 0;
   virtual string getPathOfReferenceFile() const = 0;
   virtual void logLink() = 0;
 
@@ -238,8 +238,8 @@ private:
   void logLink();
 
   // utility to convert link type with filename
-  string getFileNamePrefix(LINK_TYPE type);
-  string getBodyTextFilePrefix(LINK_TYPE type);
+  string getFileNamePrefixFromlinkType(LINK_TYPE type);
+  string getBodyTextFilePrefixFromLinkType(LINK_TYPE type);
 };
 
 static const string mainDirForLinkFromAttachment = R"(..\)";
@@ -280,6 +280,6 @@ private:
   void logLink();
 
   // utility to convert link type with filename
-  string getFileNamePrefix(LINK_TYPE type);
-  string getBodyTextFilePrefix(LINK_TYPE type);
+  string getFileNamePrefixFromlinkType(LINK_TYPE type);
+  string getBodyTextFilePrefixFromLinkType(LINK_TYPE type);
 };

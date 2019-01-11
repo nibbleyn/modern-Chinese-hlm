@@ -10,7 +10,7 @@ void removePersonalCommentsOverNumberedFiles(string referFile,
   if (fileType ==
       FILE_TYPE::ATTACHMENT) // type is only used here in this function
     attachmentPart = attachmentFileMiddleChar + TurnToString(attachNo);
-  string inputFile = BODY_TEXT_OUTPUT + getBodyTextFilePrefix(fileType) +
+  string inputFile = BODY_TEXT_OUTPUT + getBodyTextFilePrefixFromFileType(fileType) +
                      referFile + attachmentPart + BODY_TEXT_SUFFIX;
 
   ifstream infile(inputFile);
@@ -18,7 +18,7 @@ void removePersonalCommentsOverNumberedFiles(string referFile,
     cout << "file doesn't exist:" << inputFile << endl;
     return;
   }
-  string outputFile = BODY_TEXT_FIX + getBodyTextFilePrefix(fileType) +
+  string outputFile = BODY_TEXT_FIX + getBodyTextFilePrefixFromFileType(fileType) +
                       referFile + attachmentPart + BODY_TEXT_SUFFIX;
   ofstream outfile(outputFile);
   string inLine{"not found"};

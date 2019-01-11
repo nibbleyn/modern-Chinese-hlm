@@ -9,7 +9,7 @@ void addLineNumbers(int minTarget, int maxTarget, FILE_TYPE targetFileType,
                     bool hidden = false) {
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     string separatorColor = getSeparateLineColor(targetFileType);
-    BodyText bodyText(getBodyTextFilePrefix(targetFileType));
+    BodyText bodyText(getBodyTextFilePrefixFromFileType(targetFileType));
     bodyText.addLineNumber(separatorColor, file, hidden);
   }
 }
@@ -82,7 +82,7 @@ void addLineNumbersForAttachmentHtml(int minTarget, int maxTarget,
     for (const auto &attNo : targetAttachments) {
       FILE_TYPE targetFileType = FILE_TYPE::ATTACHMENT;
       string separatorColor = getSeparateLineColor(targetFileType);
-      BodyText bodyText(getBodyTextFilePrefix(targetFileType));
+      BodyText bodyText(getBodyTextFilePrefixFromFileType(targetFileType));
       bodyText.addLineNumber(separatorColor, file, attNo, hidden);
     }
   }
@@ -171,7 +171,7 @@ void splitFiles(int minTarget, int maxTarget, const string &fileType,
                 const string &sampleBlock, const string &sampleFirstLine,
                 const string &sampleWholeLine) {
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
-    BodyText bodyText(getBodyTextFilePrefix(getFileTypeFromString(fileType)));
+    BodyText bodyText(getBodyTextFilePrefixFromFileType(getFileTypeFromString(fileType)));
     bodyText.regroupingParagraphs(sampleBlock, sampleFirstLine, sampleWholeLine,
                                   file);
   }

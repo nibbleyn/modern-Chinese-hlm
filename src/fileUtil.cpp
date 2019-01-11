@@ -51,7 +51,7 @@ fileSet buildFileSet(int min, int max) {
  * @return filename prefix of target file
  */
 
-string getFileNamePrefix(FILE_TYPE type) {
+string getFileNamePrefixFromFileType(FILE_TYPE type) {
   string filenamePrefix[] = {"a0", "b0", "c0"};
   if (type == FILE_TYPE::MAIN)
     return filenamePrefix[0];
@@ -71,7 +71,7 @@ string getFileNamePrefix(FILE_TYPE type) {
  * @param type type of file
  * @return filename prefix of bodytext file
  */
-string getBodyTextFilePrefix(FILE_TYPE type) {
+string getBodyTextFilePrefixFromFileType(FILE_TYPE type) {
   string bodyTextFilePrefix[] = {"Main", "Attach", "Org"};
   if (type == FILE_TYPE::MAIN)
     return bodyTextFilePrefix[0];
@@ -159,7 +159,7 @@ vector<int> getAttachmentFileListForChapter(const string &referFile,
   vector<int> attList;
   Poco::File(fromDir).list(filenameList);
   for (const auto &file : filenameList) {
-    if (file.find(getFileNamePrefix(FILE_TYPE::ATTACHMENT) + referFile) !=
+    if (file.find(getFileNamePrefixFromFileType(FILE_TYPE::ATTACHMENT) + referFile) !=
         string::npos) {
       string start = attachmentFileMiddleChar;
       auto keyBegin = file.find(start);

@@ -293,7 +293,7 @@ void testContainer() {
 }
 
 void testConstructSubStory() {
-  BodyText bodyText(getBodyTextFilePrefix(FILE_TYPE::MAIN));
+  BodyText bodyText(getBodyTextFilePrefixFromFileType(FILE_TYPE::MAIN));
 
   BodyText::ParaStruct res = bodyText.getNumberOfPara("06");
   cout << GetTupleElement(res, 0) << " " << GetTupleElement(res, 1) << " "

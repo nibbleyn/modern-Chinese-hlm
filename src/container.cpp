@@ -34,11 +34,11 @@ void CoupledContainer::assembleBackToHTM(const string &file, int attachNo,
   if (fileType == FILE_TYPE::ATTACHMENT)
     attachmentPart = attachmentFileMiddleChar + TurnToString(attachNo);
 
-  string inputHtmlFile = htmlInputFilePath + getFileNamePrefix(fileType) +
+  string inputHtmlFile = htmlInputFilePath + getFileNamePrefixFromFileType(fileType) +
                          file + attachmentPart + HTML_SUFFIX;
-  string inputBodyTextFile = htmlInputFilePath + getFileNamePrefix(fileType) +
+  string inputBodyTextFile = htmlInputFilePath + getFileNamePrefixFromFileType(fileType) +
                              file + attachmentPart + BODY_TEXT_SUFFIX;
-  string outputFile = htmlOutputFilePath + getFileNamePrefix(fileType) + file +
+  string outputFile = htmlOutputFilePath + getFileNamePrefixFromFileType(fileType) + file +
                       attachmentPart + HTML_SUFFIX;
 
   ifstream inHtmlFile(inputHtmlFile);
@@ -173,10 +173,10 @@ void CoupledContainer::dissembleFromHTM(const string &file, int attachNo) {
   if (fileType == FILE_TYPE::ATTACHMENT)
     attachmentPart = attachmentFileMiddleChar + TurnToString(attachNo);
 
-  string inputHtmlFile = htmlInputFilePath + getFileNamePrefix(fileType) +
+  string inputHtmlFile = htmlInputFilePath + getFileNamePrefixFromFileType(fileType) +
                          file + attachmentPart + HTML_SUFFIX;
   string outputBodyTextFile = bodyTextInputFilePath +
-                              getFileNamePrefix(fileType) + file +
+                              getFileNamePrefixFromFileType(fileType) + file +
                               attachmentPart + BODY_TEXT_SUFFIX;
 
   ifstream infile(inputHtmlFile);

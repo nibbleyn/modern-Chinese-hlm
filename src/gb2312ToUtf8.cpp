@@ -23,7 +23,7 @@ void convertFromGB2312ToUtf8(string referFile, string format, FILE_TYPE type,
     string attachmentPart{""};
     if (type == FILE_TYPE::ATTACHMENT)
       attachmentPart = attachmentFileMiddleChar + TurnToString(attachNo);
-    inputFile = GB2312_HTML_SRC + getFileNamePrefix(type) + referFile +
+    inputFile = GB2312_HTML_SRC + getFileNamePrefixFromFileType(type) + referFile +
                 attachmentPart + HTML_SUFFIX;
     cout << inputFile << endl;
     ifstream infile(inputFile);
@@ -36,7 +36,7 @@ void convertFromGB2312ToUtf8(string referFile, string format, FILE_TYPE type,
     if (type == FILE_TYPE::ATTACHMENT)
       outputFile = HTML_OUTPUT_ATTACHMENT;
     outputFile +=
-        getFileNamePrefix(type) + referFile + attachmentPart + HTML_SUFFIX;
+        getFileNamePrefixFromFileType(type) + referFile + attachmentPart + HTML_SUFFIX;
     cout << outputFile << endl;
   }
   convertFromGB2312ToUtf8(inputFile, outputFile);
@@ -107,9 +107,9 @@ void gb2312FixMain(int minTarget, int maxTarget) {
 void gb2312FixOriginal(int minTarget, int maxTarget) {
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     string inputFile = GB2312_HTML_SRC + "original/" +
-                       getFileNamePrefix(FILE_TYPE::MAIN) + file + HTML_SUFFIX;
+                       getFileNamePrefixFromFileType(FILE_TYPE::MAIN) + file + HTML_SUFFIX;
     string outputFile = "utf8HTML/original/" +
-                        getFileNamePrefix(FILE_TYPE::MAIN) + file + HTML_SUFFIX;
+                        getFileNamePrefixFromFileType(FILE_TYPE::MAIN) + file + HTML_SUFFIX;
     convertFromGB2312ToUtf8(inputFile, outputFile);
   }
 }

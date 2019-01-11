@@ -367,7 +367,7 @@ string Link::asString() {
     part1 = getPathOfReferenceFile() + contentTableFilename;
   } else if (type != LINK_TYPE::SAMEPAGE) {
     part1 =
-        getPathOfReferenceFile() + getFileNamePrefix(type) + getChapterName();
+        getPathOfReferenceFile() + getFileNamePrefixFromlinkType(type) + getChapterName();
     if (attachmentNumber != 0)
       part2 = attachmentFileMiddleChar + TurnToString(attachmentNumber);
     part3 = HTML_SUFFIX;
@@ -571,7 +571,7 @@ void Link::readKey(const string &linkString) {
     usedKey = stringForSearch;
     return;
   }
-  BodyText bodyText(getBodyTextFilePrefix(type));
+  BodyText bodyText(getBodyTextFilePrefixFromLinkType(type));
   bodyText.resetBeforeSearch();
   // special hack to ignore itself
   if (type == LINK_TYPE::SAMEPAGE) {
@@ -628,7 +628,7 @@ bool isAnnotationMatch(string annotation, string title) {
  */
 AttachmentNumber getAttachmentNumber(const string &filename) {
   AttachmentNumber num(0, 0);
-  string start = getFileNamePrefix(FILE_TYPE::ATTACHMENT);
+  string start = getFileNamePrefixFromFileType(FILE_TYPE::ATTACHMENT);
   auto fileBegin = filename.find(start);
   if (fileBegin == string::npos) // referred file not found
   {
@@ -757,7 +757,7 @@ bool LinkFromMain::readReferFileName(const string &link) {
     }
     refereFileName = linkString.substr(fileBegin + start.length(),
                                        fileEnd - fileBegin - start.length());
-    fileBegin = refereFileName.find(getFileNamePrefix(type));
+    fileBegin = refereFileName.find(getFileNamePrefixFromlinkType(type));
     if (fileBegin == string::npos) // not find a right file type to refer
     {
       cout << "unsupported type in refer file name in link: " << linkString
@@ -766,7 +766,7 @@ bool LinkFromMain::readReferFileName(const string &link) {
     }
     refereFileName = refereFileName.substr(
         fileBegin); // in case there is a ..\ before file name
-    refereFileName = refereFileName.substr(getFileNamePrefix(type).length());
+    refereFileName = refereFileName.substr(getFileNamePrefixFromlinkType(type).length());
   }
 
   // get chapter number and attachment number if type is LINK_TYPE::ATTACHMENT
@@ -818,7 +818,7 @@ void LinkFromMain::logLink() {
     }
   }
   if (isTargetToOtherAttachmentHtm()) {
-    auto targetFile = getFileNamePrefix(type) + getChapterName() +
+    auto targetFile = getFileNamePrefixFromlinkType(type) + getChapterName() +
                       attachmentFileMiddleChar +
                       TurnToString(getattachmentNumber());
     auto num = make_pair(getchapterNumer(), getattachmentNumber());
@@ -849,7 +849,7 @@ void LinkFromMain::logLink() {
  * @param type type of link
  * @return filename prefix of target file
  */
-string LinkFromMain::getFileNamePrefix(LINK_TYPE _type) {
+string LinkFromMain::getFileNamePrefixFromlinkType(LINK_TYPE _type) {
   string filenamePrefix[] = {"a0", "b0", "c0", "a0"};
   string prefix = "unsupported";
   if (type == LINK_TYPE::MAIN)
@@ -871,7 +871,7 @@ string LinkFromMain::getFileNamePrefix(LINK_TYPE _type) {
  * @param type type of link
  * @return filename prefix of bodytext file
  */
-string LinkFromMain::getBodyTextFilePrefix(LINK_TYPE _type) {
+string LinkFromMain::getBodyTextFilePrefixFromLinkType(LINK_TYPE _type) {
   string bodyTextFilePrefix[] = {"Main", "Attach", "Org", "Main"};
   string prefix = "unsupported";
   if (type == LINK_TYPE::MAIN)
@@ -958,7 +958,7 @@ bool LinkFromAttachment::readReferFileName(const string &link) {
     }
     refereFileName = linkString.substr(fileBegin + start.length(),
                                        fileEnd - fileBegin - start.length());
-    fileBegin = refereFileName.find(getFileNamePrefix(type));
+    fileBegin = refereFileName.find(getFileNamePrefixFromlinkType(type));
     if (fileBegin == string::npos) // not find a right file type to refer
     {
       cout << "unsupported type in refer file name in link: " << linkString
@@ -967,7 +967,7 @@ bool LinkFromAttachment::readReferFileName(const string &link) {
     }
     refereFileName = refereFileName.substr(
         fileBegin); // in case there is a ..\ before file name
-    refereFileName = refereFileName.substr(getFileNamePrefix(type).length());
+    refereFileName = refereFileName.substr(getFileNamePrefixFromlinkType(type).length());
   }
 
   // get chapter number and attachment number if type is LINK_TYPE::ATTACHMENT
@@ -1040,7 +1040,7 @@ void LinkFromAttachment::setTypeThruFileNamePrefix(const string &prefix) {
  * @param type type of link
  * @return filename prefix of target file
  */
-string LinkFromAttachment::getFileNamePrefix(LINK_TYPE type) {
+string LinkFromAttachment::getFileNamePrefixFromlinkType(LINK_TYPE type) {
   string filenamePrefix[] = {"a0", "b0", "c0", "b0"};
   string prefix = "unsupported";
   if (type == LINK_TYPE::MAIN)
@@ -1062,7 +1062,7 @@ string LinkFromAttachment::getFileNamePrefix(LINK_TYPE type) {
  * @param type type of link
  * @return filename prefix of bodytext file
  */
-string LinkFromAttachment::getBodyTextFilePrefix(LINK_TYPE type) {
+string LinkFromAttachment::getBodyTextFilePrefixFromLinkType(LINK_TYPE type) {
   string bodyTextFilePrefix[] = {"Main", "Attach", "Org", "Attach"};
   string prefix = "unsupported";
   if (type == LINK_TYPE::MAIN)
