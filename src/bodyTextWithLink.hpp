@@ -17,6 +17,6 @@ public:
 
 private:
   using LinkPtr = std::unique_ptr<Link>;
-  LinkPtr lfm{nullptr};
-  LinkPtr following{nullptr};
+  LinkPtr m_linkPtr{nullptr};
+  LinkPtr m_followingLinkPtr{nullptr};
 };

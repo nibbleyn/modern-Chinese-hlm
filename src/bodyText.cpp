@@ -40,11 +40,11 @@ bool isOnlyPartOfOtherKeys(const string &orgLine, const string &key) {
 void BodyText::setFilePrefixFromFileType(FILE_TYPE type) {
   string bodyTextFilePrefix[] = {"Main", "Attach", "Org"};
   if (type == FILE_TYPE::MAIN)
-    filePrefix = bodyTextFilePrefix[0];
+    m_filePrefix = bodyTextFilePrefix[0];
   if (type == FILE_TYPE::ATTACHMENT)
-    filePrefix = bodyTextFilePrefix[1];
+    m_filePrefix = bodyTextFilePrefix[1];
   if (type == FILE_TYPE::ORIGINAL)
-    filePrefix = bodyTextFilePrefix[2];
+    m_filePrefix = bodyTextFilePrefix[2];
 }
 
 /**
@@ -62,13 +62,13 @@ bool BodyText::findKey(const string &key) {
   string attachmentPart{""};
   if (m_attachNumber != 0)
     attachmentPart = attachmentFileMiddleChar + TurnToString(m_attachNumber);
-  string fullPath = BODY_TEXT_OUTPUT + filePrefix + m_file + attachmentPart +
+  string fullPath = BODY_TEXT_OUTPUT + m_filePrefix + m_file + attachmentPart +
                     BODY_TEXT_SUFFIX;
 
   ifstream infile(fullPath);
   if (!infile) {
-    searchError = "file doesn't exist:" + fullPath;
-    cout << searchError << endl;
+    m_searchError = "file doesn't exist:" + fullPath;
+    cout << m_searchError << endl;
     return false;
   }
   bool found = false;
@@ -91,21 +91,21 @@ bool BodyText::findKey(const string &key) {
     LineNumber ln;
     ln.loadFromContainedLine(line);
     if (not ln.valid()) {
-      searchError =
+      m_searchError =
           "file doesn't get numbered:" + fullPath + " at line:" + line;
-      cout << searchError << endl;
+      cout << m_searchError << endl;
       return false;
     }
 
     // special hack for ignoring one lineNumber
-    if (not ignoreSet.empty() and
-        ignoreSet.find(ln.asString()) != ignoreSet.end()) {
+    if (not m_ignoreSet.empty() and
+        m_ignoreSet.find(ln.asString()) != m_ignoreSet.end()) {
       continue;
     }
 
     found = true;
-    result.insert(ln.asString());
-    if (onlyFirst) {
+    m_result.insert(ln.asString());
+    if (m_onlyFirst) {
       break;
     }
   }
@@ -118,10 +118,10 @@ void BodyText::reformatParagraphToSmallerSize(const string &sampleBlock) {
   if (m_attachNumber != 0)
     attachmentPart = attachmentFileMiddleChar + TurnToString(m_attachNumber);
 
-  string inputFile = BODY_TEXT_OUTPUT + filePrefix + m_file + attachmentPart +
+  string inputFile = BODY_TEXT_OUTPUT + m_filePrefix + m_file + attachmentPart +
                      BODY_TEXT_SUFFIX;
   string outputFile =
-      BODY_TEXT_FIX + filePrefix + m_file + attachmentPart + BODY_TEXT_SUFFIX;
+      BODY_TEXT_FIX + m_filePrefix + m_file + attachmentPart + BODY_TEXT_SUFFIX;
 
   ifstream infile(inputFile);
   if (!infile) {
@@ -175,7 +175,7 @@ BodyText::ParaStruct BodyText::getNumberOfPara() {
   if (m_attachNumber != 0)
     attachmentPart = attachmentFileMiddleChar + TurnToString(m_attachNumber);
 
-  string inputFile = BODY_TEXT_OUTPUT + filePrefix + m_file + attachmentPart +
+  string inputFile = BODY_TEXT_OUTPUT + m_filePrefix + m_file + attachmentPart +
                      BODY_TEXT_SUFFIX;
 
   int first = 0, middle = 0, last = 0;
@@ -235,10 +235,10 @@ void BodyText::addLineNumber(const string &separatorColor, bool hidden) {
   if (m_attachNumber != 0)
     attachmentPart = attachmentFileMiddleChar + TurnToString(m_attachNumber);
 
-  string inputFile = BODY_TEXT_OUTPUT + filePrefix + m_file + attachmentPart +
+  string inputFile = BODY_TEXT_OUTPUT + m_filePrefix + m_file + attachmentPart +
                      BODY_TEXT_SUFFIX;
   string outputFile =
-      BODY_TEXT_FIX + filePrefix + m_file + attachmentPart + BODY_TEXT_SUFFIX;
+      BODY_TEXT_FIX + m_filePrefix + m_file + attachmentPart + BODY_TEXT_SUFFIX;
 
   ifstream infile(inputFile);
   if (!infile) {
@@ -249,7 +249,7 @@ void BodyText::addLineNumber(const string &separatorColor, bool hidden) {
   int numberOfFirstParaHeader{1};
   int numberOfMiddleParaHeader{0};
   int numberOfLastParaHeader{1};
-  if (not autoNumbering) {
+  if (not m_autoNumbering) {
     ParaStruct res;
     res = getNumberOfPara(); // first scan
     numberOfFirstParaHeader = GetTupleElement(res, 0);

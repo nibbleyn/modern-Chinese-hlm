@@ -9,10 +9,10 @@ void BodyTextWithLink::removePersonalCommentsOverNumberedFiles(
   if (attachNo != 0)
     attachmentPart = attachmentFileMiddleChar + TurnToString(attachNo);
 
-  string inputFile =
-      BODY_TEXT_OUTPUT + filePrefix + file + attachmentPart + BODY_TEXT_SUFFIX;
+  string inputFile = BODY_TEXT_OUTPUT + m_filePrefix + file + attachmentPart +
+                     BODY_TEXT_SUFFIX;
   string outputFile =
-      BODY_TEXT_FIX + filePrefix + file + attachmentPart + BODY_TEXT_SUFFIX;
+      BODY_TEXT_FIX + m_filePrefix + file + attachmentPart + BODY_TEXT_SUFFIX;
 
   ifstream infile(inputFile);
   if (!infile) {
@@ -58,9 +58,10 @@ void BodyTextWithLink::removePersonalCommentsOverNumberedFiles(
       string specialLink = removeSpecialLinkLine.substr(
           specialLinkBegin,
           specialLinkEnd + linkEnd.length() - specialLinkBegin);
-      LinkFromAttachment lfm(file, specialLink);
-      auto num = make_pair(lfm.getchapterNumer(), lfm.getattachmentNumber());
-      if (lfm.isTargetToOtherAttachmentHtm() and
+      LinkFromAttachment m_linkPtr(file, specialLink);
+      auto num = make_pair(m_linkPtr.getchapterNumer(),
+                           m_linkPtr.getattachmentNumber());
+      if (m_linkPtr.isTargetToOtherAttachmentHtm() and
           LinkFromMain::getAttachmentType(num) == ATTACHMENT_TYPE::PERSONAL) {
         cout << specialLink << endl;
         to_replace = specialLink;
@@ -89,10 +90,10 @@ void BodyTextWithLink::fixLinksFromFile(const string &file, fileSet files,
   if (attachNo != 0)
     attachmentPart = attachmentFileMiddleChar + TurnToString(attachNo);
 
-  string inputFile =
-      BODY_TEXT_OUTPUT + filePrefix + file + attachmentPart + BODY_TEXT_SUFFIX;
+  string inputFile = BODY_TEXT_OUTPUT + m_filePrefix + file + attachmentPart +
+                     BODY_TEXT_SUFFIX;
   string outputFile =
-      BODY_TEXT_FIX + filePrefix + file + attachmentPart + BODY_TEXT_SUFFIX;
+      BODY_TEXT_FIX + m_filePrefix + file + attachmentPart + BODY_TEXT_SUFFIX;
 
   ifstream infile(inputFile);
   if (!infile) {
@@ -127,33 +128,35 @@ void BodyTextWithLink::fixLinksFromFile(const string &file, fileSet files,
       auto link = inLine.substr(linkBegin, linkEnd + 4 - linkBegin);
 
       if (attachNo != 0) {
-        lfm = std::make_unique<LinkFromMain>(file, link);
+        m_linkPtr = std::make_unique<LinkFromMain>(file, link);
       } else {
-        lfm = std::make_unique<LinkFromAttachment>(file + attachmentPart, link);
+        m_linkPtr =
+            std::make_unique<LinkFromAttachment>(file + attachmentPart, link);
       }
-      lfm->readReferFileName(link); // second step of construction, this is
-                                    // needed to check isTargetToSelfHtm
-      if (lfm->isTargetToOtherAttachmentHtm()) {
-        lfm->fixFromString(link); // third step of construction
-        lfm->setSourcePara(ln);
-        lfm->doStatistics();
+      m_linkPtr->readReferFileName(
+          link); // second step of construction, this is
+                 // needed to check isTargetToSelfHtm
+      if (m_linkPtr->isTargetToOtherAttachmentHtm()) {
+        m_linkPtr->fixFromString(link); // third step of construction
+        m_linkPtr->setSourcePara(ln);
+        m_linkPtr->doStatistics();
       }
-      if (lfm->isTargetToSelfHtm()) {
-        lfm->setSourcePara(ln);
-        lfm->fixFromString(link); // third step of construction
-        if (lfm->needUpdate())    // replace old value
+      if (m_linkPtr->isTargetToSelfHtm()) {
+        m_linkPtr->setSourcePara(ln);
+        m_linkPtr->fixFromString(link); // third step of construction
+        if (m_linkPtr->needUpdate())    // replace old value
         {
           auto orglinkBegin = orgLine.find(link);
-          orgLine.replace(orglinkBegin, link.length(), lfm->asString());
+          orgLine.replace(orglinkBegin, link.length(), m_linkPtr->asString());
         }
       }
-      if (lfm->isTargetToOtherMainHtm()) {
-        targetFile = lfm->getChapterName();
+      if (m_linkPtr->isTargetToOtherMainHtm()) {
+        targetFile = m_linkPtr->getChapterName();
         auto e = find(files.begin(), files.end(), targetFile);
         if (e != files.end()) // need to check and fix
         {
-          lfm->fixFromString(link); // third step of construction
-          lfm->setSourcePara(ln);
+          m_linkPtr->fixFromString(link); // third step of construction
+          m_linkPtr->setSourcePara(ln);
           string next = originalLinkStartChars + linkStartChars;
           bool needAddOrginalLink = true;
           // still have above "next" and </a>
@@ -163,38 +166,39 @@ void BodyTextWithLink::fixLinksFromFile(const string &file, fileSet files,
               auto followingLink = inLine.substr(
                   linkEnd + next.length() + 2); // find next link in the inLine
               if (attachNo != 0) {
-                following = std::make_unique<LinkFromMain>(file, followingLink);
+                m_followingLinkPtr =
+                    std::make_unique<LinkFromMain>(file, followingLink);
               } else {
-                following = std::make_unique<LinkFromAttachment>(
+                m_followingLinkPtr = std::make_unique<LinkFromAttachment>(
                     file + attachmentPart, followingLink);
               }
-              if (following->isTargetToOriginalHtm()) {
+              if (m_followingLinkPtr->isTargetToOriginalHtm()) {
                 needAddOrginalLink = false;
               }
             }
           }
           if (needAddOrginalLink)
-            lfm->generateLinkToOrigin();
-          lfm->doStatistics();
-          if (lfm->needUpdate()) // replace old value
+            m_linkPtr->generateLinkToOrigin();
+          m_linkPtr->doStatistics();
+          if (m_linkPtr->needUpdate()) // replace old value
           {
             auto orglinkBegin = orgLine.find(link);
-            orgLine.replace(orglinkBegin, link.length(), lfm->asString());
+            orgLine.replace(orglinkBegin, link.length(), m_linkPtr->asString());
           }
         }
       }
-      if (lfm->isTargetToOriginalHtm()) {
-        targetFile = lfm->getChapterName();
+      if (m_linkPtr->isTargetToOriginalHtm()) {
+        targetFile = m_linkPtr->getChapterName();
         auto e = find(files.begin(), files.end(), targetFile);
         if (e != files.end()) // need to check and fix
         {
-          lfm->fixFromString(link); // third step of construction
-          if (lfm->needUpdate())    // replace old value
+          m_linkPtr->fixFromString(link); // third step of construction
+          if (m_linkPtr->needUpdate())    // replace old value
           {
             auto orglinkBegin = orgLine.find(link);
             if (debug >= LOG_INFO)
               SEPERATE("isTargetToOriginalHtm", orgLine + "\n" + link);
-            orgLine.replace(orglinkBegin, link.length(), lfm->asString());
+            orgLine.replace(orglinkBegin, link.length(), m_linkPtr->asString());
           }
         }
       }

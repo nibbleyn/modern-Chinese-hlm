@@ -1,14 +1,14 @@
 #pragma once
 #include "fileUtil.hpp"
+//#include "utf8StringUtil.hpp"
 #include "lineNumber.hpp"
 #include "paraHeader.hpp"
-#include "utf8StringUtil.hpp"
 
 class BodyText {
 
 public:
   BodyText() = default;
-  BodyText(const string &filePrefix) : filePrefix(filePrefix) {}
+  BodyText(const string &filePrefix) : m_filePrefix(filePrefix) {}
   /**
    * load files under BODY_TEXT_OUTPUT directory with files under BODY_TEXT_FIX
    * i.e. from afterFix to output
@@ -36,23 +36,23 @@ public:
   using lineNumberSet = set<string>;
   // set options before search
   void resetBeforeSearch() {
-    ignoreSet.clear();
-    result.clear();
-    searchError = "";
+    m_ignoreSet.clear();
+    m_result.clear();
+    m_searchError = "";
   }
-  void addIgnoreLines(const string &line) { ignoreSet.insert(line); }
-  void searchForAll() { onlyFirst = false; }
+  void addIgnoreLines(const string &line) { m_ignoreSet.insert(line); }
+  void searchForAll() { m_onlyFirst = false; }
 
   // search
   bool findKey(const string &key);
 
   // get search results
   string getFirstResultLine() {
-    if (not result.empty())
-      return *(result.begin());
+    if (not m_result.empty())
+      return *(m_result.begin());
     return "";
   }
-  lineNumberSet getResultLineSet() { return result; };
+  lineNumberSet getResultLineSet() { return m_result; };
 
   // reformat to smaller paragraphs
   void reformatParagraphToSmallerSize(const string &sampleBlock);
@@ -69,14 +69,14 @@ public:
   void addLineNumber(const string &separatorColor, bool hidden = false);
 
 protected:
-  string filePrefix{"Main"};
+  string m_filePrefix{"Main"};
   string m_file{"01"};
   int m_attachNumber{0};
-  lineNumberSet ignoreSet;
-  lineNumberSet result;
-  string searchError{""};
-  bool onlyFirst{true};
-  bool autoNumbering{false};
+  lineNumberSet m_ignoreSet;
+  lineNumberSet m_result;
+  string m_searchError{""};
+  bool m_onlyFirst{true};
+  bool m_autoNumbering{false};
 };
 
 void testSearchTextIsOnlyPartOfOtherKeys();
