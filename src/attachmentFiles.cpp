@@ -3,6 +3,32 @@
 static const string endOfHead = R"(/head)";
 static const string titleStart = R"(<title>)";
 static const string titleEnd = R"(</title>)";
+/**
+ * get chapter number and attachment number from an attachment file name
+ * for example with input b001_15 would return pair <1,15>
+ * @param filename the attachment file without .htm, e.g. b003_7
+ * @return pair of chapter number and attachment number
+ */
+AttachmentNumber getAttachmentNumber(const string &filename) {
+  AttachmentNumber num(0, 0);
+  string start = getFileNamePrefixFromFileType(FILE_TYPE::ATTACHMENT);
+  auto fileBegin = filename.find(start);
+  if (fileBegin == string::npos) // referred file not found
+  {
+    return num;
+  }
+  auto chapter = filename.substr(fileBegin + start.length(), 2);
+  //  cout << chapter;
+  num.first = TurnToInt(chapter);
+  auto seqStart = filename.find(attachmentFileMiddleChar);
+  if (seqStart == string::npos) // no file to refer
+  {
+    return num;
+  }
+  auto seq = filename.substr(seqStart + 1, filename.length() - seqStart);
+  num.second = TurnToInt(seq);
+  return num;
+}
 
 /**
  * find in <title>xxx</title> part of attachment file header

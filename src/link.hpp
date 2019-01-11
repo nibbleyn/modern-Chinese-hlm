@@ -29,11 +29,6 @@ static const string returnLink = R"(被引用)";
 static const string returnToContentTable = R"(回目录)";
 static const string contentTableFilename = R"(aindex.htm)";
 
-enum class ATTACHMENT_TYPE { PERSONAL, REFERENCE, NON_EXISTED };
-
-using AttachmentNumber = pair<int, int>; // chapter number, attachment number
-AttachmentNumber getAttachmentNumber(const string &filename);
-
 static const string linkStartChars = R"(<a)";
 static const string linkEndChars = R"(</a>)";
 static const string originalLinkStartChars = R"(（)";
@@ -200,9 +195,6 @@ protected:
   LinkPtr m_linkPtrToOrigin{nullptr};
 };
 
-static const string attachmentDirForLinkFromMain = R"(attachment\)";
-static const string originalDirForLinkFromMain = R"(original\)";
-
 class LinkFromMain : public Link {
 public:
   static AttachmentSet attachmentTable;
@@ -220,33 +212,13 @@ public:
   bool readReferFileName(const string &link);
 
 private:
-  /**
-   *  the directory structure is like below
-   *  refer to utf8HTML/src
-   *  \              <-link from main to access main
-   *  \attachment\   <-link from attachment to access main to access other
-   *  \original\     <- no link in text here
-   *  \a*.htm        <- main texts
-   * @param linkString the link to check
-   * @return the level difference between a link and its target
-   */
-  string getPathOfReferenceFile() const override {
-    string result{""};
-    if (m_type == LINK_TYPE::ATTACHMENT)
-      result = attachmentDirForLinkFromMain;
-    if (m_type == LINK_TYPE::ORIGINAL)
-      result = originalDirForLinkFromMain;
-    return result;
-  }
+  string getPathOfReferenceFile() const override;
   void logLink();
 
   // utility to convert link type with filename
   string getFileNamePrefix();
   string getBodyTextFilePrefix();
 };
-
-static const string mainDirForLinkFromAttachment = R"(..\)";
-static const string originalDirForLinkFromAttachment = R"(..\original\)";
 
 class LinkFromAttachment : public Link {
 public:
@@ -262,24 +234,7 @@ public:
   void setTypeThruFileNamePrefix(const string &link);
 
 private:
-  /**
-   *  the directory structure is like below
-   *  refer to utf8HTML/src
-   *  \              <-link from main to access main
-   *  \attachment\   <-link from attachment to access main to access other
-   *  \original\     <- no link in text here
-   *  \a*.htm        <- main texts
-   * @param linkString the link to check
-   * @return the level difference between a link and its target
-   */
-  string getPathOfReferenceFile() const override {
-    string result{""};
-    if (m_type == LINK_TYPE::MAIN or m_annotation == returnToContentTable)
-      result = mainDirForLinkFromAttachment;
-    if (m_type == LINK_TYPE::ORIGINAL)
-      result = originalDirForLinkFromAttachment;
-    return result;
-  }
+  string getPathOfReferenceFile() const override;
   void logLink();
 
   // utility to convert link type with filename

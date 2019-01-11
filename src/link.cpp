@@ -620,33 +620,6 @@ bool isAnnotationMatch(string annotation, string title) {
   return (annotation == title);
 }
 
-/**
- * get chapter number and attachment number from an attachment file name
- * for example with input b001_15 would return pair <1,15>
- * @param filename the attachment file without .htm, e.g. b003_7
- * @return pair of chapter number and attachment number
- */
-AttachmentNumber getAttachmentNumber(const string &filename) {
-  AttachmentNumber num(0, 0);
-  string start = getFileNamePrefixFromFileType(FILE_TYPE::ATTACHMENT);
-  auto fileBegin = filename.find(start);
-  if (fileBegin == string::npos) // referred file not found
-  {
-    return num;
-  }
-  auto chapter = filename.substr(fileBegin + start.length(), 2);
-  //  cout << chapter;
-  num.first = TurnToInt(chapter);
-  auto seqStart = filename.find(attachmentFileMiddleChar);
-  if (seqStart == string::npos) // no file to refer
-  {
-    return num;
-  }
-  auto seq = filename.substr(seqStart + 1, filename.length() - seqStart);
-  num.second = TurnToInt(seq);
-  return num;
-}
-
 static const string HTML_OUTPUT_LINKS_FROM_MAIN_LIST =
     "utf8HTML/output/LinksFromMain.txt";
 static const string HTML_OUTPUT_ATTACHMENT_FROM_MAIN_LIST =
@@ -794,6 +767,27 @@ bool LinkFromMain::readReferFileName(const string &link) {
   return true;
 }
 
+static const string attachmentDirForLinkFromMain = R"(attachment\)";
+static const string originalDirForLinkFromMain = R"(original\)";
+
+/**
+ *  the directory structure is like below
+ *  refer to utf8HTML/src
+ *  \              <-link from main to access main
+ *  \attachment\   <-link from attachment to access main to access other
+ *  \original\     <- no link in text here
+ *  \a*.htm        <- main texts
+ * @param linkString the link to check
+ * @return the level difference between a link and its target
+ */
+string LinkFromMain::getPathOfReferenceFile() const {
+  string result{""};
+  if (m_type == LINK_TYPE::ATTACHMENT)
+    result = attachmentDirForLinkFromMain;
+  if (m_type == LINK_TYPE::ORIGINAL)
+    result = originalDirForLinkFromMain;
+  return result;
+}
 /**
  * log a valid link found by putting it into linksTable
  * which is sorted by ChapterName, referPara, usedKey
@@ -997,6 +991,28 @@ bool LinkFromAttachment::readReferFileName(const string &link) {
     cout << "chapterNumber: " << m_chapterNumber
          << ", attachmentNumber: " << m_attachmentNumber << endl;
   return true;
+}
+
+static const string mainDirForLinkFromAttachment = R"(..\)";
+static const string originalDirForLinkFromAttachment = R"(..\original\)";
+
+/**
+ *  the directory structure is like below
+ *  refer to utf8HTML/src
+ *  \              <-link from main to access main
+ *  \attachment\   <-link from attachment to access main to access other
+ *  \original\     <- no link in text here
+ *  \a*.htm        <- main texts
+ * @param linkString the link to check
+ * @return the level difference between a link and its target
+ */
+string LinkFromAttachment::getPathOfReferenceFile() const {
+  string result{""};
+  if (m_type == LINK_TYPE::MAIN or m_annotation == returnToContentTable)
+    result = mainDirForLinkFromAttachment;
+  if (m_type == LINK_TYPE::ORIGINAL)
+    result = originalDirForLinkFromAttachment;
+  return result;
 }
 
 /**
