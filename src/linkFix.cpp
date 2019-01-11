@@ -256,3 +256,48 @@ void fixLinksFromAttachment() {
   LinkFromAttachment::outPutStatisticsToFiles();
   cout << "fixLinksFromAttachment finished. " << endl;
 }
+
+/**
+ *
+ * @param minTarget
+ * @param maxTarget
+ */
+void removePersonalViewpoints(int minTarget, int maxTarget,
+                              FILE_TYPE fileType) {
+  cout << "to be implemented." << endl;
+  cout << "to remove <u> pairs." << endl;
+  cout << "and to remove personal attachment link." << endl;
+  for (const auto &file :
+       buildFileSet(minTarget, maxTarget)) // files need to be fixed
+  {
+    BodyTextWithLink bodyText;
+    bodyText.setFilePrefixFromFileType(fileType);
+    bodyText.removePersonalCommentsOverNumberedFiles(file);
+  }
+}
+
+void testRemovePersonalViewpoints() {
+  int minTarget = 54, maxTarget = 54;
+  removePersonalViewpoints(minTarget, maxTarget, FILE_TYPE::MAIN);
+}
+
+void testContainer() {
+  ListContainer container("1_gen");
+  auto link = fixLinkFromMainTemplate(
+      "", "80", LINK_DISPLAY_TYPE::UNHIDDEN, "菱角菱花",
+      "第80章1.1节:", "原是老奶奶（薛姨妈）使唤的", "94");
+
+  // to test link to original file
+  link = fixLinkFromOriginalTemplate(R"(original\)", "80", "菱角菱花", "94");
+
+  LinkFromMain lfm("", link);
+  lfm.readReferFileName(link); // second step of construction
+  lfm.fixFromString(link);
+  link = lfm.asString();
+
+  container.clearBodyTextFile();
+  container.appendParagraphInBodyText(link);
+  container.appendParagraphInBodyText("18 links are found.");
+  container.assembleBackToHTM("test", "test container");
+  cout << "result is in file " << container.getOutputFilePath() << endl;
+}

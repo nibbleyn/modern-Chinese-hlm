@@ -1,5 +1,6 @@
 #pragma once
-#include "fileUtil.hpp"
+//#include "fileUtil.hpp"
+#include "attachmentFiles.hpp"
 
 using namespace std;
 
@@ -16,3 +17,4 @@ void gb2312FixJPM();
 void convertAttachmentMainMenuFromGB2312ToUtf8();
 void convertMainMenuFromGB2312ToUtf8();
 void convertAllFromGb2312ToUtf8();
+void testConvertToUtf8();

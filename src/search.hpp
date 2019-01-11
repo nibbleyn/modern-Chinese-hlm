@@ -5,3 +5,4 @@
 void searchKeywordInNoAttachmentFiles(const string &key, const string &fileType,
                                       const string &outputFilename,
                                       bool searchForAll = true);
+void testFindFirstInFiles();

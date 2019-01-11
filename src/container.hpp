@@ -1,5 +1,7 @@
 #pragma once
-#include "fileUtil.hpp"
+//#include "fileUtil.hpp"
+//#include "utf8StringUtil.hpp"
+#include "attachmentFiles.hpp"
 
 static const string HTML_SRC_MAIN = "utf8HTML/src/";
 static const string HTML_SRC_ORIGINAL = "utf8HTML/src/original/";

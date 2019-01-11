@@ -43,16 +43,17 @@ void reConstructStory(string indexFilename) {
     //		  cout <<
     // startChapter<<startPara<<startLine<<endChapter<<endPara<<endLine<<
     // endl;
-    string startLink =
-        TurnToString(TurnToInt(startPara) + START_PARA_NUMBER - 1) + startPara +
-        "0" + startLine;
-    string endLink = TurnToString(TurnToInt(endPara) + START_PARA_NUMBER - 1) +
-                     endPara + "0" + endLine;
-    //		  cout << startLink<<endLink<< endl;
-    cs.push_back(make_pair(startChapter, endChapter));
-    ls.push_back(make_pair(startLink, endLink));
-    pls.push_back(
-        make_pair(startPara + " " + startLine, endPara + " " + endLine));
+    //    string startLink =
+    //        TurnToString(TurnToInt(startPara) + START_PARA_NUMBER - 1) +
+    //        startPara + "0" + startLine;
+    //    string endLink = TurnToString(TurnToInt(endPara) + START_PARA_NUMBER -
+    //    1) +
+    //                     endPara + "0" + endLine;
+    //    //		  cout << startLink<<endLink<< endl;
+    //    cs.push_back(make_pair(startChapter, endChapter));
+    //    ls.push_back(make_pair(startLink, endLink));
+    //    pls.push_back(
+    //        make_pair(startPara + " " + startLine, endPara + " " + endLine));
   }
   dispalyLinkRange(cs);
   dispalyLinkRange(ls);

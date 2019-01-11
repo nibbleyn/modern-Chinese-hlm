@@ -72,21 +72,3 @@ void LineNumber::readFromString(const string &name) {
   } else
     paraNumber = TurnToInt(name.substr(0)); // temporarily accept non-P number
 }
-
-/**
- * replace specific parts of a template link to actual value
- * @param linkString the link has key to replace
- * @param key the identified part to replace in the link
- * @param toReplace the actual value to replace in the link
- * @return the link after replacing all parts
- */
-string replacePart(string &linkString, const string &key,
-                   const string &toReplace) {
-  while (true) {
-    auto partBegin = linkString.find(key);
-    if (partBegin == string::npos)
-      break;
-    linkString.replace(partBegin, key.length(), toReplace);
-  }
-  return linkString;
-}

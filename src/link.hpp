@@ -1,6 +1,7 @@
 #pragma once
+//#include "utf8StringUtil.hpp"
+#include "attachmentFiles.hpp"
 #include "bodyText.hpp"
-#include "fileUtil.hpp"
 
 enum class LINK_TYPE { MAIN, ATTACHMENT, ORIGINAL, SAMEPAGE };
 enum class LINK_DISPLAY_TYPE { DIRECT, HIDDEN, UNHIDDEN };
@@ -283,3 +284,5 @@ private:
   string getFileNamePrefix();
   string getBodyTextFilePrefix();
 };
+
+void testLinkOperation();

@@ -46,6 +46,7 @@ void BodyText::setFilePrefixFromFileType(FILE_TYPE type) {
   if (type == FILE_TYPE::ORIGINAL)
     filePrefix = bodyTextFilePrefix[2];
 }
+
 /**
  * find a keyword in a numbered bodytext file
  * whose name is specified as fullPath
@@ -158,91 +159,6 @@ void BodyText::regroupingParagraphs(const string &sampleBlock,
     cout << "regrouping finished." << endl;
 }
 
-static const string firstParaHeader =
-    R"(<b unhidden> 第1段 </b><a unhidden name="PXX" href="#PYY">v向下</a>&nbsp;&nbsp;&nbsp;&nbsp;<a unhidden name="top" href="#bottom">页面底部->||</a><hr color="#COLOR">)";
-static const string MiddleParaHeader =
-    R"(<hr color="#COLOR"><b unhidden> 第ZZ段 </b><a unhidden name="PXX" href="#PYY">向下</a>&nbsp;&nbsp;&nbsp;&nbsp;<a unhidden name="PWW" href="#PUU">向上</a><hr color="#COLOR">)";
-static const string lastParaHeader =
-    R"(<hr color="#COLOR"><a unhidden name="bottom" href="#top">||<-页面顶部</a>&nbsp;&nbsp;&nbsp;&nbsp;<a unhidden name="PXX" href="#PYY">^向上</a><hr color="#COLOR">)";
-
-/**
- * generate real first Paragragh header
- * by filling right name and href
- * and right color
- * @param startNumber the start number as the name of first paragraph
- * @return first Paragragh header after fixed
- */
-string fixFirstParaHeaderFromTemplate(int startNumber, const string &color,
-                                      bool hidden) {
-  string link = firstParaHeader;
-  if (hidden) {
-    link = replacePart(link, "unhidden", "hidden");
-    link = replacePart(link, R"(<hr color="#COLOR">)", "<br>");
-  } else
-    link = replacePart(link, "COLOR", color);
-  link = replacePart(link, "XX", TurnToString(startNumber));
-  link = replacePart(link, "YY", TurnToString(startNumber + 1));
-
-  return link;
-}
-
-/**
- * generate real middle Paragragh header
- * by filling right number of this paragraph
- * right name for uplink and downlink
- * and right href to uplink and downlink
- * and right color for different files
- * and if this is last middle paragraph
- * make downlink pointing to bottom
- * @param startNumber the number of first paragraph header
- * @param currentParaNo number of paragraphs before this header
- * @param color the separator line color
- * @param lastPara whether this is the last middle paragraph
- * @return Paragragh header after fixed
- */
-string fixMiddleParaHeaderFromTemplate(int startNumber, int currentParaNo,
-                                       const string &color, bool hidden,
-                                       bool lastPara) {
-  string link = MiddleParaHeader;
-  if (hidden) {
-    link = replacePart(link, "unhidden", "hidden");
-    link = replacePart(link, R"(<hr color="#COLOR">)", "<br>");
-  } else
-    link = replacePart(link, "COLOR", color);
-  link = replacePart(link, "XX", TurnToString(startNumber + currentParaNo));
-  if (lastPara == true) {
-    link = replacePart(link, "PYY", R"(bottom)");
-  } else
-    link =
-        replacePart(link, "YY", TurnToString(startNumber + currentParaNo + 1));
-  link = replacePart(link, "ZZ", TurnToString(currentParaNo + 1));
-  link = replacePart(link, "WW", TurnToString(startNumber - currentParaNo));
-  link = replacePart(link, "UU", TurnToString(startNumber - currentParaNo + 1));
-  return link;
-}
-
-/**
- * generate real last Paragragh header
- * by filling right name and href
- * and right color
- * @param startNumber the start number as the name of first paragraph
- * @param lastParaNo number of paragraphs before this header
- * @param color the separator line color
- * @return last Paragragh header after fixed
- */
-string fixLastParaHeaderFromTemplate(int startNumber, int lastParaNo,
-                                     const string &color, bool hidden) {
-  string link = lastParaHeader;
-  if (hidden) {
-    link = replacePart(link, "unhidden", "hidden");
-    link = replacePart(link, R"(<hr color="#COLOR">)", "<br>");
-  } else
-    link = replacePart(link, "COLOR", color);
-  link = replacePart(link, "XX", TurnToString(startNumber - lastParaNo));
-  link = replacePart(link, "YY", TurnToString(startNumber - lastParaNo + 1));
-  return link;
-}
-
 /**
  * count number of lines with R"(name=")" of paragraph sign in it
  * return a tuple of numbers of first paragraph header,
@@ -292,7 +208,6 @@ BodyText::ParaStruct BodyText::getNumberOfPara(const string &file,
   return std::make_tuple(first, middle, last);
 }
 
-// add line number before each paragraph
 /**
  * add following line name with a name of lineNumber
  * before each line
@@ -495,4 +410,110 @@ void BodyText::addLineNumber(const string &separatorColor, const string &file,
   }
   if (debug >= LOG_INFO)
     cout << "numbering finished." << endl;
+}
+
+void testSearchTextIsOnlyPartOfOtherKeys() {
+  string line =
+      R"(秋水眼又对秋水鸳鸯剑，埋下<a unhidden href="#P94"><i hidden>春色</i>“倒底是不标致的好”</a>的悲剧结局)";
+  line =
+      R"(满脸春色，比白日更增了颜色（<i unhidden>美丽</i>）。贾琏搂她笑道：“人人都说我们那<a href="a044.htm#P94"><i hidden>夜叉星</i>夜叉婆</a>（<i unhidden>凤姐</i>）齐整（<i unhidden>标致</i>），如今我看来，（<i unhidden>俯就你</i>）给你拾鞋也不要。”尤二姐道：“我虽标致，却无<a href="a066.htm#P94"><i hidden>品行</i>品行</a>。看来倒底是不标致的好。)";
+  string key = R"(春色)";
+  cout << isOnlyPartOfOtherKeys(line, key);
+}
+
+void testLineHeader(string lnStr) {
+  cout << "original: " << endl << lnStr << endl;
+  LineNumber ln(lnStr);
+  cout << ln.getParaNumber() << " " << ln.getlineNumber() << " "
+       << ln.asString() << endl
+       << "is paragraph header? " << ln.isParagraphHeader() << endl;
+  if (not ln.isParagraphHeader()) {
+    if (not ln.isPureTextOnly())
+      cout << "generate line prefix: " << endl
+           << ln.generateLinePrefix() << endl;
+    else
+      cout << "pure text" << endl;
+  }
+}
+
+void testLineHeaderFromContainedLine(string containedLine) {
+  cout << "original: " << endl << containedLine << endl;
+  LineNumber ln;
+  ln.loadFromContainedLine(containedLine);
+  cout << ln.getParaNumber() << " " << ln.getlineNumber() << " "
+       << ln.asString() << endl
+       << "is paragraph header? " << ln.isParagraphHeader() << endl;
+  if (not ln.isParagraphHeader()) {
+    if (not ln.isPureTextOnly())
+      cout << "generate line prefix: " << endl
+           << ln.generateLinePrefix() << endl;
+    else
+      cout << "pure text" << endl;
+  }
+}
+
+void testParagraphHeader(string lnStr) {
+  cout << "original: " << endl << lnStr << endl;
+  LineNumber ln(lnStr);
+  cout << ln.getParaNumber() << " " << ln.getlineNumber() << " "
+       << ln.asString() << endl
+       << "is paragraph header? " << ln.isParagraphHeader() << endl;
+  if (not ln.isParagraphHeader()) {
+    if (not ln.isPureTextOnly())
+      cout << "generate line prefix: " << endl
+           << ln.generateLinePrefix() << endl;
+    else
+      cout << "pure text" << endl;
+  }
+}
+
+void testParagraphHeaderFromContainedLine(string containedLine) {
+  cout << "original: " << endl << containedLine << endl;
+  LineNumber ln;
+  ln.loadFromContainedLine(containedLine);
+  cout << ln.getParaNumber() << " " << ln.getlineNumber() << " "
+       << ln.asString() << endl
+       << "is paragraph header? " << ln.isParagraphHeader() << endl;
+  if (not ln.isParagraphHeader()) {
+    if (not ln.isPureTextOnly())
+      cout << "generate line prefix: " << endl
+           << ln.generateLinePrefix() << endl;
+    else
+      cout << "pure text" << endl;
+  }
+}
+
+void testLineNumber() {
+  LineNumber::setStartNumber(START_PARA_NUMBER);
+  testLineHeader("P1L4");
+  SEPERATE("ln1", " finished ");
+  testLineHeader("P13L4");
+  SEPERATE("ln2", " finished ");
+  testLineHeaderFromContainedLine(
+      R"(<a unhidden name="P12L8">12.8</a>　　原来 这一个名唤 贾蔷，也系 宁国府 正派玄孙，父母早亡，从小 跟贾珍过活，如今 长了十六岁，比 贾蓉 生得还 风流俊俏。贾蓉、贾蔷兄弟二人最相亲厚，常相共处。<br>)");
+  SEPERATE("ln3", " finished ");
+
+  testParagraphHeaderFromContainedLine(fixFirstParaHeaderFromTemplate(
+      LineNumber::getStartNumber(), getSeparateLineColor(FILE_TYPE::MAIN)));
+  SEPERATE("ln4", " finished ");
+  testParagraphHeaderFromContainedLine(fixMiddleParaHeaderFromTemplate(
+      LineNumber::getStartNumber(), 1, getSeparateLineColor(FILE_TYPE::MAIN),
+      false));
+  SEPERATE("ln5", " finished ");
+  testParagraphHeaderFromContainedLine(fixLastParaHeaderFromTemplate(
+      LineNumber::getStartNumber(), 12, getSeparateLineColor(FILE_TYPE::MAIN)));
+  SEPERATE("ln6", " finished ");
+  testLineHeaderFromContainedLine(R"(<br>)");
+  SEPERATE("ln7", " finished ");
+  testLineHeaderFromContainedLine(R"(anything)");
+  SEPERATE("ln8", " finished ");
+}
+
+void testConstructSubStory() {
+  BodyText bodyText;
+  bodyText.setFilePrefixFromFileType(FILE_TYPE::MAIN);
+
+  BodyText::ParaStruct res = bodyText.getNumberOfPara("06");
+  cout << GetTupleElement(res, 0) << " " << GetTupleElement(res, 1) << " "
+       << GetTupleElement(res, 2) << endl;
 }

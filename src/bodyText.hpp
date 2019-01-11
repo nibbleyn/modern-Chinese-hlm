@@ -1,5 +1,7 @@
 #pragma once
 #include "fileUtil.hpp"
+#include "lineNumber.hpp"
+#include "paraHeader.hpp"
 #include "utf8StringUtil.hpp"
 
 class BodyText {
@@ -73,4 +75,6 @@ protected:
   bool autoNumbering{false};
 };
 
-bool isOnlyPartOfOtherKeys(const string &orgLine, const string &key);
+void testSearchTextIsOnlyPartOfOtherKeys();
+void testLineNumber();
+void testConstructSubStory();

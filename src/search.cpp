@@ -68,3 +68,8 @@ void searchKeywordInNoAttachmentFiles(const string &key, const string &fileType,
   findFirstInNoAttachmentFiles(key, fileType, minTarget, maxTarget,
                                outputFilename);
 }
+
+void testFindFirstInFiles() {
+  searchKeywordInNoAttachmentFiles(R"(聚赌嫖娼)", "main", "xxx3");
+  searchKeywordInNoAttachmentFiles(R"(头一社)", "original", "xxx4");
+}

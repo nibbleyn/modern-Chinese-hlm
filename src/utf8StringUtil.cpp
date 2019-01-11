@@ -1,5 +1,61 @@
 #include "utf8StringUtil.hpp"
 
+/**
+ * all file names like a077.htm, b003_8.htm
+ * have a 2-digit string part "77", "03"
+ * specifying chapter 77,3 etc.
+ * this function return a 2-digit string from chapter number
+ * for example, "07" from chapter 7
+ * @param chapterNumber the index of the chapter
+ * @return 2-digit string of chapter number
+ */
+string formatIntoTwoDigitChapterNumber(int chapterNumber) {
+  stringstream formatedNumber;
+  formatedNumber.fill('0');
+  formatedNumber.width(2);
+  formatedNumber.clear();
+  formatedNumber << internal << chapterNumber;
+  return formatedNumber.str();
+}
+
+/**
+ * generate a set of strings
+ * containing 2-digit string of chapters
+ * starting from min
+ * and ending in max
+ * @param min the smallest chapter
+ * @param max the largest chapter
+ * @return a set of strings in fileSet
+ */
+fileSet buildFileSet(int min, int max) {
+  fileSet fs;
+  for (int i = min; i <= std::min(99, max); i++) {
+    fs.insert(formatIntoTwoDigitChapterNumber(i));
+  }
+  for (int i = 100; i <= max; i++) {
+    fs.insert(TurnToString(i));
+  }
+  return fs;
+}
+
+/**
+ * replace specific parts of a template link to actual value
+ * @param linkString the link has key to replace
+ * @param key the identified part to replace in the link
+ * @param toReplace the actual value to replace in the link
+ * @return the link after replacing all parts
+ */
+string replacePart(string &linkString, const string &key,
+                   const string &toReplace) {
+  while (true) {
+    auto partBegin = linkString.find(key);
+    if (partBegin == string::npos)
+      break;
+    linkString.replace(partBegin, key.length(), toReplace);
+  }
+  return linkString;
+}
+
 int utf8length(std::string originalString) {
   size_t len = 0, byteIndex = 0;
   const char *aStr = originalString.c_str();

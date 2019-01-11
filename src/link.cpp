@@ -1075,3 +1075,154 @@ string LinkFromAttachment::getBodyTextFilePrefix() {
     prefix = bodyTextFilePrefix[3];
   return prefix;
 }
+
+/**
+ * this function needs numbering first to get a correct target refer line number
+ * or copy .txt files under testData to bodyTexts\output
+ */
+void testLinkFromMain(string fromFile, string linkString,
+                      bool needToGenerateOrgLink) {
+  cout << "original link: " << endl << linkString << endl;
+  LinkFromMain lfm(fromFile, linkString);
+  lfm.readReferFileName(linkString); // second step of construction
+  lfm.fixFromString(linkString);
+  if (needToGenerateOrgLink)
+    lfm.generateLinkToOrigin();
+  auto fixed = lfm.asString();
+  cout << "need Update: " << lfm.needUpdate() << endl;
+  cout << "after fixed: " << endl << fixed << endl;
+}
+
+void testLinkFromAttachment(string fromFile, string linkString,
+                            bool needToGenerateOrgLink) {
+  cout << "original link: " << endl << linkString << endl;
+  LinkFromAttachment lfm(fromFile, linkString);
+  lfm.readReferFileName(linkString); // second step of construction
+  lfm.fixFromString(linkString);
+  cout << lfm.getAnnotation() << endl;
+  if (needToGenerateOrgLink)
+    lfm.generateLinkToOrigin();
+  auto fixed = lfm.asString();
+  cout << "need Update: " << lfm.needUpdate() << endl;
+  cout << "after fixed: " << endl << fixed << endl;
+}
+
+void testLink(Link &lfm, string linkString, bool needToGenerateOrgLink) {
+  cout << "original link: " << endl << linkString << endl;
+
+  //
+  lfm.readReferFileName(linkString); // second step of construction
+  lfm.fixFromString(linkString);
+  if (needToGenerateOrgLink)
+    lfm.generateLinkToOrigin();
+  auto fixed = lfm.asString();
+  cout << "need Update: " << lfm.needUpdate() << endl;
+  cout << "after fixed: " << endl << fixed << endl;
+}
+
+void testLinkOperation() {
+
+  string linkString =
+      R"(<a hidden href="a080.htm#top">原是（<i unhidden>薛姨妈1</i>）老奶奶（<i unhidden>薛姨妈2</i>）使唤的</a>)";
+  cout << "original link: " << endl << linkString << endl;
+  LinkFromMain lfm("75", linkString);
+  lfm.readReferFileName(linkString); // second step of construction
+  cout << "change to refer to file 57. " << endl;
+  lfm.fixReferFile(57);
+  lfm.fixFromString(linkString);
+  auto fixed = lfm.asString();
+  cout << "need Update: " << lfm.needUpdate() << endl;
+  cout << "after fixed: " << endl << fixed << endl;
+  SEPERATE("fixReferFile", " finished ");
+
+  testLinkFromMain("07", R"(<a hidden
+        href="a080.htm#top">原是（<i unhidden>薛姨妈1</i>）老奶奶（<i unhidden>薛姨妈2</i>）使唤的</a>)",
+                   false);
+  SEPERATE("#top", " finished ");
+
+  testLinkFromMain(
+      "07",
+      R"(<a hidden href="attachment\b003_9.htm#P2L3">原是老奶奶（薛姨妈）使唤的</a>)",
+      false);
+  SEPERATE("WARNING:", " SUCH LINK'S REFERPARA WON'T BE FIXED AUTOMATICALLY. ");
+  SEPERATE("attachment with referPara", " finished ");
+
+  testLinkFromMain(
+      "80",
+      fixLinkFromSameFileTemplate(LINK_DISPLAY_TYPE::HIDDEN, "菱角菱花",
+                                  "原是老奶奶（薛姨妈）使唤的", "94"),
+      false);
+  SEPERATE("fixLinkFromSameFileTemplate", " finished ");
+
+  linkString = fixLinkFromMainTemplate(
+      "", "80", LINK_DISPLAY_TYPE::HIDDEN, "菱角菱花",
+      "第80章1.1节:", "原是老奶奶（薛姨妈）使唤的", "94");
+  LinkFromMain link("07", linkString);
+  testLink(link, linkString, false);
+
+  SEPERATE("fixLinkFromMainTemplate", " finished ");
+
+  testLinkFromMain("03",
+                   fixLinkFromMainTemplate(
+                       "", "80", LINK_DISPLAY_TYPE::HIDDEN, "菱角菱花",
+                       "第80章1.1节:", "原是老奶奶（薛姨妈）使唤的", "94"),
+                   true);
+  SEPERATE("generate original link afterwards", " finished ");
+
+  testLinkFromMain(
+      "07", fixLinkFromOriginalTemplate(R"(original\)", "18", "happy", "90101"),
+      false);
+  SEPERATE("fixLinkFromOriginalTemplate", " finished ");
+
+  testLinkFromMain(
+      "07", fixLinkFromAttachmentTemplate(R"(attachment\)", "18", "7", "happy"),
+      false);
+  SEPERATE("fixLinkFromOriginalTemplate", " finished ");
+
+  SEPERATE("testLinkFromMain", " finished ");
+
+  string linkString1 = fixLinkFromMainTemplate(
+      R"(..\)", "80", LINK_DISPLAY_TYPE::HIDDEN, "菱角菱花",
+      "第80章1.1节:", "原是老奶奶（薛姨妈）使唤的", "94");
+  string linkString2 = fixLinkFromAttachmentTemplate("", "18", "7", "happy");
+  cout << "original link: " << endl << linkString2 << endl;
+  LinkFromAttachment lfm1("03_9", linkString2);
+  lfm1.readReferFileName(linkString2); // second step of construction
+  cout << "change to refer to file 55_3. " << endl;
+  lfm1.fixReferFile(55, 3);
+  lfm1.fixFromString(linkString2);
+  auto fixed2 = lfm1.asString();
+  cout << "need Update: " << lfm1.needUpdate() << endl;
+  cout << "after fixed: " << endl << fixed2 << endl;
+  SEPERATE("fixReferFile", " finished ");
+  testLinkFromAttachment("1_0",
+                         R"(<a unhidden href="..\aindex.htm">回目录</a>)",
+                         false);
+  SEPERATE("回目录", " finished ");
+
+  testLinkFromAttachment(
+      "03_9",
+      fixLinkFromSameFileTemplate(LINK_DISPLAY_TYPE::HIDDEN, "西北",
+                                  "原是老奶奶（薛姨妈）使唤的", "94"),
+      false);
+  SEPERATE("fixLinkFromSameFileTemplate", " finished ");
+
+  testLinkFromAttachment(
+      "03_9",
+      fixLinkFromMainTemplate(
+          R"(..\)", "80", LINK_DISPLAY_TYPE::HIDDEN, "菱角菱花",
+          "第80章1.1节:", "原是老奶奶（薛姨妈）使唤的", "94"),
+      true);
+  SEPERATE("fixLinkFromMainTemplate", " finished ");
+
+  testLinkFromAttachment(
+      "03_9",
+      fixLinkFromOriginalTemplate(R"(..\original\)", "80", "菱角菱花", "94"),
+      false);
+  SEPERATE("fixLinkFromOriginalTemplate", " finished ");
+
+  testLinkFromAttachment(
+      "03_9", fixLinkFromAttachmentTemplate("", "18", "7", "happy"), false);
+  SEPERATE("fixLinkFromAttachmentTemplate", " finished ");
+  SEPERATE("testLinkFromAttachment", " finished ");
+}

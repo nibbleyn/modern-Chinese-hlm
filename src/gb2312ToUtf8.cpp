@@ -149,3 +149,9 @@ void convertAllFromGb2312ToUtf8() {
   convertAttachmentMainMenuFromGB2312ToUtf8();
   convertMainMenuFromGB2312ToUtf8();
 }
+
+void testConvertToUtf8() {
+  convertAllFromGb2312ToUtf8();
+  gb2312FixJPM();
+  gb2312FixOriginal(1, 80);
+}

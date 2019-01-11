@@ -1,22 +1,5 @@
 #pragma once
-#include <iostream>
-#include <string>
-
-using namespace std;
-
-const int LOG_EXCEPTION = 1;
-const int LOG_INFO = 2;
-
-#define TurnToInt(x) stoi(x, nullptr, 10)
-#define TurnToString(x) to_string(x)
-
-static const string leadingChar = R"(P)";
-static const string middleChar = R"(L)";
-static const string invalidLineNumber = R"(P0L0)";
-static const string topParagraphIndicator =
-    R"(top)"; // of the body Text file
-static const string bottomParagraphIndicator =
-    R"(bottom)"; // of the body Text file
+#include "utf8StringUtil.hpp"
 
 static const int START_PARA_NUMBER = 90;
 class LineNumber {
