@@ -44,20 +44,20 @@ string CoupledContainer::getBodyTextFilePrefix() {
   return MAIN_BODYTEXT_PREFIX;
 }
 
-void CoupledContainer::assembleBackToHTM(const string &file, int attachNo,
-                                         const string &title,
+void CoupledContainer::assembleBackToHTM(const string &title,
                                          const string &displayTitle) {
   string attachmentPart{""};
   if (m_fileType == FILE_TYPE::ATTACHMENT)
-    attachmentPart = attachmentFileMiddleChar + TurnToString(attachNo);
+    attachmentPart =
+        attachmentFileMiddleChar + TurnToString(m_attachmentNumber);
 
   string inputHtmlFile = m_htmlInputFilePath +
-                         getHtmlFileNamePrefix(m_fileType) + file +
+                         getHtmlFileNamePrefix(m_fileType) + m_file +
                          attachmentPart + HTML_SUFFIX;
   string inputBodyTextFile = m_bodyTextInputFilePath + getBodyTextFilePrefix() +
-                             file + attachmentPart + BODY_TEXT_SUFFIX;
+                             m_file + attachmentPart + BODY_TEXT_SUFFIX;
   string outputFile = m_htmlOutputFilePath + getHtmlFileNamePrefix(m_fileType) +
-                      file + attachmentPart + HTML_SUFFIX;
+                      m_file + attachmentPart + HTML_SUFFIX;
 
   ifstream inHtmlFile(inputHtmlFile);
   if (!inHtmlFile) // doesn't exist
@@ -186,17 +186,18 @@ void CoupledContainer::backupAndOverwriteAllInputHtmlFiles() {
   }
 }
 
-void CoupledContainer::dissembleFromHTM(const string &file, int attachNo) {
+void CoupledContainer::dissembleFromHTM() {
   string attachmentPart{""};
   if (m_fileType == FILE_TYPE::ATTACHMENT)
-    attachmentPart = attachmentFileMiddleChar + TurnToString(attachNo);
+    attachmentPart =
+        attachmentFileMiddleChar + TurnToString(m_attachmentNumber);
 
   string inputHtmlFile = m_htmlInputFilePath +
-                         getHtmlFileNamePrefix(m_fileType) + file +
+                         getHtmlFileNamePrefix(m_fileType) + m_file +
                          attachmentPart + HTML_SUFFIX;
   string outputBodyTextFile = m_bodyTextInputFilePath +
-                              getBodyTextFilePrefix() + file + attachmentPart +
-                              BODY_TEXT_SUFFIX;
+                              getBodyTextFilePrefix() + m_file +
+                              attachmentPart + BODY_TEXT_SUFFIX;
 
   ifstream infile(inputHtmlFile);
   if (!infile) // doesn't exist
@@ -269,7 +270,8 @@ void dissembleAttachments(int minTarget, int maxTarget, int minAttachNo,
       targetAttachments =
           getAttachmentFileListForChapter(file, HTML_SRC_ATTACHMENT);
     for (const auto &attNo : targetAttachments) {
-      container.dissembleFromHTM(file, attNo);
+      container.setFileAndAttachmentNumber(file, attNo);
+      container.dissembleFromHTM();
     }
   }
   if (debug >= LOG_INFO)
@@ -301,7 +303,8 @@ void assembleAttachments(int minTarget, int maxTarget, int minAttachNo,
       targetAttachments =
           getAttachmentFileListForChapter(file, HTML_SRC_ATTACHMENT);
     for (const auto &attNo : targetAttachments) {
-      container.assembleBackToHTM(file, attNo);
+      container.setFileAndAttachmentNumber(file, attNo);
+      container.assembleBackToHTM();
     }
   }
   if (debug >= LOG_INFO)

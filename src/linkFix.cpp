@@ -158,7 +158,8 @@ void fixMainHtml(int minTarget, int maxTarget, int minReference,
   CoupledContainer container(FILE_TYPE::MAIN);
   container.backupAndOverwriteAllInputHtmlFiles();
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
-    container.dissembleFromHTM(file);
+    container.setFileAndAttachmentNumber(file);
+    container.dissembleFromHTM();
   }
   fixMainLinks(minTarget, maxTarget, minReference, maxReference);
   BodyText::loadBodyTextsFromFixBackToOutput();

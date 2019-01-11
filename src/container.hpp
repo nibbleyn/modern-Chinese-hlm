@@ -53,14 +53,20 @@ public:
     m_bodyTextInputFilePath = BODY_TEXT_OUTPUT;
     m_bodyTextOutputFilePath = BODY_TEXT_FIX;
   }
+  void setFileAndAttachmentNumber(const string &file, int attachNo = 0) {
+    m_file = file;
+    m_attachmentNumber = attachNo;
+  };
   void backupAndOverwriteAllInputHtmlFiles();
-  void dissembleFromHTM(const string &file, int attachNo = 1);
-  void assembleBackToHTM(const string &file, int attachNo = 1,
-                         const string &title = "",
+  void dissembleFromHTM();
+  void assembleBackToHTM(const string &title = "",
                          const string &displayTitle = "");
 
 private:
   FILE_TYPE m_fileType{FILE_TYPE::MAIN};
+  string m_file{"01"};
+  int m_attachmentNumber{0};
+
   string getBodyTextFilePrefix();
 };
 

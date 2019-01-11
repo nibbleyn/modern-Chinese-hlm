@@ -25,7 +25,8 @@ void NumberingOriginalHtml(int minTarget, int maxTarget, bool hidden = false) {
   CoupledContainer container(FILE_TYPE::ORIGINAL);
   container.backupAndOverwriteAllInputHtmlFiles();
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
-    container.dissembleFromHTM(file);
+    container.setFileAndAttachmentNumber(file);
+    container.dissembleFromHTM();
   }
   addLineNumbers(minTarget, maxTarget, FILE_TYPE::ORIGINAL, hidden);
   BodyText::loadBodyTextsFromFixBackToOutput();
@@ -46,7 +47,8 @@ void NumberingMainHtml(int minTarget, int maxTarget, bool hidden = false) {
   CoupledContainer container(FILE_TYPE::MAIN);
   container.backupAndOverwriteAllInputHtmlFiles();
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
-    container.dissembleFromHTM(file);
+    container.setFileAndAttachmentNumber(file);
+    container.dissembleFromHTM();
   }
   addLineNumbers(minTarget, maxTarget, FILE_TYPE::MAIN, hidden);
   BodyText::loadBodyTextsFromFixBackToOutput();
