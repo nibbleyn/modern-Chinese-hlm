@@ -300,6 +300,15 @@ void removePersonalViewpoints(int minTarget, int maxTarget,
   }
 }
 
+void removeImageForAutoNumbering(){
+
+}
+
+void addImageBackForManualNumbering()
+{
+
+}
+
 void testRemovePersonalViewpoints() {
   int minTarget = 54, maxTarget = 54;
   removePersonalViewpoints(minTarget, maxTarget, FILE_TYPE::MAIN);

@@ -315,7 +315,7 @@ void assembleAttachments(int minTarget, int maxTarget, int minAttachNo,
  * to get ready to write new text in this file which would be composed into
  * container htm
  */
-void GenericContainer::clearBodyTextFile() {
+void ListContainer::clearBodyTextFile() {
   string inputBodyTextFile =
       m_bodyTextInputFilePath + getInputFileName() + BODY_TEXT_SUFFIX;
   if (debug >= LOG_INFO)
@@ -328,7 +328,7 @@ void GenericContainer::clearBodyTextFile() {
  * @param linkString the string to put into
  * @param containerNumber the selected container to put into
  */
-void GenericContainer::appendParagraphInBodyText(const string &text) {
+void ListContainer::appendParagraphInBodyText(const string &text) {
   string inputBodyTextFile =
       m_bodyTextInputFilePath + getInputFileName() + BODY_TEXT_SUFFIX;
   if (debug >= LOG_INFO)

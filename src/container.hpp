@@ -90,8 +90,6 @@ public:
   virtual string getInputFileName() const = 0;
   void assembleBackToHTM(const string &title = "",
                          const string &displayTitle = "");
-  void clearBodyTextFile();
-  void appendParagraphInBodyText(const string &text);
   string getOutputFilePath() {
     return m_htmlOutputFilePath + m_outputFilename + HTML_SUFFIX;
   }
@@ -107,6 +105,8 @@ class ListContainer : public GenericContainer {
 public:
   ListContainer() = default;
   ListContainer(const string &filename) : GenericContainer(filename) {}
+  void clearBodyTextFile();
+  void appendParagraphInBodyText(const string &text);
 
 private:
   string getInputFileName() const override { return LIST_CONTAINER_FILENAME; }
