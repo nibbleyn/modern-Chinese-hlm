@@ -164,7 +164,8 @@ void fixMainHtml(int minTarget, int maxTarget, int minReference,
   fixMainLinks(minTarget, maxTarget, minReference, maxReference);
   BodyText::loadBodyTextsFromFixBackToOutput();
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
-    container.assembleBackToHTM(file);
+    container.setFileAndAttachmentNumber(file);
+    container.assembleBackToHTM();
   }
   fixReturnLinkForAttachments(minTarget, maxTarget);
 }
@@ -300,14 +301,9 @@ void removePersonalViewpoints(int minTarget, int maxTarget,
   }
 }
 
-void removeImageForAutoNumbering(){
+void removeImageForAutoNumbering() {}
 
-}
-
-void addImageBackForManualNumbering()
-{
-
-}
+void addImageBackForManualNumbering() {}
 
 void testRemovePersonalViewpoints() {
   int minTarget = 54, maxTarget = 54;

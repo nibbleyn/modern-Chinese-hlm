@@ -31,10 +31,8 @@ void NumberingOriginalHtml(int minTarget, int maxTarget, bool hidden = false) {
   addLineNumbers(minTarget, maxTarget, FILE_TYPE::ORIGINAL, hidden);
   BodyText::loadBodyTextsFromFixBackToOutput();
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
-    container.assembleBackToHTM(file);
-  }
-  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
-    container.assembleBackToHTM(file);
+    container.setFileAndAttachmentNumber(file);
+    container.assembleBackToHTM();
   }
 }
 
@@ -53,7 +51,8 @@ void NumberingMainHtml(int minTarget, int maxTarget, bool hidden = false) {
   addLineNumbers(minTarget, maxTarget, FILE_TYPE::MAIN, hidden);
   BodyText::loadBodyTextsFromFixBackToOutput();
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
-    container.assembleBackToHTM(file);
+    container.setFileAndAttachmentNumber(file);
+    container.assembleBackToHTM();
   }
   cout << "Numbering Main Html finished. " << endl;
 }

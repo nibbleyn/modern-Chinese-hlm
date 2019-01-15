@@ -127,7 +127,7 @@ void BodyTextWithLink::fixLinksFromFile(const string &file, fileSet files,
       auto linkEnd = inLine.find(linkEndChars, linkBegin);
       auto link = inLine.substr(linkBegin, linkEnd + 4 - linkBegin);
 
-      if (attachNo != 0) {
+      if (attachNo == 0) {
         m_linkPtr = std::make_unique<LinkFromMain>(file, link);
       } else {
         m_linkPtr =
@@ -165,7 +165,7 @@ void BodyTextWithLink::fixLinksFromFile(const string &file, fileSet files,
               // skip </a> and first parenthesis of next
               auto followingLink = inLine.substr(
                   linkEnd + next.length() + 2); // find next link in the inLine
-              if (attachNo != 0) {
+              if (attachNo == 0) {
                 m_followingLinkPtr =
                     std::make_unique<LinkFromMain>(file, followingLink);
               } else {

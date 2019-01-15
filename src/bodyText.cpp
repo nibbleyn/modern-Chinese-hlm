@@ -270,8 +270,8 @@ void BodyText::addLineNumber(const string &separatorColor, bool hidden) {
 
     if (debug >= LOG_INFO)
       cout << "numberOfFirstParaHeader: " << numberOfFirstParaHeader
-           << "numberOfMiddleParaHeader: " << numberOfMiddleParaHeader
-           << "numberOfLastParaHeader: " << numberOfLastParaHeader << endl;
+           << " numberOfMiddleParaHeader: " << numberOfMiddleParaHeader
+           << " numberOfLastParaHeader: " << numberOfLastParaHeader << endl;
     if (numberOfFirstParaHeader == 0 or numberOfLastParaHeader == 0) {
       cout << "no top or bottom paragraph found:" << inputFile << endl;
       return;

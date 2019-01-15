@@ -1140,9 +1140,10 @@ void testLinkOperation() {
   cout << "after fixed: " << endl << fixed << endl;
   SEPERATE("fixReferFile", " finished ");
 
-  testLinkFromMain("07", R"(<a hidden
-        href="a080.htm#top">原是（<i unhidden>薛姨妈1</i>）老奶奶（<i unhidden>薛姨妈2</i>）使唤的</a>)",
-                   false);
+  testLinkFromMain(
+      "07",
+      R"(<a hidden href="a080.htm#top">原是（<i unhidden>薛姨妈1</i>）老奶奶（<i unhidden>薛姨妈2</i>）使唤的</a>)",
+      false);
   SEPERATE("#top", " finished ");
 
   testLinkFromMain(
