@@ -189,7 +189,7 @@ void fixLinksFromMain() {
 void generateContentIndexTableForAttachments() {
   LinkFromMain::loadReferenceAttachmentList();
   ListContainer container("bindex1");
-  container.clearBodyTextFile();
+  container.initBodyTextFile();
   auto table = Link::refAttachmentTable;
   for (const auto &attachment : table) {
     auto attachmentName = attachment.first;
@@ -324,7 +324,7 @@ void testContainer() {
   lfm.fixFromString(link);
   link = lfm.asString();
 
-  container.clearBodyTextFile();
+  container.initBodyTextFile();
   container.appendParagraphInBodyText(link);
   container.appendParagraphInBodyText("18 links are found.");
   container.assembleBackToHTM("test", "test container");

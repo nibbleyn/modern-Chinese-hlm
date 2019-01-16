@@ -105,7 +105,7 @@ class ListContainer : public GenericContainer {
 public:
   ListContainer() = default;
   ListContainer(const string &filename) : GenericContainer(filename) {}
-  void clearBodyTextFile();
+  void initBodyTextFile();
   void appendParagraphInBodyText(const string &text);
 
 private:
@@ -116,8 +116,17 @@ private:
  * used for features like updateIndexTable etc.
  */
 class TableContainer : public GenericContainer {
+  static const string BODY_TEXT_STARTER;
+  static const string BODY_TEXT_DESSERT;
+
 public:
   TableContainer() = default;
+  TableContainer(const string &filename) : GenericContainer(filename) {}
+  void initBodyTextFile();
+  void appendLeftParagraphInBodyText(const string &text);
+  void appendRightParagraphInBodyText(
+      const string &text); // text could be null for last right column
+  void finishBodyTextFile();
 
 private:
   string getInputFileName() const override { return TABLE_CONTAINER_FILENAME; }

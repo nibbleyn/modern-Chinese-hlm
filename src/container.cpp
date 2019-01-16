@@ -315,7 +315,7 @@ void assembleAttachments(int minTarget, int maxTarget, int minAttachNo,
  * to get ready to write new text in this file which would be composed into
  * container htm
  */
-void ListContainer::clearBodyTextFile() {
+void ListContainer::initBodyTextFile() {
   string inputBodyTextFile =
       m_bodyTextInputFilePath + getInputFileName() + BODY_TEXT_SUFFIX;
   if (debug >= LOG_INFO)
@@ -336,6 +336,78 @@ void ListContainer::appendParagraphInBodyText(const string &text) {
   ofstream outfile;
   outfile.open(inputBodyTextFile, std::ios_base::app);
   outfile << "<br>" << text << "</br>" << endl;
+}
+
+const string TableContainer::BODY_TEXT_STARTER = R"(2front.txt)";
+const string TableContainer::BODY_TEXT_DESSERT = R"(2back.txt)";
+
+void TableContainer::initBodyTextFile() {
+  string inputBodyTextFile =
+      m_bodyTextInputFilePath + getInputFileName() + BODY_TEXT_SUFFIX;
+  if (debug >= LOG_INFO)
+    cout << "init content in: " << inputBodyTextFile << endl;
+  ofstream outfile(inputBodyTextFile);
+  // copy content from BODY_TEXT_STARTER
+  string starterFile = m_bodyTextInputFilePath + BODY_TEXT_STARTER;
+
+  ifstream inStarterFile(starterFile);
+  if (!inStarterFile) // doesn't exist
+  {
+    cout << "Starter file doesn't exist:" << starterFile << endl;
+    return;
+  }
+
+  while (!inStarterFile.eof()) // To get you all the lines.
+  {
+    string line{""};
+    getline(inStarterFile, line); // Saves the line in line.
+    outfile << line << endl;      // excluding start line
+  }
+}
+
+void TableContainer::finishBodyTextFile() {
+  string inputBodyTextFile =
+      m_bodyTextInputFilePath + getInputFileName() + BODY_TEXT_SUFFIX;
+  if (debug >= LOG_INFO)
+    cout << "append content in: " << inputBodyTextFile << endl;
+  ofstream outfile;
+  outfile.open(inputBodyTextFile, std::ios_base::app);
+  // copy content from BODY_TEXT_DESSERT
+  string dessertFile = m_bodyTextInputFilePath + BODY_TEXT_DESSERT;
+
+  ifstream inDessertFile(dessertFile);
+  if (!inDessertFile) // doesn't exist
+  {
+    cout << "Dessert file doesn't exist:" << dessertFile << endl;
+    return;
+  }
+
+  while (!inDessertFile.eof()) // To get you all the lines.
+  {
+    string line{""};
+    getline(inDessertFile, line); // Saves the line in line.
+    outfile << line << endl;      // excluding start line
+  }
+}
+
+void TableContainer::appendLeftParagraphInBodyText(const string &text) {
+  string inputBodyTextFile =
+      m_bodyTextInputFilePath + getInputFileName() + BODY_TEXT_SUFFIX;
+  if (debug >= LOG_INFO)
+    cout << "append Paragraph In BodyText: " << inputBodyTextFile << endl;
+  ofstream outfile;
+  outfile.open(inputBodyTextFile, std::ios_base::app);
+  outfile << R"(<tr><td width="50%">)" << text << "</td>" << endl;
+}
+
+void TableContainer::appendRightParagraphInBodyText(const string &text) {
+  string inputBodyTextFile =
+      m_bodyTextInputFilePath + getInputFileName() + BODY_TEXT_SUFFIX;
+  if (debug >= LOG_INFO)
+    cout << "append Paragraph In BodyText: " << inputBodyTextFile << endl;
+  ofstream outfile;
+  outfile.open(inputBodyTextFile, std::ios_base::app);
+  outfile << R"(<td width="50%">)" << text << R"(</td></tr>)" << endl;
 }
 
 void GenericContainer::assembleBackToHTM(const string &title,

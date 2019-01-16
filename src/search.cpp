@@ -7,6 +7,7 @@ void findFirstInNoAttachmentFiles(const string key, const string &fileType,
   using LinksList = map<string, vector<Link::LinkDetails>>;
   LinksList resultLinkList;
   resultLinkList.clear();
+  int total = 0;
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
 
     BodyText bodyText;
@@ -23,6 +24,7 @@ void findFirstInNoAttachmentFiles(const string key, const string &fileType,
           Link::LinkDetails detail{
               key, file, line,
               fixLinkFromOriginalTemplate(R"(original\)", file, key, line)};
+          total++;
           resultLinkList[file].push_back(detail);
         }
       }
@@ -37,29 +39,38 @@ void findFirstInNoAttachmentFiles(const string key, const string &fileType,
               key, file, line,
               fixLinkFromMainTemplate("", file, LINK_DISPLAY_TYPE::DIRECT, key,
                                       expectedSection, key, line)};
+          total++;
           resultLinkList[file].push_back(detail);
         }
       }
     }
   }
-  ListContainer container(outputFilename);
-  container.clearBodyTextFile();
-  int total = 0;
-  for (const auto &chapter : resultLinkList) {
-    container.appendParagraphInBodyText("found in " + fileType + " : " +
-                                        chapter.first + HTML_SUFFIX + " :");
-    auto list = chapter.second;
-    for (const auto &detail : list) {
-      total++;
-      container.appendParagraphInBodyText(detail.link);
+  bool asList = true;
+  if (asList) {
+    ListContainer container(outputFilename);
+    container.initBodyTextFile();
+    for (const auto &chapter : resultLinkList) {
+      container.appendParagraphInBodyText("found in " + fileType + " : " +
+                                          chapter.first + HTML_SUFFIX + " :");
+      auto list = chapter.second;
+      for (const auto &detail : list) {
+        container.appendParagraphInBodyText(detail.link);
+      }
     }
+    string verb = (total > 1) ? "s are" : " is";
+    container.appendParagraphInBodyText(TurnToString(total) + " link" + verb +
+                                        " found.");
+    container.assembleBackToHTM("search  results",
+                                "searchInFiles for key: " + key);
+    cout << "result is in file " << container.getOutputFilePath() << endl;
+  } else {
+    TableContainer container(outputFilename);
+    container.initBodyTextFile();
+    container.finishBodyTextFile();
+    container.assembleBackToHTM("search  results",
+                                "searchInFiles for key: " + key);
+    cout << "result is in file " << container.getOutputFilePath() << endl;
   }
-  string verb = (total > 1) ? "s are" : " is";
-  container.appendParagraphInBodyText(TurnToString(total) + " link" + verb +
-                                      " found.");
-  container.assembleBackToHTM("search  results",
-                              "searchInFiles for key: " + key);
-  cout << "result is in file " << container.getOutputFilePath() << endl;
 }
 
 void searchKeywordInNoAttachmentFiles(const string &key, const string &fileType,
