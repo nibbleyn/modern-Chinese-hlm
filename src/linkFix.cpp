@@ -111,8 +111,8 @@ void fixMainLinks(int minTarget, int maxTarget, int minReference,
   {
     CoupledBodyTextWithLink bodyText;
     bodyText.setFilePrefixFromFileType(FILE_TYPE::MAIN);
-    //    bodyText.fixLinksFromFile(file, buildFileSet(minReference,
-    //    maxReference));
+    bodyText.setFileAndAttachmentNumber(file);
+    bodyText.fixLinksFromFile(buildFileSet(minReference, maxReference));
     bodyText.fixTagPairBegin(R"(</strong>)", R"(<b unhidden>)", R"(</b>)",
                              R"(<strong>)");
     bodyText.fixTagPairEnd(R"(（见左图）)", R"(</font>)", R"(</var>)");
@@ -244,8 +244,8 @@ void fixLinksToMainForAttachments(int minTarget, int maxTarget,
     for (const auto &attNo : targetAttachments) {
       CoupledBodyTextWithLink bodyText;
       bodyText.setFilePrefixFromFileType(FILE_TYPE::ATTACHMENT);
-      bodyText.fixLinksFromFile(file, buildFileSet(minReference, maxReference),
-                                attNo);
+      bodyText.setFileAndAttachmentNumber(file, attNo);
+      bodyText.fixLinksFromFile(buildFileSet(minReference, maxReference));
     }
   }
 }
@@ -303,7 +303,8 @@ void removePersonalViewpoints(int minTarget, int maxTarget,
   {
     CoupledBodyTextWithLink bodyText;
     bodyText.setFilePrefixFromFileType(fileType);
-    bodyText.removePersonalCommentsOverNumberedFiles(file);
+    bodyText.setFileAndAttachmentNumber(file);
+    bodyText.removePersonalCommentsOverNumberedFiles();
   }
 }
 

@@ -3,23 +3,14 @@
 static const string personalCommentStart = R"(（<u unhidden)";
 static const string personalCommentEnd = R"(</u>）)";
 
-void CoupledBodyTextWithLink::removePersonalCommentsOverNumberedFiles(
-    const string &file, int attachNo) {
-  string attachmentPart{""};
-  if (attachNo != 0)
-    attachmentPart = attachmentFileMiddleChar + TurnToString(attachNo);
-
-  string inputFile = BODY_TEXT_OUTPUT + m_filePrefix + file + attachmentPart +
-                     BODY_TEXT_SUFFIX;
-  string outputFile =
-      BODY_TEXT_FIX + m_filePrefix + file + attachmentPart + BODY_TEXT_SUFFIX;
-
-  ifstream infile(inputFile);
+void CoupledBodyTextWithLink::removePersonalCommentsOverNumberedFiles() {
+  setInputOutputFiles();
+  ifstream infile(m_inputFile);
   if (!infile) {
-    cout << "file doesn't exist:" << inputFile << endl;
+    cout << "file doesn't exist:" << m_inputFile << endl;
     return;
   }
-  ofstream outfile(outputFile);
+  ofstream outfile(m_outputFile);
   string inLine{"not found"};
   while (!infile.eof()) // To get all the lines.
   {
@@ -58,7 +49,7 @@ void CoupledBodyTextWithLink::removePersonalCommentsOverNumberedFiles(
       string specialLink = removeSpecialLinkLine.substr(
           specialLinkBegin,
           specialLinkEnd + linkEnd.length() - specialLinkBegin);
-      LinkFromAttachment m_linkPtr(file, specialLink);
+      LinkFromAttachment m_linkPtr(m_file, specialLink);
       auto num = make_pair(m_linkPtr.getchapterNumer(),
                            m_linkPtr.getattachmentNumber());
       if (m_linkPtr.isTargetToOtherAttachmentHtm() and
@@ -79,29 +70,21 @@ void CoupledBodyTextWithLink::removePersonalCommentsOverNumberedFiles(
 }
 
 /**
- * fix links of certain type in file which refer to one of file in files
+ * fix links of certain type in file which refer to one of file in referFiles
  * @param file
- * @param files
+ * @param referFiles
  */
-void CoupledBodyTextWithLink::fixLinksFromFile(const string &file,
-                                               fileSet files, int attachNo,
-                                               int minPara, int maxPara,
-                                               int minLine, int maxLine) {
-  string attachmentPart{""};
-  if (attachNo != 0)
-    attachmentPart = attachmentFileMiddleChar + TurnToString(attachNo);
+void CoupledBodyTextWithLink::fixLinksFromFile(fileSet referFiles, int minPara,
+                                               int maxPara, int minLine,
+                                               int maxLine) {
+  setInputOutputFiles();
 
-  string inputFile = BODY_TEXT_OUTPUT + m_filePrefix + file + attachmentPart +
-                     BODY_TEXT_SUFFIX;
-  string outputFile =
-      BODY_TEXT_FIX + m_filePrefix + file + attachmentPart + BODY_TEXT_SUFFIX;
-
-  ifstream infile(inputFile);
+  ifstream infile(m_inputFile);
   if (!infile) {
-    cout << "file doesn't exist:" << inputFile << endl;
+    cout << "file doesn't exist:" << m_inputFile << endl;
     return;
   }
-  ofstream outfile(outputFile);
+  ofstream outfile(m_outputFile);
   string inLine{""};
   while (!infile.eof()) // To get all the lines.
   {
@@ -128,11 +111,12 @@ void CoupledBodyTextWithLink::fixLinksFromFile(const string &file,
       auto linkEnd = inLine.find(linkEndChars, linkBegin);
       auto link = inLine.substr(linkBegin, linkEnd + 4 - linkBegin);
 
-      if (attachNo == 0) {
-        m_linkPtr = std::make_unique<LinkFromMain>(file, link);
+      if (m_attachNumber == 0) {
+        m_linkPtr = std::make_unique<LinkFromMain>(m_file, link);
       } else {
-        m_linkPtr =
-            std::make_unique<LinkFromAttachment>(file + attachmentPart, link);
+        m_linkPtr = std::make_unique<LinkFromAttachment>(
+            m_file + attachmentFileMiddleChar + TurnToString(m_attachNumber),
+            link);
       }
       m_linkPtr->readReferFileName(
           link); // second step of construction, this is
@@ -153,8 +137,8 @@ void CoupledBodyTextWithLink::fixLinksFromFile(const string &file,
       }
       if (m_linkPtr->isTargetToOtherMainHtm()) {
         targetFile = m_linkPtr->getChapterName();
-        auto e = find(files.begin(), files.end(), targetFile);
-        if (e != files.end()) // need to check and fix
+        auto e = find(referFiles.begin(), referFiles.end(), targetFile);
+        if (e != referFiles.end()) // need to check and fix
         {
           m_linkPtr->fixFromString(link); // third step of construction
           m_linkPtr->setSourcePara(ln);
@@ -166,12 +150,14 @@ void CoupledBodyTextWithLink::fixLinksFromFile(const string &file,
               // skip </a> and first parenthesis of next
               auto followingLink = inLine.substr(
                   linkEnd + next.length() + 2); // find next link in the inLine
-              if (attachNo == 0) {
+              if (m_attachNumber == 0) {
                 m_followingLinkPtr =
-                    std::make_unique<LinkFromMain>(file, followingLink);
+                    std::make_unique<LinkFromMain>(m_file, followingLink);
               } else {
                 m_followingLinkPtr = std::make_unique<LinkFromAttachment>(
-                    file + attachmentPart, followingLink);
+                    m_file + attachmentFileMiddleChar +
+                        TurnToString(m_attachNumber),
+                    followingLink);
               }
               if (m_followingLinkPtr->isTargetToOriginalHtm()) {
                 needAddOrginalLink = false;
@@ -190,8 +176,8 @@ void CoupledBodyTextWithLink::fixLinksFromFile(const string &file,
       }
       if (m_linkPtr->isTargetToOriginalHtm()) {
         targetFile = m_linkPtr->getChapterName();
-        auto e = find(files.begin(), files.end(), targetFile);
-        if (e != files.end()) // need to check and fix
+        auto e = find(referFiles.begin(), referFiles.end(), targetFile);
+        if (e != referFiles.end()) // need to check and fix
         {
           m_linkPtr->fixFromString(link); // third step of construction
           if (m_linkPtr->needUpdate())    // replace old value

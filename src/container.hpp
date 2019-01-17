@@ -128,6 +128,7 @@ class ListContainer : public GenericContainer {
 public:
   ListContainer() = default;
   ListContainer(const string &filename) : GenericContainer(filename) {}
+  // process bodyText change directly, instead of thru CoupledBodyText
   void initBodyTextFile();
   void appendParagraphInBodyText(const string &text);
 
@@ -145,6 +146,8 @@ class TableContainer : public GenericContainer {
 public:
   TableContainer() = default;
   TableContainer(const string &filename) : GenericContainer(filename) {}
+
+  // process bodyText change directly, instead of thru CoupledBodyText
   void initBodyTextFile();
   void appendLeftParagraphInBodyText(const string &text);
   void appendRightParagraphInBodyText(

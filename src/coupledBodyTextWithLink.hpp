@@ -9,12 +9,10 @@ public:
   CoupledBodyTextWithLink(const string &filePrefix)
       : CoupledBodyText(filePrefix) {}
 
-  void fixLinksFromFile(const string &file, fileSet files, int attachNo = 0,
-                        int minPara = 0, int maxPara = 0, int minLine = 0,
-                        int maxLine = 0);
+  void fixLinksFromFile(fileSet referFiles, int minPara = 0, int maxPara = 0,
+                        int minLine = 0, int maxLine = 0);
 
-  void removePersonalCommentsOverNumberedFiles(const string &file,
-                                               int attachNo = 0);
+  void removePersonalCommentsOverNumberedFiles();
 
 private:
   using LinkPtr = std::unique_ptr<Link>;
