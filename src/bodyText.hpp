@@ -58,6 +58,15 @@ public:
   // add line number before each paragraph
   void addLineNumber(const string &separatorColor, bool hidden = false);
 
+  // fix wrong html pair
+  void fixTagPairBegin(const string &signOfTagAfterReplaceTag,
+                       const string &fromTagBegin, const string &fromTagEnd,
+                       const string &to);
+  void fixTagPairEnd(const string &signOfTagBeforeReplaceTag,
+                     const string &from, const string &to,
+                     const string &skipTagPairBegin = "",
+                     const string &skipTagPairEnd = "");
+
 protected:
   string m_filePrefix{"Main"};
   string m_file{"01"};

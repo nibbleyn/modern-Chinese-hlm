@@ -426,6 +426,13 @@ void BodyText::addLineNumber(const string &separatorColor, bool hidden) {
     cout << "numbering finished." << endl;
 }
 
+void BodyText::fixTagPairBegin(const string &signOfTagAfterReplaceTag,
+                               const string &fromTagBegin,
+                               const string &fromTagEnd, const string &to) {}
+void BodyText::fixTagPairEnd(const string &signOfTagBeforeReplaceTag,
+                             const string &from, const string &to,
+                             const string &skipTagPairBegin,
+                             const string &skipTagPairEnd) {}
 void testSearchTextIsOnlyPartOfOtherKeys() {
   string line =
       R"(秋水眼又对秋水鸳鸯剑，埋下<a unhidden href="#P94"><i hidden>春色</i>“倒底是不标致的好”</a>的悲剧结局)";

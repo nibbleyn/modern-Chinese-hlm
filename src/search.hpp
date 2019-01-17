@@ -9,4 +9,9 @@ void searchKeywordInNoAttachmentFiles(const string &key, const string &fileType,
 void searchKeywordInNoAttachmentFiles(KeyList &keyList, const string &fileType,
                                       const string &outputFilename,
                                       bool searchForAll = true);
+
+void searchByTagInNoAttachmentFiles(const string &tag, const string &fileType,
+                                    const string &outputFilename,
+                                    bool showLineNumberOnly = true);
+
 void testFindFirstInFiles();

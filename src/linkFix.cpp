@@ -111,7 +111,13 @@ void fixMainLinks(int minTarget, int maxTarget, int minReference,
   {
     BodyTextWithLink bodyText;
     bodyText.setFilePrefixFromFileType(FILE_TYPE::MAIN);
-    bodyText.fixLinksFromFile(file, buildFileSet(minReference, maxReference));
+    //    bodyText.fixLinksFromFile(file, buildFileSet(minReference,
+    //    maxReference));
+    bodyText.fixTagPairBegin(R"(</strong>)", R"(<b unhidden>)", R"(</b>)",
+                             R"(<strong>)");
+    bodyText.fixTagPairEnd(R"(（见左图）)", R"(</font>)", R"(</var>)");
+    bodyText.fixTagPairEnd(R"(<cite>)", keyEndChars, R"(</cite>)",
+                           keyStartChars, keyEndChars);
   }
 }
 
