@@ -28,6 +28,8 @@ static const string returnLinkFromAttachmentHeader = R"(返回本章原文)";
 static const string returnLink = R"(被引用)";
 static const string returnToContentTable = R"(回目录)";
 static const string contentTableFilename = R"(aindex.htm)";
+static const string citationChapterNo = R"(第)";
+static const string citationChapter = R"(章)";
 
 static const string linkStartChars = R"(<a)";
 static const string linkEndChars = R"(</a>)";

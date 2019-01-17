@@ -30,6 +30,9 @@ static const string ATTACHMENT = "attachment";
 static const string MAIN_SEPERATOR_COLOR = "F0BEC0";
 static const string ORIGINAL_SEPERATOR_COLOR = "004040";
 
+static const string attachmentDirForLinkFromMain = R"(attachment\)";
+static const string originalDirForLinkFromMain = R"(original\)";
+
 string getHtmlFileNamePrefix(FILE_TYPE type);
 string getSeparateLineColor(FILE_TYPE type);
 FILE_TYPE getFileTypeFromString(const string &fileType);

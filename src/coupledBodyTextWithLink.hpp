@@ -6,7 +6,8 @@
 class CoupledBodyTextWithLink : public CoupledBodyText {
 public:
   CoupledBodyTextWithLink() = default;
-  CoupledBodyTextWithLink(const string &filePrefix) : CoupledBodyText(filePrefix) {}
+  CoupledBodyTextWithLink(const string &filePrefix)
+      : CoupledBodyText(filePrefix) {}
 
   void fixLinksFromFile(const string &file, fileSet files, int attachNo = 0,
                         int minPara = 0, int maxPara = 0, int minLine = 0,

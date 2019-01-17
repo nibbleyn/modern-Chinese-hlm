@@ -191,8 +191,6 @@ static const string referParaMiddleChar = R"(#)";
 static const string referParaEndChar = R"(">)";
 static const string changeKey = R"(changeKey)";
 static const string citationStartChars = R"(<b hidden>)";
-static const string citationChapterNo = R"(第)";
-static const string citationChapter = R"(章)";
 static const string citationChapterParaSeparator = R"(.)";
 static const string citationPara = R"(节:)";
 static const string citationEndChars = R"(</b>)";
@@ -767,9 +765,6 @@ bool LinkFromMain::readReferFileName(const string &link) {
   return true;
 }
 
-static const string attachmentDirForLinkFromMain = R"(attachment\)";
-static const string originalDirForLinkFromMain = R"(original\)";
-
 /**
  *  the directory structure is like below
  *  refer to utf8HTML/src
@@ -1175,14 +1170,16 @@ void testLinkOperation() {
                    true);
   SEPERATE("generate original link afterwards", " finished ");
 
-  testLinkFromMain(
-      "07", fixLinkFromOriginalTemplate(R"(original\)", "18", "happy", "90101"),
-      false);
+  testLinkFromMain("07",
+                   fixLinkFromOriginalTemplate(originalDirForLinkFromMain, "18",
+                                               "happy", "90101"),
+                   false);
   SEPERATE("fixLinkFromOriginalTemplate", " finished ");
 
-  testLinkFromMain(
-      "07", fixLinkFromAttachmentTemplate(R"(attachment\)", "18", "7", "happy"),
-      false);
+  testLinkFromMain("07",
+                   fixLinkFromAttachmentTemplate(attachmentDirForLinkFromMain,
+                                                 "18", "7", "happy"),
+                   false);
   SEPERATE("fixLinkFromOriginalTemplate", " finished ");
 
   SEPERATE("testLinkFromMain", " finished ");

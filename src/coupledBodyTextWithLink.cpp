@@ -83,9 +83,10 @@ void CoupledBodyTextWithLink::removePersonalCommentsOverNumberedFiles(
  * @param file
  * @param files
  */
-void CoupledBodyTextWithLink::fixLinksFromFile(const string &file, fileSet files,
-                                        int attachNo, int minPara, int maxPara,
-                                        int minLine, int maxLine) {
+void CoupledBodyTextWithLink::fixLinksFromFile(const string &file,
+                                               fileSet files, int attachNo,
+                                               int minPara, int maxPara,
+                                               int minLine, int maxLine) {
   string attachmentPart{""};
   if (attachNo != 0)
     attachmentPart = attachmentFileMiddleChar + TurnToString(attachNo);

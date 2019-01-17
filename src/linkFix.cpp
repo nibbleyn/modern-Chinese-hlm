@@ -203,11 +203,11 @@ void generateContentIndexTableForAttachments() {
     ATTACHMENT_TYPE attachmentType = GetTupleElement(entry, 2);
 
     if (attachmentType == ATTACHMENT_TYPE::PERSONAL) {
-      string name =
-          R"(第)" + TurnToString(attachmentName.first) + R"(章附件)" +
-          TurnToString(attachmentName.second) + R"(: )";
+      string name = citationChapterNo + TurnToString(attachmentName.first) +
+                    citationChapter + R"(附件)" +
+                    TurnToString(attachmentName.second) + R"(: )";
       container.appendParagraphInBodyText(fixLinkFromAttachmentTemplate(
-          R"(attachment\)",
+          attachmentDirForLinkFromMain,
           formatIntoTwoDigitChapterNumber(attachmentName.first),
           TurnToString(attachmentName.second),
           name + GetTupleElement(entry, 1)));
@@ -323,7 +323,8 @@ void testContainer() {
       "第80章1.1节:", "原是老奶奶（薛姨妈）使唤的", "94");
 
   // to test link to original file
-  link = fixLinkFromOriginalTemplate(R"(original\)", "80", "菱角菱花", "94");
+  link = fixLinkFromOriginalTemplate(originalDirForLinkFromMain, "80",
+                                     "菱角菱花", "94");
 
   LinkFromMain lfm("", link);
   lfm.readReferFileName(link); // second step of construction

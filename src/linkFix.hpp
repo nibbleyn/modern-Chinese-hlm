@@ -1,6 +1,6 @@
 #pragma once
-#include "coupledBodyTextWithLink.hpp"
 #include "container.hpp"
+#include "coupledBodyTextWithLink.hpp"
 
 // link fixing for main files
 void fixLinksFromMain();

@@ -79,7 +79,9 @@ void CoupledBodyText::setInputOutputFiles() {
  * get size of links, Comments, image reference, poems, personal views embeded
  * to get actual size without rendering one line,
  */
-int CoupledBodyText::sizeOfLineAfterRendering(const string &lineStr) { return 0; }
+int CoupledBodyText::sizeOfLineAfterRendering(const string &lineStr) {
+  return 0;
+}
 /**
  * find a keyword in a numbered bodytext file
  * whose name is specified as fullPath
@@ -141,7 +143,8 @@ bool CoupledBodyText::findKey(const string &key) {
 }
 
 // reformat to smaller paragraphs
-void CoupledBodyText::reformatParagraphToSmallerSize(const string &sampleBlock) {
+void CoupledBodyText::reformatParagraphToSmallerSize(
+    const string &sampleBlock) {
   setInputOutputFiles();
   ifstream infile(m_inputFile);
   if (!infile) {
@@ -177,8 +180,8 @@ void CoupledBodyText::reformatParagraphToSmallerSize(const string &sampleBlock) 
 
 // regrouping to make total size smaller
 void CoupledBodyText::regroupingParagraphs(const string &sampleBlock,
-                                    const string &sampleFirstLine,
-                                    const string &sampleWholeLine) {
+                                           const string &sampleFirstLine,
+                                           const string &sampleWholeLine) {
   if (debug >= LOG_INFO)
     cout << "regrouping finished." << endl;
 }
@@ -199,8 +202,6 @@ CoupledBodyText::ParaStruct CoupledBodyText::getNumberOfPara() {
     return std::make_tuple(0, 0, 0);
   }
   int first = 0, middle = 0, last = 0;
-  string paraTab =
-      R"(name=")"; // of each paragraph
   string inLine;
   while (!infile.eof()) // To get all the lines.
   {
@@ -423,13 +424,14 @@ void CoupledBodyText::addLineNumber(const string &separatorColor, bool hidden) {
 }
 
 void CoupledBodyText::fixTagPairBegin(const string &signOfTagAfterReplaceTag,
-                               const string &fromTagBegin,
-                               const string &fromTagEnd, const string &to) {}
+                                      const string &fromTagBegin,
+                                      const string &fromTagEnd,
+                                      const string &to) {}
 
 void CoupledBodyText::fixTagPairEnd(const string &signOfTagBeforeReplaceTag,
-                             const string &from, const string &to,
-                             const string &skipTagPairBegin,
-                             const string &skipTagPairEnd) {}
+                                    const string &from, const string &to,
+                                    const string &skipTagPairBegin,
+                                    const string &skipTagPairEnd) {}
 
 void testSearchTextIsOnlyPartOfOtherKeys() {
   string line =
