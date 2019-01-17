@@ -59,6 +59,27 @@ void BodyText::setFilePrefixFromFileType(FILE_TYPE type) {
     m_filePrefix = bodyTextFilePrefix[2];
 }
 
+void BodyText::setInputOutputFiles() {
+  string attachmentPart{""};
+  if (m_attachNumber != 0)
+    attachmentPart = attachmentFileMiddleChar + TurnToString(m_attachNumber);
+
+  m_inputFile = BODY_TEXT_OUTPUT + m_filePrefix + m_file + attachmentPart +
+                BODY_TEXT_SUFFIX;
+  m_outputFile =
+      BODY_TEXT_FIX + m_filePrefix + m_file + attachmentPart + BODY_TEXT_SUFFIX;
+
+  if (debug >= LOG_INFO) {
+    cout << "input file is: " << m_inputFile << endl;
+    cout << "output file is: " << m_outputFile << endl;
+  }
+}
+
+/**
+ * get size of links, Comments, image reference, poems, personal views embeded
+ * to get actual size without rendering one line,
+ */
+int BodyText::sizeOfLineAfterRendering(const string &lineStr) { return 0; }
 /**
  * find a keyword in a numbered bodytext file
  * whose name is specified as fullPath
@@ -71,15 +92,10 @@ void BodyText::setFilePrefixFromFileType(FILE_TYPE type) {
  * otherwise the original key
  */
 bool BodyText::findKey(const string &key) {
-  string attachmentPart{""};
-  if (m_attachNumber != 0)
-    attachmentPart = attachmentFileMiddleChar + TurnToString(m_attachNumber);
-  string fullPath = BODY_TEXT_OUTPUT + m_filePrefix + m_file + attachmentPart +
-                    BODY_TEXT_SUFFIX;
-
-  ifstream infile(fullPath);
+  setInputOutputFiles();
+  ifstream infile(m_inputFile);
   if (!infile) {
-    m_searchError = "file doesn't exist:" + fullPath;
+    m_searchError = "file doesn't exist:" + m_inputFile;
     cout << m_searchError << endl;
     return false;
   }
@@ -104,7 +120,7 @@ bool BodyText::findKey(const string &key) {
     ln.loadFromContainedLine(line);
     if (not ln.valid()) {
       m_searchError =
-          "file doesn't get numbered:" + fullPath + " at line:" + line;
+          "file doesn't get numbered:" + m_inputFile + " at line:" + line;
       cout << m_searchError << endl;
       return false;
     }
@@ -126,21 +142,13 @@ bool BodyText::findKey(const string &key) {
 
 // reformat to smaller paragraphs
 void BodyText::reformatParagraphToSmallerSize(const string &sampleBlock) {
-  string attachmentPart{""};
-  if (m_attachNumber != 0)
-    attachmentPart = attachmentFileMiddleChar + TurnToString(m_attachNumber);
-
-  string inputFile = BODY_TEXT_OUTPUT + m_filePrefix + m_file + attachmentPart +
-                     BODY_TEXT_SUFFIX;
-  string outputFile =
-      BODY_TEXT_FIX + m_filePrefix + m_file + attachmentPart + BODY_TEXT_SUFFIX;
-
-  ifstream infile(inputFile);
+  setInputOutputFiles();
+  ifstream infile(m_inputFile);
   if (!infile) {
-    cout << "file doesn't exist:" << inputFile << endl;
+    cout << "file doesn't exist:" << m_inputFile << endl;
     return;
   }
-  ofstream outfile(outputFile);
+  ofstream outfile(m_outputFile);
   cout << utf8length(sampleBlock) << endl;
   cout << sampleBlock << endl;
   // continue reading
@@ -183,21 +191,16 @@ void BodyText::regroupingParagraphs(const string &sampleBlock,
  * @return a tuple of numbers
  */
 BodyText::ParaStruct BodyText::getNumberOfPara() {
-  string attachmentPart{""};
-  if (m_attachNumber != 0)
-    attachmentPart = attachmentFileMiddleChar + TurnToString(m_attachNumber);
+  setInputOutputFiles();
 
-  string inputFile = BODY_TEXT_OUTPUT + m_filePrefix + m_file + attachmentPart +
-                     BODY_TEXT_SUFFIX;
-
+  ifstream infile(m_inputFile);
+  if (!infile) {
+    cout << "file doesn't exist:" << m_inputFile << endl;
+    return std::make_tuple(0, 0, 0);
+  }
   int first = 0, middle = 0, last = 0;
   string paraTab =
       R"(name=")"; // of each paragraph
-  ifstream infile(inputFile);
-  if (!infile) {
-    cout << "file doesn't exist:" << inputFile << endl;
-    return std::make_tuple(first, middle, last);
-  }
   string inLine;
   while (!infile.eof()) // To get all the lines.
   {
@@ -243,18 +246,10 @@ BodyText::ParaStruct BodyText::getNumberOfPara() {
  * @param separatorColor the color to separate paragraphs
  */
 void BodyText::addLineNumber(const string &separatorColor, bool hidden) {
-  string attachmentPart{""};
-  if (m_attachNumber != 0)
-    attachmentPart = attachmentFileMiddleChar + TurnToString(m_attachNumber);
-
-  string inputFile = BODY_TEXT_OUTPUT + m_filePrefix + m_file + attachmentPart +
-                     BODY_TEXT_SUFFIX;
-  string outputFile =
-      BODY_TEXT_FIX + m_filePrefix + m_file + attachmentPart + BODY_TEXT_SUFFIX;
-
-  ifstream infile(inputFile);
+  setInputOutputFiles();
+  ifstream infile(m_inputFile);
   if (!infile) {
-    cout << "file doesn't exist:" << inputFile << endl;
+    cout << "file doesn't exist:" << m_inputFile << endl;
     return;
   }
 
@@ -273,17 +268,18 @@ void BodyText::addLineNumber(const string &separatorColor, bool hidden) {
            << " numberOfMiddleParaHeader: " << numberOfMiddleParaHeader
            << " numberOfLastParaHeader: " << numberOfLastParaHeader << endl;
     if (numberOfFirstParaHeader == 0 or numberOfLastParaHeader == 0) {
-      cout << "no top or bottom paragraph found:" << inputFile << endl;
+      cout << "no top or bottom paragraph found:" << m_inputFile << endl;
       return;
       LineNumber::setStartNumber(START_PARA_NUMBER);
     }
 
   } else {
+    // remove img tag first and add them afterwards
     cout << "not supported now." << endl;
     return;
   }
 
-  ofstream outfile(outputFile);
+  ofstream outfile(m_outputFile);
 
   // continue reading till first paragraph header
   string inLine;
@@ -366,7 +362,7 @@ void BodyText::addLineNumber(const string &separatorColor, bool hidden) {
       {
         cout << "wrong without " << brTab
              << " at line: " << TurnToString(para) + "." + TurnToString(lineNo)
-             << " of file: " << inputFile << "content: " << inLine << endl;
+             << " of file: " << m_inputFile << "content: " << inLine << endl;
         exit(1);
         break;
       }
@@ -429,10 +425,12 @@ void BodyText::addLineNumber(const string &separatorColor, bool hidden) {
 void BodyText::fixTagPairBegin(const string &signOfTagAfterReplaceTag,
                                const string &fromTagBegin,
                                const string &fromTagEnd, const string &to) {}
+
 void BodyText::fixTagPairEnd(const string &signOfTagBeforeReplaceTag,
                              const string &from, const string &to,
                              const string &skipTagPairBegin,
                              const string &skipTagPairEnd) {}
+
 void testSearchTextIsOnlyPartOfOtherKeys() {
   string line =
       R"(秋水眼又对秋水鸳鸯剑，埋下<a unhidden href="#P94"><i hidden>春色</i>“倒底是不标致的好”</a>的悲剧结局)";

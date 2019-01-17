@@ -46,18 +46,10 @@ string CoupledContainer::getBodyTextFilePrefix() {
 
 void CoupledContainer::assembleBackToHTM(const string &title,
                                          const string &displayTitle) {
-  string attachmentPart{""};
-  if (m_fileType == FILE_TYPE::ATTACHMENT)
-    attachmentPart =
-        attachmentFileMiddleChar + TurnToString(m_attachmentNumber);
 
-  string inputHtmlFile = m_htmlInputFilePath +
-                         getHtmlFileNamePrefix(m_fileType) + m_file +
-                         attachmentPart + HTML_SUFFIX;
-  string inputBodyTextFile = m_bodyTextInputFilePath + getBodyTextFilePrefix() +
-                             m_file + attachmentPart + BODY_TEXT_SUFFIX;
-  string outputFile = m_htmlOutputFilePath + getHtmlFileNamePrefix(m_fileType) +
-                      m_file + attachmentPart + HTML_SUFFIX;
+  string inputHtmlFile = getInputHtmlFile();
+  string inputBodyTextFile = getBodyTextFile();
+  string outputFile = getoutputHtmlFile();
 
   ifstream inHtmlFile(inputHtmlFile);
   if (!inHtmlFile) // doesn't exist
@@ -187,17 +179,8 @@ void CoupledContainer::backupAndOverwriteAllInputHtmlFiles() {
 }
 
 void CoupledContainer::dissembleFromHTM() {
-  string attachmentPart{""};
-  if (m_fileType == FILE_TYPE::ATTACHMENT)
-    attachmentPart =
-        attachmentFileMiddleChar + TurnToString(m_attachmentNumber);
-
-  string inputHtmlFile = m_htmlInputFilePath +
-                         getHtmlFileNamePrefix(m_fileType) + m_file +
-                         attachmentPart + HTML_SUFFIX;
-  string outputBodyTextFile = m_bodyTextInputFilePath +
-                              getBodyTextFilePrefix() + m_file +
-                              attachmentPart + BODY_TEXT_SUFFIX;
+  string inputHtmlFile = getInputHtmlFile();
+  string outputBodyTextFile = getBodyTextFile();
 
   ifstream infile(inputHtmlFile);
   if (!infile) // doesn't exist
@@ -316,11 +299,10 @@ void assembleAttachments(int minTarget, int maxTarget, int minAttachNo,
  * container htm
  */
 void ListContainer::initBodyTextFile() {
-  string inputBodyTextFile =
-      m_bodyTextInputFilePath + getInputFileName() + BODY_TEXT_SUFFIX;
+  string outputBodyTextFile = getOutputBodyTextFile();
   if (debug >= LOG_INFO)
-    cout << "clear content in: " << inputBodyTextFile << endl;
-  ofstream outfile(inputBodyTextFile);
+    cout << "clear content in: " << outputBodyTextFile << endl;
+  ofstream outfile(outputBodyTextFile);
 }
 
 /**
@@ -329,12 +311,11 @@ void ListContainer::initBodyTextFile() {
  * @param containerNumber the selected container to put into
  */
 void ListContainer::appendParagraphInBodyText(const string &text) {
-  string inputBodyTextFile =
-      m_bodyTextInputFilePath + getInputFileName() + BODY_TEXT_SUFFIX;
+  string outputBodyTextFile = getOutputBodyTextFile();
   if (debug >= LOG_INFO)
-    cout << "append Paragraph In BodyText: " << inputBodyTextFile << endl;
+    cout << "append Paragraph In BodyText: " << outputBodyTextFile << endl;
   ofstream outfile;
-  outfile.open(inputBodyTextFile, std::ios_base::app);
+  outfile.open(outputBodyTextFile, std::ios_base::app);
   outfile << "<br>" << text << "</br>" << endl;
 }
 
@@ -342,11 +323,10 @@ const string TableContainer::BODY_TEXT_STARTER = R"(2front.txt)";
 const string TableContainer::BODY_TEXT_DESSERT = R"(2back.txt)";
 
 void TableContainer::initBodyTextFile() {
-  string inputBodyTextFile =
-      m_bodyTextInputFilePath + getInputFileName() + BODY_TEXT_SUFFIX;
+  string outputBodyTextFile = getOutputBodyTextFile();
   if (debug >= LOG_INFO)
-    cout << "init content in: " << inputBodyTextFile << endl;
-  ofstream outfile(inputBodyTextFile);
+    cout << "init content in: " << outputBodyTextFile << endl;
+  ofstream outfile(outputBodyTextFile);
   // copy content from BODY_TEXT_STARTER
   string starterFile = m_bodyTextInputFilePath + BODY_TEXT_STARTER;
 
@@ -366,12 +346,11 @@ void TableContainer::initBodyTextFile() {
 }
 
 void TableContainer::finishBodyTextFile() {
-  string inputBodyTextFile =
-      m_bodyTextInputFilePath + getInputFileName() + BODY_TEXT_SUFFIX;
+  string outputBodyTextFile = getOutputBodyTextFile();
   if (debug >= LOG_INFO)
-    cout << "append content in: " << inputBodyTextFile << endl;
+    cout << "append content in: " << outputBodyTextFile << endl;
   ofstream outfile;
-  outfile.open(inputBodyTextFile, std::ios_base::app);
+  outfile.open(outputBodyTextFile, std::ios_base::app);
   // copy content from BODY_TEXT_DESSERT
   string dessertFile = m_bodyTextInputFilePath + BODY_TEXT_DESSERT;
 
@@ -391,32 +370,29 @@ void TableContainer::finishBodyTextFile() {
 }
 
 void TableContainer::appendLeftParagraphInBodyText(const string &text) {
-  string inputBodyTextFile =
-      m_bodyTextInputFilePath + getInputFileName() + BODY_TEXT_SUFFIX;
+  string outputBodyTextFile = getOutputBodyTextFile();
   if (debug >= LOG_INFO)
-    cout << "append Paragraph In BodyText: " << inputBodyTextFile << endl;
+    cout << "append Paragraph In BodyText: " << outputBodyTextFile << endl;
   ofstream outfile;
-  outfile.open(inputBodyTextFile, std::ios_base::app);
+  outfile.open(outputBodyTextFile, std::ios_base::app);
   outfile << R"(<tr><td width="50%">)" << text << "</td>" << endl;
 }
 
 void TableContainer::appendRightParagraphInBodyText(const string &text) {
-  string inputBodyTextFile =
-      m_bodyTextInputFilePath + getInputFileName() + BODY_TEXT_SUFFIX;
+  string outputBodyTextFile = getOutputBodyTextFile();
   if (debug >= LOG_INFO)
-    cout << "append Paragraph In BodyText: " << inputBodyTextFile << endl;
+    cout << "append Paragraph In BodyText: " << outputBodyTextFile << endl;
   ofstream outfile;
-  outfile.open(inputBodyTextFile, std::ios_base::app);
+  outfile.open(outputBodyTextFile, std::ios_base::app);
   outfile << R"(<td width="50%">)" << text << R"(</td></tr>)" << endl;
 }
 
 void GenericContainer::assembleBackToHTM(const string &title,
                                          const string &displayTitle) {
 
-  string inputHtmlFile = m_htmlInputFilePath + getInputFileName() + HTML_SUFFIX;
-  string inputBodyTextFile =
-      m_bodyTextInputFilePath + getInputFileName() + BODY_TEXT_SUFFIX;
-  string outputFile = m_htmlOutputFilePath + m_outputFilename + HTML_SUFFIX;
+  string inputHtmlFile = getInputHtmlFile();
+  string inputBodyTextFile = getOutputBodyTextFile();
+  string outputFile = getoutputHtmlFile();
 
   ifstream inHtmlFile(inputHtmlFile);
   if (!inHtmlFile) // doesn't exist

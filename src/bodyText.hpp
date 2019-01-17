@@ -70,12 +70,17 @@ public:
 protected:
   string m_filePrefix{"Main"};
   string m_file{"01"};
+  string m_inputFile{""};
+  string m_outputFile{""};
   int m_attachNumber{0};
   lineNumberSet m_ignoreSet;
   lineNumberSet m_result;
   string m_searchError{""};
   bool m_onlyFirst{true};
   bool m_autoNumbering{false};
+
+  void setInputOutputFiles();
+  int sizeOfLineAfterRendering(const string &lineStr);
 };
 
 void testSearchTextIsOnlyPartOfOtherKeys();

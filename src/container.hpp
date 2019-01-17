@@ -1,6 +1,4 @@
 #pragma once
-//#include "fileUtil.hpp"
-//#include "utf8StringUtil.hpp"
 #include "attachmentFiles.hpp"
 
 static const string HTML_SRC_MAIN = "utf8HTML/src/";
@@ -16,12 +14,14 @@ static const string TABLE_CONTAINER_FILENAME = "2";
 class Container {
 public:
   Container() = default;
+  virtual ~Container(){};
 
 protected:
-  string m_htmlInputFilePath{""};
-  string m_htmlOutputFilePath{""};
-  string m_bodyTextInputFilePath{""};
-  string m_bodyTextOutputFilePath{""};
+  string m_htmlInputFilePath{HTML_SRC_MAIN};
+  string m_htmlOutputFilePath{HTML_OUTPUT_MAIN};
+  string m_bodyTextInputFilePath{BODY_TEXT_OUTPUT};
+  string m_bodyTextOutputFilePath{BODY_TEXT_FIX};
+  virtual string getInputHtmlFile() = 0;
 };
 
 static const string final = R"(</html>)"; // last line of the html file
@@ -33,12 +33,7 @@ static const string final = R"(</html>)"; // last line of the html file
 class CoupledContainer : public Container {
 
 public:
-  CoupledContainer() {
-    m_htmlInputFilePath = HTML_SRC_MAIN;
-    m_htmlOutputFilePath = HTML_OUTPUT_MAIN;
-    m_bodyTextInputFilePath = BODY_TEXT_OUTPUT;
-    m_bodyTextOutputFilePath = BODY_TEXT_FIX;
-  }
+  CoupledContainer() = default;
   CoupledContainer(FILE_TYPE fileType) : m_fileType(fileType) {
     if (fileType == FILE_TYPE::ATTACHMENT) {
       m_htmlInputFilePath = HTML_SRC_ATTACHMENT;
@@ -46,12 +41,7 @@ public:
     } else if (fileType == FILE_TYPE::ORIGINAL) {
       m_htmlInputFilePath = HTML_SRC_ORIGINAL;
       m_htmlOutputFilePath = HTML_OUTPUT_ORIGINAL;
-    } else {
-      m_htmlInputFilePath = HTML_SRC_MAIN;
-      m_htmlOutputFilePath = HTML_OUTPUT_MAIN;
     }
-    m_bodyTextInputFilePath = BODY_TEXT_OUTPUT;
-    m_bodyTextOutputFilePath = BODY_TEXT_FIX;
   }
 
   static void backupAndOverwriteAllInputHtmlFiles();
@@ -70,6 +60,30 @@ private:
   int m_attachmentNumber{0};
 
   string getBodyTextFilePrefix();
+  string getInputHtmlFile() {
+    string attachmentPart{""};
+    if (m_fileType == FILE_TYPE::ATTACHMENT)
+      attachmentPart =
+          attachmentFileMiddleChar + TurnToString(m_attachmentNumber);
+    return m_htmlInputFilePath + getHtmlFileNamePrefix(m_fileType) + m_file +
+           attachmentPart + HTML_SUFFIX;
+  }
+  string getoutputHtmlFile() {
+    string attachmentPart{""};
+    if (m_fileType == FILE_TYPE::ATTACHMENT)
+      attachmentPart =
+          attachmentFileMiddleChar + TurnToString(m_attachmentNumber);
+    return m_htmlOutputFilePath + getHtmlFileNamePrefix(m_fileType) + m_file +
+           attachmentPart + HTML_SUFFIX;
+  }
+  string getBodyTextFile() {
+    string attachmentPart{""};
+    if (m_fileType == FILE_TYPE::ATTACHMENT)
+      attachmentPart =
+          attachmentFileMiddleChar + TurnToString(m_attachmentNumber);
+    return m_bodyTextInputFilePath + getBodyTextFilePrefix() + m_file +
+           attachmentPart + BODY_TEXT_SUFFIX;
+  }
 };
 
 static const string defaultTitle = "XXX";
@@ -96,6 +110,15 @@ public:
 
 protected:
   string m_outputFilename{"output"};
+  string getOutputBodyTextFile() {
+    return m_bodyTextOutputFilePath + getInputFileName() + BODY_TEXT_SUFFIX;
+  }
+  string getInputHtmlFile() {
+    return m_htmlInputFilePath + getInputFileName() + HTML_SUFFIX;
+  }
+  string getoutputHtmlFile() {
+    return m_htmlOutputFilePath + m_outputFilename + HTML_SUFFIX;
+  }
 };
 
 /**
