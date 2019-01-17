@@ -109,7 +109,7 @@ void fixMainLinks(int minTarget, int maxTarget, int minReference,
   for (const auto &file :
        buildFileSet(minTarget, maxTarget)) // files need to be fixed
   {
-    BodyTextWithLink bodyText;
+    CoupledBodyTextWithLink bodyText;
     bodyText.setFilePrefixFromFileType(FILE_TYPE::MAIN);
     //    bodyText.fixLinksFromFile(file, buildFileSet(minReference,
     //    maxReference));
@@ -168,7 +168,7 @@ void fixMainHtml(int minTarget, int maxTarget, int minReference,
     container.dissembleFromHTM();
   }
   fixMainLinks(minTarget, maxTarget, minReference, maxReference);
-  BodyText::loadBodyTextsFromFixBackToOutput();
+  CoupledBodyText::loadBodyTextsFromFixBackToOutput();
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     container.setFileAndAttachmentNumber(file);
     container.assembleBackToHTM();
@@ -242,7 +242,7 @@ void fixLinksToMainForAttachments(int minTarget, int maxTarget,
       targetAttachments =
           getAttachmentFileListForChapter(file, HTML_SRC_ATTACHMENT);
     for (const auto &attNo : targetAttachments) {
-      BodyTextWithLink bodyText;
+      CoupledBodyTextWithLink bodyText;
       bodyText.setFilePrefixFromFileType(FILE_TYPE::ATTACHMENT);
       bodyText.fixLinksFromFile(file, buildFileSet(minReference, maxReference),
                                 attNo);
@@ -267,7 +267,7 @@ void fixAttachments(int minTarget, int maxTarget, int minReference,
                        maxAttachNo); // dissemble html to bodytext
   fixLinksToMainForAttachments(minTarget, maxTarget, minReference, maxReference,
                                minAttachNo, maxAttachNo);
-  BodyText::loadBodyTextsFromFixBackToOutput();
+  CoupledBodyText::loadBodyTextsFromFixBackToOutput();
   assembleAttachments(minTarget, maxTarget, minAttachNo, maxAttachNo);
 }
 
@@ -301,7 +301,7 @@ void removePersonalViewpoints(int minTarget, int maxTarget,
   for (const auto &file :
        buildFileSet(minTarget, maxTarget)) // files need to be fixed
   {
-    BodyTextWithLink bodyText;
+    CoupledBodyTextWithLink bodyText;
     bodyText.setFilePrefixFromFileType(fileType);
     bodyText.removePersonalCommentsOverNumberedFiles(file);
   }

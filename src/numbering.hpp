@@ -1,5 +1,5 @@
 #pragma once
-#include "bodyText.hpp"
+#include "coupledBodyText.hpp"
 #include "container.hpp"
 
 void numberOriginalHtmls(bool hidden = false);

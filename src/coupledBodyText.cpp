@@ -1,4 +1,4 @@
-#include "bodyText.hpp"
+#include "coupledBodyText.hpp"
 
 bool KeyStartAndCommentStartNotFound(const string &testStr, const string &key) {
   if (debug >= LOG_INFO)
@@ -37,7 +37,7 @@ bool isOnlyPartOfOtherKeys(const string &orgLine, const string &key) {
   return true;
 }
 
-void BodyText::loadBodyTextsFromFixBackToOutput() {
+void CoupledBodyText::loadBodyTextsFromFixBackToOutput() {
   vector<string> filenameList;
   Poco::File(BODY_TEXT_FIX).list(filenameList);
   sort(filenameList.begin(), filenameList.end(), less<string>());
@@ -49,7 +49,7 @@ void BodyText::loadBodyTextsFromFixBackToOutput() {
   }
 }
 
-void BodyText::setFilePrefixFromFileType(FILE_TYPE type) {
+void CoupledBodyText::setFilePrefixFromFileType(FILE_TYPE type) {
   string bodyTextFilePrefix[] = {"Main", "Attach", "Org"};
   if (type == FILE_TYPE::MAIN)
     m_filePrefix = bodyTextFilePrefix[0];
@@ -59,7 +59,7 @@ void BodyText::setFilePrefixFromFileType(FILE_TYPE type) {
     m_filePrefix = bodyTextFilePrefix[2];
 }
 
-void BodyText::setInputOutputFiles() {
+void CoupledBodyText::setInputOutputFiles() {
   string attachmentPart{""};
   if (m_attachNumber != 0)
     attachmentPart = attachmentFileMiddleChar + TurnToString(m_attachNumber);
@@ -79,7 +79,7 @@ void BodyText::setInputOutputFiles() {
  * get size of links, Comments, image reference, poems, personal views embeded
  * to get actual size without rendering one line,
  */
-int BodyText::sizeOfLineAfterRendering(const string &lineStr) { return 0; }
+int CoupledBodyText::sizeOfLineAfterRendering(const string &lineStr) { return 0; }
 /**
  * find a keyword in a numbered bodytext file
  * whose name is specified as fullPath
@@ -91,7 +91,7 @@ int BodyText::sizeOfLineAfterRendering(const string &lineStr) { return 0; }
  * @return changed key (to KeyNotFound + key + reason) if it is not found,
  * otherwise the original key
  */
-bool BodyText::findKey(const string &key) {
+bool CoupledBodyText::findKey(const string &key) {
   setInputOutputFiles();
   ifstream infile(m_inputFile);
   if (!infile) {
@@ -141,7 +141,7 @@ bool BodyText::findKey(const string &key) {
 }
 
 // reformat to smaller paragraphs
-void BodyText::reformatParagraphToSmallerSize(const string &sampleBlock) {
+void CoupledBodyText::reformatParagraphToSmallerSize(const string &sampleBlock) {
   setInputOutputFiles();
   ifstream infile(m_inputFile);
   if (!infile) {
@@ -176,7 +176,7 @@ void BodyText::reformatParagraphToSmallerSize(const string &sampleBlock) {
 }
 
 // regrouping to make total size smaller
-void BodyText::regroupingParagraphs(const string &sampleBlock,
+void CoupledBodyText::regroupingParagraphs(const string &sampleBlock,
                                     const string &sampleFirstLine,
                                     const string &sampleWholeLine) {
   if (debug >= LOG_INFO)
@@ -190,7 +190,7 @@ void BodyText::regroupingParagraphs(const string &sampleBlock,
  * @param fullPath of target file
  * @return a tuple of numbers
  */
-BodyText::ParaStruct BodyText::getNumberOfPara() {
+CoupledBodyText::ParaStruct CoupledBodyText::getNumberOfPara() {
   setInputOutputFiles();
 
   ifstream infile(m_inputFile);
@@ -245,7 +245,7 @@ BodyText::ParaStruct BodyText::getNumberOfPara() {
  * @param outputFile the output file after numbering
  * @param separatorColor the color to separate paragraphs
  */
-void BodyText::addLineNumber(const string &separatorColor, bool hidden) {
+void CoupledBodyText::addLineNumber(const string &separatorColor, bool hidden) {
   setInputOutputFiles();
   ifstream infile(m_inputFile);
   if (!infile) {
@@ -422,11 +422,11 @@ void BodyText::addLineNumber(const string &separatorColor, bool hidden) {
     cout << "numbering finished." << endl;
 }
 
-void BodyText::fixTagPairBegin(const string &signOfTagAfterReplaceTag,
+void CoupledBodyText::fixTagPairBegin(const string &signOfTagAfterReplaceTag,
                                const string &fromTagBegin,
                                const string &fromTagEnd, const string &to) {}
 
-void BodyText::fixTagPairEnd(const string &signOfTagBeforeReplaceTag,
+void CoupledBodyText::fixTagPairEnd(const string &signOfTagBeforeReplaceTag,
                              const string &from, const string &to,
                              const string &skipTagPairBegin,
                              const string &skipTagPairEnd) {}
@@ -529,10 +529,10 @@ void testLineNumber() {
 }
 
 void testConstructSubStory() {
-  BodyText bodyText;
+  CoupledBodyText bodyText;
   bodyText.setFilePrefixFromFileType(FILE_TYPE::MAIN);
   bodyText.setFileAndAttachmentNumber("06");
-  BodyText::ParaStruct res = bodyText.getNumberOfPara();
+  CoupledBodyText::ParaStruct res = bodyText.getNumberOfPara();
   cout << GetTupleElement(res, 0) << " " << GetTupleElement(res, 1) << " "
        << GetTupleElement(res, 2) << endl;
 }

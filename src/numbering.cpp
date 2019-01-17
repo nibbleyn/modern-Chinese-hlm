@@ -9,7 +9,7 @@ void addLineNumbers(int minTarget, int maxTarget, FILE_TYPE targetFileType,
                     bool hidden = false) {
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     string separatorColor = getSeparateLineColor(targetFileType);
-    BodyText bodyText;
+    CoupledBodyText bodyText;
     bodyText.setFilePrefixFromFileType(targetFileType);
     bodyText.setFileAndAttachmentNumber(file);
     bodyText.addLineNumber(separatorColor, hidden);
@@ -29,7 +29,7 @@ void NumberingOriginalHtml(int minTarget, int maxTarget, bool hidden = false) {
     container.dissembleFromHTM();
   }
   addLineNumbers(minTarget, maxTarget, FILE_TYPE::ORIGINAL, hidden);
-  BodyText::loadBodyTextsFromFixBackToOutput();
+  CoupledBodyText::loadBodyTextsFromFixBackToOutput();
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     container.setFileAndAttachmentNumber(file);
     container.assembleBackToHTM();
@@ -49,7 +49,7 @@ void NumberingMainHtml(int minTarget, int maxTarget, bool hidden = false) {
     container.dissembleFromHTM();
   }
   addLineNumbers(minTarget, maxTarget, FILE_TYPE::MAIN, hidden);
-  BodyText::loadBodyTextsFromFixBackToOutput();
+  CoupledBodyText::loadBodyTextsFromFixBackToOutput();
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     container.setFileAndAttachmentNumber(file);
     container.assembleBackToHTM();
@@ -85,7 +85,7 @@ void addLineNumbersForAttachmentHtml(int minTarget, int maxTarget,
     for (const auto &attNo : targetAttachments) {
       FILE_TYPE targetFileType = FILE_TYPE::ATTACHMENT;
       string separatorColor = getSeparateLineColor(targetFileType);
-      BodyText bodyText;
+      CoupledBodyText bodyText;
       bodyText.setFilePrefixFromFileType(targetFileType);
       bodyText.setFileAndAttachmentNumber(file, attNo);
       bodyText.addLineNumber(separatorColor, hidden);
@@ -111,7 +111,7 @@ void NumberingAttachmentHtml(int minTarget, int maxTarget, int minAttachNo,
   addLineNumbersForAttachmentHtml(
       minTarget, maxTarget, minAttachNo, maxAttachNo,
       hidden); // reformat bodytext by adding line number
-  BodyText::loadBodyTextsFromFixBackToOutput();
+  CoupledBodyText::loadBodyTextsFromFixBackToOutput();
   assembleAttachments(minTarget, maxTarget, minAttachNo, maxAttachNo);
 }
 
@@ -154,7 +154,7 @@ void reformatTxtFiles(int minTarget, int maxTarget, const string &example) {
     if (filename.length() == 2) {
       filename = "0" + filename;
     }
-    BodyText bodyText("pjpm");
+    CoupledBodyText bodyText("pjpm");
     bodyText.setFileAndAttachmentNumber(filename);
     bodyText.reformatParagraphToSmallerSize(example);
   }
@@ -177,7 +177,7 @@ void splitFiles(int minTarget, int maxTarget, const string &fileType,
                 const string &sampleBlock, const string &sampleFirstLine,
                 const string &sampleWholeLine) {
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
-    BodyText bodyText;
+    CoupledBodyText bodyText;
     bodyText.setFilePrefixFromFileType(getFileTypeFromString(fileType));
     bodyText.setFileAndAttachmentNumber(file);
     bodyText.regroupingParagraphs(sampleBlock, sampleFirstLine,

@@ -1,7 +1,7 @@
 #pragma once
 //#include "utf8StringUtil.hpp"
 #include "attachmentFiles.hpp"
-#include "bodyText.hpp"
+#include "coupledBodyText.hpp"
 
 enum class LINK_TYPE { MAIN, ATTACHMENT, ORIGINAL, SAMEPAGE };
 enum class LINK_DISPLAY_TYPE { DIRECT, HIDDEN, UNHIDDEN };

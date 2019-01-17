@@ -571,7 +571,7 @@ void Link::readKey(const string &linkString) {
     m_usedKey = stringForSearch;
     return;
   }
-  BodyText bodyText(getBodyTextFilePrefix());
+  CoupledBodyText bodyText(getBodyTextFilePrefix());
   bodyText.resetBeforeSearch();
   // special hack to ignore itself
   if (m_type == LINK_TYPE::SAMEPAGE) {

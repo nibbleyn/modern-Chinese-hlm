@@ -1,9 +1,9 @@
-#include "bodyTextWithLink.hpp"
+#include "coupledBodyTextWithLink.hpp"
 
 static const string personalCommentStart = R"(（<u unhidden)";
 static const string personalCommentEnd = R"(</u>）)";
 
-void BodyTextWithLink::removePersonalCommentsOverNumberedFiles(
+void CoupledBodyTextWithLink::removePersonalCommentsOverNumberedFiles(
     const string &file, int attachNo) {
   string attachmentPart{""};
   if (attachNo != 0)
@@ -83,7 +83,7 @@ void BodyTextWithLink::removePersonalCommentsOverNumberedFiles(
  * @param file
  * @param files
  */
-void BodyTextWithLink::fixLinksFromFile(const string &file, fileSet files,
+void CoupledBodyTextWithLink::fixLinksFromFile(const string &file, fileSet files,
                                         int attachNo, int minPara, int maxPara,
                                         int minLine, int maxLine) {
   string attachmentPart{""};

@@ -10,7 +10,7 @@ void findFirstInNoAttachmentFiles(const string key, const string &fileType,
   int total = 0;
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
 
-    BodyText bodyText;
+    CoupledBodyText bodyText;
     bodyText.setFilePrefixFromFileType(targetFileType);
 
     bodyText.resetBeforeSearch();
@@ -18,7 +18,7 @@ void findFirstInNoAttachmentFiles(const string key, const string &fileType,
     bodyText.setFileAndAttachmentNumber(file);
     bool found = bodyText.findKey(key);
     if (found) {
-      BodyText::lineNumberSet lineSet = bodyText.getResultLineSet();
+      CoupledBodyText::lineNumberSet lineSet = bodyText.getResultLineSet();
       if (targetFileType == FILE_TYPE::ORIGINAL) {
         for (auto const &line : lineSet) {
           Link::LinkDetails detail{

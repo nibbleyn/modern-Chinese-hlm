@@ -4,11 +4,11 @@
 #include "lineNumber.hpp"
 #include "paraHeader.hpp"
 
-class BodyText {
+class CoupledBodyText {
 
 public:
-  BodyText() = default;
-  BodyText(const string &filePrefix) : m_filePrefix(filePrefix) {}
+  CoupledBodyText() = default;
+  CoupledBodyText(const string &filePrefix) : m_filePrefix(filePrefix) {}
   /**
    * load files under BODY_TEXT_OUTPUT directory with files under BODY_TEXT_FIX
    * i.e. from afterFix to output
