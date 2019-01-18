@@ -37,6 +37,9 @@ void testFunctions(int num) {
   case 9:
     testConvertToUtf8();
     break;
+  case 10:
+    testfixTagPairEnd();
+    break;
   default:
     cout << "no test executed." << endl;
   }

@@ -12,3 +12,4 @@ void fixLinksFromAttachment();
 
 void testContainer();
 void testRemovePersonalViewpoints();
+void testfixTagPairEnd();

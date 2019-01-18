@@ -3,6 +3,7 @@
 //#include "utf8StringUtil.hpp"
 #include "lineNumber.hpp"
 #include "paraHeader.hpp"
+#include <functional> // std::greater
 
 class CoupledBodyText {
 
@@ -60,12 +61,10 @@ public:
 
   // fix wrong html pair
   void fixTagPairBegin(const string &signOfTagAfterReplaceTag,
-                       const string &fromTagBegin, const string &fromTagEnd,
-                       const string &to);
+                       const string &from, const string &to);
   void fixTagPairEnd(const string &signOfTagBeforeReplaceTag,
                      const string &from, const string &to,
-                     const string &skipTagPairBegin = "",
-                     const string &skipTagPairEnd = "");
+                     const string &skipTagPairBegin = "");
 
 protected:
   string m_filePrefix{"Main"};

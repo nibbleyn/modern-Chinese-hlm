@@ -424,14 +424,96 @@ void CoupledBodyText::addLineNumber(const string &separatorColor, bool hidden) {
 }
 
 void CoupledBodyText::fixTagPairBegin(const string &signOfTagAfterReplaceTag,
-                                      const string &fromTagBegin,
-                                      const string &fromTagEnd,
-                                      const string &to) {}
+                                      const string &from, const string &to) {
+  setInputOutputFiles();
+  ifstream infile(m_inputFile);
+  if (!infile) {
+    cout << "file doesn't exist:" << m_inputFile << endl;
+    return;
+  }
+  ofstream outfile(m_outputFile);
+
+  // continue reading till first paragraph header
+  string inLine{""};
+
+  while (!infile.eof()) // To get all the lines.
+  {
+    getline(infile, inLine); // Saves the line in inLine.
+    int before = 0, after = 0;
+    auto orgLine = inLine; // inLine would change in loop below
+    auto signBegin = inLine.find(signOfTagAfterReplaceTag);
+    if (signBegin != string::npos) {
+      // at most two
+      after = orgLine.find(from, signBegin);
+      auto beforeStr = inLine.substr(0, signBegin);
+      before = beforeStr.find(from);
+      if (after != string::npos) {
+        orgLine.replace(after, from.length(), to);
+      }
+      if (before != string::npos) {
+        orgLine.replace(before, from.length(), to);
+      }
+    }
+    outfile << orgLine << endl;
+  }
+}
 
 void CoupledBodyText::fixTagPairEnd(const string &signOfTagBeforeReplaceTag,
                                     const string &from, const string &to,
-                                    const string &skipTagPairBegin,
-                                    const string &skipTagPairEnd) {}
+                                    const string &skipTagPairBegin) {
+  setInputOutputFiles();
+  ifstream infile(m_inputFile);
+  if (!infile) {
+    cout << "file doesn't exist:" << m_inputFile << endl;
+    return;
+  }
+  ofstream outfile(m_outputFile);
+  std::set<int, std::greater<int>> occurences;
+  // continue reading till first paragraph header
+  string inLine{""};
+  auto cutLength{0};
+  while (!infile.eof()) // To get all the lines.
+  {
+    getline(infile, inLine); // Saves the line in inLine.
+    occurences.clear();
+    cutLength = 0;
+    auto orgLine = inLine; // inLine would change in loop below
+    do {
+      auto signBegin = inLine.find(signOfTagBeforeReplaceTag);
+      if (signBegin == string::npos) // no signOfTagBeforeReplaceTag any more,
+                                     // continue with next line
+        break;
+      auto fromBegin = inLine.find(from, signBegin);
+      if (not skipTagPairBegin.empty()) {
+        do {
+          fromBegin = inLine.find(from, signBegin);
+          if (fromBegin == string::npos) {
+            cout << from << "is not found after: " << signOfTagBeforeReplaceTag
+                 << endl;
+            return;
+          }
+          auto inBetween = inLine.substr(signBegin, fromBegin - signBegin);
+          cout << inBetween << endl;
+          if (inBetween.find(skipTagPairBegin) == string::npos)
+            break;
+          signBegin = fromBegin + 1;
+        } while (1);
+      }
+      // found at fromBegin, replace
+      auto orgFromBegin = orgLine.find(from, cutLength + signBegin);
+      cout << cutLength << " " << signBegin << " " << orgFromBegin << endl;
+      cout << orgLine.substr(cutLength + signBegin) << endl;
+      occurences.insert(orgFromBegin);
+      inLine = inLine.substr(fromBegin +
+                             from.length()); // find next link in the inLine
+      cutLength += fromBegin + from.length();
+    } while (1);
+    for (const auto &pos : occurences) {
+      orgLine.replace(pos, from.length(), to);
+    }
+    outfile << orgLine << endl;
+  }
+}
 
 void testSearchTextIsOnlyPartOfOtherKeys() {
   string line =

@@ -113,11 +113,15 @@ void fixMainLinks(int minTarget, int maxTarget, int minReference,
     bodyText.setFilePrefixFromFileType(FILE_TYPE::MAIN);
     bodyText.setFileAndAttachmentNumber(file);
     bodyText.fixLinksFromFile(buildFileSet(minReference, maxReference));
-    bodyText.fixTagPairBegin(R"(</strong>)", R"(<b unhidden>)", R"(</b>)",
-                             R"(<strong>)");
-    bodyText.fixTagPairEnd(R"(（见左图）)", R"(</font>)", R"(</var>)");
-    bodyText.fixTagPairEnd(R"(<cite>)", keyEndChars, R"(</cite>)",
-                           keyStartChars, keyEndChars);
+    bool fixTag = false;
+    if (fixTag) {
+      bodyText.fixTagPairBegin(R"(</strong>)", R"(<b unhidden>)",
+                               R"(<strong>)");
+      bodyText.fixTagPairEnd(R"(<samp)", R"(</font>)", R"(</samp>)");
+      bodyText.fixTagPairEnd(R"(见左图)", R"(</font>)", R"(</var>)");
+      bodyText.fixTagPairEnd(R"(<cite>)", keyEndChars, R"(</cite>)",
+                             keyStartChars);
+    }
   }
 }
 
@@ -315,6 +319,17 @@ void addImageBackForManualNumbering() {}
 void testRemovePersonalViewpoints() {
   int minTarget = 54, maxTarget = 54;
   removePersonalViewpoints(minTarget, maxTarget, FILE_TYPE::MAIN);
+}
+
+void testfixTagPairEnd() {
+  CoupledBodyTextWithLink bodyText;
+  bodyText.setFilePrefixFromFileType(FILE_TYPE::MAIN);
+  bodyText.setFileAndAttachmentNumber("91");
+  bodyText.fixTagPairBegin(R"(</strong>)", R"(<b unhidden>)",
+                           R"(<strong>)");
+  bodyText.fixTagPairEnd(R"(<samp)", R"(</font>)", R"(</samp>)");
+  bodyText.fixTagPairEnd(R"(<cite>)", keyEndChars, R"(</cite>)", keyStartChars);
+  bodyText.fixTagPairEnd(R"(见左图)", R"(</font>)", R"(</var>)");
 }
 
 void testContainer() {
