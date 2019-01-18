@@ -1,11 +1,10 @@
 #include "coupledBodyText.hpp"
 
-bool KeyStartAndCommentStartNotFound(const string &testStr, const string &key) {
+bool KeyStartNotFound(const string &testStr, const string &key) {
   if (debug >= LOG_INFO)
     cout << testStr << " and key: " << key << endl;
   auto keyStartBegin = testStr.find(keyStartChars);
-  auto commentStartBegin = testStr.find(commentBeginChars);
-  if (keyStartBegin == string::npos and commentStartBegin == string::npos)
+  if (keyStartBegin == string::npos)
     return true;
   return false;
 }
@@ -20,7 +19,7 @@ bool isOnlyPartOfOtherKeys(const string &orgLine, const string &key) {
     if (keyEnd == string::npos) // no keyEnd any more
       return false;
     string testStr = line.substr(keyBegin, keyEnd - keyBegin);
-    if (not KeyStartAndCommentStartNotFound(testStr, key))
+    if (not KeyStartNotFound(testStr, key))
       return false;
     else {
       string beforeKey = line.substr(0, keyBegin);
@@ -187,7 +186,7 @@ void CoupledBodyText::regroupingParagraphs(const string &sampleBlock,
 }
 
 /**
- * count number of lines with R"(name=")" of paragraph sign in it
+ * count number of lines with paraTab as paragraph sign in it
  * return a tuple of numbers of first paragraph header,
  * middle header and last header
  * @param fullPath of target file
@@ -439,7 +438,7 @@ void CoupledBodyText::fixTagPairBegin(const string &signOfTagAfterReplaceTag,
   while (!infile.eof()) // To get all the lines.
   {
     getline(infile, inLine); // Saves the line in inLine.
-    int before = 0, after = 0;
+    unsigned int before = 0, after = 0;
     auto orgLine = inLine; // inLine would change in loop below
     auto signBegin = inLine.find(signOfTagAfterReplaceTag);
     if (signBegin != string::npos) {
@@ -517,11 +516,23 @@ void CoupledBodyText::fixTagPairEnd(const string &signOfTagBeforeReplaceTag,
 
 void testSearchTextIsOnlyPartOfOtherKeys() {
   string line =
-      R"(秋水眼又对秋水鸳鸯剑，埋下<a unhidden href="#P94"><i hidden>春色</i>“倒底是不标致的好”</a>的悲剧结局)";
+      R"(秋水眼又对秋水鸳鸯剑，埋下<a unhidden href="#P94">)" + keyStartChars +
+      R"(春色)" + keyEndChars + R"(“倒底是不标致的好”</a>的悲剧结局)";
+  cout << line << endl;
   line =
-      R"(满脸春色，比白日更增了颜色（<i unhidden>美丽</i>）。贾琏搂她笑道：“人人都说我们那<a href="a044.htm#P94"><i hidden>夜叉星</i>夜叉婆</a>（<i unhidden>凤姐</i>）齐整（<i unhidden>标致</i>），如今我看来，（<i unhidden>俯就你</i>）给你拾鞋也不要。”尤二姐道：“我虽标致，却无<a href="a066.htm#P94"><i hidden>品行</i>品行</a>。看来倒底是不标致的好。)";
+      R"(满脸春色，比白日更增了颜色)" + commentStart + R"(美丽)" + commentEnd +
+      R"(）。贾琏搂她笑道：“人人都说我们那<a href="a044.htm#P94">)" +
+      keyStartChars + R"(夜叉星)" + keyEndChars + R"(夜叉婆</a>)" +
+      commentStart + R"(凤姐)" + commentEnd + R"(齐整)" + commentStart +
+      R"(标致)" + commentEnd + R"(，如今我看来，)" + commentStart +
+      R"(俯就你)" + commentEnd +
+      R"(给你拾鞋也不要。”尤二姐道：“我虽标致，却无<a href="a066.htm#P94">)" +
+      keyStartChars + R"(品行)" + keyEndChars +
+      R"(品行</a>。看来倒底是不标致的好。)";
+  cout << line << endl;
   string key = R"(春色)";
-  cout << isOnlyPartOfOtherKeys(line, key);
+  cout << isOnlyPartOfOtherKeys(line, key) << endl;
+  ;
 }
 
 void testLineHeader(string lnStr) {

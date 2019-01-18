@@ -37,14 +37,50 @@ static const string BODY_TEXT_OUTPUT = "bodyTexts/output/";
 static const string BODY_TEXT_FIX = "bodyTexts/afterFix/";
 static const string BODY_TEXT_SUFFIX = R"(.txt)";
 
+static const string htmlFileFinalLine =
+    R"(</html>)"; // last line of the html file
+static const string endOfHtmlHead = R"(/head)";
+static const string htmlTitleStart = R"(<title>)";
+static const string htmlTitleEnd = R"(</title>)";
+
+static const string paraTab = R"(name=")";          // of each paragraph
 static const string topTab = R"(name="top")";       // of the body Text file
 static const string bottomTab = R"(name="bottom")"; // of the body Text file
 static const string keyNotFound = R"(KeyNotFound)";
 static const string attachmentFileMiddleChar = R"(_)";
 
-static const string commentBeginChars = R"(<i unhidden)";
+static const string imgBeginChars = R"(<img)";
+static const string leftImgBeginChars = R"(<var)";
+static const string leftImgEndChars = R"(</var>)";
+static const string rightImgBeginChars = R"(<var)";
+static const string rightImgEndChars = R"(</var>)";
+static const string commentBeginChars = R"(<cite>)";
+static const string commentEndChars = R"(</cite>)";
+static const string linkStartChars = R"(<a)";
+static const string linkEndChars = R"(</a>)";
+static const string referFileMiddleChar = R"(href=")";
+static const string referParaMiddleChar = R"(#)";
+static const string referParaEndChar = R"(">)";
 static const string keyStartChars = R"(<i hidden>)";
 static const string keyEndChars = R"(</i>)";
+static const string changeKey = R"(changeKey)";
+static const string citationStartChars = R"(<b hidden>)";
+static const string citationChapterParaSeparator = R"(.)";
+static const string citationPara = R"(节:)";
+static const string citationEndChars = R"(</b>)";
+static const string charBeforeAnnotation = R"(>)";
+static const string bracketStartChars = R"(（)";
+static const string bracketEndChars = R"(）)";
+static const string originalLinkStartChars = R"(（)";
+static const string originalLinkEndChars = R"(）)";
+static const string poemBeginChars = R"(<strong>)";
+static const string poemEndChars = R"(</strong>)";
+static const string poemTranslationBeginChars = R"(<samp>)";
+static const string poemTranslationEndChars = R"(</samp>)";
+static const string personalCommentStart = R"(（<u unhidden)";
+static const string personalCommentEnd = R"(</u>）)";
+static const string commentStart = bracketStartChars + commentBeginChars;
+static const string commentEnd = commentEndChars + bracketEndChars;
 
 string formatIntoTwoDigitChapterNumber(int chapterNumber);
 

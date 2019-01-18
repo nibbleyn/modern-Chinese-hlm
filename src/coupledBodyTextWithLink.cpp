@@ -1,8 +1,5 @@
 #include "coupledBodyTextWithLink.hpp"
 
-static const string personalCommentStart = R"(（<u unhidden)";
-static const string personalCommentEnd = R"(</u>）)";
-
 void CoupledBodyTextWithLink::removePersonalCommentsOverNumberedFiles() {
   setInputOutputFiles();
   ifstream infile(m_inputFile);

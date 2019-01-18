@@ -184,17 +184,6 @@ string fixLinkFromAttachmentTemplate(const string &path, const string &filename,
   return link;
 }
 
-static const string charBeforeAnnotation = R"(>)";
-static const string commentEndChars = R"(</i>）)";
-static const string referFileMiddleChar = R"(href=")";
-static const string referParaMiddleChar = R"(#)";
-static const string referParaEndChar = R"(">)";
-static const string changeKey = R"(changeKey)";
-static const string citationStartChars = R"(<b hidden>)";
-static const string citationChapterParaSeparator = R"(.)";
-static const string citationPara = R"(节:)";
-static const string citationEndChars = R"(</b>)";
-
 /**
  * output linksTable to file HTML_OUTPUT_LINKS_LIST
  */
@@ -980,9 +969,6 @@ bool LinkFromAttachment::readReferFileName(const string &link) {
   return true;
 }
 
-static const string mainDirForLinkFromAttachment = R"(..\)";
-static const string originalDirForLinkFromAttachment = R"(..\original\)";
-
 /**
  *  the directory structure is like below
  *  refer to utf8HTML/src
@@ -1121,9 +1107,11 @@ void testLink(Link &lfm, string linkString, bool needToGenerateOrgLink) {
 }
 
 void testLinkOperation() {
-
   string linkString =
-      R"(<a hidden href="a080.htm#top">原是（<i unhidden>薛姨妈1</i>）老奶奶（<i unhidden>薛姨妈2</i>）使唤的</a>)";
+      R"(<a hidden href="a080.htm#top">原是)" + commentStart +
+      R"(薛姨妈1)" + commentEnd +
+      R"(老奶奶)" + commentStart + R"(薛姨妈1)" + commentEnd +
+      R"(使唤的</a>)";
   cout << "original link: " << endl << linkString << endl;
   LinkFromMain lfm("75", linkString);
   lfm.readReferFileName(linkString); // second step of construction

@@ -24,17 +24,14 @@ string fixLinkFromAttachmentTemplate(const string &path, const string &filename,
                                      const string &attachNo,
                                      const string &annotation);
 
+static const string unhiddenDisplayProperty = R"(unhidden)";
+static const string hiddenDisplayProperty = R"(hidden)";
 static const string returnLinkFromAttachmentHeader = R"(返回本章原文)";
 static const string returnLink = R"(被引用)";
 static const string returnToContentTable = R"(回目录)";
 static const string contentTableFilename = R"(aindex.htm)";
 static const string citationChapterNo = R"(第)";
 static const string citationChapter = R"(章)";
-
-static const string linkStartChars = R"(<a)";
-static const string linkEndChars = R"(</a>)";
-static const string originalLinkStartChars = R"(（)";
-static const string originalLinkEndChars = R"(）)";
 
 class Link {
 public:
@@ -162,9 +159,9 @@ protected:
   string displayPropertyAsString() {
     string result{""};
     if (m_displayType == LINK_DISPLAY_TYPE::UNHIDDEN)
-      result = R"(unhidden)";
+      result = unhiddenDisplayProperty;
     if (m_displayType == LINK_DISPLAY_TYPE::HIDDEN)
-      result = R"(hidden)";
+      result = hiddenDisplayProperty;
     return result;
   }
   string getStringOfLinkToOrigin() {

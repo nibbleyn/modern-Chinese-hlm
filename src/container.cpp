@@ -128,7 +128,7 @@ void CoupledContainer::assembleBackToHTM(const string &title,
       }
     } else {
       outfile << line << endl; // excluding end line
-      if (line.find(final) != string::npos) {
+      if (line.find(htmlFileFinalLine) != string::npos) {
         break; // including this final line
       }
     }

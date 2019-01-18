@@ -24,8 +24,6 @@ protected:
   virtual string getInputHtmlFile() = 0;
 };
 
-static const string final = R"(</html>)"; // last line of the html file
-
 /**
  * used for features like removePersonalViewpoints, numbering and linkfixing
  * etc.

@@ -1,8 +1,5 @@
 #include "attachmentFiles.hpp"
 
-static const string endOfHead = R"(/head)";
-static const string titleStart = R"(<title>)";
-static const string titleEnd = R"(</title>)";
 /**
  * get chapter number and attachment number from an attachment file name
  * for example with input b001_15 would return pair <1,15>
@@ -47,8 +44,8 @@ string getAttachmentTitle(const string &filename) {
     return "file doesn't exist.";
   }
   string inLine{""};
-  string start = titleStart;
-  string end = titleEnd;
+  string start = htmlTitleStart;
+  string end = htmlTitleEnd;
   while (!infile.eof()) // To get all the lines.
   {
     getline(infile, inLine); // Saves the line in inLine.
@@ -61,7 +58,7 @@ string getAttachmentTitle(const string &filename) {
                                titleEnd - titleBegin - start.length());
       return res;
     }
-    if (inLine.find(endOfHead) != string::npos)
+    if (inLine.find(endOfHtmlHead) != string::npos)
       return "title doesn't exist.";
   }
   return "title doesn't exist.";
