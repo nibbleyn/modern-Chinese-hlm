@@ -561,7 +561,7 @@ void Link::readKey(const string &linkString) {
   CoupledBodyText bodyText(getBodyTextFilePrefix());
   bodyText.resetBeforeSearch();
   // special hack to ignore itself
-  if (m_type == LINK_TYPE::SAMEPAGE) {
+  if (isTargetToSelfHtm()) {
     bodyText.addIgnoreLines(m_fromLine.asString());
   }
   bodyText.setFileAndAttachmentNumber(getChapterName(), m_attachmentNumber);
