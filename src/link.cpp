@@ -485,14 +485,14 @@ bool Link::readAnnotation(const string &linkString) {
   afterLink = afterLink.substr(0, afterLinkEnd);
   string start = charBeforeAnnotation;
   auto afterLinkBegin = afterLink.find_last_of(start);
-  while (afterLinkBegin >= keyEndChars.length() - 1) {
-    if (afterLink.substr(afterLinkBegin - keyEndChars.length() + 1,
+  while (afterLinkBegin >= commentEndChars.length() - 1) {
+    if (afterLink.substr(afterLinkBegin - commentEndChars.length() + 1,
                          commentEndChars.length()) != commentEndChars)
       break;
     else {
       // skip this whole comment
       auto commentStart = afterLink.find_last_of(
-          commentBeginChars, afterLinkBegin - keyEndChars.length());
+          commentBeginChars, afterLinkBegin - commentEndChars.length());
       afterLinkBegin = afterLink.find_last_of(
           start, commentStart - commentBeginChars.length());
     }
@@ -1108,9 +1108,9 @@ void testLink(Link &lfm, string linkString, bool needToGenerateOrgLink) {
 
 void testLinkOperation() {
   string linkString =
-      R"(<a hidden href="a080.htm#top">原是)" + commentStart +
+      R"(<a hidden href="a080.htm#top">原是)" + commentStart + " unhidden>" +
       R"(薛姨妈1)" + commentEnd +
-      R"(老奶奶)" + commentStart + R"(薛姨妈1)" + commentEnd +
+      R"(老奶奶)" + commentStart + " unhidden>" + R"(薛姨妈1)" + commentEnd +
       R"(使唤的</a>)";
   cout << "original link: " << endl << linkString << endl;
   LinkFromMain lfm("75", linkString);
@@ -1123,9 +1123,15 @@ void testLinkOperation() {
   cout << "after fixed: " << endl << fixed << endl;
   SEPERATE("fixReferFile", " finished ");
 
+
+  linkString =
+        R"(<a hidden href="a080.htm#top">原是)" + commentStart + " unhidden>" +
+        R"(薛姨妈1)" + commentEnd +
+        R"(老奶奶)" + commentStart + " unhidden>" + R"(薛姨妈1)" + commentEnd +
+        R"(使唤的</a>)";
   testLinkFromMain(
       "07",
-      R"(<a hidden href="a080.htm#top">原是（<i unhidden>薛姨妈1</i>）老奶奶（<i unhidden>薛姨妈2</i>）使唤的</a>)",
+	  linkString,
       false);
   SEPERATE("#top", " finished ");
 
