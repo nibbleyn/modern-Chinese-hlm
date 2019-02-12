@@ -340,7 +340,7 @@ void testContainer() {
 
   // to test link to original file
   link = fixLinkFromOriginalTemplate(originalDirForLinkFromMain, "80",
-                                     "菱角菱花", "94");
+                                     "菱角菱花", "第80章1.1节:", "94");
 
   LinkFromMain lfm("", link);
   lfm.readReferFileName(link); // second step of construction

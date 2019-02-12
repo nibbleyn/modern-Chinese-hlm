@@ -77,7 +77,7 @@ string fixLinkFromSameFileTemplate(LINK_DISPLAY_TYPE type, const string &key,
 }
 
 static const string linkToMainFile =
-    R"(<a unhidden href="PPa0XX.htm#YY"><i hidden>QQ</i><b unhidden>WW</b>ZZ</a>)";
+    R"(<a unhidden href="PPa0XX.htm#YY"><i hidden>QQ</i><sub unhidden>WW</sub>ZZ</a>)";
 /**
  * generate real correct link to other main file
  * by filling right "refer para" based on key searching
@@ -105,7 +105,7 @@ string fixLinkFromMainTemplate(const string &path, const string &filename,
   link = replacePart(link, "YY", referPara);
   if (key.empty()) // use top/bottom as reference name
   {
-    link = replacePart(link, R"(<i hidden>QQ</i><b unhidden>WW</b>)", key);
+    link = replacePart(link, R"(<i hidden>QQ</i><sub unhidden>WW</sub>)", key);
   } else {
     link = replacePart(link, "QQ", key);
   }
@@ -131,7 +131,7 @@ string fixLinkFromReverseLinkTemplate(const string &filename,
 }
 
 static const string linkToOriginalFile =
-    R"(<a unhidden href="PPc0XX.htm#YY"><i hidden>QQ</i>原文</a>)";
+    R"(<a unhidden href="PPc0XX.htm#YY"><i hidden>QQ</i><sub unhidden>WW</sub>原文</a>)";
 /**
  * generate real correct link to original file
  * by filling right "refer para" based on key searching
@@ -145,17 +145,19 @@ static const string linkToOriginalFile =
  * @return link after fixed
  */
 string fixLinkFromOriginalTemplate(const string &path, const string &filename,
-                                   const string &key, const string &referPara) {
+                                   const string &key, const string &citation,
+                                   const string &referPara) {
   auto link = linkToOriginalFile;
   link = replacePart(link, "PP", path);
   link = replacePart(link, "XX", filename);
   link = replacePart(link, "YY", referPara);
   if (key.empty()) // use top/bottom as reference name
   {
-    link = replacePart(link, R"(<i hidden>QQ</i>)", key);
+    link = replacePart(link, R"(<i hidden>QQ</i><sub unhidden>WW</sub>)", key);
   } else {
     link = replacePart(link, "QQ", key);
   }
+  link = replacePart(link, "WW", citation);
   return link;
 }
 
@@ -366,8 +368,8 @@ string Link::asString() {
   string part5 = referParaEndChar, part6{""}, part7{""};
   if (m_type != LINK_TYPE::ATTACHMENT and not m_usedKey.empty()) {
     part6 = keyStartChars + getKey() + keyEndChars;
-    // easier to replace to <b unhidden> if want to display this
-    if (m_type == LINK_TYPE::MAIN)
+    // easier to replace to <sub unhidden> if want to display this
+    if (m_type == LINK_TYPE::MAIN or m_type == LINK_TYPE::ORIGINAL)
       part7 = citationStartChars + getReferSection() + citationEndChars;
   }
   string part8 = getAnnotation() + linkEndChars;
@@ -676,7 +678,7 @@ void LinkFromMain::generateLinkToOrigin() {
   auto reservedType = m_type;   // only LINK_TYPE::MAIN has origin member
   m_type = LINK_TYPE::ORIGINAL; // temporarily change type to get right path
   string to = fixLinkFromOriginalTemplate(
-      getPathOfReferenceFile(), getChapterName(), m_usedKey, m_referPara);
+      getPathOfReferenceFile(), getChapterName(), m_usedKey, "", m_referPara);
   m_linkPtrToOrigin = std::make_unique<LinkFromMain>(m_fromFile, to);
   m_linkPtrToOrigin->readReferFileName(to);
   m_linkPtrToOrigin->fixFromString(to);
@@ -887,7 +889,7 @@ void LinkFromAttachment::generateLinkToOrigin() {
   auto reservedType = m_type;
   m_type = LINK_TYPE::ORIGINAL; // temporarily change type to get right path
   string to = fixLinkFromOriginalTemplate(
-      getPathOfReferenceFile(), getChapterName(), m_usedKey, m_referPara);
+      getPathOfReferenceFile(), getChapterName(), m_usedKey, "", m_referPara);
   m_linkPtrToOrigin = std::make_unique<LinkFromAttachment>(m_fromFile, to);
   m_linkPtrToOrigin->readReferFileName(to);
   m_linkPtrToOrigin->fixFromString(to);
@@ -1106,11 +1108,14 @@ void testLink(Link &lfm, string linkString, bool needToGenerateOrgLink) {
   cout << "after fixed: " << endl << fixed << endl;
 }
 
+static const string displayPropterty = R"( unhidden>)";
 void testLinkOperation() {
   string linkString =
-      R"(<a hidden href="a080.htm#top">原是)" + commentStart + " unhidden>" +
+      R"(<a hidden href="a080.htm#top">原是)" + commentStart +
+      displayPropterty +
       R"(薛姨妈1)" + commentEnd +
-      R"(老奶奶)" + commentStart + " unhidden>" + R"(薛姨妈1)" + commentEnd +
+      R"(老奶奶)" + commentStart + displayPropterty + R"(薛姨妈1)" +
+      commentEnd +
       R"(使唤的</a>)";
   cout << "original link: " << endl << linkString << endl;
   LinkFromMain lfm("75", linkString);
@@ -1123,16 +1128,14 @@ void testLinkOperation() {
   cout << "after fixed: " << endl << fixed << endl;
   SEPERATE("fixReferFile", " finished ");
 
-
   linkString =
-        R"(<a hidden href="a080.htm#top">原是)" + commentStart + " unhidden>" +
-        R"(薛姨妈1)" + commentEnd +
-        R"(老奶奶)" + commentStart + " unhidden>" + R"(薛姨妈1)" + commentEnd +
-        R"(使唤的</a>)";
-  testLinkFromMain(
-      "07",
-	  linkString,
-      false);
+      R"(<a hidden href="a080.htm#top">原是)" + commentStart +
+      displayPropterty +
+      R"(薛姨妈1)" + commentEnd +
+      R"(老奶奶)" + commentStart + displayPropterty + R"(薛姨妈1)" +
+      commentEnd +
+      R"(使唤的</a>)";
+  testLinkFromMain("07", linkString, false);
   SEPERATE("#top", " finished ");
 
   testLinkFromMain(
@@ -1166,7 +1169,8 @@ void testLinkOperation() {
 
   testLinkFromMain("07",
                    fixLinkFromOriginalTemplate(originalDirForLinkFromMain, "18",
-                                               "happy", "90101"),
+                                               "happy",
+                                               "第80章1.1节:", "90101"),
                    false);
   SEPERATE("fixLinkFromOriginalTemplate", " finished ");
 
@@ -1212,10 +1216,11 @@ void testLinkOperation() {
       true);
   SEPERATE("fixLinkFromMainTemplate", " finished ");
 
-  testLinkFromAttachment(
-      "03_9",
-      fixLinkFromOriginalTemplate(R"(..\original\)", "80", "菱角菱花", "94"),
-      false);
+  testLinkFromAttachment("03_9",
+                         fixLinkFromOriginalTemplate(R"(..\original\)", "80",
+                                                     "菱角菱花",
+                                                     "第80章1.1节:", "94"),
+                         false);
   SEPERATE("fixLinkFromOriginalTemplate", " finished ");
 
   testLinkFromAttachment(

@@ -24,7 +24,7 @@ void findFirstInNoAttachmentFiles(const string key, const string &fileType,
           Link::LinkDetails detail{
               key, file, line,
               fixLinkFromOriginalTemplate(originalDirForLinkFromMain, file, key,
-                                          line)};
+                                          "", line)};
           total++;
           resultLinkList[file].push_back(detail);
         }

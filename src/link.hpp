@@ -19,7 +19,8 @@ string fixLinkFromReverseLinkTemplate(const string &filename,
                                       const string &referPara,
                                       const string &annotation);
 string fixLinkFromOriginalTemplate(const string &path, const string &filename,
-                                   const string &key, const string &referPara);
+                                   const string &key, const string &citation,
+                                   const string &referPara);
 string fixLinkFromAttachmentTemplate(const string &path, const string &filename,
                                      const string &attachNo,
                                      const string &annotation);
