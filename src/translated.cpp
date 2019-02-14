@@ -8,10 +8,10 @@ int main(int argc, char **argv) {
   //	  int num = 2;
   //	  int num = 3;
   //	  int num = 4;
-  int num = 5;
+  int num = 1;
   switch (num) {
   case 1:
-    testFunctions(3);
+    testFunctions(11);
     break;
   case 2:
     numberOriginalHtmls();

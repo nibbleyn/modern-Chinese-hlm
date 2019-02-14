@@ -111,7 +111,7 @@ bool CoupledBodyText::findKey(const string &key) {
     }
 
     LineNumber ln;
-    ln.loadFromContainedLine(line);
+    ln.loadFirstFromContainedLine(line);
     if (not ln.valid()) {
       m_searchError =
           "file doesn't get numbered:" + m_inputFile + " at line:" + line;
@@ -211,7 +211,7 @@ CoupledBodyText::ParaStruct CoupledBodyText::getNumberOfPara() {
     if (inLine.find(paraTab) != string::npos) // one new paragraph is found
     {
       LineNumber ln;
-      ln.loadFromContainedLine(inLine);
+      ln.loadFirstFromContainedLine(inLine);
       if (ln.isParagraphHeader())
         middle++;
     }
@@ -283,7 +283,7 @@ void CoupledBodyText::addLineNumber(const string &separatorColor, bool hidden) {
     getline(infile, inLine); // Saves the line in inLine.
     string line = inLine;
     LineNumber ln;
-    ln.loadFromContainedLine(inLine);
+    ln.loadFirstFromContainedLine(inLine);
     if (ln.isParagraphHeader()) {
       if (debug >= LOG_INFO)
         cout << "paragraph header found as:" << ln.asString() << endl;
@@ -304,7 +304,7 @@ void CoupledBodyText::addLineNumber(const string &separatorColor, bool hidden) {
   while (!infile.eof()) {
     getline(infile, inLine); // Saves the line in inLine.
     LineNumber ln;
-    ln.loadFromContainedLine(inLine);
+    ln.loadFirstFromContainedLine(inLine);
     if (enterLastPara == true) {
       if (ln.isParagraphHeader()) {
         if (debug >= LOG_INFO)
@@ -546,7 +546,7 @@ void testLineHeader(string lnStr) {
 void testLineHeaderFromContainedLine(string containedLine) {
   cout << "original: " << endl << containedLine << endl;
   LineNumber ln;
-  ln.loadFromContainedLine(containedLine);
+  ln.loadFirstFromContainedLine(containedLine);
   cout << ln.getParaNumber() << " " << ln.getlineNumber() << " "
        << ln.asString() << endl
        << "is paragraph header? " << ln.isParagraphHeader() << endl;
@@ -577,7 +577,7 @@ void testParagraphHeader(string lnStr) {
 void testParagraphHeaderFromContainedLine(string containedLine) {
   cout << "original: " << endl << containedLine << endl;
   LineNumber ln;
-  ln.loadFromContainedLine(containedLine);
+  ln.loadFirstFromContainedLine(containedLine);
   cout << ln.getParaNumber() << " " << ln.getlineNumber() << " "
        << ln.asString() << endl
        << "is paragraph header? " << ln.isParagraphHeader() << endl;

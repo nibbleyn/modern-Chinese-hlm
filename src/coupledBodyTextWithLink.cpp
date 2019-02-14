@@ -88,7 +88,7 @@ void CoupledBodyTextWithLink::fixLinksFromFile(fileSet referFiles, int minPara,
     getline(infile, inLine); // Saves the line in inLine.
     auto orgLine = inLine;   // inLine would change in loop below
     LineNumber ln;
-    ln.loadFromContainedLine(orgLine);
+    ln.loadFirstFromContainedLine(orgLine);
     if (ln.isParagraphHeader() or not ln.valid() or
         not ln.isWithinLineRange(minPara, maxPara, minLine, maxLine)) {
       outfile << orgLine << endl;

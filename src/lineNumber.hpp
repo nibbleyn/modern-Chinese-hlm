@@ -1,9 +1,10 @@
 #pragma once
+#include "Object.hpp"
 #include "utf8StringUtil.hpp"
 
 static const int START_PARA_NUMBER = 90;
 
-class LineNumber {
+class LineNumber : public Object {
   static const string UnhiddenLineNumberStart;
   static const string HiddenLineNumberStart;
   static int StartNumber;
@@ -36,8 +37,9 @@ public:
 
   LineNumber(const LineNumber &) = default;
   LineNumber &operator=(const LineNumber &) = default;
-
-  void loadFromContainedLine(const string &containedLine);
+  size_t length();
+  size_t displaySize();
+  size_t loadFirstFromContainedLine(const string &containedLine);
   bool valid() { return (m_paraNumber != 0 and m_lineNumber != 0); }
   bool isParagraphHeader() {
     return (m_paraNumber != 0 and m_paraNumber < Limit and m_lineNumber == 0);

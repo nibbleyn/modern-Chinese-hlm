@@ -52,49 +52,8 @@ static const string attachmentFileMiddleChar = R"(_)";
 static const string bracketStartChars = R"(（)";
 static const string bracketEndChars = R"(）)";
 
-static const string imgBeginChars = R"(<img)";
-class Image {
-public:
-  Image(const string &imageString);
-  size_t displaySize();
-
-private:
-  string m_fileName{""};
-  size_t height{0};
-  size_t width{0};
-};
-
 static const string unhiddenDisplayPropterty = R"( unhidden)";
 static const string endOfBeginTag = R"(>)";
-static const string leftImgBeginChars = R"(<var)";
-static const string leftImgEndChars = R"(</var>)";
-static const string rightImgBeginChars = R"(<var)";
-static const string rightImgEndChars = R"(</var>)";
-class ImageReferText {
-public:
-  ImageReferText(const string &referTextString);
-  size_t displaySize();
-
-private:
-  bool toLeft{true};
-  string m_annotation{""};
-};
-
-static const string poemBeginChars = R"(<strong)";
-static const string poemEndChars = R"(</strong>)";
-class Poem {
-public:
-  Poem() = default;
-  Poem(const string &poemString);
-  size_t loadFirstFromContainedLine(const string &containedLine);
-  size_t length();
-  size_t displaySize();
-
-private:
-  string m_poemText{""};
-};
-
-void testPoem();
 
 // links
 static const string linkStartChars = R"(<a)";

@@ -1,5 +1,5 @@
 #pragma once
-//#include "utf8StringUtil.hpp"
+#include "Object.hpp"
 #include "attachmentFiles.hpp"
 #include "coupledBodyText.hpp"
 
@@ -35,7 +35,7 @@ static const string citationChapterNo = R"(第)";
 static const string citationChapter = R"(章)";
 
 class Comment;
-class Link {
+class Link : public Object {
 public:
   struct LinkDetails {
     string key{""};
@@ -85,6 +85,9 @@ public:
   virtual ~Link(){};
   Link(const Link &) = delete;
   Link &operator=(const Link &) = delete;
+  size_t length();
+  size_t displaySize();
+  size_t loadFirstFromContainedLine(const string &containedLine);
   string asString();
   LINK_TYPE getType() { return m_type; }
   bool isTargetToOriginalHtm() { return (m_type == LINK_TYPE::ORIGINAL); };
@@ -142,7 +145,6 @@ public:
     }
   }
   virtual void generateLinkToOrigin() = 0;
-  size_t displaySize();
 
 protected:
   LINK_DISPLAY_TYPE getDisplayType() { return m_displayType; }
@@ -250,10 +252,12 @@ private:
   string getBodyTextFilePrefix();
 };
 
-class Comment {
+class Comment : public Object {
 public:
   Comment(const string &commentString);
-  size_t displaySize();
+  size_t length() { return 0; }
+  size_t displaySize() { return 0; }
+  size_t loadFirstFromContainedLine(const string &containedLine) { return 0; }
 
 private:
   using LinkPtr = std::unique_ptr<Link>;
@@ -263,10 +267,12 @@ private:
   TextCollection m_texts;
 };
 
-class PersonalComments {
+class PersonalComments : public Object {
 public:
   PersonalComments(const string &commentString);
-  size_t displaySize();
+  size_t length() { return 0; }
+  size_t displaySize() { return 0; }
+  size_t loadFirstFromContainedLine(const string &containedLine) { return 0; }
 
 private:
   using LinkPtr = std::unique_ptr<Link>;
@@ -276,13 +282,14 @@ private:
   TextCollection m_texts;
 };
 
-class PoemTranslation {
+class PoemTranslation : public Object {
 public:
   PoemTranslation(const string &translationString);
-  size_t displaySize();
+  size_t length() { return 0; }
+  size_t displaySize() { return 0; }
+  size_t loadFirstFromContainedLine(const string &containedLine) { return 0; }
 
 private:
-  string m_translation{""};
   using LinkPtr = std::unique_ptr<Link>;
   using LinkPtrCollection = std::map<size_t, LinkPtr>;
   LinkPtrCollection m_linkPtrs;

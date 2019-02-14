@@ -12,12 +12,14 @@ const string LineNumber::HiddenLineNumberStart = R"(<a hidden name=")";
 int LineNumber::StartNumber = START_PARA_NUMBER;
 int LineNumber::Limit = START_PARA_NUMBER * 2;
 
+size_t LineNumber::length() { return 0; }
+size_t LineNumber::displaySize() { return 0; }
 /**
  * retrieve lineNumber from the link at the beginning of containedLine
  * and read from it the paraNumber and lineNumber
  * @param containedLine the numbered line of one body text file
  */
-void LineNumber::loadFromContainedLine(const string &containedLine) {
+size_t LineNumber::loadFirstFromContainedLine(const string &containedLine) {
   string start = UnhiddenLineNumberStart;
   auto linkBegin = containedLine.find(start);
   if (linkBegin == string::npos) {
@@ -38,6 +40,7 @@ void LineNumber::loadFromContainedLine(const string &containedLine) {
     else
       readFromString(lineName.substr(0, linkEnd));
   }
+  return linkBegin;
 }
 /**
  * generate the line prefix for numbering a line

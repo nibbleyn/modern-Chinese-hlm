@@ -342,6 +342,12 @@ void Link::outPutStatisticsToFiles() {
   cout << "links information are written into: " << outPutFilePath << endl;
 }
 
+size_t Link::length() { return 0; }
+size_t Link::displaySize() { return 0; }
+size_t Link::loadFirstFromContainedLine(const string &containedLine) {
+  return 0;
+}
+
 /**
  * generated the string of a link from its info like type, key, etc.
  * @return the string of the link
