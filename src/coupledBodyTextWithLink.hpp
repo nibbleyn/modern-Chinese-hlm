@@ -13,6 +13,7 @@ public:
                         int minLine = 0, int maxLine = 0);
 
   void removePersonalCommentsOverNumberedFiles();
+  int sizeAfterRendering(const string &lineStr);
 
 private:
   using LinkPtr = std::unique_ptr<Link>;

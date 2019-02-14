@@ -79,7 +79,6 @@ protected:
   bool m_autoNumbering{false};
 
   void setInputOutputFiles();
-  int sizeOfLineAfterRendering(const string &lineStr);
 };
 
 void testSearchTextIsOnlyPartOfOtherKeys();

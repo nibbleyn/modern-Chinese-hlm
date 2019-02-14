@@ -40,6 +40,9 @@ void testFunctions(int num) {
   case 10:
     testfixTagPairEnd();
     break;
+  case 11:
+    testPoem();
+    break;
   default:
     cout << "no test executed." << endl;
   }

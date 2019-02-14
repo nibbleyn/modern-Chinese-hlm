@@ -191,3 +191,11 @@ void CoupledBodyTextWithLink::fixLinksFromFile(fileSet referFiles, int minPara,
     outfile << orgLine << endl;
   }
 }
+
+/**
+ * get size of links, Comments, image reference, poems, personal views embedded
+ * to get actual size without rendering one line,
+ */
+int CoupledBodyTextWithLink::sizeAfterRendering(const string &lineStr) {
+  return 0;
+}

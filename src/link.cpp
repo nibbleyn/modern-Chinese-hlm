@@ -1108,14 +1108,13 @@ void testLink(Link &lfm, string linkString, bool needToGenerateOrgLink) {
   cout << "after fixed: " << endl << fixed << endl;
 }
 
-static const string displayPropterty = R"( unhidden>)";
 void testLinkOperation() {
   string linkString =
       R"(<a hidden href="a080.htm#top">原是)" + commentStart +
-      displayPropterty +
+      unhiddenDisplayPropterty + endOfBeginTag +
       R"(薛姨妈1)" + commentEnd +
-      R"(老奶奶)" + commentStart + displayPropterty + R"(薛姨妈1)" +
-      commentEnd +
+      R"(老奶奶)" + commentStart + unhiddenDisplayPropterty + endOfBeginTag +
+      R"(薛姨妈1)" + commentEnd +
       R"(使唤的</a>)";
   cout << "original link: " << endl << linkString << endl;
   LinkFromMain lfm("75", linkString);
@@ -1130,10 +1129,10 @@ void testLinkOperation() {
 
   linkString =
       R"(<a hidden href="a080.htm#top">原是)" + commentStart +
-      displayPropterty +
+      unhiddenDisplayPropterty + endOfBeginTag +
       R"(薛姨妈1)" + commentEnd +
-      R"(老奶奶)" + commentStart + displayPropterty + R"(薛姨妈1)" +
-      commentEnd +
+      R"(老奶奶)" + commentStart + unhiddenDisplayPropterty + endOfBeginTag +
+      R"(薛姨妈1)" + commentEnd +
       R"(使唤的</a>)";
   testLinkFromMain("07", linkString, false);
   SEPERATE("#top", " finished ");

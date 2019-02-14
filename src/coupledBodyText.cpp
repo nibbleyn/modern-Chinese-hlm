@@ -75,13 +75,6 @@ void CoupledBodyText::setInputOutputFiles() {
 }
 
 /**
- * get size of links, Comments, image reference, poems, personal views embeded
- * to get actual size without rendering one line,
- */
-int CoupledBodyText::sizeOfLineAfterRendering(const string &lineStr) {
-  return 0;
-}
-/**
  * find a keyword in a numbered bodytext file
  * whose name is specified as fullPath
  * @param key the keyword used to search

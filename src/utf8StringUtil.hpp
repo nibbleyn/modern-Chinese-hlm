@@ -49,13 +49,54 @@ static const string bottomTab = R"(name="bottom")"; // of the body Text file
 static const string keyNotFound = R"(KeyNotFound)";
 static const string attachmentFileMiddleChar = R"(_)";
 
+static const string bracketStartChars = R"(（)";
+static const string bracketEndChars = R"(）)";
+
 static const string imgBeginChars = R"(<img)";
+class Image {
+public:
+  Image(const string &imageString);
+  size_t displaySize();
+
+private:
+  string m_fileName{""};
+  size_t height{0};
+  size_t width{0};
+};
+
+static const string unhiddenDisplayPropterty = R"( unhidden)";
+static const string endOfBeginTag = R"(>)";
 static const string leftImgBeginChars = R"(<var)";
 static const string leftImgEndChars = R"(</var>)";
 static const string rightImgBeginChars = R"(<var)";
 static const string rightImgEndChars = R"(</var>)";
-static const string commentBeginChars = R"(<cite)";
-static const string commentEndChars = R"(</cite>)";
+class ImageReferText {
+public:
+  ImageReferText(const string &referTextString);
+  size_t displaySize();
+
+private:
+  bool toLeft{true};
+  string m_annotation{""};
+};
+
+static const string poemBeginChars = R"(<strong)";
+static const string poemEndChars = R"(</strong>)";
+class Poem {
+public:
+  Poem() = default;
+  Poem(const string &poemString);
+  size_t loadFirstFromContainedLine(const string &containedLine);
+  size_t length();
+  size_t displaySize();
+
+private:
+  string m_poemText{""};
+};
+
+void testPoem();
+
+// links
 static const string linkStartChars = R"(<a)";
 static const string linkEndChars = R"(</a>)";
 static const string referFileMiddleChar = R"(href=")";
@@ -69,18 +110,20 @@ static const string citationChapterParaSeparator = R"(.)";
 static const string citationPara = R"(节:)";
 static const string citationEndChars = R"(</sub>)";
 static const string charBeforeAnnotation = R"(>)";
-static const string bracketStartChars = R"(（)";
-static const string bracketEndChars = R"(）)";
 static const string originalLinkStartChars = R"(（)";
 static const string originalLinkEndChars = R"(）)";
-static const string poemBeginChars = R"(<strong)";
-static const string poemEndChars = R"(</strong>)";
-static const string poemTranslationBeginChars = R"(<samp)";
-static const string poemTranslationEndChars = R"(</samp>)";
+
+// comments
+static const string commentBeginChars = R"(<cite)";
+static const string commentEndChars = R"(</cite>)";
 static const string personalCommentStart = R"(（<u unhidden)";
 static const string personalCommentEnd = R"(</u>）)";
 static const string commentStart = bracketStartChars + commentBeginChars;
 static const string commentEnd = commentEndChars + bracketEndChars;
+
+// poemTranslation
+static const string poemTranslationBeginChars = R"(<samp)";
+static const string poemTranslationEndChars = R"(</samp>)";
 
 string formatIntoTwoDigitChapterNumber(int chapterNumber);
 

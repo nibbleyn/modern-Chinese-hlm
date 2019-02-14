@@ -34,6 +34,7 @@ static const string contentTableFilename = R"(aindex.htm)";
 static const string citationChapterNo = R"(第)";
 static const string citationChapter = R"(章)";
 
+class Comment;
 class Link {
 public:
   struct LinkDetails {
@@ -141,6 +142,7 @@ public:
     }
   }
   virtual void generateLinkToOrigin() = 0;
+  size_t displaySize();
 
 protected:
   LINK_DISPLAY_TYPE getDisplayType() { return m_displayType; }
@@ -196,6 +198,9 @@ protected:
   bool m_needChange{false};
   using LinkPtr = std::unique_ptr<Link>;
   LinkPtr m_linkPtrToOrigin{nullptr};
+  using CommentPtr = std::unique_ptr<Comment>;
+  using CommentPtrCollection = std::map<size_t, CommentPtr>;
+  CommentPtrCollection m_commentPtrs;
 };
 
 class LinkFromMain : public Link {
@@ -243,6 +248,46 @@ private:
   // utility to convert link type with filename
   string getHtmlFileNamePrefix();
   string getBodyTextFilePrefix();
+};
+
+class Comment {
+public:
+  Comment(const string &commentString);
+  size_t displaySize();
+
+private:
+  using LinkPtr = std::unique_ptr<Link>;
+  using LinkPtrCollection = std::map<size_t, LinkPtr>;
+  LinkPtrCollection m_linkPtrs;
+  using TextCollection = std::map<size_t, string>;
+  TextCollection m_texts;
+};
+
+class PersonalComments {
+public:
+  PersonalComments(const string &commentString);
+  size_t displaySize();
+
+private:
+  using LinkPtr = std::unique_ptr<Link>;
+  using LinkPtrCollection = std::map<size_t, LinkPtr>;
+  LinkPtrCollection m_linkPtrs;
+  using TextCollection = std::map<size_t, string>;
+  TextCollection m_texts;
+};
+
+class PoemTranslation {
+public:
+  PoemTranslation(const string &translationString);
+  size_t displaySize();
+
+private:
+  string m_translation{""};
+  using LinkPtr = std::unique_ptr<Link>;
+  using LinkPtrCollection = std::map<size_t, LinkPtr>;
+  LinkPtrCollection m_linkPtrs;
+  using TextCollection = std::map<size_t, string>;
+  TextCollection m_texts;
 };
 
 void testLinkOperation();
