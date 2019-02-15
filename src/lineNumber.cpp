@@ -6,14 +6,18 @@ extern int debug;
 static const string endOfLineNumber =
     R"(")"; // to try special case like "bottom"
 static const string endOfGeneratedLineNumber = R"(>)";
+static const string inBetweenTwoParas = R"(" href=")";
+static const string inBetweenParaAndLineNumber = R"(.)";
+static const string lastPara = R"(<a unhidden name="bottom" href="#top">)";
 
 const string LineNumber::UnhiddenLineNumberStart = R"(<a unhidden name=")";
 const string LineNumber::HiddenLineNumberStart = R"(<a hidden name=")";
+const string LineNumber::LineNumberEnd = R"(</a>)";
 int LineNumber::StartNumber = START_PARA_NUMBER;
 int LineNumber::Limit = START_PARA_NUMBER * 2;
 
-size_t LineNumber::length() { return 0; }
-size_t LineNumber::displaySize() { return 0; }
+size_t LineNumber::length() { return getWholeString().length(); }
+size_t LineNumber::displaySize() { return getDisplayString().length(); }
 /**
  * retrieve lineNumber from the link at the beginning of containedLine
  * and read from it the paraNumber and lineNumber
@@ -42,13 +46,38 @@ size_t LineNumber::loadFirstFromContainedLine(const string &containedLine) {
   }
   return linkBegin;
 }
+
+string LineNumber::getDisplayString() {
+  if (m_lineNumber == 0)
+    return "";
+  return TurnToString(m_paraNumber) + inBetweenParaAndLineNumber +
+         TurnToString(m_lineNumber);
+}
+
+string LineNumber::getWholeString() {
+  if (isPureTextOnly())
+    return "";
+  if (isParagraphHeader()) {
+    if (m_paraNumber != Limit - 1) {
+      auto nextPara = *this;
+      nextPara.m_paraNumber++;
+      return UnhiddenLineNumberStart + asString() + inBetweenTwoParas +
+             nextPara.asString() + endOfLineNumber + endOfGeneratedLineNumber;
+    } else {
+      return lastPara;
+    }
+  }
+  return generateLinePrefix() + TurnToString(m_paraNumber) +
+         inBetweenParaAndLineNumber + TurnToString(m_lineNumber) +
+         LineNumberEnd;
+}
 /**
  * generate the line prefix for numbering a line
  * @return the prefix to add
  */
 string LineNumber::generateLinePrefix() {
   string result{""};
-  if (m_lineNumber != 0)
+  if (!isParagraphHeader())
     result = UnhiddenLineNumberStart + asString() + endOfLineNumber +
              endOfGeneratedLineNumber;
   return result;

@@ -12,12 +12,12 @@ using namespace std;
 #include "utf8StringUtil.hpp"
 
 enum class OBJECT_TYPE {
+  LINENUMBER,
   IMAGE,
   IMAGEREF,
   POEM,
-  LINENUMBER,
-  LINK,
   POEMTRANSLATION,
+  LINK,
   COMMENT,
   PERSONALCOMMENT
 };
@@ -26,6 +26,8 @@ class Object {
 public:
   Object() = default;
   virtual ~Object(){};
+  virtual string getWholeString() = 0;
+  virtual string getDisplayString() = 0;
   virtual size_t length() = 0;
   virtual size_t displaySize() = 0;
   virtual size_t loadFirstFromContainedLine(const string &containedLine) = 0;
@@ -64,6 +66,8 @@ class Poem : public Object {
 public:
   Poem() = default;
   Poem(const string &poemString);
+  string getWholeString();
+  string getDisplayString();
   size_t loadFirstFromContainedLine(const string &containedLine);
   size_t length();
   size_t displaySize();

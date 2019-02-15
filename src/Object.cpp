@@ -15,12 +15,14 @@ size_t Poem::loadFirstFromContainedLine(const string &containedLine) {
   m_bodyText = containedLine.substr(beginPos + 1, endPos - beginPos - 1);
   return beginPos + 1;
 }
-
-size_t Poem::length() {
-  return poemBeginChars.length() + unhiddenDisplayPropterty.length() +
-         endOfBeginTag.length() + m_bodyText.length() + poemEndChars.length();
+string Poem::getWholeString() {
+  return poemBeginChars + unhiddenDisplayPropterty + endOfBeginTag +
+         m_bodyText + poemEndChars;
 }
-size_t Poem::displaySize() { return m_bodyText.length(); }
+
+string Poem::getDisplayString() { return m_bodyText; }
+size_t Poem::length() { return getWholeString().length(); }
+size_t Poem::displaySize() { return getDisplayString().length(); }
 
 void testPoem() {
   string poemStr =
@@ -30,8 +32,13 @@ void testPoem() {
   Poem poem1(poemStr);
   cout << "length: " << poem1.length()
        << " display size: " << poem1.displaySize() << endl;
+  cout << "whole string: " << poem1.getWholeString() << endl;
+  cout << "display as: " << poem1.getDisplayString() << endl;
   Poem poem2;
   cout << "first appearance offset: " << poem2.loadFirstFromContainedLine(line)
-       << " length: " << poem2.length()
+       << endl
+       << "length: " << poem2.length()
        << " display size: " << poem2.displaySize() << endl;
+  cout << "whole string: " << poem2.getWholeString() << endl;
+  cout << "display as: " << poem2.getDisplayString() << endl;
 }

@@ -85,6 +85,8 @@ public:
   virtual ~Link(){};
   Link(const Link &) = delete;
   Link &operator=(const Link &) = delete;
+  string getWholeString();
+  string getDisplayString();
   size_t length();
   size_t displaySize();
   size_t loadFirstFromContainedLine(const string &containedLine);

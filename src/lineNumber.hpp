@@ -11,6 +11,7 @@ class LineNumber : public Object {
   static int Limit;
 
 public:
+  static const string LineNumberEnd;
   /**
    * the paragraph number in a body text would start from this number
    * and increase thru downlink to limit-1
@@ -37,7 +38,9 @@ public:
 
   LineNumber(const LineNumber &) = default;
   LineNumber &operator=(const LineNumber &) = default;
+  string getWholeString();
   size_t length();
+  string getDisplayString();
   size_t displaySize();
   size_t loadFirstFromContainedLine(const string &containedLine);
   bool valid() { return (m_paraNumber != 0 and m_lineNumber != 0); }

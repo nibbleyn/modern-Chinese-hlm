@@ -365,12 +365,11 @@ void CoupledBodyText::addLineNumber(const string &separatorColor, bool hidden) {
       if (not ln.equal(newLn)) {
         if (ln.valid()) // remove old one
         {
-          auto linkEnd = inLine.find("</a>");
+          auto linkEnd = inLine.find(LineNumber::LineNumberEnd);
           inLine = inLine.substr(linkEnd + 4);
         }
-        outfile << newLn.generateLinePrefix() + TurnToString(para) + "." +
-                       TurnToString(lineNo) + "</a>"
-                << "    " << inLine << endl; // Prints our line
+        outfile << newLn.getWholeString() << "    " << inLine
+                << endl; // Prints our line
       } else
         outfile << inLine << endl;
       if (debug >= LOG_INFO)
@@ -534,6 +533,8 @@ void testLineHeader(string lnStr) {
   cout << ln.getParaNumber() << " " << ln.getlineNumber() << " "
        << ln.asString() << endl
        << "is paragraph header? " << ln.isParagraphHeader() << endl;
+  cout << "whole string: " << ln.getWholeString() << endl;
+  cout << "display as: " << ln.getDisplayString() << endl;
   if (not ln.isParagraphHeader()) {
     if (not ln.isPureTextOnly())
       cout << "generate line prefix: " << endl
@@ -550,6 +551,8 @@ void testLineHeaderFromContainedLine(string containedLine) {
   cout << ln.getParaNumber() << " " << ln.getlineNumber() << " "
        << ln.asString() << endl
        << "is paragraph header? " << ln.isParagraphHeader() << endl;
+  cout << "whole string: " << ln.getWholeString() << endl;
+  cout << "display as: " << ln.getDisplayString() << endl;
   if (not ln.isParagraphHeader()) {
     if (not ln.isPureTextOnly())
       cout << "generate line prefix: " << endl
@@ -565,6 +568,8 @@ void testParagraphHeader(string lnStr) {
   cout << ln.getParaNumber() << " " << ln.getlineNumber() << " "
        << ln.asString() << endl
        << "is paragraph header? " << ln.isParagraphHeader() << endl;
+  cout << "whole string: " << ln.getWholeString() << endl;
+  cout << "display as: " << ln.getDisplayString() << endl;
   if (not ln.isParagraphHeader()) {
     if (not ln.isPureTextOnly())
       cout << "generate line prefix: " << endl
@@ -581,6 +586,8 @@ void testParagraphHeaderFromContainedLine(string containedLine) {
   cout << ln.getParaNumber() << " " << ln.getlineNumber() << " "
        << ln.asString() << endl
        << "is paragraph header? " << ln.isParagraphHeader() << endl;
+  cout << "whole string: " << ln.getWholeString() << endl;
+  cout << "display as: " << ln.getDisplayString() << endl;
   if (not ln.isParagraphHeader()) {
     if (not ln.isPureTextOnly())
       cout << "generate line prefix: " << endl
