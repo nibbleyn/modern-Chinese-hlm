@@ -11,7 +11,7 @@ int main(int argc, char **argv) {
   int num = 1;
   switch (num) {
   case 1:
-    testFunctions(11);
+    testFunctions(2);
     break;
   case 2:
     numberOriginalHtmls();

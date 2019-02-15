@@ -12,6 +12,7 @@ using namespace std;
 #include "utf8StringUtil.hpp"
 
 enum class OBJECT_TYPE {
+  SPACE,
   LINENUMBER,
   IMAGE,
   IMAGEREF,
@@ -60,6 +61,21 @@ private:
   bool toLeft{true};
 };
 
+static const string space = R"(&nbsp;)";
+static const string displaySpace = R"( )";
+static const string fourSpace = space + space + space + space;
+class Space : public Object {
+public:
+  Space() = default;
+  string getWholeString() { return space; };
+  string getDisplayString() { return displaySpace; };
+  size_t loadFirstFromContainedLine(const string &containedLine);
+  size_t length() { return space.length(); };
+  size_t displaySize() { return displaySpace.length(); };
+
+private:
+};
+
 static const string poemBeginChars = R"(<strong)";
 static const string poemEndChars = R"(</strong>)";
 class Poem : public Object {
@@ -75,4 +91,5 @@ public:
 private:
 };
 
+void testSpace();
 void testPoem();

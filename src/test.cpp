@@ -44,6 +44,9 @@ void testFunctions(int num) {
   case 11:
     testPoem();
     break;
+  case 12:
+    testSpace();
+    break;
   default:
     cout << "no test executed." << endl;
   }
