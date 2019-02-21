@@ -63,6 +63,7 @@ private:
 
 static const string space = R"(&nbsp;)";
 static const string displaySpace = R"( )";
+static const string doubleSpace = space + space;
 static const string fourSpace = space + space + space + space;
 class Space : public Object {
 public:

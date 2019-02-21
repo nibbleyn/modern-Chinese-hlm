@@ -57,7 +57,8 @@ public:
   ParaStruct getNumberOfPara();
 
   // add line number before each paragraph
-  void addLineNumber(const string &separatorColor, bool hidden = false);
+  void addLineNumber(const string &separatorColor, bool forceUpdate = true,
+                     bool hidden = false);
 
   // fix wrong html pair
   void fixTagPairBegin(const string &signOfTagAfterReplaceTag,

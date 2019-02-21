@@ -238,7 +238,8 @@ CoupledBodyText::ParaStruct CoupledBodyText::getNumberOfPara() {
  * @param outputFile the output file after numbering
  * @param separatorColor the color to separate paragraphs
  */
-void CoupledBodyText::addLineNumber(const string &separatorColor, bool hidden) {
+void CoupledBodyText::addLineNumber(const string &separatorColor,
+                                    bool forceUpdate, bool hidden) {
   setInputOutputFiles();
   ifstream infile(m_inputFile);
   if (!infile) {
@@ -362,14 +363,28 @@ void CoupledBodyText::addLineNumber(const string &separatorColor, bool hidden) {
       if (debug >= LOG_INFO)
         cout << "processing paragraph:" << para << " line: " << lineNo << endl;
       LineNumber newLn(para, lineNo);
-      if (not ln.equal(newLn)) {
-        if (ln.valid()) // remove old one
+      if (forceUpdate or not ln.equal(newLn)) {
+        if (ln.valid()) // remove old line number
         {
           auto linkEnd = inLine.find(LineNumber::LineNumberEnd);
           inLine = inLine.substr(linkEnd + 4);
         }
-        outfile << newLn.getWholeString() << fourSpace << inLine
-                << endl; // Prints our line
+        // remove existing nbsps and spaces
+        auto iterBegin = inLine.begin();
+        while (iterBegin < inLine.end()) {
+          if (*iterBegin == displaySpace.at(0))
+            ++iterBegin;
+          else if (*iterBegin == space.at(0) and
+                   (iterBegin + space.length() < inLine.end()) and
+                   (std::string(iterBegin, iterBegin + space.length()) ==
+                    space)) {
+            iterBegin += space.length();
+          } else
+            break;
+        }
+        inLine = std::string(iterBegin, inLine.end());
+        outfile << newLn.getWholeString() << doubleSpace << displaySpace
+                << inLine << endl; // Prints our line
       } else
         outfile << inLine << endl;
       if (debug >= LOG_INFO)

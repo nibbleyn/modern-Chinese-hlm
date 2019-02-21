@@ -6,13 +6,13 @@
  * @param maxTarget until this file
  */
 void addLineNumbers(int minTarget, int maxTarget, FILE_TYPE targetFileType,
-                    bool hidden = false) {
+                    bool forceUpdate = true, bool hidden = false) {
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     string separatorColor = getSeparateLineColor(targetFileType);
     CoupledBodyText bodyText;
     bodyText.setFilePrefixFromFileType(targetFileType);
     bodyText.setFileAndAttachmentNumber(file);
-    bodyText.addLineNumber(separatorColor, hidden);
+    bodyText.addLineNumber(separatorColor, forceUpdate, hidden);
   }
 }
 
@@ -21,14 +21,16 @@ void addLineNumbers(int minTarget, int maxTarget, FILE_TYPE targetFileType,
  * @param minTarget starting from this file
  * @param maxTarget until this file
  */
-void NumberingOriginalHtml(int minTarget, int maxTarget, bool hidden = false) {
+void NumberingOriginalHtml(int minTarget, int maxTarget,
+                           bool forceUpdate = true, bool hidden = false) {
   CoupledContainer container(FILE_TYPE::ORIGINAL);
   CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     container.setFileAndAttachmentNumber(file);
     container.dissembleFromHTM();
   }
-  addLineNumbers(minTarget, maxTarget, FILE_TYPE::ORIGINAL, hidden);
+  addLineNumbers(minTarget, maxTarget, FILE_TYPE::ORIGINAL, forceUpdate,
+                 hidden);
   CoupledBodyText::loadBodyTextsFromFixBackToOutput();
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     container.setFileAndAttachmentNumber(file);
@@ -41,14 +43,15 @@ void NumberingOriginalHtml(int minTarget, int maxTarget, bool hidden = false) {
  * @param minTarget starting from this file
  * @param maxTarget until this file
  */
-void NumberingMainHtml(int minTarget, int maxTarget, bool hidden = false) {
+void NumberingMainHtml(int minTarget, int maxTarget, bool forceUpdate = true,
+                       bool hidden = false) {
   CoupledContainer container(FILE_TYPE::MAIN);
   CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     container.setFileAndAttachmentNumber(file);
     container.dissembleFromHTM();
   }
-  addLineNumbers(minTarget, maxTarget, FILE_TYPE::MAIN, hidden);
+  addLineNumbers(minTarget, maxTarget, FILE_TYPE::MAIN, forceUpdate, hidden);
   CoupledBodyText::loadBodyTextsFromFixBackToOutput();
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     container.setFileAndAttachmentNumber(file);
@@ -68,6 +71,7 @@ void NumberingMainHtml(int minTarget, int maxTarget, bool hidden = false) {
  */
 void addLineNumbersForAttachmentHtml(int minTarget, int maxTarget,
                                      int minAttachNo, int maxAttachNo,
+                                     bool forceUpdate = true,
                                      bool hidden = false) {
 
   vector<int> targetAttachments;
@@ -88,7 +92,7 @@ void addLineNumbersForAttachmentHtml(int minTarget, int maxTarget,
       CoupledBodyText bodyText;
       bodyText.setFilePrefixFromFileType(targetFileType);
       bodyText.setFileAndAttachmentNumber(file, attNo);
-      bodyText.addLineNumber(separatorColor, hidden);
+      bodyText.addLineNumber(separatorColor, forceUpdate, hidden);
     }
   }
 }
@@ -103,13 +107,14 @@ void addLineNumbersForAttachmentHtml(int minTarget, int maxTarget,
  * @param maxAttachNo for each chapter, until this attachment
  */
 void NumberingAttachmentHtml(int minTarget, int maxTarget, int minAttachNo,
-                             int maxAttachNo, bool hidden = false) {
+                             int maxAttachNo, bool forceUpdate = true,
+                             bool hidden = false) {
   CoupledContainer container(FILE_TYPE::ATTACHMENT);
   CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
   dissembleAttachments(minTarget, maxTarget, minAttachNo,
                        maxAttachNo); // dissemble html to bodytext
   addLineNumbersForAttachmentHtml(
-      minTarget, maxTarget, minAttachNo, maxAttachNo,
+      minTarget, maxTarget, minAttachNo, maxAttachNo, forceUpdate,
       hidden); // reformat bodytext by adding line number
   CoupledBodyText::loadBodyTextsFromFixBackToOutput();
   assembleAttachments(minTarget, maxTarget, minAttachNo, maxAttachNo);
@@ -119,17 +124,17 @@ void NumberingAttachmentHtml(int minTarget, int maxTarget, int minAttachNo,
  * copy main files into HTML_OUTPUT
  * before run this
  */
-void numberMainHtmls(bool hidden) {
+void numberMainHtmls(bool forceUpdate, bool hidden) {
   int minTarget = 1, maxTarget = 80;
-  NumberingMainHtml(minTarget, maxTarget, hidden);
+  NumberingMainHtml(minTarget, maxTarget, forceUpdate, hidden);
 }
 /**
  * copy original files into HTML_SRC_ORIGINAL
  * before run this
  */
-void numberOriginalHtmls(bool hidden) {
+void numberOriginalHtmls(bool forceUpdate, bool hidden) {
   int minTarget = 1, maxTarget = 80;
-  NumberingOriginalHtml(minTarget, maxTarget, hidden);
+  NumberingOriginalHtml(minTarget, maxTarget, forceUpdate, hidden);
   cout << "Numbering Original Html finished. " << endl;
 }
 
@@ -137,11 +142,11 @@ void numberOriginalHtmls(bool hidden) {
  * copy attachment files into HTML_SRC_ATTACHMENT
  * before run this
  */
-void numberAttachmentHtmls(bool hidden) {
+void numberAttachmentHtmls(bool forceUpdate, bool hidden) {
   int minTarget = 1, maxTarget = 80;
   int minAttachNo = 0, maxAttachNo = 50;
   NumberingAttachmentHtml(minTarget, maxTarget, minAttachNo, maxAttachNo,
-                          hidden);
+                          forceUpdate, hidden);
   cout << "Numbering Attachment Html finished. " << endl;
 }
 
