@@ -47,6 +47,9 @@ void testFunctions(int num) {
   case 12:
     testSpace();
     break;
+  case 13:
+    testImageReference();
+    break;
   default:
     cout << "no test executed." << endl;
   }

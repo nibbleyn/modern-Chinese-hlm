@@ -48,17 +48,23 @@ private:
   size_t width{0};
 };
 
-static const string leftImgBeginChars = R"(<var)";
-static const string leftImgEndChars = R"(</var>)";
-static const string rightImgBeginChars = R"(<var)";
-static const string rightImgEndChars = R"(</var>)";
+static const string ImgRefBeginChars = R"(<var)";
+static const string endOfImgRefBeginTag = R"(">)";
+static const string ImgRefEndChars = R"(</var>)";
+static const string leftImgRefChars = R"(（见左图）<-----)";
+static const string rightImgRefChars = R"(----->（见右图）)";
 class ImageReferText : public Object {
 public:
-  ImageReferText(const string &referTextString);
+  ImageReferText() = default;
+  ImageReferText(const string &imgRefString);
+  string getWholeString();
+  string getDisplayString();
+  size_t loadFirstFromContainedLine(const string &containedLine);
+  size_t length();
   size_t displaySize();
 
 private:
-  bool toLeft{true};
+  bool m_toLeft{true};
 };
 
 static const string space = R"(&nbsp;)";
@@ -94,3 +100,4 @@ private:
 
 void testSpace();
 void testPoem();
+void testImageReference();

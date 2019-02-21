@@ -4,14 +4,14 @@
 
 int main(int argc, char **argv) {
   // change this number to run different functions
-  //	  int num = 1;
+  int num = 1;
   //	  int num = 2;
-  int num = 3;
+  //  int num = 3;
   //	  int num = 4;
   //  int num = 5;
   switch (num) {
   case 1:
-    testFunctions(2);
+    testFunctions(13);
     break;
   case 2:
     numberOriginalHtmls(false);
