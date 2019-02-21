@@ -44,7 +44,10 @@ size_t ImageReferText::loadFirstFromContainedLine(const string &containedLine) {
 string ImageReferText::getWholeString() {
   return fixImgReferenceFromTemplate(m_toLeft, m_bodyText);
 }
-string ImageReferText::getDisplayString() { return m_bodyText; }
+string ImageReferText::getDisplayString() {
+  return (m_toLeft == true) ? leftImgRefChars + m_bodyText
+                            : m_bodyText + rightImgRefChars;
+}
 size_t ImageReferText::length() { return getWholeString().length(); }
 size_t ImageReferText::displaySize() { return getDisplayString().length(); }
 
