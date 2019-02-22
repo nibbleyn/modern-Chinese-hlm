@@ -10,9 +10,6 @@ static const string inBetweenTwoParas = R"(" href=")";
 static const string inBetweenParaAndLineNumber = R"(.)";
 static const string lastPara = R"(<a unhidden name="bottom" href="#top">)";
 
-const string LineNumber::UnhiddenLineNumberStart = R"(<a unhidden name=")";
-const string LineNumber::HiddenLineNumberStart = R"(<a hidden name=")";
-const string LineNumber::LineNumberEnd = R"(</a>)";
 int LineNumber::StartNumber = START_PARA_NUMBER;
 int LineNumber::Limit = START_PARA_NUMBER * 2;
 
@@ -23,12 +20,13 @@ size_t LineNumber::displaySize() { return getDisplayString().length(); }
  * and read from it the paraNumber and lineNumber
  * @param containedLine the numbered line of one body text file
  */
-size_t LineNumber::loadFirstFromContainedLine(const string &containedLine) {
+size_t LineNumber::loadFirstFromContainedLine(const string &containedLine,
+                                              size_t after) {
   string start = UnhiddenLineNumberStart;
-  auto linkBegin = containedLine.find(start);
+  auto linkBegin = containedLine.find(start, after);
   if (linkBegin == string::npos) {
     start = HiddenLineNumberStart;
-    linkBegin = containedLine.find(start);
+    linkBegin = containedLine.find(start, after);
   }
   if (linkBegin != string::npos) // found name in lineName
   {
@@ -36,7 +34,7 @@ size_t LineNumber::loadFirstFromContainedLine(const string &containedLine) {
     string lineName = containedLine.substr(linkBegin + start.length());
     if (debug >= LOG_INFO)
       cout << lineName << endl;
-    auto linkEnd = lineName.find(end);
+    auto linkEnd = lineName.find(end, after);
     if (debug >= LOG_INFO)
       cout << lineName.substr(0, linkEnd) << endl;
     if (lineName.substr(0, linkEnd) == bottomParagraphIndicator)

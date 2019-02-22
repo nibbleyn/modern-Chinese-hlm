@@ -50,6 +50,9 @@ void testFunctions(int num) {
   case 13:
     testImageReference();
     break;
+  case 14:
+    testMixOfLineNumberSpaceAndImageRef();
+    break;
   default:
     cout << "no test executed." << endl;
   }

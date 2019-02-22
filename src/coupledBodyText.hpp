@@ -85,3 +85,4 @@ protected:
 void testSearchTextIsOnlyPartOfOtherKeys();
 void testLineNumber();
 void testConstructSubStory();
+void testMixOfLineNumberSpaceAndImageRef();

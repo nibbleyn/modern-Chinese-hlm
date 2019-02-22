@@ -347,7 +347,8 @@ string Link::getDisplayString() { return ""; }
 
 size_t Link::length() { return 0; }
 size_t Link::displaySize() { return 0; }
-size_t Link::loadFirstFromContainedLine(const string &containedLine) {
+size_t Link::loadFirstFromContainedLine(const string &containedLine,
+                                        size_t after) {
   return 0;
 }
 

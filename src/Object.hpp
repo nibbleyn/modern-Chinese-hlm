@@ -31,7 +31,8 @@ public:
   virtual string getDisplayString() = 0;
   virtual size_t length() = 0;
   virtual size_t displaySize() = 0;
-  virtual size_t loadFirstFromContainedLine(const string &containedLine) = 0;
+  virtual size_t loadFirstFromContainedLine(const string &containedLine,
+                                            size_t after = 0) = 0;
 
 protected:
   string m_bodyText{""};
@@ -56,10 +57,10 @@ static const string rightImgRefChars = R"(----->（见右图）)";
 class ImageReferText : public Object {
 public:
   ImageReferText() = default;
-  ImageReferText(const string &imgRefString);
   string getWholeString();
   string getDisplayString();
-  size_t loadFirstFromContainedLine(const string &containedLine);
+  size_t loadFirstFromContainedLine(const string &containedLine,
+                                    size_t after = 0);
   size_t length();
   size_t displaySize();
 
@@ -76,7 +77,8 @@ public:
   Space() = default;
   string getWholeString() { return space; };
   string getDisplayString() { return displaySpace; };
-  size_t loadFirstFromContainedLine(const string &containedLine);
+  size_t loadFirstFromContainedLine(const string &containedLine,
+                                    size_t after = 0);
   size_t length() { return space.length(); };
   size_t displaySize() { return displaySpace.length(); };
 
@@ -88,10 +90,10 @@ static const string poemEndChars = R"(</strong>)";
 class Poem : public Object {
 public:
   Poem() = default;
-  Poem(const string &poemString);
   string getWholeString();
   string getDisplayString();
-  size_t loadFirstFromContainedLine(const string &containedLine);
+  size_t loadFirstFromContainedLine(const string &containedLine,
+                                    size_t after = 0);
   size_t length();
   size_t displaySize();
 

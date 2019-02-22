@@ -3,15 +3,14 @@
 #include "utf8StringUtil.hpp"
 
 static const int START_PARA_NUMBER = 90;
-
+static const string UnhiddenLineNumberStart = R"(<a unhidden name=")";
+static const string HiddenLineNumberStart = R"(<a hidden name=")";
+static const string LineNumberEnd = R"(</a>)";
 class LineNumber : public Object {
-  static const string UnhiddenLineNumberStart;
-  static const string HiddenLineNumberStart;
   static int StartNumber;
   static int Limit;
 
 public:
-  static const string LineNumberEnd;
   /**
    * the paragraph number in a body text would start from this number
    * and increase thru downlink to limit-1
@@ -42,7 +41,8 @@ public:
   size_t length();
   string getDisplayString();
   size_t displaySize();
-  size_t loadFirstFromContainedLine(const string &containedLine);
+  size_t loadFirstFromContainedLine(const string &containedLine,
+                                    size_t after = 0);
   bool valid() { return (m_paraNumber != 0 and m_lineNumber != 0); }
   bool isParagraphHeader() {
     return (m_paraNumber != 0 and m_paraNumber < Limit and m_lineNumber == 0);

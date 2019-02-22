@@ -89,7 +89,8 @@ public:
   string getDisplayString();
   size_t length();
   size_t displaySize();
-  size_t loadFirstFromContainedLine(const string &containedLine);
+  size_t loadFirstFromContainedLine(const string &containedLine,
+                                    size_t after = 0);
   string asString();
   LINK_TYPE getType() { return m_type; }
   bool isTargetToOriginalHtm() { return (m_type == LINK_TYPE::ORIGINAL); };
@@ -259,7 +260,10 @@ public:
   Comment(const string &commentString);
   size_t length() { return 0; }
   size_t displaySize() { return 0; }
-  size_t loadFirstFromContainedLine(const string &containedLine) { return 0; }
+  size_t loadFirstFromContainedLine(const string &containedLine,
+                                    size_t after = 0) {
+    return 0;
+  }
 
 private:
   using LinkPtr = std::unique_ptr<Link>;
@@ -274,7 +278,10 @@ public:
   PersonalComments(const string &commentString);
   size_t length() { return 0; }
   size_t displaySize() { return 0; }
-  size_t loadFirstFromContainedLine(const string &containedLine) { return 0; }
+  size_t loadFirstFromContainedLine(const string &containedLine,
+                                    size_t after = 0) {
+    return 0;
+  }
 
 private:
   using LinkPtr = std::unique_ptr<Link>;
@@ -289,7 +296,10 @@ public:
   PoemTranslation(const string &translationString);
   size_t length() { return 0; }
   size_t displaySize() { return 0; }
-  size_t loadFirstFromContainedLine(const string &containedLine) { return 0; }
+  size_t loadFirstFromContainedLine(const string &containedLine,
+                                    size_t after = 0) {
+    return 0;
+  }
 
 private:
   using LinkPtr = std::unique_ptr<Link>;

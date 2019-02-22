@@ -12,22 +12,18 @@ string fixImgReferenceFromTemplate(bool toLeft, const string &caption) {
   return link;
 }
 
-ImageReferText::ImageReferText(const string &imgRefString) {
-  loadFirstFromContainedLine(imgRefString);
-  cout << "direction: " << m_toLeft << " caption: " << m_bodyText << endl;
-}
-
-size_t ImageReferText::loadFirstFromContainedLine(const string &containedLine) {
+size_t ImageReferText::loadFirstFromContainedLine(const string &containedLine,
+                                                  size_t after) {
   string begin = ImgRefBeginChars;
   string end = ImgRefEndChars;
-  cout << containedLine << endl;
-  auto beginPos = containedLine.find(begin);
-  auto endPos = containedLine.find(end);
-  if (containedLine.find(begin) == string::npos or endPos == string::npos)
+  //  cout << containedLine << endl;
+  auto beginPos = containedLine.find(begin, after);
+  auto endPos = containedLine.find(end, after);
+  if (beginPos == string::npos or endPos == string::npos)
     return string::npos;
 
   string part = containedLine.substr(beginPos, endPos - beginPos);
-  cout << part << endl;
+  //  cout << part << endl;
   beginPos = part.find(endOfImgRefBeginTag);
   m_bodyText = part.substr(beginPos + endOfImgRefBeginTag.length());
   if (m_bodyText.find(leftImgRefChars) != string::npos) {
@@ -38,7 +34,7 @@ size_t ImageReferText::loadFirstFromContainedLine(const string &containedLine) {
     m_bodyText =
         m_bodyText.substr(0, m_bodyText.length() - rightImgRefChars.length());
   }
-  return containedLine.find(begin);
+  return containedLine.find(begin, after);
 }
 
 string ImageReferText::getWholeString() {
@@ -51,25 +47,23 @@ string ImageReferText::getDisplayString() {
 size_t ImageReferText::length() { return getWholeString().length(); }
 size_t ImageReferText::displaySize() { return getDisplayString().length(); }
 
-size_t Space::loadFirstFromContainedLine(const string &containedLine) {
+size_t Space::loadFirstFromContainedLine(const string &containedLine,
+                                         size_t after) {
   m_bodyText = displaySpace;
-  return containedLine.find(space);
+  return containedLine.find(space, after);
 }
 
-Poem::Poem(const string &poemString) {
-  loadFirstFromContainedLine(poemString);
-  cout << m_bodyText << endl;
-}
-
-size_t Poem::loadFirstFromContainedLine(const string &containedLine) {
+size_t Poem::loadFirstFromContainedLine(const string &containedLine,
+                                        size_t after) {
   string begin = poemBeginChars;
   string end = poemEndChars;
-  auto endPos = containedLine.find(end);
-  if (containedLine.find(begin) == string::npos or endPos == string::npos)
+  auto endPos = containedLine.find(end, after);
+  if (containedLine.find(begin, after) == string::npos or
+      endPos == string::npos)
     return string::npos;
   auto beginPos = containedLine.find_last_of(endOfBeginTag, endPos);
   m_bodyText = containedLine.substr(beginPos + 1, endPos - beginPos - 1);
-  return containedLine.find(begin);
+  return containedLine.find(begin, after);
 }
 
 string Poem::getWholeString() {
@@ -117,7 +111,8 @@ void testPoem() {
       R"(<strong unhidden>杜鹃无语正黄昏，荷锄归去掩重门。青灯照壁人初睡，冷雨敲窗被未温。</strong>)";
   string line =
       R"(<a unhidden name="P11L1">11.1</a>&nbsp;&nbsp; <strong unhidden>杜鹃无语正黄昏，荷锄归去掩重门。青灯照壁人初睡，冷雨敲窗被未温。</strong>&nbsp;&nbsp;&nbsp;&nbsp;<samp unhidden font style="font-size: 13.5pt; font-family:楷体; color:#ff00ff">（像杜鹃啼血一样）我泣尽了血泪默默无语，只发现愁惨的黄昏正在降临，只好扛着花锄忍痛归去，一层层带上身后的门。闺中点起青冷的灯光，摇摇曳曳照射着四壁，我才要躺下，拉上尚是冰凉的被裘，却又听见轻寒的春雨敲打着窗棂，更增加了一层寒意。</samp><br>)";
-  Poem poem1(poemStr);
+  Poem poem1;
+  poem1.loadFirstFromContainedLine(poemStr);
   cout << "length: " << poem1.length()
        << " display size: " << poem1.displaySize() << endl;
   cout << "whole string: " << poem1.getWholeString() << endl;
