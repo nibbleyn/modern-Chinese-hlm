@@ -342,14 +342,30 @@ void Link::outPutStatisticsToFiles() {
   cout << "links information are written into: " << outPutFilePath << endl;
 }
 
-string Link::getWholeString() { return ""; }
-string Link::getDisplayString() { return ""; }
+string Link::getWholeString() { return asString(); }
+string Link::getDisplayString() { return m_bodyText; }
 
-size_t Link::length() { return 0; }
-size_t Link::displaySize() { return 0; }
+size_t Link::length() { return getWholeString().length(); }
+size_t Link::displaySize() { return getDisplayString().length(); }
+/**
+ * must ensure this is not a line number before calling this method
+ */
 size_t Link::loadFirstFromContainedLine(const string &containedLine,
                                         size_t after) {
-  return 0;
+  auto linkBegin = containedLine.find(linkStartChars, after);
+  if (linkBegin == string::npos) // no link any more, continue with next
+                                 // line
+    return string::npos;
+  auto linkEnd = containedLine.find(linkEndChars, linkBegin);
+  auto linkString = containedLine.substr(
+      linkBegin, linkEnd + linkEndChars.length() - linkBegin);
+  readTypeAndAnnotation(linkString);
+  readReferFileName(linkString); // second step of construction
+  fixFromString(linkString);
+
+  m_bodyText =
+      m_annotation; // to be changed to take comments out into ptr table
+  return containedLine.find(linkStartChars, after);
 }
 
 /**

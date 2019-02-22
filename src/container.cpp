@@ -68,9 +68,9 @@ void CoupledContainer::assembleBackToHTM(const string &title,
   string line{""};
   bool started = false;
 
-  string start = topIdBeginChars;    // first line
-  string end = bottomIdBeginChars;   // last line
-  while (!inHtmlFile.eof()) // To get you all the lines.
+  string start = topIdBeginChars;  // first line
+  string end = bottomIdBeginChars; // last line
+  while (!inHtmlFile.eof())        // To get you all the lines.
   {
     getline(inHtmlFile, line); // Saves the line in line.
     if (not started) {
@@ -409,9 +409,9 @@ void GenericContainer::assembleBackToHTM(const string &title,
   ofstream outfile(outputFile);
   string line{""};
   bool started = false;
-  string start = topIdBeginChars;    // first line
-  string end = bottomIdBeginChars;   // last line
-  while (!inHtmlFile.eof()) // To get you all the lines.
+  string start = topIdBeginChars;  // first line
+  string end = bottomIdBeginChars; // last line
+  while (!inHtmlFile.eof())        // To get you all the lines.
   {
     getline(inHtmlFile, line); // Saves the line in line.
     if (not started) {

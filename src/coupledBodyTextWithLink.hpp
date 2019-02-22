@@ -20,3 +20,5 @@ private:
   LinkPtr m_linkPtr{nullptr};
   LinkPtr m_followingLinkPtr{nullptr};
 };
+
+void testMixedObjects();

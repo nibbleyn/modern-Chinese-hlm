@@ -218,6 +218,7 @@ public:
   static void outPutStatisticsToFiles();
 
 public:
+  LinkFromMain() = default;
   LinkFromMain(const string &fromFile, const string &linkString)
       : Link(fromFile, linkString) {}
   ~LinkFromMain(){};

@@ -32,11 +32,11 @@ size_t LineNumber::loadFirstFromContainedLine(const string &containedLine,
   {
     string end = endOfLineNumber;
     string lineName = containedLine.substr(linkBegin + start.length());
-//    if (debug >= LOG_INFO)
-//      cout << lineName << endl;
+    //    if (debug >= LOG_INFO)
+    //      cout << lineName << endl;
     auto linkEnd = lineName.find(end, after);
-//    if (debug >= LOG_INFO)
-//      cout << lineName.substr(0, linkEnd) << endl;
+    //    if (debug >= LOG_INFO)
+    //      cout << lineName.substr(0, linkEnd) << endl;
     if (lineName.substr(0, linkEnd) == bottomParagraphIndicator)
       readFromString(leadingChar + TurnToString(Limit - 1));
     else
