@@ -68,8 +68,8 @@ void CoupledContainer::assembleBackToHTM(const string &title,
   string line{""};
   bool started = false;
 
-  string start = topTab;    // first line
-  string end = bottomTab;   // last line
+  string start = topIdBeginChars;    // first line
+  string end = bottomIdBeginChars;   // last line
   while (!inHtmlFile.eof()) // To get you all the lines.
   {
     getline(inHtmlFile, line); // Saves the line in line.
@@ -192,8 +192,8 @@ void CoupledContainer::dissembleFromHTM() {
   string line{""};
   bool started = false, ended = false;
 
-  string start = topTab;
-  string end = bottomTab;
+  string start = topIdBeginChars;
+  string end = bottomIdBeginChars;
   while (!infile.eof()) // To get you all the lines.
   {
     getline(infile, line); // Saves the line in line.
@@ -409,8 +409,8 @@ void GenericContainer::assembleBackToHTM(const string &title,
   ofstream outfile(outputFile);
   string line{""};
   bool started = false;
-  string start = topTab;    // first line
-  string end = bottomTab;   // last line
+  string start = topIdBeginChars;    // first line
+  string end = bottomIdBeginChars;   // last line
   while (!inHtmlFile.eof()) // To get you all the lines.
   {
     getline(inHtmlFile, line); // Saves the line in line.

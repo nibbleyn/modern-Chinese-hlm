@@ -179,7 +179,7 @@ void CoupledBodyText::regroupingParagraphs(const string &sampleBlock,
 }
 
 /**
- * count number of lines with paraTab as paragraph sign in it
+ * count number of lines with lineNumberIdBeginChars as paragraph sign in it
  * return a tuple of numbers of first paragraph header,
  * middle header and last header
  * @param fullPath of target file
@@ -198,17 +198,17 @@ CoupledBodyText::ParaStruct CoupledBodyText::getNumberOfPara() {
   while (!infile.eof()) // To get all the lines.
   {
     getline(infile, inLine); // Saves the line in inLine.
-    if (inLine.find(topTab) != string::npos) {
+    if (inLine.find(topIdBeginChars) != string::npos) {
       first++; // end of whole FILE_TYPE::MAIN file
       continue;
     }
-    if (inLine.find(bottomTab) != string::npos) {
+    if (inLine.find(bottomIdBeginChars) != string::npos) {
       last++;
       return std::make_tuple(first, middle,
                              last); // end of whole FILE_TYPE::MAIN file
     }
     // search for new paragraph and also fix the para number
-    if (inLine.find(paraTab) != string::npos) // one new paragraph is found
+    if (inLine.find(lineNumberIdBeginChars) != string::npos) // one new paragraph is found
     {
       LineNumber ln;
       ln.loadFirstFromContainedLine(inLine);
@@ -222,7 +222,7 @@ CoupledBodyText::ParaStruct CoupledBodyText::getNumberOfPara() {
 /**
  * add following line name with a name of lineNumber
  * before each line
- * <a unhidden name="P4L2">4.2</a>
+ * <a unhidden id="P4L2">4.2</a>
  * assume the input file in following format:
  * none-paragraph head texts
  * 0-n paragraph
@@ -627,7 +627,7 @@ void printObjectTypeToOffset() {
 
 void testMixOfLineNumberSpaceAndImageRef() {
   string line =
-      R"(<a unhidden name="P3L2">3.2</a>&nbsp;&nbsp; 贾母又说：“请姑娘们来。今日有远客来，就不必上学去了。”众人答应了一声，便派了两个人去请。没多久，只见三个奶妈和五六个丫鬟，簇拥着三个姊妹来了。第一个乃二姐<var unhidden font style="font-size: 13.5pt; font-family:楷体; color:#ff00ff">迎春----->（见右图）</var>，生的肌肤微丰，合中身材，腮凝新荔，鼻腻鹅脂，温柔沉默，观之可亲。第二个是三妹<var unhidden font style="font-size: 13.5pt; font-family:楷体; color:#ff00ff">（见左图）<-----探春</var>，削肩细腰，长挑身材，鸭蛋脸面，俊眼修眉，顾盼神飞，文彩精华，见之忘俗。（<cite unhidden>迎春外表就有懦小姐的感觉，探春外表就文采甚好，可起诗社。</cite>）<br>)";
+      R"(<a unhidden id="P3L2">3.2</a>&nbsp;&nbsp; 贾母又说：“请姑娘们来。今日有远客来，就不必上学去了。”众人答应了一声，便派了两个人去请。没多久，只见三个奶妈和五六个丫鬟，簇拥着三个姊妹来了。第一个乃二姐<var unhidden font style="font-size: 13.5pt; font-family:楷体; color:#ff00ff">迎春----->（见右图）</var>，生的肌肤微丰，合中身材，腮凝新荔，鼻腻鹅脂，温柔沉默，观之可亲。第二个是三妹<var unhidden font style="font-size: 13.5pt; font-family:楷体; color:#ff00ff">（见左图）<-----探春</var>，削肩细腰，长挑身材，鸭蛋脸面，俊眼修眉，顾盼神飞，文彩精华，见之忘俗。（<cite unhidden>迎春外表就有懦小姐的感觉，探春外表就文采甚好，可起诗社。</cite>）<br>)";
   scanForTypes(line);
   printOffsetToObjectType();
 
@@ -712,7 +712,7 @@ void testLineNumber() {
   testLineHeader("P13L4");
   SEPERATE("ln2", " finished ");
   testLineHeaderFromContainedLine(
-      R"(<a unhidden name="P12L8">12.8</a>　　原来 这一个名唤 贾蔷，也系 宁国府 正派玄孙，父母早亡，从小 跟贾珍过活，如今 长了十六岁，比 贾蓉 生得还 风流俊俏。贾蓉、贾蔷兄弟二人最相亲厚，常相共处。<br>)");
+      R"(<a unhidden id="P12L8">12.8</a>　　原来 这一个名唤 贾蔷，也系 宁国府 正派玄孙，父母早亡，从小 跟贾珍过活，如今 长了十六岁，比 贾蓉 生得还 风流俊俏。贾蓉、贾蔷兄弟二人最相亲厚，常相共处。<br>)");
   SEPERATE("ln3", " finished ");
 
   testParagraphHeaderFromContainedLine(fixFirstParaHeaderFromTemplate(

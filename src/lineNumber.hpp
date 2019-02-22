@@ -3,8 +3,9 @@
 #include "utf8StringUtil.hpp"
 
 static const int START_PARA_NUMBER = 90;
-static const string UnhiddenLineNumberStart = R"(<a unhidden name=")";
-static const string HiddenLineNumberStart = R"(<a hidden name=")";
+// line number is placeholder hyperlink since a ParagraphHeader would have href attribute and is a line number also
+static const string UnhiddenLineNumberStart = R"(<a unhidden id=")";
+static const string HiddenLineNumberStart = R"(<a hidden id=")";
 static const string LineNumberEnd = R"(</a>)";
 class LineNumber : public Object {
   static int StartNumber;

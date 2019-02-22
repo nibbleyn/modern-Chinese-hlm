@@ -8,7 +8,7 @@ static const string endOfLineNumber =
 static const string endOfGeneratedLineNumber = R"(>)";
 static const string inBetweenTwoParas = R"(" href=")";
 static const string inBetweenParaAndLineNumber = R"(.)";
-static const string lastPara = R"(<a unhidden name="bottom" href="#top">)";
+static const string lastPara = R"(<a unhidden id="bottom" href="#top">)";
 
 int LineNumber::StartNumber = START_PARA_NUMBER;
 int LineNumber::Limit = START_PARA_NUMBER * 2;
@@ -32,11 +32,11 @@ size_t LineNumber::loadFirstFromContainedLine(const string &containedLine,
   {
     string end = endOfLineNumber;
     string lineName = containedLine.substr(linkBegin + start.length());
-    if (debug >= LOG_INFO)
-      cout << lineName << endl;
+//    if (debug >= LOG_INFO)
+//      cout << lineName << endl;
     auto linkEnd = lineName.find(end, after);
-    if (debug >= LOG_INFO)
-      cout << lineName.substr(0, linkEnd) << endl;
+//    if (debug >= LOG_INFO)
+//      cout << lineName.substr(0, linkEnd) << endl;
     if (lineName.substr(0, linkEnd) == bottomParagraphIndicator)
       readFromString(leadingChar + TurnToString(Limit - 1));
     else

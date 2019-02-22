@@ -43,9 +43,9 @@ static const string endOfHtmlHead = R"(/head)";
 static const string htmlTitleStart = R"(<title>)";
 static const string htmlTitleEnd = R"(</title>)";
 
-static const string paraTab = R"(name=")";          // of each paragraph
-static const string topTab = R"(name="top")";       // of the body Text file
-static const string bottomTab = R"(name="bottom")"; // of the body Text file
+static const string lineNumberIdBeginChars = R"(id="P)";          // of each paragraph and line number
+static const string topIdBeginChars = R"(id="top")";       // of the body Text file
+static const string bottomIdBeginChars = R"(id="bottom")"; // of the body Text file
 static const string keyNotFound = R"(KeyNotFound)";
 static const string attachmentFileMiddleChar = R"(_)";
 
