@@ -1258,9 +1258,9 @@ static const string personalCommentTemplate =
     R"(<u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">XX</u>)";
 
 string fixPersonalCommentFromTemplate(const string &comment) {
-  string link = personalCommentTemplate;
-  link = replacePart(link, "XX", comment);
-  return link;
+  string result = personalCommentTemplate;
+  result = replacePart(result, "XX", comment);
+  return result;
 }
 
 string PersonalComment::getWholeString() {
@@ -1271,9 +1271,6 @@ string PersonalComment::getDisplayString() { return m_bodyText; }
 size_t PersonalComment::length() { return getWholeString().length(); }
 size_t PersonalComment::displaySize() { return getDisplayString().length(); }
 
-/**
- * must ensure this is not a line number before calling this method
- */
 size_t PersonalComment::loadFirstFromContainedLine(const string &containedLine,
                                                    size_t after) {
   auto personalCommentBegin =
@@ -1286,6 +1283,39 @@ size_t PersonalComment::loadFirstFromContainedLine(const string &containedLine,
   string part = containedLine.substr(personalCommentBegin,
                                      personalCommentEnd - personalCommentBegin);
   auto beginPos = part.find(endOfPersonalCommentBeginTag);
-  m_bodyText = part.substr(beginPos + endOfImgRefBeginTag.length());
+  m_bodyText = part.substr(beginPos + endOfPersonalCommentBeginTag.length());
   return containedLine.find(personalCommentStartChars, after);
+}
+
+static const string poemTranslationTemplate =
+    R"(<samp unhidden font style="font-size: 13.5pt; font-family:楷体; color:#ff00ff">XX</samp> )";
+
+string fixPoemTranslationFromTemplate(const string &translation) {
+  string result = poemTranslationTemplate;
+  result = replacePart(result, "XX", translation);
+  return result;
+}
+
+string PoemTranslation::getWholeString() {
+  return fixPoemTranslationFromTemplate(m_bodyText);
+}
+string PoemTranslation::getDisplayString() { return m_bodyText; }
+
+size_t PoemTranslation::length() { return getWholeString().length(); }
+size_t PoemTranslation::displaySize() { return getDisplayString().length(); }
+
+size_t PoemTranslation::loadFirstFromContainedLine(const string &containedLine,
+                                                   size_t after) {
+  auto poemTranslationBegin =
+      containedLine.find(poemTranslationBeginChars, after);
+  if (poemTranslationBegin == string::npos) // no poemTranslation any more,
+                                            // continue with next line
+    return string::npos;
+  auto poemTranslationEnd =
+      containedLine.find(poemTranslationEndChars, poemTranslationBegin);
+  string part = containedLine.substr(poemTranslationBegin,
+                                     poemTranslationEnd - poemTranslationBegin);
+  auto beginPos = part.find(endOfPoemTranslationBeginTag);
+  m_bodyText = part.substr(beginPos + endOfPoemTranslationBeginTag.length());
+  return containedLine.find(poemTranslationBeginChars, after);
 }

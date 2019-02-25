@@ -273,6 +273,10 @@ private:
   TextCollection m_texts;
 };
 
+static const string personalCommentStartChars = R"(（<u unhidden)";
+static const string personalCommentEndChars = R"(</u>）)";
+static const string endOfPersonalCommentBeginTag = R"(">)";
+
 class PersonalComment : public Object {
 public:
   string getWholeString();
@@ -290,14 +294,19 @@ private:
   TextCollection m_texts;
 };
 
+// poemTranslation
+static const string poemTranslationBeginChars = R"(<samp)";
+static const string poemTranslationEndChars = R"(</samp>)";
+static const string endOfPoemTranslationBeginTag = R"(">)";
+
 class PoemTranslation : public Object {
 public:
-  size_t length() { return 0; }
-  size_t displaySize() { return 0; }
+  string getWholeString();
+  string getDisplayString();
+  size_t length();
+  size_t displaySize();
   size_t loadFirstFromContainedLine(const string &containedLine,
-                                    size_t after = 0) {
-    return 0;
-  }
+                                    size_t after = 0);
 
 private:
   using LinkPtr = std::unique_ptr<Link>;

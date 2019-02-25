@@ -212,8 +212,10 @@ struct LinkStringInfo {
 };
 using LinkStringTable = std::map<size_t, LinkStringInfo>;
 using PersonalCommentStringTable = std::map<size_t, size_t>;
+using PoemTranslationStringTable = std::map<size_t, size_t>;
 LinkStringTable linkStringTable;
 PersonalCommentStringTable personalCommentStringTable;
+PoemTranslationStringTable poemTranslationStringTable;
 
 string getNameOfObjectType(OBJECT_TYPE type) {
   if (type == OBJECT_TYPE::LINENUMBER)
@@ -228,6 +230,8 @@ string getNameOfObjectType(OBJECT_TYPE type) {
     return "LINKFROMMAIN";
   else if (type == OBJECT_TYPE::PERSONALCOMMENT)
     return "PERSONALCOMMENT";
+  else if (type == OBJECT_TYPE::POEMTRANSLATION)
+    return "POEMTRANSLATION";
   return "";
 }
 
@@ -262,6 +266,14 @@ void printPersonalCommentStringTable() {
   }
 }
 
+void printPoemTranslationStringTable() {
+  if (not poemTranslationStringTable.empty())
+    cout << "poemTranslationStringTable:" << endl;
+  for (const auto &element : poemTranslationStringTable) {
+    cout << element.first << "  " << element.second << endl;
+  }
+}
+
 ObjectPtr createObjectFromType(OBJECT_TYPE type) {
   if (type == OBJECT_TYPE::LINENUMBER)
     return std::make_unique<LineNumber>();
@@ -275,6 +287,8 @@ ObjectPtr createObjectFromType(OBJECT_TYPE type) {
     return std::make_unique<LinkFromMain>();
   else if (type == OBJECT_TYPE::PERSONALCOMMENT)
     return std::make_unique<PersonalComment>();
+  else if (type == OBJECT_TYPE::POEMTRANSLATION)
+    return std::make_unique<PoemTranslation>();
   return nullptr;
 }
 
@@ -291,6 +305,8 @@ string getStartTagOfObjectType(OBJECT_TYPE type) {
     return linkStartChars;
   else if (type == OBJECT_TYPE::PERSONALCOMMENT)
     return personalCommentStartChars;
+  else if (type == OBJECT_TYPE::POEMTRANSLATION)
+    return poemTranslationBeginChars;
   return "";
 }
 
@@ -299,6 +315,8 @@ string getEndTagOfObjectType(OBJECT_TYPE type) {
     return linkEndChars;
   else if (type == OBJECT_TYPE::PERSONALCOMMENT)
     return personalCommentEndChars;
+  else if (type == OBJECT_TYPE::POEMTRANSLATION)
+    return poemTranslationEndChars;
   return "";
 }
 
@@ -317,6 +335,15 @@ bool isEmbeddedObject(OBJECT_TYPE type, size_t offset) {
 void searchForEmbededLinks() {
   for (auto &linkInfo : linkStringTable) {
     for (const auto &element : personalCommentStringTable) {
+      if (linkInfo.second.startOffset > element.first and
+          linkInfo.second.endOffset < element.second) {
+        linkInfo.second.embedded = true;
+        break;
+      }
+    }
+  }
+  for (auto &linkInfo : linkStringTable) {
+    for (const auto &element : poemTranslationStringTable) {
       if (linkInfo.second.startOffset > element.first and
           linkInfo.second.endOffset < element.second) {
         linkInfo.second.embedded = true;
@@ -348,6 +375,23 @@ void scanForTypes(string containedLine) {
     if (firstOccurence == true) {
       foundTypes[OBJECT_TYPE::PERSONALCOMMENT] = offset;
       offsetOfTypes[offset] = OBJECT_TYPE::PERSONALCOMMENT;
+      firstOccurence = false;
+    }
+  } while (true);
+
+  firstOccurence = true;
+  offset = string::npos;
+  do {
+    offset = containedLine.find(
+        getStartTagOfObjectType(OBJECT_TYPE::POEMTRANSLATION),
+        (firstOccurence) ? 0 : offset + 1);
+    if (offset == string::npos)
+      break;
+    poemTranslationStringTable[offset] = containedLine.find(
+        getEndTagOfObjectType(OBJECT_TYPE::POEMTRANSLATION), offset);
+    if (firstOccurence == true) {
+      foundTypes[OBJECT_TYPE::POEMTRANSLATION] = offset;
+      offsetOfTypes[offset] = OBJECT_TYPE::POEMTRANSLATION;
       firstOccurence = false;
     }
   } while (true);
@@ -402,8 +446,29 @@ void testMixedObjects() {
   //      color:#ff00ff">（见左图）<-----探春</var>，削肩细腰，长挑身材，鸭蛋脸面，俊眼修眉，顾盼神飞，文彩精华，见之忘俗。（<cite
   //      unhidden>迎春外表就有懦小姐的感觉，探春外表就文采甚好，可起诗社。</cite>）<br>)";
 
+  //  string line =
+  //      R"(前儿老太太（<cite unhidden>贾母</cite>）因要把<a
+  //      href="a050.htm#P15L2"><i hidden>说媒</i><sub
+  //      hidden>第50章15.2节:</sub>你妹妹（<cite
+  //      unhidden>薛宝琴</cite>）说给宝玉</a>（<a unhidden
+  //      href="original\c050.htm#P14L2"><i hidden>说媒</i><sub
+  //      hidden>第50章14.2节:</sub>原文</a>），偏生（<cite
+  //      unhidden>薛宝琴</cite>）又有了人家（<cite
+  //      unhidden>梅翰林家</cite>），不然（<cite
+  //      unhidden>宝琴宝玉他二人</cite>）倒是一门好亲。老太太离了鸳鸯，饭也吃不下去的，哪里就舍得了？（<cite
+  //      unhidden>凤姐并不知道贾赦要鸳鸯是要<a unhidden href="a071.htm#P7L2"><i
+  //      hidden>作兴</i><sub hidden>第71章7.2节:</sub>争宠之意</a>（<a unhidden
+  //      href="original\c071.htm#P5L3"><i hidden>作兴</i><sub
+  //      hidden>第71章5.3节:</sub>原文</a>）（<u unhidden
+  //      style="text-decoration-color: #F0BEC0;text-decoration-style:
+  //      wavy;opacity: 0.4">这句又接到宝玉生日探春让李纨打黛玉，李纨说黛玉<a
+  //      unhidden href="a063.htm#P13L3"><i hidden>挨打</i><sub
+  //      hidden>第63章13.3节:</sub>人家不得贵婿反挨打</a>（<a unhidden
+  //      href="original\c063.htm#P6L3"><i hidden>挨打</i><sub
+  //      hidden>第63章6.3节:</sub>原文</a>），黛玉的婚姻是镜中花，他们二人的一个不能完成的愿望而已。</u>）)";
+
   string line =
-      R"(前儿老太太（<cite unhidden>贾母</cite>）因要把<a  href="a050.htm#P15L2"><i hidden>说媒</i><sub hidden>第50章15.2节:</sub>你妹妹（<cite unhidden>薛宝琴</cite>）说给宝玉</a>（<a unhidden href="original\c050.htm#P14L2"><i hidden>说媒</i><sub hidden>第50章14.2节:</sub>原文</a>），偏生（<cite unhidden>薛宝琴</cite>）又有了人家（<cite unhidden>梅翰林家</cite>），不然（<cite unhidden>宝琴宝玉他二人</cite>）倒是一门好亲。老太太离了鸳鸯，饭也吃不下去的，哪里就舍得了？（<cite unhidden>凤姐并不知道贾赦要鸳鸯是要<a unhidden href="a071.htm#P7L2"><i hidden>作兴</i><sub hidden>第71章7.2节:</sub>争宠之意</a>（<a unhidden href="original\c071.htm#P5L3"><i hidden>作兴</i><sub hidden>第71章5.3节:</sub>原文</a>）（<u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">这句又接到宝玉生日探春让李纨打黛玉，李纨说黛玉<a unhidden href="a063.htm#P13L3"><i hidden>挨打</i><sub hidden>第63章13.3节:</sub>人家不得贵婿反挨打</a>（<a unhidden href="original\c063.htm#P6L3"><i hidden>挨打</i><sub hidden>第63章6.3节:</sub>原文</a>），黛玉的婚姻是镜中花，他们二人的一个不能完成的愿望而已。</u>）)";
+      R"(<a unhidden id="P8L3">8.3</a>&nbsp;&nbsp; <strong unhidden>惯养娇生笑你痴，菱花空对雪澌澌。好防佳节元宵后，便是烟消火灭时。</strong>&nbsp;&nbsp;&nbsp;&nbsp;<samp unhidden font style="font-size: 13.5pt; font-family:楷体; color:#ff00ff">你这么痴心 娇生惯养她，实在是可笑。你知道她有多么生不逢时吗？<a  href="a080.htm#P1L1"><i hidden>菱角菱花</i><sub hidden>第80章1.1节:</sub>菱角菱花皆盛于秋</a>（<a unhidden href="original\c080.htm#P1L3"><i hidden>菱角菱花</i><sub hidden>第80章1.3节:</sub>原文</a>），可却毫无办法要面对茫茫大雪。要小心元宵佳节一过，一切都会烟消云散（<cite unhidden> <a unhidden href="a022.htm#P13L4"><i hidden>清净孤独</i><sub hidden>第22章13.4节:</sub>不详灯谜</a>（<a unhidden href="original\c022.htm#P12L1"><i hidden>清净孤独</i><sub hidden>第22章12.1节:</sub>原文</a>）、<a unhidden href="a054.htm#P13L1"><i hidden>进贡</i><sub hidden>第54章13.1节:</sub>聋子放炮仗</a>（<a unhidden href="original\c054.htm#P8L2"><i hidden>进贡</i><sub hidden>第54章8.2节:</sub>原文</a>）、<a unhidden href="a058.htm#P1L2"><i hidden>按爵</i><sub hidden>第58章1.2节:</sub>老太妃薨毙</a>（<a unhidden href="original\c058.htm#P1L2"><i hidden>按爵</i><sub hidden>第58章1.2节:</sub>原文</a>）。</cite>）</samp><br>)";
   LineNumber ln;
   ln.loadFirstFromContainedLine(line);
   if (ln.isParagraphHeader()) {
@@ -412,8 +477,9 @@ void testMixedObjects() {
   // after this, there could be only one line number at the beginning
   scanForTypes(line);
   printOffsetToObjectType();
-  //  printLinkStringTable();
+  printLinkStringTable();
   //  printPersonalCommentStringTable();
+  printPoemTranslationStringTable();
 
   do {
     if (offsetOfTypes.empty())
@@ -421,10 +487,12 @@ void testMixedObjects() {
     auto first = offsetOfTypes.begin();
     auto type = first->second;
     auto offset = first->first;
-    auto current = createObjectFromType(type);
-    current->loadFirstFromContainedLine(line, offset);
-    cout << "whole string: " << current->getWholeString() << endl;
-    cout << "display as:" << current->getDisplayString() << "||" << endl;
+    if (not isEmbeddedObject(type, offset)) {
+      auto current = createObjectFromType(type);
+      current->loadFirstFromContainedLine(line, offset);
+      cout << "whole string: " << current->getWholeString() << endl;
+      cout << "display as:" << current->getDisplayString() << "||" << endl;
+    }
     offsetOfTypes.erase(first);
     auto nextOffsetOfSameType =
         line.find(getStartTagOfObjectType(type), offset + 1);

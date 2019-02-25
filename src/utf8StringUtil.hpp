@@ -77,15 +77,8 @@ static const string originalLinkEndChars = R"(）)";
 // comments
 static const string commentBeginChars = R"(<cite)";
 static const string commentEndChars = R"(</cite>)";
-static const string personalCommentStartChars = R"(（<u unhidden)";
-static const string personalCommentEndChars = R"(</u>）)";
-static const string endOfPersonalCommentBeginTag = R"(">)";
 static const string commentStart = bracketStartChars + commentBeginChars;
 static const string commentEnd = commentEndChars + bracketEndChars;
-
-// poemTranslation
-static const string poemTranslationBeginChars = R"(<samp)";
-static const string poemTranslationEndChars = R"(</samp>)";
 
 string formatIntoTwoDigitChapterNumber(int chapterNumber);
 
