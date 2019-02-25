@@ -77,8 +77,9 @@ static const string originalLinkEndChars = R"(）)";
 // comments
 static const string commentBeginChars = R"(<cite)";
 static const string commentEndChars = R"(</cite>)";
-static const string personalCommentStart = R"(（<u unhidden)";
-static const string personalCommentEnd = R"(</u>）)";
+static const string personalCommentStartChars = R"(（<u unhidden)";
+static const string personalCommentEndChars = R"(</u>）)";
+static const string endOfPersonalCommentBeginTag = R"(">)";
 static const string commentStart = bracketStartChars + commentBeginChars;
 static const string commentEnd = commentEndChars + bracketEndChars;
 

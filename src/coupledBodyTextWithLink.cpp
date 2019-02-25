@@ -15,8 +15,8 @@ void CoupledBodyTextWithLink::removePersonalCommentsOverNumberedFiles() {
     if (debug >= LOG_INFO)
       cout << inLine << endl;
     auto orgLine = inLine; // inLine would change in loop below
-    string start = personalCommentStart;
-    string end = personalCommentEnd;
+    string start = personalCommentStartChars;
+    string end = personalCommentEndChars;
     string to_replace = "";
     // first loop to remove all personal Comments
     auto removePersonalCommentLine = orgLine;
@@ -205,6 +205,15 @@ using ObjectTypeToOffset = std::map<OBJECT_TYPE, size_t>;
 using ObjectPtr = std::unique_ptr<Object>;
 OffsetToObjectType offsetOfTypes;
 ObjectTypeToOffset foundTypes;
+struct LinkStringInfo {
+  size_t startOffset{0};
+  size_t endOffset{0};
+  bool embedded{false};
+};
+using LinkStringTable = std::map<size_t, LinkStringInfo>;
+using PersonalCommentStringTable = std::map<size_t, size_t>;
+LinkStringTable linkStringTable;
+PersonalCommentStringTable personalCommentStringTable;
 
 string getNameOfObjectType(OBJECT_TYPE type) {
   if (type == OBJECT_TYPE::LINENUMBER)
@@ -217,6 +226,8 @@ string getNameOfObjectType(OBJECT_TYPE type) {
     return "POEM";
   else if (type == OBJECT_TYPE::LINKFROMMAIN)
     return "LINKFROMMAIN";
+  else if (type == OBJECT_TYPE::PERSONALCOMMENT)
+    return "PERSONALCOMMENT";
   return "";
 }
 
@@ -234,6 +245,23 @@ void printObjectTypeToOffset() {
   }
 }
 
+void printLinkStringTable() {
+  if (not linkStringTable.empty())
+    cout << "linkStringTable:" << endl;
+  for (const auto &element : linkStringTable) {
+    cout << element.first << "  " << element.second.endOffset << "  "
+         << element.second.embedded << endl;
+  }
+}
+
+void printPersonalCommentStringTable() {
+  if (not personalCommentStringTable.empty())
+    cout << "personalCommentStringTable:" << endl;
+  for (const auto &element : personalCommentStringTable) {
+    cout << element.first << "  " << element.second << endl;
+  }
+}
+
 ObjectPtr createObjectFromType(OBJECT_TYPE type) {
   if (type == OBJECT_TYPE::LINENUMBER)
     return std::make_unique<LineNumber>();
@@ -245,6 +273,8 @@ ObjectPtr createObjectFromType(OBJECT_TYPE type) {
     return std::make_unique<Poem>();
   else if (type == OBJECT_TYPE::LINKFROMMAIN)
     return std::make_unique<LinkFromMain>();
+  else if (type == OBJECT_TYPE::PERSONALCOMMENT)
+    return std::make_unique<PersonalComment>();
   return nullptr;
 }
 
@@ -259,7 +289,41 @@ string getStartTagOfObjectType(OBJECT_TYPE type) {
     return poemBeginChars;
   else if (type == OBJECT_TYPE::LINKFROMMAIN)
     return linkStartChars;
+  else if (type == OBJECT_TYPE::PERSONALCOMMENT)
+    return personalCommentStartChars;
   return "";
+}
+
+string getEndTagOfObjectType(OBJECT_TYPE type) {
+  if (type == OBJECT_TYPE::LINKFROMMAIN)
+    return linkEndChars;
+  else if (type == OBJECT_TYPE::PERSONALCOMMENT)
+    return personalCommentEndChars;
+  return "";
+}
+
+bool isEmbeddedObject(OBJECT_TYPE type, size_t offset) {
+  if (type == OBJECT_TYPE::LINKFROMMAIN) {
+    try {
+      auto linkInfo = linkStringTable.at(offset);
+      return linkInfo.embedded;
+    } catch (exception &) {
+      cout << "no such object " << getNameOfObjectType(type) << "at " << offset;
+    }
+  }
+  return false;
+}
+
+void searchForEmbededLinks() {
+  for (auto &linkInfo : linkStringTable) {
+    for (const auto &element : personalCommentStringTable) {
+      if (linkInfo.second.startOffset > element.first and
+          linkInfo.second.endOffset < element.second) {
+        linkInfo.second.embedded = true;
+        break;
+      }
+    }
+  }
 }
 
 void scanForTypes(string containedLine) {
@@ -271,10 +335,27 @@ void scanForTypes(string containedLine) {
       offsetOfTypes[offset] = type;
     }
   }
+  bool firstOccurence = true;
   auto offset = string::npos;
+  do {
+    offset = containedLine.find(
+        getStartTagOfObjectType(OBJECT_TYPE::PERSONALCOMMENT),
+        (firstOccurence) ? 0 : offset + 1);
+    if (offset == string::npos)
+      break;
+    personalCommentStringTable[offset] = containedLine.find(
+        getEndTagOfObjectType(OBJECT_TYPE::PERSONALCOMMENT), offset);
+    if (firstOccurence == true) {
+      foundTypes[OBJECT_TYPE::PERSONALCOMMENT] = offset;
+      offsetOfTypes[offset] = OBJECT_TYPE::PERSONALCOMMENT;
+      firstOccurence = false;
+    }
+  } while (true);
+
+  offset = string::npos;
   try {
     auto type = offsetOfTypes.at(0);
-    //skip first line number as a link actually
+    // skip first line number as a link actually
     if (type == OBJECT_TYPE::LINENUMBER)
       offset = containedLine.find(
           getStartTagOfObjectType(OBJECT_TYPE::LINKFROMMAIN), 1);
@@ -285,12 +366,44 @@ void scanForTypes(string containedLine) {
   if (offset != string::npos) {
     foundTypes[OBJECT_TYPE::LINKFROMMAIN] = offset;
     offsetOfTypes[offset] = OBJECT_TYPE::LINKFROMMAIN;
+    LinkStringInfo info{
+        offset,
+        containedLine.find(getEndTagOfObjectType(OBJECT_TYPE::LINKFROMMAIN),
+                           offset),
+        false};
+    linkStringTable[offset] = info;
+    do {
+      offset = containedLine.find(
+          getStartTagOfObjectType(OBJECT_TYPE::LINKFROMMAIN), offset + 1);
+      if (offset == string::npos)
+        break;
+      LinkStringInfo info{
+          offset,
+          containedLine.find(getEndTagOfObjectType(OBJECT_TYPE::LINKFROMMAIN),
+                             offset),
+          false};
+      linkStringTable[offset] = info;
+    } while (true);
   }
+  //  printLinkStringTable();
+  searchForEmbededLinks();
 }
 
 void testMixedObjects() {
+  //  string line =
+  //      R"(<a unhidden id="P3L2">3.2</a>&nbsp;&nbsp;
+  //      贾母又说：“请姑娘们来。今日有远客来，就不必上学去了。”<a hidden
+  //      href="a057.htm#top">原是（<cite unhidden>薛姨妈1</cite>）老奶奶（<cite
+  //      unhidden>薛姨妈1</cite>）使唤的</a>众人答应了一声，便派了两个人去请。没多久，只见三个奶妈和五六个丫鬟，簇拥着三个姊妹来了。第一个乃二姐<var
+  //      unhidden font style="font-size: 13.5pt; font-family:楷体;
+  //      color:#ff00ff">迎春----->（见右图）</var>，生的肌肤微丰，合中身材，腮凝新荔，鼻腻鹅脂，温柔沉默，观之可亲。<a
+  //      unhidden href="attachment\b018_7.htm">happy</a>第二个是三妹<var
+  //      unhidden font style="font-size: 13.5pt; font-family:楷体;
+  //      color:#ff00ff">（见左图）<-----探春</var>，削肩细腰，长挑身材，鸭蛋脸面，俊眼修眉，顾盼神飞，文彩精华，见之忘俗。（<cite
+  //      unhidden>迎春外表就有懦小姐的感觉，探春外表就文采甚好，可起诗社。</cite>）<br>)";
+
   string line =
-      R"(<a unhidden id="P3L2">3.2</a>&nbsp;&nbsp; 贾母又说：“请姑娘们来。今日有远客来，就不必上学去了。”<a hidden href="a057.htm#top">原是（<cite unhidden>薛姨妈1</cite>）老奶奶（<cite unhidden>薛姨妈1</cite>）使唤的</a>众人答应了一声，便派了两个人去请。没多久，只见三个奶妈和五六个丫鬟，簇拥着三个姊妹来了。第一个乃二姐<var unhidden font style="font-size: 13.5pt; font-family:楷体; color:#ff00ff">迎春----->（见右图）</var>，生的肌肤微丰，合中身材，腮凝新荔，鼻腻鹅脂，温柔沉默，观之可亲。<a unhidden href="attachment\b018_7.htm">happy</a>第二个是三妹<var unhidden font style="font-size: 13.5pt; font-family:楷体; color:#ff00ff">（见左图）<-----探春</var>，削肩细腰，长挑身材，鸭蛋脸面，俊眼修眉，顾盼神飞，文彩精华，见之忘俗。（<cite unhidden>迎春外表就有懦小姐的感觉，探春外表就文采甚好，可起诗社。</cite>）<br>)";
+      R"(前儿老太太（<cite unhidden>贾母</cite>）因要把<a  href="a050.htm#P15L2"><i hidden>说媒</i><sub hidden>第50章15.2节:</sub>你妹妹（<cite unhidden>薛宝琴</cite>）说给宝玉</a>（<a unhidden href="original\c050.htm#P14L2"><i hidden>说媒</i><sub hidden>第50章14.2节:</sub>原文</a>），偏生（<cite unhidden>薛宝琴</cite>）又有了人家（<cite unhidden>梅翰林家</cite>），不然（<cite unhidden>宝琴宝玉他二人</cite>）倒是一门好亲。老太太离了鸳鸯，饭也吃不下去的，哪里就舍得了？（<cite unhidden>凤姐并不知道贾赦要鸳鸯是要<a unhidden href="a071.htm#P7L2"><i hidden>作兴</i><sub hidden>第71章7.2节:</sub>争宠之意</a>（<a unhidden href="original\c071.htm#P5L3"><i hidden>作兴</i><sub hidden>第71章5.3节:</sub>原文</a>）（<u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">这句又接到宝玉生日探春让李纨打黛玉，李纨说黛玉<a unhidden href="a063.htm#P13L3"><i hidden>挨打</i><sub hidden>第63章13.3节:</sub>人家不得贵婿反挨打</a>（<a unhidden href="original\c063.htm#P6L3"><i hidden>挨打</i><sub hidden>第63章6.3节:</sub>原文</a>），黛玉的婚姻是镜中花，他们二人的一个不能完成的愿望而已。</u>）)";
   LineNumber ln;
   ln.loadFirstFromContainedLine(line);
   if (ln.isParagraphHeader()) {
@@ -299,6 +412,8 @@ void testMixedObjects() {
   // after this, there could be only one line number at the beginning
   scanForTypes(line);
   printOffsetToObjectType();
+  //  printLinkStringTable();
+  //  printPersonalCommentStringTable();
 
   do {
     if (offsetOfTypes.empty())
@@ -313,6 +428,14 @@ void testMixedObjects() {
     offsetOfTypes.erase(first);
     auto nextOffsetOfSameType =
         line.find(getStartTagOfObjectType(type), offset + 1);
+    do {
+      if (nextOffsetOfSameType != string::npos and
+          isEmbeddedObject(type, nextOffsetOfSameType))
+        nextOffsetOfSameType =
+            line.find(getStartTagOfObjectType(type), nextOffsetOfSameType + 1);
+      else
+        break;
+    } while (true);
     if (nextOffsetOfSameType != string::npos) {
       foundTypes[type] = nextOffsetOfSameType;
       offsetOfTypes[nextOffsetOfSameType] = type;

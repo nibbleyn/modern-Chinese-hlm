@@ -258,7 +258,6 @@ private:
 
 class Comment : public Object {
 public:
-  Comment(const string &commentString);
   size_t length() { return 0; }
   size_t displaySize() { return 0; }
   size_t loadFirstFromContainedLine(const string &containedLine,
@@ -274,15 +273,14 @@ private:
   TextCollection m_texts;
 };
 
-class PersonalComments : public Object {
+class PersonalComment : public Object {
 public:
-  PersonalComments(const string &commentString);
-  size_t length() { return 0; }
-  size_t displaySize() { return 0; }
+  string getWholeString();
+  string getDisplayString();
+  size_t length();
+  size_t displaySize();
   size_t loadFirstFromContainedLine(const string &containedLine,
-                                    size_t after = 0) {
-    return 0;
-  }
+                                    size_t after = 0);
 
 private:
   using LinkPtr = std::unique_ptr<Link>;
@@ -294,7 +292,6 @@ private:
 
 class PoemTranslation : public Object {
 public:
-  PoemTranslation(const string &translationString);
   size_t length() { return 0; }
   size_t displaySize() { return 0; }
   size_t loadFirstFromContainedLine(const string &containedLine,

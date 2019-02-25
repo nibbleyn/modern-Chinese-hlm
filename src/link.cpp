@@ -1253,3 +1253,39 @@ void testLinkOperation() {
   SEPERATE("fixLinkFromAttachmentTemplate", " finished ");
   SEPERATE("testLinkFromAttachment", " finished ");
 }
+
+static const string personalCommentTemplate =
+    R"(<u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">XX</u>)";
+
+string fixPersonalCommentFromTemplate(const string &comment) {
+  string link = personalCommentTemplate;
+  link = replacePart(link, "XX", comment);
+  return link;
+}
+
+string PersonalComment::getWholeString() {
+  return fixPersonalCommentFromTemplate(m_bodyText);
+}
+string PersonalComment::getDisplayString() { return m_bodyText; }
+
+size_t PersonalComment::length() { return getWholeString().length(); }
+size_t PersonalComment::displaySize() { return getDisplayString().length(); }
+
+/**
+ * must ensure this is not a line number before calling this method
+ */
+size_t PersonalComment::loadFirstFromContainedLine(const string &containedLine,
+                                                   size_t after) {
+  auto personalCommentBegin =
+      containedLine.find(personalCommentStartChars, after);
+  if (personalCommentBegin == string::npos) // no personalComment any more,
+                                            // continue with next line
+    return string::npos;
+  auto personalCommentEnd =
+      containedLine.find(personalCommentEndChars, personalCommentBegin);
+  string part = containedLine.substr(personalCommentBegin,
+                                     personalCommentEnd - personalCommentBegin);
+  auto beginPos = part.find(endOfPersonalCommentBeginTag);
+  m_bodyText = part.substr(beginPos + endOfImgRefBeginTag.length());
+  return containedLine.find(personalCommentStartChars, after);
+}
