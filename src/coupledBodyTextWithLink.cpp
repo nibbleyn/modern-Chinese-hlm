@@ -205,15 +205,26 @@ using ObjectTypeToOffset = std::map<OBJECT_TYPE, size_t>;
 using ObjectPtr = std::unique_ptr<Object>;
 OffsetToObjectType offsetOfTypes;
 ObjectTypeToOffset foundTypes;
+
 struct LinkStringInfo {
   size_t startOffset{0};
   size_t endOffset{0};
   bool embedded{false};
 };
 using LinkStringTable = std::map<size_t, LinkStringInfo>;
+
+struct CommentStringInfo {
+  size_t startOffset{0};
+  size_t endOffset{0};
+  bool embedded{false};
+};
+using CommentStringTable = std::map<size_t, CommentStringInfo>;
+
 using PersonalCommentStringTable = std::map<size_t, size_t>;
 using PoemTranslationStringTable = std::map<size_t, size_t>;
+
 LinkStringTable linkStringTable;
+CommentStringTable commentStringTable;
 PersonalCommentStringTable personalCommentStringTable;
 PoemTranslationStringTable poemTranslationStringTable;
 
@@ -232,6 +243,8 @@ string getNameOfObjectType(OBJECT_TYPE type) {
     return "PERSONALCOMMENT";
   else if (type == OBJECT_TYPE::POEMTRANSLATION)
     return "POEMTRANSLATION";
+  else if (type == OBJECT_TYPE::COMMENT)
+    return "COMMENT";
   return "";
 }
 
@@ -253,6 +266,15 @@ void printLinkStringTable() {
   if (not linkStringTable.empty())
     cout << "linkStringTable:" << endl;
   for (const auto &element : linkStringTable) {
+    cout << element.first << "  " << element.second.endOffset << "  "
+         << element.second.embedded << endl;
+  }
+}
+
+void printCommentStringTable() {
+  if (not commentStringTable.empty())
+    cout << "commentStringTable:" << endl;
+  for (const auto &element : commentStringTable) {
     cout << element.first << "  " << element.second.endOffset << "  "
          << element.second.embedded << endl;
   }
@@ -289,6 +311,8 @@ ObjectPtr createObjectFromType(OBJECT_TYPE type) {
     return std::make_unique<PersonalComment>();
   else if (type == OBJECT_TYPE::POEMTRANSLATION)
     return std::make_unique<PoemTranslation>();
+  else if (type == OBJECT_TYPE::COMMENT)
+    return std::make_unique<Comment>();
   return nullptr;
 }
 
@@ -307,6 +331,8 @@ string getStartTagOfObjectType(OBJECT_TYPE type) {
     return personalCommentStartChars;
   else if (type == OBJECT_TYPE::POEMTRANSLATION)
     return poemTranslationBeginChars;
+  else if (type == OBJECT_TYPE::COMMENT)
+    return commentBeginChars;
   return "";
 }
 
@@ -317,6 +343,8 @@ string getEndTagOfObjectType(OBJECT_TYPE type) {
     return personalCommentEndChars;
   else if (type == OBJECT_TYPE::POEMTRANSLATION)
     return poemTranslationEndChars;
+  else if (type == OBJECT_TYPE::COMMENT)
+    return commentEndChars;
   return "";
 }
 
@@ -325,6 +353,14 @@ bool isEmbeddedObject(OBJECT_TYPE type, size_t offset) {
     try {
       auto linkInfo = linkStringTable.at(offset);
       return linkInfo.embedded;
+    } catch (exception &) {
+      cout << "no such object " << getNameOfObjectType(type) << "at " << offset;
+    }
+  }
+  if (type == OBJECT_TYPE::COMMENT) {
+    try {
+      auto commentInfo = commentStringTable.at(offset);
+      return commentInfo.embedded;
     } catch (exception &) {
       cout << "no such object " << getNameOfObjectType(type) << "at " << offset;
     }
@@ -347,6 +383,24 @@ void searchForEmbededLinks() {
       if (linkInfo.second.startOffset > element.first and
           linkInfo.second.endOffset < element.second) {
         linkInfo.second.embedded = true;
+        break;
+      }
+    }
+  }
+  for (auto &linkInfo : linkStringTable) {
+    for (const auto &commentInfo : commentStringTable) {
+      if (linkInfo.second.startOffset > commentInfo.second.startOffset and
+          linkInfo.second.endOffset < commentInfo.second.endOffset) {
+        linkInfo.second.embedded = true;
+        break;
+      }
+    }
+  }
+  for (auto &commentInfo : commentStringTable) {
+    for (const auto &linkInfo : linkStringTable) {
+      if (linkInfo.second.startOffset < commentInfo.second.startOffset and
+          linkInfo.second.endOffset > commentInfo.second.endOffset) {
+        commentInfo.second.embedded = true;
         break;
       }
     }
@@ -396,6 +450,25 @@ void scanForTypes(string containedLine) {
     }
   } while (true);
 
+  firstOccurence = true;
+  offset = string::npos;
+  do {
+    offset = containedLine.find(getStartTagOfObjectType(OBJECT_TYPE::COMMENT),
+                                (firstOccurence) ? 0 : offset + 1);
+    if (offset == string::npos)
+      break;
+    CommentStringInfo info{
+        offset,
+        containedLine.find(getEndTagOfObjectType(OBJECT_TYPE::COMMENT), offset),
+        false};
+    commentStringTable[offset] = info;
+    if (firstOccurence == true) {
+      foundTypes[OBJECT_TYPE::COMMENT] = offset;
+      offsetOfTypes[offset] = OBJECT_TYPE::COMMENT;
+      firstOccurence = false;
+    }
+  } while (true);
+
   offset = string::npos;
   try {
     auto type = offsetOfTypes.at(0);
@@ -429,7 +502,6 @@ void scanForTypes(string containedLine) {
       linkStringTable[offset] = info;
     } while (true);
   }
-  //  printLinkStringTable();
   searchForEmbededLinks();
 }
 
@@ -467,8 +539,32 @@ void testMixedObjects() {
   //      href="original\c063.htm#P6L3"><i hidden>挨打</i><sub
   //      hidden>第63章6.3节:</sub>原文</a>），黛玉的婚姻是镜中花，他们二人的一个不能完成的愿望而已。</u>）)";
 
+  //  string line =
+  //      R"(<a unhidden id="P8L3">8.3</a>&nbsp;&nbsp; <strong
+  //      unhidden>惯养娇生笑你痴，菱花空对雪澌澌。好防佳节元宵后，便是烟消火灭时。</strong>&nbsp;&nbsp;&nbsp;&nbsp;<samp
+  //      unhidden font style="font-size: 13.5pt; font-family:楷体;
+  //      color:#ff00ff">你这么痴心
+  //      娇生惯养她，实在是可笑。你知道她有多么生不逢时吗？<a
+  //      href="a080.htm#P1L1"><i hidden>菱角菱花</i><sub
+  //      hidden>第80章1.1节:</sub>菱角菱花皆盛于秋</a>（<a unhidden
+  //      href="original\c080.htm#P1L3"><i hidden>菱角菱花</i><sub
+  //      hidden>第80章1.3节:</sub>原文</a>），可却毫无办法要面对茫茫大雪。要小心元宵佳节一过，一切都会烟消云散（<cite
+  //      unhidden> <a unhidden href="a022.htm#P13L4"><i hidden>清净孤独</i><sub
+  //      hidden>第22章13.4节:</sub>不详灯谜</a>（<a unhidden
+  //      href="original\c022.htm#P12L1"><i hidden>清净孤独</i><sub
+  //      hidden>第22章12.1节:</sub>原文</a>）、<a unhidden
+  //      href="a054.htm#P13L1"><i hidden>进贡</i><sub
+  //      hidden>第54章13.1节:</sub>聋子放炮仗</a>（<a unhidden
+  //      href="original\c054.htm#P8L2"><i hidden>进贡</i><sub
+  //      hidden>第54章8.2节:</sub>原文</a>）、<a unhidden
+  //      href="a058.htm#P1L2"><i hidden>按爵</i><sub
+  //      hidden>第58章1.2节:</sub>老太妃薨毙</a>（<a unhidden
+  //      href="original\c058.htm#P1L2"><i hidden>按爵</i><sub
+  //      hidden>第58章1.2节:</sub>原文</a>）。</cite>）</samp><br>)";
+
   string line =
-      R"(<a unhidden id="P8L3">8.3</a>&nbsp;&nbsp; <strong unhidden>惯养娇生笑你痴，菱花空对雪澌澌。好防佳节元宵后，便是烟消火灭时。</strong>&nbsp;&nbsp;&nbsp;&nbsp;<samp unhidden font style="font-size: 13.5pt; font-family:楷体; color:#ff00ff">你这么痴心 娇生惯养她，实在是可笑。你知道她有多么生不逢时吗？<a  href="a080.htm#P1L1"><i hidden>菱角菱花</i><sub hidden>第80章1.1节:</sub>菱角菱花皆盛于秋</a>（<a unhidden href="original\c080.htm#P1L3"><i hidden>菱角菱花</i><sub hidden>第80章1.3节:</sub>原文</a>），可却毫无办法要面对茫茫大雪。要小心元宵佳节一过，一切都会烟消云散（<cite unhidden> <a unhidden href="a022.htm#P13L4"><i hidden>清净孤独</i><sub hidden>第22章13.4节:</sub>不详灯谜</a>（<a unhidden href="original\c022.htm#P12L1"><i hidden>清净孤独</i><sub hidden>第22章12.1节:</sub>原文</a>）、<a unhidden href="a054.htm#P13L1"><i hidden>进贡</i><sub hidden>第54章13.1节:</sub>聋子放炮仗</a>（<a unhidden href="original\c054.htm#P8L2"><i hidden>进贡</i><sub hidden>第54章8.2节:</sub>原文</a>）、<a unhidden href="a058.htm#P1L2"><i hidden>按爵</i><sub hidden>第58章1.2节:</sub>老太妃薨毙</a>（<a unhidden href="original\c058.htm#P1L2"><i hidden>按爵</i><sub hidden>第58章1.2节:</sub>原文</a>）。</cite>）</samp><br>)";
+      R"(<a unhidden id="P1L5">1.5</a>&nbsp;&nbsp; 一天，神石正在独自嗟呀怀悼，突然看见一个僧人和一个道士远远走来。他们生得骨格不凡，丰神迥别（<cite unhidden>神石是神仙，所以看他们才骨骼不凡，否则也跟贾政眼里的<a unhidden href="a025.htm#P11L3"><i hidden>见那和尚</i><sub hidden>第25章11.3节:</sub>模样</a>（<a unhidden href="original\c025.htm#P9L4"><i hidden>见那和尚</i><sub hidden>第25章9.4节:</sub>原文</a>）一样了</cite>），说说笑笑走到青埂峰下，坐在神石边高谈快论。前儿老太太（<cite unhidden>贾母</cite>）因要把<a href="a050.htm#P15L2"><i hidden>说媒</i><sub hidden>第50章15.2节:</sub>你妹妹（<cite unhidden>薛宝琴</cite>）说给宝玉</a>（<a unhidden href="original\c050.htm#P14L2"><i hidden>说媒</i><sub hidden>第50章14.2节:</sub>原文</a>），偏生（<cite unhidden>薛宝琴</cite>）又有了人家（<cite unhidden>梅翰林家</cite>），不然（<cite unhidden>宝琴宝玉他二人</cite>）倒是一门好亲。)";
+
   LineNumber ln;
   ln.loadFirstFromContainedLine(line);
   if (ln.isParagraphHeader()) {
@@ -478,7 +574,8 @@ void testMixedObjects() {
   scanForTypes(line);
   printOffsetToObjectType();
   printLinkStringTable();
-  //  printPersonalCommentStringTable();
+  printCommentStringTable();
+  printPersonalCommentStringTable();
   printPoemTranslationStringTable();
 
   do {

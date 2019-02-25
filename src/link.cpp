@@ -1276,7 +1276,6 @@ size_t PersonalComment::loadFirstFromContainedLine(const string &containedLine,
   auto personalCommentBegin =
       containedLine.find(personalCommentStartChars, after);
   if (personalCommentBegin == string::npos) // no personalComment any more,
-                                            // continue with next line
     return string::npos;
   auto personalCommentEnd =
       containedLine.find(personalCommentEndChars, personalCommentBegin);
@@ -1309,7 +1308,6 @@ size_t PoemTranslation::loadFirstFromContainedLine(const string &containedLine,
   auto poemTranslationBegin =
       containedLine.find(poemTranslationBeginChars, after);
   if (poemTranslationBegin == string::npos) // no poemTranslation any more,
-                                            // continue with next line
     return string::npos;
   auto poemTranslationEnd =
       containedLine.find(poemTranslationEndChars, poemTranslationBegin);
@@ -1318,4 +1316,31 @@ size_t PoemTranslation::loadFirstFromContainedLine(const string &containedLine,
   auto beginPos = part.find(endOfPoemTranslationBeginTag);
   m_bodyText = part.substr(beginPos + endOfPoemTranslationBeginTag.length());
   return containedLine.find(poemTranslationBeginChars, after);
+}
+
+static const string commentTemplate =
+    R"(<cite unhidden>XX</cite>)";
+
+string fixCommentFromTemplate(const string &comment) {
+  string result = commentTemplate;
+  result = replacePart(result, "XX", comment);
+  return result;
+}
+
+string Comment::getWholeString() { return fixCommentFromTemplate(m_bodyText); }
+string Comment::getDisplayString() { return m_bodyText; }
+
+size_t Comment::length() { return getWholeString().length(); }
+size_t Comment::displaySize() { return getDisplayString().length(); }
+
+size_t Comment::loadFirstFromContainedLine(const string &containedLine,
+                                           size_t after) {
+  auto commentBegin = containedLine.find(commentBeginChars, after);
+  if (commentBegin == string::npos) // no comment any more,
+    return string::npos;
+  auto commentEnd = containedLine.find(commentEndChars, commentBegin);
+  string part = containedLine.substr(commentBegin, commentEnd - commentBegin);
+  auto beginPos = part.find(endOfCommentBeginTag);
+  m_bodyText = part.substr(beginPos + endOfCommentBeginTag.length());
+  return containedLine.find(commentBeginChars, after);
 }

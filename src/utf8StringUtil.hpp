@@ -79,6 +79,7 @@ static const string commentBeginChars = R"(<cite)";
 static const string commentEndChars = R"(</cite>)";
 static const string commentStart = bracketStartChars + commentBeginChars;
 static const string commentEnd = commentEndChars + bracketEndChars;
+static const string endOfCommentBeginTag = R"(>)";
 
 string formatIntoTwoDigitChapterNumber(int chapterNumber);
 
