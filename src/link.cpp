@@ -347,49 +347,6 @@ string Link::getDisplayString() { return m_displayText; }
 
 size_t Link::length() { return getWholeString().length(); }
 size_t Link::displaySize() { return getDisplayString().length(); }
-/**
- * must ensure this is not a line number before calling this method
- */
-size_t Link::loadFirstFromContainedLine(const string &containedLine,
-                                        size_t after) {
-  auto linkBegin = containedLine.find(linkStartChars, after);
-  if (linkBegin == string::npos) // no link any more, continue with next
-                                 // line
-    return string::npos;
-  auto linkEnd = containedLine.find(linkEndChars, linkBegin);
-  auto linkString = containedLine.substr(
-      linkBegin, linkEnd + linkEndChars.length() - linkBegin);
-  readTypeAndAnnotation(linkString);
-  readReferFileName(linkString); // second step of construction
-  fixFromString(linkString);
-
-  m_bodyText = m_annotation;
-  scanForComments();
-  return containedLine.find(linkStartChars, after);
-}
-
-void Link::scanForComments() {
-  auto offset = m_bodyText.find(getStartTagOfObjectType(OBJECT_TYPE::COMMENT));
-  do {
-    if (offset == string::npos)
-      break;
-    m_comments[offset] =
-        m_bodyText.find(getEndTagOfObjectType(OBJECT_TYPE::COMMENT), offset);
-    offset = m_bodyText.find(getStartTagOfObjectType(OBJECT_TYPE::COMMENT),
-                             offset + 1);
-  } while (true);
-  auto endOfCommentOffset = 0;
-  for (const auto &comment : m_comments) {
-    m_displayText += m_bodyText.substr(endOfCommentOffset,
-                                       comment.first - endOfCommentOffset);
-    std::unique_ptr<Comment> commentPtr = std::make_unique<Comment>();
-    commentPtr->loadFirstFromContainedLine(m_bodyText, endOfCommentOffset);
-    m_displayText += commentPtr->getDisplayString();
-    endOfCommentOffset =
-        comment.second + getEndTagOfObjectType(OBJECT_TYPE::COMMENT).length();
-  }
-  m_displayText += m_bodyText.substr(endOfCommentOffset);
-}
 
 /**
  * generated the string of a link from its info like type, key, etc.
@@ -1165,6 +1122,53 @@ string getEndTagOfObjectType(OBJECT_TYPE type) {
   return "";
 }
 
+string scanForSubType(const string &original, OBJECT_TYPE subType) {
+  string result;
+  using SubStringOffsetTable =
+      std::map<size_t, size_t>; // start offset -> end offset
+  SubStringOffsetTable subStrings;
+  auto offset = original.find(getStartTagOfObjectType(subType));
+  do {
+    if (offset == string::npos)
+      break;
+    subStrings[offset] = original.find(getEndTagOfObjectType(subType), offset);
+    offset = original.find(getStartTagOfObjectType(subType), offset + 1);
+  } while (true);
+  auto endOfSubStringOffset = 0;
+  for (const auto &link : subStrings) {
+    result += original.substr(endOfSubStringOffset,
+                              link.first - endOfSubStringOffset);
+    auto current = createObjectFromType(subType);
+    current->loadFirstFromContainedLine(original, endOfSubStringOffset);
+    result += current->getDisplayString();
+    endOfSubStringOffset =
+        link.second + getEndTagOfObjectType(subType).length();
+  }
+  result += original.substr(endOfSubStringOffset);
+  return result;
+}
+
+/**
+ * must ensure this is not a line number before calling this method
+ */
+size_t Link::loadFirstFromContainedLine(const string &containedLine,
+                                        size_t after) {
+  auto linkBegin = containedLine.find(linkStartChars, after);
+  if (linkBegin == string::npos) // no link any more, continue with next
+                                 // line
+    return string::npos;
+  auto linkEnd = containedLine.find(linkEndChars, linkBegin);
+  auto linkString = containedLine.substr(
+      linkBegin, linkEnd + linkEndChars.length() - linkBegin);
+  readTypeAndAnnotation(linkString);
+  readReferFileName(linkString); // second step of construction
+  fixFromString(linkString);
+
+  m_bodyText = m_annotation;
+  m_displayText = scanForSubType(m_bodyText, OBJECT_TYPE::COMMENT);
+  return containedLine.find(linkStartChars, after);
+}
+
 static const string personalCommentTemplate =
     R"(<u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">XX</u>)";
 
@@ -1177,7 +1181,7 @@ string fixPersonalCommentFromTemplate(const string &comment) {
 string PersonalComment::getWholeString() {
   return fixPersonalCommentFromTemplate(m_bodyText);
 }
-string PersonalComment::getDisplayString() { return m_bodyText; }
+string PersonalComment::getDisplayString() { return m_displayText; }
 
 size_t PersonalComment::length() { return getWholeString().length(); }
 size_t PersonalComment::displaySize() { return getDisplayString().length(); }
@@ -1194,6 +1198,7 @@ size_t PersonalComment::loadFirstFromContainedLine(const string &containedLine,
                                      personalCommentEnd - personalCommentBegin);
   auto beginPos = part.find(endOfPersonalCommentBeginTag);
   m_bodyText = part.substr(beginPos + endOfPersonalCommentBeginTag.length());
+  m_displayText = scanForSubType(m_bodyText, OBJECT_TYPE::LINKFROMMAIN);
   return containedLine.find(personalCommentStartChars, after);
 }
 
@@ -1209,7 +1214,7 @@ string fixPoemTranslationFromTemplate(const string &translation) {
 string PoemTranslation::getWholeString() {
   return fixPoemTranslationFromTemplate(m_bodyText);
 }
-string PoemTranslation::getDisplayString() { return m_bodyText; }
+string PoemTranslation::getDisplayString() { return m_displayText; }
 
 size_t PoemTranslation::length() { return getWholeString().length(); }
 size_t PoemTranslation::displaySize() { return getDisplayString().length(); }
@@ -1226,6 +1231,7 @@ size_t PoemTranslation::loadFirstFromContainedLine(const string &containedLine,
                                      poemTranslationEnd - poemTranslationBegin);
   auto beginPos = part.find(endOfPoemTranslationBeginTag);
   m_bodyText = part.substr(beginPos + endOfPoemTranslationBeginTag.length());
+  m_displayText = scanForSubType(m_bodyText, OBJECT_TYPE::LINKFROMMAIN);
   return containedLine.find(poemTranslationBeginChars, after);
 }
 
@@ -1253,32 +1259,8 @@ size_t Comment::loadFirstFromContainedLine(const string &containedLine,
   string part = containedLine.substr(commentBegin, commentEnd - commentBegin);
   auto beginPos = part.find(endOfCommentBeginTag);
   m_bodyText = part.substr(beginPos + endOfCommentBeginTag.length());
-  scanForLinks();
+  m_displayText = scanForSubType(m_bodyText, OBJECT_TYPE::LINKFROMMAIN);
   return containedLine.find(commentBeginChars, after);
-}
-
-void Comment::scanForLinks() {
-  auto offset =
-      m_bodyText.find(getStartTagOfObjectType(OBJECT_TYPE::LINKFROMMAIN));
-  do {
-    if (offset == string::npos)
-      break;
-    m_links[offset] = m_bodyText.find(
-        getEndTagOfObjectType(OBJECT_TYPE::LINKFROMMAIN), offset);
-    offset = m_bodyText.find(getStartTagOfObjectType(OBJECT_TYPE::LINKFROMMAIN),
-                             offset + 1);
-  } while (true);
-  auto endOfLinkOffset = 0;
-  for (const auto &link : m_links) {
-    m_displayText +=
-        m_bodyText.substr(endOfLinkOffset, link.first - endOfLinkOffset);
-    std::unique_ptr<Link> linkPtr = std::make_unique<LinkFromMain>();
-    linkPtr->loadFirstFromContainedLine(m_bodyText, endOfLinkOffset);
-    m_displayText += linkPtr->getDisplayString();
-    endOfLinkOffset =
-        link.second + getEndTagOfObjectType(OBJECT_TYPE::LINKFROMMAIN).length();
-  }
-  m_displayText += m_bodyText.substr(endOfLinkOffset);
 }
 
 /**

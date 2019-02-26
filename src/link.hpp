@@ -203,9 +203,6 @@ protected:
   bool m_needChange{false};
   using LinkPtr = std::unique_ptr<Link>;
   LinkPtr m_linkPtrToOrigin{nullptr};
-  void scanForComments();
-  using CommentsTable = std::map<size_t, size_t>; // start offset -> end offset
-  CommentsTable m_comments;
   string m_displayText{""};
 };
 
@@ -267,10 +264,6 @@ public:
                                     size_t after = 0);
 
 private:
-  void scanForLinks();
-  using LinkStringTable =
-      std::map<size_t, size_t>; // start offset -> end offset
-  LinkStringTable m_links;
   string m_displayText{""};
 };
 
@@ -288,11 +281,7 @@ public:
                                     size_t after = 0);
 
 private:
-  using LinkPtr = std::unique_ptr<Link>;
-  using LinkPtrCollection = std::map<size_t, LinkPtr>;
-  LinkPtrCollection m_linkPtrs;
-  using TextCollection = std::map<size_t, string>;
-  TextCollection m_texts;
+  string m_displayText{""};
 };
 
 // poemTranslation
@@ -310,11 +299,7 @@ public:
                                     size_t after = 0);
 
 private:
-  using LinkPtr = std::unique_ptr<Link>;
-  using LinkPtrCollection = std::map<size_t, LinkPtr>;
-  LinkPtrCollection m_linkPtrs;
-  using TextCollection = std::map<size_t, string>;
-  TextCollection m_texts;
+  string m_displayText{""};
 };
 
 using ObjectPtr = std::unique_ptr<Object>;
