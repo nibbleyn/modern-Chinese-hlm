@@ -343,7 +343,12 @@ void Link::outPutStatisticsToFiles() {
 }
 
 string Link::getWholeString() { return asString(); }
-string Link::getDisplayString() { return m_displayText; }
+string Link::getDisplayString() {
+  if (m_displayType == LINK_DISPLAY_TYPE::HIDDEN)
+    return "";
+  else
+    return m_displayText;
+}
 
 size_t Link::length() { return getWholeString().length(); }
 size_t Link::displaySize() { return getDisplayString().length(); }
@@ -353,8 +358,10 @@ size_t Link::displaySize() { return getDisplayString().length(); }
  * @return the string of the link
  */
 string Link::asString() {
-  string part0 = linkStartChars + " " + displayPropertyAsString() + " " +
-                 referFileMiddleChar;
+  string part0 = linkStartChars + " " + displayPropertyAsString();
+  if (m_displayType != LINK_DISPLAY_TYPE::DIRECT)
+    part0 += " ";
+  part0 += referFileMiddleChar;
   string part1{""}, part2{""}, part3{""};
   if (m_annotation == returnToContentTable) // type would be SAMEPAGE
   {

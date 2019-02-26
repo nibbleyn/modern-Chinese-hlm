@@ -267,8 +267,8 @@ private:
   string m_displayText{""};
 };
 
-static const string personalCommentStartChars = R"(（<u unhidden)";
-static const string personalCommentEndChars = R"(</u>）)";
+static const string personalCommentStartChars = R"(<u unhidden)";
+static const string personalCommentEndChars = R"(</u>)";
 static const string endOfPersonalCommentBeginTag = R"(">)";
 
 class PersonalComment : public Object {
