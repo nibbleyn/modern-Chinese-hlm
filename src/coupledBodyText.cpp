@@ -49,13 +49,14 @@ void CoupledBodyText::loadBodyTextsFromFixBackToOutput() {
 }
 
 void CoupledBodyText::setFilePrefixFromFileType(FILE_TYPE type) {
-  string bodyTextFilePrefix[] = {"Main", "Attach", "Org"};
   if (type == FILE_TYPE::MAIN)
-    m_filePrefix = bodyTextFilePrefix[0];
+    m_filePrefix = MAIN_BODYTEXT_PREFIX;
   if (type == FILE_TYPE::ATTACHMENT)
-    m_filePrefix = bodyTextFilePrefix[1];
+    m_filePrefix = ATTACHMENT_BODYTEXT_PREFIX;
   if (type == FILE_TYPE::ORIGINAL)
-    m_filePrefix = bodyTextFilePrefix[2];
+    m_filePrefix = ORIGINAL_BODYTEXT_PREFIX;
+  if (type == FILE_TYPE::JPM)
+    m_filePrefix = JPM_BODYTEXT_PREFIX;
 }
 
 void CoupledBodyText::setInputOutputFiles() {

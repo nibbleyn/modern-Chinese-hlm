@@ -17,6 +17,27 @@ void addLineNumbers(int minTarget, int maxTarget, FILE_TYPE targetFileType,
 }
 
 /**
+ * Numbering a set of JPM Html files
+ * @param minTarget starting from this file
+ * @param maxTarget until this file
+ */
+void NumberingJPMHtml(int minTarget, int maxTarget, bool forceUpdate = true,
+                      bool hidden = false) {
+  CoupledContainer container(FILE_TYPE::JPM);
+  //  CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
+  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
+    container.setFileAndAttachmentNumber(file);
+    container.dissembleFromHTM();
+  }
+  addLineNumbers(minTarget, maxTarget, FILE_TYPE::JPM, forceUpdate, hidden);
+  CoupledBodyText::loadBodyTextsFromFixBackToOutput();
+  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
+    container.setFileAndAttachmentNumber(file);
+    container.assembleBackToHTM();
+  }
+}
+
+/**
  * Numbering a set of original Html files
  * @param minTarget starting from this file
  * @param maxTarget until this file
@@ -128,20 +149,19 @@ void numberMainHtmls(bool forceUpdate, bool hidden) {
   int minTarget = 1, maxTarget = 80;
   NumberingMainHtml(minTarget, maxTarget, forceUpdate, hidden);
 }
-/**
- * copy original files into HTML_SRC_ORIGINAL
- * before run this
- */
+
 void numberOriginalHtmls(bool forceUpdate, bool hidden) {
   int minTarget = 1, maxTarget = 80;
   NumberingOriginalHtml(minTarget, maxTarget, forceUpdate, hidden);
   cout << "Numbering Original Html finished. " << endl;
 }
 
-/**
- * copy attachment files into HTML_SRC_ATTACHMENT
- * before run this
- */
+void numberJPMHtmls(bool forceUpdate, bool hidden) {
+  int minTarget = 1, maxTarget = 100;
+  NumberingJPMHtml(minTarget, maxTarget, forceUpdate, hidden);
+  cout << "Numbering JPM Html finished. " << endl;
+}
+
 void numberAttachmentHtmls(bool forceUpdate, bool hidden) {
   int minTarget = 1, maxTarget = 80;
   int minAttachNo = 0, maxAttachNo = 50;
@@ -150,9 +170,6 @@ void numberAttachmentHtmls(bool forceUpdate, bool hidden) {
   cout << "Numbering Attachment Html finished. " << endl;
 }
 
-/**
- *
- */
 void reformatTxtFiles(int minTarget, int maxTarget, const string &example) {
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     string filename = file;
@@ -165,9 +182,6 @@ void reformatTxtFiles(int minTarget, int maxTarget, const string &example) {
   }
 }
 
-/**
- *
- */
 void reformatTxtFilesForReader() {
   const string example =
       R"(话说安童领着书信，辞了黄通判，径往山东大道而来。打听巡按御史在东昌府住扎，姓曾，双名孝序，【夹批：曾者，争也。序即天叙有典之叙，盖作者为世所厄不能自全其孝，故抑郁愤懑)";

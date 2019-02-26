@@ -81,7 +81,7 @@ static const string commentStart = bracketStartChars + commentBeginChars;
 static const string commentEnd = commentEndChars + bracketEndChars;
 static const string endOfCommentBeginTag = R"(>)";
 
-string formatIntoTwoDigitChapterNumber(int chapterNumber);
+string formatIntoZeroPatchedChapterNumber(int chapterNumber, int digits);
 
 // operations to construct a group of file names
 using fileSet = set<string>;

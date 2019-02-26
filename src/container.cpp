@@ -41,6 +41,8 @@ string CoupledContainer::getBodyTextFilePrefix() {
     return ORIGINAL_BODYTEXT_PREFIX;
   if (m_fileType == FILE_TYPE::ATTACHMENT)
     return ATTACHMENT_BODYTEXT_PREFIX;
+  if (m_fileType == FILE_TYPE::JPM)
+    return JPM_BODYTEXT_PREFIX;
   return MAIN_BODYTEXT_PREFIX;
 }
 

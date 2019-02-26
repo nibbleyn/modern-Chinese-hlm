@@ -14,6 +14,8 @@ string getHtmlFileNamePrefix(FILE_TYPE type) {
     return ORIGINAL_HTML_PREFIX;
   if (type == FILE_TYPE::ATTACHMENT)
     return ATTACHMENT_HTML_PREFIX;
+  if (type == FILE_TYPE::JPM)
+    return JPM_HTML_PREFIX;
   return MAIN_HTML_PREFIX;
 }
 
@@ -22,6 +24,8 @@ FILE_TYPE getFileTypeFromString(const string &fileType) {
     return FILE_TYPE::ATTACHMENT;
   if (fileType == ORIGINAL)
     return FILE_TYPE::ORIGINAL;
+  if (fileType == JPM)
+    return FILE_TYPE::JPM;
   return FILE_TYPE::MAIN;
 }
 /**
@@ -34,6 +38,8 @@ FILE_TYPE getFileTypeFromString(const string &fileType) {
  */
 string getSeparateLineColor(FILE_TYPE type) {
   if (type == FILE_TYPE::MAIN)
+    return MAIN_SEPERATOR_COLOR;
+  if (type == FILE_TYPE::JPM)
     return MAIN_SEPERATOR_COLOR;
   if (type == FILE_TYPE::ATTACHMENT)
     return MAIN_SEPERATOR_COLOR;

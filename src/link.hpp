@@ -116,7 +116,7 @@ public:
   string getSourceChapterName() { return m_fromFile; }
   void setSourcePara(LineNumber fp) { m_fromLine = fp; }
   string getChapterName() {
-    return formatIntoTwoDigitChapterNumber(m_chapterNumber);
+    return formatIntoZeroPatchedChapterNumber(m_chapterNumber, 2);
   }
   void doStatistics() {
     if (m_usedKey.find(keyNotFound) != string::npos) {

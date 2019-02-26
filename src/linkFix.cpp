@@ -212,7 +212,7 @@ void generateContentIndexTableForAttachments() {
                     TurnToString(attachmentName.second) + R"(: )";
       container.appendParagraphInBodyText(fixLinkFromAttachmentTemplate(
           attachmentDirForLinkFromMain,
-          formatIntoTwoDigitChapterNumber(attachmentName.first),
+          formatIntoZeroPatchedChapterNumber(attachmentName.first, 2),
           TurnToString(attachmentName.second),
           name + GetTupleElement(entry, 1)));
     }

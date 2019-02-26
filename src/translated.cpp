@@ -9,9 +9,10 @@ int main(int argc, char **argv) {
   //  int num = 3;
   //	  int num = 4;
   //  int num = 5;
+  //  int num = 11;
   switch (num) {
   case 1:
-    testFunctions(14);
+    numberJPMHtmls(false);
     break;
   case 2:
     numberOriginalHtmls(false);
@@ -40,6 +41,9 @@ int main(int argc, char **argv) {
     break;
   case 10:
     generateContentIndexTableForAttachments();
+    break;
+  case 11:
+    testFunctions(14);
     break;
   default:
     cout << "nothing gets executed." << endl;

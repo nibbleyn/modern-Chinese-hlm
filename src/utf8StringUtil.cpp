@@ -9,10 +9,10 @@
  * @param chapterNumber the index of the chapter
  * @return 2-digit string of chapter number
  */
-string formatIntoTwoDigitChapterNumber(int chapterNumber) {
+string formatIntoZeroPatchedChapterNumber(int chapterNumber, int digits) {
   stringstream formatedNumber;
   formatedNumber.fill('0');
-  formatedNumber.width(2);
+  formatedNumber.width(digits);
   formatedNumber.clear();
   formatedNumber << internal << chapterNumber;
   return formatedNumber.str();
@@ -29,11 +29,17 @@ string formatIntoTwoDigitChapterNumber(int chapterNumber) {
  */
 fileSet buildFileSet(int min, int max) {
   fileSet fs;
-  for (int i = min; i <= std::min(99, max); i++) {
-    fs.insert(formatIntoTwoDigitChapterNumber(i));
+  // build 2 digit file name set
+  if (max < 100) {
+    for (int i = min; i <= max; i++) {
+      fs.insert(formatIntoZeroPatchedChapterNumber(i, 2));
+    }
   }
-  for (int i = 100; i <= max; i++) {
-    fs.insert(TurnToString(i));
+  // build 3 digit file name set
+  else if (max < 1000) {
+    for (int i = min; i <= max; i++) {
+      fs.insert(formatIntoZeroPatchedChapterNumber(i, 3));
+    }
   }
   return fs;
 }

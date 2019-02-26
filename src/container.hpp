@@ -3,10 +3,12 @@
 
 static const string HTML_SRC_MAIN = "utf8HTML/src/";
 static const string HTML_SRC_ORIGINAL = "utf8HTML/src/original/";
+static const string HTML_SRC_JPM = "utf8HTML/src/JPM/";
 
 static const string HTML_OUTPUT_MAIN = "utf8HTML/output/";
 static const string HTML_OUTPUT_ATTACHMENT = "utf8HTML/output/attachment/";
 static const string HTML_OUTPUT_ORIGINAL = "utf8HTML/output/original/";
+static const string HTML_OUTPUT_JPM = "utf8HTML/output/JPM/";
 
 static const string LIST_CONTAINER_FILENAME = "1";
 static const string TABLE_CONTAINER_FILENAME = "2";
@@ -39,6 +41,9 @@ public:
     } else if (fileType == FILE_TYPE::ORIGINAL) {
       m_htmlInputFilePath = HTML_SRC_ORIGINAL;
       m_htmlOutputFilePath = HTML_OUTPUT_ORIGINAL;
+    } else if (fileType == FILE_TYPE::JPM) {
+      m_htmlInputFilePath = HTML_SRC_JPM;
+      m_htmlOutputFilePath = HTML_OUTPUT_JPM;
     }
   }
 
