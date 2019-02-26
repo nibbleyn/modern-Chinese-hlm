@@ -203,9 +203,10 @@ protected:
   bool m_needChange{false};
   using LinkPtr = std::unique_ptr<Link>;
   LinkPtr m_linkPtrToOrigin{nullptr};
-  using CommentPtr = std::unique_ptr<Comment>;
-  using CommentPtrCollection = std::map<size_t, CommentPtr>;
-  CommentPtrCollection m_commentPtrs;
+  void scanForComments();
+  using CommentsTable = std::map<size_t, size_t>; // start offset -> end offset
+  CommentsTable m_comments;
+  string m_displayText{""};
 };
 
 class LinkFromMain : public Link {

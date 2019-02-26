@@ -343,7 +343,7 @@ void Link::outPutStatisticsToFiles() {
 }
 
 string Link::getWholeString() { return asString(); }
-string Link::getDisplayString() { return m_bodyText; }
+string Link::getDisplayString() { return m_displayText; }
 
 size_t Link::length() { return getWholeString().length(); }
 size_t Link::displaySize() { return getDisplayString().length(); }
@@ -363,9 +363,32 @@ size_t Link::loadFirstFromContainedLine(const string &containedLine,
   readReferFileName(linkString); // second step of construction
   fixFromString(linkString);
 
-  m_bodyText =
-      m_annotation; // to be changed to take comments out into ptr table
+  m_bodyText = m_annotation;
+  scanForComments();
   return containedLine.find(linkStartChars, after);
+}
+
+void Link::scanForComments() {
+  auto offset = m_bodyText.find(getStartTagOfObjectType(OBJECT_TYPE::COMMENT));
+  do {
+    if (offset == string::npos)
+      break;
+    m_comments[offset] =
+        m_bodyText.find(getEndTagOfObjectType(OBJECT_TYPE::COMMENT), offset);
+    offset = m_bodyText.find(getStartTagOfObjectType(OBJECT_TYPE::COMMENT),
+                             offset + 1);
+  } while (true);
+  auto endOfCommentOffset = 0;
+  for (const auto &comment : m_comments) {
+    m_displayText += m_bodyText.substr(endOfCommentOffset,
+                                       comment.first - endOfCommentOffset);
+    std::unique_ptr<Comment> commentPtr = std::make_unique<Comment>();
+    commentPtr->loadFirstFromContainedLine(m_bodyText, endOfCommentOffset);
+    m_displayText += commentPtr->getDisplayString();
+    endOfCommentOffset =
+        comment.second + getEndTagOfObjectType(OBJECT_TYPE::COMMENT).length();
+  }
+  m_displayText += m_bodyText.substr(endOfCommentOffset);
 }
 
 /**
@@ -1247,17 +1270,13 @@ void Comment::scanForLinks() {
   } while (true);
   auto endOfLinkOffset = 0;
   for (const auto &link : m_links) {
-    cout << m_bodyText.substr(endOfLinkOffset, link.first - endOfLinkOffset)
-         << endl;
     m_displayText +=
         m_bodyText.substr(endOfLinkOffset, link.first - endOfLinkOffset);
-    cout << link.first << "  " << link.second << endl;
     std::unique_ptr<Link> linkPtr = std::make_unique<LinkFromMain>();
     linkPtr->loadFirstFromContainedLine(m_bodyText, endOfLinkOffset);
-    cout << linkPtr->asString() << endl;
-    cout << linkPtr->getDisplayString() << endl;
     m_displayText += linkPtr->getDisplayString();
-    endOfLinkOffset = link.second + linkEndChars.length();
+    endOfLinkOffset =
+        link.second + getEndTagOfObjectType(OBJECT_TYPE::LINKFROMMAIN).length();
   }
   m_displayText += m_bodyText.substr(endOfLinkOffset);
 }

@@ -22,8 +22,7 @@ enum class OBJECT_TYPE {
   LINKFROMATTACHMENT,
   COMMENT,
   PERSONALCOMMENT,
-  FULLBR,
-  PARTBR
+  BR
 };
 
 string getNameOfObjectType(OBJECT_TYPE type);
