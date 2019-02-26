@@ -1,5 +1,25 @@
 #include "Object.hpp"
 
+string getNameOfObjectType(OBJECT_TYPE type) {
+  if (type == OBJECT_TYPE::LINENUMBER)
+    return "LINENUMBER";
+  else if (type == OBJECT_TYPE::IMAGEREF)
+    return "IMAGEREF";
+  else if (type == OBJECT_TYPE::SPACE)
+    return "SPACE";
+  else if (type == OBJECT_TYPE::POEM)
+    return "POEM";
+  else if (type == OBJECT_TYPE::LINKFROMMAIN)
+    return "LINKFROMMAIN";
+  else if (type == OBJECT_TYPE::PERSONALCOMMENT)
+    return "PERSONALCOMMENT";
+  else if (type == OBJECT_TYPE::POEMTRANSLATION)
+    return "POEMTRANSLATION";
+  else if (type == OBJECT_TYPE::COMMENT)
+    return "COMMENT";
+  return "";
+}
+
 static const string leftImgReferenceTemplate =
     R"(<var unhidden font style="font-size: 13.5pt; font-family:楷体; color:#ff00ff">（见左图）<-----XX</var>)";
 static const string rightImgReferenceTemplate =

@@ -202,7 +202,6 @@ int CoupledBodyTextWithLink::sizeAfterRendering(const string &lineStr) {
 
 using OffsetToObjectType = std::map<size_t, OBJECT_TYPE>;
 using ObjectTypeToOffset = std::map<OBJECT_TYPE, size_t>;
-using ObjectPtr = std::unique_ptr<Object>;
 OffsetToObjectType offsetOfTypes;
 ObjectTypeToOffset foundTypes;
 
@@ -227,26 +226,6 @@ LinkStringTable linkStringTable;
 CommentStringTable commentStringTable;
 PersonalCommentStringTable personalCommentStringTable;
 PoemTranslationStringTable poemTranslationStringTable;
-
-string getNameOfObjectType(OBJECT_TYPE type) {
-  if (type == OBJECT_TYPE::LINENUMBER)
-    return "LINENUMBER";
-  else if (type == OBJECT_TYPE::IMAGEREF)
-    return "IMAGEREF";
-  else if (type == OBJECT_TYPE::SPACE)
-    return "SPACE";
-  else if (type == OBJECT_TYPE::POEM)
-    return "POEM";
-  else if (type == OBJECT_TYPE::LINKFROMMAIN)
-    return "LINKFROMMAIN";
-  else if (type == OBJECT_TYPE::PERSONALCOMMENT)
-    return "PERSONALCOMMENT";
-  else if (type == OBJECT_TYPE::POEMTRANSLATION)
-    return "POEMTRANSLATION";
-  else if (type == OBJECT_TYPE::COMMENT)
-    return "COMMENT";
-  return "";
-}
 
 void printOffsetToObjectType() {
   for (const auto &element : offsetOfTypes) {
@@ -294,58 +273,6 @@ void printPoemTranslationStringTable() {
   for (const auto &element : poemTranslationStringTable) {
     cout << element.first << "  " << element.second << endl;
   }
-}
-
-ObjectPtr createObjectFromType(OBJECT_TYPE type) {
-  if (type == OBJECT_TYPE::LINENUMBER)
-    return std::make_unique<LineNumber>();
-  else if (type == OBJECT_TYPE::IMAGEREF)
-    return std::make_unique<ImageReferText>();
-  else if (type == OBJECT_TYPE::SPACE)
-    return std::make_unique<Space>();
-  else if (type == OBJECT_TYPE::POEM)
-    return std::make_unique<Poem>();
-  else if (type == OBJECT_TYPE::LINKFROMMAIN)
-    return std::make_unique<LinkFromMain>();
-  else if (type == OBJECT_TYPE::PERSONALCOMMENT)
-    return std::make_unique<PersonalComment>();
-  else if (type == OBJECT_TYPE::POEMTRANSLATION)
-    return std::make_unique<PoemTranslation>();
-  else if (type == OBJECT_TYPE::COMMENT)
-    return std::make_unique<Comment>();
-  return nullptr;
-}
-
-string getStartTagOfObjectType(OBJECT_TYPE type) {
-  if (type == OBJECT_TYPE::LINENUMBER)
-    return UnhiddenLineNumberStart;
-  else if (type == OBJECT_TYPE::IMAGEREF)
-    return ImgRefBeginChars;
-  else if (type == OBJECT_TYPE::SPACE)
-    return space;
-  else if (type == OBJECT_TYPE::POEM)
-    return poemBeginChars;
-  else if (type == OBJECT_TYPE::LINKFROMMAIN)
-    return linkStartChars;
-  else if (type == OBJECT_TYPE::PERSONALCOMMENT)
-    return personalCommentStartChars;
-  else if (type == OBJECT_TYPE::POEMTRANSLATION)
-    return poemTranslationBeginChars;
-  else if (type == OBJECT_TYPE::COMMENT)
-    return commentBeginChars;
-  return "";
-}
-
-string getEndTagOfObjectType(OBJECT_TYPE type) {
-  if (type == OBJECT_TYPE::LINKFROMMAIN)
-    return linkEndChars;
-  else if (type == OBJECT_TYPE::PERSONALCOMMENT)
-    return personalCommentEndChars;
-  else if (type == OBJECT_TYPE::POEMTRANSLATION)
-    return poemTranslationEndChars;
-  else if (type == OBJECT_TYPE::COMMENT)
-    return commentEndChars;
-  return "";
 }
 
 bool isEmbeddedObject(OBJECT_TYPE type, size_t offset) {
@@ -572,11 +499,11 @@ void testMixedObjects() {
   }
   // after this, there could be only one line number at the beginning
   scanForTypes(line);
-  printOffsetToObjectType();
-  printLinkStringTable();
-  printCommentStringTable();
-  printPersonalCommentStringTable();
-  printPoemTranslationStringTable();
+  //  printOffsetToObjectType();
+  //  printLinkStringTable();
+  //  printCommentStringTable();
+  //  printPersonalCommentStringTable();
+  //  printPoemTranslationStringTable();
 
   do {
     if (offsetOfTypes.empty())
@@ -605,6 +532,6 @@ void testMixedObjects() {
       foundTypes[type] = nextOffsetOfSameType;
       offsetOfTypes[nextOffsetOfSameType] = type;
     }
-    printOffsetToObjectType();
+    //    printOffsetToObjectType();
   } while (true);
 }

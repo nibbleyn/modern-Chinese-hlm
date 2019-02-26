@@ -26,6 +26,8 @@ enum class OBJECT_TYPE {
   PARTBR
 };
 
+string getNameOfObjectType(OBJECT_TYPE type);
+
 class Object {
 public:
   Object() = default;

@@ -1090,6 +1090,178 @@ string LinkFromAttachment::getBodyTextFilePrefix() {
   return prefix;
 }
 
+ObjectPtr createObjectFromType(OBJECT_TYPE type) {
+  if (type == OBJECT_TYPE::LINENUMBER)
+    return std::make_unique<LineNumber>();
+  else if (type == OBJECT_TYPE::IMAGEREF)
+    return std::make_unique<ImageReferText>();
+  else if (type == OBJECT_TYPE::SPACE)
+    return std::make_unique<Space>();
+  else if (type == OBJECT_TYPE::POEM)
+    return std::make_unique<Poem>();
+  else if (type == OBJECT_TYPE::LINKFROMMAIN)
+    return std::make_unique<LinkFromMain>();
+  else if (type == OBJECT_TYPE::PERSONALCOMMENT)
+    return std::make_unique<PersonalComment>();
+  else if (type == OBJECT_TYPE::POEMTRANSLATION)
+    return std::make_unique<PoemTranslation>();
+  else if (type == OBJECT_TYPE::COMMENT)
+    return std::make_unique<Comment>();
+  return nullptr;
+}
+
+string getStartTagOfObjectType(OBJECT_TYPE type) {
+  if (type == OBJECT_TYPE::LINENUMBER)
+    return UnhiddenLineNumberStart;
+  else if (type == OBJECT_TYPE::IMAGEREF)
+    return ImgRefBeginChars;
+  else if (type == OBJECT_TYPE::SPACE)
+    return space;
+  else if (type == OBJECT_TYPE::POEM)
+    return poemBeginChars;
+  else if (type == OBJECT_TYPE::LINKFROMMAIN)
+    return linkStartChars;
+  else if (type == OBJECT_TYPE::PERSONALCOMMENT)
+    return personalCommentStartChars;
+  else if (type == OBJECT_TYPE::POEMTRANSLATION)
+    return poemTranslationBeginChars;
+  else if (type == OBJECT_TYPE::COMMENT)
+    return commentBeginChars;
+  return "";
+}
+
+string getEndTagOfObjectType(OBJECT_TYPE type) {
+  if (type == OBJECT_TYPE::LINKFROMMAIN)
+    return linkEndChars;
+  else if (type == OBJECT_TYPE::PERSONALCOMMENT)
+    return personalCommentEndChars;
+  else if (type == OBJECT_TYPE::POEMTRANSLATION)
+    return poemTranslationEndChars;
+  else if (type == OBJECT_TYPE::COMMENT)
+    return commentEndChars;
+  return "";
+}
+
+static const string personalCommentTemplate =
+    R"(<u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">XX</u>)";
+
+string fixPersonalCommentFromTemplate(const string &comment) {
+  string result = personalCommentTemplate;
+  result = replacePart(result, "XX", comment);
+  return result;
+}
+
+string PersonalComment::getWholeString() {
+  return fixPersonalCommentFromTemplate(m_bodyText);
+}
+string PersonalComment::getDisplayString() { return m_bodyText; }
+
+size_t PersonalComment::length() { return getWholeString().length(); }
+size_t PersonalComment::displaySize() { return getDisplayString().length(); }
+
+size_t PersonalComment::loadFirstFromContainedLine(const string &containedLine,
+                                                   size_t after) {
+  auto personalCommentBegin =
+      containedLine.find(personalCommentStartChars, after);
+  if (personalCommentBegin == string::npos) // no personalComment any more,
+    return string::npos;
+  auto personalCommentEnd =
+      containedLine.find(personalCommentEndChars, personalCommentBegin);
+  string part = containedLine.substr(personalCommentBegin,
+                                     personalCommentEnd - personalCommentBegin);
+  auto beginPos = part.find(endOfPersonalCommentBeginTag);
+  m_bodyText = part.substr(beginPos + endOfPersonalCommentBeginTag.length());
+  return containedLine.find(personalCommentStartChars, after);
+}
+
+static const string poemTranslationTemplate =
+    R"(<samp unhidden font style="font-size: 13.5pt; font-family:楷体; color:#ff00ff">XX</samp> )";
+
+string fixPoemTranslationFromTemplate(const string &translation) {
+  string result = poemTranslationTemplate;
+  result = replacePart(result, "XX", translation);
+  return result;
+}
+
+string PoemTranslation::getWholeString() {
+  return fixPoemTranslationFromTemplate(m_bodyText);
+}
+string PoemTranslation::getDisplayString() { return m_bodyText; }
+
+size_t PoemTranslation::length() { return getWholeString().length(); }
+size_t PoemTranslation::displaySize() { return getDisplayString().length(); }
+
+size_t PoemTranslation::loadFirstFromContainedLine(const string &containedLine,
+                                                   size_t after) {
+  auto poemTranslationBegin =
+      containedLine.find(poemTranslationBeginChars, after);
+  if (poemTranslationBegin == string::npos) // no poemTranslation any more,
+    return string::npos;
+  auto poemTranslationEnd =
+      containedLine.find(poemTranslationEndChars, poemTranslationBegin);
+  string part = containedLine.substr(poemTranslationBegin,
+                                     poemTranslationEnd - poemTranslationBegin);
+  auto beginPos = part.find(endOfPoemTranslationBeginTag);
+  m_bodyText = part.substr(beginPos + endOfPoemTranslationBeginTag.length());
+  return containedLine.find(poemTranslationBeginChars, after);
+}
+
+static const string commentTemplate =
+    R"(<cite unhidden>XX</cite>)";
+
+string fixCommentFromTemplate(const string &comment) {
+  string result = commentTemplate;
+  result = replacePart(result, "XX", comment);
+  return result;
+}
+
+string Comment::getWholeString() { return fixCommentFromTemplate(m_bodyText); }
+string Comment::getDisplayString() { return m_displayText; }
+
+size_t Comment::length() { return getWholeString().length(); }
+size_t Comment::displaySize() { return getDisplayString().length(); }
+
+size_t Comment::loadFirstFromContainedLine(const string &containedLine,
+                                           size_t after) {
+  auto commentBegin = containedLine.find(commentBeginChars, after);
+  if (commentBegin == string::npos) // no comment any more,
+    return string::npos;
+  auto commentEnd = containedLine.find(commentEndChars, commentBegin);
+  string part = containedLine.substr(commentBegin, commentEnd - commentBegin);
+  auto beginPos = part.find(endOfCommentBeginTag);
+  m_bodyText = part.substr(beginPos + endOfCommentBeginTag.length());
+  scanForLinks();
+  return containedLine.find(commentBeginChars, after);
+}
+
+void Comment::scanForLinks() {
+  auto offset =
+      m_bodyText.find(getStartTagOfObjectType(OBJECT_TYPE::LINKFROMMAIN));
+  do {
+    if (offset == string::npos)
+      break;
+    m_links[offset] = m_bodyText.find(
+        getEndTagOfObjectType(OBJECT_TYPE::LINKFROMMAIN), offset);
+    offset = m_bodyText.find(getStartTagOfObjectType(OBJECT_TYPE::LINKFROMMAIN),
+                             offset + 1);
+  } while (true);
+  auto endOfLinkOffset = 0;
+  for (const auto &link : m_links) {
+    cout << m_bodyText.substr(endOfLinkOffset, link.first - endOfLinkOffset)
+         << endl;
+    m_displayText +=
+        m_bodyText.substr(endOfLinkOffset, link.first - endOfLinkOffset);
+    cout << link.first << "  " << link.second << endl;
+    std::unique_ptr<Link> linkPtr = std::make_unique<LinkFromMain>();
+    linkPtr->loadFirstFromContainedLine(m_bodyText, endOfLinkOffset);
+    cout << linkPtr->asString() << endl;
+    cout << linkPtr->getDisplayString() << endl;
+    m_displayText += linkPtr->getDisplayString();
+    endOfLinkOffset = link.second + linkEndChars.length();
+  }
+  m_displayText += m_bodyText.substr(endOfLinkOffset);
+}
+
 /**
  * this function needs numbering first to get a correct target refer line number
  * or copy .txt files under testData to bodyTexts\output
@@ -1252,95 +1424,4 @@ void testLinkOperation() {
       "03_9", fixLinkFromAttachmentTemplate("", "18", "7", "happy"), false);
   SEPERATE("fixLinkFromAttachmentTemplate", " finished ");
   SEPERATE("testLinkFromAttachment", " finished ");
-}
-
-static const string personalCommentTemplate =
-    R"(<u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">XX</u>)";
-
-string fixPersonalCommentFromTemplate(const string &comment) {
-  string result = personalCommentTemplate;
-  result = replacePart(result, "XX", comment);
-  return result;
-}
-
-string PersonalComment::getWholeString() {
-  return fixPersonalCommentFromTemplate(m_bodyText);
-}
-string PersonalComment::getDisplayString() { return m_bodyText; }
-
-size_t PersonalComment::length() { return getWholeString().length(); }
-size_t PersonalComment::displaySize() { return getDisplayString().length(); }
-
-size_t PersonalComment::loadFirstFromContainedLine(const string &containedLine,
-                                                   size_t after) {
-  auto personalCommentBegin =
-      containedLine.find(personalCommentStartChars, after);
-  if (personalCommentBegin == string::npos) // no personalComment any more,
-    return string::npos;
-  auto personalCommentEnd =
-      containedLine.find(personalCommentEndChars, personalCommentBegin);
-  string part = containedLine.substr(personalCommentBegin,
-                                     personalCommentEnd - personalCommentBegin);
-  auto beginPos = part.find(endOfPersonalCommentBeginTag);
-  m_bodyText = part.substr(beginPos + endOfPersonalCommentBeginTag.length());
-  return containedLine.find(personalCommentStartChars, after);
-}
-
-static const string poemTranslationTemplate =
-    R"(<samp unhidden font style="font-size: 13.5pt; font-family:楷体; color:#ff00ff">XX</samp> )";
-
-string fixPoemTranslationFromTemplate(const string &translation) {
-  string result = poemTranslationTemplate;
-  result = replacePart(result, "XX", translation);
-  return result;
-}
-
-string PoemTranslation::getWholeString() {
-  return fixPoemTranslationFromTemplate(m_bodyText);
-}
-string PoemTranslation::getDisplayString() { return m_bodyText; }
-
-size_t PoemTranslation::length() { return getWholeString().length(); }
-size_t PoemTranslation::displaySize() { return getDisplayString().length(); }
-
-size_t PoemTranslation::loadFirstFromContainedLine(const string &containedLine,
-                                                   size_t after) {
-  auto poemTranslationBegin =
-      containedLine.find(poemTranslationBeginChars, after);
-  if (poemTranslationBegin == string::npos) // no poemTranslation any more,
-    return string::npos;
-  auto poemTranslationEnd =
-      containedLine.find(poemTranslationEndChars, poemTranslationBegin);
-  string part = containedLine.substr(poemTranslationBegin,
-                                     poemTranslationEnd - poemTranslationBegin);
-  auto beginPos = part.find(endOfPoemTranslationBeginTag);
-  m_bodyText = part.substr(beginPos + endOfPoemTranslationBeginTag.length());
-  return containedLine.find(poemTranslationBeginChars, after);
-}
-
-static const string commentTemplate =
-    R"(<cite unhidden>XX</cite>)";
-
-string fixCommentFromTemplate(const string &comment) {
-  string result = commentTemplate;
-  result = replacePart(result, "XX", comment);
-  return result;
-}
-
-string Comment::getWholeString() { return fixCommentFromTemplate(m_bodyText); }
-string Comment::getDisplayString() { return m_bodyText; }
-
-size_t Comment::length() { return getWholeString().length(); }
-size_t Comment::displaySize() { return getDisplayString().length(); }
-
-size_t Comment::loadFirstFromContainedLine(const string &containedLine,
-                                           size_t after) {
-  auto commentBegin = containedLine.find(commentBeginChars, after);
-  if (commentBegin == string::npos) // no comment any more,
-    return string::npos;
-  auto commentEnd = containedLine.find(commentEndChars, commentBegin);
-  string part = containedLine.substr(commentBegin, commentEnd - commentBegin);
-  auto beginPos = part.find(endOfCommentBeginTag);
-  m_bodyText = part.substr(beginPos + endOfCommentBeginTag.length());
-  return containedLine.find(commentBeginChars, after);
 }

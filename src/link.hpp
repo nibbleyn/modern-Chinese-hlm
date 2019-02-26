@@ -266,11 +266,11 @@ public:
                                     size_t after = 0);
 
 private:
-  using LinkPtr = std::unique_ptr<Link>;
-  using LinkPtrCollection = std::map<size_t, LinkPtr>;
-  LinkPtrCollection m_linkPtrs;
-  using TextCollection = std::map<size_t, string>;
-  TextCollection m_texts;
+  void scanForLinks();
+  using LinkStringTable =
+      std::map<size_t, size_t>; // start offset -> end offset
+  LinkStringTable m_links;
+  string m_displayText{""};
 };
 
 static const string personalCommentStartChars = R"(（<u unhidden)";
@@ -315,5 +315,10 @@ private:
   using TextCollection = std::map<size_t, string>;
   TextCollection m_texts;
 };
+
+using ObjectPtr = std::unique_ptr<Object>;
+ObjectPtr createObjectFromType(OBJECT_TYPE type);
+string getStartTagOfObjectType(OBJECT_TYPE type);
+string getEndTagOfObjectType(OBJECT_TYPE type);
 
 void testLinkOperation();

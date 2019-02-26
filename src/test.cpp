@@ -5,8 +5,8 @@
 #include "search.hpp"
 #include "story.hpp"
 
-// int debug = LOG_INFO;
-int debug = LOG_EXCEPTION;
+int debug = LOG_INFO;
+// int debug = LOG_EXCEPTION;
 
 void testFunctions(int num) {
   SEPERATE("HLM test", " started ");
