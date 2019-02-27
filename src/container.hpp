@@ -53,6 +53,8 @@ public:
     m_file = file;
     m_attachmentNumber = attachNo;
   };
+  void makeSingleLineHeaderAndFooter();
+  void fixHeaderAndFooter();
   void dissembleFromHTM();
   void assembleBackToHTM(const string &title = "",
                          const string &displayTitle = "");

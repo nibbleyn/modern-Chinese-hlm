@@ -4,6 +4,7 @@
 #include <iomanip>
 #include <sstream>
 
+#include <cmath>
 #include <iostream>
 #include <set>
 #include <string>
@@ -85,7 +86,7 @@ string formatIntoZeroPatchedChapterNumber(int chapterNumber, int digits);
 
 // operations to construct a group of file names
 using fileSet = set<string>;
-fileSet buildFileSet(int min, int max);
+fileSet buildFileSet(int min, int max, int digits = 2);
 
 string replacePart(string &linkString, const string &key,
                    const string &toReplace);

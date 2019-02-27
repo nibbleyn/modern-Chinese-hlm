@@ -27,19 +27,12 @@ string formatIntoZeroPatchedChapterNumber(int chapterNumber, int digits) {
  * @param max the largest chapter
  * @return a set of strings in fileSet
  */
-fileSet buildFileSet(int min, int max) {
+fileSet buildFileSet(int minValue, int maxValue, int digits) {
   fileSet fs;
-  // build 2 digit file name set
-  if (max < 100) {
-    for (int i = min; i <= max; i++) {
-      fs.insert(formatIntoZeroPatchedChapterNumber(i, 2));
-    }
-  }
-  // build 3 digit file name set
-  else if (max < 1000) {
-    for (int i = min; i <= max; i++) {
-      fs.insert(formatIntoZeroPatchedChapterNumber(i, 3));
-    }
+  auto numberOfDigits = static_cast<int>(log10(maxValue)) + 1;
+  for (int i = minValue; i <= maxValue; i++) {
+    fs.insert(
+        formatIntoZeroPatchedChapterNumber(i, max(digits, numberOfDigits)));
   }
   return fs;
 }

@@ -1,15 +1,16 @@
 #include "linkFix.hpp"
 #include "numbering.hpp"
 #include "test.hpp"
+#include "tools.hpp"
 
 int main(int argc, char **argv) {
   // change this number to run different functions
-  int num = 1;
+  //  int num = 1;
   //	  int num = 2;
   //  int num = 3;
   //	  int num = 4;
   //  int num = 5;
-  //  int num = 11;
+  int num = 12;
   switch (num) {
   case 1:
     numberJPMHtmls(false);
@@ -44,6 +45,9 @@ int main(int argc, char **argv) {
     break;
   case 11:
     testFunctions(14);
+    break;
+  case 12:
+    tools(2);
     break;
   default:
     cout << "nothing gets executed." << endl;
