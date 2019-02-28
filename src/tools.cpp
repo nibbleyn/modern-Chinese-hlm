@@ -383,6 +383,83 @@ void fixHeaderAndFooterForJPMHtmls() {
   cout << "fixHeaderAndFooter for JPM Htmls finished. " << endl;
 }
 
+void CoupledBodyText::fixPersonalView() {
+  setInputOutputFiles();
+  ifstream infile(m_inputFile);
+  if (!infile) {
+    cout << "file doesn't exist:" << m_inputFile << endl;
+    return;
+  }
+  ofstream outfile(m_outputFile);
+  string inLine{"not found"};
+  bool unpairFound{false};
+  while (!infile.eof()) // To get all the lines.
+  {
+    getline(infile, inLine); // Saves the line in inLine.
+    if (debug >= LOG_INFO)
+      cout << inLine << endl;
+    if ((inLine == brTab + "\r") or (inLine == brTab + "\n") or
+        (inLine == brTab + "\r\n")) {
+      outfile << inLine << endl;
+      continue;
+    }
+
+    LineNumber ln;
+    ln.loadFirstFromContainedLine(inLine);
+    // assume only one unpaired personalComment
+    auto personalCommentBegin = inLine.find(personalCommentStartChars);
+    auto personalCommentEnd = inLine.find(personalCommentEndChars);
+    if (unpairFound == true) {
+      if (ln.valid()) // remove old line number
+      {
+        removeOldLineNumber(inLine);
+      }
+      removeNbspsAndSpaces(inLine);
+      inLine = ln.getWholeString() + doubleSpace + displaySpace +
+               personalCommentStartChars + personalCommentStartRestChars +
+               endOfPersonalCommentBeginTag + inLine;
+      if (personalCommentEnd != string::npos) {
+        unpairFound = false;
+      } else {
+        const string endOfLineBr = R"(<br>)";
+        if (inLine.find(endOfLineBr) != string::npos)
+          inLine.replace(inLine.find(endOfLineBr), endOfLineBr.length(),
+                         personalCommentEndChars + endOfLineBr);
+      }
+      cout << inLine << endl;
+    } else if (personalCommentBegin != string::npos and
+               personalCommentEnd == string::npos) {
+      unpairFound = true;
+      const string endOfLineBr = R"(<br>)";
+      if (inLine.find(endOfLineBr) != string::npos)
+        inLine.replace(inLine.find(endOfLineBr), endOfLineBr.length(),
+                       personalCommentEndChars + endOfLineBr);
+    }
+    outfile << inLine << endl;
+  }
+}
+
+void fixPersonalViewForJPMHtmls() {
+  int minTarget = 1, maxTarget = 100;
+  CoupledContainer container(FILE_TYPE::JPM);
+  for (const auto &file : buildFileSet(minTarget, maxTarget, 3)) {
+    container.setFileAndAttachmentNumber(file);
+    container.dissembleFromHTM();
+  }
+  for (const auto &file : buildFileSet(minTarget, maxTarget, 3)) {
+    CoupledBodyText bodyText;
+    bodyText.setFilePrefixFromFileType(FILE_TYPE::JPM);
+    bodyText.setFileAndAttachmentNumber(file);
+    bodyText.fixPersonalView();
+  }
+  CoupledBodyText::loadBodyTextsFromFixBackToOutput();
+  for (const auto &file : buildFileSet(minTarget, maxTarget, 3)) {
+    container.setFileAndAttachmentNumber(file);
+    container.assembleBackToHTM();
+  }
+  cout << "fixPersonalView for JPM Htmls finished. " << endl;
+}
+
 void fixHeaderAndFooterForMainHtml(int minTarget, int maxTarget) {
   CoupledContainer container(FILE_TYPE::MAIN);
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
@@ -397,6 +474,50 @@ void fixHeaderAndFooterForMainHtmls() {
   cout << "fixHeaderAndFooter for Main Htmls finished. " << endl;
 }
 
+void fixHeaderAndFooterForAttachmentHtml(int minTarget, int maxTarget,
+                                         int minAttachNo, int maxAttachNo) {
+  vector<int> targetAttachments;
+  bool overAllAttachments = true;
+  if (not(minAttachNo == 0 and maxAttachNo == 0) and
+      minAttachNo <= maxAttachNo) {
+    for (int i = maxAttachNo; i >= minAttachNo; i--)
+      targetAttachments.push_back(i);
+    overAllAttachments = false;
+  }
+  CoupledContainer container(FILE_TYPE::ATTACHMENT);
+  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
+    if (overAllAttachments == true)
+      targetAttachments =
+          getAttachmentFileListForChapter(file, HTML_SRC_ATTACHMENT);
+    for (const auto &attNo : targetAttachments) {
+      container.setFileAndAttachmentNumber(file, attNo);
+      container.makeSingleLineHeaderAndFooter();
+    }
+  }
+}
+
+void fixHeaderAndFooterForAttachmentHtmls() {
+  int minTarget = 1, maxTarget = 80;
+  int minAttachNo = 1, maxAttachNo = 50;
+  fixHeaderAndFooterForAttachmentHtml(minTarget, maxTarget, minAttachNo,
+                                      maxAttachNo);
+  cout << "fixHeaderAndFooter for Attachment Htmls finished. " << endl;
+}
+
+void fixHeaderAndFooterForOriginalHtml(int minTarget, int maxTarget) {
+  CoupledContainer container(FILE_TYPE::ORIGINAL);
+  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
+    container.setFileAndAttachmentNumber(file);
+    container.makeSingleLineHeaderAndFooter();
+  }
+}
+
+void fixHeaderAndFooterForOriginalHtmls() {
+  int minTarget = 1, maxTarget = 80;
+  fixHeaderAndFooterForOriginalHtml(minTarget, maxTarget);
+  cout << "fixHeaderAndFooter for Original Htmls finished. " << endl;
+}
+
 void tools(int num) {
   SEPERATE("HLM tool", " started ");
   switch (num) {
@@ -405,6 +526,15 @@ void tools(int num) {
     break;
   case 2:
     fixHeaderAndFooterForMainHtmls();
+    break;
+  case 3:
+    fixHeaderAndFooterForOriginalHtmls();
+    break;
+  case 4:
+    fixHeaderAndFooterForAttachmentHtmls();
+    break;
+  case 5:
+    fixPersonalViewForJPMHtmls();
     break;
   default:
     cout << "invalid tool." << endl;

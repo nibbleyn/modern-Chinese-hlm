@@ -49,6 +49,9 @@ static const string lineNumberIdBeginChars =
 static const string topIdBeginChars = R"(id="top")"; // of the body Text file
 static const string bottomIdBeginChars =
     R"(id="bottom")"; // of the body Text file
+
+static const string brTab = "<br>"; // start and end of each LINE
+
 static const string keyNotFound = R"(KeyNotFound)";
 static const string attachmentFileMiddleChar = R"(_)";
 

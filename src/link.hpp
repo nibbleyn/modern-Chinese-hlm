@@ -269,6 +269,8 @@ private:
 
 static const string personalCommentStartChars = R"(<u unhidden)";
 static const string personalCommentEndChars = R"(</u>)";
+static const string personalCommentStartRestChars =
+    R"( style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4)";
 static const string endOfPersonalCommentBeginTag = R"(">)";
 
 class PersonalComment : public Object {

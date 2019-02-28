@@ -164,7 +164,7 @@ void numberJPMHtmls(bool forceUpdate, bool hidden) {
 
 void numberAttachmentHtmls(bool forceUpdate, bool hidden) {
   int minTarget = 1, maxTarget = 80;
-  int minAttachNo = 0, maxAttachNo = 50;
+  int minAttachNo = 1, maxAttachNo = 50;
   NumberingAttachmentHtml(minTarget, maxTarget, minAttachNo, maxAttachNo,
                           forceUpdate, hidden);
   cout << "Numbering Attachment Html finished. " << endl;

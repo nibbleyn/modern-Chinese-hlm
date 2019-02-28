@@ -221,6 +221,26 @@ CoupledBodyText::ParaStruct CoupledBodyText::getNumberOfPara() {
   return std::make_tuple(first, middle, last);
 }
 
+void CoupledBodyText::removeNbspsAndSpaces(string &inLine) {
+  // remove existing nbsps and spaces
+  auto iterBegin = inLine.begin();
+  while (iterBegin < inLine.end()) {
+    if (*iterBegin == displaySpace.at(0))
+      ++iterBegin;
+    else if (*iterBegin == space.at(0) and
+             (iterBegin + space.length() < inLine.end()) and
+             (std::string(iterBegin, iterBegin + space.length()) == space)) {
+      iterBegin += space.length();
+    } else
+      break;
+  }
+  inLine = std::string(iterBegin, inLine.end());
+}
+
+void CoupledBodyText::removeOldLineNumber(string &inLine) {
+  auto linkEnd = inLine.find(LineNumberEnd);
+  inLine = inLine.substr(linkEnd + LineNumberEnd.length());
+}
 /**
  * add following line name with a name of lineNumber
  * before each line
@@ -300,9 +320,8 @@ void CoupledBodyText::addLineNumber(const string &separatorColor,
 
   enum class STATE { EXPECT_MIDDLE_PARA_HEADER, LINEFOUND, LINECOMPLETED };
   STATE state = STATE::EXPECT_MIDDLE_PARA_HEADER;
-  int para = 1;          // paragraph index
-  int lineNo = 1;        // LINE index within each group
-  string brTab = "<br>"; // start and end of each LINE
+  int para = 1;   // paragraph index
+  int lineNo = 1; // LINE index within each group
   bool enterLastPara = (numberOfMiddleParaHeader == 0);
   while (!infile.eof()) {
     getline(infile, inLine); // Saves the line in inLine.
@@ -368,23 +387,9 @@ void CoupledBodyText::addLineNumber(const string &separatorColor,
       if (forceUpdate or not ln.equal(newLn)) {
         if (ln.valid()) // remove old line number
         {
-          auto linkEnd = inLine.find(LineNumberEnd);
-          inLine = inLine.substr(linkEnd + 4);
+          removeOldLineNumber(inLine);
         }
-        // remove existing nbsps and spaces
-        auto iterBegin = inLine.begin();
-        while (iterBegin < inLine.end()) {
-          if (*iterBegin == displaySpace.at(0))
-            ++iterBegin;
-          else if (*iterBegin == space.at(0) and
-                   (iterBegin + space.length() < inLine.end()) and
-                   (std::string(iterBegin, iterBegin + space.length()) ==
-                    space)) {
-            iterBegin += space.length();
-          } else
-            break;
-        }
-        inLine = std::string(iterBegin, inLine.end());
+        removeNbspsAndSpaces(inLine);
         outfile << newLn.getWholeString() << doubleSpace << displaySpace
                 << inLine << endl; // Prints our line
       } else

@@ -66,6 +66,7 @@ public:
   void fixTagPairEnd(const string &signOfTagBeforeReplaceTag,
                      const string &from, const string &to,
                      const string &skipTagPairBegin = "");
+  void fixPersonalView();
 
 protected:
   string m_filePrefix{"Main"};
@@ -80,6 +81,8 @@ protected:
   bool m_autoNumbering{false};
 
   void setInputOutputFiles();
+  void removeNbspsAndSpaces(string &inLine);
+  void removeOldLineNumber(string &inLine);
 };
 
 void testSearchTextIsOnlyPartOfOtherKeys();
