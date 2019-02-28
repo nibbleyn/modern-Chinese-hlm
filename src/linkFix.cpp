@@ -3,17 +3,11 @@
 fileSet keyMissingChapters;
 fileSet newAttachmentList;
 
-/**
- *
- */
 void clearReport() {
   keyMissingChapters.clear();
   newAttachmentList.clear();
 }
 
-/**
- *
- */
 void displayMainFilesOfMissingKey() {
   if (keyMissingChapters.empty())
     return;
@@ -23,9 +17,6 @@ void displayMainFilesOfMissingKey() {
   }
 }
 
-/**
- *
- */
 void displayNewlyAddedAttachments() {
   if (newAttachmentList.empty())
     return;
@@ -97,13 +88,6 @@ void fixReturnLinkForAttachmentFile(const string &referFile,
   }
 }
 
-/**
- *
- * @param minTarget
- * @param maxTarget
- * @param minReference
- * @param maxReference
- */
 void fixMainLinks(int minTarget, int maxTarget, int minReference,
                   int maxReference) {
   for (const auto &file :
@@ -113,23 +97,9 @@ void fixMainLinks(int minTarget, int maxTarget, int minReference,
     bodyText.setFilePrefixFromFileType(FILE_TYPE::MAIN);
     bodyText.setFileAndAttachmentNumber(file);
     bodyText.fixLinksFromFile(buildFileSet(minReference, maxReference));
-    bool fixTag = false;
-    if (fixTag) {
-      bodyText.fixTagPairBegin(R"(</strong>)", R"(<b unhidden>)",
-                               R"(<strong>)");
-      bodyText.fixTagPairEnd(R"(<samp)", R"(</font>)", R"(</samp>)");
-      bodyText.fixTagPairEnd(R"(见左图)", R"(</font>)", R"(</var>)");
-      bodyText.fixTagPairEnd(R"(<cite>)", keyEndChars, R"(</cite>)",
-                             keyStartChars);
-    }
   }
 }
 
-/**
- *
- * @param minTarget
- * @param maxTarget
- */
 void fixReturnLinkForAttachments(int minTarget, int maxTarget) {
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     auto targetAttachments =
@@ -221,15 +191,6 @@ void generateContentIndexTableForAttachments() {
   cout << "result is in file " << container.getOutputFilePath() << endl;
 }
 
-/**
- *
- * @param minTarget
- * @param maxTarget
- * @param minReference
- * @param maxReference
- * @param minAttachNo
- * @param maxAttachNo
- */
 void fixLinksToMainForAttachments(int minTarget, int maxTarget,
                                   int minReference, int maxReference,
                                   int minAttachNo, int maxAttachNo) {
@@ -254,15 +215,6 @@ void fixLinksToMainForAttachments(int minTarget, int maxTarget,
   }
 }
 
-/**
- *
- * @param minTarget
- * @param maxTarget
- * @param minReference
- * @param maxReference
- * @param minAttachNo
- * @param maxAttachNo
- */
 void fixAttachments(int minTarget, int maxTarget, int minReference,
                     int maxReference, int minAttachNo, int maxAttachNo) {
   CoupledContainer container(FILE_TYPE::ATTACHMENT);
@@ -292,11 +244,6 @@ void fixLinksFromAttachment() {
   cout << "fixLinksFromAttachment finished. " << endl;
 }
 
-/**
- *
- * @param minTarget
- * @param maxTarget
- */
 void removePersonalViewpoints(int minTarget, int maxTarget,
                               FILE_TYPE fileType) {
   cout << "to be implemented." << endl;
@@ -319,17 +266,6 @@ void addImageBackForManualNumbering() {}
 void testRemovePersonalViewpoints() {
   int minTarget = 54, maxTarget = 54;
   removePersonalViewpoints(minTarget, maxTarget, FILE_TYPE::MAIN);
-}
-
-void testfixTagPairEnd() {
-  CoupledBodyTextWithLink bodyText;
-  bodyText.setFilePrefixFromFileType(FILE_TYPE::MAIN);
-  bodyText.setFileAndAttachmentNumber("91");
-  bodyText.fixTagPairBegin(R"(</strong>)", R"(<b unhidden>)",
-                           R"(<strong>)");
-  bodyText.fixTagPairEnd(R"(<samp)", R"(</font>)", R"(</samp>)");
-  bodyText.fixTagPairEnd(R"(<cite>)", keyEndChars, R"(</cite>)", keyStartChars);
-  bodyText.fixTagPairEnd(R"(见左图)", R"(</font>)", R"(</var>)");
 }
 
 void testContainer() {

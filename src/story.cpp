@@ -1,8 +1,5 @@
 #include "story.hpp"
-/**
- *
- * @param fs
- */
+
 void dispalyLinkRange(LinkRange fs) {
   for (const auto &link : fs) {
     cout << link.first << "   " << link.second << endl;
