@@ -202,10 +202,6 @@ void fixLinksFromAttachment() {
   cout << "fixLinksFromAttachment finished. " << endl;
 }
 
-void removeImageForAutoNumbering() {}
-
-void addImageBackForManualNumbering() {}
-
 void testListContainer() {
   ListContainer container("1_gen");
   auto link = fixLinkFromMainTemplate(
@@ -231,9 +227,13 @@ void testListContainer() {
 void testTableContainer() {
   TableContainer container("2_gen");
   container.initBodyTextFile();
+  container.appendLeftParagraphInBodyText("line1-left");
+  container.appendRightParagraphInBodyText("line1-right");
+  container.appendLeftParagraphInBodyText("line2-left");
+  container.appendRightParagraphInBodyText(""); // if only 3 is added, patch last right part
   container.finishBodyTextFile();
   container.assembleBackToHTM("content index table", "content");
-  cout << "result is in file " << container.getOutputFilePath() << endl;
+  cout << "result is in file: " << container.getOutputFilePath() << endl;
 }
 
 void testContainer(int num) {
@@ -246,6 +246,6 @@ void testContainer(int num) {
     testTableContainer();
     break;
   default:
-    cout << "invalid tool." << endl;
+    cout << "invalid test." << endl;
   }
 }

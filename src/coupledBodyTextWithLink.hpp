@@ -13,6 +13,9 @@ public:
                         int minLine = 0, int maxLine = 0);
 
   void removePersonalCommentsOverNumberedFiles();
+  void removeImageForAutoNumbering() {}
+  void addImageBackForManualNumbering() {}
+
   int sizeAfterRendering(const string &lineStr);
 
 private:
