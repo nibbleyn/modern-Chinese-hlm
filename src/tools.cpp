@@ -215,7 +215,7 @@ void CoupledBodyText::fixTagPairEnd(const string &signOfTagBeforeReplaceTag,
   }
 }
 
-void testfixTagPairEnd() {
+void fixTagPairEnd() {
   CoupledBodyTextWithLink bodyText;
   bodyText.setFilePrefixFromFileType(FILE_TYPE::MAIN);
   bodyText.setFileAndAttachmentNumber("91");
@@ -589,6 +589,26 @@ void autoSplitBodyText(const string &fileType) {
              sampleWholeLine);
 }
 
+void removePersonalViewpoints(int minTarget, int maxTarget,
+                              FILE_TYPE fileType) {
+  cout << "to be implemented." << endl;
+  cout << "to remove <u> pairs." << endl;
+  cout << "and to remove personal attachment link." << endl;
+  for (const auto &file :
+       buildFileSet(minTarget, maxTarget)) // files need to be fixed
+  {
+    CoupledBodyTextWithLink bodyText;
+    bodyText.setFilePrefixFromFileType(fileType);
+    bodyText.setFileAndAttachmentNumber(file);
+    bodyText.removePersonalCommentsOverNumberedFiles();
+  }
+}
+
+void removePersonalViewpoints() {
+  int minTarget = 54, maxTarget = 54;
+  removePersonalViewpoints(minTarget, maxTarget, FILE_TYPE::MAIN);
+}
+
 void tools(int num) {
   SEPERATE("HLM tool", " started ");
   switch (num) {
@@ -624,6 +644,12 @@ void tools(int num) {
     break;
   case 11:
     ConvertNonPrefixedGb2312FilesToUtf8();
+    break;
+  case 12:
+    removePersonalViewpoints();
+    break;
+  case 13:
+    fixTagPairEnd();
     break;
   default:
     cout << "invalid tool." << endl;

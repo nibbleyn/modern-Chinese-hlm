@@ -202,31 +202,11 @@ void fixLinksFromAttachment() {
   cout << "fixLinksFromAttachment finished. " << endl;
 }
 
-void removePersonalViewpoints(int minTarget, int maxTarget,
-                              FILE_TYPE fileType) {
-  cout << "to be implemented." << endl;
-  cout << "to remove <u> pairs." << endl;
-  cout << "and to remove personal attachment link." << endl;
-  for (const auto &file :
-       buildFileSet(minTarget, maxTarget)) // files need to be fixed
-  {
-    CoupledBodyTextWithLink bodyText;
-    bodyText.setFilePrefixFromFileType(fileType);
-    bodyText.setFileAndAttachmentNumber(file);
-    bodyText.removePersonalCommentsOverNumberedFiles();
-  }
-}
-
 void removeImageForAutoNumbering() {}
 
 void addImageBackForManualNumbering() {}
 
-void testRemovePersonalViewpoints() {
-  int minTarget = 54, maxTarget = 54;
-  removePersonalViewpoints(minTarget, maxTarget, FILE_TYPE::MAIN);
-}
-
-void testContainer() {
+void testListContainer() {
   ListContainer container("1_gen");
   auto link = fixLinkFromMainTemplate(
       "", "80", LINK_DISPLAY_TYPE::UNHIDDEN, "菱角菱花",
@@ -246,4 +226,26 @@ void testContainer() {
   container.appendParagraphInBodyText("18 links are found.");
   container.assembleBackToHTM("test", "test container");
   cout << "result is in file " << container.getOutputFilePath() << endl;
+}
+
+void testTableContainer() {
+  TableContainer container("2_gen");
+  container.initBodyTextFile();
+  container.finishBodyTextFile();
+  container.assembleBackToHTM("content index table", "content");
+  cout << "result is in file " << container.getOutputFilePath() << endl;
+}
+
+void testContainer(int num) {
+  SEPERATE("testContainer", " started ");
+  switch (num) {
+  case 1:
+    testListContainer();
+    break;
+  case 2:
+    testTableContainer();
+    break;
+  default:
+    cout << "invalid tool." << endl;
+  }
 }

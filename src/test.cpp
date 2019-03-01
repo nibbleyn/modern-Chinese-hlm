@@ -24,7 +24,7 @@ void testFunctions(int num) {
     testAttachmentOperations();
     break;
   case 5:
-    testContainer();
+    testContainer(2);
     break;
   case 6:
     testConstructSubStory();
@@ -33,21 +33,15 @@ void testFunctions(int num) {
     testFindFirstInFiles();
     break;
   case 8:
-    testRemovePersonalViewpoints();
-    break;
-  case 10:
-    testfixTagPairEnd();
-    break;
-  case 11:
     testPoem();
     break;
-  case 12:
+  case 9:
     testSpace();
     break;
-  case 13:
+  case 10:
     testImageReference();
     break;
-  case 14:
+  case 11:
     testMixedObjects();
     break;
   default:

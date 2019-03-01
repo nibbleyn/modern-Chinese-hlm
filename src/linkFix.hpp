@@ -8,6 +8,4 @@ void fixLinksFromMain();
 // link fixing for attachment files
 void fixLinksFromAttachment();
 
-void testContainer();
-void testRemovePersonalViewpoints();
-void testfixTagPairEnd();
+void testContainer(int num);
