@@ -40,14 +40,11 @@ int main(int argc, char **argv) {
   case 9:
     numberAttachmentHtmls(false, true);
     break;
-  case 10:
-    generateContentIndexTableForAttachments();
-    break;
   case 11:
     testFunctions(14);
     break;
   case 12:
-    tools(2);
+    tools(11);
     break;
   default:
     cout << "nothing gets executed." << endl;

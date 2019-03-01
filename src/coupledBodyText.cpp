@@ -41,8 +41,6 @@ void CoupledBodyText::loadBodyTextsFromFixBackToOutput() {
   Poco::File(BODY_TEXT_FIX).list(filenameList);
   sort(filenameList.begin(), filenameList.end(), less<string>());
   for (const auto &file : filenameList) {
-    if (debug >= LOG_INFO)
-      cout << "loading " << file << ".. " << endl;
     Poco::File fileToCopy(BODY_TEXT_FIX + file);
     fileToCopy.copyTo(BODY_TEXT_OUTPUT + file);
   }
@@ -318,8 +316,7 @@ void CoupledBodyText::addLineNumber(const string &separatorColor,
     outfile << line << endl;
   }
 
-  enum class STATE { EXPECT_MIDDLE_PARA_HEADER, LINEFOUND, LINECOMPLETED };
-  STATE state = STATE::EXPECT_MIDDLE_PARA_HEADER;
+  bool expectAnotherHalf = false;
   int para = 1;   // paragraph index
   int lineNo = 1; // LINE index within each group
   bool enterLastPara = (numberOfMiddleParaHeader == 0);
@@ -339,97 +336,72 @@ void CoupledBodyText::addLineNumber(const string &separatorColor,
       }
     }
 
-    // can keep STATE::EXPECT_MIDDLE_PARA_HEADER or enter STATE::LINEFOUND
-    if (state == STATE::EXPECT_MIDDLE_PARA_HEADER) {
-      if (ln.isParagraphHeader()) {
-        if (debug >= LOG_INFO)
-          cout << "paragraph header found as:" << ln.asString() << endl;
+    if (ln.isParagraphHeader()) {
+      if (debug >= LOG_INFO)
+        cout << "paragraph header found as:" << ln.asString() << endl;
 
-        if (para == numberOfMiddleParaHeader) {
-          enterLastPara = true;
-          outfile << fixMiddleParaHeaderFromTemplate(
-                         LineNumber::getStartNumber(), para++, separatorColor,
-                         hidden, true)
-                  << endl;
-        } else
-          outfile << fixMiddleParaHeaderFromTemplate(
-                         LineNumber::getStartNumber(), para++, separatorColor,
-                         hidden, false)
-                  << endl;
-        lineNo = 1; // LINE index within each group
-        continue;
-      }
-      // search for LINE start
-      if (inLine.find(brTab) != string::npos) {
-        state = STATE::LINEFOUND; // the LINE start
-      }
-      // also incl. non-LINE start line
+      if (para == numberOfMiddleParaHeader) {
+        enterLastPara = true;
+        outfile << fixMiddleParaHeaderFromTemplate(LineNumber::getStartNumber(),
+                                                   para++, separatorColor,
+                                                   hidden, true)
+                << endl;
+      } else
+        outfile << fixMiddleParaHeaderFromTemplate(LineNumber::getStartNumber(),
+                                                   para++, separatorColor,
+                                                   hidden, false)
+                << endl;
+      lineNo = 1; // LINE index within each group
+      expectAnotherHalf = false;
+      continue;
+    }
+
+    if (isEmptyLine(inLine)) {
+      if (debug >= LOG_INFO)
+        cout << "processed empty line." << inLine << endl;
       outfile << inLine << endl;
       continue;
     }
 
-    // can only enter STATE::LINECOMPLETED,
-    // otherwise a line error reported and abort
-    if (state == STATE::LINEFOUND) {
-      if (ln.isParagraphHeader() or
-          inLine.find(brTab) ==
-              string::npos) // search for LINE end, even an empty line
-      {
-        cout << "wrong without " << brTab
+    if (expectAnotherHalf) {
+      if (isLeadingBr(inLine)) {
+        if (debug >= LOG_INFO)
+          cout << "processed :" << inLine << endl;
+        outfile << inLine << endl;
+        // still expectAnotherHalf
+        continue;
+      }
+      if (hasEndingBr(inLine)) {
+        LineNumber newLn(para, lineNo);
+        if (forceUpdate or not ln.equal(newLn)) {
+          if (ln.valid()) // remove old line number
+          {
+            removeOldLineNumber(inLine);
+          }
+          removeNbspsAndSpaces(inLine);
+          outfile << newLn.getWholeString() << doubleSpace << displaySpace
+                  << inLine << endl; // Prints our line
+        } else
+          outfile << inLine << endl;
+        if (debug >= LOG_INFO)
+          cout << "processed :" << inLine << endl;
+        lineNo++;
+        expectAnotherHalf = false;
+        continue;
+      }
+    } else {
+      // must followed by a leading BR
+      if (isLeadingBr(inLine)) {
+        outfile << inLine << endl;
+        expectAnotherHalf = true;
+      } else {
+        cout << "expectAnotherHalf: " << expectAnotherHalf
+             << " wrong without leading " << brTab
              << " at line: " << TurnToString(para) + "." + TurnToString(lineNo)
              << " of file: " << m_inputFile << "content: " << inLine << endl;
         exit(1);
         break;
       }
-      if (debug >= LOG_INFO)
-        cout << "processing paragraph:" << para << " line: " << lineNo << endl;
-      LineNumber newLn(para, lineNo);
-      if (forceUpdate or not ln.equal(newLn)) {
-        if (ln.valid()) // remove old line number
-        {
-          removeOldLineNumber(inLine);
-        }
-        removeNbspsAndSpaces(inLine);
-        outfile << newLn.getWholeString() << doubleSpace << displaySpace
-                << inLine << endl; // Prints our line
-      } else
-        outfile << inLine << endl;
-      if (debug >= LOG_INFO)
-        cout << "processed :" << inLine << endl;
-      lineNo++;
-      state = STATE::LINECOMPLETED;
-      continue;
-    }
-
-    // can enter STATE::LINEFOUND or STATE::EXPECT_MIDDLE_PARA_HEADER
-    if (state == STATE::LINECOMPLETED) {
-      if (ln.isParagraphHeader()) {
-        if (debug >= LOG_INFO)
-          cout << "paragraph header found as:" << ln.asString() << endl;
-
-        if (para == numberOfMiddleParaHeader) {
-          enterLastPara = true;
-          outfile << fixMiddleParaHeaderFromTemplate(
-                         LineNumber::getStartNumber(), para++, separatorColor,
-                         hidden, true)
-                  << endl;
-        } else {
-          outfile << fixMiddleParaHeaderFromTemplate(
-                         LineNumber::getStartNumber(), para++, separatorColor,
-                         hidden, false)
-                  << endl;
-          state = STATE::EXPECT_MIDDLE_PARA_HEADER;
-        }
-        lineNo = 1; // LINE index within each group
-        continue;
-      }
-      if (inLine.find(brTab) != string::npos) // another LINE start
-      {
-        state = STATE::LINEFOUND;
-      }
-      // also incl. non-LINE start
-      outfile << inLine << endl;
-      continue;
     }
   }
   if (debug >= LOG_INFO)

@@ -35,9 +35,6 @@ void testFunctions(int num) {
   case 8:
     testRemovePersonalViewpoints();
     break;
-  case 9:
-    testConvertToUtf8();
-    break;
   case 10:
     testfixTagPairEnd();
     break;

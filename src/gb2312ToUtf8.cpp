@@ -6,15 +6,8 @@
 using Poco::Process;
 using Poco::ProcessHandle;
 
-static const string HTML_OUTPUT_MAIN = "utf8HTML/output/";
-static const string HTML_OUTPUT_ATTACHMENT = "utf8HTML/output/attachment/";
-
 /**
- * convert gb2312 format FILE_TYPE::MAIN files to utf8 format
- * @param referFile
- * @param format
- * @param type
- * @param attachNo
+ * all files are converted from GB2312_HTML_SRC whatever type is
  */
 void convertFromGB2312ToUtf8(string referFile, string format, FILE_TYPE type,
                              int attachNo) {
@@ -35,6 +28,10 @@ void convertFromGB2312ToUtf8(string referFile, string format, FILE_TYPE type,
     outputFile = HTML_OUTPUT_MAIN;
     if (type == FILE_TYPE::ATTACHMENT)
       outputFile = HTML_OUTPUT_ATTACHMENT;
+    if (type == FILE_TYPE::ORIGINAL)
+      outputFile = HTML_OUTPUT_ORIGINAL;
+    if (type == FILE_TYPE::JPM)
+      outputFile = HTML_OUTPUT_JPM;
     outputFile +=
         getHtmlFileNamePrefix(type) + referFile + attachmentPart + HTML_SUFFIX;
     cout << outputFile << endl;
@@ -42,11 +39,6 @@ void convertFromGB2312ToUtf8(string referFile, string format, FILE_TYPE type,
   convertFromGB2312ToUtf8(inputFile, outputFile);
 }
 
-/**
- *
- * @param inputFile
- * @param outputFile
- */
 void convertFromGB2312ToUtf8(string inputFile, string outputFile) {
   cout << inputFile << endl;
   string cmd("iconv");
@@ -65,9 +57,33 @@ void convertFromGB2312ToUtf8(string inputFile, string outputFile) {
   Poco::StreamCopier::copyStream(istr, ostr);
 }
 
-/**
- *
- */
+void convertNonPrefixedAttachmentFilesFromGB2312ToUtf8() {
+  string inputFile{""}, outputFile{""};
+  inputFile = GB2312_HTML_SRC + "b00001_1.htm";
+  outputFile = HTML_OUTPUT_ATTACHMENT + "b00001_1.htm";
+  convertFromGB2312ToUtf8(inputFile, outputFile);
+}
+
+void convertNonPrefixedMainFilesFromGB2312ToUtf8() {
+  string inputFile{""}, outputFile{""};
+  inputFile = GB2312_HTML_SRC + "a00001.htm";
+  outputFile = HTML_OUTPUT_MAIN + "a00001.htm";
+  convertFromGB2312ToUtf8(inputFile, outputFile);
+  inputFile = GB2312_HTML_SRC + "a0001.htm";
+  outputFile = HTML_OUTPUT_MAIN + "a0001.htm";
+  convertFromGB2312ToUtf8(inputFile, outputFile);
+}
+
+void convertNonPrefixedOriginalFilesFromGB2312ToUtf8() {
+  string inputFile{""}, outputFile{""};
+  inputFile = GB2312_HTML_SRC + "c00001.htm";
+  outputFile = HTML_OUTPUT_ORIGINAL + "c00001.htm";
+  convertFromGB2312ToUtf8(inputFile, outputFile);
+  inputFile = GB2312_HTML_SRC + "c0001.htm";
+  outputFile = HTML_OUTPUT_ORIGINAL + "c0001.htm";
+  convertFromGB2312ToUtf8(inputFile, outputFile);
+}
+
 void convertMainMenuFromGB2312ToUtf8() {
   string inputFile{""}, outputFile{""};
   inputFile = GB2312_HTML_SRC + "aindex.htm";
@@ -75,9 +91,6 @@ void convertMainMenuFromGB2312ToUtf8() {
   convertFromGB2312ToUtf8(inputFile, outputFile);
 }
 
-/**
- *
- */
 void convertAttachmentMainMenuFromGB2312ToUtf8() {
   string inputFile{""}, outputFile{""};
   inputFile = GB2312_HTML_SRC + "bttindex0.htm";
@@ -88,50 +101,26 @@ void convertAttachmentMainMenuFromGB2312ToUtf8() {
   convertFromGB2312ToUtf8(inputFile, outputFile);
 }
 
-/**
- *
- * @param minTarget
- * @param maxTarget
- */
 void gb2312FixMain(int minTarget, int maxTarget) {
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     convertFromGB2312ToUtf8(file, "htm", FILE_TYPE::MAIN);
   }
 }
 
-/**
- *
- * @param minTarget
- * @param maxTarget
- */
 void gb2312FixOriginal(int minTarget, int maxTarget) {
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
-    string inputFile = GB2312_HTML_SRC + "original/" +
-                       getHtmlFileNamePrefix(FILE_TYPE::MAIN) + file +
-                       HTML_SUFFIX;
-    string outputFile = "utf8HTML/original/" +
-                        getHtmlFileNamePrefix(FILE_TYPE::MAIN) + file +
-                        HTML_SUFFIX;
-    convertFromGB2312ToUtf8(inputFile, outputFile);
+    convertFromGB2312ToUtf8(file, "htm", FILE_TYPE::ORIGINAL);
   }
 }
 
-/**
- *
- */
-void gb2312FixJPM() {
-  for (int i = 1; i <= 100; i++) {
+void gb2312FixJPM(int minTarget, int maxTarget) {
+  for (int i = minTarget; i <= maxTarget; i++) {
     string inputFile = GB2312_HTML_SRC + "JPM/" + TurnToString(i) + HTML_SUFFIX;
-    string outputFile = "utf8HTML/JPM/" + TurnToString(i) + HTML_SUFFIX;
+    string outputFile = HTML_OUTPUT_JPM + TurnToString(i) + HTML_SUFFIX;
     convertFromGB2312ToUtf8(inputFile, outputFile);
   }
 }
 
-/**
- *
- * @param minTarget
- * @param maxTarget
- */
 void gb2312FixAttachment(int minTarget, int maxTarget) {
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     auto attList = getAttachmentFileListForChapter(file, GB2312_HTML_SRC);
@@ -140,18 +129,15 @@ void gb2312FixAttachment(int minTarget, int maxTarget) {
   }
 }
 
-/**
- *
- */
-void convertAllFromGb2312ToUtf8() {
+void ConvertPrefixedGb2312FilesToUtf8() {
   gb2312FixMain(1, 80);
   gb2312FixAttachment(1, 80);
-  convertAttachmentMainMenuFromGB2312ToUtf8();
-  convertMainMenuFromGB2312ToUtf8();
+  gb2312FixJPM(1, 100);
+  gb2312FixOriginal(1, 80);
 }
 
-void testConvertToUtf8() {
-  convertAllFromGb2312ToUtf8();
-  gb2312FixJPM();
-  gb2312FixOriginal(1, 80);
+void ConvertNonPrefixedGb2312FilesToUtf8() {
+  convertNonPrefixedAttachmentFilesFromGB2312ToUtf8();
+  convertNonPrefixedMainFilesFromGB2312ToUtf8();
+  convertNonPrefixedOriginalFilesFromGB2312ToUtf8();
 }

@@ -17,71 +17,6 @@ void addLineNumbers(int minTarget, int maxTarget, FILE_TYPE targetFileType,
 }
 
 /**
- * Numbering a set of JPM Html files
- * @param minTarget starting from this file
- * @param maxTarget until this file
- */
-void NumberingJPMHtml(int minTarget, int maxTarget, bool forceUpdate = true,
-                      bool hidden = false) {
-  CoupledContainer container(FILE_TYPE::JPM);
-  //  CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
-  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
-    container.setFileAndAttachmentNumber(file);
-    container.dissembleFromHTM();
-  }
-  addLineNumbers(minTarget, maxTarget, FILE_TYPE::JPM, forceUpdate, hidden);
-  CoupledBodyText::loadBodyTextsFromFixBackToOutput();
-  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
-    container.setFileAndAttachmentNumber(file);
-    container.assembleBackToHTM();
-  }
-}
-
-/**
- * Numbering a set of original Html files
- * @param minTarget starting from this file
- * @param maxTarget until this file
- */
-void NumberingOriginalHtml(int minTarget, int maxTarget,
-                           bool forceUpdate = true, bool hidden = false) {
-  CoupledContainer container(FILE_TYPE::ORIGINAL);
-  CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
-  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
-    container.setFileAndAttachmentNumber(file);
-    container.dissembleFromHTM();
-  }
-  addLineNumbers(minTarget, maxTarget, FILE_TYPE::ORIGINAL, forceUpdate,
-                 hidden);
-  CoupledBodyText::loadBodyTextsFromFixBackToOutput();
-  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
-    container.setFileAndAttachmentNumber(file);
-    container.assembleBackToHTM();
-  }
-}
-
-/**
- * Numbering a set of Main Html files
- * @param minTarget starting from this file
- * @param maxTarget until this file
- */
-void NumberingMainHtml(int minTarget, int maxTarget, bool forceUpdate = true,
-                       bool hidden = false) {
-  CoupledContainer container(FILE_TYPE::MAIN);
-  CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
-  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
-    container.setFileAndAttachmentNumber(file);
-    container.dissembleFromHTM();
-  }
-  addLineNumbers(minTarget, maxTarget, FILE_TYPE::MAIN, forceUpdate, hidden);
-  CoupledBodyText::loadBodyTextsFromFixBackToOutput();
-  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
-    container.setFileAndAttachmentNumber(file);
-    container.assembleBackToHTM();
-  }
-  cout << "Numbering Main Html finished. " << endl;
-}
-
-/**
  * numbering lines of a set of Attachment body text files of a set of chapters
  * if minAttachNo>maxAttachNo or both are zero
  * Numbering all attachments for those chapters
@@ -119,17 +54,64 @@ void addLineNumbersForAttachmentHtml(int minTarget, int maxTarget,
 }
 
 /**
- * Numbering a set of Attachment Html files of a set of chapters
- * if minAttachNo>maxAttachNo or both are zero
- * Numbering all attachments for those chapters
- * @param minTarget starting from this chapter
- * @param maxTarget until this chapter
- * @param minAttachNo for each chapter, start from this attachment
- * @param maxAttachNo for each chapter, until this attachment
+ * copy main files into HTML_OUTPUT
+ * before run this
  */
-void NumberingAttachmentHtml(int minTarget, int maxTarget, int minAttachNo,
-                             int maxAttachNo, bool forceUpdate = true,
-                             bool hidden = false) {
+void numberMainHtmls(bool forceUpdate, bool hidden) {
+  int minTarget = 1, maxTarget = 80;
+  CoupledContainer container(FILE_TYPE::MAIN);
+  CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
+  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
+    container.setFileAndAttachmentNumber(file);
+    container.dissembleFromHTM();
+  }
+  addLineNumbers(minTarget, maxTarget, FILE_TYPE::MAIN, forceUpdate, hidden);
+  CoupledBodyText::loadBodyTextsFromFixBackToOutput();
+  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
+    container.setFileAndAttachmentNumber(file);
+    container.assembleBackToHTM();
+  }
+  cout << "Numbering Main Html finished. " << endl;
+}
+
+void numberOriginalHtmls(bool forceUpdate, bool hidden) {
+  int minTarget = 1, maxTarget = 80;
+  CoupledContainer container(FILE_TYPE::ORIGINAL);
+  CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
+  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
+    container.setFileAndAttachmentNumber(file);
+    container.dissembleFromHTM();
+  }
+  addLineNumbers(minTarget, maxTarget, FILE_TYPE::ORIGINAL, forceUpdate,
+                 hidden);
+  CoupledBodyText::loadBodyTextsFromFixBackToOutput();
+  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
+    container.setFileAndAttachmentNumber(file);
+    container.assembleBackToHTM();
+  }
+  cout << "Numbering Original Html finished. " << endl;
+}
+
+void numberJPMHtmls(bool forceUpdate, bool hidden) {
+  int minTarget = 1, maxTarget = 100;
+  CoupledContainer container(FILE_TYPE::JPM);
+  //  CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
+  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
+    container.setFileAndAttachmentNumber(file);
+    container.dissembleFromHTM();
+  }
+  addLineNumbers(minTarget, maxTarget, FILE_TYPE::JPM, forceUpdate, hidden);
+  CoupledBodyText::loadBodyTextsFromFixBackToOutput();
+  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
+    container.setFileAndAttachmentNumber(file);
+    container.assembleBackToHTM();
+  }
+  cout << "Numbering JPM Html finished. " << endl;
+}
+
+void numberAttachmentHtmls(bool forceUpdate, bool hidden) {
+  int minTarget = 1, maxTarget = 80;
+  int minAttachNo = 1, maxAttachNo = 50;
   CoupledContainer container(FILE_TYPE::ATTACHMENT);
   CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
   dissembleAttachments(minTarget, maxTarget, minAttachNo,
@@ -139,76 +121,5 @@ void NumberingAttachmentHtml(int minTarget, int maxTarget, int minAttachNo,
       hidden); // reformat bodytext by adding line number
   CoupledBodyText::loadBodyTextsFromFixBackToOutput();
   assembleAttachments(minTarget, maxTarget, minAttachNo, maxAttachNo);
-}
-
-/**
- * copy main files into HTML_OUTPUT
- * before run this
- */
-void numberMainHtmls(bool forceUpdate, bool hidden) {
-  int minTarget = 1, maxTarget = 80;
-  NumberingMainHtml(minTarget, maxTarget, forceUpdate, hidden);
-}
-
-void numberOriginalHtmls(bool forceUpdate, bool hidden) {
-  int minTarget = 1, maxTarget = 80;
-  NumberingOriginalHtml(minTarget, maxTarget, forceUpdate, hidden);
-  cout << "Numbering Original Html finished. " << endl;
-}
-
-void numberJPMHtmls(bool forceUpdate, bool hidden) {
-  int minTarget = 1, maxTarget = 100;
-  NumberingJPMHtml(minTarget, maxTarget, forceUpdate, hidden);
-  cout << "Numbering JPM Html finished. " << endl;
-}
-
-void numberAttachmentHtmls(bool forceUpdate, bool hidden) {
-  int minTarget = 1, maxTarget = 80;
-  int minAttachNo = 1, maxAttachNo = 50;
-  NumberingAttachmentHtml(minTarget, maxTarget, minAttachNo, maxAttachNo,
-                          forceUpdate, hidden);
   cout << "Numbering Attachment Html finished. " << endl;
-}
-
-void reformatTxtFiles(int minTarget, int maxTarget, const string &example) {
-  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
-    string filename = file;
-    if (filename.length() == 2) {
-      filename = "0" + filename;
-    }
-    CoupledBodyText bodyText("pjpm");
-    bodyText.setFileAndAttachmentNumber(filename);
-    bodyText.reformatParagraphToSmallerSize(example);
-  }
-}
-
-void reformatTxtFilesForReader() {
-  const string example =
-      R"(话说安童领着书信，辞了黄通判，径往山东大道而来。打听巡按御史在东昌府住扎，姓曾，双名孝序，【夹批：曾者，争也。序即天叙有典之叙，盖作者为世所厄不能自全其孝，故抑郁愤懑)";
-
-  int minTarget = 1, maxTarget = 100;
-  reformatTxtFiles(minTarget, maxTarget, example);
-  cout << "reformat files from " << minTarget << " to " << maxTarget
-       << " finished. " << endl;
-}
-
-void splitFiles(int minTarget, int maxTarget, const string &fileType,
-                const string &sampleBlock, const string &sampleFirstLine,
-                const string &sampleWholeLine) {
-  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
-    CoupledBodyText bodyText;
-    bodyText.setFilePrefixFromFileType(getFileTypeFromString(fileType));
-    bodyText.setFileAndAttachmentNumber(file);
-    bodyText.regroupingParagraphs(sampleBlock, sampleFirstLine,
-                                  sampleWholeLine);
-  }
-}
-
-void autoSplitBodyText(const string &fileType) {
-  const string sampleBlock = R"()";
-  const string sampleFirstLine = R"()";
-  const string sampleWholeLine = R"()";
-  int minTarget = 1, maxTarget = 1;
-  splitFiles(minTarget, maxTarget, fileType, sampleBlock, sampleFirstLine,
-             sampleWholeLine);
 }

@@ -77,8 +77,6 @@ void fixReturnLinkForAttachmentFile(const string &referFile,
         lfm.fixReferPara(LinkFromMain::getFromLineOfAttachment(num));
         if (lfm.needUpdate()) // replace old value
         {
-          if (debug >= LOG_INFO)
-            cout << lfm.asString() << endl;
           auto orglinkBegin = orgLine.find(link);
           orgLine.replace(orglinkBegin, link.length(), lfm.asString());
         }
@@ -128,13 +126,10 @@ void fixReturnLinkForAttachments(int minTarget, int maxTarget) {
  * for getting titles of them.
  * and fixReturnLinkForAttachments would fix these attachment files
  * and save them into HTML_OUTPUT_ATTACHMENT just like assembleAttachments
- * @param minTarget
- * @param maxTarget
- * @param minReference
- * @param maxReference
  */
-void fixMainHtml(int minTarget, int maxTarget, int minReference,
-                 int maxReference) {
+void fixLinksFromMainHtmls() {
+  int minTarget = 1, maxTarget = 80;
+  int minReference = 1, maxReference = 80;
   CoupledContainer container(FILE_TYPE::MAIN);
   CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
@@ -150,12 +145,6 @@ void fixMainHtml(int minTarget, int maxTarget, int minReference,
   fixReturnLinkForAttachments(minTarget, maxTarget);
 }
 
-void fixLinksFromMainHtmls() {
-  int minTarget = 1, maxTarget = 80;
-  int minReference = 1, maxReference = 80;
-  fixMainHtml(minTarget, maxTarget, minReference, maxReference);
-}
-
 void fixLinksFromMain() {
   clearReport();
   LinkFromMain::resetStatisticsAndLoadReferenceAttachmentList();
@@ -164,31 +153,6 @@ void fixLinksFromMain() {
   displayMainFilesOfMissingKey();
   displayNewlyAddedAttachments();
   cout << "fixLinksFromMain finished. " << endl;
-}
-
-void generateContentIndexTableForAttachments() {
-  LinkFromMain::loadReferenceAttachmentList();
-  ListContainer container("bindex1");
-  container.initBodyTextFile();
-  auto table = Link::refAttachmentTable;
-  for (const auto &attachment : table) {
-    auto attachmentName = attachment.first;
-    auto entry = attachment.second.second;
-    ATTACHMENT_TYPE attachmentType = GetTupleElement(entry, 2);
-
-    if (attachmentType == ATTACHMENT_TYPE::PERSONAL) {
-      string name = citationChapterNo + TurnToString(attachmentName.first) +
-                    citationChapter + R"(附件)" +
-                    TurnToString(attachmentName.second) + R"(: )";
-      container.appendParagraphInBodyText(fixLinkFromAttachmentTemplate(
-          attachmentDirForLinkFromMain,
-          formatIntoZeroPatchedChapterNumber(attachmentName.first, 2),
-          TurnToString(attachmentName.second),
-          name + GetTupleElement(entry, 1)));
-    }
-  }
-  container.assembleBackToHTM("personal attachments", "personal attachments");
-  cout << "result is in file " << container.getOutputFilePath() << endl;
 }
 
 void fixLinksToMainForAttachments(int minTarget, int maxTarget,
@@ -215,8 +179,12 @@ void fixLinksToMainForAttachments(int minTarget, int maxTarget,
   }
 }
 
-void fixAttachments(int minTarget, int maxTarget, int minReference,
-                    int maxReference, int minAttachNo, int maxAttachNo) {
+void fixLinksFromAttachmentHtmls() {
+  int minTarget = 1, maxTarget = 80;
+  int minReference = 1, maxReference = 80;
+  int minAttachNo = 1, maxAttachNo = 50;
+  // if to fix all attachments
+  //  int minAttachNo = 0, maxAttachNo = 0;
   CoupledContainer container(FILE_TYPE::ATTACHMENT);
   CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
   dissembleAttachments(minTarget, maxTarget, minAttachNo,
@@ -225,16 +193,6 @@ void fixAttachments(int minTarget, int maxTarget, int minReference,
                                minAttachNo, maxAttachNo);
   CoupledBodyText::loadBodyTextsFromFixBackToOutput();
   assembleAttachments(minTarget, maxTarget, minAttachNo, maxAttachNo);
-}
-
-void fixLinksFromAttachmentHtmls() {
-  int minTarget = 1, maxTarget = 80;
-  int minReference = 1, maxReference = 80;
-  int minAttachNo = 1, maxAttachNo = 1;
-  // if to fix all attachments
-  //  int minAttachNo = 0, maxAttachNo = 0;
-  fixAttachments(minTarget, maxTarget, minReference, maxReference, minAttachNo,
-                 maxAttachNo);
 }
 
 void fixLinksFromAttachment() {

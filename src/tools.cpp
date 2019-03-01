@@ -398,8 +398,7 @@ void CoupledBodyText::fixPersonalView() {
     getline(infile, inLine); // Saves the line in inLine.
     if (debug >= LOG_INFO)
       cout << inLine << endl;
-    if ((inLine == brTab + "\r") or (inLine == brTab + "\n") or
-        (inLine == brTab + "\r\n")) {
+    if (isLeadingBr(inLine)) {
       outfile << inLine << endl;
       continue;
     }
@@ -517,6 +516,78 @@ void fixHeaderAndFooterForOriginalHtmls() {
   fixHeaderAndFooterForOriginalHtml(minTarget, maxTarget);
   cout << "fixHeaderAndFooter for Original Htmls finished. " << endl;
 }
+void generateContentTableForMainHtmls() {}
+void generateContentTableForOriginalHtmls() {}
+void generateContentTableForJPMHtmls() {}
+void generateContentTableForReferenceAttachments() {}
+
+void generateContentTableForPersonalAttachments() {
+  LinkFromMain::loadReferenceAttachmentList();
+  ListContainer container("bindex2");
+  container.initBodyTextFile();
+  auto table = Link::refAttachmentTable;
+  for (const auto &attachment : table) {
+    auto attachmentName = attachment.first;
+    auto entry = attachment.second.second;
+    ATTACHMENT_TYPE attachmentType = GetTupleElement(entry, 2);
+
+    if (attachmentType == ATTACHMENT_TYPE::PERSONAL) {
+      string name = citationChapterNo + TurnToString(attachmentName.first) +
+                    citationChapter + R"(附件)" +
+                    TurnToString(attachmentName.second) + R"(: )";
+      container.appendParagraphInBodyText(fixLinkFromAttachmentTemplate(
+          attachmentDirForLinkFromMain,
+          formatIntoZeroPatchedChapterNumber(attachmentName.first, 2),
+          TurnToString(attachmentName.second),
+          name + GetTupleElement(entry, 1)));
+    }
+  }
+  container.assembleBackToHTM("personal attachments", "personal attachments");
+  cout << "result is in file " << container.getOutputFilePath() << endl;
+}
+
+void reformatTxtFiles(int minTarget, int maxTarget, const string &example) {
+  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
+    string filename = file;
+    if (filename.length() == 2) {
+      filename = "0" + filename;
+    }
+    CoupledBodyText bodyText("pjpm");
+    bodyText.setFileAndAttachmentNumber(filename);
+    bodyText.reformatParagraphToSmallerSize(example);
+  }
+}
+
+void reformatTxtFilesForReader() {
+  const string example =
+      R"(话说安童领着书信，辞了黄通判，径往山东大道而来。打听巡按御史在东昌府住扎，姓曾，双名孝序，【夹批：曾者，争也。序即天叙有典之叙，盖作者为世所厄不能自全其孝，故抑郁愤懑)";
+
+  int minTarget = 1, maxTarget = 100;
+  reformatTxtFiles(minTarget, maxTarget, example);
+  cout << "reformat files from " << minTarget << " to " << maxTarget
+       << " finished. " << endl;
+}
+
+void splitFiles(int minTarget, int maxTarget, const string &fileType,
+                const string &sampleBlock, const string &sampleFirstLine,
+                const string &sampleWholeLine) {
+  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
+    CoupledBodyText bodyText;
+    bodyText.setFilePrefixFromFileType(getFileTypeFromString(fileType));
+    bodyText.setFileAndAttachmentNumber(file);
+    bodyText.regroupingParagraphs(sampleBlock, sampleFirstLine,
+                                  sampleWholeLine);
+  }
+}
+
+void autoSplitBodyText(const string &fileType) {
+  const string sampleBlock = R"()";
+  const string sampleFirstLine = R"()";
+  const string sampleWholeLine = R"()";
+  int minTarget = 1, maxTarget = 1;
+  splitFiles(minTarget, maxTarget, fileType, sampleBlock, sampleFirstLine,
+             sampleWholeLine);
+}
 
 void tools(int num) {
   SEPERATE("HLM tool", " started ");
@@ -535,6 +606,24 @@ void tools(int num) {
     break;
   case 5:
     fixPersonalViewForJPMHtmls();
+    break;
+  case 6:
+    generateContentTableForMainHtmls();
+    break;
+  case 7:
+    generateContentTableForOriginalHtmls();
+    break;
+  case 8:
+    generateContentTableForJPMHtmls();
+    break;
+  case 9:
+    generateContentTableForReferenceAttachments();
+    break;
+  case 10:
+    generateContentTableForPersonalAttachments();
+    break;
+  case 11:
+    ConvertNonPrefixedGb2312FilesToUtf8();
     break;
   default:
     cout << "invalid tool." << endl;
