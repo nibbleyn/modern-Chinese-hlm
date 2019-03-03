@@ -71,7 +71,7 @@ void CoupledBodyTextWithLink::removePersonalCommentsOverNumberedFiles() {
  * @param file
  * @param referFiles
  */
-void CoupledBodyTextWithLink::fixLinksFromFile(fileSet referFiles, int minPara,
+void CoupledBodyTextWithLink::fixLinksFromFile(fileSet referFiles, bool forceUpdate, int minPara,
                                                int maxPara, int minLine,
                                                int maxLine) {
   setInputOutputFiles();
@@ -106,7 +106,7 @@ void CoupledBodyTextWithLink::fixLinksFromFile(fileSet referFiles, int minPara,
                                      // line
         break;
       auto linkEnd = inLine.find(linkEndChars, linkBegin);
-      auto link = inLine.substr(linkBegin, linkEnd + 4 - linkBegin);
+      auto link = inLine.substr(linkBegin, linkEnd + linkEndChars.length() - linkBegin);
 
       if (m_attachNumber == 0) {
         m_linkPtr = std::make_unique<LinkFromMain>(m_file, link);
@@ -126,7 +126,7 @@ void CoupledBodyTextWithLink::fixLinksFromFile(fileSet referFiles, int minPara,
       if (m_linkPtr->isTargetToSelfHtm()) {
         m_linkPtr->setSourcePara(ln);
         m_linkPtr->fixFromString(link); // third step of construction
-        if (m_linkPtr->needUpdate())    // replace old value
+        if (forceUpdate or m_linkPtr->needUpdate())    // replace old value
         {
           auto orglinkBegin = orgLine.find(link);
           orgLine.replace(orglinkBegin, link.length(), m_linkPtr->asString());
@@ -142,8 +142,8 @@ void CoupledBodyTextWithLink::fixLinksFromFile(fileSet referFiles, int minPara,
           string next = originalLinkStartChars + linkStartChars;
           bool needAddOrginalLink = true;
           // still have above "next" and </a>
-          if (inLine.length() > (link.length() + next.length() + 4)) {
-            if (inLine.substr(linkEnd + 4, next.length()) == next) {
+          if (inLine.length() > (link.length() + next.length() + linkEndChars.length())) {
+            if (inLine.substr(linkEnd + linkEndChars.length(), next.length()) == next) {
               // skip </a> and first parenthesis of next
               auto followingLink = inLine.substr(
                   linkEnd + next.length() + 2); // find next link in the inLine
@@ -164,7 +164,7 @@ void CoupledBodyTextWithLink::fixLinksFromFile(fileSet referFiles, int minPara,
           if (needAddOrginalLink)
             m_linkPtr->generateLinkToOrigin();
           m_linkPtr->doStatistics();
-          if (m_linkPtr->needUpdate()) // replace old value
+          if (forceUpdate or m_linkPtr->needUpdate()) // replace old value
           {
             auto orglinkBegin = orgLine.find(link);
             orgLine.replace(orglinkBegin, link.length(), m_linkPtr->asString());
@@ -177,7 +177,7 @@ void CoupledBodyTextWithLink::fixLinksFromFile(fileSet referFiles, int minPara,
         if (e != referFiles.end()) // need to check and fix
         {
           m_linkPtr->fixFromString(link); // third step of construction
-          if (m_linkPtr->needUpdate())    // replace old value
+          if (forceUpdate or m_linkPtr->needUpdate())    // replace old value
           {
             auto orglinkBegin = orgLine.find(link);
             if (debug >= LOG_INFO)
@@ -186,7 +186,7 @@ void CoupledBodyTextWithLink::fixLinksFromFile(fileSet referFiles, int minPara,
           }
         }
       }
-      inLine = inLine.substr(linkEnd + 4); // find next link in the inLine
+      inLine = inLine.substr(linkEnd + linkEndChars.length()); // find next link in the inLine
     } while (1);
     outfile << orgLine << endl;
   }

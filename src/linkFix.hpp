@@ -3,9 +3,9 @@
 #include "coupledBodyTextWithLink.hpp"
 
 // link fixing for main files
-void fixLinksFromMain();
+void fixLinksFromMain(bool forceUpdate = true);
 
 // link fixing for attachment files
-void fixLinksFromAttachment();
+void fixLinksFromAttachment(bool forceUpdate = true);
 
 void testContainer(int num);

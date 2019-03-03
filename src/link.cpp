@@ -49,7 +49,7 @@ string replaceDisplayLink(string &linkString, LINK_DISPLAY_TYPE type) {
 }
 
 static const string linkToSameFile =
-    R"(<a unhidden href="#YY"><i hidden>QQ</i>ZZ</a>)";
+    R"(<a unhidden href="#YY" title="QQ"><i hidden>QQ</i>ZZ</a>)";
 /**
  * generate real correct link within same file
  * by filling right "refer para" based on key searching
@@ -77,7 +77,7 @@ string fixLinkFromSameFileTemplate(LINK_DISPLAY_TYPE type, const string &key,
 }
 
 static const string linkToMainFile =
-    R"(<a unhidden href="PPa0XX.htm#YY"><i hidden>QQ</i><sub unhidden>WW</sub>ZZ</a>)";
+    R"(<a unhidden href="PPa0XX.htm#YY" title="QQ"><i hidden>QQ</i><sub unhidden>WW</sub>ZZ</a>)";
 /**
  * generate real correct link to other main file
  * by filling right "refer para" based on key searching
@@ -131,7 +131,7 @@ string fixLinkFromReverseLinkTemplate(const string &filename,
 }
 
 static const string linkToOriginalFile =
-    R"(<a unhidden href="PPc0XX.htm#YY"><i hidden>QQ</i><sub unhidden>WW</sub>原文</a>)";
+    R"(<a unhidden href="PPc0XX.htm#YY" title="QQ"><i hidden>QQ</i><sub unhidden>WW</sub>原文</a>)";
 /**
  * generate real correct link to original file
  * by filling right "refer para" based on key searching
@@ -361,6 +361,8 @@ string Link::asString() {
   string part0 = linkStartChars + " " + displayPropertyAsString();
   if (m_displayType != LINK_DISPLAY_TYPE::DIRECT)
     part0 += " ";
+  if (m_type != LINK_TYPE::ATTACHMENT)
+	  part0 += titleStartChars + getKey() + titleEndChars;
   part0 += referFileMiddleChar;
   string part1{""}, part2{""}, part3{""};
   if (m_annotation == returnToContentTable) // type would be SAMEPAGE

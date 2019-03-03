@@ -86,18 +86,6 @@ void fixReturnLinkForAttachmentFile(const string &referFile,
   }
 }
 
-void fixMainLinks(int minTarget, int maxTarget, int minReference,
-                  int maxReference) {
-  for (const auto &file :
-       buildFileSet(minTarget, maxTarget)) // files need to be fixed
-  {
-    CoupledBodyTextWithLink bodyText;
-    bodyText.setFilePrefixFromFileType(FILE_TYPE::MAIN);
-    bodyText.setFileAndAttachmentNumber(file);
-    bodyText.fixLinksFromFile(buildFileSet(minReference, maxReference));
-  }
-}
-
 void fixReturnLinkForAttachments(int minTarget, int maxTarget) {
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     auto targetAttachments =
@@ -127,7 +115,7 @@ void fixReturnLinkForAttachments(int minTarget, int maxTarget) {
  * and fixReturnLinkForAttachments would fix these attachment files
  * and save them into HTML_OUTPUT_ATTACHMENT just like assembleAttachments
  */
-void fixLinksFromMainHtmls() {
+void fixLinksFromMainHtmls(bool forceUpdate) {
   int minTarget = 1, maxTarget = 80;
   int minReference = 1, maxReference = 80;
   CoupledContainer container(FILE_TYPE::MAIN);
@@ -136,7 +124,14 @@ void fixLinksFromMainHtmls() {
     container.setFileAndAttachmentNumber(file);
     container.dissembleFromHTM();
   }
-  fixMainLinks(minTarget, maxTarget, minReference, maxReference);
+  for (const auto &file :
+       buildFileSet(minTarget, maxTarget)) // files need to be fixed
+  {
+    CoupledBodyTextWithLink bodyText;
+    bodyText.setFilePrefixFromFileType(FILE_TYPE::MAIN);
+    bodyText.setFileAndAttachmentNumber(file);
+    bodyText.fixLinksFromFile(buildFileSet(minReference, maxReference), forceUpdate);
+  }
   CoupledBodyText::loadBodyTextsFromFixBackToOutput();
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     container.setFileAndAttachmentNumber(file);
@@ -145,20 +140,22 @@ void fixLinksFromMainHtmls() {
   fixReturnLinkForAttachments(minTarget, maxTarget);
 }
 
-void fixLinksFromMain() {
+void fixLinksFromMain(bool forceUpdate) {
   clearReport();
   LinkFromMain::resetStatisticsAndLoadReferenceAttachmentList();
-  fixLinksFromMainHtmls();
+  fixLinksFromMainHtmls(forceUpdate);
   LinkFromMain::outPutStatisticsToFiles();
   displayMainFilesOfMissingKey();
   displayNewlyAddedAttachments();
   cout << "fixLinksFromMain finished. " << endl;
 }
 
-void fixLinksToMainForAttachments(int minTarget, int maxTarget,
-                                  int minReference, int maxReference,
-                                  int minAttachNo, int maxAttachNo) {
-
+void fixLinksFromAttachmentHtmls(bool forceUpdate) {
+  int minTarget = 1, maxTarget = 80;
+  int minReference = 1, maxReference = 80;
+  int minAttachNo = 1, maxAttachNo = 50;
+  // if to fix all attachments
+  //  int minAttachNo = 0, maxAttachNo = 0;
   vector<int> targetAttachments;
   bool overAllAttachments = true;
   if (minAttachNo != 0 and maxAttachNo != 0 and minAttachNo <= maxAttachNo) {
@@ -166,6 +163,10 @@ void fixLinksToMainForAttachments(int minTarget, int maxTarget,
       targetAttachments.push_back(i);
     overAllAttachments = false;
   }
+  CoupledContainer container(FILE_TYPE::ATTACHMENT);
+  CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
+  dissembleAttachments(minTarget, maxTarget, minAttachNo,
+                       maxAttachNo); // dissemble html to bodytext
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     if (overAllAttachments == true)
       targetAttachments =
@@ -174,30 +175,16 @@ void fixLinksToMainForAttachments(int minTarget, int maxTarget,
       CoupledBodyTextWithLink bodyText;
       bodyText.setFilePrefixFromFileType(FILE_TYPE::ATTACHMENT);
       bodyText.setFileAndAttachmentNumber(file, attNo);
-      bodyText.fixLinksFromFile(buildFileSet(minReference, maxReference));
+      bodyText.fixLinksFromFile(buildFileSet(minReference, maxReference), forceUpdate);
     }
   }
-}
-
-void fixLinksFromAttachmentHtmls() {
-  int minTarget = 1, maxTarget = 80;
-  int minReference = 1, maxReference = 80;
-  int minAttachNo = 1, maxAttachNo = 50;
-  // if to fix all attachments
-  //  int minAttachNo = 0, maxAttachNo = 0;
-  CoupledContainer container(FILE_TYPE::ATTACHMENT);
-  CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
-  dissembleAttachments(minTarget, maxTarget, minAttachNo,
-                       maxAttachNo); // dissemble html to bodytext
-  fixLinksToMainForAttachments(minTarget, maxTarget, minReference, maxReference,
-                               minAttachNo, maxAttachNo);
   CoupledBodyText::loadBodyTextsFromFixBackToOutput();
   assembleAttachments(minTarget, maxTarget, minAttachNo, maxAttachNo);
 }
 
-void fixLinksFromAttachment() {
+void fixLinksFromAttachment(bool forceUpdate) {
   LinkFromAttachment::resetStatisticsAndLoadReferenceAttachmentList();
-  fixLinksFromAttachmentHtmls();
+  fixLinksFromAttachmentHtmls(forceUpdate);
   LinkFromAttachment::outPutStatisticsToFiles();
   cout << "fixLinksFromAttachment finished. " << endl;
 }
