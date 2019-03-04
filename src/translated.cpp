@@ -9,8 +9,8 @@ int main(int argc, char **argv) {
   //	  int num = 2;
   //  int num = 3;
   //	  int num = 4;
-    int num = 5;
-//  int num = 11;
+  //  int num = 5;
+  int num = 12;
   switch (num) {
   case 1:
     numberJPMHtmls(false);
@@ -44,7 +44,7 @@ int main(int argc, char **argv) {
     testFunctions(5);
     break;
   case 12:
-    tools(11);
+    tools(8);
     break;
   default:
     cout << "nothing gets executed." << endl;

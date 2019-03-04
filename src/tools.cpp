@@ -1,6 +1,11 @@
 #include "tools.hpp"
 #include <regex>
 
+const string strongTitleBeginChars = R"(<strong unhidden>)";
+const string strongTitleEndChars = R"(</strong>)";
+const string sampTitleBeginChars = R"(<samp unhidden>)";
+const string sampTitleEndChars = R"(</samp>)";
+
 void fixFooter(string &footer, const string &filename) {
   string previous =
       formatIntoZeroPatchedChapterNumber(TurnToInt(filename) - 1, 3);
@@ -37,10 +42,7 @@ void fixHeader(string &header, const string &filename) {
   string previous =
       formatIntoZeroPatchedChapterNumber(TurnToInt(filename) - 1, 3);
   string next = formatIntoZeroPatchedChapterNumber(TurnToInt(filename) + 1, 3);
-  //  cout << previous << endl;
-  //  cout << next << endl;
   const string origHeader = header;
-  //  cout << origHeader << endl;
   const string originalTitleBeginChars = R"(<b unhidden>)";
   const string originalTitleEndChars = R"(</b>)";
   string originalTitle;
@@ -52,15 +54,10 @@ void fixHeader(string &header, const string &filename) {
   originalTitle = header.substr(
       originalTitleBegin + originalTitleBeginChars.length(),
       originalTitleEnd - originalTitleBegin - originalTitleBeginChars.length());
-  //  cout << originalTitle << endl;
-  const string strongTitleBeginChars = R"(<strong unhidden>)";
-  const string strongTitleEndChars = R"(</strong>)";
   header.replace(originalTitleBegin,
                  originalTitleBeginChars.length() + originalTitle.length() +
                      originalTitleEndChars.length(),
                  strongTitleBeginChars + originalTitle + strongTitleEndChars);
-  //  cout << origHeader << endl;
-  //  cout << header << endl;
   string start = htmlTitleStart;
   string end = htmlTitleEnd;
   auto titleBegin = header.find(start);
@@ -71,7 +68,6 @@ void fixHeader(string &header, const string &filename) {
                      titleEnd - titleBegin - start.length(), originalTitle);
   }
 
-  //  cout << header << endl;
   const string toReplacePrevious = "a077";
   const string toReplaceNext = "a079";
   do {
@@ -92,8 +88,6 @@ void fixHeader(string &header, const string &filename) {
   const string toReplaceTranslatedTitle =
       R"(第七十八回　老学士与贾政闲征姽婳词	痴公子贾宝玉为晴雯杜撰芙蓉诔)";
   auto toReplaceTranslatedTitleBegin = header.find(toReplaceTranslatedTitle);
-  const string sampTitleBeginChars = R"(<samp unhidden>)";
-  const string sampTitleEndChars = R"(</samp>)";
   header.replace(toReplaceTranslatedTitleBegin,
                  toReplaceTranslatedTitle.length(),
                  sampTitleBeginChars + originalTitle + sampTitleEndChars);
@@ -309,6 +303,39 @@ void CoupledContainer::makeSingleLineHeaderAndFooter() {
          << endl;
 }
 
+void CoupledContainer::fetchOriginalAndTranslatedTitles() {
+  string inputHtmlFile = getInputHtmlFile();
+  ifstream inHtmlFile(inputHtmlFile);
+  if (!inHtmlFile) // doesn't exist
+  {
+    cout << "file doesn't exist:" << inputHtmlFile << endl;
+    return;
+  }
+  string line{""};
+  while (!inHtmlFile.eof()) // To get you all the lines.
+  {
+    getline(inHtmlFile, line); // Saves the line in line.
+    auto linkBegin = line.find(topIdBeginChars);
+    if (linkBegin != string::npos) {
+      break;
+    }
+    auto strongTitleBegin = line.find(strongTitleBeginChars);
+    if (strongTitleBegin != string::npos) {
+      auto strongTitleEnd = line.find(strongTitleEndChars, strongTitleBegin);
+      m_originalTitle = line.substr(
+          strongTitleBegin + strongTitleBeginChars.length(),
+          strongTitleEnd - strongTitleBegin - strongTitleBeginChars.length());
+    }
+    auto sampTitleBegin = line.find(sampTitleBeginChars);
+    if (sampTitleBegin != string::npos) {
+      auto sampTitleEnd = line.find(sampTitleEndChars, sampTitleBegin);
+      m_translatedTitle = line.substr(
+          sampTitleBegin + sampTitleBeginChars.length(),
+          sampTitleEnd - sampTitleBegin - sampTitleBeginChars.length());
+    }
+  }
+}
+
 void CoupledContainer::fixHeaderAndFooter() {
   string inputHtmlFile = getInputHtmlFile();
   string outputHtmlFile = getoutputHtmlFile();
@@ -459,22 +486,19 @@ void fixPersonalViewForJPMHtmls() {
   cout << "fixPersonalView for JPM Htmls finished. " << endl;
 }
 
-void fixHeaderAndFooterForMainHtml(int minTarget, int maxTarget) {
+void fixHeaderAndFooterForMainHtmls() {
+  int minTarget = 1, maxTarget = 80;
   CoupledContainer container(FILE_TYPE::MAIN);
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     container.setFileAndAttachmentNumber(file);
     container.makeSingleLineHeaderAndFooter();
   }
-}
-
-void fixHeaderAndFooterForMainHtmls() {
-  int minTarget = 1, maxTarget = 80;
-  fixHeaderAndFooterForMainHtml(minTarget, maxTarget);
   cout << "fixHeaderAndFooter for Main Htmls finished. " << endl;
 }
 
-void fixHeaderAndFooterForAttachmentHtml(int minTarget, int maxTarget,
-                                         int minAttachNo, int maxAttachNo) {
+void fixHeaderAndFooterForAttachmentHtmls() {
+  int minTarget = 1, maxTarget = 80;
+  int minAttachNo = 1, maxAttachNo = 50;
   vector<int> targetAttachments;
   bool overAllAttachments = true;
   if (not(minAttachNo == 0 and maxAttachNo == 0) and
@@ -493,32 +517,53 @@ void fixHeaderAndFooterForAttachmentHtml(int minTarget, int maxTarget,
       container.makeSingleLineHeaderAndFooter();
     }
   }
-}
-
-void fixHeaderAndFooterForAttachmentHtmls() {
-  int minTarget = 1, maxTarget = 80;
-  int minAttachNo = 1, maxAttachNo = 50;
-  fixHeaderAndFooterForAttachmentHtml(minTarget, maxTarget, minAttachNo,
-                                      maxAttachNo);
   cout << "fixHeaderAndFooter for Attachment Htmls finished. " << endl;
 }
 
-void fixHeaderAndFooterForOriginalHtml(int minTarget, int maxTarget) {
+void fixHeaderAndFooterForOriginalHtmls() {
+  int minTarget = 1, maxTarget = 80;
   CoupledContainer container(FILE_TYPE::ORIGINAL);
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     container.setFileAndAttachmentNumber(file);
     container.makeSingleLineHeaderAndFooter();
   }
-}
-
-void fixHeaderAndFooterForOriginalHtmls() {
-  int minTarget = 1, maxTarget = 80;
-  fixHeaderAndFooterForOriginalHtml(minTarget, maxTarget);
   cout << "fixHeaderAndFooter for Original Htmls finished. " << endl;
 }
-void generateContentTableForMainHtmls() {}
-void generateContentTableForOriginalHtmls() {}
-void generateContentTableForJPMHtmls() {}
+
+void generateContentTableForMainHtmls() {
+  int minTarget = 1, maxTarget = 80;
+  CoupledContainer container(FILE_TYPE::MAIN);
+  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
+    container.setFileAndAttachmentNumber(file);
+    container.fetchOriginalAndTranslatedTitles();
+    cout << container.getOriginalTitle() << endl;
+    cout << container.getTranslatedTitle() << endl;
+  }
+  cout << "generateContentTable for Main Htmls finished. " << endl;
+}
+
+void generateContentTableForOriginalHtmls() {
+  int minTarget = 1, maxTarget = 80;
+  CoupledContainer container(FILE_TYPE::ORIGINAL);
+  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
+    container.setFileAndAttachmentNumber(file);
+    container.fetchOriginalAndTranslatedTitles();
+    cout << container.getOriginalTitle() << endl;
+    cout << container.getTranslatedTitle() << endl;
+  }
+  cout << "generateContentTable for Original Htmls finished. " << endl;
+}
+void generateContentTableForJPMHtmls() {
+  int minTarget = 1, maxTarget = 100;
+  CoupledContainer container(FILE_TYPE::JPM);
+  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
+    container.setFileAndAttachmentNumber(file);
+    container.fetchOriginalAndTranslatedTitles();
+    cout << container.getOriginalTitle() << endl;
+    cout << container.getTranslatedTitle() << endl;
+  }
+  cout << "generateContentTable for JPM Htmls finished. " << endl;
+}
 void generateContentTableForReferenceAttachments() {}
 
 void generateContentTableForPersonalAttachments() {

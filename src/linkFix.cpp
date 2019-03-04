@@ -130,7 +130,8 @@ void fixLinksFromMainHtmls(bool forceUpdate) {
     CoupledBodyTextWithLink bodyText;
     bodyText.setFilePrefixFromFileType(FILE_TYPE::MAIN);
     bodyText.setFileAndAttachmentNumber(file);
-    bodyText.fixLinksFromFile(buildFileSet(minReference, maxReference), forceUpdate);
+    bodyText.fixLinksFromFile(buildFileSet(minReference, maxReference),
+                              forceUpdate);
   }
   CoupledBodyText::loadBodyTextsFromFixBackToOutput();
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
@@ -175,7 +176,8 @@ void fixLinksFromAttachmentHtmls(bool forceUpdate) {
       CoupledBodyTextWithLink bodyText;
       bodyText.setFilePrefixFromFileType(FILE_TYPE::ATTACHMENT);
       bodyText.setFileAndAttachmentNumber(file, attNo);
-      bodyText.fixLinksFromFile(buildFileSet(minReference, maxReference), forceUpdate);
+      bodyText.fixLinksFromFile(buildFileSet(minReference, maxReference),
+                                forceUpdate);
     }
   }
   CoupledBodyText::loadBodyTextsFromFixBackToOutput();
@@ -217,7 +219,8 @@ void testTableContainer() {
   container.appendLeftParagraphInBodyText("line1-left");
   container.appendRightParagraphInBodyText("line1-right");
   container.appendLeftParagraphInBodyText("line2-left");
-  container.appendRightParagraphInBodyText(""); // if only 3 is added, patch last right part
+  container.appendRightParagraphInBodyText(
+      ""); // if only 3 is added, patch last right part
   container.finishBodyTextFile();
   container.assembleBackToHTM("content index table", "content");
   cout << "result is in file: " << container.getOutputFilePath() << endl;

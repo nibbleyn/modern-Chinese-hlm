@@ -362,7 +362,7 @@ string Link::asString() {
   if (m_displayType != LINK_DISPLAY_TYPE::DIRECT)
     part0 += " ";
   if (m_type != LINK_TYPE::ATTACHMENT)
-	  part0 += titleStartChars + getKey() + titleEndChars;
+    part0 += titleStartChars + getKey() + titleEndChars;
   part0 += referFileMiddleChar;
   string part1{""}, part2{""}, part3{""};
   if (m_annotation == returnToContentTable) // type would be SAMEPAGE

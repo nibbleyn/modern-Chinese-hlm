@@ -84,11 +84,12 @@ protected:
   void removeNbspsAndSpaces(string &inLine);
   void removeOldLineNumber(string &inLine);
   bool isEmptyLine(const string &inLine) {
-    return (inLine == "") or (inLine == "\r") or (inLine == "\n") or (inLine == "\r\n");
+    return (inLine == "") or (inLine == "\r") or (inLine == "\n") or
+           (inLine == "\r\n");
   }
   bool isLeadingBr(const string &inLine) {
-    return (inLine == brTab) or (inLine == brTab + "\r") or (inLine == brTab + "\n") or
-           (inLine == brTab + "\r\n");
+    return (inLine == brTab) or (inLine == brTab + "\r") or
+           (inLine == brTab + "\n") or (inLine == brTab + "\r\n");
   };
   bool hasEndingBr(const string &inLine) {
     return (inLine.find(brTab) != string::npos and not isLeadingBr(inLine));

@@ -55,6 +55,9 @@ public:
   };
   void makeSingleLineHeaderAndFooter();
   void fixHeaderAndFooter();
+  void fetchOriginalAndTranslatedTitles();
+  string getOriginalTitle() { return m_originalTitle; };
+  string getTranslatedTitle() { return m_translatedTitle; };
   void dissembleFromHTM();
   void assembleBackToHTM(const string &title = "",
                          const string &displayTitle = "");
@@ -63,6 +66,8 @@ private:
   FILE_TYPE m_fileType{FILE_TYPE::MAIN};
   string m_file{"01"};
   int m_attachmentNumber{0};
+  string m_originalTitle{""};
+  string m_translatedTitle{""};
 
   string getBodyTextFilePrefix();
   string getInputHtmlFile() {

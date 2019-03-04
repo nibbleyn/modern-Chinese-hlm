@@ -95,7 +95,7 @@ void numberOriginalHtmls(bool forceUpdate, bool hidden) {
 void numberJPMHtmls(bool forceUpdate, bool hidden) {
   int minTarget = 1, maxTarget = 100;
   CoupledContainer container(FILE_TYPE::JPM);
-    CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
+  CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     container.setFileAndAttachmentNumber(file);
     container.dissembleFromHTM();
