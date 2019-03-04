@@ -20,7 +20,12 @@ string fixLinkFromReverseLinkTemplate(const string &filename,
                                       const string &annotation);
 string fixLinkFromOriginalTemplate(const string &path, const string &filename,
                                    const string &key, const string &citation,
-                                   const string &referPara);
+                                   const string &referPara,
+                                   const string &annotation = R"(原文)");
+string fixLinkFromJPMTemplate(const string &path, const string &filename,
+                              const string &key, const string &citation,
+                              const string &referPara,
+                              const string &annotation = R"(原文)");
 string fixLinkFromAttachmentTemplate(const string &path, const string &filename,
                                      const string &attachNo,
                                      const string &annotation);

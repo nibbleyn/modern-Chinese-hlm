@@ -553,17 +553,34 @@ void generateContentTableForOriginalHtmls() {
   }
   cout << "generateContentTable for Original Htmls finished. " << endl;
 }
+
 void generateContentTableForJPMHtmls() {
   int minTarget = 1, maxTarget = 100;
   CoupledContainer container(FILE_TYPE::JPM);
-  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
+  TableContainer outputContainer("dindex");
+  outputContainer.initBodyTextFile();
+  int i = 1;
+  for (const auto &file : buildFileSet(minTarget, maxTarget, 3)) {
     container.setFileAndAttachmentNumber(file);
     container.fetchOriginalAndTranslatedTitles();
     cout << container.getOriginalTitle() << endl;
     cout << container.getTranslatedTitle() << endl;
+    auto link = fixLinkFromJPMTemplate(jpmDirForLinkFromMain, file, "", "", "",
+                                       container.getOriginalTitle());
+    cout << link << endl;
+    if (i % 2 == 0)
+      outputContainer.appendRightParagraphInBodyText(link);
+    else
+      outputContainer.appendLeftParagraphInBodyText(link);
+    i++;
   }
+  outputContainer.finishBodyTextFile();
+  outputContainer.assembleBackToHTM(R"(张竹坡批注金瓶梅)",
+                                    R"(张竹坡批注金瓶梅)");
+  cout << "result is in file: " << outputContainer.getOutputFilePath() << endl;
   cout << "generateContentTable for JPM Htmls finished. " << endl;
 }
+
 void generateContentTableForReferenceAttachments() {}
 
 void generateContentTableForPersonalAttachments() {

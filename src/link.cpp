@@ -65,7 +65,10 @@ string fixLinkFromSameFileTemplate(LINK_DISPLAY_TYPE type, const string &key,
                                    const string &referPara) {
   string link = linkToSameFile;
   link = replaceDisplayLink(link, type);
-  link = replacePart(link, "YY", referPara);
+  if (referPara.empty()) {
+    link = replacePart(link, R"(#YY)", "");
+  } else
+    link = replacePart(link, "YY", referPara);
   if (key.empty()) // use top/bottom as reference name
   {
     link = replacePart(link, R"(<i hidden>QQ</i>)", key);
@@ -102,10 +105,14 @@ string fixLinkFromMainTemplate(const string &path, const string &filename,
   link = replaceDisplayLink(link, type);
   link = replacePart(link, "PP", path);
   link = replacePart(link, "XX", filename);
-  link = replacePart(link, "YY", referPara);
+  if (referPara.empty()) {
+    link = replacePart(link, R"(#YY)", "");
+  } else
+    link = replacePart(link, "YY", referPara);
   if (key.empty()) // use top/bottom as reference name
   {
     link = replacePart(link, R"(<i hidden>QQ</i><sub unhidden>WW</sub>)", key);
+    link = replacePart(link, R"(title="QQ")", "");
   } else {
     link = replacePart(link, "QQ", key);
   }
@@ -126,12 +133,15 @@ string fixLinkFromReverseLinkTemplate(const string &filename,
   string link = reverseLinkToMainFile;
   link = replaceDisplayLink(link, type);
   link = replacePart(link, "XX", filename);
-  link = replacePart(link, "YY", referPara);
+  if (referPara.empty()) {
+    link = replacePart(link, R"(#YY)", "");
+  } else
+    link = replacePart(link, "YY", referPara);
   return link;
 }
 
 static const string linkToOriginalFile =
-    R"(<a unhidden href="PPc0XX.htm#YY" title="QQ"><i hidden>QQ</i><sub unhidden>WW</sub>原文</a>)";
+    R"(<a unhidden href="PPc0XX.htm#YY" title="QQ"><i hidden>QQ</i><sub unhidden>WW</sub>ZZ</a>)";
 /**
  * generate real correct link to original file
  * by filling right "refer para" based on key searching
@@ -146,18 +156,61 @@ static const string linkToOriginalFile =
  */
 string fixLinkFromOriginalTemplate(const string &path, const string &filename,
                                    const string &key, const string &citation,
-                                   const string &referPara) {
+                                   const string &referPara,
+                                   const string &annotation) {
   auto link = linkToOriginalFile;
   link = replacePart(link, "PP", path);
   link = replacePart(link, "XX", filename);
-  link = replacePart(link, "YY", referPara);
+  if (referPara.empty()) {
+    link = replacePart(link, R"(#YY)", "");
+  } else
+    link = replacePart(link, "YY", referPara);
   if (key.empty()) // use top/bottom as reference name
   {
     link = replacePart(link, R"(<i hidden>QQ</i><sub unhidden>WW</sub>)", key);
+    link = replacePart(link, R"(title="QQ")", "");
   } else {
     link = replacePart(link, "QQ", key);
   }
   link = replacePart(link, "WW", citation);
+  link = replacePart(link, "ZZ", annotation);
+  return link;
+}
+
+static const string linkToJPMFile =
+    R"(<a unhidden href="PPdXXX.htm#YY" title="QQ"><i hidden>QQ</i><sub unhidden>WW</sub>ZZ</a>)";
+/**
+ * generate real correct link to original file
+ * by filling right "refer para" based on key searching
+ * avoid literal strings of PP XX YY QQ appear in the original link
+ * to get a unexpected replacement
+ * @param path relative path based on the link type, refer to
+ * getPathOfReferenceFile()
+ * @param filename the target origin file's chapter name, e.g. 07
+ * @param key the key to use in search over target original file
+ * @param referPara the target place identified by line number
+ * @return link after fixed
+ */
+string fixLinkFromJPMTemplate(const string &path, const string &filename,
+                              const string &key, const string &citation,
+                              const string &referPara,
+                              const string &annotation) {
+  auto link = linkToJPMFile;
+  link = replacePart(link, "PP", path);
+  link = replacePart(link, "XXX", filename);
+  if (referPara.empty()) {
+    link = replacePart(link, R"(#YY)", "");
+  } else
+    link = replacePart(link, "YY", referPara);
+  if (key.empty()) // use top/bottom as reference name
+  {
+    link = replacePart(link, R"(<i hidden>QQ</i><sub unhidden>WW</sub>)", key);
+    link = replacePart(link, R"(title="QQ")", "");
+  } else {
+    link = replacePart(link, "QQ", key);
+  }
+  link = replacePart(link, "WW", citation);
+  link = replacePart(link, "ZZ", annotation);
   return link;
 }
 
@@ -1386,6 +1439,11 @@ void testLinkOperation() {
                                                  "18", "7", "happy"),
                    false);
   SEPERATE("fixLinkFromOriginalTemplate", " finished ");
+
+  cout << "original link: " << endl
+       << fixLinkFromJPMTemplate(jpmDirForLinkFromMain, "018",
+                                 R"(拆牌)", "第80章1.1节:", "90101");
+  SEPERATE("fixLinkFromJPMTemplate", " finished ");
 
   SEPERATE("testLinkFromMain", " finished ");
 
