@@ -533,24 +533,54 @@ void fixHeaderAndFooterForOriginalHtmls() {
 void generateContentTableForMainHtmls() {
   int minTarget = 1, maxTarget = 80;
   CoupledContainer container(FILE_TYPE::MAIN);
+  TableContainer outputContainer("aindex");
+  outputContainer.initBodyTextFile();
+  int i = 1;
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     container.setFileAndAttachmentNumber(file);
     container.fetchOriginalAndTranslatedTitles();
     cout << container.getOriginalTitle() << endl;
     cout << container.getTranslatedTitle() << endl;
+    auto link = fixLinkFromMainTemplate("", file, LINK_DISPLAY_TYPE::UNHIDDEN, "", "",
+    		brTab + container.getOriginalTitle() + brTab + container.getTranslatedTitle(), "");
+    cout << link << endl;
+    if (i % 2 == 0)
+      outputContainer.appendRightParagraphInBodyText(link);
+    else
+      outputContainer.appendLeftParagraphInBodyText(link);
+    i++;
   }
+  outputContainer.finishBodyTextFile();
+  outputContainer.assembleBackToHTM(R"(脂砚斋重评石头记 现代白话文版)",
+                                    R"(脂砚斋重评石头记 现代白话文版 目录)");
+  cout << "result is in file: " << outputContainer.getOutputFilePath() << endl;
   cout << "generateContentTable for Main Htmls finished. " << endl;
 }
 
 void generateContentTableForOriginalHtmls() {
   int minTarget = 1, maxTarget = 80;
   CoupledContainer container(FILE_TYPE::ORIGINAL);
+  TableContainer outputContainer("cindex");
+  outputContainer.initBodyTextFile();
+  int i = 1;
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     container.setFileAndAttachmentNumber(file);
     container.fetchOriginalAndTranslatedTitles();
     cout << container.getOriginalTitle() << endl;
     cout << container.getTranslatedTitle() << endl;
+    auto link = fixLinkFromOriginalTemplate(originalDirForLinkFromMain, file, "", "", "",
+                                       container.getOriginalTitle());
+    cout << link << endl;
+    if (i % 2 == 0)
+      outputContainer.appendRightParagraphInBodyText(link);
+    else
+      outputContainer.appendLeftParagraphInBodyText(link);
+    i++;
   }
+  outputContainer.finishBodyTextFile();
+  outputContainer.assembleBackToHTM(R"(脂砚斋重评石头记)",
+                                    R"(脂砚斋重评石头记 目录)");
+  cout << "result is in file: " << outputContainer.getOutputFilePath() << endl;
   cout << "generateContentTable for Original Htmls finished. " << endl;
 }
 
@@ -576,7 +606,7 @@ void generateContentTableForJPMHtmls() {
   }
   outputContainer.finishBodyTextFile();
   outputContainer.assembleBackToHTM(R"(张竹坡批注金瓶梅)",
-                                    R"(张竹坡批注金瓶梅)");
+                                    R"(张竹坡批注金瓶梅 目录)");
   cout << "result is in file: " << outputContainer.getOutputFilePath() << endl;
   cout << "generateContentTable for JPM Htmls finished. " << endl;
 }
