@@ -530,11 +530,26 @@ void fixHeaderAndFooterForOriginalHtmls() {
   cout << "fixHeaderAndFooter for Original Htmls finished. " << endl;
 }
 
+std::vector<int> createParaList(int first, int incremental, int max) {
+  std::vector<int> result;
+  result.push_back(first);
+  int i = first;
+  while ((i += incremental) < max) {
+    result.push_back(i);
+  }
+  return result;
+}
+
 void generateContentTableForMainHtmls() {
   int minTarget = 1, maxTarget = 80;
   CoupledContainer container(FILE_TYPE::MAIN);
   TableContainer outputContainer("aindex");
-  auto paraList = {4, 10, 16, 22, 28, 34, 40, 46, 52, 58, 64, 72};
+  outputContainer.setInputFileName(TABLE_CONTAINER_FILENAME_SMALLER_FONT);
+  auto paraList = createParaList(6, 10, 70);
+  paraList.push_back(72);
+  std::sort(paraList.begin(), paraList.end());
+  for (const auto &no : paraList)
+    cout << no << endl;
   auto start = paraList.begin();
   outputContainer.insertFrontParagrapHeader(*start);
   outputContainer.addExistingFrontParagraphs();
@@ -544,14 +559,11 @@ void generateContentTableForMainHtmls() {
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     container.setFileAndAttachmentNumber(file);
     container.fetchOriginalAndTranslatedTitles();
-    cout << container.getOriginalTitle() << endl;
-    cout << container.getTranslatedTitle() << endl;
     auto link =
         fixLinkFromMainTemplate("", file, LINK_DISPLAY_TYPE::UNHIDDEN, "", "",
                                 brTab + container.getOriginalTitle() + brTab +
                                     container.getTranslatedTitle(),
                                 "");
-    cout << link << endl;
     if (i % 2 == 0)
       outputContainer.appendRightParagraphInBodyText(link);
     else
@@ -581,7 +593,10 @@ void generateContentTableForOriginalHtmls() {
   int minTarget = 1, maxTarget = 80;
   CoupledContainer container(FILE_TYPE::ORIGINAL);
   TableContainer outputContainer("cindex");
-  auto paraList = {18, 40, 62};
+  auto paraList = createParaList(18, 22, 70);
+  std::sort(paraList.begin(), paraList.end());
+  for (const auto &no : paraList)
+    cout << no << endl;
   auto start = paraList.begin();
   outputContainer.insertFrontParagrapHeader(*start);
   int i = 1;
@@ -590,12 +605,9 @@ void generateContentTableForOriginalHtmls() {
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     container.setFileAndAttachmentNumber(file);
     container.fetchOriginalAndTranslatedTitles();
-    cout << container.getOriginalTitle() << endl;
-    cout << container.getTranslatedTitle() << endl;
     auto link =
         fixLinkFromOriginalTemplate(originalDirForLinkFromMain, file, "", "",
                                     "", container.getOriginalTitle());
-    cout << link << endl;
     if (i % 2 == 0)
       outputContainer.appendRightParagraphInBodyText(link);
     else
@@ -625,7 +637,10 @@ void generateContentTableForJPMHtmls() {
   int minTarget = 1, maxTarget = 100;
   CoupledContainer container(FILE_TYPE::JPM);
   TableContainer outputContainer("dindex");
-  auto paraList = {18, 40, 62, 84};
+  auto paraList = createParaList(18, 22, 90);
+  std::sort(paraList.begin(), paraList.end());
+  for (const auto &no : paraList)
+    cout << no << endl;
   auto start = paraList.begin();
   outputContainer.insertFrontParagrapHeader(*start);
   int i = 1;
@@ -634,11 +649,8 @@ void generateContentTableForJPMHtmls() {
   for (const auto &file : buildFileSet(minTarget, maxTarget, 3)) {
     container.setFileAndAttachmentNumber(file);
     container.fetchOriginalAndTranslatedTitles();
-    cout << container.getOriginalTitle() << endl;
-    cout << container.getTranslatedTitle() << endl;
     auto link = fixLinkFromJPMTemplate(jpmDirForLinkFromMain, file, "", "", "",
                                        container.getOriginalTitle());
-    cout << link << endl;
     if (i % 2 == 0)
       outputContainer.appendRightParagraphInBodyText(link);
     else

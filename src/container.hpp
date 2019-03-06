@@ -13,6 +13,7 @@ static const string HTML_OUTPUT_JPM = "utf8HTML/output/JPM/";
 
 static const string LIST_CONTAINER_FILENAME = "1";
 static const string TABLE_CONTAINER_FILENAME = "2";
+static const string TABLE_CONTAINER_FILENAME_SMALLER_FONT = "3";
 
 class Container {
 public:
@@ -169,9 +170,11 @@ public:
   void appendRightParagraphInBodyText(
       const string &text); // text could be null for last right column
   void finishBodyTextFile();
+  void setInputFileName(const string &name) { m_filename = name; }
 
 private:
-  string getInputFileName() const override { return TABLE_CONTAINER_FILENAME; }
+  string getInputFileName() const override { return m_filename; }
+  string m_filename{TABLE_CONTAINER_FILENAME};
 };
 
 void dissembleAttachments(int minTarget, int maxTarget, int minAttachNo,
