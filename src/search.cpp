@@ -49,7 +49,7 @@ void findFirstInNoAttachmentFiles(const string key, const string &fileType,
   bool asList = true;
   if (asList) {
     ListContainer container(outputFilename);
-    container.initBodyTextFile();
+    container.addExistingFrontParagraphs();
     for (const auto &chapter : resultLinkList) {
       container.appendParagraphInBodyText("found in " + fileType + " : " +
                                           chapter.first + HTML_SUFFIX + " :");
@@ -66,7 +66,7 @@ void findFirstInNoAttachmentFiles(const string key, const string &fileType,
     cout << "result is in file " << container.getOutputFilePath() << endl;
   } else {
     TableContainer container(outputFilename);
-    container.initBodyTextFile();
+    container.addExistingFrontParagraphs();
     container.finishBodyTextFile();
     container.assembleBackToHTM("search  results",
                                 "searchInFiles for key: " + key);

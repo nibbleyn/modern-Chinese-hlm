@@ -1,5 +1,6 @@
 #pragma once
 #include "attachmentFiles.hpp"
+#include "lineNumber.hpp"
 
 static const string HTML_SRC_MAIN = "utf8HTML/src/";
 static const string HTML_SRC_ORIGINAL = "utf8HTML/src/original/";
@@ -139,7 +140,7 @@ public:
   ListContainer() = default;
   ListContainer(const string &filename) : GenericContainer(filename) {}
   // process bodyText change directly, instead of thru CoupledBodyText
-  void initBodyTextFile();
+  void addExistingFrontParagraphs();
   void appendParagraphInBodyText(const string &text);
 
 private:
@@ -158,7 +159,12 @@ public:
   TableContainer(const string &filename) : GenericContainer(filename) {}
 
   // process bodyText change directly, instead of thru CoupledBodyText
-  void initBodyTextFile();
+  void addExistingFrontParagraphs();
+  void insertFrontParagrapHeader(int totalPara);
+  void insertMiddleParagrapHeader(bool enterLastPara, int seqOfPara,
+                                  int startParaNo, int endParaNo, int totalPara,
+                                  int preTotalPara);
+  void insertBackParagrapHeader(int seqOfPara, int totalPara);
   void appendLeftParagraphInBodyText(const string &text);
   void appendRightParagraphInBodyText(
       const string &text); // text could be null for last right column

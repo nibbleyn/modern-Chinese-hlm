@@ -534,23 +534,43 @@ void generateContentTableForMainHtmls() {
   int minTarget = 1, maxTarget = 80;
   CoupledContainer container(FILE_TYPE::MAIN);
   TableContainer outputContainer("aindex");
-  outputContainer.initBodyTextFile();
+  auto paraList = {4, 10, 16, 22, 28, 34, 40, 46, 52, 58, 64, 72};
+  auto start = paraList.begin();
+  outputContainer.insertFrontParagrapHeader(*start);
+  outputContainer.addExistingFrontParagraphs();
   int i = 1;
+  int seqOfPara = 1;
+  int totalPara = 0;
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     container.setFileAndAttachmentNumber(file);
     container.fetchOriginalAndTranslatedTitles();
     cout << container.getOriginalTitle() << endl;
     cout << container.getTranslatedTitle() << endl;
-    auto link = fixLinkFromMainTemplate("", file, LINK_DISPLAY_TYPE::UNHIDDEN, "", "",
-    		brTab + container.getOriginalTitle() + brTab + container.getTranslatedTitle(), "");
+    auto link =
+        fixLinkFromMainTemplate("", file, LINK_DISPLAY_TYPE::UNHIDDEN, "", "",
+                                brTab + container.getOriginalTitle() + brTab +
+                                    container.getTranslatedTitle(),
+                                "");
     cout << link << endl;
     if (i % 2 == 0)
       outputContainer.appendRightParagraphInBodyText(link);
     else
       outputContainer.appendLeftParagraphInBodyText(link);
+    if (start != paraList.end() and i == *start) {
+      auto enterLastPara = (start + 1 == paraList.end());
+      auto startParaNo = i + 1;
+      int endParaNo = (enterLastPara) ? maxTarget : *(start + 1);
+      totalPara = endParaNo - startParaNo + 1;
+      int preTotalPara = i - *(start - 1);
+      outputContainer.insertMiddleParagrapHeader(enterLastPara, seqOfPara,
+                                                 startParaNo, endParaNo,
+                                                 totalPara, preTotalPara);
+      seqOfPara++;
+      start++;
+    }
     i++;
   }
-  outputContainer.finishBodyTextFile();
+  outputContainer.insertBackParagrapHeader(seqOfPara, totalPara);
   outputContainer.assembleBackToHTM(R"(脂砚斋重评石头记 现代白话文版)",
                                     R"(脂砚斋重评石头记 现代白话文版 目录)");
   cout << "result is in file: " << outputContainer.getOutputFilePath() << endl;
@@ -561,23 +581,40 @@ void generateContentTableForOriginalHtmls() {
   int minTarget = 1, maxTarget = 80;
   CoupledContainer container(FILE_TYPE::ORIGINAL);
   TableContainer outputContainer("cindex");
-  outputContainer.initBodyTextFile();
+  auto paraList = {18, 40, 62};
+  auto start = paraList.begin();
+  outputContainer.insertFrontParagrapHeader(*start);
   int i = 1;
+  int seqOfPara = 1;
+  int totalPara = 0;
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     container.setFileAndAttachmentNumber(file);
     container.fetchOriginalAndTranslatedTitles();
     cout << container.getOriginalTitle() << endl;
     cout << container.getTranslatedTitle() << endl;
-    auto link = fixLinkFromOriginalTemplate(originalDirForLinkFromMain, file, "", "", "",
-                                       container.getOriginalTitle());
+    auto link =
+        fixLinkFromOriginalTemplate(originalDirForLinkFromMain, file, "", "",
+                                    "", container.getOriginalTitle());
     cout << link << endl;
     if (i % 2 == 0)
       outputContainer.appendRightParagraphInBodyText(link);
     else
       outputContainer.appendLeftParagraphInBodyText(link);
+    if (start != paraList.end() and i == *start) {
+      auto enterLastPara = (start + 1 == paraList.end());
+      auto startParaNo = i + 1;
+      int endParaNo = (enterLastPara) ? maxTarget : *(start + 1);
+      totalPara = endParaNo - startParaNo + 1;
+      int preTotalPara = i - *(start - 1);
+      outputContainer.insertMiddleParagrapHeader(enterLastPara, seqOfPara,
+                                                 startParaNo, endParaNo,
+                                                 totalPara, preTotalPara);
+      seqOfPara++;
+      start++;
+    }
     i++;
   }
-  outputContainer.finishBodyTextFile();
+  outputContainer.insertBackParagrapHeader(seqOfPara, totalPara);
   outputContainer.assembleBackToHTM(R"(脂砚斋重评石头记)",
                                     R"(脂砚斋重评石头记 目录)");
   cout << "result is in file: " << outputContainer.getOutputFilePath() << endl;
@@ -588,8 +625,12 @@ void generateContentTableForJPMHtmls() {
   int minTarget = 1, maxTarget = 100;
   CoupledContainer container(FILE_TYPE::JPM);
   TableContainer outputContainer("dindex");
-  outputContainer.initBodyTextFile();
+  auto paraList = {18, 40, 62, 84};
+  auto start = paraList.begin();
+  outputContainer.insertFrontParagrapHeader(*start);
   int i = 1;
+  int seqOfPara = 1;
+  int totalPara = 0;
   for (const auto &file : buildFileSet(minTarget, maxTarget, 3)) {
     container.setFileAndAttachmentNumber(file);
     container.fetchOriginalAndTranslatedTitles();
@@ -602,9 +643,21 @@ void generateContentTableForJPMHtmls() {
       outputContainer.appendRightParagraphInBodyText(link);
     else
       outputContainer.appendLeftParagraphInBodyText(link);
+    if (start != paraList.end() and i == *start) {
+      auto enterLastPara = (start + 1 == paraList.end());
+      auto startParaNo = i + 1;
+      int endParaNo = (enterLastPara) ? maxTarget : *(start + 1);
+      totalPara = endParaNo - startParaNo + 1;
+      int preTotalPara = i - *(start - 1);
+      outputContainer.insertMiddleParagrapHeader(enterLastPara, seqOfPara,
+                                                 startParaNo, endParaNo,
+                                                 totalPara, preTotalPara);
+      seqOfPara++;
+      start++;
+    }
     i++;
   }
-  outputContainer.finishBodyTextFile();
+  outputContainer.insertBackParagrapHeader(seqOfPara, totalPara);
   outputContainer.assembleBackToHTM(R"(张竹坡批注金瓶梅)",
                                     R"(张竹坡批注金瓶梅 目录)");
   cout << "result is in file: " << outputContainer.getOutputFilePath() << endl;
@@ -616,7 +669,6 @@ void generateContentTableForReferenceAttachments() {}
 void generateContentTableForPersonalAttachments() {
   LinkFromMain::loadReferenceAttachmentList();
   ListContainer container("bindex2");
-  container.initBodyTextFile();
   auto table = Link::refAttachmentTable;
   for (const auto &attachment : table) {
     auto attachmentName = attachment.first;

@@ -1,5 +1,5 @@
 #include "container.hpp"
-
+#include "paraHeader.hpp"
 /**
  * seconds from EPOCH as the timestamp
  * used for unique name in backup etc.
@@ -300,7 +300,7 @@ void assembleAttachments(int minTarget, int maxTarget, int minAttachNo,
  * to get ready to write new text in this file which would be composed into
  * container htm
  */
-void ListContainer::initBodyTextFile() {
+void ListContainer::addExistingFrontParagraphs() {
   string outputBodyTextFile = getOutputBodyTextFile();
   if (debug >= LOG_INFO)
     cout << "clear content in: " << outputBodyTextFile << endl;
@@ -324,11 +324,11 @@ void ListContainer::appendParagraphInBodyText(const string &text) {
 const string TableContainer::BODY_TEXT_STARTER = R"(2front.txt)";
 const string TableContainer::BODY_TEXT_DESSERT = R"(2back.txt)";
 
-void TableContainer::initBodyTextFile() {
+void TableContainer::addExistingFrontParagraphs() {
   string outputBodyTextFile = getOutputBodyTextFile();
   if (debug >= LOG_INFO)
     cout << "init content in: " << outputBodyTextFile << endl;
-  ofstream outfile(outputBodyTextFile);
+  ofstream outfile(outputBodyTextFile, std::ios_base::app);
   // copy content from BODY_TEXT_STARTER
   string starterFile = m_bodyTextInputFilePath + BODY_TEXT_STARTER;
 
@@ -369,6 +369,53 @@ void TableContainer::finishBodyTextFile() {
     getline(inDessertFile, line); // Saves the line in line.
     outfile << line << endl;      // excluding start line
   }
+}
+
+void TableContainer::insertFrontParagrapHeader(int totalPara) {
+  string outputBodyTextFile = getOutputBodyTextFile();
+  if (debug >= LOG_INFO)
+    cout << "append content in: " << outputBodyTextFile << endl;
+  ofstream outfile;
+  outfile.open(outputBodyTextFile);
+  LineNumber::setStartNumber(START_PARA_NUMBER);
+  string line = fixFrontParaHeaderFromTemplate(LineNumber::getStartNumber(), "",
+                                               totalPara, false);
+  cout << line << endl;
+  outfile << line << endl;
+}
+
+void TableContainer::insertMiddleParagrapHeader(bool enterLastPara,
+                                                int seqOfPara, int startParaNo,
+                                                int endParaNo, int totalPara,
+                                                int preTotalPara) {
+  string outputBodyTextFile = getOutputBodyTextFile();
+  if (debug >= LOG_INFO)
+    cout << "append content in: " << outputBodyTextFile << endl;
+  ofstream outfile;
+  outfile.open(outputBodyTextFile, std::ios_base::app);
+  string line;
+  if (enterLastPara) {
+    line = insertParaHeaderFromTemplate(LineNumber::getStartNumber(), seqOfPara,
+                                        startParaNo, endParaNo, totalPara,
+                                        preTotalPara, "", false, true);
+  } else
+    line = insertParaHeaderFromTemplate(LineNumber::getStartNumber(), seqOfPara,
+                                        startParaNo, endParaNo, totalPara,
+                                        preTotalPara, "", false, false);
+  cout << line << endl;
+  outfile << line << endl;
+}
+
+void TableContainer::insertBackParagrapHeader(int seqOfPara, int totalPara) {
+  string outputBodyTextFile = getOutputBodyTextFile();
+  if (debug >= LOG_INFO)
+    cout << "append content in: " << outputBodyTextFile << endl;
+  ofstream outfile;
+  outfile.open(outputBodyTextFile, std::ios_base::app);
+  string line = fixBackParaHeaderFromTemplate(LineNumber::getStartNumber(),
+                                              seqOfPara, totalPara, "", false);
+  cout << line << endl;
+  outfile << line << endl;
 }
 
 void TableContainer::appendLeftParagraphInBodyText(const string &text) {

@@ -44,7 +44,7 @@ int main(int argc, char **argv) {
     testFunctions(5);
     break;
   case 12:
-    tools(8);
+    tools(6);
     break;
   default:
     cout << "nothing gets executed." << endl;

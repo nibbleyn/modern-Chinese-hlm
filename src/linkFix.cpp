@@ -206,7 +206,7 @@ void testListContainer() {
   lfm.fixFromString(link);
   link = lfm.asString();
 
-  container.initBodyTextFile();
+  container.addExistingFrontParagraphs();
   container.appendParagraphInBodyText(link);
   container.appendParagraphInBodyText("18 links are found.");
   container.assembleBackToHTM("test", "test container");
@@ -215,7 +215,7 @@ void testListContainer() {
 
 void testTableContainer() {
   TableContainer container("2_gen");
-  container.initBodyTextFile();
+  container.addExistingFrontParagraphs();
   container.appendLeftParagraphInBodyText("line1-left");
   container.appendRightParagraphInBodyText("line1-right");
   container.appendLeftParagraphInBodyText("line2-left");
