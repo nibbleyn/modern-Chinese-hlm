@@ -1,14 +1,4 @@
 #pragma once
-
-#include <fstream>
-#include <iomanip>
-#include <sstream>
-
-#include <iostream>
-#include <set>
-#include <string>
-using namespace std;
-
 #include "utf8StringUtil.hpp"
 
 enum class OBJECT_TYPE {

@@ -96,7 +96,7 @@ void searchKeywordInNoAttachmentFiles(const string &key, const string &fileType,
                                outputFilename);
 }
 
-void testFindFirstInFiles() {
+void findFirstInFiles() {
   searchKeywordInNoAttachmentFiles(R"(聚赌嫖娼)", "main", "xxx3");
   searchKeywordInNoAttachmentFiles(R"(头一社)", "original", "xxx4");
 }

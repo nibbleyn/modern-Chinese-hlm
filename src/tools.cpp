@@ -807,6 +807,12 @@ void tools(int num) {
   case 13:
     fixTagPairEnd();
     break;
+  case 14:
+    findFirstInFiles();
+    break;
+  case 15:
+    constructSubStory();
+    break;
   default:
     cout << "invalid tool." << endl;
   }

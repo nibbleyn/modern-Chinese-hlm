@@ -21,12 +21,6 @@ void testFunctions(int num) {
   case 5:
     testContainer(2);
     break;
-  case 6:
-    testConstructSubStory();
-    break;
-  case 7:
-    testFindFirstInFiles();
-    break;
   case 8:
     testPoem();
     break;

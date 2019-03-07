@@ -15,4 +15,4 @@ void searchByTagInNoAttachmentFiles(const string &tag, const string &fileType,
                                     bool showLineNumberOnly = true);
 
 void searchForImages();
-void testFindFirstInFiles();
+void findFirstInFiles();

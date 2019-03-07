@@ -525,12 +525,3 @@ void testLineNumber() {
   testLineHeaderFromContainedLine(R"(anything)");
   SEPERATE("ln8", " finished ");
 }
-
-void testConstructSubStory() {
-  CoupledBodyText bodyText;
-  bodyText.setFilePrefixFromFileType(FILE_TYPE::MAIN);
-  bodyText.setFileAndAttachmentNumber("06");
-  CoupledBodyText::ParaStruct res = bodyText.getNumberOfPara();
-  cout << GetTupleElement(res, 0) << " " << GetTupleElement(res, 1) << " "
-       << GetTupleElement(res, 2) << endl;
-}
