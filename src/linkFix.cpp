@@ -215,13 +215,13 @@ void testListContainer() {
 
 void testTableContainer() {
   TableContainer container("2_gen");
-  container.addExistingFrontParagraphs();
+  container.insertFrontParagrapHeader(4, searchUnit);
   container.appendLeftParagraphInBodyText("line1-left");
   container.appendRightParagraphInBodyText("line1-right");
   container.appendLeftParagraphInBodyText("line2-left");
   container.appendRightParagraphInBodyText(
       ""); // if only 3 is added, patch last right part
-  container.finishBodyTextFile();
+  container.insertBackParagrapHeader(0, 4, searchUnit);
   container.assembleBackToHTM("content index table", "content");
   cout << "result is in file: " << container.getOutputFilePath() << endl;
 }

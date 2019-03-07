@@ -88,7 +88,8 @@ string fixLastParaHeaderFromTemplate(int startNumber, int lastParaNo,
 static const string frontParaHeader =
     R"(<tr><td width="50%"><b unhidden> 第1回 - 第QQ回 </b><a unhidden id="PXX" href="#PYY">v向下QQ回</a></td><td width="50%"><a unhidden id="top" href="#bottom">页面底部->||</a></td></tr>)";
 string fixFrontParaHeaderFromTemplate(int startNumber, const string &color,
-                                      int totalPara, bool hidden) {
+                                      int totalPara, const string &units,
+                                      bool hidden) {
   string link = frontParaHeader;
   if (hidden) {
     link = replacePart(link, "unhidden", "hidden");
@@ -100,7 +101,8 @@ string fixFrontParaHeaderFromTemplate(int startNumber, const string &color,
   link = replacePart(link, "XX", TurnToString(startNumber));
   link = replacePart(link, "YY", TurnToString(startNumber + 1));
   link = replacePart(link, "QQ", TurnToString(totalPara));
-
+  if (units != defaultUnit)
+    link = replacePart(link, defaultUnit, units);
   return link;
 }
 
@@ -110,8 +112,8 @@ static const string insertParaHeader =
 string insertParaHeaderFromTemplate(int startNumber, int seqOfPara,
                                     int startParaNo, int endParaNo,
                                     int totalPara, int preTotalPara,
-                                    const string &color, bool hidden,
-                                    bool lastPara) {
+                                    const string &color, const string &units,
+                                    bool hidden, bool lastPara) {
   string link = insertParaHeader;
   if (hidden) {
     link = replacePart(link, "unhidden", "hidden");
@@ -131,6 +133,8 @@ string insertParaHeaderFromTemplate(int startNumber, int seqOfPara,
   link = replacePart(link, "UU", TurnToString(startNumber - seqOfPara + 1));
   link = replacePart(link, "PP", TurnToString(startParaNo));
   link = replacePart(link, "QQ", TurnToString(endParaNo));
+  if (units != defaultUnit)
+    link = replacePart(link, defaultUnit, units);
   return link;
 }
 
@@ -139,7 +143,7 @@ static const string backParaHeader =
 
 string fixBackParaHeaderFromTemplate(int startNumber, int seqOfPara,
                                      int totalPara, const string &color,
-                                     bool hidden) {
+                                     const string &units, bool hidden) {
   string link = backParaHeader;
   if (hidden) {
     link = replacePart(link, "unhidden", "hidden");
@@ -151,5 +155,7 @@ string fixBackParaHeaderFromTemplate(int startNumber, int seqOfPara,
   link = replacePart(link, "ZZ", TurnToString(totalPara));
   link = replacePart(link, "XX", TurnToString(startNumber - seqOfPara));
   link = replacePart(link, "YY", TurnToString(startNumber - seqOfPara + 1));
+  if (units != defaultUnit)
+    link = replacePart(link, defaultUnit, units);
   return link;
 }

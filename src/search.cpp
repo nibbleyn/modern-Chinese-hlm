@@ -46,7 +46,7 @@ void findFirstInNoAttachmentFiles(const string key, const string &fileType,
       }
     }
   }
-  bool asList = true;
+  bool asList = false;
   if (asList) {
     ListContainer container(outputFilename);
     container.addExistingFrontParagraphs();
@@ -66,8 +66,22 @@ void findFirstInNoAttachmentFiles(const string key, const string &fileType,
     cout << "result is in file " << container.getOutputFilePath() << endl;
   } else {
     TableContainer container(outputFilename);
-    container.addExistingFrontParagraphs();
-    container.finishBodyTextFile();
+    container.insertFrontParagrapHeader(total, searchUnit);
+    int i = 1;
+    for (const auto &chapter : resultLinkList) {
+      auto list = chapter.second;
+      for (const auto &detail : list) {
+        if (i % 2 == 0)
+          container.appendRightParagraphInBodyText(detail.link);
+        else
+          container.appendLeftParagraphInBodyText(detail.link);
+        i++;
+      }
+    }
+    // patch last right part
+    if (total % 2 != 0)
+      container.appendRightParagraphInBodyText("");
+    container.insertBackParagrapHeader(0, total, searchUnit);
     container.assembleBackToHTM("search  results",
                                 "searchInFiles for key: " + key);
     cout << "result is in file " << container.getOutputFilePath() << endl;

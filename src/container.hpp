@@ -1,6 +1,7 @@
 #pragma once
 #include "attachmentFiles.hpp"
 #include "lineNumber.hpp"
+#include "paraHeader.hpp"
 
 static const string HTML_SRC_MAIN = "utf8HTML/src/";
 static const string HTML_SRC_ORIGINAL = "utf8HTML/src/original/";
@@ -161,11 +162,14 @@ public:
 
   // process bodyText change directly, instead of thru CoupledBodyText
   void addExistingFrontParagraphs();
-  void insertFrontParagrapHeader(int totalPara);
+  void insertFrontParagrapHeader(int totalPara,
+                                 const string &units = defaultUnit);
   void insertMiddleParagrapHeader(bool enterLastPara, int seqOfPara,
                                   int startParaNo, int endParaNo, int totalPara,
-                                  int preTotalPara);
-  void insertBackParagrapHeader(int seqOfPara, int totalPara);
+                                  int preTotalPara,
+                                  const string &units = defaultUnit);
+  void insertBackParagrapHeader(int seqOfPara, int totalPara,
+                                const string &units = defaultUnit);
   void appendLeftParagraphInBodyText(const string &text);
   void appendRightParagraphInBodyText(
       const string &text); // text could be null for last right column

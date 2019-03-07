@@ -1,9 +1,6 @@
 #pragma once
-#include "fileUtil.hpp"
-//#include "utf8StringUtil.hpp"
 #include "lineNumber.hpp"
 #include "paraHeader.hpp"
-#include <functional> // std::greater
 
 class CoupledBodyText {
 

@@ -1,4 +1,5 @@
 #include "coupledBodyText.hpp"
+#include <functional> // std::greater
 
 bool KeyStartNotFound(const string &testStr, const string &key) {
   if (debug >= LOG_INFO)

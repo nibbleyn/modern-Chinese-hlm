@@ -1,5 +1,4 @@
 #include "container.hpp"
-#include "paraHeader.hpp"
 /**
  * seconds from EPOCH as the timestamp
  * used for unique name in backup etc.
@@ -321,8 +320,8 @@ void ListContainer::appendParagraphInBodyText(const string &text) {
   outfile << "<br>" << text << "</br>" << endl;
 }
 
-const string TableContainer::BODY_TEXT_STARTER = R"(2front.txt)";
-const string TableContainer::BODY_TEXT_DESSERT = R"(2back.txt)";
+const string TableContainer::BODY_TEXT_STARTER = R"(3front.txt)";
+const string TableContainer::BODY_TEXT_DESSERT = R"(3back.txt)";
 
 void TableContainer::addExistingFrontParagraphs() {
   string outputBodyTextFile = getOutputBodyTextFile();
@@ -371,7 +370,8 @@ void TableContainer::finishBodyTextFile() {
   }
 }
 
-void TableContainer::insertFrontParagrapHeader(int totalPara) {
+void TableContainer::insertFrontParagrapHeader(int totalPara,
+                                               const string &units) {
   string outputBodyTextFile = getOutputBodyTextFile();
   if (debug >= LOG_INFO)
     cout << "append content in: " << outputBodyTextFile << endl;
@@ -379,7 +379,7 @@ void TableContainer::insertFrontParagrapHeader(int totalPara) {
   outfile.open(outputBodyTextFile);
   LineNumber::setStartNumber(START_PARA_NUMBER);
   string line = fixFrontParaHeaderFromTemplate(LineNumber::getStartNumber(), "",
-                                               totalPara, false);
+                                               totalPara, units, false);
   cout << line << endl;
   outfile << line << endl;
 }
@@ -387,7 +387,8 @@ void TableContainer::insertFrontParagrapHeader(int totalPara) {
 void TableContainer::insertMiddleParagrapHeader(bool enterLastPara,
                                                 int seqOfPara, int startParaNo,
                                                 int endParaNo, int totalPara,
-                                                int preTotalPara) {
+                                                int preTotalPara,
+                                                const string &units) {
   string outputBodyTextFile = getOutputBodyTextFile();
   if (debug >= LOG_INFO)
     cout << "append content in: " << outputBodyTextFile << endl;
@@ -397,23 +398,24 @@ void TableContainer::insertMiddleParagrapHeader(bool enterLastPara,
   if (enterLastPara) {
     line = insertParaHeaderFromTemplate(LineNumber::getStartNumber(), seqOfPara,
                                         startParaNo, endParaNo, totalPara,
-                                        preTotalPara, "", false, true);
+                                        preTotalPara, "", units, false, true);
   } else
     line = insertParaHeaderFromTemplate(LineNumber::getStartNumber(), seqOfPara,
                                         startParaNo, endParaNo, totalPara,
-                                        preTotalPara, "", false, false);
+                                        preTotalPara, "", units, false, false);
   cout << line << endl;
   outfile << line << endl;
 }
 
-void TableContainer::insertBackParagrapHeader(int seqOfPara, int totalPara) {
+void TableContainer::insertBackParagrapHeader(int seqOfPara, int totalPara,
+                                              const string &units) {
   string outputBodyTextFile = getOutputBodyTextFile();
   if (debug >= LOG_INFO)
     cout << "append content in: " << outputBodyTextFile << endl;
   ofstream outfile;
   outfile.open(outputBodyTextFile, std::ios_base::app);
-  string line = fixBackParaHeaderFromTemplate(LineNumber::getStartNumber(),
-                                              seqOfPara, totalPara, "", false);
+  string line = fixBackParaHeaderFromTemplate(
+      LineNumber::getStartNumber(), seqOfPara, totalPara, "", units, false);
   cout << line << endl;
   outfile << line << endl;
 }

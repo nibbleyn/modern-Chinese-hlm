@@ -1,6 +1,5 @@
 #pragma once
 
-#include "coupledBodyText.hpp"
 #include "link.hpp"
 
 class CoupledBodyTextWithLink : public CoupledBodyText {
