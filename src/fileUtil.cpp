@@ -9,7 +9,7 @@
  * @return filename prefix of target file
  */
 
-string getHtmlFileNamePrefix(FILE_TYPE type) {
+std::string getHtmlFileNamePrefix(FILE_TYPE type) {
   if (type == FILE_TYPE::ORIGINAL)
     return ORIGINAL_HTML_PREFIX;
   if (type == FILE_TYPE::ATTACHMENT)
@@ -19,7 +19,7 @@ string getHtmlFileNamePrefix(FILE_TYPE type) {
   return MAIN_HTML_PREFIX;
 }
 
-FILE_TYPE getFileTypeFromString(const string &fileType) {
+FILE_TYPE getFileTypeFromString(const std::string &fileType) {
   if (fileType == ATTACHMENT)
     return FILE_TYPE::ATTACHMENT;
   if (fileType == ORIGINAL)
@@ -36,7 +36,7 @@ FILE_TYPE getFileTypeFromString(const string &fileType) {
  * @param type type of file
  * @return corresponding color of separator line between paragraphs
  */
-string getSeparateLineColor(FILE_TYPE type) {
+std::string getSeparateLineColor(FILE_TYPE type) {
   if (type == FILE_TYPE::MAIN)
     return MAIN_SEPERATOR_COLOR;
   if (type == FILE_TYPE::JPM)

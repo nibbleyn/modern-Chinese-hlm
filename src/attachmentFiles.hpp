@@ -1,6 +1,6 @@
 #pragma once
-#include "fileUtil.hpp"
 #include "utf8StringUtil.hpp"
+#include "fileUtil.hpp"
 
 enum class ATTACHMENT_TYPE { PERSONAL, REFERENCE, NON_EXISTED };
 
