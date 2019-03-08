@@ -453,17 +453,16 @@ string Link::asString() {
  * @param linkString the link to check
  */
 void Link::readDisplayType(const string &linkString) {
-  string copy = linkString;
-  // remove space in the linkString
-  copy.erase(remove(copy.begin(), copy.end(), ' '), copy.end());
-  if (copy.find("aunhiddenhref") != string::npos) {
+  auto hrefStart = linkString.find(referFileMiddleChar);
+  string containedPart = linkString.substr(0, hrefStart);
+  if (debug >= LOG_INFO)
+    cout << containedPart << endl;
+  if (containedPart.find(unhiddenDisplayProperty) != string::npos) {
     m_displayType = LINK_DISPLAY_TYPE::UNHIDDEN;
-  }
-  if (copy.find("ahref") != string::npos) {
-    m_displayType = LINK_DISPLAY_TYPE::DIRECT;
-  }
-  if (copy.find("ahiddenhref") != string::npos) {
+  } else if (containedPart.find(hiddenDisplayProperty) != string::npos) {
     m_displayType = LINK_DISPLAY_TYPE::HIDDEN;
+  } else {
+    m_displayType = LINK_DISPLAY_TYPE::DIRECT;
   }
   if (debug >= LOG_INFO)
     cout << "display Type:" << displayPropertyAsString() << endl;
@@ -1222,12 +1221,16 @@ size_t Link::loadFirstFromContainedLine(const string &containedLine,
   auto linkEnd = containedLine.find(linkEndChars, linkBegin);
   auto linkString = containedLine.substr(
       linkBegin, linkEnd + linkEndChars.length() - linkBegin);
+  if (debug >= LOG_INFO)
+    cout << "original length: " << linkString.length() << endl;
   readTypeAndAnnotation(linkString);
   readReferFileName(linkString); // second step of construction
   fixFromString(linkString);
-
+  if (debug >= LOG_INFO)
+    cout << "after fix length: " << length() << endl;
   m_bodyText = m_annotation;
   m_displayText = scanForSubType(m_bodyText, OBJECT_TYPE::COMMENT);
+
   return containedLine.find(linkStartChars, after);
 }
 
@@ -1372,9 +1375,9 @@ void testLink(Link &lfm, string linkString, bool needToGenerateOrgLink) {
 void testLinkOperation() {
   string linkString =
       R"(<a hidden href="a080.htm#top">原是)" + commentStart +
-      unhiddenDisplayPropterty + endOfBeginTag +
+      unhiddenDisplayProperty + endOfBeginTag +
       R"(薛姨妈1)" + commentEnd +
-      R"(老奶奶)" + commentStart + unhiddenDisplayPropterty + endOfBeginTag +
+      R"(老奶奶)" + commentStart + unhiddenDisplayProperty + endOfBeginTag +
       R"(薛姨妈1)" + commentEnd +
       R"(使唤的</a>)";
   cout << "original link: " << endl << linkString << endl;
@@ -1390,9 +1393,9 @@ void testLinkOperation() {
 
   linkString =
       R"(<a hidden href="a080.htm#top">原是)" + commentStart +
-      unhiddenDisplayPropterty + endOfBeginTag +
+      unhiddenDisplayProperty + endOfBeginTag +
       R"(薛姨妈1)" + commentEnd +
-      R"(老奶奶)" + commentStart + unhiddenDisplayPropterty + endOfBeginTag +
+      R"(老奶奶)" + commentStart + unhiddenDisplayProperty + endOfBeginTag +
       R"(薛姨妈1)" + commentEnd +
       R"(使唤的</a>)";
   testLinkFromMain("07", linkString, false);

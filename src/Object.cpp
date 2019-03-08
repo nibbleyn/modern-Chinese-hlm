@@ -87,8 +87,8 @@ size_t Poem::loadFirstFromContainedLine(const string &containedLine,
 }
 
 string Poem::getWholeString() {
-  return poemBeginChars + unhiddenDisplayPropterty + endOfBeginTag +
-         m_bodyText + poemEndChars;
+  return poemBeginChars + unhiddenDisplayProperty + endOfBeginTag + m_bodyText +
+         poemEndChars;
 }
 
 string Poem::getDisplayString() { return m_bodyText; }

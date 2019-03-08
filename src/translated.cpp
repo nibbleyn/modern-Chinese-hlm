@@ -10,7 +10,7 @@ int main(int argc, char **argv) {
   //  int num = 3;
   //	  int num = 4;
   //  int num = 5;
-  int num = 12;
+  int num = 11;
   switch (num) {
   case 1:
     numberJPMHtmls(false);
@@ -41,7 +41,7 @@ int main(int argc, char **argv) {
     numberAttachmentHtmls(false, true);
     break;
   case 11:
-    testFunctions(5);
+    testFunctions(11);
     break;
   case 12:
     tools(6);

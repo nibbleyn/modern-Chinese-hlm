@@ -29,8 +29,6 @@ string fixLinkFromAttachmentTemplate(const string &path, const string &filename,
                                      const string &attachNo,
                                      const string &annotation);
 
-static const string unhiddenDisplayProperty = R"(unhidden)";
-static const string hiddenDisplayProperty = R"(hidden)";
 static const string returnLinkFromAttachmentHeader = R"(返回本章原文)";
 static const string returnLink = R"(被引用)";
 static const string returnToContentTable = R"(回目录)";

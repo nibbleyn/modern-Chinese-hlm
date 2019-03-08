@@ -79,7 +79,7 @@ public:
 private:
 };
 
-static const string poemBeginChars = R"(<strong)";
+static const string poemBeginChars = R"(<strong )";
 static const string poemEndChars = R"(</strong>)";
 class Poem : public Object {
 public:

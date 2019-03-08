@@ -84,3 +84,20 @@ string utf8substr(const string &originalString, size_t begin, size_t &end,
   }
   return originalString.substr(begin, byteIndex - begin);
 }
+
+string markDifference(const string &firstString, const string &secondString,
+                      size_t begin) {
+  if (firstString == secondString)
+    return R"(same)";
+  const char *aStr1 = firstString.c_str();
+  const char *aStr2 = secondString.c_str();
+  size_t firstPos = 0;
+  for (size_t byteIndex = begin;
+       byteIndex < min(firstString.size(), secondString.size()); byteIndex++) {
+    if (aStr1[byteIndex] == aStr2[byteIndex])
+      firstPos++;
+    else
+      break;
+  }
+  return firstString.substr(0, firstPos) + "^";
+}

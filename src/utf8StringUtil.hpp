@@ -58,7 +58,8 @@ static const string attachmentFileMiddleChar = R"(_)";
 static const string bracketStartChars = R"(（)";
 static const string bracketEndChars = R"(）)";
 
-static const string unhiddenDisplayPropterty = R"( unhidden)";
+static const string unhiddenDisplayProperty = R"(unhidden)";
+static const string hiddenDisplayProperty = R"(hidden)";
 static const string endOfBeginTag = R"(>)";
 
 // links
@@ -98,3 +99,5 @@ void replacePart(string &linkString, const string &key,
 int utf8length(const string &originalString);
 string utf8substr(const string &originalString, size_t begin, size_t &end,
                   size_t SubStrLength);
+string markDifference(const string &firstString, const string &secondString,
+                      size_t begin = 0);
