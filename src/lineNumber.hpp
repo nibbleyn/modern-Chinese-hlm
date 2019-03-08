@@ -42,7 +42,7 @@ public:
   size_t length();
   string getDisplayString();
   size_t displaySize();
-  size_t loadFirstFromContainedLine(const string& containedLine,
+  size_t loadFirstFromContainedLine(const string &containedLine,
                                     size_t after = 0);
   bool valid() { return (m_paraNumber != 0 and m_lineNumber != 0); }
   bool isParagraphHeader() {

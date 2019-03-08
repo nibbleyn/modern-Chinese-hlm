@@ -28,7 +28,7 @@ static const string rightImgReferenceTemplate =
 string fixImgReferenceFromTemplate(bool toLeft, const string &caption) {
   string link =
       (toLeft == true) ? leftImgReferenceTemplate : rightImgReferenceTemplate;
-  link = replacePart(link, "XX", caption);
+  replacePart(link, "XX", caption);
   return link;
 }
 

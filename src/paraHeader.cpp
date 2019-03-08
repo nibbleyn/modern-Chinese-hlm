@@ -18,12 +18,12 @@ string fixFirstParaHeaderFromTemplate(int startNumber, const string &color,
                                       bool hidden) {
   string link = firstParaHeader;
   if (hidden) {
-    link = replacePart(link, "unhidden", "hidden");
-    link = replacePart(link, R"(<hr color="#COLOR">)", "<br>");
+    replacePart(link, "unhidden", "hidden");
+    replacePart(link, R"(<hr color="#COLOR">)", "<br>");
   } else
-    link = replacePart(link, "COLOR", color);
-  link = replacePart(link, "XX", TurnToString(startNumber));
-  link = replacePart(link, "YY", TurnToString(startNumber + 1));
+    replacePart(link, "COLOR", color);
+  replacePart(link, "XX", TurnToString(startNumber));
+  replacePart(link, "YY", TurnToString(startNumber + 1));
 
   return link;
 }
@@ -47,19 +47,18 @@ string fixMiddleParaHeaderFromTemplate(int startNumber, int currentParaNo,
                                        bool lastPara) {
   string link = MiddleParaHeader;
   if (hidden) {
-    link = replacePart(link, "unhidden", "hidden");
-    link = replacePart(link, R"(<hr color="#COLOR">)", "<br>");
+    replacePart(link, "unhidden", "hidden");
+    replacePart(link, R"(<hr color="#COLOR">)", "<br>");
   } else
-    link = replacePart(link, "COLOR", color);
-  link = replacePart(link, "XX", TurnToString(startNumber + currentParaNo));
+    replacePart(link, "COLOR", color);
+  replacePart(link, "XX", TurnToString(startNumber + currentParaNo));
   if (lastPara == true) {
-    link = replacePart(link, "PYY", R"(bottom)");
+    replacePart(link, "PYY", R"(bottom)");
   } else
-    link =
-        replacePart(link, "YY", TurnToString(startNumber + currentParaNo + 1));
-  link = replacePart(link, "ZZ", TurnToString(currentParaNo + 1));
-  link = replacePart(link, "WW", TurnToString(startNumber - currentParaNo));
-  link = replacePart(link, "UU", TurnToString(startNumber - currentParaNo + 1));
+    replacePart(link, "YY", TurnToString(startNumber + currentParaNo + 1));
+  replacePart(link, "ZZ", TurnToString(currentParaNo + 1));
+  replacePart(link, "WW", TurnToString(startNumber - currentParaNo));
+  replacePart(link, "UU", TurnToString(startNumber - currentParaNo + 1));
   return link;
 }
 
@@ -76,12 +75,12 @@ string fixLastParaHeaderFromTemplate(int startNumber, int lastParaNo,
                                      const string &color, bool hidden) {
   string link = lastParaHeader;
   if (hidden) {
-    link = replacePart(link, "unhidden", "hidden");
-    link = replacePart(link, R"(<hr color="#COLOR">)", "<br>");
+    replacePart(link, "unhidden", "hidden");
+    replacePart(link, R"(<hr color="#COLOR">)", "<br>");
   } else
-    link = replacePart(link, "COLOR", color);
-  link = replacePart(link, "XX", TurnToString(startNumber - lastParaNo));
-  link = replacePart(link, "YY", TurnToString(startNumber - lastParaNo + 1));
+    replacePart(link, "COLOR", color);
+  replacePart(link, "XX", TurnToString(startNumber - lastParaNo));
+  replacePart(link, "YY", TurnToString(startNumber - lastParaNo + 1));
   return link;
 }
 
@@ -92,17 +91,17 @@ string fixFrontParaHeaderFromTemplate(int startNumber, const string &color,
                                       bool hidden) {
   string link = frontParaHeader;
   if (hidden) {
-    link = replacePart(link, "unhidden", "hidden");
-    link = replacePart(link, R"(<hr color="#COLOR">)", "<br>");
+    replacePart(link, "unhidden", "hidden");
+    replacePart(link, R"(<hr color="#COLOR">)", "<br>");
   } else if (not color.empty())
-    link = replacePart(link, "COLOR", color);
+    replacePart(link, "COLOR", color);
   else
-    link = replacePart(link, "COLOR", MAIN_SEPERATOR_COLOR);
-  link = replacePart(link, "XX", TurnToString(startNumber));
-  link = replacePart(link, "YY", TurnToString(startNumber + 1));
-  link = replacePart(link, "QQ", TurnToString(totalPara));
+    replacePart(link, "COLOR", MAIN_SEPERATOR_COLOR);
+  replacePart(link, "XX", TurnToString(startNumber));
+  replacePart(link, "YY", TurnToString(startNumber + 1));
+  replacePart(link, "QQ", TurnToString(totalPara));
   if (units != defaultUnit)
-    link = replacePart(link, defaultUnit, units);
+    replacePart(link, defaultUnit, units);
   return link;
 }
 
@@ -116,25 +115,25 @@ string insertParaHeaderFromTemplate(int startNumber, int seqOfPara,
                                     bool hidden, bool lastPara) {
   string link = insertParaHeader;
   if (hidden) {
-    link = replacePart(link, "unhidden", "hidden");
-    link = replacePart(link, R"(<hr color="#COLOR">)", "<br>");
+    replacePart(link, "unhidden", "hidden");
+    replacePart(link, R"(<hr color="#COLOR">)", "<br>");
   } else if (not color.empty())
-    link = replacePart(link, "COLOR", color);
+    replacePart(link, "COLOR", color);
   else
-    link = replacePart(link, "COLOR", MAIN_SEPERATOR_COLOR);
-  link = replacePart(link, "XX", TurnToString(startNumber + seqOfPara));
+    replacePart(link, "COLOR", MAIN_SEPERATOR_COLOR);
+  replacePart(link, "XX", TurnToString(startNumber + seqOfPara));
   if (lastPara == true) {
-    link = replacePart(link, "PYY", R"(bottom)");
+    replacePart(link, "PYY", R"(bottom)");
   } else
-    link = replacePart(link, "YY", TurnToString(startNumber + seqOfPara + 1));
-  link = replacePart(link, "ZD", TurnToString(totalPara));
-  link = replacePart(link, "ZU", TurnToString(preTotalPara));
-  link = replacePart(link, "WW", TurnToString(startNumber - seqOfPara));
-  link = replacePart(link, "UU", TurnToString(startNumber - seqOfPara + 1));
-  link = replacePart(link, "PP", TurnToString(startParaNo));
-  link = replacePart(link, "QQ", TurnToString(endParaNo));
+    replacePart(link, "YY", TurnToString(startNumber + seqOfPara + 1));
+  replacePart(link, "ZD", TurnToString(totalPara));
+  replacePart(link, "ZU", TurnToString(preTotalPara));
+  replacePart(link, "WW", TurnToString(startNumber - seqOfPara));
+  replacePart(link, "UU", TurnToString(startNumber - seqOfPara + 1));
+  replacePart(link, "PP", TurnToString(startParaNo));
+  replacePart(link, "QQ", TurnToString(endParaNo));
   if (units != defaultUnit)
-    link = replacePart(link, defaultUnit, units);
+    replacePart(link, defaultUnit, units);
   return link;
 }
 
@@ -146,16 +145,16 @@ string fixBackParaHeaderFromTemplate(int startNumber, int seqOfPara,
                                      const string &units, bool hidden) {
   string link = backParaHeader;
   if (hidden) {
-    link = replacePart(link, "unhidden", "hidden");
-    link = replacePart(link, R"(<hr color="#COLOR">)", "<br>");
+    replacePart(link, "unhidden", "hidden");
+    replacePart(link, R"(<hr color="#COLOR">)", "<br>");
   } else if (not color.empty())
-    link = replacePart(link, "COLOR", color);
+    replacePart(link, "COLOR", color);
   else
-    link = replacePart(link, "COLOR", MAIN_SEPERATOR_COLOR);
-  link = replacePart(link, "ZZ", TurnToString(totalPara));
-  link = replacePart(link, "XX", TurnToString(startNumber - seqOfPara));
-  link = replacePart(link, "YY", TurnToString(startNumber - seqOfPara + 1));
+    replacePart(link, "COLOR", MAIN_SEPERATOR_COLOR);
+  replacePart(link, "ZZ", TurnToString(totalPara));
+  replacePart(link, "XX", TurnToString(startNumber - seqOfPara));
+  replacePart(link, "YY", TurnToString(startNumber - seqOfPara + 1));
   if (units != defaultUnit)
-    link = replacePart(link, defaultUnit, units);
+    replacePart(link, defaultUnit, units);
   return link;
 }

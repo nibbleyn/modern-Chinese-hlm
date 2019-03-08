@@ -93,8 +93,8 @@ string formatIntoZeroPatchedChapterNumber(int chapterNumber, int digits);
 using fileSet = set<string>;
 fileSet buildFileSet(int min, int max, int digits = 2);
 
-string replacePart(string &linkString, const string &key,
-                   const string &toReplace);
-int utf8length(std::string originalString);
-std::string utf8substr(std::string originalString, size_t begin, size_t &end,
-                       size_t SubStrLength);
+void replacePart(string &linkString, const string &key,
+                 const string &toReplace);
+int utf8length(const string &originalString);
+string utf8substr(const string &originalString, size_t begin, size_t &end,
+                  size_t SubStrLength);

@@ -147,7 +147,7 @@ void CoupledContainer::assembleBackToHTM(const string &title,
  * then dissemble would happen from HTML_SRC_MAIN afterwards
  */
 void CoupledContainer::backupAndOverwriteAllInputHtmlFiles() {
-  std::string dir = HTML_SRC_MAIN.substr(0, HTML_SRC_MAIN.find_last_of('/'));
+  string dir = HTML_SRC_MAIN.substr(0, HTML_SRC_MAIN.find_last_of('/'));
   string BACKUP = dir + currentTimeStamp();
   if (debug >= LOG_INFO)
     cout << "backup of current src is created under : " << BACKUP << endl;

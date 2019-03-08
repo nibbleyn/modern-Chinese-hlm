@@ -66,16 +66,16 @@ string fixLinkFromSameFileTemplate(LINK_DISPLAY_TYPE type, const string &key,
   string link = linkToSameFile;
   link = replaceDisplayLink(link, type);
   if (referPara.empty()) {
-    link = replacePart(link, R"(#YY)", "");
+    replacePart(link, R"(#YY)", "");
   } else
-    link = replacePart(link, "YY", referPara);
+    replacePart(link, "YY", referPara);
   if (key.empty()) // use top/bottom as reference name
   {
-    link = replacePart(link, R"(<i hidden>QQ</i>)", key);
+    replacePart(link, R"(<i hidden>QQ</i>)", key);
   } else {
-    link = replacePart(link, "QQ", key);
+    replacePart(link, "QQ", key);
   }
-  link = replacePart(link, "ZZ", annotation);
+  replacePart(link, "ZZ", annotation);
   return link;
 }
 
@@ -103,21 +103,21 @@ string fixLinkFromMainTemplate(const string &path, const string &filename,
 
   string link = linkToMainFile;
   link = replaceDisplayLink(link, type);
-  link = replacePart(link, "PP", path);
-  link = replacePart(link, "XX", filename);
+  replacePart(link, "PP", path);
+  replacePart(link, "XX", filename);
   if (referPara.empty()) {
-    link = replacePart(link, R"(#YY)", "");
+    replacePart(link, R"(#YY)", "");
   } else
-    link = replacePart(link, "YY", referPara);
+    replacePart(link, "YY", referPara);
   if (key.empty()) // use top/bottom as reference name
   {
-    link = replacePart(link, R"(<i hidden>QQ</i><sub unhidden>WW</sub>)", key);
-    link = replacePart(link, R"(title="QQ")", "");
+    replacePart(link, R"(<i hidden>QQ</i><sub unhidden>WW</sub>)", key);
+    replacePart(link, R"(title="QQ")", "");
   } else {
-    link = replacePart(link, "QQ", key);
+    replacePart(link, "QQ", key);
   }
-  link = replacePart(link, "WW", citation);
-  link = replacePart(link, "ZZ", annotation);
+  replacePart(link, "WW", citation);
+  replacePart(link, "ZZ", annotation);
   return link;
 }
 
@@ -132,11 +132,11 @@ string fixLinkFromReverseLinkTemplate(const string &filename,
 
   string link = reverseLinkToMainFile;
   link = replaceDisplayLink(link, type);
-  link = replacePart(link, "XX", filename);
+  replacePart(link, "XX", filename);
   if (referPara.empty()) {
-    link = replacePart(link, R"(#YY)", "");
+    replacePart(link, R"(#YY)", "");
   } else
-    link = replacePart(link, "YY", referPara);
+    replacePart(link, "YY", referPara);
   return link;
 }
 
@@ -159,21 +159,21 @@ string fixLinkFromOriginalTemplate(const string &path, const string &filename,
                                    const string &referPara,
                                    const string &annotation) {
   auto link = linkToOriginalFile;
-  link = replacePart(link, "PP", path);
-  link = replacePart(link, "XX", filename);
+  replacePart(link, "PP", path);
+  replacePart(link, "XX", filename);
   if (referPara.empty()) {
-    link = replacePart(link, R"(#YY)", "");
+    replacePart(link, R"(#YY)", "");
   } else
-    link = replacePart(link, "YY", referPara);
+    replacePart(link, "YY", referPara);
   if (key.empty()) // use top/bottom as reference name
   {
-    link = replacePart(link, R"(<i hidden>QQ</i><sub unhidden>WW</sub>)", key);
-    link = replacePart(link, R"(title="QQ")", "");
+    replacePart(link, R"(<i hidden>QQ</i><sub unhidden>WW</sub>)", key);
+    replacePart(link, R"(title="QQ")", "");
   } else {
-    link = replacePart(link, "QQ", key);
+    replacePart(link, "QQ", key);
   }
-  link = replacePart(link, "WW", citation);
-  link = replacePart(link, "ZZ", annotation);
+  replacePart(link, "WW", citation);
+  replacePart(link, "ZZ", annotation);
   return link;
 }
 
@@ -196,21 +196,21 @@ string fixLinkFromJPMTemplate(const string &path, const string &filename,
                               const string &referPara,
                               const string &annotation) {
   auto link = linkToJPMFile;
-  link = replacePart(link, "PP", path);
-  link = replacePart(link, "XXX", filename);
+  replacePart(link, "PP", path);
+  replacePart(link, "XXX", filename);
   if (referPara.empty()) {
-    link = replacePart(link, R"(#YY)", "");
+    replacePart(link, R"(#YY)", "");
   } else
-    link = replacePart(link, "YY", referPara);
+    replacePart(link, "YY", referPara);
   if (key.empty()) // use top/bottom as reference name
   {
-    link = replacePart(link, R"(<i hidden>QQ</i><sub unhidden>WW</sub>)", key);
-    link = replacePart(link, R"(title="QQ")", "");
+    replacePart(link, R"(<i hidden>QQ</i><sub unhidden>WW</sub>)", key);
+    replacePart(link, R"(title="QQ")", "");
   } else {
-    link = replacePart(link, "QQ", key);
+    replacePart(link, "QQ", key);
   }
-  link = replacePart(link, "WW", citation);
-  link = replacePart(link, "ZZ", annotation);
+  replacePart(link, "WW", citation);
+  replacePart(link, "ZZ", annotation);
   return link;
 }
 
@@ -232,10 +232,10 @@ string fixLinkFromAttachmentTemplate(const string &path, const string &filename,
                                      const string &attachNo,
                                      const string &annotation) {
   auto link = linkToAttachmentFile;
-  link = replacePart(link, "PP", path);
-  link = replacePart(link, "XX", filename);
-  link = replacePart(link, "YY", attachNo);
-  link = replacePart(link, "ZZ", annotation);
+  replacePart(link, "PP", path);
+  replacePart(link, "XX", filename);
+  replacePart(link, "YY", attachNo);
+  replacePart(link, "ZZ", annotation);
   return link;
 }
 
@@ -414,7 +414,7 @@ string Link::asString() {
   string part0 = linkStartChars + " " + displayPropertyAsString();
   if (m_displayType != LINK_DISPLAY_TYPE::DIRECT)
     part0 += " ";
-  if (m_type != LINK_TYPE::ATTACHMENT)
+  if (m_type != LINK_TYPE::ATTACHMENT and not m_usedKey.empty())
     part0 += titleStartChars + getKey() + titleEndChars;
   part0 += referFileMiddleChar;
   string part1{""}, part2{""}, part3{""};
@@ -1236,7 +1236,7 @@ static const string personalCommentTemplate =
 
 string fixPersonalCommentFromTemplate(const string &comment) {
   string result = personalCommentTemplate;
-  result = replacePart(result, "XX", comment);
+  replacePart(result, "XX", comment);
   return result;
 }
 
@@ -1269,7 +1269,7 @@ static const string poemTranslationTemplate =
 
 string fixPoemTranslationFromTemplate(const string &translation) {
   string result = poemTranslationTemplate;
-  result = replacePart(result, "XX", translation);
+  replacePart(result, "XX", translation);
   return result;
 }
 
@@ -1302,7 +1302,7 @@ static const string commentTemplate =
 
 string fixCommentFromTemplate(const string &comment) {
   string result = commentTemplate;
-  result = replacePart(result, "XX", comment);
+  replacePart(result, "XX", comment);
   return result;
 }
 

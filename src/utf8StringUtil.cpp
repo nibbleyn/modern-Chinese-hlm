@@ -46,18 +46,17 @@ fileSet buildFileSet(int minValue, int maxValue, int digits) {
  * @param toReplace the actual value to replace in the link
  * @return the link after replacing all parts
  */
-string replacePart(string &linkString, const string &key,
-                   const string &toReplace) {
+void replacePart(string &linkString, const string &key,
+                 const string &toReplace) {
   while (true) {
     auto partBegin = linkString.find(key);
     if (partBegin == string::npos)
       break;
     linkString.replace(partBegin, key.length(), toReplace);
   }
-  return linkString;
 }
 
-int utf8length(std::string originalString) {
+int utf8length(const string &originalString) {
   size_t len = 0, byteIndex = 0;
   const char *aStr = originalString.c_str();
   for (; byteIndex < originalString.size(); byteIndex++) {
@@ -67,8 +66,8 @@ int utf8length(std::string originalString) {
   return len;
 }
 
-std::string utf8substr(std::string originalString, size_t begin, size_t &end,
-                       size_t SubStrLength) {
+string utf8substr(const string &originalString, size_t begin, size_t &end,
+                  size_t SubStrLength) {
   const char *aStr = originalString.c_str();
   size_t origSize = originalString.size();
   size_t byteIndex = begin;

@@ -228,12 +228,12 @@ void CoupledBodyText::removeNbspsAndSpaces(string &inLine) {
       ++iterBegin;
     else if (*iterBegin == space.at(0) and
              (iterBegin + space.length() < inLine.end()) and
-             (std::string(iterBegin, iterBegin + space.length()) == space)) {
+             (string(iterBegin, iterBegin + space.length()) == space)) {
       iterBegin += space.length();
     } else
       break;
   }
-  inLine = std::string(iterBegin, inLine.end());
+  inLine = string(iterBegin, inLine.end());
 }
 
 void CoupledBodyText::removeOldLineNumber(string &inLine) {
