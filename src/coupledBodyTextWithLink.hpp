@@ -7,7 +7,8 @@ public:
   CoupledBodyTextWithLink(const string &filePrefix)
       : CoupledBodyText(filePrefix) {}
 
-  void fixLinksFromFile(fileSet referFiles, bool forceUpdate = true,
+  void fixLinksFromFile(fileSet referMainFiles, fileSet referOriginalFiles,
+                        fileSet referJPMFiles, bool forceUpdate = true,
                         int minPara = 0, int maxPara = 0, int minLine = 0,
                         int maxLine = 0);
 

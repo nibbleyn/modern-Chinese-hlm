@@ -51,6 +51,7 @@ static const string bottomIdBeginChars =
     R"(id="bottom")"; // of the body Text file
 
 static const string brTab = "<br>"; // start and end of each LINE
+static const string displaySpace = R"( )";
 
 static const string keyNotFound = R"(KeyNotFound)";
 static const string attachmentFileMiddleChar = R"(_)";
@@ -84,7 +85,8 @@ static const string originalLinkEndChars = R"(）)";
 // comments
 static const string commentBeginChars = R"(<cite)";
 static const string commentEndChars = R"(</cite>)";
-static const string commentStart = bracketStartChars + commentBeginChars;
+static const string commentStart =
+    bracketStartChars + commentBeginChars + displaySpace;
 static const string commentEnd = commentEndChars + bracketEndChars;
 static const string endOfCommentBeginTag = R"(>)";
 
@@ -101,3 +103,6 @@ string utf8substr(const string &originalString, size_t begin, size_t &end,
                   size_t SubStrLength);
 string markDifference(const string &firstString, const string &secondString,
                       size_t begin = 0);
+
+void printCompareResult(const string &firstString, const string &secondString,
+                        size_t begin = 0);

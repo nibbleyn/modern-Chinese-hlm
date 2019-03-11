@@ -117,7 +117,9 @@ void fixReturnLinkForAttachments(int minTarget, int maxTarget) {
  */
 void fixLinksFromMainHtmls(bool forceUpdate) {
   int minTarget = 1, maxTarget = 80;
-  int minReference = 1, maxReference = 80;
+  int minReferenceToMain = 1, maxReferenceToMain = 80;
+  int minReferenceToOriginal = 1, maxReferenceToOriginal = 80;
+  int minReferenceToJPM = 1, maxReferenceToJPM = 100;
   CoupledContainer container(FILE_TYPE::MAIN);
   CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
@@ -130,8 +132,10 @@ void fixLinksFromMainHtmls(bool forceUpdate) {
     CoupledBodyTextWithLink bodyText;
     bodyText.setFilePrefixFromFileType(FILE_TYPE::MAIN);
     bodyText.setFileAndAttachmentNumber(file);
-    bodyText.fixLinksFromFile(buildFileSet(minReference, maxReference),
-                              forceUpdate);
+    bodyText.fixLinksFromFile(
+        buildFileSet(minReferenceToMain, maxReferenceToMain),
+        buildFileSet(minReferenceToOriginal, maxReferenceToOriginal),
+        buildFileSet(minReferenceToJPM, maxReferenceToJPM), forceUpdate);
   }
   CoupledBodyText::loadBodyTextsFromFixBackToOutput();
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
@@ -153,7 +157,9 @@ void fixLinksFromMain(bool forceUpdate) {
 
 void fixLinksFromAttachmentHtmls(bool forceUpdate) {
   int minTarget = 1, maxTarget = 80;
-  int minReference = 1, maxReference = 80;
+  int minReferenceToMain = 1, maxReferenceToMain = 80;
+  int minReferenceToOriginal = 1, maxReferenceToOriginal = 80;
+  int minReferenceToJPM = 1, maxReferenceToJPM = 100;
   int minAttachNo = 1, maxAttachNo = 50;
   // if to fix all attachments
   //  int minAttachNo = 0, maxAttachNo = 0;
@@ -176,8 +182,10 @@ void fixLinksFromAttachmentHtmls(bool forceUpdate) {
       CoupledBodyTextWithLink bodyText;
       bodyText.setFilePrefixFromFileType(FILE_TYPE::ATTACHMENT);
       bodyText.setFileAndAttachmentNumber(file, attNo);
-      bodyText.fixLinksFromFile(buildFileSet(minReference, maxReference),
-                                forceUpdate);
+      bodyText.fixLinksFromFile(
+          buildFileSet(minReferenceToMain, maxReferenceToMain),
+          buildFileSet(minReferenceToOriginal, maxReferenceToOriginal),
+          buildFileSet(minReferenceToJPM, maxReferenceToJPM), forceUpdate);
     }
   }
   CoupledBodyText::loadBodyTextsFromFixBackToOutput();

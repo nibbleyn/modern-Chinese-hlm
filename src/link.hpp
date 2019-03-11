@@ -2,9 +2,10 @@
 #include "attachmentFiles.hpp"
 #include "coupledBodyText.hpp"
 
-enum class LINK_TYPE { MAIN, ATTACHMENT, ORIGINAL, SAMEPAGE };
+enum class LINK_TYPE { MAIN, ATTACHMENT, ORIGINAL, SAMEPAGE, JPM };
 enum class LINK_DISPLAY_TYPE { DIRECT, HIDDEN, UNHIDDEN };
 
+static const string annotationToOriginal = R"(原文)";
 // operations over link string template initialization
 string fixLinkFromSameFileTemplate(LINK_DISPLAY_TYPE type, const string &key,
                                    const string &annotation,
@@ -17,14 +18,15 @@ string fixLinkFromReverseLinkTemplate(const string &filename,
                                       LINK_DISPLAY_TYPE type,
                                       const string &referPara,
                                       const string &annotation);
-string fixLinkFromOriginalTemplate(const string &path, const string &filename,
-                                   const string &key, const string &citation,
-                                   const string &referPara,
-                                   const string &annotation = R"(原文)");
+string
+fixLinkFromOriginalTemplate(const string &path, const string &filename,
+                            const string &key, const string &citation,
+                            const string &referPara,
+                            const string &annotation = annotationToOriginal);
 string fixLinkFromJPMTemplate(const string &path, const string &filename,
                               const string &key, const string &citation,
                               const string &referPara,
-                              const string &annotation = R"(原文)");
+                              const string &annotation = annotationToOriginal);
 string fixLinkFromAttachmentTemplate(const string &path, const string &filename,
                                      const string &attachNo,
                                      const string &annotation);
@@ -32,11 +34,12 @@ string fixLinkFromAttachmentTemplate(const string &path, const string &filename,
 static const string returnLinkFromAttachmentHeader = R"(返回本章原文)";
 static const string returnLink = R"(被引用)";
 static const string returnToContentTable = R"(回目录)";
-static const string contentTableFilename = R"(aindex.htm)";
+static const string contentTableFilename = R"(aindex)";
 static const string citationChapterNo = R"(第)";
 static const string citationChapter = R"(章)";
 
-class Comment;
+string scanForSubType(const string &original, OBJECT_TYPE subType);
+
 class Link : public Object {
 public:
   struct LinkDetails {
@@ -83,6 +86,8 @@ public:
     if (m_annotation != returnLinkFromAttachmentHeader and
         m_annotation != returnLink and m_annotation != returnToContentTable)
       readKey(linkString); // key would be searched here and replaced
+    m_bodyText = m_annotation;
+    m_displayText = scanForSubType(m_bodyText, OBJECT_TYPE::COMMENT);
   }
   virtual ~Link(){};
   Link(const Link &) = delete;
@@ -95,6 +100,7 @@ public:
                                     size_t after = 0);
   string asString();
   LINK_TYPE getType() { return m_type; }
+  bool isTargetToJPMHtm() { return (m_type == LINK_TYPE::JPM); };
   bool isTargetToOriginalHtm() { return (m_type == LINK_TYPE::ORIGINAL); };
   bool isTargetToOtherMainHtm() {
     return (m_type == LINK_TYPE::MAIN and getChapterName() != m_fromFile);
@@ -118,6 +124,8 @@ public:
   string getSourceChapterName() { return m_fromFile; }
   void setSourcePara(LineNumber fp) { m_fromLine = fp; }
   string getChapterName() {
+    if ((m_type == LINK_TYPE::JPM))
+      return formatIntoZeroPatchedChapterNumber(m_chapterNumber, 3);
     return formatIntoZeroPatchedChapterNumber(m_chapterNumber, 2);
   }
   void doStatistics() {
@@ -289,7 +297,7 @@ private:
 };
 
 // poemTranslation
-static const string poemTranslationBeginChars = R"(<samp)";
+static const string poemTranslationBeginChars = R"(<samp )";
 static const string poemTranslationEndChars = R"(</samp>)";
 static const string endOfPoemTranslationBeginTag = R"(">)";
 

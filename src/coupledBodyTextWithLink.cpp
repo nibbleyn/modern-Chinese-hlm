@@ -230,6 +230,8 @@ string CoupledBodyTextWithLink::getDisplayString(const string &originalString) {
       cout << "whole string: " << current->getWholeString() << endl;
       cout << "display as:" << current->getDisplayString() << "||" << endl;
       result += current->getDisplayString();
+      // should add length of substring above loadFirstFromContainedLine gets
+      // so require the string be fixed before
       endOfSubStringOffset = offset + current->length();
     }
     m_offsetOfTypes.erase(first);
@@ -325,10 +327,9 @@ void CoupledBodyTextWithLink::removePersonalCommentsOverNumberedFiles() {
  * @param file
  * @param referFiles
  */
-void CoupledBodyTextWithLink::fixLinksFromFile(fileSet referFiles,
-                                               bool forceUpdate, int minPara,
-                                               int maxPara, int minLine,
-                                               int maxLine) {
+void CoupledBodyTextWithLink::fixLinksFromFile(
+    fileSet referMainFiles, fileSet referOriginalFiles, fileSet referJPMFiles,
+    bool forceUpdate, int minPara, int maxPara, int minLine, int maxLine) {
   setInputOutputFiles();
 
   ifstream infile(m_inputFile);
@@ -390,8 +391,8 @@ void CoupledBodyTextWithLink::fixLinksFromFile(fileSet referFiles,
       }
       if (m_linkPtr->isTargetToOtherMainHtm()) {
         targetFile = m_linkPtr->getChapterName();
-        auto e = find(referFiles.begin(), referFiles.end(), targetFile);
-        if (e != referFiles.end()) // need to check and fix
+        auto e = find(referMainFiles.begin(), referMainFiles.end(), targetFile);
+        if (e != referMainFiles.end()) // need to check and fix
         {
           m_linkPtr->fixFromString(link); // third step of construction
           m_linkPtr->setSourcePara(ln);
@@ -429,10 +430,26 @@ void CoupledBodyTextWithLink::fixLinksFromFile(fileSet referFiles,
           }
         }
       }
+      if (m_linkPtr->isTargetToJPMHtm()) {
+        targetFile = m_linkPtr->getChapterName();
+        auto e = find(referJPMFiles.begin(), referJPMFiles.end(), targetFile);
+        if (e != referJPMFiles.end()) // need to check and fix
+        {
+          m_linkPtr->fixFromString(link); // third step of construction
+          if (forceUpdate or m_linkPtr->needUpdate()) // replace old value
+          {
+            auto orglinkBegin = orgLine.find(link);
+            if (debug >= LOG_INFO)
+              SEPERATE("isTargetToJPMHtm", orgLine + "\n" + link);
+            orgLine.replace(orglinkBegin, link.length(), m_linkPtr->asString());
+          }
+        }
+      }
       if (m_linkPtr->isTargetToOriginalHtm()) {
         targetFile = m_linkPtr->getChapterName();
-        auto e = find(referFiles.begin(), referFiles.end(), targetFile);
-        if (e != referFiles.end()) // need to check and fix
+        auto e = find(referOriginalFiles.begin(), referOriginalFiles.end(),
+                      targetFile);
+        if (e != referOriginalFiles.end()) // need to check and fix
         {
           m_linkPtr->fixFromString(link); // third step of construction
           if (forceUpdate or m_linkPtr->needUpdate()) // replace old value
@@ -459,7 +476,6 @@ int CoupledBodyTextWithLink::sizeAfterRendering(const string &lineStr) {
   return 0;
 }
 
-
 void testMixedObjects() {
   // clang-format off
 //		string line = R"(<a unhidden id="P3L2">3.2</a>&nbsp;&nbsp; 贾母又说：“请姑娘们来。今日有远客来，就不必上学去了。”<a hidden href="a057.htm#top">原是（<cite unhidden>薛姨妈1</cite>）老奶奶（<cite unhidden>薛姨妈3</cite>）使唤的</a>众人答应了一声，便派了两个人去请。没多久，只见三个奶妈和五六个丫鬟，簇拥着三个姊妹来了。第一个乃二姐<var unhidden font style="font-size: 13.5pt; font-family:楷体; color:#ff00ff">迎春----->（见右图）</var>，生的肌肤微丰，合中身材，腮凝新荔，鼻腻鹅脂，温柔沉默，观之可亲。<a unhidden href="attachment\b018_7.htm">happy</a>第二个是三妹<var unhidden font style="font-size: 13.5pt; font-family:楷体; color:#ff00ff">（见左图）<-----探春</var>，削肩细腰，长挑身材，鸭蛋脸面，俊眼修眉，顾盼神飞，文彩精华，见之忘俗。（<cite unhidden>迎春外表就有懦小姐的感觉，探春外表就文采甚好，可起诗社。</cite>）)";
@@ -477,11 +493,7 @@ void testMixedObjects() {
   if (ln.isParagraphHeader()) {
     return;
   }
-  cout << line << "||" << endl;
   // after this, there could be only one line number at the beginning
   CoupledBodyTextWithLink bodyText;
-  auto result = bodyText.getDisplayString(line);
-  cout << result << "||" << endl;
-  cout << compareTo << "||" << endl;
-  cout << markDifference(result, compareTo) << endl;
+  printCompareResult(bodyText.getDisplayString(line), compareTo);
 }

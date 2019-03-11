@@ -101,3 +101,10 @@ string markDifference(const string &firstString, const string &secondString,
   }
   return firstString.substr(0, firstPos) + "^";
 }
+
+void printCompareResult(const string &firstString, const string &secondString,
+                        size_t begin) {
+  cout << firstString << "||" << endl;
+  cout << secondString << "||" << endl;
+  cout << markDifference(firstString, secondString, begin) << endl;
+}
