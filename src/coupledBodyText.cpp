@@ -10,32 +10,38 @@ bool KeyStartNotFound(const string &testStr, const string &key) {
   return false;
 }
 
-bool isOnlyPartOfOtherKeys(const string &orgLine, const string &key) {
-	// need to change since title="key" contains key
-  string line = orgLine;
+bool isFoundAsNonKeys(const string &line, const string &key) {
+  unsigned int searchStart = 0;
   while (true) {
-    auto keyBegin = line.find(key);
-    if (keyBegin == string::npos) // no key any more
+    auto keyBegin = line.find(key, searchStart);
+    // no key found any more
+    if (keyBegin == string::npos)
       break;
-    auto keyEnd = line.find(keyEndChars, keyBegin);
-    if (keyEnd == string::npos) // no keyEnd any more
-      return false;
-    string testStr = line.substr(keyBegin, keyEnd - keyBegin);
-    if (not KeyStartNotFound(testStr, key))
-      return false;
-    else {
-      string beforeKey = line.substr(0, keyBegin);
-      if (debug >= LOG_INFO)
-        cout << beforeKey << endl;
-      // if only part of comment
-      if (beforeKey.find(keyStartChars) == string::npos)
-        return false;
+    auto testBeginPos = line.rfind(keyStartChars, keyBegin);
+    // if keyStartChars exists
+    if (testBeginPos != string::npos and testBeginPos > searchStart) {
+      string testStr =
+          line.substr(testBeginPos + keyStartChars.length(),
+                      keyBegin - testBeginPos - keyStartChars.length());
+      cout << testStr << " and key: " << key << endl;
+      if (testStr.find(keyEndChars) != string::npos)
+        return true;
+    } else {
+      testBeginPos = line.rfind(titleStartChars, keyBegin);
+      // if titleStartChars exists
+      if (testBeginPos != string::npos and testBeginPos > searchStart) {
+        string testStr =
+            line.substr(testBeginPos + titleStartChars.length(),
+                        keyBegin - testBeginPos - titleStartChars.length());
+        cout << testStr << " and key: " << key << endl;
+        if (testStr.find(titleEndChars) != string::npos)
+          return true;
+      } else
+        return true;
     }
-    line = line.substr(keyEnd + keyEndChars.length());
-    if (debug >= LOG_INFO)
-      cout << line << endl;
+    searchStart = keyBegin + 1;
   }
-  return true;
+  return false;
 }
 
 void CoupledBodyText::loadBodyTextsFromFixBackToOutput() {
@@ -105,9 +111,7 @@ bool CoupledBodyText::findKey(const string &key) {
       continue;
     }
     // if "key" is only part of the key of another link, skip this line
-    if (isOnlyPartOfOtherKeys(line, key)) {
-      if (debug >= LOG_INFO)
-        cout << "found as key only: " << line << endl;
+    if (not isFoundAsNonKeys(line, key)) {
       continue;
     }
 
@@ -411,24 +415,16 @@ void CoupledBodyText::addLineNumber(const string &separatorColor,
 }
 
 void testSearchTextIsOnlyPartOfOtherKeys() {
-  string line =
-      R"(秋水眼又对秋水鸳鸯剑，埋下<a unhidden href="#P94">)" + keyStartChars +
-      R"(春色)" + keyEndChars + R"(“倒底是不标致的好”</a>的悲剧结局)";
-  cout << line << endl;
-  line =
-      R"(满脸春色，比白日更增了颜色)" + commentStart + R"(美丽)" + commentEnd +
-      R"(）。贾琏搂她笑道：“人人都说我们那<a href="a044.htm#P94">)" +
-      keyStartChars + R"(夜叉星)" + keyEndChars + R"(夜叉婆</a>)" +
-      commentStart + R"(凤姐)" + commentEnd + R"(齐整)" + commentStart +
-      R"(标致)" + commentEnd + R"(，如今我看来，)" + commentStart +
-      R"(俯就你)" + commentEnd +
-      R"(给你拾鞋也不要。”尤二姐道：“我虽标致，却无<a href="a066.htm#P94">)" +
-      keyStartChars + R"(品行)" + keyEndChars +
-      R"(品行</a>。看来倒底是不标致的好。)";
-  cout << line << endl;
-  string key = R"(春色)";
-  cout << isOnlyPartOfOtherKeys(line, key) << endl;
-  ;
+
+  string line1 =
+      R"(弄得（<cite unhidden>宝玉</cite>）情色若痴，语言常乱，似染怔忡之疾，慌得袭人等又不敢回贾母，只百般逗他玩笑（<cite unhidden>指望他早日康复</cite>）。（<u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">怔忡，为病名，首见于《济生方·惊悸怔忡健忘门》中“惊者，心卒动而不宁也；悸者,心跳动而怕惊也；怔忡者，心中躁动不安，惕惕然后人将捕之也”,是心悸的一种，是指多因久病体虚、心脏受损导致气血、阴阳亏虚，或邪毒、痰饮、瘀血阻滞心脉，日久导致心失濡养，心脉不畅，从而引起的心中剔剔不安，不能自控的一种病证，常和惊悸合并称为心悸</u>）)";
+  string key = R"(怔忡)";
+  cout << line1 << endl;
+  cout << isFoundAsNonKeys(line1, key) << endl;
+  string line2 =
+      R"(（<u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">宝玉真病了的时候，不过袭人<a unhidden href="#P94" title="怔忡"><i hidden>怔忡</i>瞒着不回贾母</a>，晨昏定省还是去的</u>）。宝玉方（<cite unhidden>放下笔，先</cite>）去请安（<u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">贾母关切，姊妹们则看在眼里</u>）)";
+  cout << line2 << endl;
+  cout << isFoundAsNonKeys(line2, key) << endl;
 }
 
 void testLineHeader(string lnStr) {

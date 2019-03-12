@@ -22,13 +22,6 @@ public:
   void render();
 
 private:
-  void printOffsetToObjectType();
-  void printObjectTypeToOffset();
-  void printLinkStringTable();
-  void printCommentStringTable();
-  void printPersonalCommentStringTable();
-  void printPoemTranslationStringTable();
-
   void searchForEmbededLinks();
   void scanForTypes(const string &containedLine);
   bool isEmbeddedObject(OBJECT_TYPE type, size_t offset);
@@ -63,6 +56,24 @@ private:
   CommentStringTable m_commentStringTable;
   PersonalCommentStringTable m_personalCommentStringTable;
   PoemTranslationStringTable m_poemTranslationStringTable;
+
+  void printLinkStringTable();
+  void printCommentStringTable();
+  void printPersonalCommentStringTable();
+  void printPoemTranslationStringTable();
+  void printOffsetToObjectType() {
+    for (const auto &element : m_offsetOfTypes) {
+      cout << element.first << "  " << getNameOfObjectType(element.second)
+           << endl;
+    }
+  }
+
+  void printObjectTypeToOffset() {
+    for (const auto &element : m_foundTypes) {
+      cout << getNameOfObjectType(element.first) << "  " << element.second
+           << endl;
+    }
+  }
 };
 
 void testMixedObjects();
