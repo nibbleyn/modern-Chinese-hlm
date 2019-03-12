@@ -724,29 +724,21 @@ void reformatTxtFilesForReader() {
        << " finished. " << endl;
 }
 
-void splitFiles(int minTarget, int maxTarget, const string &fileType,
-                const string &sampleBlock, const string &sampleFirstLine,
-                const string &sampleWholeLine) {
-  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
-    CoupledBodyText bodyText;
-    bodyText.setFilePrefixFromFileType(getFileTypeFromString(fileType));
-    bodyText.setFileAndAttachmentNumber(file);
-    bodyText.regroupingParagraphs(sampleBlock, sampleFirstLine,
-                                  sampleWholeLine);
-  }
-}
-
-void autoSplitBodyText(const string &fileType) {
+void renderingBodyText(const string &fileType) {
   const string sampleBlock = R"()";
   const string sampleFirstLine = R"()";
   const string sampleWholeLine = R"()";
-  int minTarget = 1, maxTarget = 1;
-  splitFiles(minTarget, maxTarget, fileType, sampleBlock, sampleFirstLine,
-             sampleWholeLine);
+  int minTarget = 69, maxTarget = 69;
+  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
+    CoupledBodyTextWithLink bodyText;
+    bodyText.setFilePrefixFromFileType(getFileTypeFromString(fileType));
+    bodyText.setFileAndAttachmentNumber(file);
+    bodyText.render();
+  }
 }
 
-void removePersonalViewpoints(int minTarget, int maxTarget,
-                              FILE_TYPE fileType) {
+void removePersonalViewpoints() {
+  int minTarget = 54, maxTarget = 54;
   cout << "to be implemented." << endl;
   cout << "to remove <u> pairs." << endl;
   cout << "and to remove personal attachment link." << endl;
@@ -754,15 +746,10 @@ void removePersonalViewpoints(int minTarget, int maxTarget,
        buildFileSet(minTarget, maxTarget)) // files need to be fixed
   {
     CoupledBodyTextWithLink bodyText;
-    bodyText.setFilePrefixFromFileType(fileType);
+    bodyText.setFilePrefixFromFileType(FILE_TYPE::MAIN);
     bodyText.setFileAndAttachmentNumber(file);
     bodyText.removePersonalCommentsOverNumberedFiles();
   }
-}
-
-void removePersonalViewpoints() {
-  int minTarget = 54, maxTarget = 54;
-  removePersonalViewpoints(minTarget, maxTarget, FILE_TYPE::MAIN);
 }
 
 void tools(int num) {
@@ -812,6 +799,9 @@ void tools(int num) {
     break;
   case 15:
     constructSubStory();
+    break;
+  case 16:
+    renderingBodyText("main");
     break;
   default:
     cout << "invalid tool." << endl;

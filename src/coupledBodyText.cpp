@@ -11,6 +11,7 @@ bool KeyStartNotFound(const string &testStr, const string &key) {
 }
 
 bool isOnlyPartOfOtherKeys(const string &orgLine, const string &key) {
+	// need to change since title="key" contains key
   string line = orgLine;
   while (true) {
     auto keyBegin = line.find(key);

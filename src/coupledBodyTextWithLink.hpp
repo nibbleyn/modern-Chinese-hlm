@@ -19,6 +19,7 @@ public:
   int sizeAfterRendering(const string &lineStr);
 
   string getDisplayString(const string &originalString);
+  void render();
 
 private:
   void printOffsetToObjectType();

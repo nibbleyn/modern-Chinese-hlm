@@ -205,6 +205,32 @@ void CoupledBodyTextWithLink::scanForTypes(const string &containedLine) {
   searchForEmbededLinks();
 }
 
+void CoupledBodyTextWithLink::render() {
+  setInputOutputFiles();
+  ifstream infile(m_inputFile);
+  if (!infile) {
+    cout << "file doesn't exist:" << m_inputFile << endl;
+    return;
+  }
+  ofstream outfile(m_outputFile);
+  string inLine{"not found"};
+  while (!infile.eof()) // To get all the lines.
+  {
+    getline(infile, inLine); // Saves the line in inLine.
+    LineNumber ln;
+    ln.loadFirstFromContainedLine(inLine);
+    if (ln.isParagraphHeader()) {
+      continue;
+    }
+
+    if (debug >= LOG_INFO) {
+      cout << inLine << endl;
+      cout << getDisplayString(inLine) << endl;
+    }
+    outfile << getDisplayString(inLine) << endl;
+  }
+}
+
 string CoupledBodyTextWithLink::getDisplayString(const string &originalString) {
   scanForTypes(originalString);
   if (debug >= LOG_INFO) {
@@ -253,6 +279,12 @@ string CoupledBodyTextWithLink::getDisplayString(const string &originalString) {
   } while (true);
   if (endOfSubStringOffset < originalString.length())
     result += originalString.substr(endOfSubStringOffset);
+  m_foundTypes.clear();
+  m_offsetOfTypes.clear();
+  m_linkStringTable.clear();
+  m_commentStringTable.clear();
+  m_personalCommentStringTable.clear();
+  m_poemTranslationStringTable.clear();
   return result;
 }
 
