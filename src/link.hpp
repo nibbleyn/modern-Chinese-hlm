@@ -38,7 +38,8 @@ static const string contentTableFilename = R"(aindex)";
 static const string citationChapterNo = R"(第)";
 static const string citationChapter = R"(章)";
 
-string scanForSubType(const string &original, OBJECT_TYPE subType);
+string scanForSubType(const string &original, OBJECT_TYPE subType,
+                      const string &fromFile);
 
 class Link : public Object {
 public:
@@ -71,6 +72,7 @@ public:
 
 public:
   Link() = default;
+  Link(const string &fromFile) : m_fromFile(fromFile) {}
   // the first shallow step of construction
   Link(const string &fromFile, const string &linkString)
       : m_fromFile(fromFile) {
@@ -87,7 +89,8 @@ public:
         m_annotation != returnLink and m_annotation != returnToContentTable)
       readKey(linkString); // key would be searched here and replaced
     m_bodyText = m_annotation;
-    m_displayText = scanForSubType(m_bodyText, OBJECT_TYPE::COMMENT);
+    m_displayText =
+        scanForSubType(m_bodyText, OBJECT_TYPE::COMMENT, m_fromFile);
   }
   virtual ~Link(){};
   Link(const Link &) = delete;
@@ -227,6 +230,7 @@ public:
 
 public:
   LinkFromMain() = default;
+  LinkFromMain(const string &fromFile) : Link(fromFile) {}
   LinkFromMain(const string &fromFile, const string &linkString)
       : Link(fromFile, linkString) {}
   ~LinkFromMain(){};
@@ -248,6 +252,7 @@ public:
   static void outPutStatisticsToFiles();
 
 public:
+  LinkFromAttachment(const string &fromFile) : Link(fromFile) {}
   LinkFromAttachment(const string &fromFile, const string &linkString)
       : Link(fromFile, linkString) {}
   ~LinkFromAttachment(){};
@@ -266,6 +271,7 @@ private:
 
 class Comment : public Object {
 public:
+  Comment(const string &fromFile) : m_fromFile(fromFile) {}
   string getWholeString();
   string getDisplayString();
   size_t length();
@@ -275,6 +281,7 @@ public:
 
 private:
   string m_displayText{""};
+  string m_fromFile{"81"};
 };
 
 static const string personalCommentStartChars = R"(<u unhidden)";
@@ -285,6 +292,7 @@ static const string endOfPersonalCommentBeginTag = R"(">)";
 
 class PersonalComment : public Object {
 public:
+  PersonalComment(const string &fromFile) : m_fromFile(fromFile) {}
   string getWholeString();
   string getDisplayString();
   size_t length();
@@ -294,6 +302,7 @@ public:
 
 private:
   string m_displayText{""};
+  string m_fromFile{"81"};
 };
 
 // poemTranslation
@@ -303,6 +312,7 @@ static const string endOfPoemTranslationBeginTag = R"(">)";
 
 class PoemTranslation : public Object {
 public:
+  PoemTranslation(const string &fromFile) : m_fromFile(fromFile) {}
   string getWholeString();
   string getDisplayString();
   size_t length();
@@ -312,10 +322,11 @@ public:
 
 private:
   string m_displayText{""};
+  string m_fromFile{"81"};
 };
 
 using ObjectPtr = std::unique_ptr<Object>;
-ObjectPtr createObjectFromType(OBJECT_TYPE type);
+ObjectPtr createObjectFromType(OBJECT_TYPE type, const string &fromFile);
 string getStartTagOfObjectType(OBJECT_TYPE type);
 string getEndTagOfObjectType(OBJECT_TYPE type);
 

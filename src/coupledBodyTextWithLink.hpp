@@ -57,10 +57,6 @@ private:
   PersonalCommentStringTable m_personalCommentStringTable;
   PoemTranslationStringTable m_poemTranslationStringTable;
 
-  void printLinkStringTable();
-  void printCommentStringTable();
-  void printPersonalCommentStringTable();
-  void printPoemTranslationStringTable();
   void printOffsetToObjectType() {
     for (const auto &element : m_offsetOfTypes) {
       cout << element.first << "  " << getNameOfObjectType(element.second)
@@ -72,6 +68,39 @@ private:
     for (const auto &element : m_foundTypes) {
       cout << getNameOfObjectType(element.first) << "  " << element.second
            << endl;
+    }
+  }
+  void printLinkStringTable() {
+    if (not m_linkStringTable.empty())
+      cout << "m_linkStringTable:" << endl;
+    for (const auto &element : m_linkStringTable) {
+      cout << element.first << "  " << element.second.endOffset << "  "
+           << element.second.embedded << endl;
+    }
+  }
+
+  void printCommentStringTable() {
+    if (not m_commentStringTable.empty())
+      cout << "m_commentStringTable:" << endl;
+    for (const auto &element : m_commentStringTable) {
+      cout << element.first << "  " << element.second.endOffset << "  "
+           << element.second.embedded << endl;
+    }
+  }
+
+  void printPersonalCommentStringTable() {
+    if (not m_personalCommentStringTable.empty())
+      cout << "m_personalCommentStringTable:" << endl;
+    for (const auto &element : m_personalCommentStringTable) {
+      cout << element.first << "  " << element.second << endl;
+    }
+  }
+
+  void printPoemTranslationStringTable() {
+    if (not m_poemTranslationStringTable.empty())
+      cout << "m_poemTranslationStringTable:" << endl;
+    for (const auto &element : m_poemTranslationStringTable) {
+      cout << element.first << "  " << element.second << endl;
     }
   }
 };

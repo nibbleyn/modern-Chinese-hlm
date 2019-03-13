@@ -1141,7 +1141,7 @@ string LinkFromAttachment::getBodyTextFilePrefix() {
   return prefix;
 }
 
-ObjectPtr createObjectFromType(OBJECT_TYPE type) {
+ObjectPtr createObjectFromType(OBJECT_TYPE type, const string &fromFile) {
   if (type == OBJECT_TYPE::LINENUMBER)
     return std::make_unique<LineNumber>();
   else if (type == OBJECT_TYPE::IMAGEREF)
@@ -1151,13 +1151,13 @@ ObjectPtr createObjectFromType(OBJECT_TYPE type) {
   else if (type == OBJECT_TYPE::POEM)
     return std::make_unique<Poem>();
   else if (type == OBJECT_TYPE::LINKFROMMAIN)
-    return std::make_unique<LinkFromMain>();
+    return std::make_unique<LinkFromMain>(fromFile);
   else if (type == OBJECT_TYPE::PERSONALCOMMENT)
-    return std::make_unique<PersonalComment>();
+    return std::make_unique<PersonalComment>(fromFile);
   else if (type == OBJECT_TYPE::POEMTRANSLATION)
-    return std::make_unique<PoemTranslation>();
+    return std::make_unique<PoemTranslation>(fromFile);
   else if (type == OBJECT_TYPE::COMMENT)
-    return std::make_unique<Comment>();
+    return std::make_unique<Comment>(fromFile);
   return nullptr;
 }
 
@@ -1193,7 +1193,8 @@ string getEndTagOfObjectType(OBJECT_TYPE type) {
   return "";
 }
 
-string scanForSubType(const string &original, OBJECT_TYPE subType) {
+string scanForSubType(const string &original, OBJECT_TYPE subType,
+                      const string &fromFile) {
   string result;
   using SubStringOffsetTable =
       std::map<size_t, size_t>; // start offset -> end offset
@@ -1209,7 +1210,7 @@ string scanForSubType(const string &original, OBJECT_TYPE subType) {
   for (const auto &link : subStrings) {
     result += original.substr(endOfSubStringOffset,
                               link.first - endOfSubStringOffset);
-    auto current = createObjectFromType(subType);
+    auto current = createObjectFromType(subType, fromFile);
     current->loadFirstFromContainedLine(original, endOfSubStringOffset);
     result += current->getDisplayString();
     endOfSubStringOffset =
@@ -1271,7 +1272,8 @@ size_t PersonalComment::loadFirstFromContainedLine(const string &containedLine,
                                      personalCommentEnd - personalCommentBegin);
   auto beginPos = part.find(endOfPersonalCommentBeginTag);
   m_bodyText = part.substr(beginPos + endOfPersonalCommentBeginTag.length());
-  m_displayText = scanForSubType(m_bodyText, OBJECT_TYPE::LINKFROMMAIN);
+  m_displayText =
+      scanForSubType(m_bodyText, OBJECT_TYPE::LINKFROMMAIN, m_fromFile);
   return containedLine.find(personalCommentStartChars, after);
 }
 
@@ -1304,7 +1306,8 @@ size_t PoemTranslation::loadFirstFromContainedLine(const string &containedLine,
                                      poemTranslationEnd - poemTranslationBegin);
   auto beginPos = part.find(endOfPoemTranslationBeginTag);
   m_bodyText = part.substr(beginPos + endOfPoemTranslationBeginTag.length());
-  m_displayText = scanForSubType(m_bodyText, OBJECT_TYPE::LINKFROMMAIN);
+  m_displayText =
+      scanForSubType(m_bodyText, OBJECT_TYPE::LINKFROMMAIN, m_fromFile);
   return containedLine.find(poemTranslationBeginChars, after);
 }
 
@@ -1332,7 +1335,8 @@ size_t Comment::loadFirstFromContainedLine(const string &containedLine,
   string part = containedLine.substr(commentBegin, commentEnd - commentBegin);
   auto beginPos = part.find(endOfCommentBeginTag);
   m_bodyText = part.substr(beginPos + endOfCommentBeginTag.length());
-  m_displayText = scanForSubType(m_bodyText, OBJECT_TYPE::LINKFROMMAIN);
+  m_displayText =
+      scanForSubType(m_bodyText, OBJECT_TYPE::LINKFROMMAIN, m_fromFile);
   return containedLine.find(commentBeginChars, after);
 }
 
