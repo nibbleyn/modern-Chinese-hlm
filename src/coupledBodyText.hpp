@@ -55,7 +55,7 @@ public:
 
   // add line number before each paragraph
   void addLineNumber(const string &separatorColor, bool forceUpdate = true,
-                     bool hidden = false);
+                     bool hideParaHeader = false);
 
   // fix wrong html pair
   void fixTagPairBegin(const string &signOfTagAfterReplaceTag,

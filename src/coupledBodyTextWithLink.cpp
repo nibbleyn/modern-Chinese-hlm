@@ -158,7 +158,7 @@ void CoupledBodyTextWithLink::scanForTypes(const string &containedLine) {
   searchForEmbededLinks();
 }
 
-void CoupledBodyTextWithLink::render() {
+void CoupledBodyTextWithLink::render(bool hideParaHeader) {
   setInputOutputFiles();
   ifstream infile(m_inputFile);
   if (!infile) {
@@ -174,13 +174,15 @@ void CoupledBodyTextWithLink::render() {
     LineNumber ln;
     ln.loadFirstFromContainedLine(inLine);
     if (ln.isParagraphHeader()) {
-      string paraString = R"(第)" + TurnToString(paraNo) + R"(段)";
-      if (paraNo == 1)
-        paraString += R"( v向下    页面底部->||)";
-      else
-        paraString += R"( 向下    向上)";
-      paraNo++;
-      outfile << paraString << endl;
+      if (hideParaHeader == false) {
+        string paraString = R"(第)" + TurnToString(paraNo) + R"(段)";
+        if (paraNo == 1)
+          paraString += R"( v向下    页面底部->||)";
+        else
+          paraString += R"( 向下    向上)";
+        paraNo++;
+        outfile << paraString << endl;
+      }
       continue;
     }
 
@@ -195,6 +197,10 @@ void CoupledBodyTextWithLink::render() {
       auto lastBr = outputLine.find(brTab);
       outfile << outputLine.substr(0, lastBr) << endl;
     }
+  }
+  if (hideParaHeader == false) {
+    string paraString = R"(||<-页面顶部    ^向上)";
+    outfile << paraString << endl;
   }
 }
 
@@ -216,13 +222,17 @@ string CoupledBodyTextWithLink::getDisplayString(const string &originalString) {
     auto type = first->second;
     auto offset = first->first;
     if (not isEmbeddedObject(type, offset)) {
+    	cout << endOfSubStringOffset << offset - endOfSubStringOffset << originalString.substr(endOfSubStringOffset,
+                offset - endOfSubStringOffset) << endl;
       result += originalString.substr(endOfSubStringOffset,
                                       offset - endOfSubStringOffset);
+      cout << result << "|8|" << endl;
       auto current = createObjectFromType(type, m_file);
       current->loadFirstFromContainedLine(originalString, offset);
       cout << "whole string: " << current->getWholeString() << endl;
       cout << "display as:" << current->getDisplayString() << "||" << endl;
       result += current->getDisplayString();
+      cout << result << "|0|"  << endl;
       // should add length of substring above loadFirstFromContainedLine gets
       // so require the string be fixed before
       endOfSubStringOffset = offset + current->length();
@@ -496,8 +506,17 @@ void testMixedObjects() {
       R"(<a unhidden id="P14L4">14.4</a>&nbsp;&nbsp; （<cite unhidden>贾琏</cite>）揭起衾单一看，只见这尤二姐面色如生，比活着还美貌。贾琏又搂着大哭，只叫“奶奶，你死的不明，都是我坑了你！”（<u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">还是像当初<a unhidden title="提三说二" href="a065.htm#P1L2"><i hidden>提三说二</i><sub hidden>第65章1.2节:</sub>按大房</a>（<a unhidden title="提三说二" href="original\c065.htm#P1L4"><i hidden>提三说二</i><sub hidden>第65章1.4节:</sub>原文</a>）叫尤二姐“奶奶”</u>）贾蓉忙上来劝（<cite unhidden>贾琏</cite>）：“叔叔解着些儿（<cite unhidden>伤悲</cite>），（<cite unhidden>都是</cite>）我这个姨娘（<cite unhidden>尤二姐她</cite>）自己没福。”说着，又向南指（<cite unhidden>着梨香院和</cite>）<a title="群山" href="#P15L3"><i hidden>群山</i>大观园的界墙</a>，贾琏会意（<u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">凤姐此时仍在偷听</u>），只悄悄跌脚说：“我忽略了（<cite unhidden>，只当凤姐她是好意对尤二姐</cite>），终久（<cite unhidden>把凤姐她的所作所为我都</cite>）对出（<cite unhidden>词</cite>）来，我替（<cite unhidden>尤二姐</cite>）你报仇。”（<u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">贾琏、凤姐彻底<a unhidden title="连理" href="a064.htm#P19L3"><i hidden>连理</i><sub hidden>第64章19.3节:</sub>决裂</a>（<a unhidden title="连理" href="original\c064.htm#P11L3"><i hidden>连理</i><sub hidden>第64章11.3节:</sub>原文</a>）。</u>）)";
   string compareTo5 =
       R"(14.4   （贾琏）揭起衾单一看，只见这尤二姐面色如生，比活着还美貌。贾琏又搂着大哭，只叫“奶奶，你死的不明，都是我坑了你！”（还是像当初按大房（原文）叫尤二姐“奶奶”）贾蓉忙上来劝（贾琏）：“叔叔解着些儿（伤悲），（都是）我这个姨娘（尤二姐她）自己没福。”说着，又向南指（着梨香院和）大观园的界墙，贾琏会意（凤姐此时仍在偷听），只悄悄跌脚说：“我忽略了（，只当凤姐她是好意对尤二姐），终久（把凤姐她的所作所为我都）对出（词）来，我替（尤二姐）你报仇。”（贾琏、凤姐彻底决裂（原文）。）)";
-  string line = line5;
-  string compareTo = compareTo5;
+
+  string line6 =
+        R"(<a unhidden id="P7L2">7.2</a>&nbsp;&nbsp; <strong unhidden>西施一代倾城逐浪花，吴宫空自忆儿家。效颦莫笑东村女，头白溪边尚浣纱。</strong>&nbsp;&nbsp;&nbsp;&nbsp;<samp unhidden font style="font-size: 13.5pt; font-family:楷体; color:#ff00ff">日日在吴王夫差的宫殿里思念儿时的家园又如何，倾国倾城的一代佳人西施却再也没有回到当年浣纱的耶溪边，相反，如溪里那浪花互相追逐着奔向远方，她也消失不归。所以，也不必嘲笑效颦的东施，毕竟她相安无事地在溪边一直浣纱到白头。</samp>（<a unhidden href="attachment\b003_2.htm">西施</a>）（<a unhidden href="attachment\b064_7.htm">临江仙·滚滚长江东逝水</a>）（<a unhidden href="attachment\b064_8.htm">念奴娇·赤壁怀古</a>）（<a unhidden href="attachment\b064_9.htm">杜甫《登高》</a>）（<a unhidden href="attachment\b064_10.htm">王维《西施咏》</a>）（<a unhidden href="attachment\b064_11.htm">《庄子·天运》 东施效颦</a>）<br>)";
+  string compareTo6 =
+      R"(7.2   西施一代倾城逐浪花，吴宫空自忆儿家。效颦莫笑东村女，头白溪边尚浣纱。    日日在吴王夫差的宫殿里思念儿时的家园又如何，倾国倾城的一代佳人西施却再也没有回到当年浣纱的耶溪边，相反，如溪里那浪花互相追逐着奔向远方，她也消失不归。所以，也不必嘲笑效颦的东施，毕竟她相安无事地在溪边一直浣纱到白头。（西施）（临江仙·滚滚长江东逝水）（念奴娇·赤壁怀古）（杜甫《登高》）（王维《西施咏》）（《庄子·天运》 东施效颦）<br>)";
+  string line7 =
+          R"(<a unhidden id="P4L1">4.1</a>&nbsp;&nbsp; <strong unhidden>桃花帘外东风软，桃花帘内晨妆懒。帘外桃花帘内人，人与桃花隔不远。</strong>&nbsp;&nbsp;&nbsp;&nbsp;<samp unhidden font style="font-size: 13.5pt; font-family:楷体; color:#ff00ff">轻柔的春风又一次吹开了帘外的桃花，不禁让我回想起帘内的美人曾经情绪慵懒、无心梳妆。看似仅仅一帘之隔，帘外的桃花和帘内人隔得并不远。岂知隔花人远天涯近，这桃花和美人已经天各一方。</samp>（<u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">“不远”对应“月痕”</u>） <br>)";
+  string compareTo7 =
+      R"(4.1   桃花帘外东风软，桃花帘内晨妆懒。帘外桃花帘内人，人与桃花隔不远。    轻柔的春风又一次吹开了帘外的桃花，不禁让我回想起帘内的美人曾经情绪慵懒、无心梳妆。看似仅仅一帘之隔，帘外的桃花和帘内人隔得并不远。岂知隔花人远天涯近，这桃花和美人已经天各一方。（“不远”对应“月痕”） <br>)";
+  string line = line7;
+  string compareTo = compareTo7;
   LineNumber ln;
   ln.loadFirstFromContainedLine(line);
   if (ln.isParagraphHeader()) {

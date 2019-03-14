@@ -265,7 +265,7 @@ void CoupledBodyText::removeOldLineNumber(string &inLine) {
  * @param separatorColor the color to separate paragraphs
  */
 void CoupledBodyText::addLineNumber(const string &separatorColor,
-                                    bool forceUpdate, bool hidden) {
+                                    bool forceUpdate, bool hideParaHeader) {
   setInputOutputFiles();
   ifstream infile(m_inputFile);
   if (!infile) {
@@ -315,7 +315,7 @@ void CoupledBodyText::addLineNumber(const string &separatorColor,
       if (debug >= LOG_INFO)
         cout << "paragraph header found as:" << ln.asString() << endl;
       line = fixFirstParaHeaderFromTemplate(LineNumber::getStartNumber(),
-                                            separatorColor, hidden);
+                                            separatorColor, hideParaHeader);
       stop = true;
     }
     // incl. above header
@@ -336,7 +336,7 @@ void CoupledBodyText::addLineNumber(const string &separatorColor,
           cout << ln.asString() << endl;
         outfile << fixLastParaHeaderFromTemplate(LineNumber::getStartNumber(),
                                                  numberOfMiddleParaHeader + 1,
-                                                 separatorColor, hidden)
+                                                 separatorColor, hideParaHeader)
                 << endl;
         break; // end of whole file
       }
@@ -350,12 +350,12 @@ void CoupledBodyText::addLineNumber(const string &separatorColor,
         enterLastPara = true;
         outfile << fixMiddleParaHeaderFromTemplate(LineNumber::getStartNumber(),
                                                    para++, separatorColor,
-                                                   hidden, true)
+                                                   hideParaHeader, true)
                 << endl;
       } else
         outfile << fixMiddleParaHeaderFromTemplate(LineNumber::getStartNumber(),
                                                    para++, separatorColor,
-                                                   hidden, false)
+                                                   hideParaHeader, false)
                 << endl;
       lineNo = 1; // LINE index within each group
       expectAnotherHalf = false;

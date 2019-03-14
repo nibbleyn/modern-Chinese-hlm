@@ -41,7 +41,7 @@ int main(int argc, char **argv) {
     numberAttachmentHtmls(false, true);
     break;
   case 11:
-    testFunctions(1);
+    testFunctions(11);
     break;
   case 12:
     tools(16);

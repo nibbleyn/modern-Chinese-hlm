@@ -1278,7 +1278,7 @@ size_t PersonalComment::loadFirstFromContainedLine(const string &containedLine,
 }
 
 static const string poemTranslationTemplate =
-    R"(<samp unhidden font style="font-size: 13.5pt; font-family:楷体; color:#ff00ff">XX</samp> )";
+    R"(<samp unhidden font style="font-size: 13.5pt; font-family:楷体; color:#ff00ff">XX</samp>)";
 
 string fixPoemTranslationFromTemplate(const string &translation) {
   string result = poemTranslationTemplate;

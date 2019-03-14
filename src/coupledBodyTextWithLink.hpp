@@ -19,7 +19,7 @@ public:
   int sizeAfterRendering(const string &lineStr);
 
   string getDisplayString(const string &originalString);
-  void render();
+  void render(bool hideParaHeader = false);
 
 private:
   void searchForEmbededLinks();

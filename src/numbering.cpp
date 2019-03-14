@@ -6,13 +6,13 @@
  * @param maxTarget until this file
  */
 void addLineNumbers(int minTarget, int maxTarget, FILE_TYPE targetFileType,
-                    bool forceUpdate = true, bool hidden = false) {
+                    bool forceUpdate = true, bool hideParaHeader = false) {
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     string separatorColor = getSeparateLineColor(targetFileType);
     CoupledBodyText bodyText;
     bodyText.setFilePrefixFromFileType(targetFileType);
     bodyText.setFileAndAttachmentNumber(file);
-    bodyText.addLineNumber(separatorColor, forceUpdate, hidden);
+    bodyText.addLineNumber(separatorColor, forceUpdate, hideParaHeader);
   }
 }
 
@@ -28,7 +28,7 @@ void addLineNumbers(int minTarget, int maxTarget, FILE_TYPE targetFileType,
 void addLineNumbersForAttachmentHtml(int minTarget, int maxTarget,
                                      int minAttachNo, int maxAttachNo,
                                      bool forceUpdate = true,
-                                     bool hidden = false) {
+                                     bool hideParaHeader = false) {
 
   vector<int> targetAttachments;
   bool overAllAttachments = true;
@@ -48,7 +48,7 @@ void addLineNumbersForAttachmentHtml(int minTarget, int maxTarget,
       CoupledBodyText bodyText;
       bodyText.setFilePrefixFromFileType(targetFileType);
       bodyText.setFileAndAttachmentNumber(file, attNo);
-      bodyText.addLineNumber(separatorColor, forceUpdate, hidden);
+      bodyText.addLineNumber(separatorColor, forceUpdate, hideParaHeader);
     }
   }
 }
@@ -57,7 +57,7 @@ void addLineNumbersForAttachmentHtml(int minTarget, int maxTarget,
  * copy main files into HTML_OUTPUT
  * before run this
  */
-void numberMainHtmls(bool forceUpdate, bool hidden) {
+void numberMainHtmls(bool forceUpdate, bool hideParaHeader) {
   int minTarget = 1, maxTarget = 80;
   CoupledContainer container(FILE_TYPE::MAIN);
   CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
@@ -65,7 +65,8 @@ void numberMainHtmls(bool forceUpdate, bool hidden) {
     container.setFileAndAttachmentNumber(file);
     container.dissembleFromHTM();
   }
-  addLineNumbers(minTarget, maxTarget, FILE_TYPE::MAIN, forceUpdate, hidden);
+  addLineNumbers(minTarget, maxTarget, FILE_TYPE::MAIN, forceUpdate,
+                 hideParaHeader);
   CoupledBodyText::loadBodyTextsFromFixBackToOutput();
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     container.setFileAndAttachmentNumber(file);
@@ -74,7 +75,7 @@ void numberMainHtmls(bool forceUpdate, bool hidden) {
   cout << "Numbering Main Html finished. " << endl;
 }
 
-void numberOriginalHtmls(bool forceUpdate, bool hidden) {
+void numberOriginalHtmls(bool forceUpdate, bool hideParaHeader) {
   int minTarget = 1, maxTarget = 80;
   CoupledContainer container(FILE_TYPE::ORIGINAL);
   CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
@@ -83,7 +84,7 @@ void numberOriginalHtmls(bool forceUpdate, bool hidden) {
     container.dissembleFromHTM();
   }
   addLineNumbers(minTarget, maxTarget, FILE_TYPE::ORIGINAL, forceUpdate,
-                 hidden);
+                 hideParaHeader);
   CoupledBodyText::loadBodyTextsFromFixBackToOutput();
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     container.setFileAndAttachmentNumber(file);
@@ -92,7 +93,7 @@ void numberOriginalHtmls(bool forceUpdate, bool hidden) {
   cout << "Numbering Original Html finished. " << endl;
 }
 
-void numberJPMHtmls(bool forceUpdate, bool hidden) {
+void numberJPMHtmls(bool forceUpdate, bool hideParaHeader) {
   int minTarget = 1, maxTarget = 100;
   CoupledContainer container(FILE_TYPE::JPM);
   CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
@@ -100,7 +101,8 @@ void numberJPMHtmls(bool forceUpdate, bool hidden) {
     container.setFileAndAttachmentNumber(file);
     container.dissembleFromHTM();
   }
-  addLineNumbers(minTarget, maxTarget, FILE_TYPE::JPM, forceUpdate, hidden);
+  addLineNumbers(minTarget, maxTarget, FILE_TYPE::JPM, forceUpdate,
+                 hideParaHeader);
   CoupledBodyText::loadBodyTextsFromFixBackToOutput();
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     container.setFileAndAttachmentNumber(file);
@@ -109,7 +111,7 @@ void numberJPMHtmls(bool forceUpdate, bool hidden) {
   cout << "Numbering JPM Html finished. " << endl;
 }
 
-void numberAttachmentHtmls(bool forceUpdate, bool hidden) {
+void numberAttachmentHtmls(bool forceUpdate, bool hideParaHeader) {
   int minTarget = 1, maxTarget = 80;
   int minAttachNo = 1, maxAttachNo = 50;
   CoupledContainer container(FILE_TYPE::ATTACHMENT);
@@ -118,7 +120,7 @@ void numberAttachmentHtmls(bool forceUpdate, bool hidden) {
                        maxAttachNo); // dissemble html to bodytext
   addLineNumbersForAttachmentHtml(
       minTarget, maxTarget, minAttachNo, maxAttachNo, forceUpdate,
-      hidden); // reformat bodytext by adding line number
+      hideParaHeader); // reformat bodytext by adding line number
   CoupledBodyText::loadBodyTextsFromFixBackToOutput();
   assembleAttachments(minTarget, maxTarget, minAttachNo, maxAttachNo);
   cout << "Numbering Attachment Html finished. " << endl;
