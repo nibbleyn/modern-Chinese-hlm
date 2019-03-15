@@ -21,6 +21,9 @@ void testFunctions(int num) {
   case 5:
     testContainer(2);
     break;
+  case 7:
+    testImage();
+    break;
   case 8:
     testPoem();
     break;

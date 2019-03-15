@@ -35,12 +35,20 @@ protected:
 static const string imgBeginChars = R"(<img)";
 class Image : public Object {
 public:
-  Image(const string &imageString);
-  size_t displaySize();
+  Image() = default;
+  string getWholeString();
+  size_t loadFirstFromContainedLine(const string &containedLine,
+                                    size_t after = 0);
+  string getDisplayString() { return ""; };
+  size_t length() { return getWholeString().length(); };
+  size_t displaySize() { return getDisplayString().length(); };
 
 private:
-  size_t height{0};
-  size_t width{0};
+  string m_path{""};
+  string m_filename{""};
+  bool m_leftAlign{false};
+  size_t m_width{0};
+  string m_fullString{""};
 };
 
 static const string ImgRefBeginChars = R"(<var)";
@@ -93,6 +101,7 @@ public:
 private:
 };
 
+void testImage();
 void testSpace();
 void testPoem();
 void testImageReference();

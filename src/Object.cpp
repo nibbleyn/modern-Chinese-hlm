@@ -3,6 +3,8 @@
 string getNameOfObjectType(OBJECT_TYPE type) {
   if (type == OBJECT_TYPE::LINENUMBER)
     return "LINENUMBER";
+  else if (type == OBJECT_TYPE::IMAGE)
+    return "IMAGE";
   else if (type == OBJECT_TYPE::IMAGEREF)
     return "IMAGEREF";
   else if (type == OBJECT_TYPE::SPACE)
@@ -18,6 +20,38 @@ string getNameOfObjectType(OBJECT_TYPE type) {
   else if (type == OBJECT_TYPE::COMMENT)
     return "COMMENT";
   return "";
+}
+
+static const string imageTemplate =
+    R"(<img unhidden src="PPXX" align="right" width="YY">)";
+
+string fixImageReferenceFromTemplate(const string &path, const string &filename,
+                                     const string &direction, size_t size) {
+  string link = imageTemplate;
+  replacePart(link, "PP", path);
+  replacePart(link, "XX", filename);
+  replacePart(link, "right", direction);
+  replacePart(link, "YY", TurnToString(size));
+  return link;
+}
+
+string Image::getWholeString() {
+  //	return fixImageReferenceFromTemplate(m_path,m_filename,
+  //m_leftAlign?"left":"right",m_width);
+  return m_fullString;
+}
+
+size_t Image::loadFirstFromContainedLine(const string &containedLine,
+                                         size_t after) {
+  string begin = imgBeginChars;
+  string end = endOfBeginTag;
+  auto beginPos = containedLine.find(begin, after);
+  auto endPos = containedLine.find(end, beginPos);
+  if (beginPos == string::npos or endPos == string::npos)
+    return string::npos;
+  m_fullString = containedLine.substr(beginPos, endPos - beginPos + 1);
+  cout << m_fullString << endl;
+  return containedLine.find(begin, after);
 }
 
 static const string leftImgReferenceTemplate =
@@ -94,6 +128,18 @@ string Poem::getWholeString() {
 string Poem::getDisplayString() { return m_bodyText; }
 size_t Poem::length() { return getWholeString().length(); }
 size_t Poem::displaySize() { return getDisplayString().length(); }
+
+void testImage() {
+  string line =
+      R"(<img unhidden src="pictures\szy.jpg" align="left" width="300">)";
+  Image sp;
+  cout << "first appearance offset: " << sp.loadFirstFromContainedLine(line)
+       << endl
+       << "length: " << sp.length() << " display size: " << sp.displaySize()
+       << endl;
+  cout << "whole string: " << sp.getWholeString() << endl;
+  cout << "display as:" << sp.getDisplayString() << "||" << endl;
+}
 
 void testImageReference() {
   string line =

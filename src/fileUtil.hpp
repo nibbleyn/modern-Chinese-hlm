@@ -35,10 +35,12 @@ static const std::string ORIGINAL_SEPERATOR_COLOR = "004040";
 static const std::string attachmentDirForLinkFromMain = R"(attachment\)";
 static const std::string originalDirForLinkFromMain = R"(original\)";
 static const std::string jpmDirForLinkFromMain = R"(JPM\)";
+static const std::string pictureDirForLinkFromMain = R"(pictures\)";
 
 static const std::string mainDirForLinkFromAttachment = R"(..\)";
 static const std::string originalDirForLinkFromAttachment = R"(..\original\)";
 static const std::string jpmDirForLinkFromAttachment = R"(..\JPM\)";
+static const std::string pictureDirForLinkFromAttachment = R"(..\pictures\)";
 
 std::string getHtmlFileNamePrefix(FILE_TYPE type);
 std::string getSeparateLineColor(FILE_TYPE type);
