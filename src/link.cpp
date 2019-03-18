@@ -13,6 +13,7 @@ LinkFromMain::AttachmentSet LinkFromMain::attachmentTable;
 /**
  * a link type is got from the filename it's refer to
  * if no filename appears, it is a link to the same page
+ * never called for an link to image
  * @param refereFileName the refer file name part of the link
  * @return link type
  */
@@ -214,6 +215,7 @@ string fixLinkFromJPMTemplate(const string &path, const string &filename,
   }
   replacePart(link, "WW", citation);
   replacePart(link, "ZZ", annotation);
+  cout << link << endl;
   return link;
 }
 
@@ -243,7 +245,8 @@ string fixLinkFromAttachmentTemplate(const string &path, const string &filename,
 }
 
 static const string linkToImageFile =
-    R"(<a unhidden title="IMAGE" href="PPXX" target="_self">图示：ZZ</a>)";
+    R"(<a unhidden title="IMAGE" href="PPXX" target="_self">ZZ</a>)";
+static const string targetAttrBeginChars = R"(target=")";
 
 string fixLinkFromImageTemplate(const string &path, const string &filename,
                                 const string &annotation,
@@ -252,7 +255,7 @@ string fixLinkFromImageTemplate(const string &path, const string &filename,
   replacePart(link, "PP", path);
   replacePart(link, "XX", filename);
   replacePart(link, "ZZ", annotation);
-  replacePart(link, "_self", target);
+  replacePart(link, selfImageTarget, target);
   return link;
 }
 
@@ -427,6 +430,10 @@ size_t Link::displaySize() { return getDisplayString().length(); }
  * @return the string of the link
  */
 string Link::asString() {
+  if (m_type == LINK_TYPE::IMAGE) {
+    return fixLinkFromImageTemplate(getPathOfReferenceFile(), m_imageFilename,
+                                    m_annotation, m_imageTarget);
+  }
   string part0 = linkStartChars + " " + displayPropertyAsString();
   if (m_displayType != LINK_DISPLAY_TYPE::DIRECT)
     part0 += " ";
@@ -498,8 +505,17 @@ void Link::readType(const string &linkString) {
   if (linkString.find(HTML_SUFFIX) == string::npos) // no html to refer
   {
     if (linkString.find(titleStartChars + imageTypeChars + titleEndChars) !=
-        string::npos)
+        string::npos) {
       m_type = LINK_TYPE::IMAGE;
+      string begin = targetAttrBeginChars;
+      string end = referParaEndChar;
+      auto beginPos = linkString.find(begin);
+      auto endPos = linkString.find(end, beginPos);
+      if (beginPos != string::npos and endPos != string::npos)
+        m_imageTarget = linkString.substr(beginPos + begin.length(),
+                                          endPos - begin.length() - beginPos);
+      cout << "m_imageTarget: " << m_imageTarget << endl;
+    }
     return;
   }
   auto fileEnd = linkString.find(HTML_SUFFIX);
@@ -524,6 +540,9 @@ void Link::readType(const string &linkString) {
  * @param linkString the link to check
  */
 void Link::readReferPara(const string &linkString) {
+  if (m_type == LINK_TYPE::IMAGE) {
+    return;
+  }
   string htmStart = HTML_SUFFIX + referParaMiddleChar;
   if (m_type == LINK_TYPE::SAMEPAGE)
     htmStart = referParaMiddleChar;
@@ -554,6 +573,8 @@ bool Link::readAnnotation(const string &linkString) {
   string htmStart = HTML_SUFFIX;
   if (m_type == LINK_TYPE::SAMEPAGE)
     htmStart = referParaMiddleChar;
+  if (m_type == LINK_TYPE::IMAGE)
+    htmStart = referParaEndChar;
   auto processStart = linkString.find(htmStart);
   if (processStart == string::npos) // no file to refer
   {
@@ -615,6 +636,11 @@ bool Link::readAnnotation(const string &linkString) {
  * @param linkString the link to analysize
  */
 void Link::readKey(const string &linkString) {
+  if (m_type == LINK_TYPE::IMAGE) {
+    m_usedKey = imageTypeChars;
+    return;
+  }
+
   string keyStart = referParaEndChar + keyStartChars;
   string start = keyStart;
   auto keyBegin = linkString.find(start);
@@ -784,7 +810,34 @@ void LinkFromMain::generateLinkToOrigin() {
  */
 bool LinkFromMain::readReferFileName(const string &link) {
   string linkString = link;
+  if (m_type == LINK_TYPE::IMAGE) {
+    string begin = targetAttrBeginChars;
+    auto beginPos = linkString.find(begin);
+    const string attrSeparator = R"(")";
+    auto fileEndPos = linkString.rfind(attrSeparator, beginPos);
+    auto fileBeginPos = linkString.rfind(attrSeparator, fileEndPos - 1);
+    auto separatorLength = attrSeparator.length();
+    cout << linkString.substr(fileBeginPos + separatorLength,
+                              fileEndPos - fileBeginPos - separatorLength)
+         << endl;
+    const string pathSeparator = R"(\)";
+    if (linkString
+            .substr(fileBeginPos + separatorLength,
+                    fileEndPos - fileBeginPos - separatorLength)
+            .find(pathSeparator) != string::npos) {
+      fileBeginPos = linkString.rfind(pathSeparator, fileEndPos);
+      separatorLength = pathSeparator.length();
+    }
+    if (fileBeginPos != string::npos and fileEndPos != string::npos)
+      m_imageFilename =
+          linkString.substr(fileBeginPos + separatorLength,
+                            fileEndPos - fileBeginPos - separatorLength);
+    cout << "m_imageFilename: " << m_imageFilename << endl;
+    return true;
+  }
+
   string refereFileName = m_fromFile;
+
   if (m_type != LINK_TYPE::SAMEPAGE) {
     // remove space in the input linkString
     linkString.erase(remove(linkString.begin(), linkString.end(), ' '),
@@ -852,6 +905,8 @@ bool LinkFromMain::readReferFileName(const string &link) {
  */
 string LinkFromMain::getPathOfReferenceFile() const {
   string result{""};
+  if (m_type == LINK_TYPE::IMAGE)
+    result = pictureDirForLinkFromMain;
   if (m_type == LINK_TYPE::ATTACHMENT)
     result = attachmentDirForLinkFromMain;
   if (m_type == LINK_TYPE::ORIGINAL)
@@ -1072,6 +1127,8 @@ bool LinkFromAttachment::readReferFileName(const string &link) {
  */
 string LinkFromAttachment::getPathOfReferenceFile() const {
   string result{""};
+  if (m_type == LINK_TYPE::IMAGE)
+    result = pictureDirForLinkFromAttachment;
   if (m_type == LINK_TYPE::MAIN or m_annotation == returnToContentTable)
     result = mainDirForLinkFromAttachment;
   if (m_type == LINK_TYPE::ORIGINAL)
@@ -1420,6 +1477,19 @@ void testLink(Link &lfm, string linkString, bool needToGenerateOrgLink) {
 
 void testLinkOperation() {
   SEPERATE("testLinkOperation", " starts ");
+
+  testLinkFromMain(
+      "07",
+      R"(<a unhidden title="IMAGE" href="pictures\fg.jpg" target="_self">（图示：时间顺序图）</a>)",
+      false);
+  SEPERATE("image link", " finished ");
+
+  testLinkFromMain(
+      "07",
+      R"(<a unhidden title="IMAGE" href="timeline_xgq.jpg" target="_self">（图示：时间顺序图）</a>)",
+      false);
+  SEPERATE("image link without path", " finished ");
+
   string linkString =
       R"(<a unhidden href="a080.htm#top">原是)" + commentStart +
       unhiddenDisplayProperty + endOfBeginTag +
@@ -1440,8 +1510,8 @@ void testLinkOperation() {
   SEPERATE("fixReferFile", " finished ");
 
   linkString = fixLinkFromJPMTemplate(jpmDirForLinkFromMain, "017", R"(床帐)",
-                                      "", "P1L1",
-                                      R"(雪梅相妒，无复桂月争辉)");
+                                      "", "P1L1", R"(雪梅相妒，无复桂月争辉)");
+  cout << linkString << endl;
   LinkFromMain link1("05", linkString);
   testLink(link1, linkString, false);
 
@@ -1465,10 +1535,9 @@ void testLinkOperation() {
 
   SEPERATE("#top", " finished ");
 
-  testLinkFromMain(
-      "07",
-      R"(<a hidden href="attachment\b003_9.htm#P2L3">原是老奶奶（薛姨妈）使唤的</a>)",
-      false);
+  testLinkFromMain("07",
+                   R"(<a hidden href="attachment\b003_9.htm#P2L3">原是老奶奶（薛姨妈）使唤的</a>)",
+                   false);
   SEPERATE("WARNING:", " SUCH LINK'S REFERPARA WON'T BE FIXED AUTOMATICALLY.");
 
   SEPERATE("attachment with referPara", " finished ");

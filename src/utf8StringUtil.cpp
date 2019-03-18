@@ -48,6 +48,8 @@ fileSet buildFileSet(int minValue, int maxValue, int digits) {
  */
 void replacePart(string &linkString, const string &key,
                  const string &toReplace) {
+  if (key == toReplace)
+    return;
   while (true) {
     auto partBegin = linkString.find(key);
     if (partBegin == string::npos)

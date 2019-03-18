@@ -6,6 +6,9 @@ enum class LINK_TYPE { MAIN, ATTACHMENT, ORIGINAL, SAMEPAGE, JPM, IMAGE };
 enum class LINK_DISPLAY_TYPE { DIRECT, HIDDEN, UNHIDDEN };
 
 static const string annotationToOriginal = R"(原文)";
+static const string selfImageTarget = R"(_self)";
+static const string newTabImageTarget = R"(_blank)";
+
 // operations over link string template initialization
 string fixLinkFromSameFileTemplate(LINK_DISPLAY_TYPE type, const string &key,
                                    const string &annotation,
@@ -32,7 +35,7 @@ string fixLinkFromAttachmentTemplate(const string &path, const string &filename,
                                      const string &annotation);
 string fixLinkFromImageTemplate(const string &path, const string &filename,
                                 const string &annotation,
-                                const string &target = R"(_self)");
+                                const string &target = selfImageTarget);
 
 static const string returnLinkFromAttachmentHeader = R"(返回本章原文)";
 static const string returnLink = R"(被引用)";
@@ -105,6 +108,7 @@ public:
                                     size_t after = 0);
   string asString();
   LINK_TYPE getType() { return m_type; }
+  bool isTargetToImage() { return (m_type == LINK_TYPE::IMAGE); };
   bool isTargetToJPMHtm() { return (m_type == LINK_TYPE::JPM); };
   bool isTargetToOriginalHtm() { return (m_type == LINK_TYPE::ORIGINAL); };
   bool isTargetToOtherMainHtm() {
@@ -219,6 +223,8 @@ protected:
   using LinkPtr = std::unique_ptr<Link>;
   LinkPtr m_linkPtrToOrigin{nullptr};
   string m_displayText{""};
+  string m_imageFilename{""};
+  string m_imageTarget{selfImageTarget};
 };
 
 class LinkFromMain : public Link {
