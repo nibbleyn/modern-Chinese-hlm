@@ -242,6 +242,20 @@ string fixLinkFromAttachmentTemplate(const string &path, const string &filename,
   return link;
 }
 
+static const string linkToImageFile =
+    R"(<a unhidden title="IMAGE" href="PPXX" target="_self">图示：ZZ</a>)";
+
+string fixLinkFromImageTemplate(const string &path, const string &filename,
+                                const string &annotation,
+                                const string &target) {
+  auto link = linkToImageFile;
+  replacePart(link, "PP", path);
+  replacePart(link, "XX", filename);
+  replacePart(link, "ZZ", annotation);
+  replacePart(link, "_self", target);
+  return link;
+}
+
 /**
  * output linksTable to file HTML_OUTPUT_LINKS_LIST
  */
@@ -406,7 +420,6 @@ string Link::getDisplayString() {
     return m_displayText;
 }
 
-size_t Link::length() { return getWholeString().length(); }
 size_t Link::displaySize() { return getDisplayString().length(); }
 
 /**
@@ -481,11 +494,15 @@ void Link::readDisplayType(const string &linkString) {
  */
 void Link::readType(const string &linkString) {
   m_type = LINK_TYPE::SAMEPAGE;
-  auto fileEnd = linkString.find(HTML_SUFFIX);
-  if (fileEnd == string::npos) // no file to refer
+  // special image file with non html suffix, use title to check
+  if (linkString.find(HTML_SUFFIX) == string::npos) // no html to refer
   {
+    if (linkString.find(titleStartChars + imageTypeChars + titleEndChars) !=
+        string::npos)
+      m_type = LINK_TYPE::IMAGE;
     return;
   }
+  auto fileEnd = linkString.find(HTML_SUFFIX);
   string start = referFileMiddleChar;
   auto fileBegin = linkString.find(start);
   if (fileBegin == string::npos) // referred file not found
@@ -1229,18 +1246,19 @@ string scanForSubType(const string &original, OBJECT_TYPE subType,
  */
 size_t Link::loadFirstFromContainedLine(const string &containedLine,
                                         size_t after) {
-  auto linkBegin = containedLine.find(linkStartChars, after);
-  if (linkBegin == string::npos) // no link any more, continue with next
-                                 // line
+  string begin = linkStartChars;
+  string end = linkEndChars;
+  auto beginPos = containedLine.find(begin, after);
+  auto endPos = containedLine.find(end, after);
+  if (beginPos == string::npos or endPos == string::npos)
     return string::npos;
-  auto linkEnd = containedLine.find(linkEndChars, linkBegin);
-  auto linkString = containedLine.substr(
-      linkBegin, linkEnd + linkEndChars.length() - linkBegin);
-  if (debug >= LOG_INFO)
-    cout << "original length: " << linkString.length() << endl;
-  readTypeAndAnnotation(linkString);
-  readReferFileName(linkString); // second step of construction
-  fixFromString(linkString);
+  m_fullString =
+      containedLine.substr(beginPos, endPos + end.length() - beginPos);
+  cout << "m_fullString: " << endl << m_fullString << endl;
+
+  readTypeAndAnnotation(m_fullString);
+  readReferFileName(m_fullString); // second step of construction
+  fixFromString(m_fullString);
   if (debug >= LOG_INFO)
     cout << "after fix length: " << length() << endl;
 
@@ -1261,20 +1279,22 @@ string PersonalComment::getWholeString() {
 }
 string PersonalComment::getDisplayString() { return m_displayText; }
 
-size_t PersonalComment::length() { return getWholeString().length(); }
 size_t PersonalComment::displaySize() { return getDisplayString().length(); }
 
 size_t PersonalComment::loadFirstFromContainedLine(const string &containedLine,
                                                    size_t after) {
-  auto personalCommentBegin =
-      containedLine.find(personalCommentStartChars, after);
-  if (personalCommentBegin == string::npos) // no personalComment any more,
+  string begin = personalCommentStartChars;
+  string end = personalCommentEndChars;
+  auto beginPos = containedLine.find(begin, after);
+  auto endPos = containedLine.find(end, after);
+  if (beginPos == string::npos or endPos == string::npos)
     return string::npos;
-  auto personalCommentEnd =
-      containedLine.find(personalCommentEndChars, personalCommentBegin);
-  string part = containedLine.substr(personalCommentBegin,
-                                     personalCommentEnd - personalCommentBegin);
-  auto beginPos = part.find(endOfPersonalCommentBeginTag);
+  m_fullString =
+      containedLine.substr(beginPos, endPos + end.length() - beginPos);
+  cout << "m_fullString: " << endl << m_fullString << endl;
+
+  string part = containedLine.substr(beginPos, endPos - beginPos);
+  beginPos = part.find(endOfPersonalCommentBeginTag);
   m_bodyText = part.substr(beginPos + endOfPersonalCommentBeginTag.length());
   m_displayText =
       scanForSubType(m_bodyText, OBJECT_TYPE::LINKFROMMAIN, m_fromFile);
@@ -1295,20 +1315,22 @@ string PoemTranslation::getWholeString() {
 }
 string PoemTranslation::getDisplayString() { return m_displayText; }
 
-size_t PoemTranslation::length() { return getWholeString().length(); }
 size_t PoemTranslation::displaySize() { return getDisplayString().length(); }
 
 size_t PoemTranslation::loadFirstFromContainedLine(const string &containedLine,
                                                    size_t after) {
-  auto poemTranslationBegin =
-      containedLine.find(poemTranslationBeginChars, after);
-  if (poemTranslationBegin == string::npos) // no poemTranslation any more,
+  string begin = poemTranslationBeginChars;
+  string end = poemTranslationEndChars;
+  auto beginPos = containedLine.find(begin, after);
+  auto endPos = containedLine.find(end, after);
+  if (beginPos == string::npos or endPos == string::npos)
     return string::npos;
-  auto poemTranslationEnd =
-      containedLine.find(poemTranslationEndChars, poemTranslationBegin);
-  string part = containedLine.substr(poemTranslationBegin,
-                                     poemTranslationEnd - poemTranslationBegin);
-  auto beginPos = part.find(endOfPoemTranslationBeginTag);
+  m_fullString =
+      containedLine.substr(beginPos, endPos + end.length() - beginPos);
+  cout << "m_fullString: " << endl << m_fullString << endl;
+
+  string part = containedLine.substr(beginPos, endPos - beginPos);
+  beginPos = part.find(endOfPoemTranslationBeginTag);
   m_bodyText = part.substr(beginPos + endOfPoemTranslationBeginTag.length());
   m_displayText =
       scanForSubType(m_bodyText, OBJECT_TYPE::LINKFROMMAIN, m_fromFile);
@@ -1327,17 +1349,22 @@ string fixCommentFromTemplate(const string &comment) {
 string Comment::getWholeString() { return fixCommentFromTemplate(m_bodyText); }
 string Comment::getDisplayString() { return m_displayText; }
 
-size_t Comment::length() { return getWholeString().length(); }
 size_t Comment::displaySize() { return getDisplayString().length(); }
 
 size_t Comment::loadFirstFromContainedLine(const string &containedLine,
                                            size_t after) {
-  auto commentBegin = containedLine.find(commentBeginChars, after);
-  if (commentBegin == string::npos) // no comment any more,
+  string begin = commentBeginChars;
+  string end = commentEndChars;
+  auto beginPos = containedLine.find(begin, after);
+  auto endPos = containedLine.find(end, after);
+  if (beginPos == string::npos or endPos == string::npos)
     return string::npos;
-  auto commentEnd = containedLine.find(commentEndChars, commentBegin);
-  string part = containedLine.substr(commentBegin, commentEnd - commentBegin);
-  auto beginPos = part.find(endOfCommentBeginTag);
+  m_fullString =
+      containedLine.substr(beginPos, endPos + end.length() - beginPos);
+  cout << "m_fullString: " << endl << m_fullString << endl;
+
+  string part = containedLine.substr(beginPos, endPos - beginPos);
+  beginPos = part.find(endOfCommentBeginTag);
   m_bodyText = part.substr(beginPos + endOfCommentBeginTag.length());
   m_displayText =
       scanForSubType(m_bodyText, OBJECT_TYPE::LINKFROMMAIN, m_fromFile);

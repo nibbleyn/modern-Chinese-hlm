@@ -13,7 +13,6 @@ static const string lastPara = R"(<a unhidden id="bottom" href="#top">)";
 int LineNumber::StartNumber = START_PARA_NUMBER;
 int LineNumber::Limit = START_PARA_NUMBER * 2;
 
-size_t LineNumber::length() { return getWholeString().length(); }
 size_t LineNumber::displaySize() { return getDisplayString().length(); }
 /**
  * retrieve lineNumber from the link at the beginning of containedLine
@@ -22,27 +21,31 @@ size_t LineNumber::displaySize() { return getDisplayString().length(); }
  */
 size_t LineNumber::loadFirstFromContainedLine(const string &containedLine,
                                               size_t after) {
-  string start = UnhiddenLineNumberStart;
-  auto linkBegin = containedLine.find(start, after);
-  if (linkBegin == string::npos) {
-    start = HiddenLineNumberStart;
-    linkBegin = containedLine.find(start, after);
+  string begin = UnhiddenLineNumberStart;
+  auto beginPos = containedLine.find(begin, after);
+  if (beginPos == string::npos) {
+    begin = HiddenLineNumberStart;
+    beginPos = containedLine.find(begin, after);
   }
-  if (linkBegin != string::npos) // found name in lineName
+  if (beginPos != string::npos) // found name in lineName
   {
-    string end = endOfLineNumber;
-    string lineName = containedLine.substr(linkBegin + start.length());
-    //    if (debug >= LOG_INFO)
-    //      cout << lineName << endl;
-    auto linkEnd = lineName.find(end, after);
-    //    if (debug >= LOG_INFO)
-    //      cout << lineName.substr(0, linkEnd) << endl;
-    if (lineName.substr(0, linkEnd) == bottomParagraphIndicator)
+    string end = linkEndChars;
+    auto endPos = containedLine.find(end, beginPos);
+
+    m_fullString =
+        containedLine.substr(beginPos, endPos + end.length() - beginPos);
+    cout << "m_fullString: " << endl << m_fullString << endl;
+
+    string lineName = containedLine.substr(beginPos + begin.length());
+    end = endOfLineNumber;
+    endPos = lineName.find(end);
+    cout << lineName.substr(0, endPos) << endl;
+    if (lineName.substr(0, endPos) == bottomParagraphIndicator)
       readFromString(leadingChar + TurnToString(Limit - 1));
     else
-      readFromString(lineName.substr(0, linkEnd));
+      readFromString(lineName.substr(0, endPos));
   }
-  return linkBegin;
+  return beginPos;
 }
 
 string LineNumber::getDisplayString() {

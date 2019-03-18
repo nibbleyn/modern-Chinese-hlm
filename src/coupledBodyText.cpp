@@ -433,7 +433,7 @@ void testLineHeader(string lnStr) {
   cout << ln.getParaNumber() << " " << ln.getlineNumber() << " "
        << ln.asString() << endl
        << "is paragraph header? " << ln.isParagraphHeader() << endl;
-  cout << "whole string: " << ln.getWholeString() << endl;
+  cout << "whole string: " << endl << ln.getWholeString() << endl;
   cout << "display as:" << ln.getDisplayString() << "||" << endl;
   if (not ln.isParagraphHeader()) {
     if (not ln.isPureTextOnly())
@@ -451,7 +451,7 @@ void testLineHeaderFromContainedLine(string containedLine) {
   cout << ln.getParaNumber() << " " << ln.getlineNumber() << " "
        << ln.asString() << endl
        << "is paragraph header? " << ln.isParagraphHeader() << endl;
-  cout << "whole string: " << ln.getWholeString() << endl;
+  cout << "whole string: " << endl << ln.getWholeString() << endl;
   cout << "display as:" << ln.getDisplayString() << "||" << endl;
   if (not ln.isParagraphHeader()) {
     if (not ln.isPureTextOnly())
@@ -468,7 +468,7 @@ void testParagraphHeader(string lnStr) {
   cout << ln.getParaNumber() << " " << ln.getlineNumber() << " "
        << ln.asString() << endl
        << "is paragraph header? " << ln.isParagraphHeader() << endl;
-  cout << "whole string: " << ln.getWholeString() << endl;
+  cout << "whole string: " << endl << ln.getWholeString() << endl;
   cout << "display as:" << ln.getDisplayString() << "||" << endl;
   if (not ln.isParagraphHeader()) {
     if (not ln.isPureTextOnly())
@@ -486,7 +486,7 @@ void testParagraphHeaderFromContainedLine(string containedLine) {
   cout << ln.getParaNumber() << " " << ln.getlineNumber() << " "
        << ln.asString() << endl
        << "is paragraph header? " << ln.isParagraphHeader() << endl;
-  cout << "whole string: " << ln.getWholeString() << endl;
+  cout << "whole string: " << endl << ln.getWholeString() << endl;
   cout << "display as:" << ln.getDisplayString() << "||" << endl;
   if (not ln.isParagraphHeader()) {
     if (not ln.isPureTextOnly())

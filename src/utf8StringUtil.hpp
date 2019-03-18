@@ -67,6 +67,7 @@ static const string endOfBeginTag = R"(>)";
 static const string linkStartChars = R"(<a)";
 static const string linkEndChars = R"(</a>)";
 static const string titleStartChars = R"(title=")";
+static const string imageTypeChars = R"(IMAGE)";
 static const string titleEndChars = R"(" )";
 static const string referFileMiddleChar = R"(href=")";
 static const string referParaMiddleChar = R"(#)";

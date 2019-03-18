@@ -39,7 +39,6 @@ public:
   LineNumber(const LineNumber &) = default;
   LineNumber &operator=(const LineNumber &) = default;
   string getWholeString();
-  size_t length();
   string getDisplayString();
   size_t displaySize();
   size_t loadFirstFromContainedLine(const string &containedLine,

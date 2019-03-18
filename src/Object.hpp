@@ -23,13 +23,19 @@ public:
   virtual ~Object(){};
   virtual string getWholeString() = 0;
   virtual string getDisplayString() = 0;
-  virtual size_t length() = 0;
+  size_t length() {
+    if (m_fullString.length() != getWholeString().length())
+      cout << " size not match: " << m_fullString.length() << " vs "
+           << getWholeString().length() << endl;
+    return m_fullString.length();
+  }
   virtual size_t displaySize() = 0;
   virtual size_t loadFirstFromContainedLine(const string &containedLine,
                                             size_t after = 0) = 0;
 
 protected:
   string m_bodyText{""};
+  string m_fullString{""};
 };
 
 static const string imgBeginChars = R"(<img)";
@@ -40,7 +46,6 @@ public:
   size_t loadFirstFromContainedLine(const string &containedLine,
                                     size_t after = 0);
   string getDisplayString() { return ""; };
-  size_t length() { return getWholeString().length(); };
   size_t displaySize() { return getDisplayString().length(); };
 
 private:
@@ -48,7 +53,6 @@ private:
   string m_filename{""};
   bool m_leftAlign{false};
   size_t m_width{0};
-  string m_fullString{""};
 };
 
 static const string ImgRefBeginChars = R"(<var)";
@@ -63,7 +67,6 @@ public:
   string getDisplayString();
   size_t loadFirstFromContainedLine(const string &containedLine,
                                     size_t after = 0);
-  size_t length();
   size_t displaySize();
 
 private:
@@ -80,7 +83,6 @@ public:
   string getDisplayString() { return displaySpace; };
   size_t loadFirstFromContainedLine(const string &containedLine,
                                     size_t after = 0);
-  size_t length() { return space.length(); };
   size_t displaySize() { return displaySpace.length(); };
 
 private:
@@ -95,7 +97,6 @@ public:
   string getDisplayString();
   size_t loadFirstFromContainedLine(const string &containedLine,
                                     size_t after = 0);
-  size_t length();
   size_t displaySize();
 
 private:

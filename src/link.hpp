@@ -2,7 +2,7 @@
 #include "attachmentFiles.hpp"
 #include "coupledBodyText.hpp"
 
-enum class LINK_TYPE { MAIN, ATTACHMENT, ORIGINAL, SAMEPAGE, JPM };
+enum class LINK_TYPE { MAIN, ATTACHMENT, ORIGINAL, SAMEPAGE, JPM, IMAGE };
 enum class LINK_DISPLAY_TYPE { DIRECT, HIDDEN, UNHIDDEN };
 
 static const string annotationToOriginal = R"(原文)";
@@ -30,6 +30,9 @@ string fixLinkFromJPMTemplate(const string &path, const string &filename,
 string fixLinkFromAttachmentTemplate(const string &path, const string &filename,
                                      const string &attachNo,
                                      const string &annotation);
+string fixLinkFromImageTemplate(const string &path, const string &filename,
+                                const string &annotation,
+                                const string &target = R"(_self)");
 
 static const string returnLinkFromAttachmentHeader = R"(返回本章原文)";
 static const string returnLink = R"(被引用)";
@@ -97,7 +100,6 @@ public:
   Link &operator=(const Link &) = delete;
   string getWholeString();
   string getDisplayString();
-  size_t length();
   size_t displaySize();
   size_t loadFirstFromContainedLine(const string &containedLine,
                                     size_t after = 0);
@@ -274,7 +276,6 @@ public:
   Comment(const string &fromFile) : m_fromFile(fromFile) {}
   string getWholeString();
   string getDisplayString();
-  size_t length();
   size_t displaySize();
   size_t loadFirstFromContainedLine(const string &containedLine,
                                     size_t after = 0);
@@ -295,7 +296,6 @@ public:
   PersonalComment(const string &fromFile) : m_fromFile(fromFile) {}
   string getWholeString();
   string getDisplayString();
-  size_t length();
   size_t displaySize();
   size_t loadFirstFromContainedLine(const string &containedLine,
                                     size_t after = 0);
@@ -315,7 +315,6 @@ public:
   PoemTranslation(const string &fromFile) : m_fromFile(fromFile) {}
   string getWholeString();
   string getDisplayString();
-  size_t length();
   size_t displaySize();
   size_t loadFirstFromContainedLine(const string &containedLine,
                                     size_t after = 0);

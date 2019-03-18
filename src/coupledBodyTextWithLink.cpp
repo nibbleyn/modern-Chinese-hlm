@@ -206,6 +206,7 @@ void CoupledBodyTextWithLink::render(bool hideParaHeader) {
 }
 
 string CoupledBodyTextWithLink::getDisplayString(const string &originalString) {
+  cout << originalString.length() << endl;
   scanForTypes(originalString);
   if (debug >= LOG_INFO) {
     printOffsetToObjectType();
@@ -240,6 +241,7 @@ string CoupledBodyTextWithLink::getDisplayString(const string &originalString) {
       // should add length of substring above loadFirstFromContainedLine gets
       // so require the string be fixed before
       endOfSubStringOffset = offset + current->length();
+      cout << current->length() << " " << endOfSubStringOffset << endl;
     }
     m_offsetOfTypes.erase(first);
     auto nextOffsetOfSameType =
@@ -524,8 +526,13 @@ void testMixedObjects() {
       R"(<a unhidden id="P11L2">11.2</a>&nbsp;&nbsp; <img unhidden src="pictures\szy.jpg" align="left" width="300"><strong unhidden>落霞与孤鹜齐飞，风急江天过雁哀，却是一只折足雁，叫的人九回肠，这是鸿雁来宾。</strong>&nbsp;&nbsp;&nbsp;&nbsp;<samp unhidden font style="font-size: 13.5pt; font-family:楷体; color:#ff00ff">水天一色，孤雁随着流动的落霞一起在江边飞翔。看它迎着江风急切切飞去，却一叫千回首。再看，它竟然是一只折足雁，再听，它的哀叫实在让人回肠九转，内心无比痛苦焦虑。话说季秋之月，鸿雁来宾，这是深秋将至，鸿雁南飞的季节，岂能留住它呢。</samp>（<a unhidden href="attachment\b062_1.htm">古文 王勃 《滕王阁序》</a>）（<a unhidden href="attachment\b062_2.htm">旧诗 哭刘司户二首</a>）（<a unhidden href="attachment\b062_3.htm">骨牌名</a><var unhidden font style="font-size: 13.5pt; font-family:楷体; color:#ff00ff">（见左图）<-----折足雁</var>）（<a unhidden href="attachment\b062_4.htm">曲牌名 九回肠</a>）（<a unhidden href="attachment\b062_5.htm">历书 鸿雁来宾</a>）)";
   string compareTo8 =
       R"(11.2   落霞与孤鹜齐飞，风急江天过雁哀，却是一只折足雁，叫的人九回肠，这是鸿雁来宾。    水天一色，孤雁随着流动的落霞一起在江边飞翔。看它迎着江风急切切飞去，却一叫千回首。再看，它竟然是一只折足雁，再听，它的哀叫实在让人回肠九转，内心无比痛苦焦虑。话说季秋之月，鸿雁来宾，这是深秋将至，鸿雁南飞的季节，岂能留住它呢。（古文 王勃 《滕王阁序》）（旧诗 哭刘司户二首）（骨牌名（见左图）<-----折足雁）（曲牌名 九回肠）（历书 鸿雁来宾）)";
-  string line = line8;
-  string compareTo = compareTo8;
+  string line9 =
+      R"(<a unhidden id="P7L1">7.1</a>&nbsp;&nbsp; （<u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">晴雯一点争着靠近宝玉的心都没有，宝玉却慢慢靠近晴雯，看下面邀她进自己被窝。袭人回去这次是转折点，虽然自从王夫人收了的时候<a unhidden title="同房" href="a077.htm#P10L2"><i hidden>同房</i><sub hidden>第77章10.2节:</sub>她就离宝玉渐渐远了</a>（<a unhidden title="同房" href="original\c077.htm#P9L2"><i hidden>同房</i><sub hidden>第77章9.2节:</sub>原文</a>）。</u>）)";
+  string compareTo9 =
+      R"(7.1   （晴雯一点争着靠近宝玉的心都没有，宝玉却慢慢靠近晴雯，看下面邀她进自己被窝。袭人回去这次是转折点，虽然自从王夫人收了的时候她就离宝玉渐渐远了（原文）。）)";
+
+  string line = line9;
+  string compareTo = compareTo9;
   LineNumber ln;
   ln.loadFirstFromContainedLine(line);
   if (ln.isParagraphHeader()) {
