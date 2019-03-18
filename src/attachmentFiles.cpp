@@ -15,7 +15,6 @@ AttachmentNumber getAttachmentNumber(const string &filename) {
     return num;
   }
   auto chapter = filename.substr(fileBegin + start.length(), 2);
-  //  cout << chapter;
   num.first = TurnToInt(chapter);
   auto seqStart = filename.find(attachmentFileMiddleChar);
   if (seqStart == string::npos) // no file to refer

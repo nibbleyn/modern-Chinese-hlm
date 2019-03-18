@@ -23,7 +23,8 @@ bool isFoundAsNonKeys(const string &line, const string &key) {
       string testStr =
           line.substr(testBeginPos + keyStartChars.length(),
                       keyBegin - testBeginPos - keyStartChars.length());
-      cout << testStr << " and key: " << key << endl;
+      if (debug >= LOG_INFO)
+        cout << testStr << " and key: " << key << endl;
       if (testStr.find(keyEndChars) != string::npos)
         return true;
     } else {
@@ -33,7 +34,8 @@ bool isFoundAsNonKeys(const string &line, const string &key) {
         string testStr =
             line.substr(testBeginPos + titleStartChars.length(),
                         keyBegin - testBeginPos - titleStartChars.length());
-        cout << testStr << " and key: " << key << endl;
+        if (debug >= LOG_INFO)
+          cout << testStr << " and key: " << key << endl;
         if (testStr.find(titleEndChars) != string::npos)
           return true;
       } else
@@ -149,8 +151,10 @@ void CoupledBodyText::reformatParagraphToSmallerSize(
     return;
   }
   ofstream outfile(m_outputFile);
-  cout << utf8length(sampleBlock) << endl;
-  cout << sampleBlock << endl;
+  if (debug >= LOG_INFO)
+    cout << utf8length(sampleBlock) << endl;
+  if (debug >= LOG_INFO)
+    cout << sampleBlock << endl;
   // continue reading
   string inLine;
   string CR{0x0D};

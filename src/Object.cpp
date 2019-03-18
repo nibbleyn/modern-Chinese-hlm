@@ -1,5 +1,7 @@
 #include "Object.hpp"
 
+extern int debug;
+
 string getNameOfObjectType(OBJECT_TYPE type) {
   if (type == OBJECT_TYPE::LINENUMBER)
     return "LINENUMBER";
@@ -51,7 +53,8 @@ size_t Image::loadFirstFromContainedLine(const string &containedLine,
     return string::npos;
   m_fullString =
       containedLine.substr(beginPos, endPos + end.length() - beginPos);
-  cout << "m_fullString: " << endl << m_fullString << endl;
+  if (debug >= LOG_INFO)
+    cout << "m_fullString: " << endl << m_fullString << endl;
   return containedLine.find(begin, after);
 }
 
@@ -71,7 +74,6 @@ size_t ImageReferText::loadFirstFromContainedLine(const string &containedLine,
                                                   size_t after) {
   string begin = ImgRefBeginChars;
   string end = ImgRefEndChars;
-  //  cout << containedLine << endl;
   auto beginPos = containedLine.find(begin, after);
   auto endPos = containedLine.find(end, after);
   if (beginPos == string::npos or endPos == string::npos)
@@ -79,7 +81,8 @@ size_t ImageReferText::loadFirstFromContainedLine(const string &containedLine,
 
   m_fullString =
       containedLine.substr(beginPos, endPos + end.length() - beginPos);
-  cout << "m_fullString: " << endl << m_fullString << endl;
+  if (debug >= LOG_INFO)
+    cout << "m_fullString: " << endl << m_fullString << endl;
   string part = containedLine.substr(beginPos, endPos - beginPos);
   beginPos = part.find(endOfImgRefBeginTag);
   m_bodyText = part.substr(beginPos + endOfImgRefBeginTag.length());
@@ -107,7 +110,8 @@ size_t Space::loadFirstFromContainedLine(const string &containedLine,
                                          size_t after) {
   m_bodyText = displaySpace;
   m_fullString = space;
-  cout << "m_fullString: " << endl << m_fullString << endl;
+  if (debug >= LOG_INFO)
+    cout << "m_fullString: " << endl << m_fullString << endl;
   return containedLine.find(space, after);
 }
 
@@ -121,7 +125,8 @@ size_t Poem::loadFirstFromContainedLine(const string &containedLine,
     return string::npos;
   m_fullString =
       containedLine.substr(beginPos, endPos + end.length() - beginPos);
-  cout << "m_fullString: " << endl << m_fullString << endl;
+  if (debug >= LOG_INFO)
+    cout << "m_fullString: " << endl << m_fullString << endl;
   beginPos = containedLine.find_last_of(endOfBeginTag, endPos);
   m_bodyText = containedLine.substr(beginPos + 1, endPos - beginPos - 1);
   return containedLine.find(begin, after);

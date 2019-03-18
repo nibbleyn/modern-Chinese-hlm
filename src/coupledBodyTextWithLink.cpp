@@ -206,7 +206,8 @@ void CoupledBodyTextWithLink::render(bool hideParaHeader) {
 }
 
 string CoupledBodyTextWithLink::getDisplayString(const string &originalString) {
-  cout << originalString.length() << endl;
+  if (debug >= LOG_INFO)
+    cout << originalString.length() << endl;
   scanForTypes(originalString);
   if (debug >= LOG_INFO) {
     printOffsetToObjectType();
@@ -224,24 +225,28 @@ string CoupledBodyTextWithLink::getDisplayString(const string &originalString) {
     auto type = first->second;
     auto offset = first->first;
     if (not isEmbeddedObject(type, offset)) {
-      cout << endOfSubStringOffset << " " << offset - endOfSubStringOffset
-           << " "
-           << originalString.substr(endOfSubStringOffset,
-                                    offset - endOfSubStringOffset)
-           << endl;
+      if (debug >= LOG_INFO)
+        cout << endOfSubStringOffset << " " << offset - endOfSubStringOffset
+             << " "
+             << originalString.substr(endOfSubStringOffset,
+                                      offset - endOfSubStringOffset)
+             << endl;
       result += originalString.substr(endOfSubStringOffset,
                                       offset - endOfSubStringOffset);
-      cout << result << "|8|" << endl;
+      if (debug >= LOG_INFO)
+        cout << result << "|8|" << endl;
       auto current = createObjectFromType(type, m_file);
       current->loadFirstFromContainedLine(originalString, offset);
       cout << "whole string: " << current->getWholeString() << endl;
       cout << "display as:" << current->getDisplayString() << "||" << endl;
       result += current->getDisplayString();
-      cout << result << "|0|" << endl;
+      if (debug >= LOG_INFO)
+        cout << result << "|0|" << endl;
       // should add length of substring above loadFirstFromContainedLine gets
       // so require the string be fixed before
       endOfSubStringOffset = offset + current->length();
-      cout << current->length() << " " << endOfSubStringOffset << endl;
+      if (debug >= LOG_INFO)
+        cout << current->length() << " " << endOfSubStringOffset << endl;
     }
     m_offsetOfTypes.erase(first);
     auto nextOffsetOfSameType =
@@ -297,7 +302,6 @@ void CoupledBodyTextWithLink::removePersonalCommentsOverNumberedFiles() {
       string personalComment = removePersonalCommentLine.substr(
           personalCommentBegin,
           personalCommentEnd + end.length() - personalCommentBegin);
-      //      cout << personalComment << endl;
       to_replace = personalComment;
       auto replaceBegin = orgLine.find(to_replace);
       orgLine.replace(replaceBegin, to_replace.length(), "");
@@ -322,7 +326,8 @@ void CoupledBodyTextWithLink::removePersonalCommentsOverNumberedFiles() {
                            m_linkPtr.getattachmentNumber());
       if (m_linkPtr.isTargetToOtherAttachmentHtm() and
           LinkFromMain::getAttachmentType(num) == ATTACHMENT_TYPE::PERSONAL) {
-        cout << specialLink << endl;
+        if (debug >= LOG_INFO)
+          cout << specialLink << endl;
         to_replace = specialLink;
         auto replaceBegin = orgLine.find(to_replace);
         orgLine.replace(replaceBegin, to_replace.length(), "");

@@ -12,8 +12,29 @@ static const string lastPara = R"(<a unhidden id="bottom" href="#top">)";
 
 int LineNumber::StartNumber = START_PARA_NUMBER;
 int LineNumber::Limit = START_PARA_NUMBER * 2;
+/**
+ * read from a string of format "PxxLyy"
+ * and assign xx to paraNumber
+ * and assign yy to lineNumber
+ * @param name a string of format "PxxLyy"
+ */
+void LineNumber::readFromString(const string &name) {
+  auto lineNumberStart = name.find(middleChar);
+  if (lineNumberStart != string::npos) {
+    // sign of already numbered
+    m_lineNumber = TurnToInt(name.substr(lineNumberStart + 1));
+    if (name.substr(0, 1) == leadingChar)
+      m_paraNumber = TurnToInt(name.substr(1, lineNumberStart - 1));
+  } else if (name.substr(0, 1) == leadingChar) {
+    m_paraNumber = TurnToInt(name.substr(1));
+    if (m_paraNumber >= Limit) {
+      if (debug >= LOG_EXCEPTION)
+        cout << "too limit to hold such paragraph: " << m_paraNumber << endl;
+    }
+  } else
+    m_paraNumber = TurnToInt(name.substr(0)); // temporarily accept non-P number
+}
 
-size_t LineNumber::displaySize() { return getDisplayString().length(); }
 /**
  * retrieve lineNumber from the link at the beginning of containedLine
  * and read from it the paraNumber and lineNumber
@@ -34,12 +55,14 @@ size_t LineNumber::loadFirstFromContainedLine(const string &containedLine,
 
     m_fullString =
         containedLine.substr(beginPos, endPos + end.length() - beginPos);
-    cout << "m_fullString: " << endl << m_fullString << endl;
+    if (debug >= LOG_INFO)
+      cout << "m_fullString: " << endl << m_fullString << endl;
 
     string lineName = containedLine.substr(beginPos + begin.length());
     end = endOfLineNumber;
     endPos = lineName.find(end);
-    cout << lineName.substr(0, endPos) << endl;
+    if (debug >= LOG_INFO)
+      cout << lineName.substr(0, endPos) << endl;
     if (lineName.substr(0, endPos) == bottomParagraphIndicator)
       readFromString(leadingChar + TurnToString(Limit - 1));
     else
@@ -96,24 +119,4 @@ bool LineNumber::isWithinLineRange(int minPara, int maxPara, int minLine,
   return (biggerThanMin and lessThanMax);
 }
 
-/**
- * read from a string of format "PxxLyy"
- * and assign xx to paraNumber
- * and assign yy to lineNumber
- * @param name a string of format "PxxLyy"
- */
-void LineNumber::readFromString(const string &name) {
-  auto lineNumberStart = name.find(middleChar);
-  if (lineNumberStart != string::npos) {
-    // sign of already numbered
-    m_lineNumber = TurnToInt(name.substr(lineNumberStart + 1));
-    if (name.substr(0, 1) == leadingChar)
-      m_paraNumber = TurnToInt(name.substr(1, lineNumberStart - 1));
-  } else if (name.substr(0, 1) == leadingChar) {
-    m_paraNumber = TurnToInt(name.substr(1));
-    if (m_paraNumber >= Limit) {
-      cout << "too limit to hold such paragraph: " << m_paraNumber << endl;
-    }
-  } else
-    m_paraNumber = TurnToInt(name.substr(0)); // temporarily accept non-P number
-}
+size_t LineNumber::displaySize() { return getDisplayString().length(); }

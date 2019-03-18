@@ -215,7 +215,8 @@ string fixLinkFromJPMTemplate(const string &path, const string &filename,
   }
   replacePart(link, "WW", citation);
   replacePart(link, "ZZ", annotation);
-  cout << link << endl;
+  if (debug >= LOG_INFO)
+    cout << link << endl;
   return link;
 }
 
@@ -514,7 +515,8 @@ void Link::readType(const string &linkString) {
       if (beginPos != string::npos and endPos != string::npos)
         m_imageTarget = linkString.substr(beginPos + begin.length(),
                                           endPos - begin.length() - beginPos);
-      cout << "m_imageTarget: " << m_imageTarget << endl;
+      if (debug >= LOG_INFO)
+        cout << "m_imageTarget: " << m_imageTarget << endl;
     }
     return;
   }
@@ -817,9 +819,10 @@ bool LinkFromMain::readReferFileName(const string &link) {
     auto fileEndPos = linkString.rfind(attrSeparator, beginPos);
     auto fileBeginPos = linkString.rfind(attrSeparator, fileEndPos - 1);
     auto separatorLength = attrSeparator.length();
-    cout << linkString.substr(fileBeginPos + separatorLength,
-                              fileEndPos - fileBeginPos - separatorLength)
-         << endl;
+    if (debug >= LOG_INFO)
+      cout << linkString.substr(fileBeginPos + separatorLength,
+                                fileEndPos - fileBeginPos - separatorLength)
+           << endl;
     const string pathSeparator = R"(\)";
     if (linkString
             .substr(fileBeginPos + separatorLength,
@@ -832,7 +835,8 @@ bool LinkFromMain::readReferFileName(const string &link) {
       m_imageFilename =
           linkString.substr(fileBeginPos + separatorLength,
                             fileEndPos - fileBeginPos - separatorLength);
-    cout << "m_imageFilename: " << m_imageFilename << endl;
+    if (debug >= LOG_INFO)
+      cout << "m_imageFilename: " << m_imageFilename << endl;
     return true;
   }
 
@@ -1058,6 +1062,34 @@ void LinkFromAttachment::generateLinkToOrigin() {
  */
 bool LinkFromAttachment::readReferFileName(const string &link) {
   string linkString = link;
+  if (m_type == LINK_TYPE::IMAGE) {
+    string begin = targetAttrBeginChars;
+    auto beginPos = linkString.find(begin);
+    const string attrSeparator = R"(")";
+    auto fileEndPos = linkString.rfind(attrSeparator, beginPos);
+    auto fileBeginPos = linkString.rfind(attrSeparator, fileEndPos - 1);
+    auto separatorLength = attrSeparator.length();
+    if (debug >= LOG_INFO)
+      cout << linkString.substr(fileBeginPos + separatorLength,
+                                fileEndPos - fileBeginPos - separatorLength)
+           << endl;
+    const string pathSeparator = R"(\)";
+    if (linkString
+            .substr(fileBeginPos + separatorLength,
+                    fileEndPos - fileBeginPos - separatorLength)
+            .find(pathSeparator) != string::npos) {
+      fileBeginPos = linkString.rfind(pathSeparator, fileEndPos);
+      separatorLength = pathSeparator.length();
+    }
+    if (fileBeginPos != string::npos and fileEndPos != string::npos)
+      m_imageFilename =
+          linkString.substr(fileBeginPos + separatorLength,
+                            fileEndPos - fileBeginPos - separatorLength);
+    if (debug >= LOG_INFO)
+      cout << "m_imageFilename: " << m_imageFilename << endl;
+    return true;
+  }
+
   string refereFileName = m_fromFile;
   if (m_type != LINK_TYPE::SAMEPAGE) {
     // remove space in the input linkString
@@ -1311,7 +1343,8 @@ size_t Link::loadFirstFromContainedLine(const string &containedLine,
     return string::npos;
   m_fullString =
       containedLine.substr(beginPos, endPos + end.length() - beginPos);
-  cout << "m_fullString: " << endl << m_fullString << endl;
+  if (debug >= LOG_INFO)
+    cout << "m_fullString: " << endl << m_fullString << endl;
 
   readTypeAndAnnotation(m_fullString);
   readReferFileName(m_fullString); // second step of construction
@@ -1348,7 +1381,8 @@ size_t PersonalComment::loadFirstFromContainedLine(const string &containedLine,
     return string::npos;
   m_fullString =
       containedLine.substr(beginPos, endPos + end.length() - beginPos);
-  cout << "m_fullString: " << endl << m_fullString << endl;
+  if (debug >= LOG_INFO)
+    cout << "m_fullString: " << endl << m_fullString << endl;
 
   string part = containedLine.substr(beginPos, endPos - beginPos);
   beginPos = part.find(endOfPersonalCommentBeginTag);
@@ -1384,7 +1418,8 @@ size_t PoemTranslation::loadFirstFromContainedLine(const string &containedLine,
     return string::npos;
   m_fullString =
       containedLine.substr(beginPos, endPos + end.length() - beginPos);
-  cout << "m_fullString: " << endl << m_fullString << endl;
+  if (debug >= LOG_INFO)
+    cout << "m_fullString: " << endl << m_fullString << endl;
 
   string part = containedLine.substr(beginPos, endPos - beginPos);
   beginPos = part.find(endOfPoemTranslationBeginTag);
@@ -1418,7 +1453,8 @@ size_t Comment::loadFirstFromContainedLine(const string &containedLine,
     return string::npos;
   m_fullString =
       containedLine.substr(beginPos, endPos + end.length() - beginPos);
-  cout << "m_fullString: " << endl << m_fullString << endl;
+  if (debug >= LOG_INFO)
+    cout << "m_fullString: " << endl << m_fullString << endl;
 
   string part = containedLine.substr(beginPos, endPos - beginPos);
   beginPos = part.find(endOfCommentBeginTag);
@@ -1478,9 +1514,9 @@ void testLink(Link &lfm, string linkString, bool needToGenerateOrgLink) {
 void testLinkOperation() {
   SEPERATE("testLinkOperation", " starts ");
 
-  testLinkFromMain(
+  testLinkFromAttachment(
       "07",
-      R"(<a unhidden title="IMAGE" href="pictures\fg.jpg" target="_self">（图示：时间顺序图）</a>)",
+      R"(<a unhidden title="IMAGE" href="..\pictures\fg.jpg" target="_self">（图示：时间顺序图）</a>)",
       false);
   SEPERATE("image link", " finished ");
 
@@ -1535,9 +1571,10 @@ void testLinkOperation() {
 
   SEPERATE("#top", " finished ");
 
-  testLinkFromMain("07",
-                   R"(<a hidden href="attachment\b003_9.htm#P2L3">原是老奶奶（薛姨妈）使唤的</a>)",
-                   false);
+  testLinkFromMain(
+      "07",
+      R"(<a hidden href="attachment\b003_9.htm#P2L3">原是老奶奶（薛姨妈）使唤的</a>)",
+      false);
   SEPERATE("WARNING:", " SUCH LINK'S REFERPARA WON'T BE FIXED AUTOMATICALLY.");
 
   SEPERATE("attachment with referPara", " finished ");

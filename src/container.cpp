@@ -380,7 +380,8 @@ void TableContainer::insertFrontParagrapHeader(int totalPara,
   LineNumber::setStartNumber(START_PARA_NUMBER);
   string line = fixFrontParaHeaderFromTemplate(LineNumber::getStartNumber(), "",
                                                totalPara, units, false);
-  cout << line << endl;
+  if (debug >= LOG_INFO)
+    cout << line << endl;
   outfile << line << endl;
 }
 
@@ -403,7 +404,8 @@ void TableContainer::insertMiddleParagrapHeader(bool enterLastPara,
     line = insertParaHeaderFromTemplate(LineNumber::getStartNumber(), seqOfPara,
                                         startParaNo, endParaNo, totalPara,
                                         preTotalPara, "", units, false, false);
-  cout << line << endl;
+  if (debug >= LOG_INFO)
+    cout << line << endl;
   outfile << line << endl;
 }
 
@@ -416,7 +418,8 @@ void TableContainer::insertBackParagrapHeader(int seqOfPara, int totalPara,
   outfile.open(outputBodyTextFile, std::ios_base::app);
   string line = fixBackParaHeaderFromTemplate(
       LineNumber::getStartNumber(), seqOfPara, totalPara, "", units, false);
-  cout << line << endl;
+  if (debug >= LOG_INFO)
+    cout << line << endl;
   outfile << line << endl;
 }
 
