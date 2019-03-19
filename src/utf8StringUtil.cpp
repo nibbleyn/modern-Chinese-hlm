@@ -110,3 +110,22 @@ void printCompareResult(const string &firstString, const string &secondString,
   cout << secondString << "||" << endl;
   cout << markDifference(firstString, secondString, begin) << endl;
 }
+
+string getIncludedString(const string &originalString, const string &begin,
+                         const string &end, size_t after) {
+  auto beginPos = originalString.find(begin, after);
+  auto endPos = originalString.find(end, beginPos);
+  if (beginPos == string::npos or endPos == string::npos)
+    return "";
+  return originalString.substr(beginPos + begin.length(),
+                               endPos - begin.length() - beginPos);
+}
+
+string getWholeString(const string &originalString, const string &begin,
+                      const string &end, size_t after) {
+  auto beginPos = originalString.find(begin, after);
+  auto endPos = originalString.find(end, beginPos);
+  if (beginPos == string::npos or endPos == string::npos)
+    return "";
+  return originalString.substr(beginPos, endPos + end.length() - beginPos);
+}

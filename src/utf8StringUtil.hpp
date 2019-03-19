@@ -107,3 +107,8 @@ string markDifference(const string &firstString, const string &secondString,
 
 void printCompareResult(const string &firstString, const string &secondString,
                         size_t begin = 0);
+
+string getIncludedString(const string &originalString, const string &begin,
+                         const string &end, size_t after = 0);
+string getWholeString(const string &originalString, const string &begin,
+                      const string &end, size_t after = 0);

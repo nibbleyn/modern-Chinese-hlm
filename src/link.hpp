@@ -33,9 +33,9 @@ string fixLinkFromJPMTemplate(const string &path, const string &filename,
 string fixLinkFromAttachmentTemplate(const string &path, const string &filename,
                                      const string &attachNo,
                                      const string &annotation);
-string fixLinkFromImageTemplate(const string &path, const string &filename,
-                                const string &annotation,
-                                const string &target = selfImageTarget);
+string fixLinkFromImageTemplate(
+    const string &filename, const string &annotation,
+    const string &displayProperty = unhiddenDisplayProperty);
 
 static const string returnLinkFromAttachmentHeader = R"(返回本章原文)";
 static const string returnLink = R"(被引用)";

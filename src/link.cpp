@@ -246,17 +246,23 @@ string fixLinkFromAttachmentTemplate(const string &path, const string &filename,
 }
 
 static const string linkToImageFile =
-    R"(<a unhidden title="IMAGE" href="PPXX" target="_self">ZZ</a>)";
-static const string targetAttrBeginChars = R"(target=")";
+    R"(<a unhidden title="IMAGE" href="#XX">（图示：ZZ）</a>)";
+static const string realAnnotationOfImageLinkStartChars =
+    bracketStartChars + R"(图示：)";
+static const string realAnnotationOfImageLinkEndChars = bracketEndChars;
 
-string fixLinkFromImageTemplate(const string &path, const string &filename,
-                                const string &annotation,
-                                const string &target) {
+string fixLinkFromImageTemplate(const string &filename,
+                                const string &fullAnnotation,
+                                const string &displayProperty) {
   auto link = linkToImageFile;
-  replacePart(link, "PP", path);
+  if (displayProperty != unhiddenDisplayProperty) {
+    if (displayProperty == hiddenDisplayProperty)
+      replacePart(link, unhiddenDisplayProperty, hiddenDisplayProperty);
+    else
+      replacePart(link, unhiddenDisplayProperty + " ", "");
+  }
   replacePart(link, "XX", filename);
-  replacePart(link, "ZZ", annotation);
-  replacePart(link, selfImageTarget, target);
+  replacePart(link, "（图示：ZZ）", fullAnnotation);
   return link;
 }
 
@@ -432,8 +438,8 @@ size_t Link::displaySize() { return getDisplayString().length(); }
  */
 string Link::asString() {
   if (m_type == LINK_TYPE::IMAGE) {
-    return fixLinkFromImageTemplate(getPathOfReferenceFile(), m_imageFilename,
-                                    m_annotation, m_imageTarget);
+    return fixLinkFromImageTemplate(m_imageFilename, m_annotation,
+                                    displayPropertyAsString());
   }
   string part0 = linkStartChars + " " + displayPropertyAsString();
   if (m_displayType != LINK_DISPLAY_TYPE::DIRECT)
@@ -508,15 +514,6 @@ void Link::readType(const string &linkString) {
     if (linkString.find(titleStartChars + imageTypeChars + titleEndChars) !=
         string::npos) {
       m_type = LINK_TYPE::IMAGE;
-      string begin = targetAttrBeginChars;
-      string end = referParaEndChar;
-      auto beginPos = linkString.find(begin);
-      auto endPos = linkString.find(end, beginPos);
-      if (beginPos != string::npos and endPos != string::npos)
-        m_imageTarget = linkString.substr(beginPos + begin.length(),
-                                          endPos - begin.length() - beginPos);
-      if (debug >= LOG_INFO)
-        cout << "m_imageTarget: " << m_imageTarget << endl;
     }
     return;
   }
@@ -813,28 +810,8 @@ void LinkFromMain::generateLinkToOrigin() {
 bool LinkFromMain::readReferFileName(const string &link) {
   string linkString = link;
   if (m_type == LINK_TYPE::IMAGE) {
-    string begin = targetAttrBeginChars;
-    auto beginPos = linkString.find(begin);
-    const string attrSeparator = R"(")";
-    auto fileEndPos = linkString.rfind(attrSeparator, beginPos);
-    auto fileBeginPos = linkString.rfind(attrSeparator, fileEndPos - 1);
-    auto separatorLength = attrSeparator.length();
-    if (debug >= LOG_INFO)
-      cout << linkString.substr(fileBeginPos + separatorLength,
-                                fileEndPos - fileBeginPos - separatorLength)
-           << endl;
-    const string pathSeparator = R"(\)";
-    if (linkString
-            .substr(fileBeginPos + separatorLength,
-                    fileEndPos - fileBeginPos - separatorLength)
-            .find(pathSeparator) != string::npos) {
-      fileBeginPos = linkString.rfind(pathSeparator, fileEndPos);
-      separatorLength = pathSeparator.length();
-    }
-    if (fileBeginPos != string::npos and fileEndPos != string::npos)
-      m_imageFilename =
-          linkString.substr(fileBeginPos + separatorLength,
-                            fileEndPos - fileBeginPos - separatorLength);
+    m_imageFilename =
+        getIncludedString(linkString, referParaMiddleChar, referParaEndChar);
     if (debug >= LOG_INFO)
       cout << "m_imageFilename: " << m_imageFilename << endl;
     return true;
@@ -1063,28 +1040,8 @@ void LinkFromAttachment::generateLinkToOrigin() {
 bool LinkFromAttachment::readReferFileName(const string &link) {
   string linkString = link;
   if (m_type == LINK_TYPE::IMAGE) {
-    string begin = targetAttrBeginChars;
-    auto beginPos = linkString.find(begin);
-    const string attrSeparator = R"(")";
-    auto fileEndPos = linkString.rfind(attrSeparator, beginPos);
-    auto fileBeginPos = linkString.rfind(attrSeparator, fileEndPos - 1);
-    auto separatorLength = attrSeparator.length();
-    if (debug >= LOG_INFO)
-      cout << linkString.substr(fileBeginPos + separatorLength,
-                                fileEndPos - fileBeginPos - separatorLength)
-           << endl;
-    const string pathSeparator = R"(\)";
-    if (linkString
-            .substr(fileBeginPos + separatorLength,
-                    fileEndPos - fileBeginPos - separatorLength)
-            .find(pathSeparator) != string::npos) {
-      fileBeginPos = linkString.rfind(pathSeparator, fileEndPos);
-      separatorLength = pathSeparator.length();
-    }
-    if (fileBeginPos != string::npos and fileEndPos != string::npos)
-      m_imageFilename =
-          linkString.substr(fileBeginPos + separatorLength,
-                            fileEndPos - fileBeginPos - separatorLength);
+    m_imageFilename =
+        getIncludedString(linkString, referParaMiddleChar, referParaEndChar);
     if (debug >= LOG_INFO)
       cout << "m_imageFilename: " << m_imageFilename << endl;
     return true;
@@ -1514,17 +1471,25 @@ void testLink(Link &lfm, string linkString, bool needToGenerateOrgLink) {
 void testLinkOperation() {
   SEPERATE("testLinkOperation", " starts ");
 
+  cout << getIncludedString(linkToImageFile,
+                            realAnnotationOfImageLinkStartChars,
+                            realAnnotationOfImageLinkEndChars)
+       << endl;
+  cout << getWholeString(linkToImageFile, realAnnotationOfImageLinkStartChars,
+                         realAnnotationOfImageLinkEndChars)
+       << endl;
+
+  //clang-format off
   testLinkFromAttachment(
       "07",
-      R"(<a unhidden title="IMAGE" href="..\pictures\fg.jpg" target="_self">（图示：时间顺序图）</a>)",
-      false);
-  SEPERATE("image link", " finished ");
+      R"(<a title="IMAGE" href="#nwbt.jpg">（图示：女娲补天）</a>)", false);
+  SEPERATE("direct image link", " finished ");
 
-  testLinkFromMain(
+  testLinkFromAttachment(
       "07",
-      R"(<a unhidden title="IMAGE" href="timeline_xgq.jpg" target="_self">（图示：时间顺序图）</a>)",
+      R"(<a hidden title="IMAGE" href="#nwbt.jpg">（图示：女娲补天）</a>)",
       false);
-  SEPERATE("image link without path", " finished ");
+  SEPERATE("hidden image link", " finished ");
 
   string linkString =
       R"(<a unhidden href="a080.htm#top">原是)" + commentStart +
@@ -1659,5 +1624,6 @@ void testLinkOperation() {
   testLinkFromAttachment(
       "03_9", fixLinkFromAttachmentTemplate("", "18", "7", "happy"), false);
   SEPERATE("fixLinkFromAttachmentTemplate", " finished ");
+  //clang-format on
   SEPERATE("testLinkFromAttachment", " finished ");
 }
