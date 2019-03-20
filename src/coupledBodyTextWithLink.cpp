@@ -62,8 +62,7 @@ void CoupledBodyTextWithLink::searchForEmbededLinks() {
 
 void CoupledBodyTextWithLink::scanForTypes(const string &containedLine) {
   for (const auto &type :
-       {OBJECT_TYPE::LINENUMBER, OBJECT_TYPE::IMAGE, OBJECT_TYPE::IMAGEREF,
-        OBJECT_TYPE::SPACE, OBJECT_TYPE::POEM}) {
+       {OBJECT_TYPE::LINENUMBER, OBJECT_TYPE::SPACE, OBJECT_TYPE::POEM}) {
     auto offset = containedLine.find(getStartTagOfObjectType(type));
     if (offset != string::npos) {
       m_foundTypes[type] = offset;
@@ -508,10 +507,6 @@ int CoupledBodyTextWithLink::sizeAfterRendering(const string &lineStr) {
 }
 
 void testMixedObjects() {
-  string line1 =
-      R"(<a unhidden id="P3L2">3.2</a>&nbsp;&nbsp; 贾母又说：“请姑娘们来。今日有远客来，就不必上学去了。”<a hidden href="a057.htm#top">原是（<cite unhidden>薛姨妈1</cite>）老奶奶（<cite unhidden>薛姨妈3</cite>）使唤的</a>众人答应了一声，便派了两个人去请。没多久，只见三个奶妈和五六个丫鬟，簇拥着三个姊妹来了。第一个乃二姐<var unhidden font style="font-size: 13.5pt; font-family:楷体; color:#ff00ff">迎春----->（见右图）</var>，生的肌肤微丰，合中身材，腮凝新荔，鼻腻鹅脂，温柔沉默，观之可亲。<a unhidden href="attachment\b018_7.htm">happy</a>第二个是三妹<var unhidden font style="font-size: 13.5pt; font-family:楷体; color:#ff00ff">（见左图）<-----探春</var>，削肩细腰，长挑身材，鸭蛋脸面，俊眼修眉，顾盼神飞，文彩精华，见之忘俗。（<cite unhidden>迎春外表就有懦小姐的感觉，探春外表就文采甚好，可起诗社。</cite>）)";
-  string compareTo1 =
-      R"(3.2   贾母又说：“请姑娘们来。今日有远客来，就不必上学去了。”众人答应了一声，便派了两个人去请。没多久，只见三个奶妈和五六个丫鬟，簇拥着三个姊妹来了。第一个乃二姐迎春----->（见右图），生的肌肤微丰，合中身材，腮凝新荔，鼻腻鹅脂，温柔沉默，观之可亲。happy第二个是三妹（见左图）<-----探春，削肩细腰，长挑身材，鸭蛋脸面，俊眼修眉，顾盼神飞，文彩精华，见之忘俗。（迎春外表就有懦小姐的感觉，探春外表就文采甚好，可起诗社。）)";
   string line2 =
       R"(前儿老太太（<cite unhidden>贾母</cite>）因要把<a title="梅翰林" href="a050.htm#P15L2"><i hidden>梅翰林</i><sub hidden>第50章15.2节:</sub>你妹妹（<cite unhidden>薛宝琴</cite>）说给宝玉</a>（<a unhidden title="说媒" href="original\c050.htm#P14L2"><i hidden>说媒</i><sub hidden>第50章14.2节:</sub>原文</a>），偏生（<cite unhidden>薛宝琴</cite>）又有了人家（<cite unhidden>梅翰林家</cite>），不然（<cite unhidden>宝琴宝玉他二人</cite>）倒是一门好亲。老太太离了鸳鸯，饭也吃不下去的，哪里就舍得了？（<cite unhidden>凤姐并不知道贾赦要鸳鸯是要<a unhidden title="作兴" href="a071.htm#P7L2"><i hidden>作兴</i><sub hidden>第71章7.2节:</sub>争宠之意</a>（<a unhidden title="作兴" href="original\c071.htm#P5L3"><i hidden>作兴</i><sub hidden>第71章5.3节:</sub>原文</a>）</cite>）（<u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">这句又接到宝玉生日探春让李纨打黛玉，李纨说黛玉<a unhidden title="挨打" href="a063.htm#P13L3"><i hidden>挨打</i><sub hidden>第63章13.3节:</sub>人家不得贵婿反挨打</a>（<a unhidden title="挨打" href="original\c063.htm#P6L3"><i hidden>挨打</i><sub hidden>第63章6.3节:</sub>原文</a>），黛玉的婚姻是镜中花，他们二人的一个不能完成的愿望而已。</u>）)";
   string compareTo2 =
@@ -539,16 +534,16 @@ void testMixedObjects() {
       R"(4.1   桃花帘外东风软，桃花帘内晨妆懒。帘外桃花帘内人，人与桃花隔不远。    轻柔的春风又一次吹开了帘外的桃花，不禁让我回想起帘内的美人曾经情绪慵懒、无心梳妆。看似仅仅一帘之隔，帘外的桃花和帘内人隔得并不远。岂知隔花人远天涯近，这桃花和美人已经天各一方。（“不远”对应“月痕”） <br>)";
 
   string line8 =
-      R"(<a unhidden id="P11L2">11.2</a>&nbsp;&nbsp; <img unhidden src="pictures\szy.jpg" align="left" width="300"><strong unhidden>落霞与孤鹜齐飞，风急江天过雁哀，却是一只折足雁，叫的人九回肠，这是鸿雁来宾。</strong>&nbsp;&nbsp;&nbsp;&nbsp;<samp unhidden font style="font-size: 13.5pt; font-family:楷体; color:#ff00ff">水天一色，孤雁随着流动的落霞一起在江边飞翔。看它迎着江风急切切飞去，却一叫千回首。再看，它竟然是一只折足雁，再听，它的哀叫实在让人回肠九转，内心无比痛苦焦虑。话说季秋之月，鸿雁来宾，这是深秋将至，鸿雁南飞的季节，岂能留住它呢。</samp>（<a unhidden href="attachment\b062_1.htm">古文 王勃 《滕王阁序》</a>）（<a unhidden href="attachment\b062_2.htm">旧诗 哭刘司户二首</a>）（<a unhidden href="attachment\b062_3.htm">骨牌名</a><var unhidden font style="font-size: 13.5pt; font-family:楷体; color:#ff00ff">（见左图）<-----折足雁</var>）（<a unhidden href="attachment\b062_4.htm">曲牌名 九回肠</a>）（<a unhidden href="attachment\b062_5.htm">历书 鸿雁来宾</a>）)";
+      R"(<a unhidden id="P11L2">11.2</a>&nbsp;&nbsp; <strong unhidden>落霞与孤鹜齐飞，风急江天过雁哀，却是一只折足雁，叫的人九回肠，这是鸿雁来宾。</strong>&nbsp;&nbsp;&nbsp;&nbsp;<samp unhidden font style="font-size: 13.5pt; font-family:楷体; color:#ff00ff">水天一色，孤雁随着流动的落霞一起在江边飞翔。看它迎着江风急切切飞去，却一叫千回首。再看，它竟然是一只折足雁，再听，它的哀叫实在让人回肠九转，内心无比痛苦焦虑。话说季秋之月，鸿雁来宾，这是深秋将至，鸿雁南飞的季节，岂能留住它呢。</samp>（<a unhidden href="attachment\b062_1.htm">古文 王勃 《滕王阁序》</a>）（<a unhidden href="attachment\b062_2.htm">旧诗 哭刘司户二首</a>）（<a unhidden href="attachment\b062_3.htm">骨牌名</a>折足雁）（<a unhidden href="attachment\b062_4.htm">曲牌名 九回肠</a>）（<a unhidden href="attachment\b062_5.htm">历书 鸿雁来宾</a>）)";
   string compareTo8 =
-      R"(11.2   落霞与孤鹜齐飞，风急江天过雁哀，却是一只折足雁，叫的人九回肠，这是鸿雁来宾。    水天一色，孤雁随着流动的落霞一起在江边飞翔。看它迎着江风急切切飞去，却一叫千回首。再看，它竟然是一只折足雁，再听，它的哀叫实在让人回肠九转，内心无比痛苦焦虑。话说季秋之月，鸿雁来宾，这是深秋将至，鸿雁南飞的季节，岂能留住它呢。（古文 王勃 《滕王阁序》）（旧诗 哭刘司户二首）（骨牌名（见左图）<-----折足雁）（曲牌名 九回肠）（历书 鸿雁来宾）)";
+      R"(11.2   落霞与孤鹜齐飞，风急江天过雁哀，却是一只折足雁，叫的人九回肠，这是鸿雁来宾。    水天一色，孤雁随着流动的落霞一起在江边飞翔。看它迎着江风急切切飞去，却一叫千回首。再看，它竟然是一只折足雁，再听，它的哀叫实在让人回肠九转，内心无比痛苦焦虑。话说季秋之月，鸿雁来宾，这是深秋将至，鸿雁南飞的季节，岂能留住它呢。（古文 王勃 《滕王阁序》）（旧诗 哭刘司户二首）（骨牌名折足雁）（曲牌名 九回肠）（历书 鸿雁来宾）)";
   string line9 =
       R"(<a unhidden id="P7L1">7.1</a>&nbsp;&nbsp; （<u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">晴雯一点争着靠近宝玉的心都没有，宝玉却慢慢靠近晴雯，看下面邀她进自己被窝。袭人回去这次是转折点，虽然自从王夫人收了的时候<a unhidden title="同房" href="a077.htm#P10L2"><i hidden>同房</i><sub hidden>第77章10.2节:</sub>她就离宝玉渐渐远了</a>（<a unhidden title="同房" href="original\c077.htm#P9L2"><i hidden>同房</i><sub hidden>第77章9.2节:</sub>原文</a>）。</u>）)";
   string compareTo9 =
       R"(7.1   （晴雯一点争着靠近宝玉的心都没有，宝玉却慢慢靠近晴雯，看下面邀她进自己被窝。袭人回去这次是转折点，虽然自从王夫人收了的时候她就离宝玉渐渐远了（原文）。）)";
 
-  string line = line9;
-  string compareTo = compareTo9;
+  string line = line8;
+  string compareTo = compareTo8;
   LineNumber ln;
   ln.loadFirstFromContainedLine(line);
   if (ln.isParagraphHeader()) {

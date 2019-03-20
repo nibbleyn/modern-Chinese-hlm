@@ -103,6 +103,12 @@ bool CoupledBodyText::findKey(const string &key) {
     {
       continue;
     }
+
+    // skip text in image group
+    if (isImageGroupLine(line)) {
+      continue;
+    }
+
     // if "key" is only part of the key of another link, skip this line
     if (not isFoundAsNonKeys(line, key)) {
       continue;

@@ -21,17 +21,11 @@ void testFunctions(int num) {
   case 5:
     testContainer(2);
     break;
-  case 7:
-    testImage();
-    break;
   case 8:
     testPoem();
     break;
   case 9:
     testSpace();
-    break;
-  case 10:
-    testImageReference();
     break;
   case 11:
     testMixedObjects();

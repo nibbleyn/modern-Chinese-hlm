@@ -1207,10 +1207,6 @@ string LinkFromAttachment::getBodyTextFilePrefix() {
 ObjectPtr createObjectFromType(OBJECT_TYPE type, const string &fromFile) {
   if (type == OBJECT_TYPE::LINENUMBER)
     return std::make_unique<LineNumber>();
-  else if (type == OBJECT_TYPE::IMAGE)
-    return std::make_unique<Image>();
-  else if (type == OBJECT_TYPE::IMAGEREF)
-    return std::make_unique<ImageReferText>();
   else if (type == OBJECT_TYPE::SPACE)
     return std::make_unique<Space>();
   else if (type == OBJECT_TYPE::POEM)
@@ -1229,10 +1225,6 @@ ObjectPtr createObjectFromType(OBJECT_TYPE type, const string &fromFile) {
 string getStartTagOfObjectType(OBJECT_TYPE type) {
   if (type == OBJECT_TYPE::LINENUMBER)
     return UnhiddenLineNumberStart;
-  else if (type == OBJECT_TYPE::IMAGE)
-    return imgBeginChars;
-  else if (type == OBJECT_TYPE::IMAGEREF)
-    return ImgRefBeginChars;
   else if (type == OBJECT_TYPE::SPACE)
     return space;
   else if (type == OBJECT_TYPE::POEM)

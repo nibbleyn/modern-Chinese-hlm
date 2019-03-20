@@ -4,8 +4,6 @@
 enum class OBJECT_TYPE {
   SPACE,
   LINENUMBER,
-  IMAGE,
-  IMAGEREF,
   POEM,
   POEMTRANSLATION,
   LINKFROMMAIN,
@@ -36,41 +34,6 @@ public:
 protected:
   string m_bodyText{""};
   string m_fullString{""};
-};
-
-static const string imgBeginChars = R"(<img)";
-class Image : public Object {
-public:
-  Image() = default;
-  string getWholeString();
-  size_t loadFirstFromContainedLine(const string &containedLine,
-                                    size_t after = 0);
-  string getDisplayString() { return ""; };
-  size_t displaySize() { return getDisplayString().length(); };
-
-private:
-  string m_path{""};
-  string m_filename{""};
-  bool m_leftAlign{false};
-  size_t m_width{0};
-};
-
-static const string ImgRefBeginChars = R"(<var)";
-static const string endOfImgRefBeginTag = R"(">)";
-static const string ImgRefEndChars = R"(</var>)";
-static const string leftImgRefChars = R"(（见左图）<-----)";
-static const string rightImgRefChars = R"(----->（见右图）)";
-class ImageReferText : public Object {
-public:
-  ImageReferText() = default;
-  string getWholeString();
-  string getDisplayString();
-  size_t loadFirstFromContainedLine(const string &containedLine,
-                                    size_t after = 0);
-  size_t displaySize();
-
-private:
-  bool m_toLeft{true};
 };
 
 static const string space = R"(&nbsp;)";
