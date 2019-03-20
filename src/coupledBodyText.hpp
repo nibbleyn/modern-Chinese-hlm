@@ -53,8 +53,9 @@ public:
   void getNumberOfPara();
 
   // add line number before each paragraph
-  void addLineNumber(const string &separatorColor, bool forceUpdate = true,
-                     bool hideParaHeader = false);
+  virtual void addLineNumber(const string &separatorColor,
+                             bool forceUpdate = true,
+                             bool hideParaHeader = false);
 
   // fix wrong html pair
   void fixTagPairBegin(const string &signOfTagAfterReplaceTag,
@@ -76,9 +77,9 @@ protected:
   bool m_onlyFirst{true};
   bool m_autoNumbering{false};
 
-  using BrAfterImageGroupTable =
-      std::map<size_t,
-               size_t>; // apperance of imageGroup -> counts of BR afterwards
+  // apperance of imageGroup -> counts of BR afterwards, missing a paraheader
+  // afterwards
+  using BrAfterImageGroupTable = std::map<size_t, pair<size_t, bool>>;
   int m_numberOfFirstParaHeader{0};
   int m_numberOfMiddleParaHeader{0};
   int m_numberOfLastParaHeader{0};
@@ -89,7 +90,8 @@ protected:
     if (not m_brTable.empty())
       cout << "m_brTable:" << endl;
     for (const auto &element : m_brTable) {
-      cout << element.first << "  " << element.second << endl;
+      cout << element.first << "  " << element.second.first << "  "
+           << element.second.second << endl;
     }
   }
 

@@ -1,15 +1,6 @@
 #include "coupledBodyText.hpp"
 #include <functional> // std::greater
 
-bool KeyStartNotFound(const string &testStr, const string &key) {
-  if (debug >= LOG_INFO)
-    cout << testStr << " and key: " << key << endl;
-  auto keyStartBegin = testStr.find(keyStartChars);
-  if (keyStartBegin == string::npos)
-    return true;
-  return false;
-}
-
 bool isFoundAsNonKeys(const string &line, const string &key) {
   unsigned int searchStart = 0;
   while (true) {
@@ -189,10 +180,7 @@ void CoupledBodyText::regroupingParagraphs(const string &sampleBlock,
 
 /**
  * count number of lines with lineNumberIdBeginChars as paragraph sign in it
- * return a tuple of numbers of first paragraph header,
- * middle header and last header
- * @param fullPath of target file
- * @return a tuple of numbers
+ * count number of image groups not included in its own paragraph
  */
 void CoupledBodyText::getNumberOfPara() {
   setInputOutputFiles();
@@ -239,29 +227,31 @@ void CoupledBodyText::getNumberOfPara() {
       if (isImageGroupLine(inLine)) {
         seqOfImageGroup++;
         expectPara = true;
-        m_brTable[seqOfImageGroup] = 0;
+        m_brTable[seqOfImageGroup] = make_pair(0, false);
         continue;
       }
     }
     if (expectPara) {
       if (isLeadingBr(inLine))
-        m_brTable[seqOfImageGroup]++;
+        m_brTable[seqOfImageGroup].first++;
       else if (hasEndingBr(inLine)) {
         expectPara = false;
         m_numberOfImageGroupNotIncludedInPara++;
-        if (m_brTable[seqOfImageGroup] > 0)
-          m_brTable[seqOfImageGroup]--;
+        m_brTable[seqOfImageGroup].second = true;
+        if (m_brTable[seqOfImageGroup].first > 0)
+          m_brTable[seqOfImageGroup].first--;
       }
     }
   }
-  cout << "result of getNumberOfPara:" << endl;
-  printBrAfterImageGroupTable();
-  if (debug >= LOG_INFO)
+  if (debug >= LOG_INFO) {
+    cout << endl << "Result of getNumberOfPara:" << endl;
+    printBrAfterImageGroupTable();
     cout << "m_numberOfFirstParaHeader: " << m_numberOfFirstParaHeader << endl
          << "m_numberOfMiddleParaHeader: " << m_numberOfMiddleParaHeader << endl
          << "m_numberOfLastParaHeader: " << m_numberOfLastParaHeader << endl
          << "m_numberOfImageGroupNotIncludedInPara: "
          << m_numberOfImageGroupNotIncludedInPara << endl;
+  }
 }
 
 void CoupledBodyText::removeNbspsAndSpaces(string &inLine) {
@@ -322,11 +312,12 @@ void CoupledBodyText::addLineNumber(const string &separatorColor,
     }
 
   } else {
-    // remove img tag first and add them afterwards
-    cout << "not supported now." << endl;
+    cout << "call CoupledBodyTextWithLink::addLineNumber instead." << endl;
     return;
   }
 
+  // increase this number to hold new paragraphs for image Group
+  m_numberOfMiddleParaHeader += m_numberOfImageGroupNotIncludedInPara;
   ofstream outfile(m_outputFile);
 
   // continue reading till first paragraph header
@@ -354,6 +345,10 @@ void CoupledBodyText::addLineNumber(const string &separatorColor,
   int para = 1;   // paragraph index
   int lineNo = 1; // LINE index within each group
   bool enterLastPara = (m_numberOfMiddleParaHeader == 0);
+  bool readLinesAfterImageGroup = false;
+  size_t seqOfImageGroup = 0;
+  int linesAfter = 0;
+  bool needToGenerateParaHeader = false;
   while (!infile.eof()) {
     getline(infile, inLine); // Saves the line in inLine.
     LineNumber ln;
@@ -374,33 +369,71 @@ void CoupledBodyText::addLineNumber(const string &separatorColor,
       if (debug >= LOG_INFO)
         cout << "paragraph header found as:" << ln.asString() << endl;
 
-      if (para == m_numberOfMiddleParaHeader) {
-        enterLastPara = true;
-        outfile << fixMiddleParaHeaderFromTemplate(LineNumber::getStartNumber(),
-                                                   para++, separatorColor,
-                                                   hideParaHeader, true)
-                << endl;
-      } else
-        outfile << fixMiddleParaHeaderFromTemplate(LineNumber::getStartNumber(),
-                                                   para++, separatorColor,
-                                                   hideParaHeader, false)
-                << endl;
-      lineNo = 1; // LINE index within each group
-      expectAnotherHalf = false;
+      enterLastPara = (para == m_numberOfMiddleParaHeader);
+      outfile << fixMiddleParaHeaderFromTemplate(LineNumber::getStartNumber(),
+                                                 para++, separatorColor,
+                                                 hideParaHeader, enterLastPara)
+              << endl;
+      if (not enterLastPara) {
+        lineNo = 1; // LINE index within each group
+        expectAnotherHalf = false;
+      }
       continue;
     }
 
-    if (isEmptyLine(inLine) or isImageGroupLine(inLine)) {
+    if (isEmptyLine(inLine)) {
       if (debug >= LOG_INFO)
-        cout << "processed empty line." << inLine << endl;
+        cout << "processed empty line." << endl << inLine << endl;
       outfile << inLine << endl;
+      continue;
+    }
+
+    if (readLinesAfterImageGroup == true) {
+      // output middle para Header
+      if (linesAfter == 0) {
+        readLinesAfterImageGroup = false;
+        if (needToGenerateParaHeader) {
+          enterLastPara = (para == m_numberOfMiddleParaHeader);
+          outfile << fixMiddleParaHeaderFromTemplate(
+                         LineNumber::getStartNumber(), para++, separatorColor,
+                         hideParaHeader, enterLastPara)
+                  << endl;
+          if (not enterLastPara) {
+            lineNo = 1; // LINE index within each group
+            expectAnotherHalf = false;
+          }
+        }
+        // already read in one line, normally the next <br> after image Group
+        if (isLeadingBr(inLine)) {
+          outfile << inLine << endl;
+          expectAnotherHalf = true;
+        }
+      } else {
+        outfile << inLine << endl;
+        linesAfter--;
+      }
+      continue;
+    }
+
+    if (isImageGroupLine(inLine)) {
+      seqOfImageGroup++;
+      linesAfter = m_brTable[seqOfImageGroup].first;
+      needToGenerateParaHeader = m_brTable[seqOfImageGroup].second;
+      if (debug >= LOG_INFO) {
+        cout << "processed image Group line." << endl << inLine << endl;
+        cout << "linesAfter :" << endl << linesAfter << endl;
+        cout << "needToGenerateParaHeader :" << endl
+             << needToGenerateParaHeader << endl;
+      }
+      outfile << inLine << endl;
+      readLinesAfterImageGroup = true;
       continue;
     }
 
     if (expectAnotherHalf) {
       if (isLeadingBr(inLine)) {
         if (debug >= LOG_INFO)
-          cout << "processed :" << inLine << endl;
+          cout << "processed :" << endl << inLine << endl;
         outfile << inLine << endl;
         // still expectAnotherHalf
         continue;

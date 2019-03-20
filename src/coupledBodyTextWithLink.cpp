@@ -205,6 +205,17 @@ void CoupledBodyTextWithLink::render(bool hideParaHeader) {
   }
 }
 
+void CoupledBodyTextWithLink::addLineNumber(const string &separatorColor,
+                                            bool forceUpdate,
+                                            bool hideParaHeader) {
+  setInputOutputFiles();
+  ifstream infile(m_inputFile);
+  if (!infile) {
+    cout << "file doesn't exist:" << m_inputFile << endl;
+    return;
+  }
+}
+
 string CoupledBodyTextWithLink::getDisplayString(const string &originalString) {
   if (debug >= LOG_INFO)
     cout << originalString.length() << endl;

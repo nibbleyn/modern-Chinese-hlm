@@ -6,6 +6,7 @@ public:
   CoupledBodyTextWithLink() = default;
   CoupledBodyTextWithLink(const string &filePrefix)
       : CoupledBodyText(filePrefix) {}
+  virtual ~CoupledBodyTextWithLink(){};
 
   void fixLinksFromFile(fileSet referMainFiles, fileSet referOriginalFiles,
                         fileSet referJPMFiles, bool forceUpdate = true,
@@ -20,6 +21,8 @@ public:
 
   string getDisplayString(const string &originalString);
   void render(bool hideParaHeader = false);
+  void addLineNumber(const string &separatorColor, bool forceUpdate = true,
+                     bool hideParaHeader = false) override;
 
 private:
   void searchForEmbededLinks();
