@@ -194,27 +194,35 @@ void CoupledBodyText::regroupingParagraphs(const string &sampleBlock,
  * @param fullPath of target file
  * @return a tuple of numbers
  */
-CoupledBodyText::ParaStruct CoupledBodyText::getNumberOfPara() {
+void CoupledBodyText::getNumberOfPara() {
   setInputOutputFiles();
+
+  m_numberOfFirstParaHeader = 0;
+  m_numberOfMiddleParaHeader = 0;
+  m_numberOfLastParaHeader = 0;
+  m_numberOfImageGroupNotIncludedInPara = 0;
+  m_brTable.clear();
 
   ifstream infile(m_inputFile);
   if (!infile) {
     cout << "file doesn't exist:" << m_inputFile << endl;
-    return std::make_tuple(0, 0, 0);
+    return;
   }
-  int first = 0, middle = 0, last = 0;
+
   string inLine;
+  bool expectPara = false;
+  size_t seqOfImageGroup = 0;
   while (!infile.eof()) // To get all the lines.
   {
     getline(infile, inLine); // Saves the line in inLine.
     if (inLine.find(topIdBeginChars) != string::npos) {
-      first++; // end of whole FILE_TYPE::MAIN file
+      m_numberOfFirstParaHeader++; // end of whole FILE_TYPE::MAIN file
+      expectPara = false;
       continue;
     }
     if (inLine.find(bottomIdBeginChars) != string::npos) {
-      last++;
-      return std::make_tuple(first, middle,
-                             last); // end of whole FILE_TYPE::MAIN file
+      m_numberOfLastParaHeader++;
+      break; // end of whole FILE_TYPE::MAIN file
     }
     // search for new paragraph and also fix the para number
     if (inLine.find(lineNumberIdBeginChars) !=
@@ -222,11 +230,38 @@ CoupledBodyText::ParaStruct CoupledBodyText::getNumberOfPara() {
     {
       LineNumber ln;
       ln.loadFirstFromContainedLine(inLine);
-      if (ln.isParagraphHeader())
-        middle++;
+      if (ln.isParagraphHeader()) {
+        m_numberOfMiddleParaHeader++;
+        expectPara = false;
+        continue;
+      }
+    } else {
+      if (isImageGroupLine(inLine)) {
+        seqOfImageGroup++;
+        expectPara = true;
+        m_brTable[seqOfImageGroup] = 0;
+        continue;
+      }
+    }
+    if (expectPara) {
+      if (isLeadingBr(inLine))
+        m_brTable[seqOfImageGroup]++;
+      else if (hasEndingBr(inLine)) {
+        expectPara = false;
+        m_numberOfImageGroupNotIncludedInPara++;
+        if (m_brTable[seqOfImageGroup] > 0)
+          m_brTable[seqOfImageGroup]--;
+      }
     }
   }
-  return std::make_tuple(first, middle, last);
+  cout << "result of getNumberOfPara:" << endl;
+  printBrAfterImageGroupTable();
+  if (debug >= LOG_INFO)
+    cout << "m_numberOfFirstParaHeader: " << m_numberOfFirstParaHeader << endl
+         << "m_numberOfMiddleParaHeader: " << m_numberOfMiddleParaHeader << endl
+         << "m_numberOfLastParaHeader: " << m_numberOfLastParaHeader << endl
+         << "m_numberOfImageGroupNotIncludedInPara: "
+         << m_numberOfImageGroupNotIncludedInPara << endl;
 }
 
 void CoupledBodyText::removeNbspsAndSpaces(string &inLine) {
@@ -277,21 +312,10 @@ void CoupledBodyText::addLineNumber(const string &separatorColor,
     return;
   }
 
-  int numberOfFirstParaHeader{1};
-  int numberOfMiddleParaHeader{0};
-  int numberOfLastParaHeader{1};
   if (not m_autoNumbering) {
-    ParaStruct res;
-    res = getNumberOfPara(); // first scan
-    numberOfFirstParaHeader = GetTupleElement(res, 0);
-    numberOfMiddleParaHeader = GetTupleElement(res, 1);
-    numberOfLastParaHeader = GetTupleElement(res, 2);
+    getNumberOfPara(); // first scan
 
-    if (debug >= LOG_INFO)
-      cout << "numberOfFirstParaHeader: " << numberOfFirstParaHeader
-           << " numberOfMiddleParaHeader: " << numberOfMiddleParaHeader
-           << " numberOfLastParaHeader: " << numberOfLastParaHeader << endl;
-    if (numberOfFirstParaHeader == 0 or numberOfLastParaHeader == 0) {
+    if (m_numberOfFirstParaHeader == 0 or m_numberOfLastParaHeader == 0) {
       cout << "no top or bottom paragraph found:" << m_inputFile << endl;
       return;
       LineNumber::setStartNumber(START_PARA_NUMBER);
@@ -329,7 +353,7 @@ void CoupledBodyText::addLineNumber(const string &separatorColor,
   bool expectAnotherHalf = false;
   int para = 1;   // paragraph index
   int lineNo = 1; // LINE index within each group
-  bool enterLastPara = (numberOfMiddleParaHeader == 0);
+  bool enterLastPara = (m_numberOfMiddleParaHeader == 0);
   while (!infile.eof()) {
     getline(infile, inLine); // Saves the line in inLine.
     LineNumber ln;
@@ -339,7 +363,7 @@ void CoupledBodyText::addLineNumber(const string &separatorColor,
         if (debug >= LOG_INFO)
           cout << ln.asString() << endl;
         outfile << fixLastParaHeaderFromTemplate(LineNumber::getStartNumber(),
-                                                 numberOfMiddleParaHeader + 1,
+                                                 m_numberOfMiddleParaHeader + 1,
                                                  separatorColor, hideParaHeader)
                 << endl;
         break; // end of whole file
@@ -350,7 +374,7 @@ void CoupledBodyText::addLineNumber(const string &separatorColor,
       if (debug >= LOG_INFO)
         cout << "paragraph header found as:" << ln.asString() << endl;
 
-      if (para == numberOfMiddleParaHeader) {
+      if (para == m_numberOfMiddleParaHeader) {
         enterLastPara = true;
         outfile << fixMiddleParaHeaderFromTemplate(LineNumber::getStartNumber(),
                                                    para++, separatorColor,
@@ -366,7 +390,7 @@ void CoupledBodyText::addLineNumber(const string &separatorColor,
       continue;
     }
 
-    if (isEmptyLine(inLine)) {
+    if (isEmptyLine(inLine) or isImageGroupLine(inLine)) {
       if (debug >= LOG_INFO)
         cout << "processed empty line." << inLine << endl;
       outfile << inLine << endl;

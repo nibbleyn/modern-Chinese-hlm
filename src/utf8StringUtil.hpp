@@ -49,6 +49,7 @@ static const string lineNumberIdBeginChars =
 static const string topIdBeginChars = R"(id="top")"; // of the body Text file
 static const string bottomIdBeginChars =
     R"(id="bottom")"; // of the body Text file
+static const string imageGroupBeginChars = R"(<div)";
 
 static const string brTab = "<br>"; // start and end of each LINE
 static const string displaySpace = R"( )";

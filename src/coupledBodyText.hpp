@@ -50,8 +50,7 @@ public:
                             const string &sampleFirstLine,
                             const string &sampleWholeLine);
 
-  using ParaStruct = std::tuple<int, int, int>;
-  ParaStruct getNumberOfPara();
+  void getNumberOfPara();
 
   // add line number before each paragraph
   void addLineNumber(const string &separatorColor, bool forceUpdate = true,
@@ -77,9 +76,29 @@ protected:
   bool m_onlyFirst{true};
   bool m_autoNumbering{false};
 
+  using BrAfterImageGroupTable =
+      std::map<size_t,
+               size_t>; // apperance of imageGroup -> counts of BR afterwards
+  int m_numberOfFirstParaHeader{0};
+  int m_numberOfMiddleParaHeader{0};
+  int m_numberOfLastParaHeader{0};
+  int m_numberOfImageGroupNotIncludedInPara{0};
+  BrAfterImageGroupTable m_brTable;
+
+  void printBrAfterImageGroupTable() {
+    if (not m_brTable.empty())
+      cout << "m_brTable:" << endl;
+    for (const auto &element : m_brTable) {
+      cout << element.first << "  " << element.second << endl;
+    }
+  }
+
   void setInputOutputFiles();
   void removeNbspsAndSpaces(string &inLine);
   void removeOldLineNumber(string &inLine);
+  bool isImageGroupLine(const string &inLine) {
+    return (inLine.find(imageGroupBeginChars) != string::npos);
+  }
   bool isEmptyLine(const string &inLine) {
     return (inLine == "") or (inLine == "\r") or (inLine == "\n") or
            (inLine == "\r\n");
