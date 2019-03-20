@@ -65,7 +65,5 @@ public:
 private:
 };
 
-void testImage();
 void testSpace();
 void testPoem();
-void testImageReference();

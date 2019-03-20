@@ -111,8 +111,9 @@ void printCompareResult(const string &firstString, const string &secondString,
   cout << markDifference(firstString, secondString, begin) << endl;
 }
 
-string getIncludedString(const string &originalString, const string &begin,
-                         const string &end, size_t after) {
+string getIncludedStringBetweenTags(const string &originalString,
+                                    const string &begin, const string &end,
+                                    size_t after) {
   auto beginPos = originalString.find(begin, after);
   auto endPos = originalString.find(end, beginPos);
   if (beginPos == string::npos or endPos == string::npos)
@@ -121,8 +122,9 @@ string getIncludedString(const string &originalString, const string &begin,
                                endPos - begin.length() - beginPos);
 }
 
-string getWholeString(const string &originalString, const string &begin,
-                      const string &end, size_t after) {
+string getWholeStringBetweenTags(const string &originalString,
+                                 const string &begin, const string &end,
+                                 size_t after) {
   auto beginPos = originalString.find(begin, after);
   auto endPos = originalString.find(end, beginPos);
   if (beginPos == string::npos or endPos == string::npos)

@@ -810,8 +810,8 @@ void LinkFromMain::generateLinkToOrigin() {
 bool LinkFromMain::readReferFileName(const string &link) {
   string linkString = link;
   if (m_type == LINK_TYPE::IMAGE) {
-    m_imageFilename =
-        getIncludedString(linkString, referParaMiddleChar, referParaEndChar);
+    m_imageFilename = getIncludedStringBetweenTags(
+        linkString, referParaMiddleChar, referParaEndChar);
     if (debug >= LOG_INFO)
       cout << "m_imageFilename: " << m_imageFilename << endl;
     return true;
@@ -1040,8 +1040,8 @@ void LinkFromAttachment::generateLinkToOrigin() {
 bool LinkFromAttachment::readReferFileName(const string &link) {
   string linkString = link;
   if (m_type == LINK_TYPE::IMAGE) {
-    m_imageFilename =
-        getIncludedString(linkString, referParaMiddleChar, referParaEndChar);
+    m_imageFilename = getIncludedStringBetweenTags(
+        linkString, referParaMiddleChar, referParaEndChar);
     if (debug >= LOG_INFO)
       cout << "m_imageFilename: " << m_imageFilename << endl;
     return true;
@@ -1284,14 +1284,8 @@ string scanForSubType(const string &original, OBJECT_TYPE subType,
  */
 size_t Link::loadFirstFromContainedLine(const string &containedLine,
                                         size_t after) {
-  string begin = linkStartChars;
-  string end = linkEndChars;
-  auto beginPos = containedLine.find(begin, after);
-  auto endPos = containedLine.find(end, after);
-  if (beginPos == string::npos or endPos == string::npos)
-    return string::npos;
-  m_fullString =
-      containedLine.substr(beginPos, endPos + end.length() - beginPos);
+  m_fullString = getWholeStringBetweenTags(containedLine, linkStartChars,
+                                           linkEndChars, after);
   if (debug >= LOG_INFO)
     cout << "m_fullString: " << endl << m_fullString << endl;
 
@@ -1322,20 +1316,12 @@ size_t PersonalComment::displaySize() { return getDisplayString().length(); }
 
 size_t PersonalComment::loadFirstFromContainedLine(const string &containedLine,
                                                    size_t after) {
-  string begin = personalCommentStartChars;
-  string end = personalCommentEndChars;
-  auto beginPos = containedLine.find(begin, after);
-  auto endPos = containedLine.find(end, after);
-  if (beginPos == string::npos or endPos == string::npos)
-    return string::npos;
-  m_fullString =
-      containedLine.substr(beginPos, endPos + end.length() - beginPos);
+  m_fullString = getWholeStringBetweenTags(
+      containedLine, personalCommentStartChars, personalCommentEndChars, after);
   if (debug >= LOG_INFO)
     cout << "m_fullString: " << endl << m_fullString << endl;
-
-  string part = containedLine.substr(beginPos, endPos - beginPos);
-  beginPos = part.find(endOfPersonalCommentBeginTag);
-  m_bodyText = part.substr(beginPos + endOfPersonalCommentBeginTag.length());
+  m_bodyText = getIncludedStringBetweenTags(
+      m_fullString, endOfPersonalCommentBeginTag, personalCommentEndChars);
   m_displayText =
       scanForSubType(m_bodyText, OBJECT_TYPE::LINKFROMMAIN, m_fromFile);
   return containedLine.find(personalCommentStartChars, after);
@@ -1359,20 +1345,12 @@ size_t PoemTranslation::displaySize() { return getDisplayString().length(); }
 
 size_t PoemTranslation::loadFirstFromContainedLine(const string &containedLine,
                                                    size_t after) {
-  string begin = poemTranslationBeginChars;
-  string end = poemTranslationEndChars;
-  auto beginPos = containedLine.find(begin, after);
-  auto endPos = containedLine.find(end, after);
-  if (beginPos == string::npos or endPos == string::npos)
-    return string::npos;
-  m_fullString =
-      containedLine.substr(beginPos, endPos + end.length() - beginPos);
+  m_fullString = getWholeStringBetweenTags(
+      containedLine, poemTranslationBeginChars, poemTranslationEndChars, after);
   if (debug >= LOG_INFO)
     cout << "m_fullString: " << endl << m_fullString << endl;
-
-  string part = containedLine.substr(beginPos, endPos - beginPos);
-  beginPos = part.find(endOfPoemTranslationBeginTag);
-  m_bodyText = part.substr(beginPos + endOfPoemTranslationBeginTag.length());
+  m_bodyText = getIncludedStringBetweenTags(
+      m_fullString, endOfPoemTranslationBeginTag, poemTranslationEndChars);
   m_displayText =
       scanForSubType(m_bodyText, OBJECT_TYPE::LINKFROMMAIN, m_fromFile);
   return containedLine.find(poemTranslationBeginChars, after);
@@ -1394,20 +1372,12 @@ size_t Comment::displaySize() { return getDisplayString().length(); }
 
 size_t Comment::loadFirstFromContainedLine(const string &containedLine,
                                            size_t after) {
-  string begin = commentBeginChars;
-  string end = commentEndChars;
-  auto beginPos = containedLine.find(begin, after);
-  auto endPos = containedLine.find(end, after);
-  if (beginPos == string::npos or endPos == string::npos)
-    return string::npos;
-  m_fullString =
-      containedLine.substr(beginPos, endPos + end.length() - beginPos);
+  m_fullString = getWholeStringBetweenTags(containedLine, commentBeginChars,
+                                           commentEndChars, after);
   if (debug >= LOG_INFO)
     cout << "m_fullString: " << endl << m_fullString << endl;
-
-  string part = containedLine.substr(beginPos, endPos - beginPos);
-  beginPos = part.find(endOfCommentBeginTag);
-  m_bodyText = part.substr(beginPos + endOfCommentBeginTag.length());
+  m_bodyText = getIncludedStringBetweenTags(m_fullString, endOfCommentBeginTag,
+                                            commentEndChars);
   m_displayText =
       scanForSubType(m_bodyText, OBJECT_TYPE::LINKFROMMAIN, m_fromFile);
   return containedLine.find(commentBeginChars, after);
@@ -1463,12 +1433,13 @@ void testLink(Link &lfm, string linkString, bool needToGenerateOrgLink) {
 void testLinkOperation() {
   SEPERATE("testLinkOperation", " starts ");
 
-  cout << getIncludedString(linkToImageFile,
-                            realAnnotationOfImageLinkStartChars,
-                            realAnnotationOfImageLinkEndChars)
+  cout << getIncludedStringBetweenTags(linkToImageFile,
+                                       realAnnotationOfImageLinkStartChars,
+                                       realAnnotationOfImageLinkEndChars)
        << endl;
-  cout << getWholeString(linkToImageFile, realAnnotationOfImageLinkStartChars,
-                         realAnnotationOfImageLinkEndChars)
+  cout << getWholeStringBetweenTags(linkToImageFile,
+                                    realAnnotationOfImageLinkStartChars,
+                                    realAnnotationOfImageLinkEndChars)
        << endl;
 
   //clang-format off

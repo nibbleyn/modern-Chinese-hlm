@@ -31,19 +31,13 @@ size_t Space::loadFirstFromContainedLine(const string &containedLine,
 
 size_t Poem::loadFirstFromContainedLine(const string &containedLine,
                                         size_t after) {
-  string begin = poemBeginChars;
-  string end = poemEndChars;
-  auto beginPos = containedLine.find(begin, after);
-  auto endPos = containedLine.find(end, after);
-  if (beginPos == string::npos or endPos == string::npos)
-    return string::npos;
-  m_fullString =
-      containedLine.substr(beginPos, endPos + end.length() - beginPos);
+  m_fullString = getWholeStringBetweenTags(containedLine, poemBeginChars,
+                                           poemEndChars, after);
   if (debug >= LOG_INFO)
     cout << "m_fullString: " << endl << m_fullString << endl;
-  beginPos = containedLine.find_last_of(endOfBeginTag, endPos);
-  m_bodyText = containedLine.substr(beginPos + 1, endPos - beginPos - 1);
-  return containedLine.find(begin, after);
+  m_bodyText =
+      getIncludedStringBetweenTags(m_fullString, endOfBeginTag, poemEndChars);
+  return containedLine.find(poemBeginChars, after);
 }
 
 string Poem::getWholeString() {
@@ -75,13 +69,13 @@ void testPoem() {
   poem1->loadFirstFromContainedLine(poemStr);
   cout << "length: " << poem1->length()
        << " display size: " << poem1->displaySize() << endl;
-  cout << "whole string: " << poem1->getWholeString() << endl;
-  cout << "display as:" << poem1->getDisplayString() << "||" << endl;
+  cout << "whole string: " << endl << poem1->getWholeString() << endl;
+  cout << "display as:" << endl << poem1->getDisplayString() << "||" << endl;
   std::unique_ptr<Poem> poem2 = std::make_unique<Poem>();
-  cout << "first appearance offset: " << poem2->loadFirstFromContainedLine(line)
-       << endl
+  cout << "first appearance offset: " << endl
+       << poem2->loadFirstFromContainedLine(line) << endl
        << "length: " << poem2->length()
        << " display size: " << poem2->displaySize() << endl;
-  cout << "whole string: " << poem2->getWholeString() << endl;
-  cout << "display as:" << poem2->getDisplayString() << "||" << endl;
+  cout << "whole string: " << endl << poem2->getWholeString() << endl;
+  cout << "display as:" << endl << poem2->getDisplayString() << "||" << endl;
 }
