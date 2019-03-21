@@ -23,7 +23,7 @@ public:
   virtual string getDisplayString() = 0;
   size_t length() {
     if (m_fullString.length() != getWholeString().length())
-      FUNCTION_OUTPUT << " size not match: " << m_fullString.length() << " vs "
+      METHOD_OUTPUT << " size not match: " << m_fullString.length() << " vs "
                       << getWholeString().length() << endl;
     return m_fullString.length();
   }

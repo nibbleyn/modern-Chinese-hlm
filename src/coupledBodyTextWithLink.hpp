@@ -62,48 +62,48 @@ private:
 
   void printOffsetToObjectType() {
     for (const auto &element : m_offsetOfTypes) {
-      FUNCTION_OUTPUT << element.first << "  "
+      METHOD_OUTPUT << element.first << "  "
                       << getNameOfObjectType(element.second) << endl;
     }
   }
 
   void printObjectTypeToOffset() {
     for (const auto &element : m_foundTypes) {
-      FUNCTION_OUTPUT << getNameOfObjectType(element.first) << "  "
+      METHOD_OUTPUT << getNameOfObjectType(element.first) << "  "
                       << element.second << endl;
     }
   }
   void printLinkStringTable() {
     if (not m_linkStringTable.empty())
-      FUNCTION_OUTPUT << "m_linkStringTable:" << endl;
+      METHOD_OUTPUT << "m_linkStringTable:" << endl;
     for (const auto &element : m_linkStringTable) {
-      FUNCTION_OUTPUT << element.first << "  " << element.second.endOffset
+      METHOD_OUTPUT << element.first << "  " << element.second.endOffset
                       << "  " << element.second.embedded << endl;
     }
   }
 
   void printCommentStringTable() {
     if (not m_commentStringTable.empty())
-      FUNCTION_OUTPUT << "m_commentStringTable:" << endl;
+      METHOD_OUTPUT << "m_commentStringTable:" << endl;
     for (const auto &element : m_commentStringTable) {
-      FUNCTION_OUTPUT << element.first << "  " << element.second.endOffset
+      METHOD_OUTPUT << element.first << "  " << element.second.endOffset
                       << "  " << element.second.embedded << endl;
     }
   }
 
   void printPersonalCommentStringTable() {
     if (not m_personalCommentStringTable.empty())
-      FUNCTION_OUTPUT << "m_personalCommentStringTable:" << endl;
+      METHOD_OUTPUT << "m_personalCommentStringTable:" << endl;
     for (const auto &element : m_personalCommentStringTable) {
-      FUNCTION_OUTPUT << element.first << "  " << element.second << endl;
+      METHOD_OUTPUT << element.first << "  " << element.second << endl;
     }
   }
 
   void printPoemTranslationStringTable() {
     if (not m_poemTranslationStringTable.empty())
-      FUNCTION_OUTPUT << "m_poemTranslationStringTable:" << endl;
+      METHOD_OUTPUT << "m_poemTranslationStringTable:" << endl;
     for (const auto &element : m_poemTranslationStringTable) {
-      FUNCTION_OUTPUT << element.first << "  " << element.second << endl;
+      METHOD_OUTPUT << element.first << "  " << element.second << endl;
     }
   }
 };

@@ -89,9 +89,9 @@ protected:
 
   void printBrAfterImageGroupTable() {
     if (not m_brTable.empty())
-      FUNCTION_OUTPUT << "m_brTable:" << endl;
+      METHOD_OUTPUT << "m_brTable:" << endl;
     for (const auto &element : m_brTable) {
-      FUNCTION_OUTPUT << element.first << "  " << element.second.first << "  "
+      METHOD_OUTPUT << element.first << "  " << element.second.first << "  "
                       << element.second.second << endl;
     }
   }
