@@ -216,7 +216,7 @@ string fixLinkFromJPMTemplate(const string &path, const string &filename,
   replacePart(link, "WW", citation);
   replacePart(link, "ZZ", annotation);
   if (debug >= LOG_INFO)
-    cout << link << endl;
+    FUNCTION_OUTPUT << link << endl;
   return link;
 }
 
@@ -272,7 +272,7 @@ string fixLinkFromImageTemplate(const string &filename,
 void Link::displayFixedLinks() {
   if (linksTable.empty())
     return;
-  cout << outPutFilePath << " is created." << endl;
+  FUNCTION_OUTPUT << outPutFilePath << " is created." << endl;
   ofstream outfile(outPutFilePath);
   outfile << "all links processed:" << endl;
   outfile << "---------------------------------" << endl;
@@ -337,8 +337,9 @@ ATTACHMENT_TYPE Link::getAttachmentType(AttachmentNumber num) {
     attachmentType = GetTupleElement(entry, 2);
   } catch (exception &) {
     if (debug >= LOG_EXCEPTION)
-      cout << "not found info in refAttachmentTable about: " << num.first
-           << attachmentFileMiddleChar << num.second << endl;
+      FUNCTION_OUTPUT << "not found info in refAttachmentTable about: "
+                      << num.first << attachmentFileMiddleChar << num.second
+                      << endl;
   }
   return attachmentType;
 }
@@ -359,7 +360,8 @@ static const string HTML_SRC_REF_ATTACHMENT_LIST =
 void Link::loadReferenceAttachmentList() {
   ifstream infile(HTML_SRC_REF_ATTACHMENT_LIST);
   if (!infile) {
-    cout << "file doesn't exist:" << HTML_SRC_REF_ATTACHMENT_LIST << endl;
+    FUNCTION_OUTPUT << "file doesn't exist:" << HTML_SRC_REF_ATTACHMENT_LIST
+                    << endl;
     return;
   }
   refAttachmentTable.clear();
@@ -390,8 +392,8 @@ void Link::loadReferenceAttachmentList() {
     string fromLine = line.substr(fromBegin + start.length(),
                                   nameBegin - fromBegin - start.length());
     if (debug >= LOG_INFO)
-      cout << "from:" << fromLine << " name:" << targetFile
-           << " title:" << title << " type:" << type << endl;
+      FUNCTION_OUTPUT << "from:" << fromLine << " name:" << targetFile
+                      << " title:" << title << " type:" << type << endl;
     fromLine.erase(remove(fromLine.begin(), fromLine.end(), ' '),
                    fromLine.end());
     targetFile.erase(remove(targetFile.begin(), targetFile.end(), ' '),
@@ -419,7 +421,8 @@ void Link::resetStatisticsAndLoadReferenceAttachmentList() {
  */
 void Link::outPutStatisticsToFiles() {
   displayFixedLinks();
-  cout << "links information are written into: " << outPutFilePath << endl;
+  FUNCTION_OUTPUT << "links information are written into: " << outPutFilePath
+                  << endl;
 }
 
 string Link::getWholeString() { return asString(); }
@@ -487,7 +490,7 @@ void Link::readDisplayType(const string &linkString) {
   auto hrefStart = linkString.find(referFileMiddleChar);
   string containedPart = linkString.substr(0, hrefStart);
   if (debug >= LOG_INFO)
-    cout << containedPart << endl;
+    FUNCTION_OUTPUT << containedPart << endl;
   if (containedPart.find(unhiddenDisplayProperty) != string::npos) {
     m_displayType = LINK_DISPLAY_TYPE::UNHIDDEN;
   } else if (containedPart.find(hiddenDisplayProperty) != string::npos) {
@@ -496,7 +499,7 @@ void Link::readDisplayType(const string &linkString) {
     m_displayType = LINK_DISPLAY_TYPE::DIRECT;
   }
   if (debug >= LOG_INFO)
-    cout << "display Type:" << displayPropertyAsString() << endl;
+    METHOD_OUTPUT << "display Type:" << displayPropertyAsString() << endl;
 }
 
 /**
@@ -528,7 +531,7 @@ void Link::readType(const string &linkString) {
       fileBegin + start.length(), fileEnd - fileBegin - start.length());
   m_type = getLinKTypeFromReferFileName(refereFileName);
   if (debug >= LOG_INFO)
-    cout << "type seen from prefix: " << refereFileName << endl;
+    METHOD_OUTPUT << "type seen from prefix: " << refereFileName << endl;
 }
 
 /**
@@ -549,7 +552,8 @@ void Link::readReferPara(const string &linkString) {
   if (processStart == string::npos) // no file to refer
   {
     if (debug >= LOG_EXCEPTION and m_type != LINK_TYPE::ATTACHMENT)
-      cout << "no # found to read referPara from link: " << linkString << endl;
+      METHOD_OUTPUT << "no # found to read referPara from link: " << linkString
+                    << endl;
     return;
   }
   string afterLink = linkString.substr(processStart + htmStart.length(),
@@ -557,7 +561,7 @@ void Link::readReferPara(const string &linkString) {
   auto processEnd = afterLink.find(referParaEndChar);
   m_referPara = afterLink.substr(0, processEnd);
   if (debug >= LOG_INFO)
-    cout << "referPara: " << m_referPara << endl;
+    METHOD_OUTPUT << "referPara: " << m_referPara << endl;
 }
 
 /**
@@ -578,8 +582,8 @@ bool Link::readAnnotation(const string &linkString) {
   if (processStart == string::npos) // no file to refer
   {
     if (linkString.find(returnToContentTable) == string::npos) {
-      cout << "no htm or # is found to read annotation from link: "
-           << linkString << endl;
+      METHOD_OUTPUT << "no htm or # is found to read annotation from link: "
+                    << linkString << endl;
       return false;
     } else {
       // type would be ignored in this case
@@ -610,7 +614,7 @@ bool Link::readAnnotation(const string &linkString) {
       afterLink.substr(afterLinkBegin + start.length(),
                        afterLink.length() - afterLinkBegin - start.length());
   if (debug >= LOG_INFO)
-    cout << "annotation: " << m_annotation << endl;
+    METHOD_OUTPUT << "annotation: " << m_annotation << endl;
   return true;
 }
 
@@ -654,7 +658,7 @@ void Link::readKey(const string &linkString) {
     }
     if (debug >= LOG_EXCEPTION and m_type != LINK_TYPE::ATTACHMENT) {
       string output = m_usedKey.empty() ? "EMPTY" : m_usedKey;
-      cout << "key string not found, so use key: " << output << endl;
+      METHOD_OUTPUT << "key string not found, so use key: " << output << endl;
     }
     return;
   }
@@ -684,7 +688,7 @@ void Link::readKey(const string &linkString) {
     // only use the first line found
     string lineNumber = bodyText.getFirstResultLine();
     if (debug >= LOG_INFO)
-      cout << "line number found: " << lineNumber << endl;
+      METHOD_OUTPUT << "line number found: " << lineNumber << endl;
     LineNumber ln(lineNumber);
     string expectedSection =
         citationChapterNo + TurnToString(m_chapterNumber) + citationChapter +
@@ -695,7 +699,18 @@ void Link::readKey(const string &linkString) {
     fixReferSection(expectedSection);
   }
   if (debug >= LOG_INFO)
-    cout << "key: " << m_usedKey << endl;
+    METHOD_OUTPUT << "key: " << m_usedKey << endl;
+}
+
+void Link::fixFromString(const string &linkString) {
+  readDisplayType(linkString);
+  readReferPara(linkString);
+  // no need for key for these links
+  if (m_annotation != returnLinkFromAttachmentHeader and
+      m_annotation != returnLink and m_annotation != returnToContentTable)
+    readKey(linkString); // key would be searched here and replaced
+  m_bodyText = m_annotation;
+  m_displayText = scanForSubType(m_bodyText, OBJECT_TYPE::COMMENT, m_fromFile);
 }
 
 /**
@@ -738,8 +753,8 @@ void LinkFromMain::displayAttachments() {
             << " type:" << attachmentTypeAsString(GetTupleElement(entry, 2))
             << endl;
   }
-  cout << "attachment information are written into: "
-       << HTML_OUTPUT_ATTACHMENT_FROM_MAIN_LIST << endl;
+  FUNCTION_OUTPUT << "attachment information are written into: "
+                  << HTML_OUTPUT_ATTACHMENT_FROM_MAIN_LIST << endl;
 }
 
 /**
@@ -754,8 +769,9 @@ string LinkFromMain::getFromLineOfAttachment(AttachmentNumber num) {
     result = attachmentTable.at(num).first;
   } catch (exception &) {
     if (debug >= LOG_INFO)
-      cout << "fromLine not found in attachmentTable about: " << num.first
-           << attachmentFileMiddleChar << num.second << endl;
+      FUNCTION_OUTPUT << "fromLine not found in attachmentTable about: "
+                      << num.first << attachmentFileMiddleChar << num.second
+                      << endl;
   }
   return result;
 }
@@ -782,7 +798,8 @@ void LinkFromMain::outPutStatisticsToFiles() {
  */
 void LinkFromMain::generateLinkToOrigin() {
   if (debug >= LOG_INFO)
-    cout << "create link to original main html thru key: " << m_usedKey << endl;
+    METHOD_OUTPUT << "create link to original main html thru key: " << m_usedKey
+                  << endl;
   auto reservedType = m_type;   // only LINK_TYPE::MAIN has origin member
   m_type = LINK_TYPE::ORIGINAL; // temporarily change type to get right path
   string to = fixLinkFromOriginalTemplate(
@@ -813,7 +830,7 @@ bool LinkFromMain::readReferFileName(const string &link) {
     m_imageFilename = getIncludedStringBetweenTags(
         linkString, referParaMiddleChar, referParaEndChar);
     if (debug >= LOG_INFO)
-      cout << "m_imageFilename: " << m_imageFilename << endl;
+      METHOD_OUTPUT << "m_imageFilename: " << m_imageFilename << endl;
     return true;
   }
 
@@ -826,22 +843,24 @@ bool LinkFromMain::readReferFileName(const string &link) {
     auto fileEnd = linkString.find(HTML_SUFFIX);
     if (fileEnd == string::npos) // no file to refer
     {
-      cout << "there is no file to refer in link: " << linkString << endl;
+      METHOD_OUTPUT << "there is no file to refer in link: " << linkString
+                    << endl;
       return false;
     }
     string start = referFileMiddleChar;
     auto fileBegin = linkString.find(start);
     if (fileBegin == string::npos) // referred file not found
     {
-      cout << "there is no file to refer in link: " << linkString << endl;
+      METHOD_OUTPUT << "there is no file to refer in link: " << linkString
+                    << endl;
     }
     refereFileName = linkString.substr(fileBegin + start.length(),
                                        fileEnd - fileBegin - start.length());
     fileBegin = refereFileName.find(getHtmlFileNamePrefix());
     if (fileBegin == string::npos) // not find a right file type to refer
     {
-      cout << "unsupported type in refer file name in link: " << linkString
-           << endl;
+      METHOD_OUTPUT << "unsupported type in refer file name in link: "
+                    << linkString << endl;
       return false;
     }
     refereFileName = refereFileName.substr(
@@ -853,14 +872,14 @@ bool LinkFromMain::readReferFileName(const string &link) {
   if (m_type == LINK_TYPE::ATTACHMENT) {
     auto attachmentNumberStart = refereFileName.find(attachmentFileMiddleChar);
     if (attachmentNumberStart == string::npos) {
-      cout << "no attachment number in link: " << linkString << endl;
+      METHOD_OUTPUT << "no attachment number in link: " << linkString << endl;
       return false;
     }
     if (debug >= LOG_INFO)
-      cout << "chapterNumber: "
-           << refereFileName.substr(0, attachmentNumberStart)
-           << ", attachmentNumber: "
-           << refereFileName.substr(attachmentNumberStart + 1) << endl;
+      METHOD_OUTPUT << "chapterNumber: "
+                    << refereFileName.substr(0, attachmentNumberStart)
+                    << ", attachmentNumber: "
+                    << refereFileName.substr(attachmentNumberStart + 1) << endl;
     m_attachmentNumber =
         TurnToInt(refereFileName.substr(attachmentNumberStart + 1));
     m_chapterNumber =
@@ -869,8 +888,8 @@ bool LinkFromMain::readReferFileName(const string &link) {
     m_chapterNumber = TurnToInt(refereFileName);
   }
   if (debug >= LOG_INFO)
-    cout << "chapterNumber: " << m_chapterNumber
-         << ", attachmentNumber: " << m_attachmentNumber << endl;
+    METHOD_OUTPUT << "chapterNumber: " << m_chapterNumber
+                  << ", attachmentNumber: " << m_attachmentNumber << endl;
   return true;
 }
 
@@ -910,13 +929,13 @@ void LinkFromMain::logLink() {
           linksTable.at(std::make_pair(getChapterName(), m_referPara));
       entry.push_back(detail);
       if (debug >= LOG_INFO)
-        cout << "entry.size: " << entry.size()
-             << " more reference to link: " << getChapterName() << " "
-             << m_referPara << " " << m_usedKey << endl;
+        METHOD_OUTPUT << "entry.size: " << entry.size()
+                      << " more reference to link: " << getChapterName() << " "
+                      << m_referPara << " " << m_usedKey << endl;
     } catch (exception &) {
       if (debug >= LOG_INFO)
-        cout << "create vector for : " << getChapterName() << " " << m_referPara
-             << endl;
+        METHOD_OUTPUT << "create vector for : " << getChapterName() << " "
+                      << m_referPara << endl;
       vector<LinkDetails> list;
       list.push_back(detail);
       linksTable[std::make_pair(getChapterName(), m_referPara)] = list;
@@ -939,9 +958,9 @@ void LinkFromMain::logLink() {
                                                 : ATTACHMENT_TYPE::REFERENCE));
     }
     if (not isAnnotationMatch(getAnnotation(), title)) {
-      cout << m_fromFile << " has a link to " << targetFile
-           << " with annotation: " << getAnnotation()
-           << " differs from title: " << title << endl;
+      METHOD_OUTPUT << m_fromFile << " has a link to " << targetFile
+                    << " with annotation: " << getAnnotation()
+                    << " differs from title: " << title << endl;
     }
   }
 }
@@ -1009,7 +1028,8 @@ void LinkFromAttachment::outPutStatisticsToFiles() {
  */
 void LinkFromAttachment::generateLinkToOrigin() {
   if (debug >= LOG_INFO)
-    cout << "create link to original main html thru key: " << m_usedKey << endl;
+    METHOD_OUTPUT << "create link to original main html thru key: " << m_usedKey
+                  << endl;
   auto reservedType = m_type;
   m_type = LINK_TYPE::ORIGINAL; // temporarily change type to get right path
   string to = fixLinkFromOriginalTemplate(
@@ -1043,7 +1063,7 @@ bool LinkFromAttachment::readReferFileName(const string &link) {
     m_imageFilename = getIncludedStringBetweenTags(
         linkString, referParaMiddleChar, referParaEndChar);
     if (debug >= LOG_INFO)
-      cout << "m_imageFilename: " << m_imageFilename << endl;
+      METHOD_OUTPUT << "m_imageFilename: " << m_imageFilename << endl;
     return true;
   }
 
@@ -1055,22 +1075,24 @@ bool LinkFromAttachment::readReferFileName(const string &link) {
     auto fileEnd = linkString.find(HTML_SUFFIX);
     if (fileEnd == string::npos) // no file to refer
     {
-      cout << "there is no file to refer in link: " << linkString << endl;
+      METHOD_OUTPUT << "there is no file to refer in link: " << linkString
+                    << endl;
       return false;
     }
     string start = referFileMiddleChar;
     auto fileBegin = linkString.find(start);
     if (fileBegin == string::npos) // referred file not found
     {
-      cout << "there is no file to refer in link: " << linkString << endl;
+      METHOD_OUTPUT << "there is no file to refer in link: " << linkString
+                    << endl;
     }
     refereFileName = linkString.substr(fileBegin + start.length(),
                                        fileEnd - fileBegin - start.length());
     fileBegin = refereFileName.find(getHtmlFileNamePrefix());
     if (fileBegin == string::npos) // not find a right file type to refer
     {
-      cout << "unsupported type in refer file name in link: " << linkString
-           << endl;
+      METHOD_OUTPUT << "unsupported type in refer file name in link: "
+                    << linkString << endl;
       return false;
     }
     refereFileName = refereFileName.substr(
@@ -1082,14 +1104,14 @@ bool LinkFromAttachment::readReferFileName(const string &link) {
   if (m_type == LINK_TYPE::SAMEPAGE or m_type == LINK_TYPE::ATTACHMENT) {
     auto attachmentNumberStart = refereFileName.find(attachmentFileMiddleChar);
     if (attachmentNumberStart == string::npos) {
-      cout << "no attachment number in link: " << linkString << endl;
+      METHOD_OUTPUT << "no attachment number in link: " << linkString << endl;
       return false;
     }
     if (debug >= LOG_INFO)
-      cout << "chapterNumber: "
-           << refereFileName.substr(0, attachmentNumberStart)
-           << ", attachmentNumber: "
-           << refereFileName.substr(attachmentNumberStart + 1) << endl;
+      METHOD_OUTPUT << "chapterNumber: "
+                    << refereFileName.substr(0, attachmentNumberStart)
+                    << ", attachmentNumber: "
+                    << refereFileName.substr(attachmentNumberStart + 1) << endl;
 
     m_attachmentNumber =
         TurnToInt(refereFileName.substr(attachmentNumberStart + 1));
@@ -1099,8 +1121,8 @@ bool LinkFromAttachment::readReferFileName(const string &link) {
     m_chapterNumber = TurnToInt(refereFileName);
   }
   if (debug >= LOG_INFO)
-    cout << "chapterNumber: " << m_chapterNumber
-         << ", attachmentNumber: " << m_attachmentNumber << endl;
+    METHOD_OUTPUT << "chapterNumber: " << m_chapterNumber
+                  << ", attachmentNumber: " << m_attachmentNumber << endl;
   return true;
 }
 
@@ -1143,10 +1165,10 @@ void LinkFromAttachment::logLink() {
       entry.push_back(detail);
     } catch (exception &) {
       if (debug >= LOG_EXCEPTION)
-        cout << "not found link for: "
-             << getChapterName() + attachmentFileMiddleChar +
-                    TurnToString(m_attachmentNumber)
-             << " " << m_referPara << " " << m_usedKey << endl;
+        METHOD_OUTPUT << "not found link for: "
+                      << getChapterName() + attachmentFileMiddleChar +
+                             TurnToString(m_attachmentNumber)
+                      << " " << m_referPara << " " << m_usedKey << endl;
       vector<LinkDetails> list;
       list.push_back(detail);
       linksTable[std::make_pair(getChapterName() + attachmentFileMiddleChar +
@@ -1286,14 +1308,16 @@ size_t Link::loadFirstFromContainedLine(const string &containedLine,
                                         size_t after) {
   m_fullString = getWholeStringBetweenTags(containedLine, linkStartChars,
                                            linkEndChars, after);
-  if (debug >= LOG_INFO)
-    cout << "m_fullString: " << endl << m_fullString << endl;
+  if (debug >= LOG_INFO) {
+    METHOD_OUTPUT << "m_fullString: " << endl;
+    METHOD_OUTPUT << m_fullString << endl;
+  }
 
   readTypeAndAnnotation(m_fullString);
   readReferFileName(m_fullString); // second step of construction
   fixFromString(m_fullString);
   if (debug >= LOG_INFO)
-    cout << "after fix length: " << length() << endl;
+    METHOD_OUTPUT << "after fix length: " << length() << endl;
 
   return containedLine.find(linkStartChars, after);
 }
@@ -1318,8 +1342,10 @@ size_t PersonalComment::loadFirstFromContainedLine(const string &containedLine,
                                                    size_t after) {
   m_fullString = getWholeStringBetweenTags(
       containedLine, personalCommentStartChars, personalCommentEndChars, after);
-  if (debug >= LOG_INFO)
-    cout << "m_fullString: " << endl << m_fullString << endl;
+  if (debug >= LOG_INFO) {
+    METHOD_OUTPUT << "m_fullString: " << endl;
+    METHOD_OUTPUT << m_fullString << endl;
+  }
   m_bodyText = getIncludedStringBetweenTags(
       m_fullString, endOfPersonalCommentBeginTag, personalCommentEndChars);
   m_displayText =
@@ -1347,8 +1373,10 @@ size_t PoemTranslation::loadFirstFromContainedLine(const string &containedLine,
                                                    size_t after) {
   m_fullString = getWholeStringBetweenTags(
       containedLine, poemTranslationBeginChars, poemTranslationEndChars, after);
-  if (debug >= LOG_INFO)
-    cout << "m_fullString: " << endl << m_fullString << endl;
+  if (debug >= LOG_INFO) {
+    METHOD_OUTPUT << "m_fullString: " << endl;
+    METHOD_OUTPUT << m_fullString << endl;
+  }
   m_bodyText = getIncludedStringBetweenTags(
       m_fullString, endOfPoemTranslationBeginTag, poemTranslationEndChars);
   m_displayText =
@@ -1374,8 +1402,10 @@ size_t Comment::loadFirstFromContainedLine(const string &containedLine,
                                            size_t after) {
   m_fullString = getWholeStringBetweenTags(containedLine, commentBeginChars,
                                            commentEndChars, after);
-  if (debug >= LOG_INFO)
-    cout << "m_fullString: " << endl << m_fullString << endl;
+  if (debug >= LOG_INFO) {
+    METHOD_OUTPUT << "m_fullString: " << endl;
+    METHOD_OUTPUT << m_fullString << endl;
+  }
   m_bodyText = getIncludedStringBetweenTags(m_fullString, endOfCommentBeginTag,
                                             commentEndChars);
   m_displayText =
@@ -1389,35 +1419,40 @@ size_t Comment::loadFirstFromContainedLine(const string &containedLine,
  */
 void testLinkFromMain(string fromFile, string linkString,
                       bool needToGenerateOrgLink) {
-  cout << "original link: " << endl << linkString << endl;
+  FUNCTION_OUTPUT << "original link: " << endl;
+  FUNCTION_OUTPUT << linkString << endl;
   LinkFromMain lfm(fromFile, linkString);
   lfm.readReferFileName(linkString); // second step of construction
   lfm.fixFromString(linkString);
   if (needToGenerateOrgLink)
     lfm.generateLinkToOrigin();
   auto fixed = lfm.asString();
-  cout << "need Update: " << lfm.needUpdate() << endl;
-  cout << "after fixed: " << endl << fixed << endl;
-  cout << "display as:" << lfm.getDisplayString() << "||" << endl;
+  FUNCTION_OUTPUT << "need Update: " << lfm.needUpdate() << endl;
+  FUNCTION_OUTPUT << "after fixed: " << endl;
+  FUNCTION_OUTPUT << fixed << endl;
+  FUNCTION_OUTPUT << "display as:" << lfm.getDisplayString() << "||" << endl;
 }
 
 void testLinkFromAttachment(string fromFile, string linkString,
                             bool needToGenerateOrgLink) {
-  cout << "original link: " << endl << linkString << endl;
+  FUNCTION_OUTPUT << "original link: " << endl;
+  FUNCTION_OUTPUT << linkString << endl;
   LinkFromAttachment lfm(fromFile, linkString);
   lfm.readReferFileName(linkString); // second step of construction
   lfm.fixFromString(linkString);
-  cout << lfm.getAnnotation() << endl;
+  FUNCTION_OUTPUT << lfm.getAnnotation() << endl;
   if (needToGenerateOrgLink)
     lfm.generateLinkToOrigin();
   auto fixed = lfm.asString();
-  cout << "need Update: " << lfm.needUpdate() << endl;
-  cout << "after fixed: " << endl << fixed << endl;
-  cout << "display as:" << lfm.getDisplayString() << "||" << endl;
+  FUNCTION_OUTPUT << "need Update: " << lfm.needUpdate() << endl;
+  FUNCTION_OUTPUT << "after fixed: " << endl;
+  FUNCTION_OUTPUT << fixed << endl;
+  FUNCTION_OUTPUT << "display as:" << lfm.getDisplayString() << "||" << endl;
 }
 
 void testLink(Link &lfm, string linkString, bool needToGenerateOrgLink) {
-  cout << "original link: " << endl << linkString << endl;
+  FUNCTION_OUTPUT << "original link: " << endl;
+  FUNCTION_OUTPUT << linkString << endl;
 
   //
   lfm.readReferFileName(linkString); // second step of construction
@@ -1425,22 +1460,23 @@ void testLink(Link &lfm, string linkString, bool needToGenerateOrgLink) {
   if (needToGenerateOrgLink)
     lfm.generateLinkToOrigin();
   auto fixed = lfm.asString();
-  cout << "need Update: " << lfm.needUpdate() << endl;
-  cout << "after fixed: " << endl << fixed << endl;
-  cout << "display as:" << lfm.getDisplayString() << "||" << endl;
+  FUNCTION_OUTPUT << "need Update: " << lfm.needUpdate() << endl;
+  FUNCTION_OUTPUT << "after fixed: " << endl;
+  FUNCTION_OUTPUT << fixed << endl;
+  FUNCTION_OUTPUT << "display as:" << lfm.getDisplayString() << "||" << endl;
 }
 
 void testLinkOperation() {
   SEPERATE("testLinkOperation", " starts ");
 
-  cout << getIncludedStringBetweenTags(linkToImageFile,
-                                       realAnnotationOfImageLinkStartChars,
-                                       realAnnotationOfImageLinkEndChars)
-       << endl;
-  cout << getWholeStringBetweenTags(linkToImageFile,
-                                    realAnnotationOfImageLinkStartChars,
-                                    realAnnotationOfImageLinkEndChars)
-       << endl;
+  FUNCTION_OUTPUT << getIncludedStringBetweenTags(
+                         linkToImageFile, realAnnotationOfImageLinkStartChars,
+                         realAnnotationOfImageLinkEndChars)
+                  << endl;
+  FUNCTION_OUTPUT << getWholeStringBetweenTags(
+                         linkToImageFile, realAnnotationOfImageLinkStartChars,
+                         realAnnotationOfImageLinkEndChars)
+                  << endl;
 
   //clang-format off
   testLinkFromAttachment(
@@ -1461,21 +1497,23 @@ void testLinkOperation() {
       R"(老奶奶)" + commentStart + unhiddenDisplayProperty + endOfBeginTag +
       R"(薛姨妈1)" + commentEnd +
       R"(使唤的</a>)";
-  cout << "original link: " << endl << linkString << endl;
+  FUNCTION_OUTPUT << "original link: " << endl;
+  FUNCTION_OUTPUT << linkString << endl;
   LinkFromMain lfm("75", linkString);
   lfm.readReferFileName(linkString); // second step of construction
-  cout << "change to refer to file 57. " << endl;
+  FUNCTION_OUTPUT << "change to refer to file 57. " << endl;
   lfm.fixReferFile(57);
   lfm.fixFromString(linkString);
   auto fixed = lfm.asString();
-  cout << "need Update: " << lfm.needUpdate() << endl;
-  cout << "after fixed: " << endl << fixed << endl;
-  cout << "display as:" << lfm.getDisplayString() << "||" << endl;
+  FUNCTION_OUTPUT << "need Update: " << lfm.needUpdate() << endl;
+  FUNCTION_OUTPUT << "after fixed: " << endl;
+  FUNCTION_OUTPUT << fixed << endl;
+  FUNCTION_OUTPUT << "display as:" << lfm.getDisplayString() << "||" << endl;
   SEPERATE("fixReferFile", " finished ");
 
   linkString = fixLinkFromJPMTemplate(jpmDirForLinkFromMain, "017", R"(床帐)",
                                       "", "P1L1", R"(雪梅相妒，无复桂月争辉)");
-  cout << linkString << endl;
+  FUNCTION_OUTPUT << linkString << endl;
   LinkFromMain link1("05", linkString);
   testLink(link1, linkString, false);
 
@@ -1545,16 +1583,18 @@ void testLinkOperation() {
   SEPERATE("testLinkFromMain", " finished ");
 
   string linkString2 = fixLinkFromAttachmentTemplate("", "18", "7", "happy");
-  cout << "original link: " << endl << linkString2 << endl;
+  FUNCTION_OUTPUT << "original link: " << endl;
+  FUNCTION_OUTPUT << linkString2 << endl;
   LinkFromAttachment lfm1("03_9", linkString2);
   lfm1.readReferFileName(linkString2); // second step of construction
-  cout << "change to refer to file 55_3. " << endl;
+  FUNCTION_OUTPUT << "change to refer to file 55_3. " << endl;
   lfm1.fixReferFile(55, 3);
   lfm1.fixFromString(linkString2);
   auto fixed2 = lfm1.asString();
-  cout << "need Update: " << lfm1.needUpdate() << endl;
-  cout << "after fixed: " << endl << fixed2 << endl;
-  cout << "display as:" << lfm1.getDisplayString() << "||" << endl;
+  FUNCTION_OUTPUT << "need Update: " << lfm1.needUpdate() << endl;
+  FUNCTION_OUTPUT << "after fixed: " << endl;
+  FUNCTION_OUTPUT << fixed2 << endl;
+  FUNCTION_OUTPUT << "display as:" << lfm1.getDisplayString() << "||" << endl;
   SEPERATE("fixReferFile", " finished ");
 
   testLinkFromAttachment("1_0",

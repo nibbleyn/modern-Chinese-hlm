@@ -31,6 +31,10 @@ static const string bottomParagraphIndicator =
   cout << "*************************line " << __LINE__ << ": " << x << y       \
        << "*************************" << endl; //<< __func__<< __FILE__
 
+#define METHOD_OUTPUT                                                          \
+  cout << typeid(*this).name() << "::" << __func__ << "              "
+#define FUNCTION_OUTPUT cout << __func__ << "              "
+
 static const string HTML_SRC_ATTACHMENT = "utf8HTML/src/attachment/";
 static const string HTML_SUFFIX = R"(.htm)";
 

@@ -6,8 +6,6 @@ enum class LINK_TYPE { MAIN, ATTACHMENT, ORIGINAL, SAMEPAGE, JPM, IMAGE };
 enum class LINK_DISPLAY_TYPE { DIRECT, HIDDEN, UNHIDDEN };
 
 static const string annotationToOriginal = R"(原文)";
-static const string selfImageTarget = R"(_self)";
-static const string newTabImageTarget = R"(_blank)";
 
 // operations over link string template initialization
 string fixLinkFromSameFileTemplate(LINK_DISPLAY_TYPE type, const string &key,
@@ -87,17 +85,8 @@ public:
   // the second step to read target file name
   virtual bool readReferFileName(const string &link) = 0;
   // the last step also including fixing
-  void fixFromString(const string &linkString) {
-    readDisplayType(linkString);
-    readReferPara(linkString);
-    // no need for key for these links
-    if (m_annotation != returnLinkFromAttachmentHeader and
-        m_annotation != returnLink and m_annotation != returnToContentTable)
-      readKey(linkString); // key would be searched here and replaced
-    m_bodyText = m_annotation;
-    m_displayText =
-        scanForSubType(m_bodyText, OBJECT_TYPE::COMMENT, m_fromFile);
-  }
+  void fixFromString(const string &linkString);
+
   virtual ~Link(){};
   Link(const Link &) = delete;
   Link &operator=(const Link &) = delete;
@@ -224,7 +213,6 @@ protected:
   LinkPtr m_linkPtrToOrigin{nullptr};
   string m_displayText{""};
   string m_imageFilename{""};
-  string m_imageTarget{selfImageTarget};
 };
 
 class LinkFromMain : public Link {

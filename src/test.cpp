@@ -31,6 +31,6 @@ void testFunctions(int num) {
     testMixedObjects();
     break;
   default:
-    cout << "no test executed." << endl;
+    FUNCTION_OUTPUT << "no test executed." << endl;
   }
 }

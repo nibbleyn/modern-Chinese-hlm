@@ -55,13 +55,14 @@ void CoupledContainer::assembleBackToHTM(const string &title,
   ifstream inHtmlFile(inputHtmlFile);
   if (!inHtmlFile) // doesn't exist
   {
-    cout << "HTM file doesn't exist:" << inputHtmlFile << endl;
+    METHOD_OUTPUT << "HTM file doesn't exist:" << inputHtmlFile << endl;
     return;
   }
   ifstream inBodyTextFile(inputBodyTextFile);
   if (!inBodyTextFile) // doesn't exist
   {
-    cout << "Body text file doesn't exist:" << inputBodyTextFile << endl;
+    METHOD_OUTPUT << "Body text file doesn't exist:" << inputBodyTextFile
+                  << endl;
     return;
   }
 
@@ -94,8 +95,8 @@ void CoupledContainer::assembleBackToHTM(const string &title,
     }
   }
   if (inHtmlFile.eof() and not started) {
-    cout << "source .htm: " << inputBodyTextFile
-         << " has no start mark:" << start << endl;
+    METHOD_OUTPUT << "source .htm: " << inputBodyTextFile
+                  << " has no start mark:" << start << endl;
     return;
   }
   bool ended = false;
@@ -112,8 +113,8 @@ void CoupledContainer::assembleBackToHTM(const string &title,
     }
   }
   if (inBodyTextFile.eof() and not ended) {
-    cout << "source body text file: " << inputBodyTextFile
-         << " has no end mark:" << end << endl;
+    METHOD_OUTPUT << "source body text file: " << inputBodyTextFile
+                  << " has no end mark:" << end << endl;
     return;
   }
   ended = false;
@@ -135,7 +136,7 @@ void CoupledContainer::assembleBackToHTM(const string &title,
     }
   }
   if (debug >= LOG_INFO)
-    cout << "assemble finished for " << outputFile << endl;
+    METHOD_OUTPUT << "assemble finished for " << outputFile << endl;
 }
 
 /**
@@ -150,7 +151,8 @@ void CoupledContainer::backupAndOverwriteAllInputHtmlFiles() {
   string dir = HTML_SRC_MAIN.substr(0, HTML_SRC_MAIN.find_last_of('/'));
   string BACKUP = dir + currentTimeStamp();
   if (debug >= LOG_INFO)
-    cout << "backup of current src is created under : " << BACKUP << endl;
+    FUNCTION_OUTPUT << "backup of current src is created under : " << BACKUP
+                    << endl;
 
   Poco::File BackupPath(BACKUP);
   if (!BackupPath.exists())
@@ -186,7 +188,7 @@ void CoupledContainer::dissembleFromHTM() {
   ifstream infile(inputHtmlFile);
   if (!infile) // doesn't exist
   {
-    cout << "file doesn't exist:" << inputHtmlFile << endl;
+    METHOD_OUTPUT << "file doesn't exist:" << inputHtmlFile << endl;
     return;
   }
   ofstream outfile(outputBodyTextFile);
@@ -220,13 +222,13 @@ void CoupledContainer::dissembleFromHTM() {
     }
   }
   if (not started)
-    cout << "no top paragraph found for " << inputHtmlFile << "as " << start
-         << endl;
+    METHOD_OUTPUT << "no top paragraph found for " << inputHtmlFile << "as "
+                  << start << endl;
   else if (not ended)
-    cout << "no end paragraph found for " << inputHtmlFile << "as " << end
-         << endl;
+    METHOD_OUTPUT << "no end paragraph found for " << inputHtmlFile << "as "
+                  << end << endl;
   else if (debug >= LOG_INFO)
-    cout << "dissemble finished for " << inputHtmlFile << endl;
+    METHOD_OUTPUT << "dissemble finished for " << inputHtmlFile << endl;
 }
 
 /**
@@ -259,7 +261,7 @@ void dissembleAttachments(int minTarget, int maxTarget, int minAttachNo,
     }
   }
   if (debug >= LOG_INFO)
-    cout << "Attachments dissemble finished. " << endl;
+    FUNCTION_OUTPUT << "Attachments dissemble finished. " << endl;
 }
 
 /**
@@ -292,7 +294,7 @@ void assembleAttachments(int minTarget, int maxTarget, int minAttachNo,
     }
   }
   if (debug >= LOG_INFO)
-    cout << "assemble finished. " << endl;
+    FUNCTION_OUTPUT << "assemble finished. " << endl;
 }
 
 /**
@@ -302,7 +304,7 @@ void assembleAttachments(int minTarget, int maxTarget, int minAttachNo,
 void ListContainer::addExistingFrontParagraphs() {
   string outputBodyTextFile = getOutputBodyTextFile();
   if (debug >= LOG_INFO)
-    cout << "clear content in: " << outputBodyTextFile << endl;
+    METHOD_OUTPUT << "clear content in: " << outputBodyTextFile << endl;
   ofstream outfile(outputBodyTextFile);
 }
 
@@ -314,7 +316,8 @@ void ListContainer::addExistingFrontParagraphs() {
 void ListContainer::appendParagraphInBodyText(const string &text) {
   string outputBodyTextFile = getOutputBodyTextFile();
   if (debug >= LOG_INFO)
-    cout << "append Paragraph In BodyText: " << outputBodyTextFile << endl;
+    METHOD_OUTPUT << "append Paragraph In BodyText: " << outputBodyTextFile
+                  << endl;
   ofstream outfile;
   outfile.open(outputBodyTextFile, std::ios_base::app);
   outfile << "<br>" << text << "</br>" << endl;
@@ -326,7 +329,7 @@ const string TableContainer::BODY_TEXT_DESSERT = R"(3back.txt)";
 void TableContainer::addExistingFrontParagraphs() {
   string outputBodyTextFile = getOutputBodyTextFile();
   if (debug >= LOG_INFO)
-    cout << "init content in: " << outputBodyTextFile << endl;
+    METHOD_OUTPUT << "init content in: " << outputBodyTextFile << endl;
   ofstream outfile(outputBodyTextFile, std::ios_base::app);
   // copy content from BODY_TEXT_STARTER
   string starterFile = m_bodyTextInputFilePath + BODY_TEXT_STARTER;
@@ -334,7 +337,7 @@ void TableContainer::addExistingFrontParagraphs() {
   ifstream inStarterFile(starterFile);
   if (!inStarterFile) // doesn't exist
   {
-    cout << "Starter file doesn't exist:" << starterFile << endl;
+    METHOD_OUTPUT << "Starter file doesn't exist:" << starterFile << endl;
     return;
   }
 
@@ -349,7 +352,7 @@ void TableContainer::addExistingFrontParagraphs() {
 void TableContainer::finishBodyTextFile() {
   string outputBodyTextFile = getOutputBodyTextFile();
   if (debug >= LOG_INFO)
-    cout << "append content in: " << outputBodyTextFile << endl;
+    METHOD_OUTPUT << "append content in: " << outputBodyTextFile << endl;
   ofstream outfile;
   outfile.open(outputBodyTextFile, std::ios_base::app);
   // copy content from BODY_TEXT_DESSERT
@@ -358,7 +361,7 @@ void TableContainer::finishBodyTextFile() {
   ifstream inDessertFile(dessertFile);
   if (!inDessertFile) // doesn't exist
   {
-    cout << "Dessert file doesn't exist:" << dessertFile << endl;
+    METHOD_OUTPUT << "Dessert file doesn't exist:" << dessertFile << endl;
     return;
   }
 
@@ -374,14 +377,14 @@ void TableContainer::insertFrontParagrapHeader(int totalPara,
                                                const string &units) {
   string outputBodyTextFile = getOutputBodyTextFile();
   if (debug >= LOG_INFO)
-    cout << "append content in: " << outputBodyTextFile << endl;
+    METHOD_OUTPUT << "append content in: " << outputBodyTextFile << endl;
   ofstream outfile;
   outfile.open(outputBodyTextFile);
   LineNumber::setStartNumber(START_PARA_NUMBER);
   string line = fixFrontParaHeaderFromTemplate(LineNumber::getStartNumber(), "",
                                                totalPara, units, false);
   if (debug >= LOG_INFO)
-    cout << line << endl;
+    METHOD_OUTPUT << line << endl;
   outfile << line << endl;
 }
 
@@ -392,7 +395,7 @@ void TableContainer::insertMiddleParagrapHeader(bool enterLastPara,
                                                 const string &units) {
   string outputBodyTextFile = getOutputBodyTextFile();
   if (debug >= LOG_INFO)
-    cout << "append content in: " << outputBodyTextFile << endl;
+    METHOD_OUTPUT << "append content in: " << outputBodyTextFile << endl;
   ofstream outfile;
   outfile.open(outputBodyTextFile, std::ios_base::app);
   string line;
@@ -405,7 +408,7 @@ void TableContainer::insertMiddleParagrapHeader(bool enterLastPara,
                                         startParaNo, endParaNo, totalPara,
                                         preTotalPara, "", units, false, false);
   if (debug >= LOG_INFO)
-    cout << line << endl;
+    METHOD_OUTPUT << line << endl;
   outfile << line << endl;
 }
 
@@ -413,20 +416,21 @@ void TableContainer::insertBackParagrapHeader(int seqOfPara, int totalPara,
                                               const string &units) {
   string outputBodyTextFile = getOutputBodyTextFile();
   if (debug >= LOG_INFO)
-    cout << "append content in: " << outputBodyTextFile << endl;
+    METHOD_OUTPUT << "append content in: " << outputBodyTextFile << endl;
   ofstream outfile;
   outfile.open(outputBodyTextFile, std::ios_base::app);
   string line = fixBackParaHeaderFromTemplate(
       LineNumber::getStartNumber(), seqOfPara, totalPara, "", units, false);
   if (debug >= LOG_INFO)
-    cout << line << endl;
+    METHOD_OUTPUT << line << endl;
   outfile << line << endl;
 }
 
 void TableContainer::appendLeftParagraphInBodyText(const string &text) {
   string outputBodyTextFile = getOutputBodyTextFile();
   if (debug >= LOG_INFO)
-    cout << "append Paragraph In BodyText: " << outputBodyTextFile << endl;
+    METHOD_OUTPUT << "append Paragraph In BodyText: " << outputBodyTextFile
+                  << endl;
   ofstream outfile;
   outfile.open(outputBodyTextFile, std::ios_base::app);
   outfile << R"(<tr><td width="50%">)" << text << "</td>" << endl;
@@ -435,7 +439,8 @@ void TableContainer::appendLeftParagraphInBodyText(const string &text) {
 void TableContainer::appendRightParagraphInBodyText(const string &text) {
   string outputBodyTextFile = getOutputBodyTextFile();
   if (debug >= LOG_INFO)
-    cout << "append Paragraph In BodyText: " << outputBodyTextFile << endl;
+    METHOD_OUTPUT << "append Paragraph In BodyText: " << outputBodyTextFile
+                  << endl;
   ofstream outfile;
   outfile.open(outputBodyTextFile, std::ios_base::app);
   outfile << R"(<td width="50%">)" << text << R"(</td></tr>)" << endl;
@@ -451,13 +456,13 @@ void GenericContainer::assembleBackToHTM(const string &title,
   ifstream inHtmlFile(inputHtmlFile);
   if (!inHtmlFile) // doesn't exist
   {
-    cout << "file doesn't exist:" << inputHtmlFile << endl;
+    METHOD_OUTPUT << "file doesn't exist:" << inputHtmlFile << endl;
     return;
   }
   ifstream inBodyTextFile(inputBodyTextFile);
   if (!inBodyTextFile) // doesn't exist
   {
-    cout << "file doesn't exist:" << inputBodyTextFile << endl;
+    METHOD_OUTPUT << "file doesn't exist:" << inputBodyTextFile << endl;
     return;
   }
   ofstream outfile(outputFile);
@@ -485,13 +490,13 @@ void GenericContainer::assembleBackToHTM(const string &title,
           line.replace(titleBegin, defaultDisplayTitle.length(), displayTitle);
       }
       if (debug >= LOG_INFO)
-        cout << line << endl;  // including end line
-      outfile << line << endl; // excluding start line
+        METHOD_OUTPUT << line << endl; // including end line
+      outfile << line << endl;         // excluding start line
     }
   }
   if (inHtmlFile.eof() and not started) {
-    cout << "source htm" << inputBodyTextFile << "has no start mark:" << start
-         << endl;
+    METHOD_OUTPUT << "source htm" << inputBodyTextFile
+                  << "has no start mark:" << start << endl;
     return;
   }
   bool ended = false;
@@ -499,8 +504,8 @@ void GenericContainer::assembleBackToHTM(const string &title,
   {
     getline(inBodyTextFile, line); // Saves the line in line.
     if (debug >= LOG_INFO)
-      cout << line << endl;  // including end line
-    outfile << line << endl; // including end line
+      METHOD_OUTPUT << line << endl; // including end line
+    outfile << line << endl;         // including end line
   }
   while (!inHtmlFile.eof()) // To get you all the lines.
   {
@@ -513,8 +518,8 @@ void GenericContainer::assembleBackToHTM(const string &title,
       }
     } else {
       if (debug >= LOG_INFO)
-        cout << line << endl;  // including end line
-      outfile << line << endl; // excluding end line
+        METHOD_OUTPUT << line << endl; // including end line
+      outfile << line << endl;         // excluding end line
     }
   }
 }

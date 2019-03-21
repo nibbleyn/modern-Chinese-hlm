@@ -7,6 +7,7 @@ class CoupledBodyText {
 public:
   CoupledBodyText() = default;
   CoupledBodyText(const string &filePrefix) : m_filePrefix(filePrefix) {}
+  virtual ~CoupledBodyText(){};
   /**
    * load files under BODY_TEXT_OUTPUT directory with files under BODY_TEXT_FIX
    * i.e. from afterFix to output
@@ -88,10 +89,10 @@ protected:
 
   void printBrAfterImageGroupTable() {
     if (not m_brTable.empty())
-      cout << "m_brTable:" << endl;
+      FUNCTION_OUTPUT << "m_brTable:" << endl;
     for (const auto &element : m_brTable) {
-      cout << element.first << "  " << element.second.first << "  "
-           << element.second.second << endl;
+      FUNCTION_OUTPUT << element.first << "  " << element.second.first << "  "
+                      << element.second.second << endl;
     }
   }
 

@@ -106,9 +106,9 @@ string markDifference(const string &firstString, const string &secondString,
 
 void printCompareResult(const string &firstString, const string &secondString,
                         size_t begin) {
-  cout << firstString << "||" << endl;
-  cout << secondString << "||" << endl;
-  cout << markDifference(firstString, secondString, begin) << endl;
+  FUNCTION_OUTPUT << firstString << "||" << endl;
+  FUNCTION_OUTPUT << secondString << "||" << endl;
+  FUNCTION_OUTPUT << markDifference(firstString, secondString, begin) << endl;
 }
 
 string getIncludedStringBetweenTags(const string &originalString,

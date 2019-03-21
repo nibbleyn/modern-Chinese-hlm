@@ -2,7 +2,7 @@
 
 void dispalyLinkRange(LinkRange fs) {
   for (const auto &link : fs) {
-    cout << link.first << "   " << link.second << endl;
+    FUNCTION_OUTPUT << link.first << "   " << link.second << endl;
   }
 }
 
@@ -17,7 +17,7 @@ void reConstructStory(string indexFilename) {
   ifstream infile(indexFilename);
   if (!infile) // doesn't exist
   {
-    cout << "file doesn't exist:" << indexFilename << endl;
+    FUNCTION_OUTPUT << "file doesn't exist:" << indexFilename << endl;
     return;
   }
   string title{""};
@@ -25,7 +25,7 @@ void reConstructStory(string indexFilename) {
     getline(infile, title);
   else
     return; // empty file
-  cout << title << endl;
+  FUNCTION_OUTPUT << title << endl;
 
   while (!infile.eof()) // To get you all the lines.
   {
@@ -37,20 +37,6 @@ void reConstructStory(string indexFilename) {
     getline(infile, endChapter, '#');
     getline(infile, endPara, '.');
     getline(infile, endLine, '\n');
-    //		  cout <<
-    // startChapter<<startPara<<startLine<<endChapter<<endPara<<endLine<<
-    // endl;
-    //    string startLink =
-    //        TurnToString(TurnToInt(startPara) + START_PARA_NUMBER - 1) +
-    //        startPara + "0" + startLine;
-    //    string endLink = TurnToString(TurnToInt(endPara) + START_PARA_NUMBER -
-    //    1) +
-    //                     endPara + "0" + endLine;
-    //    //		  cout << startLink<<endLink<< endl;
-    //    cs.push_back(make_pair(startChapter, endChapter));
-    //    ls.push_back(make_pair(startLink, endLink));
-    //    pls.push_back(
-    //        make_pair(startPara + " " + startLine, endPara + " " + endLine));
   }
   dispalyLinkRange(cs);
   dispalyLinkRange(ls);

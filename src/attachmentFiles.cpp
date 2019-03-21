@@ -94,13 +94,13 @@ void testAttachmentOperations() {
   auto attList = getAttachmentFileListForChapter("28", HTML_SRC_ATTACHMENT);
   sort(attList.begin(), attList.end());
   for (const auto &attNo : attList) {
-    cout << attNo << ", ";
+    FUNCTION_OUTPUT << attNo << ", ";
   }
-  cout << endl;
+  FUNCTION_OUTPUT << endl;
   attList = getAttachmentFileListForChapter("22", HTML_SRC_ATTACHMENT);
   sort(attList.begin(), attList.end());
   for (const auto &attNo : attList) {
-    cout << attNo << ", ";
+    FUNCTION_OUTPUT << attNo << ", ";
   }
-  cout << endl;
+  FUNCTION_OUTPUT << endl;
 }

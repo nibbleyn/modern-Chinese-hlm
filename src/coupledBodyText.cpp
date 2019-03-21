@@ -14,8 +14,6 @@ bool isFoundAsNonKeys(const string &line, const string &key) {
       string testStr =
           line.substr(testBeginPos + keyStartChars.length(),
                       keyBegin - testBeginPos - keyStartChars.length());
-      if (debug >= LOG_INFO)
-        cout << testStr << " and key: " << key << endl;
       if (testStr.find(keyEndChars) != string::npos)
         return true;
     } else {
@@ -25,8 +23,6 @@ bool isFoundAsNonKeys(const string &line, const string &key) {
         string testStr =
             line.substr(testBeginPos + titleStartChars.length(),
                         keyBegin - testBeginPos - titleStartChars.length());
-        if (debug >= LOG_INFO)
-          cout << testStr << " and key: " << key << endl;
         if (testStr.find(titleEndChars) != string::npos)
           return true;
       } else
@@ -69,8 +65,8 @@ void CoupledBodyText::setInputOutputFiles() {
       BODY_TEXT_FIX + m_filePrefix + m_file + attachmentPart + BODY_TEXT_SUFFIX;
 
   if (debug >= LOG_INFO) {
-    cout << "input file is: " << m_inputFile << endl;
-    cout << "output file is: " << m_outputFile << endl;
+    METHOD_OUTPUT << "input file is: " << m_inputFile << endl;
+    METHOD_OUTPUT << "output file is: " << m_outputFile << endl;
   }
 }
 
@@ -90,7 +86,7 @@ bool CoupledBodyText::findKey(const string &key) {
   ifstream infile(m_inputFile);
   if (!infile) {
     m_searchError = "file doesn't exist:" + m_inputFile;
-    cout << m_searchError << endl;
+    METHOD_OUTPUT << m_searchError << endl;
     return false;
   }
   bool found = false;
@@ -119,7 +115,7 @@ bool CoupledBodyText::findKey(const string &key) {
     if (not ln.valid()) {
       m_searchError =
           "file doesn't get numbered:" + m_inputFile + " at line:" + line;
-      cout << m_searchError << endl;
+      METHOD_OUTPUT << m_searchError << endl;
       return false;
     }
 
@@ -144,14 +140,14 @@ void CoupledBodyText::reformatParagraphToSmallerSize(
   setInputOutputFiles();
   ifstream infile(m_inputFile);
   if (!infile) {
-    cout << "file doesn't exist:" << m_inputFile << endl;
+    METHOD_OUTPUT << "file doesn't exist:" << m_inputFile << endl;
     return;
   }
   ofstream outfile(m_outputFile);
   if (debug >= LOG_INFO)
-    cout << utf8length(sampleBlock) << endl;
+    METHOD_OUTPUT << utf8length(sampleBlock) << endl;
   if (debug >= LOG_INFO)
-    cout << sampleBlock << endl;
+    METHOD_OUTPUT << sampleBlock << endl;
   // continue reading
   string inLine;
   string CR{0x0D};
@@ -165,7 +161,7 @@ void CoupledBodyText::reformatParagraphToSmallerSize(
       if (not line.empty()) {
         auto outputLine = line + CRLF;
         if (debug >= LOG_INFO)
-          cout << outputLine << CR << CRLF;
+          METHOD_OUTPUT << outputLine << CR << CRLF;
         outfile << outputLine << CR << CRLF;
       }
       if (utf8length(line) < utf8length(sampleBlock) - 1)
@@ -173,7 +169,7 @@ void CoupledBodyText::reformatParagraphToSmallerSize(
     } while (true);
   }
   if (debug >= LOG_INFO)
-    cout << "reformatting finished." << endl;
+    METHOD_OUTPUT << "reformatting finished." << endl;
 }
 
 // regrouping to make total size smaller
@@ -181,7 +177,7 @@ void CoupledBodyText::regroupingParagraphs(const string &sampleBlock,
                                            const string &sampleFirstLine,
                                            const string &sampleWholeLine) {
   if (debug >= LOG_INFO)
-    cout << "regrouping finished." << endl;
+    METHOD_OUTPUT << "regrouping finished." << endl;
 }
 
 /**
@@ -199,7 +195,7 @@ void CoupledBodyText::getNumberOfPara() {
 
   ifstream infile(m_inputFile);
   if (!infile) {
-    cout << "file doesn't exist:" << m_inputFile << endl;
+    METHOD_OUTPUT << "file doesn't exist:" << m_inputFile << endl;
     return;
   }
 
@@ -250,13 +246,17 @@ void CoupledBodyText::getNumberOfPara() {
     }
   }
   if (debug >= LOG_INFO) {
-    cout << endl << "Result of getNumberOfPara:" << endl;
+    METHOD_OUTPUT << endl;
+    METHOD_OUTPUT << "Result of getNumberOfPara:" << endl;
     printBrAfterImageGroupTable();
-    cout << "m_numberOfFirstParaHeader: " << m_numberOfFirstParaHeader << endl
-         << "m_numberOfMiddleParaHeader: " << m_numberOfMiddleParaHeader << endl
-         << "m_numberOfLastParaHeader: " << m_numberOfLastParaHeader << endl
-         << "m_numberOfImageGroupNotIncludedInPara: "
-         << m_numberOfImageGroupNotIncludedInPara << endl;
+    METHOD_OUTPUT << "m_numberOfFirstParaHeader: " << m_numberOfFirstParaHeader
+                  << endl;
+    METHOD_OUTPUT << "m_numberOfMiddleParaHeader: "
+                  << m_numberOfMiddleParaHeader << endl;
+    METHOD_OUTPUT << "m_numberOfLastParaHeader: " << m_numberOfLastParaHeader
+                  << endl;
+    METHOD_OUTPUT << "m_numberOfImageGroupNotIncludedInPara: "
+                  << m_numberOfImageGroupNotIncludedInPara << endl;
   }
 }
 
@@ -304,7 +304,7 @@ void CoupledBodyText::addLineNumber(const string &separatorColor,
   setInputOutputFiles();
   ifstream infile(m_inputFile);
   if (!infile) {
-    cout << "file doesn't exist:" << m_inputFile << endl;
+    METHOD_OUTPUT << "file doesn't exist:" << m_inputFile << endl;
     return;
   }
 
@@ -312,13 +312,15 @@ void CoupledBodyText::addLineNumber(const string &separatorColor,
     getNumberOfPara(); // first scan
 
     if (m_numberOfFirstParaHeader == 0 or m_numberOfLastParaHeader == 0) {
-      cout << "no top or bottom paragraph found:" << m_inputFile << endl;
+      METHOD_OUTPUT << "no top or bottom paragraph found:" << m_inputFile
+                    << endl;
       return;
       LineNumber::setStartNumber(START_PARA_NUMBER);
     }
 
   } else {
-    cout << "call CoupledBodyTextWithLink::addLineNumber instead." << endl;
+    METHOD_OUTPUT << "call CoupledBodyTextWithLink::addLineNumber instead."
+                  << endl;
     return;
   }
 
@@ -337,8 +339,10 @@ void CoupledBodyText::addLineNumber(const string &separatorColor,
     LineNumber ln;
     ln.loadFirstFromContainedLine(inLine);
     if (ln.isParagraphHeader()) {
-      if (debug >= LOG_INFO)
-        cout << "paragraph header found as:" << ln.asString() << endl;
+      if (debug >= LOG_INFO) {
+        METHOD_OUTPUT << "paragraph header found as:" << endl;
+        METHOD_OUTPUT << ln.asString() << endl;
+      }
       line = fixFirstParaHeaderFromTemplate(LineNumber::getStartNumber(),
                                             separatorColor, hideParaHeader);
       stop = true;
@@ -361,8 +365,9 @@ void CoupledBodyText::addLineNumber(const string &separatorColor,
     ln.loadFirstFromContainedLine(inLine);
     if (enterLastPara == true) {
       if (ln.isParagraphHeader()) {
-        if (debug >= LOG_INFO)
-          cout << ln.asString() << endl;
+        if (debug >= LOG_INFO) {
+          METHOD_OUTPUT << ln.asString() << endl;
+        }
         outfile << fixLastParaHeaderFromTemplate(LineNumber::getStartNumber(),
                                                  m_numberOfMiddleParaHeader + 1,
                                                  separatorColor, hideParaHeader)
@@ -372,8 +377,10 @@ void CoupledBodyText::addLineNumber(const string &separatorColor,
     }
 
     if (ln.isParagraphHeader()) {
-      if (debug >= LOG_INFO)
-        cout << "paragraph header found as:" << ln.asString() << endl;
+      if (debug >= LOG_INFO) {
+        METHOD_OUTPUT << "paragraph header found as:" << endl;
+        METHOD_OUTPUT << ln.asString() << endl;
+      }
 
       enterLastPara = (para == m_numberOfMiddleParaHeader);
       outfile << fixMiddleParaHeaderFromTemplate(LineNumber::getStartNumber(),
@@ -388,8 +395,10 @@ void CoupledBodyText::addLineNumber(const string &separatorColor,
     }
 
     if (isEmptyLine(inLine)) {
-      if (debug >= LOG_INFO)
-        cout << "processed empty line." << endl << inLine << endl;
+      if (debug >= LOG_INFO) {
+        METHOD_OUTPUT << "processed empty line." << endl;
+        METHOD_OUTPUT << inLine << endl;
+      }
       outfile << inLine << endl;
       continue;
     }
@@ -426,10 +435,12 @@ void CoupledBodyText::addLineNumber(const string &separatorColor,
       linesAfter = m_brTable[seqOfImageGroup].first;
       needToGenerateParaHeader = m_brTable[seqOfImageGroup].second;
       if (debug >= LOG_INFO) {
-        cout << "processed image Group line." << endl << inLine << endl;
-        cout << "linesAfter :" << endl << linesAfter << endl;
-        cout << "needToGenerateParaHeader :" << endl
-             << needToGenerateParaHeader << endl;
+        METHOD_OUTPUT << "processed image Group line." << endl;
+        METHOD_OUTPUT << inLine << endl;
+        METHOD_OUTPUT << "linesAfter :" << endl;
+        METHOD_OUTPUT << linesAfter << endl;
+        METHOD_OUTPUT << "needToGenerateParaHeader :" << endl;
+        METHOD_OUTPUT << needToGenerateParaHeader << endl;
       }
       outfile << inLine << endl;
       readLinesAfterImageGroup = true;
@@ -439,7 +450,8 @@ void CoupledBodyText::addLineNumber(const string &separatorColor,
     if (expectAnotherHalf) {
       if (isLeadingBr(inLine)) {
         if (debug >= LOG_INFO)
-          cout << "processed :" << endl << inLine << endl;
+          METHOD_OUTPUT << "processed :" << endl;
+        METHOD_OUTPUT << inLine << endl;
         outfile << inLine << endl;
         // still expectAnotherHalf
         continue;
@@ -457,7 +469,7 @@ void CoupledBodyText::addLineNumber(const string &separatorColor,
         } else
           outfile << inLine << endl;
         if (debug >= LOG_INFO)
-          cout << "processed :" << inLine << endl;
+          METHOD_OUTPUT << "processed :" << inLine << endl;
         lineNo++;
         expectAnotherHalf = false;
         continue;
@@ -468,17 +480,18 @@ void CoupledBodyText::addLineNumber(const string &separatorColor,
         outfile << inLine << endl;
         expectAnotherHalf = true;
       } else {
-        cout << "expectAnotherHalf: " << expectAnotherHalf
-             << " wrong without leading " << brTab
-             << " at line: " << TurnToString(para) + "." + TurnToString(lineNo)
-             << " of file: " << m_inputFile << "content: " << inLine << endl;
+        METHOD_OUTPUT << "expectAnotherHalf: " << expectAnotherHalf
+                      << " wrong without leading " << brTab << " at line: "
+                      << TurnToString(para) + "." + TurnToString(lineNo)
+                      << " of file: " << m_inputFile << "content: " << inLine
+                      << endl;
         exit(1);
         break;
       }
     }
   }
   if (debug >= LOG_INFO)
-    cout << "numbering finished." << endl;
+    METHOD_OUTPUT << "numbering finished." << endl;
 }
 
 void testSearchTextIsOnlyPartOfOtherKeys() {
@@ -486,81 +499,89 @@ void testSearchTextIsOnlyPartOfOtherKeys() {
   string line1 =
       R"(弄得（<cite unhidden>宝玉</cite>）情色若痴，语言常乱，似染怔忡之疾，慌得袭人等又不敢回贾母，只百般逗他玩笑（<cite unhidden>指望他早日康复</cite>）。（<u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">怔忡，为病名，首见于《济生方·惊悸怔忡健忘门》中“惊者，心卒动而不宁也；悸者,心跳动而怕惊也；怔忡者，心中躁动不安，惕惕然后人将捕之也”,是心悸的一种，是指多因久病体虚、心脏受损导致气血、阴阳亏虚，或邪毒、痰饮、瘀血阻滞心脉，日久导致心失濡养，心脉不畅，从而引起的心中剔剔不安，不能自控的一种病证，常和惊悸合并称为心悸</u>）)";
   string key = R"(怔忡)";
-  cout << line1 << endl;
-  cout << isFoundAsNonKeys(line1, key) << endl;
+  FUNCTION_OUTPUT << line1 << endl;
+  FUNCTION_OUTPUT << isFoundAsNonKeys(line1, key) << endl;
   string line2 =
       R"(（<u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">宝玉真病了的时候，不过袭人<a unhidden href="#P94" title="怔忡"><i hidden>怔忡</i>瞒着不回贾母</a>，晨昏定省还是去的</u>）。宝玉方（<cite unhidden>放下笔，先</cite>）去请安（<u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">贾母关切，姊妹们则看在眼里</u>）)";
-  cout << line2 << endl;
-  cout << isFoundAsNonKeys(line2, key) << endl;
+  FUNCTION_OUTPUT << line2 << endl;
+  FUNCTION_OUTPUT << isFoundAsNonKeys(line2, key) << endl;
 }
 
 void testLineHeader(string lnStr) {
-  cout << "original: " << endl << lnStr << endl;
+  FUNCTION_OUTPUT << "original: " << endl;
+  FUNCTION_OUTPUT << lnStr << endl;
   LineNumber ln(lnStr);
-  cout << ln.getParaNumber() << " " << ln.getlineNumber() << " "
-       << ln.asString() << endl
-       << "is paragraph header? " << ln.isParagraphHeader() << endl;
-  cout << "whole string: " << endl << ln.getWholeString() << endl;
-  cout << "display as:" << ln.getDisplayString() << "||" << endl;
+  FUNCTION_OUTPUT << ln.getParaNumber() << " " << ln.getlineNumber() << " "
+                  << ln.asString() << endl;
+  FUNCTION_OUTPUT << "is paragraph header? " << ln.isParagraphHeader() << endl;
+  FUNCTION_OUTPUT << "whole string: " << endl;
+  FUNCTION_OUTPUT << ln.getWholeString() << endl;
+  FUNCTION_OUTPUT << "display as:" << ln.getDisplayString() << "||" << endl;
   if (not ln.isParagraphHeader()) {
-    if (not ln.isPureTextOnly())
-      cout << "generate line prefix: " << endl
-           << ln.generateLinePrefix() << endl;
-    else
-      cout << "pure text" << endl;
+    if (not ln.isPureTextOnly()) {
+      FUNCTION_OUTPUT << "generate line prefix: " << endl;
+      FUNCTION_OUTPUT << ln.generateLinePrefix() << endl;
+    } else
+      FUNCTION_OUTPUT << "pure text" << endl;
   }
 }
 
 void testLineHeaderFromContainedLine(string containedLine) {
-  cout << "original: " << endl << containedLine << endl;
+  FUNCTION_OUTPUT << "original: " << endl;
+  FUNCTION_OUTPUT << containedLine << endl;
   LineNumber ln;
   ln.loadFirstFromContainedLine(containedLine);
-  cout << ln.getParaNumber() << " " << ln.getlineNumber() << " "
-       << ln.asString() << endl
-       << "is paragraph header? " << ln.isParagraphHeader() << endl;
-  cout << "whole string: " << endl << ln.getWholeString() << endl;
-  cout << "display as:" << ln.getDisplayString() << "||" << endl;
+  FUNCTION_OUTPUT << ln.getParaNumber() << " " << ln.getlineNumber() << " "
+                  << ln.asString() << endl;
+  FUNCTION_OUTPUT << "is paragraph header? " << ln.isParagraphHeader() << endl;
+  FUNCTION_OUTPUT << "whole string: " << endl;
+  FUNCTION_OUTPUT << ln.getWholeString() << endl;
+  FUNCTION_OUTPUT << "display as:" << ln.getDisplayString() << "||" << endl;
   if (not ln.isParagraphHeader()) {
-    if (not ln.isPureTextOnly())
-      cout << "generate line prefix: " << endl
-           << ln.generateLinePrefix() << endl;
-    else
-      cout << "pure text" << endl;
+    if (not ln.isPureTextOnly()) {
+      FUNCTION_OUTPUT << "generate line prefix: " << endl;
+      FUNCTION_OUTPUT << ln.generateLinePrefix() << endl;
+    } else
+      FUNCTION_OUTPUT << "pure text" << endl;
   }
 }
 
 void testParagraphHeader(string lnStr) {
-  cout << "original: " << endl << lnStr << endl;
+  FUNCTION_OUTPUT << "original: " << endl;
+  FUNCTION_OUTPUT << lnStr << endl;
   LineNumber ln(lnStr);
-  cout << ln.getParaNumber() << " " << ln.getlineNumber() << " "
-       << ln.asString() << endl
-       << "is paragraph header? " << ln.isParagraphHeader() << endl;
-  cout << "whole string: " << endl << ln.getWholeString() << endl;
-  cout << "display as:" << ln.getDisplayString() << "||" << endl;
+  FUNCTION_OUTPUT << ln.getParaNumber() << " " << ln.getlineNumber() << " "
+                  << ln.asString() << endl;
+  FUNCTION_OUTPUT << "is paragraph header? " << ln.isParagraphHeader() << endl;
+  FUNCTION_OUTPUT << "whole string: " << endl;
+  FUNCTION_OUTPUT << ln.getWholeString() << endl;
+  FUNCTION_OUTPUT << "display as:" << ln.getDisplayString() << "||" << endl;
   if (not ln.isParagraphHeader()) {
-    if (not ln.isPureTextOnly())
-      cout << "generate line prefix: " << endl
-           << ln.generateLinePrefix() << endl;
-    else
-      cout << "pure text" << endl;
+    if (not ln.isPureTextOnly()) {
+      FUNCTION_OUTPUT << "generate line prefix: " << endl;
+      FUNCTION_OUTPUT << ln.generateLinePrefix() << endl;
+    } else
+      FUNCTION_OUTPUT << "pure text" << endl;
   }
 }
 
 void testParagraphHeaderFromContainedLine(string containedLine) {
-  cout << "original: " << endl << containedLine << endl;
+  FUNCTION_OUTPUT << "original: " << endl;
+  FUNCTION_OUTPUT << containedLine << endl;
   LineNumber ln;
   ln.loadFirstFromContainedLine(containedLine);
-  cout << ln.getParaNumber() << " " << ln.getlineNumber() << " "
-       << ln.asString() << endl
-       << "is paragraph header? " << ln.isParagraphHeader() << endl;
-  cout << "whole string: " << endl << ln.getWholeString() << endl;
-  cout << "display as:" << ln.getDisplayString() << "||" << endl;
+  FUNCTION_OUTPUT << ln.getParaNumber() << " " << ln.getlineNumber() << " "
+                  << ln.asString() << endl;
+  FUNCTION_OUTPUT << "is paragraph header? " << ln.isParagraphHeader() << endl;
+  FUNCTION_OUTPUT << "whole string: " << endl;
+  FUNCTION_OUTPUT << ln.getWholeString() << endl;
+  FUNCTION_OUTPUT << "display as:" << ln.getDisplayString() << "||" << endl;
   if (not ln.isParagraphHeader()) {
     if (not ln.isPureTextOnly())
-      cout << "generate line prefix: " << endl
-           << ln.generateLinePrefix() << endl;
+      FUNCTION_OUTPUT << "generate line prefix: " << endl
+                      << ln.generateLinePrefix() << endl;
     else
-      cout << "pure text" << endl;
+      FUNCTION_OUTPUT << "pure text" << endl;
   }
 }
 

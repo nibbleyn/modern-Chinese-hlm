@@ -34,7 +34,7 @@ void fixFooter(string &footer, const string &filename) {
       getHtmlFileNamePrefix(FILE_TYPE::JPM) + "index";
   footer.replace(footer.find(toReplaceContentTable),
                  toReplaceContentTable.length(), newContentTable);
-  cout << footer << endl;
+  FUNCTION_OUTPUT << footer << endl;
 }
 
 void fixHeader(string &header, const string &filename) {
@@ -97,7 +97,7 @@ void fixHeader(string &header, const string &filename) {
       getHtmlFileNamePrefix(FILE_TYPE::JPM) + "index";
   header.replace(header.find(toReplaceContentTable),
                  toReplaceContentTable.length(), newContentTable);
-  cout << header << endl;
+  FUNCTION_OUTPUT << header << endl;
 }
 
 void fixHeaderAndFooter(const string &filename) {
@@ -106,15 +106,15 @@ void fixHeaderAndFooter(const string &filename) {
   string headerCompareTo =
       R"(<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf8"><style type="text/css">a {text-decoration: none}</style><title>第八十四回　　吴月娘大闹碧霞宫　曾静师化缘雪涧洞</title></head><body text="white" bgcolor="#004040" topmargin="0" leftmargin="0" marginwidth="0" marginheight="0" rightmargin="0" link="#fff000" vlink="#fff000"><center>		<table border="0" cellspacing="1" width="80%"   style="font-size: 12pt; font-family: 宋体; line-height:150%"><tr><td style="font-size: 10.5pt"><hr color="#F0BEC0"><hr color="#F0BEC0"><a unhidden href="dindex.htm">>回目录</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a unhidden href="d083.htm#bottom">上回结尾</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a unhidden href="d083.htm">上回开始</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a unhidden href="d085.htm">->下一回</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a unhidden href="#top">本回开始</a></td>	</tr><tr><td height="50" style="font-size: 15pt; font-family: 黑体; letter-spacing:1" align="center"><br><strong unhidden>第八十四回　　吴月娘大闹碧霞宫　曾静师化缘雪涧洞</strong><br>				<br><samp unhidden>第八十四回　　吴月娘大闹碧霞宫　曾静师化缘雪涧洞</samp><br></td></tr><tr><td align="center"><hr color="#F0BEC0"></td></tr><tr><td>)";
   fixHeader(header, filename);
-  cout << headerCompareTo << endl;
-  cout << (header == headerCompareTo) << endl;
+  FUNCTION_OUTPUT << headerCompareTo << endl;
+  FUNCTION_OUTPUT << (header == headerCompareTo) << endl;
   string footer =
       R"(</td></tr><tr><td><hr color="#F0BEC0"></td></tr><tr><td align="center"><a unhidden href="a077.htm">上一回</a>&nbsp;<a unhidden href="aindex.htm">回目录</a>&nbsp;<a unhidden href="a079.htm">下一回</a>&nbsp;<hr color="#F0BEC0">	<hr color="#F0BEC0"></td></tr></table></center></body></html>)";
   string footerCompareTo =
       R"(</td></tr><tr><td><hr color="#F0BEC0"></td></tr><tr><td align="center"><a unhidden href="d083.htm">上一回</a>&nbsp;<a unhidden href="dindex.htm">回目录</a>&nbsp;<a unhidden href="d085.htm">下一回</a>&nbsp;<hr color="#F0BEC0">	<hr color="#F0BEC0"></td></tr></table></center></body></html>)";
   fixFooter(footer, filename);
-  cout << footerCompareTo << endl;
-  cout << (footer == footerCompareTo) << endl;
+  FUNCTION_OUTPUT << footerCompareTo << endl;
+  FUNCTION_OUTPUT << (footer == footerCompareTo) << endl;
 }
 
 void CoupledBodyText::fixTagPairBegin(const string &signOfTagAfterReplaceTag,
@@ -122,7 +122,7 @@ void CoupledBodyText::fixTagPairBegin(const string &signOfTagAfterReplaceTag,
   setInputOutputFiles();
   ifstream infile(m_inputFile);
   if (!infile) {
-    cout << "file doesn't exist:" << m_inputFile << endl;
+    FUNCTION_OUTPUT << "file doesn't exist:" << m_inputFile << endl;
     return;
   }
   ofstream outfile(m_outputFile);
@@ -158,7 +158,7 @@ void CoupledBodyText::fixTagPairEnd(const string &signOfTagBeforeReplaceTag,
   setInputOutputFiles();
   ifstream infile(m_inputFile);
   if (!infile) {
-    cout << "file doesn't exist:" << m_inputFile << endl;
+    FUNCTION_OUTPUT << "file doesn't exist:" << m_inputFile << endl;
     return;
   }
   ofstream outfile(m_outputFile);
@@ -182,12 +182,13 @@ void CoupledBodyText::fixTagPairEnd(const string &signOfTagBeforeReplaceTag,
         do {
           fromBegin = inLine.find(from, signBegin);
           if (fromBegin == string::npos) {
-            cout << from << "is not found after: " << signOfTagBeforeReplaceTag
-                 << endl;
+            FUNCTION_OUTPUT
+                << from << "is not found after: " << signOfTagBeforeReplaceTag
+                << endl;
             return;
           }
           auto inBetween = inLine.substr(signBegin, fromBegin - signBegin);
-          cout << inBetween << endl;
+          FUNCTION_OUTPUT << inBetween << endl;
           if (inBetween.find(skipTagPairBegin) == string::npos)
             break;
           signBegin = fromBegin + 1;
@@ -195,8 +196,9 @@ void CoupledBodyText::fixTagPairEnd(const string &signOfTagBeforeReplaceTag,
       }
       // found at fromBegin, replace
       auto orgFromBegin = orgLine.find(from, cutLength + signBegin);
-      cout << cutLength << " " << signBegin << " " << orgFromBegin << endl;
-      cout << orgLine.substr(cutLength + signBegin) << endl;
+      FUNCTION_OUTPUT << cutLength << " " << signBegin << " " << orgFromBegin
+                      << endl;
+      FUNCTION_OUTPUT << orgLine.substr(cutLength + signBegin) << endl;
       occurences.insert(orgFromBegin);
       inLine = inLine.substr(fromBegin +
                              from.length()); // find next link in the inLine
@@ -246,7 +248,7 @@ void CoupledContainer::makeSingleLineHeaderAndFooter() {
   ifstream inHtmlFile(inputHtmlFile);
   if (!inHtmlFile) // doesn't exist
   {
-    cout << "file doesn't exist:" << inputHtmlFile << endl;
+    FUNCTION_OUTPUT << "file doesn't exist:" << inputHtmlFile << endl;
     return;
   }
   ofstream outHtmlFile(outputHtmlFile);
@@ -265,12 +267,12 @@ void CoupledContainer::makeSingleLineHeaderAndFooter() {
       singleLineHeader += line;
     }
   }
-  cout << singleLineHeader << endl;
+  FUNCTION_OUTPUT << singleLineHeader << endl;
   outHtmlFile << singleLineHeader << endl; // excluding start line
   outHtmlFile << line << endl;             // output start line
   if (inHtmlFile.eof()) {
-    cout << "source " << inputHtmlFile
-         << " has no start mark:" << topIdBeginChars << endl;
+    FUNCTION_OUTPUT << "source " << inputHtmlFile
+                    << " has no start mark:" << topIdBeginChars << endl;
     return;
   }
   while (!inHtmlFile.eof()) // To get you all the lines.
@@ -284,8 +286,8 @@ void CoupledContainer::makeSingleLineHeaderAndFooter() {
     }
   }
   if (inHtmlFile.eof()) {
-    cout << "source " << inputHtmlFile
-         << " has no end mark:" << bottomIdBeginChars << endl;
+    FUNCTION_OUTPUT << "source " << inputHtmlFile
+                    << " has no end mark:" << bottomIdBeginChars << endl;
     return;
   }
   string singleLineFooter;
@@ -296,11 +298,11 @@ void CoupledContainer::makeSingleLineHeaderAndFooter() {
     line = std::regex_replace(line, std::regex("(?:\\r\\n|\\n|\\r)"), "");
     singleLineFooter += line;
   }
-  cout << singleLineFooter << endl;
+  FUNCTION_OUTPUT << singleLineFooter << endl;
   outHtmlFile << singleLineFooter << endl; // excluding start line
   if (debug >= LOG_INFO)
-    cout << "makeSingleLineHeaderAndFooter finished for " << outputHtmlFile
-         << endl;
+    FUNCTION_OUTPUT << "makeSingleLineHeaderAndFooter finished for "
+                    << outputHtmlFile << endl;
 }
 
 void CoupledContainer::fetchOriginalAndTranslatedTitles() {
@@ -308,7 +310,7 @@ void CoupledContainer::fetchOriginalAndTranslatedTitles() {
   ifstream inHtmlFile(inputHtmlFile);
   if (!inHtmlFile) // doesn't exist
   {
-    cout << "file doesn't exist:" << inputHtmlFile << endl;
+    FUNCTION_OUTPUT << "file doesn't exist:" << inputHtmlFile << endl;
     return;
   }
   string line{""};
@@ -343,7 +345,7 @@ void CoupledContainer::fixHeaderAndFooter() {
   ifstream inHtmlFile(inputHtmlFile);
   if (!inHtmlFile) // doesn't exist
   {
-    cout << "file doesn't exist:" << inputHtmlFile << endl;
+    FUNCTION_OUTPUT << "file doesn't exist:" << inputHtmlFile << endl;
     return;
   }
   ofstream outHtmlFile(outputHtmlFile);
@@ -360,12 +362,12 @@ void CoupledContainer::fixHeaderAndFooter() {
       singleLineHeader += line;
   }
   fixHeader(singleLineHeader, m_file);
-  cout << singleLineHeader << endl;
+  FUNCTION_OUTPUT << singleLineHeader << endl;
   outHtmlFile << singleLineHeader << endl; // excluding start line
   outHtmlFile << line << endl;             // output start line
   if (inHtmlFile.eof()) {
-    cout << "source " << inputHtmlFile
-         << " has no start mark:" << topIdBeginChars << endl;
+    FUNCTION_OUTPUT << "source " << inputHtmlFile
+                    << " has no start mark:" << topIdBeginChars << endl;
     return;
   }
   while (!inHtmlFile.eof()) // To get you all the lines.
@@ -379,8 +381,8 @@ void CoupledContainer::fixHeaderAndFooter() {
     }
   }
   if (inHtmlFile.eof()) {
-    cout << "source " << inputHtmlFile
-         << " has no end mark:" << bottomIdBeginChars << endl;
+    FUNCTION_OUTPUT << "source " << inputHtmlFile
+                    << " has no end mark:" << bottomIdBeginChars << endl;
     return;
   }
   string singleLineFooter;
@@ -390,10 +392,11 @@ void CoupledContainer::fixHeaderAndFooter() {
     singleLineFooter += line;
   }
   fixFooter(singleLineFooter, m_file);
-  cout << singleLineFooter << endl;
+  FUNCTION_OUTPUT << singleLineFooter << endl;
   outHtmlFile << singleLineFooter << endl; // excluding start line
   if (debug >= LOG_INFO)
-    cout << "fixHeaderAndFooter finished for " << outputHtmlFile << endl;
+    FUNCTION_OUTPUT << "fixHeaderAndFooter finished for " << outputHtmlFile
+                    << endl;
 }
 
 void fixHeaderAndFooterForJPMHtml(int minTarget, int maxTarget) {
@@ -407,14 +410,14 @@ void fixHeaderAndFooterForJPMHtml(int minTarget, int maxTarget) {
 void fixHeaderAndFooterForJPMHtmls() {
   int minTarget = 2, maxTarget = 99;
   fixHeaderAndFooterForJPMHtml(minTarget, maxTarget);
-  cout << "fixHeaderAndFooter for JPM Htmls finished. " << endl;
+  FUNCTION_OUTPUT << "fixHeaderAndFooter for JPM Htmls finished. " << endl;
 }
 
 void CoupledBodyText::fixPersonalView() {
   setInputOutputFiles();
   ifstream infile(m_inputFile);
   if (!infile) {
-    cout << "file doesn't exist:" << m_inputFile << endl;
+    FUNCTION_OUTPUT << "file doesn't exist:" << m_inputFile << endl;
     return;
   }
   ofstream outfile(m_outputFile);
@@ -424,7 +427,7 @@ void CoupledBodyText::fixPersonalView() {
   {
     getline(infile, inLine); // Saves the line in inLine.
     if (debug >= LOG_INFO)
-      cout << inLine << endl;
+      FUNCTION_OUTPUT << inLine << endl;
     if (isLeadingBr(inLine)) {
       outfile << inLine << endl;
       continue;
@@ -452,7 +455,7 @@ void CoupledBodyText::fixPersonalView() {
           inLine.replace(inLine.find(endOfLineBr), endOfLineBr.length(),
                          personalCommentEndChars + endOfLineBr);
       }
-      cout << inLine << endl;
+      FUNCTION_OUTPUT << inLine << endl;
     } else if (personalCommentBegin != string::npos and
                personalCommentEnd == string::npos) {
       unpairFound = true;
@@ -483,7 +486,7 @@ void fixPersonalViewForJPMHtmls() {
     container.setFileAndAttachmentNumber(file);
     container.assembleBackToHTM();
   }
-  cout << "fixPersonalView for JPM Htmls finished. " << endl;
+  FUNCTION_OUTPUT << "fixPersonalView for JPM Htmls finished. " << endl;
 }
 
 void fixHeaderAndFooterForMainHtmls() {
@@ -493,7 +496,7 @@ void fixHeaderAndFooterForMainHtmls() {
     container.setFileAndAttachmentNumber(file);
     container.makeSingleLineHeaderAndFooter();
   }
-  cout << "fixHeaderAndFooter for Main Htmls finished. " << endl;
+  FUNCTION_OUTPUT << "fixHeaderAndFooter for Main Htmls finished. " << endl;
 }
 
 void fixHeaderAndFooterForAttachmentHtmls() {
@@ -517,7 +520,8 @@ void fixHeaderAndFooterForAttachmentHtmls() {
       container.makeSingleLineHeaderAndFooter();
     }
   }
-  cout << "fixHeaderAndFooter for Attachment Htmls finished. " << endl;
+  FUNCTION_OUTPUT << "fixHeaderAndFooter for Attachment Htmls finished. "
+                  << endl;
 }
 
 void fixHeaderAndFooterForOriginalHtmls() {
@@ -527,7 +531,7 @@ void fixHeaderAndFooterForOriginalHtmls() {
     container.setFileAndAttachmentNumber(file);
     container.makeSingleLineHeaderAndFooter();
   }
-  cout << "fixHeaderAndFooter for Original Htmls finished. " << endl;
+  FUNCTION_OUTPUT << "fixHeaderAndFooter for Original Htmls finished. " << endl;
 }
 
 std::vector<int> createParaList(int first, int incremental, int max) {
@@ -549,7 +553,7 @@ void generateContentTableForMainHtmls() {
   paraList.push_back(72);
   std::sort(paraList.begin(), paraList.end());
   for (const auto &no : paraList)
-    cout << no << endl;
+    FUNCTION_OUTPUT << no << endl;
   auto start = paraList.begin();
   outputContainer.insertFrontParagrapHeader(*start);
   outputContainer.addExistingFrontParagraphs();
@@ -585,8 +589,9 @@ void generateContentTableForMainHtmls() {
   outputContainer.insertBackParagrapHeader(seqOfPara, totalPara);
   outputContainer.assembleBackToHTM(R"(脂砚斋重评石头记 现代白话文版)",
                                     R"(脂砚斋重评石头记 现代白话文版 目录)");
-  cout << "result is in file: " << outputContainer.getOutputFilePath() << endl;
-  cout << "generateContentTable for Main Htmls finished. " << endl;
+  FUNCTION_OUTPUT << "result is in file: "
+                  << outputContainer.getOutputFilePath() << endl;
+  FUNCTION_OUTPUT << "generateContentTable for Main Htmls finished. " << endl;
 }
 
 void generateContentTableForOriginalHtmls() {
@@ -596,7 +601,7 @@ void generateContentTableForOriginalHtmls() {
   auto paraList = createParaList(18, 22, 70);
   std::sort(paraList.begin(), paraList.end());
   for (const auto &no : paraList)
-    cout << no << endl;
+    FUNCTION_OUTPUT << no << endl;
   auto start = paraList.begin();
   outputContainer.insertFrontParagrapHeader(*start);
   int i = 1;
@@ -629,8 +634,10 @@ void generateContentTableForOriginalHtmls() {
   outputContainer.insertBackParagrapHeader(seqOfPara, totalPara);
   outputContainer.assembleBackToHTM(R"(脂砚斋重评石头记)",
                                     R"(脂砚斋重评石头记 目录)");
-  cout << "result is in file: " << outputContainer.getOutputFilePath() << endl;
-  cout << "generateContentTable for Original Htmls finished. " << endl;
+  FUNCTION_OUTPUT << "result is in file: "
+                  << outputContainer.getOutputFilePath() << endl;
+  FUNCTION_OUTPUT << "generateContentTable for Original Htmls finished. "
+                  << endl;
 }
 
 void generateContentTableForJPMHtmls() {
@@ -640,7 +647,7 @@ void generateContentTableForJPMHtmls() {
   auto paraList = createParaList(18, 22, 90);
   std::sort(paraList.begin(), paraList.end());
   for (const auto &no : paraList)
-    cout << no << endl;
+    FUNCTION_OUTPUT << no << endl;
   auto start = paraList.begin();
   outputContainer.insertFrontParagrapHeader(*start);
   int i = 1;
@@ -672,8 +679,9 @@ void generateContentTableForJPMHtmls() {
   outputContainer.insertBackParagrapHeader(seqOfPara, totalPara);
   outputContainer.assembleBackToHTM(R"(张竹坡批注金瓶梅)",
                                     R"(张竹坡批注金瓶梅 目录)");
-  cout << "result is in file: " << outputContainer.getOutputFilePath() << endl;
-  cout << "generateContentTable for JPM Htmls finished. " << endl;
+  FUNCTION_OUTPUT << "result is in file: "
+                  << outputContainer.getOutputFilePath() << endl;
+  FUNCTION_OUTPUT << "generateContentTable for JPM Htmls finished. " << endl;
 }
 
 void generateContentTableForReferenceAttachments() {}
@@ -699,7 +707,8 @@ void generateContentTableForPersonalAttachments() {
     }
   }
   container.assembleBackToHTM("personal attachments", "personal attachments");
-  cout << "result is in file " << container.getOutputFilePath() << endl;
+  FUNCTION_OUTPUT << "result is in file " << container.getOutputFilePath()
+                  << endl;
 }
 
 void reformatTxtFiles(int minTarget, int maxTarget, const string &example) {
@@ -720,8 +729,8 @@ void reformatTxtFilesForReader() {
 
   int minTarget = 1, maxTarget = 100;
   reformatTxtFiles(minTarget, maxTarget, example);
-  cout << "reformat files from " << minTarget << " to " << maxTarget
-       << " finished. " << endl;
+  FUNCTION_OUTPUT << "reformat files from " << minTarget << " to " << maxTarget
+                  << " finished. " << endl;
 }
 
 void renderingBodyText(const string &fileType, bool hideParaHeader = false) {
@@ -739,9 +748,9 @@ void renderingBodyText(const string &fileType, bool hideParaHeader = false) {
 
 void removePersonalViewpoints() {
   int minTarget = 54, maxTarget = 54;
-  cout << "to be implemented." << endl;
-  cout << "to remove <u> pairs." << endl;
-  cout << "and to remove personal attachment link." << endl;
+  FUNCTION_OUTPUT << "to be implemented." << endl;
+  FUNCTION_OUTPUT << "to remove <u> pairs." << endl;
+  FUNCTION_OUTPUT << "and to remove personal attachment link." << endl;
   for (const auto &file :
        buildFileSet(minTarget, maxTarget)) // files need to be fixed
   {
@@ -804,6 +813,6 @@ void tools(int num) {
     renderingBodyText("main");
     break;
   default:
-    cout << "invalid tool." << endl;
+    FUNCTION_OUTPUT << "invalid tool." << endl;
   }
 }

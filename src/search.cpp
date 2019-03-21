@@ -63,7 +63,8 @@ void findFirstInNoAttachmentFiles(const string key, const string &fileType,
                                         " found.");
     container.assembleBackToHTM("search  results",
                                 "searchInFiles for key: " + key);
-    cout << "result is in file " << container.getOutputFilePath() << endl;
+    FUNCTION_OUTPUT << "result is in file " << container.getOutputFilePath()
+                    << endl;
   } else {
     TableContainer container(outputFilename);
     container.insertFrontParagrapHeader(total, searchUnit);
@@ -84,7 +85,8 @@ void findFirstInNoAttachmentFiles(const string key, const string &fileType,
     container.insertBackParagrapHeader(0, total, searchUnit);
     container.assembleBackToHTM("search  results",
                                 "searchInFiles for key: " + key);
-    cout << "result is in file " << container.getOutputFilePath() << endl;
+    FUNCTION_OUTPUT << "result is in file " << container.getOutputFilePath()
+                    << endl;
   }
 }
 
@@ -97,6 +99,8 @@ void searchKeywordInNoAttachmentFiles(const string &key, const string &fileType,
 }
 
 void findFirstInFiles() {
-  searchKeywordInNoAttachmentFiles(R"(聚赌嫖娼)", "main", "xxx3");
-  searchKeywordInNoAttachmentFiles(R"(头一社)", "original", "xxx4");
+  searchKeywordInNoAttachmentFiles(R"(地藏)", "main", "xxx1");
+
+  //  searchKeywordInNoAttachmentFiles(R"(聚赌嫖娼)", "main", "xxx3");
+  //  searchKeywordInNoAttachmentFiles(R"(头一社)", "original", "xxx4");
 }

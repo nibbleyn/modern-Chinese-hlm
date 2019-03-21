@@ -19,11 +19,11 @@ void convertFromGB2312ToUtf8(string referFile, string format, FILE_TYPE type,
     inputFile = GB2312_HTML_SRC + getHtmlFileNamePrefix(type) + referFile +
                 attachmentPart + HTML_SUFFIX;
     if (debug >= LOG_INFO)
-      cout << inputFile << endl;
+      FUNCTION_OUTPUT << inputFile << endl;
     ifstream infile(inputFile);
     if (!infile) // doesn't exist
     {
-      cout << "file doesn't exist:" << inputFile << endl;
+      FUNCTION_OUTPUT << "file doesn't exist:" << inputFile << endl;
       return;
     }
     outputFile = HTML_OUTPUT_MAIN;
@@ -36,14 +36,14 @@ void convertFromGB2312ToUtf8(string referFile, string format, FILE_TYPE type,
     outputFile +=
         getHtmlFileNamePrefix(type) + referFile + attachmentPart + HTML_SUFFIX;
     if (debug >= LOG_INFO)
-      cout << outputFile << endl;
+      FUNCTION_OUTPUT << outputFile << endl;
   }
   convertFromGB2312ToUtf8(inputFile, outputFile);
 }
 
 void convertFromGB2312ToUtf8(string inputFile, string outputFile) {
   if (debug >= LOG_INFO)
-    cout << inputFile << endl;
+    FUNCTION_OUTPUT << inputFile << endl;
   string cmd("iconv");
   vector<string> args;
   args.push_back("-c");
@@ -56,7 +56,7 @@ void convertFromGB2312ToUtf8(string inputFile, string outputFile) {
   ProcessHandle ph = Process::launch(cmd, args, 0, &outPipe, 0);
   Poco::PipeInputStream istr(outPipe);
   if (debug >= LOG_INFO)
-    cout << outputFile << endl;
+    FUNCTION_OUTPUT << outputFile << endl;
   ofstream ostr(outputFile);
   Poco::StreamCopier::copyStream(istr, ostr);
 }

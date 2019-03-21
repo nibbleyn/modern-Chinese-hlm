@@ -7,7 +7,8 @@ bool CoupledBodyTextWithLink::isEmbeddedObject(OBJECT_TYPE type,
       auto linkInfo = m_linkStringTable.at(offset);
       return linkInfo.embedded;
     } catch (exception &) {
-      cout << "no such object " << getNameOfObjectType(type) << "at " << offset;
+      METHOD_OUTPUT << "no such object " << getNameOfObjectType(type) << "at "
+                    << offset;
     }
   }
   if (type == OBJECT_TYPE::COMMENT) {
@@ -15,7 +16,8 @@ bool CoupledBodyTextWithLink::isEmbeddedObject(OBJECT_TYPE type,
       auto commentInfo = m_commentStringTable.at(offset);
       return commentInfo.embedded;
     } catch (exception &) {
-      cout << "no such object " << getNameOfObjectType(type) << "at " << offset;
+      METHOD_OUTPUT << "no such object " << getNameOfObjectType(type) << "at "
+                    << offset;
     }
   }
   return false;
@@ -162,7 +164,7 @@ void CoupledBodyTextWithLink::render(bool hideParaHeader) {
   setInputOutputFiles();
   ifstream infile(m_inputFile);
   if (!infile) {
-    cout << "file doesn't exist:" << m_inputFile << endl;
+    METHOD_OUTPUT << "file doesn't exist:" << m_inputFile << endl;
     return;
   }
   ofstream outfile(m_outputFile);
@@ -187,8 +189,8 @@ void CoupledBodyTextWithLink::render(bool hideParaHeader) {
     }
 
     if (debug >= LOG_INFO) {
-      cout << inLine << endl;
-      cout << getDisplayString(inLine) << endl;
+      METHOD_OUTPUT << inLine << endl;
+      METHOD_OUTPUT << getDisplayString(inLine) << endl;
     }
     if (isLeadingBr(inLine)) {
       outfile << endl;
@@ -210,14 +212,14 @@ void CoupledBodyTextWithLink::addLineNumber(const string &separatorColor,
   setInputOutputFiles();
   ifstream infile(m_inputFile);
   if (!infile) {
-    cout << "file doesn't exist:" << m_inputFile << endl;
+    METHOD_OUTPUT << "file doesn't exist:" << m_inputFile << endl;
     return;
   }
 }
 
 string CoupledBodyTextWithLink::getDisplayString(const string &originalString) {
   if (debug >= LOG_INFO)
-    cout << originalString.length() << endl;
+    METHOD_OUTPUT << originalString.length() << endl;
   scanForTypes(originalString);
   if (debug >= LOG_INFO) {
     printOffsetToObjectType();
@@ -236,27 +238,29 @@ string CoupledBodyTextWithLink::getDisplayString(const string &originalString) {
     auto offset = first->first;
     if (not isEmbeddedObject(type, offset)) {
       if (debug >= LOG_INFO)
-        cout << endOfSubStringOffset << " " << offset - endOfSubStringOffset
-             << " "
-             << originalString.substr(endOfSubStringOffset,
-                                      offset - endOfSubStringOffset)
-             << endl;
+        METHOD_OUTPUT << endOfSubStringOffset << " "
+                      << offset - endOfSubStringOffset << " "
+                      << originalString.substr(endOfSubStringOffset,
+                                               offset - endOfSubStringOffset)
+                      << endl;
       result += originalString.substr(endOfSubStringOffset,
                                       offset - endOfSubStringOffset);
       if (debug >= LOG_INFO)
-        cout << result << "|8|" << endl;
+        METHOD_OUTPUT << result << "|8|" << endl;
       auto current = createObjectFromType(type, m_file);
       current->loadFirstFromContainedLine(originalString, offset);
-      cout << "whole string: " << current->getWholeString() << endl;
-      cout << "display as:" << current->getDisplayString() << "||" << endl;
+      METHOD_OUTPUT << "whole string: " << current->getWholeString() << endl;
+      METHOD_OUTPUT << "display as:" << current->getDisplayString() << "||"
+                    << endl;
       result += current->getDisplayString();
       if (debug >= LOG_INFO)
-        cout << result << "|0|" << endl;
+        METHOD_OUTPUT << result << "|0|" << endl;
       // should add length of substring above loadFirstFromContainedLine gets
       // so require the string be fixed before
       endOfSubStringOffset = offset + current->length();
       if (debug >= LOG_INFO)
-        cout << current->length() << " " << endOfSubStringOffset << endl;
+        METHOD_OUTPUT << current->length() << " " << endOfSubStringOffset
+                      << endl;
     }
     m_offsetOfTypes.erase(first);
     auto nextOffsetOfSameType =
@@ -290,7 +294,7 @@ void CoupledBodyTextWithLink::removePersonalCommentsOverNumberedFiles() {
   setInputOutputFiles();
   ifstream infile(m_inputFile);
   if (!infile) {
-    cout << "file doesn't exist:" << m_inputFile << endl;
+    METHOD_OUTPUT << "file doesn't exist:" << m_inputFile << endl;
     return;
   }
   ofstream outfile(m_outputFile);
@@ -299,7 +303,7 @@ void CoupledBodyTextWithLink::removePersonalCommentsOverNumberedFiles() {
   {
     getline(infile, inLine); // Saves the line in inLine.
     if (debug >= LOG_INFO)
-      cout << inLine << endl;
+      METHOD_OUTPUT << inLine << endl;
     auto orgLine = inLine; // inLine would change in loop below
     string start = personalCommentStartChars;
     string end = personalCommentEndChars;
@@ -337,7 +341,7 @@ void CoupledBodyTextWithLink::removePersonalCommentsOverNumberedFiles() {
       if (m_linkPtr.isTargetToOtherAttachmentHtm() and
           LinkFromMain::getAttachmentType(num) == ATTACHMENT_TYPE::PERSONAL) {
         if (debug >= LOG_INFO)
-          cout << specialLink << endl;
+          METHOD_OUTPUT << specialLink << endl;
         to_replace = specialLink;
         auto replaceBegin = orgLine.find(to_replace);
         orgLine.replace(replaceBegin, to_replace.length(), "");
@@ -364,7 +368,7 @@ void CoupledBodyTextWithLink::fixLinksFromFile(
 
   ifstream infile(m_inputFile);
   if (!infile) {
-    cout << "file doesn't exist:" << m_inputFile << endl;
+    METHOD_OUTPUT << "file doesn't exist:" << m_inputFile << endl;
     return;
   }
   ofstream outfile(m_outputFile);
@@ -383,7 +387,7 @@ void CoupledBodyTextWithLink::fixLinksFromFile(
     inLine = inLine.substr(
         ln.generateLinePrefix().length()); // skip line number link
     if (debug >= LOG_INFO)
-      cout << inLine << endl;
+      METHOD_OUTPUT << inLine << endl;
     auto start = linkStartChars;
     string targetFile{""};
     do {

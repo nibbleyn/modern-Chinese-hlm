@@ -23,8 +23,8 @@ public:
   virtual string getDisplayString() = 0;
   size_t length() {
     if (m_fullString.length() != getWholeString().length())
-      cout << " size not match: " << m_fullString.length() << " vs "
-           << getWholeString().length() << endl;
+      FUNCTION_OUTPUT << " size not match: " << m_fullString.length() << " vs "
+                      << getWholeString().length() << endl;
     return m_fullString.length();
   }
   virtual size_t displaySize() = 0;

@@ -72,7 +72,7 @@ void numberMainHtmls(bool forceUpdate, bool hideParaHeader) {
     container.setFileAndAttachmentNumber(file);
     container.assembleBackToHTM();
   }
-  cout << "Numbering Main Html finished. " << endl;
+  FUNCTION_OUTPUT << "Numbering Main Html finished. " << endl;
 }
 
 void numberOriginalHtmls(bool forceUpdate, bool hideParaHeader) {
@@ -90,7 +90,7 @@ void numberOriginalHtmls(bool forceUpdate, bool hideParaHeader) {
     container.setFileAndAttachmentNumber(file);
     container.assembleBackToHTM();
   }
-  cout << "Numbering Original Html finished. " << endl;
+  FUNCTION_OUTPUT << "Numbering Original Html finished. " << endl;
 }
 
 void numberJPMHtmls(bool forceUpdate, bool hideParaHeader) {
@@ -108,7 +108,7 @@ void numberJPMHtmls(bool forceUpdate, bool hideParaHeader) {
     container.setFileAndAttachmentNumber(file);
     container.assembleBackToHTM();
   }
-  cout << "Numbering JPM Html finished. " << endl;
+  FUNCTION_OUTPUT << "Numbering JPM Html finished. " << endl;
 }
 
 void numberAttachmentHtmls(bool forceUpdate, bool hideParaHeader) {
@@ -123,5 +123,5 @@ void numberAttachmentHtmls(bool forceUpdate, bool hideParaHeader) {
       hideParaHeader); // reformat bodytext by adding line number
   CoupledBodyText::loadBodyTextsFromFixBackToOutput();
   assembleAttachments(minTarget, maxTarget, minAttachNo, maxAttachNo);
-  cout << "Numbering Attachment Html finished. " << endl;
+  FUNCTION_OUTPUT << "Numbering Attachment Html finished. " << endl;
 }

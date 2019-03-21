@@ -29,7 +29,8 @@ void LineNumber::readFromString(const string &name) {
     m_paraNumber = TurnToInt(name.substr(1));
     if (m_paraNumber >= Limit) {
       if (debug >= LOG_EXCEPTION)
-        cout << "too limit to hold such paragraph: " << m_paraNumber << endl;
+        METHOD_OUTPUT << "too limit to hold such paragraph: " << m_paraNumber
+                      << endl;
     }
   } else
     m_paraNumber = TurnToInt(name.substr(0)); // temporarily accept non-P number
@@ -55,14 +56,16 @@ size_t LineNumber::loadFirstFromContainedLine(const string &containedLine,
 
     m_fullString =
         containedLine.substr(beginPos, endPos + end.length() - beginPos);
-    if (debug >= LOG_INFO)
-      cout << "m_fullString: " << endl << m_fullString << endl;
+    if (debug >= LOG_INFO) {
+      METHOD_OUTPUT << "m_fullString: " << endl;
+      METHOD_OUTPUT << m_fullString << endl;
+    }
 
     string lineName = containedLine.substr(beginPos + begin.length());
     end = endOfLineNumber;
     endPos = lineName.find(end);
     if (debug >= LOG_INFO)
-      cout << lineName.substr(0, endPos) << endl;
+      METHOD_OUTPUT << lineName.substr(0, endPos) << endl;
     if (lineName.substr(0, endPos) == bottomParagraphIndicator)
       readFromString(leadingChar + TurnToString(Limit - 1));
     else

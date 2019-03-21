@@ -11,18 +11,19 @@ void clearReport() {
 void displayMainFilesOfMissingKey() {
   if (keyMissingChapters.empty())
     return;
-  cout << "files which has missing key links:" << endl;
+  FUNCTION_OUTPUT << "files which has missing key links:" << endl;
   for (const auto &file : keyMissingChapters) {
-    cout << getHtmlFileNamePrefix(FILE_TYPE::MAIN) + file + ".htm" << endl;
+    FUNCTION_OUTPUT << getHtmlFileNamePrefix(FILE_TYPE::MAIN) + file + ".htm"
+                    << endl;
   }
 }
 
 void displayNewlyAddedAttachments() {
   if (newAttachmentList.empty())
     return;
-  cout << "Newly Added Attachments:" << endl;
+  FUNCTION_OUTPUT << "Newly Added Attachments:" << endl;
   for (const auto &file : newAttachmentList) {
-    cout << file + ".htm" << endl;
+    FUNCTION_OUTPUT << file + ".htm" << endl;
   }
 }
 
@@ -37,7 +38,7 @@ void fixReturnLinkForAttachmentFile(const string &referFile,
   ifstream inHtmlFile(inputHtmlFile);
   if (!inHtmlFile) // doesn't exist
   {
-    cout << "HTM file doesn't exist:" << inputHtmlFile << endl;
+    FUNCTION_OUTPUT << "HTM file doesn't exist:" << inputHtmlFile << endl;
     return;
   }
   ofstream outfile(outputFile);
@@ -104,7 +105,7 @@ void fixReturnLinkForAttachments(int minTarget, int maxTarget) {
     }
   }
   if (debug >= LOG_INFO)
-    cout << "fix Return Link finished. " << endl;
+    FUNCTION_OUTPUT << "fix Return Link finished. " << endl;
 }
 
 /**
@@ -152,7 +153,7 @@ void fixLinksFromMain(bool forceUpdate) {
   LinkFromMain::outPutStatisticsToFiles();
   displayMainFilesOfMissingKey();
   displayNewlyAddedAttachments();
-  cout << "fixLinksFromMain finished. " << endl;
+  FUNCTION_OUTPUT << "fixLinksFromMain finished. " << endl;
 }
 
 void fixLinksFromAttachmentHtmls(bool forceUpdate) {
@@ -196,7 +197,7 @@ void fixLinksFromAttachment(bool forceUpdate) {
   LinkFromAttachment::resetStatisticsAndLoadReferenceAttachmentList();
   fixLinksFromAttachmentHtmls(forceUpdate);
   LinkFromAttachment::outPutStatisticsToFiles();
-  cout << "fixLinksFromAttachment finished. " << endl;
+  FUNCTION_OUTPUT << "fixLinksFromAttachment finished. " << endl;
 }
 
 void testListContainer() {
@@ -218,7 +219,8 @@ void testListContainer() {
   container.appendParagraphInBodyText(link);
   container.appendParagraphInBodyText("18 links are found.");
   container.assembleBackToHTM("test", "test container");
-  cout << "result is in file " << container.getOutputFilePath() << endl;
+  FUNCTION_OUTPUT << "result is in file " << container.getOutputFilePath()
+                  << endl;
 }
 
 void testTableContainer() {
@@ -231,7 +233,8 @@ void testTableContainer() {
       ""); // if only 3 is added, patch last right part
   container.insertBackParagrapHeader(0, 4, searchUnit);
   container.assembleBackToHTM("content index table", "content");
-  cout << "result is in file: " << container.getOutputFilePath() << endl;
+  FUNCTION_OUTPUT << "result is in file: " << container.getOutputFilePath()
+                  << endl;
 }
 
 void testContainer(int num) {
@@ -244,6 +247,6 @@ void testContainer(int num) {
     testTableContainer();
     break;
   default:
-    cout << "invalid test." << endl;
+    FUNCTION_OUTPUT << "invalid test." << endl;
   }
 }
