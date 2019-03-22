@@ -1,6 +1,9 @@
 #pragma once
 #include "link.hpp"
 
+static const string REFERENCE_LINES = "container/referLines.txt";
+static const string TO_CHECK_FILE = "container/toCheck.txt";
+
 class CoupledBodyTextWithLink : public CoupledBodyText {
 public:
   CoupledBodyTextWithLink() = default;
@@ -20,11 +23,13 @@ public:
   int sizeAfterRendering(const string &lineStr);
 
   string getDisplayString(const string &originalString);
+  void printStringInLines();
   void render(bool hideParaHeader = false);
   void addLineNumber(const string &separatorColor, bool forceUpdate = true,
                      bool hideParaHeader = false) override;
 
 private:
+  size_t getAverageLineLengthFromReferenceFile();
   void searchForEmbededLinks();
   void scanForTypes(const string &containedLine);
   bool isEmbeddedObject(OBJECT_TYPE type, size_t offset);
@@ -63,22 +68,22 @@ private:
   void printOffsetToObjectType() {
     for (const auto &element : m_offsetOfTypes) {
       METHOD_OUTPUT << element.first << "  "
-                      << getNameOfObjectType(element.second) << endl;
+                    << getNameOfObjectType(element.second) << endl;
     }
   }
 
   void printObjectTypeToOffset() {
     for (const auto &element : m_foundTypes) {
       METHOD_OUTPUT << getNameOfObjectType(element.first) << "  "
-                      << element.second << endl;
+                    << element.second << endl;
     }
   }
   void printLinkStringTable() {
     if (not m_linkStringTable.empty())
       METHOD_OUTPUT << "m_linkStringTable:" << endl;
     for (const auto &element : m_linkStringTable) {
-      METHOD_OUTPUT << element.first << "  " << element.second.endOffset
-                      << "  " << element.second.embedded << endl;
+      METHOD_OUTPUT << element.first << "  " << element.second.endOffset << "  "
+                    << element.second.embedded << endl;
     }
   }
 
@@ -86,8 +91,8 @@ private:
     if (not m_commentStringTable.empty())
       METHOD_OUTPUT << "m_commentStringTable:" << endl;
     for (const auto &element : m_commentStringTable) {
-      METHOD_OUTPUT << element.first << "  " << element.second.endOffset
-                      << "  " << element.second.embedded << endl;
+      METHOD_OUTPUT << element.first << "  " << element.second.endOffset << "  "
+                    << element.second.embedded << endl;
     }
   }
 

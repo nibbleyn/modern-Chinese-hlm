@@ -216,6 +216,75 @@ void CoupledBodyTextWithLink::addLineNumber(const string &separatorColor,
     return;
   }
 }
+size_t CoupledBodyTextWithLink::getAverageLineLengthFromReferenceFile() {
+  ifstream referLinesFile(REFERENCE_LINES);
+  if (!referLinesFile) // doesn't exist
+  {
+    METHOD_OUTPUT << "referLines file doesn't exist:" << REFERENCE_LINES
+                  << endl;
+    return 0;
+  }
+
+  auto totalSizes = 0;
+  auto totalLines = 0;
+
+  while (!referLinesFile.eof()) // To get you all the lines.
+  {
+    string line{""};
+    getline(referLinesFile, line);
+    line = std::regex_replace(line, std::regex("(?:\\r\\n|\\n|\\r)"), "");
+    //	    METHOD_OUTPUT << line << endl;
+    //	    METHOD_OUTPUT << utf8length(line) << endl;
+    if (not line.empty()) {
+      totalSizes += utf8length(line);
+      totalLines++;
+    }
+  }
+  return totalSizes / totalLines;
+}
+
+void CoupledBodyTextWithLink::printStringInLines() {
+
+  auto averageSizeOfOneLine = getAverageLineLengthFromReferenceFile();
+
+  setInputOutputFiles();
+  ifstream infile(m_inputFile);
+  //  ifstream infile(TO_CHECK_FILE);
+  if (!infile) {
+    METHOD_OUTPUT << "file doesn't exist:" << m_inputFile << endl;
+    return;
+  }
+
+  auto totalLines = 0;
+  string originalString;
+  while (!infile.eof()) // To get you all the lines.
+  {
+    getline(infile, originalString);
+    METHOD_OUTPUT << originalString << endl; // excluding start line
+    METHOD_OUTPUT << utf8length(originalString) << endl;
+    int size = utf8length(originalString);
+    if (size == 0) {
+      METHOD_OUTPUT << endl;
+      totalLines++;
+    } else {
+      size_t end = -1;
+      bool firstline = true;
+      while (size > 0) {
+        auto cutSize = (firstline) ? (averageSizeOfOneLine + 1)
+                                   : (averageSizeOfOneLine - 1);
+        auto cutLine = utf8substr(originalString, end + 1, end, cutSize);
+        size -= cutSize;
+        if (firstline)
+          firstline = false;
+        METHOD_OUTPUT << cutLine << endl;
+        METHOD_OUTPUT << utf8length(cutLine) << endl;
+        METHOD_OUTPUT << size << endl;
+        totalLines++;
+      }
+    }
+  }
+  METHOD_OUTPUT << "totalLines: " << totalLines << endl;
+}
 
 string CoupledBodyTextWithLink::getDisplayString(const string &originalString) {
   if (debug >= LOG_INFO)
@@ -557,5 +626,6 @@ void testMixedObjects() {
   CoupledBodyTextWithLink bodyText;
   bodyText.setFilePrefixFromFileType(FILE_TYPE::MAIN);
   bodyText.setFileAndAttachmentNumber("69");
-  printCompareResult(bodyText.getDisplayString(line), compareTo);
+  bodyText.printStringInLines();
+  //  printCompareResult(bodyText.getDisplayString(line), compareTo);
 }

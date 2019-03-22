@@ -92,7 +92,7 @@ protected:
       METHOD_OUTPUT << "m_brTable:" << endl;
     for (const auto &element : m_brTable) {
       METHOD_OUTPUT << element.first << "  " << element.second.first << "  "
-                      << element.second.second << endl;
+                    << element.second.second << endl;
     }
   }
 

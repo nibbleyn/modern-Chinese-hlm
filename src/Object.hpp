@@ -24,7 +24,7 @@ public:
   size_t length() {
     if (m_fullString.length() != getWholeString().length())
       METHOD_OUTPUT << " size not match: " << m_fullString.length() << " vs "
-                      << getWholeString().length() << endl;
+                    << getWholeString().length() << endl;
     return m_fullString.length();
   }
   virtual size_t displaySize() = 0;

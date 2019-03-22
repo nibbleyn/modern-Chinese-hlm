@@ -1,5 +1,4 @@
 #include "tools.hpp"
-#include <regex>
 
 const string strongTitleBeginChars = R"(<strong unhidden>)";
 const string strongTitleEndChars = R"(</strong>)";

@@ -19,30 +19,26 @@ void findFirstInNoAttachmentFiles(const string key, const string &fileType,
     bool found = bodyText.findKey(key);
     if (found) {
       CoupledBodyText::lineNumberSet lineSet = bodyText.getResultLineSet();
-      if (targetFileType == FILE_TYPE::ORIGINAL) {
-        for (auto const &line : lineSet) {
+      for (auto const &line : lineSet) {
+        LineNumber ln(line);
+        string expectedSection =
+            R"(第)" + TurnToString(TurnToInt(file)) + R"(章)" +
+            TurnToString(ln.getParaNumber()) + R"(.)" +
+            TurnToString(ln.getlineNumber()) + R"(节:)";
+        if (targetFileType == FILE_TYPE::ORIGINAL) {
           Link::LinkDetails detail{
               key, file, line,
               fixLinkFromOriginalTemplate(originalDirForLinkFromMain, file, key,
-                                          "", line)};
-          total++;
+                                          expectedSection, line)};
           resultLinkList[file].push_back(detail);
-        }
-      }
-      if (targetFileType == FILE_TYPE::MAIN) {
-        for (auto const &line : lineSet) {
-          LineNumber ln(line);
-          string expectedSection =
-              R"(第)" + TurnToString(TurnToInt(file)) + R"(章)" +
-              TurnToString(ln.getParaNumber()) + R"(.)" +
-              TurnToString(ln.getlineNumber()) + R"(节:)";
+        } else if (targetFileType == FILE_TYPE::MAIN) {
           Link::LinkDetails detail{
               key, file, line,
               fixLinkFromMainTemplate("", file, LINK_DISPLAY_TYPE::DIRECT, key,
                                       expectedSection, key, line)};
-          total++;
           resultLinkList[file].push_back(detail);
         }
+        total++;
       }
     }
   }
@@ -99,7 +95,7 @@ void searchKeywordInNoAttachmentFiles(const string &key, const string &fileType,
 }
 
 void findFirstInFiles() {
-  searchKeywordInNoAttachmentFiles(R"(地藏)", "main", "xxx1");
+  searchKeywordInNoAttachmentFiles(R"(周瑞家的)", "original", "xxx1");
 
   //  searchKeywordInNoAttachmentFiles(R"(聚赌嫖娼)", "main", "xxx3");
   //  searchKeywordInNoAttachmentFiles(R"(头一社)", "original", "xxx4");

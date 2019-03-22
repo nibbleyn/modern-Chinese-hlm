@@ -76,15 +76,17 @@ string utf8substr(const string &originalString, size_t begin, size_t &end,
   size_t len = 0;
 
   end = begin;
-  for (; byteIndex < origSize; byteIndex++) {
+  if (((aStr[byteIndex] & 0xc0) == 0x80))
+    cout << "not aligned" << endl;
+  while (byteIndex < origSize) {
     if ((aStr[byteIndex] & 0xc0) != 0x80)
       len += 1;
-    if (len >= SubStrLength) {
-      end = byteIndex - 1;
+    if ((len > SubStrLength))
       break;
-    }
+    byteIndex++;
   }
-  return originalString.substr(begin, byteIndex - begin);
+  end = byteIndex - 1;
+  return originalString.substr(begin, end - begin + 1);
 }
 
 string markDifference(const string &firstString, const string &secondString,

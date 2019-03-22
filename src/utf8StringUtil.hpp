@@ -6,9 +6,11 @@
 
 #include <cmath>
 #include <iostream>
+#include <regex>
 #include <set>
 #include <string>
 #include <tuple>
+
 using namespace std;
 
 const int LOG_EXCEPTION = 1;
