@@ -343,8 +343,12 @@ void CoupledBodyText::addLineNumber(const string &separatorColor,
         METHOD_OUTPUT << "paragraph header found as:" << endl;
         METHOD_OUTPUT << ln.asString() << endl;
       }
-      line = fixFirstParaHeaderFromTemplate(LineNumber::getStartNumber(),
-                                            separatorColor, hideParaHeader);
+      ParaHeader paraHeader;
+      paraHeader.m_startNumber = LineNumber::getStartNumber();
+      paraHeader.m_color = separatorColor;
+      paraHeader.m_hidden = hideParaHeader;
+      paraHeader.fixFirstParaHeaderFromTemplate();
+      line = paraHeader.getFixedResult();
       stop = true;
     }
     // incl. above header
@@ -368,10 +372,13 @@ void CoupledBodyText::addLineNumber(const string &separatorColor,
         if (debug >= LOG_INFO) {
           METHOD_OUTPUT << ln.asString() << endl;
         }
-        outfile << fixLastParaHeaderFromTemplate(LineNumber::getStartNumber(),
-                                                 m_numberOfMiddleParaHeader + 1,
-                                                 separatorColor, hideParaHeader)
-                << endl;
+        ParaHeader paraHeader;
+        paraHeader.m_startNumber = LineNumber::getStartNumber();
+        paraHeader.m_currentParaNo = m_numberOfMiddleParaHeader + 1;
+        paraHeader.m_color = separatorColor;
+        paraHeader.m_hidden = hideParaHeader;
+        paraHeader.fixLastParaHeaderFromTemplate();
+        outfile << paraHeader.getFixedResult() << endl;
         break; // end of whole file
       }
     }
@@ -383,10 +390,14 @@ void CoupledBodyText::addLineNumber(const string &separatorColor,
       }
 
       enterLastPara = (para == m_numberOfMiddleParaHeader);
-      outfile << fixMiddleParaHeaderFromTemplate(LineNumber::getStartNumber(),
-                                                 para++, separatorColor,
-                                                 hideParaHeader, enterLastPara)
-              << endl;
+      ParaHeader paraHeader;
+      paraHeader.m_startNumber = LineNumber::getStartNumber();
+      paraHeader.m_currentParaNo = para++;
+      paraHeader.m_color = separatorColor;
+      paraHeader.m_hidden = hideParaHeader;
+      paraHeader.m_lastPara = enterLastPara;
+      paraHeader.fixMiddleParaHeaderFromTemplate();
+      outfile << paraHeader.getFixedResult() << endl;
       if (not enterLastPara) {
         lineNo = 1; // LINE index within each group
         expectAnotherHalf = false;
@@ -409,10 +420,14 @@ void CoupledBodyText::addLineNumber(const string &separatorColor,
         readLinesAfterImageGroup = false;
         if (needToGenerateParaHeader) {
           enterLastPara = (para == m_numberOfMiddleParaHeader);
-          outfile << fixMiddleParaHeaderFromTemplate(
-                         LineNumber::getStartNumber(), para++, separatorColor,
-                         hideParaHeader, enterLastPara)
-                  << endl;
+          ParaHeader paraHeader;
+          paraHeader.m_startNumber = LineNumber::getStartNumber();
+          paraHeader.m_currentParaNo = para++;
+          paraHeader.m_color = separatorColor;
+          paraHeader.m_hidden = hideParaHeader;
+          paraHeader.m_lastPara = enterLastPara;
+          paraHeader.fixMiddleParaHeaderFromTemplate();
+          outfile << paraHeader.getFixedResult() << endl;
           if (not enterLastPara) {
             lineNo = 1; // LINE index within each group
             expectAnotherHalf = false;
@@ -595,15 +610,41 @@ void testLineNumber() {
       R"(<a unhidden id="P12L8">12.8</a>　　原来 这一个名唤 贾蔷，也系 宁国府 正派玄孙，父母早亡，从小 跟贾珍过活，如今 长了十六岁，比 贾蓉 生得还 风流俊俏。贾蓉、贾蔷兄弟二人最相亲厚，常相共处。<br>)");
   SEPERATE("ln3", " finished ");
 
-  testParagraphHeaderFromContainedLine(fixFirstParaHeaderFromTemplate(
-      LineNumber::getStartNumber(), getSeparateLineColor(FILE_TYPE::MAIN)));
+  ParaHeader paraHeader;
+  paraHeader.m_startNumber = LineNumber::getStartNumber();
+  paraHeader.m_color = getSeparateLineColor(FILE_TYPE::MAIN);
+  paraHeader.fixFirstParaHeaderFromTemplate();
+  testParagraphHeaderFromContainedLine(paraHeader.getFixedResult());
+
+  ParaHeader paraHeaderLoaded;
+  paraHeaderLoaded.loadFromFirstParaHeader(paraHeader.getFixedResult());
+  paraHeaderLoaded.fixFirstParaHeaderFromTemplate();
+  FUNCTION_OUTPUT << paraHeaderLoaded.getFixedResult() << endl;
+  printCompareResult(paraHeader.getFixedResult(),
+                     paraHeaderLoaded.getFixedResult());
   SEPERATE("ln4", " finished ");
-  testParagraphHeaderFromContainedLine(fixMiddleParaHeaderFromTemplate(
-      LineNumber::getStartNumber(), 1, getSeparateLineColor(FILE_TYPE::MAIN),
-      false));
+
+  paraHeader.m_currentParaNo = 7;
+  paraHeader.fixMiddleParaHeaderFromTemplate();
+  testParagraphHeaderFromContainedLine(paraHeader.getFixedResult());
+
+  paraHeaderLoaded.loadFromMiddleParaHeader(paraHeader.getFixedResult());
+  paraHeaderLoaded.fixMiddleParaHeaderFromTemplate();
+  FUNCTION_OUTPUT << paraHeaderLoaded.getFixedResult() << endl;
+  printCompareResult(paraHeader.getFixedResult(),
+                     paraHeaderLoaded.getFixedResult());
   SEPERATE("ln5", " finished ");
-  testParagraphHeaderFromContainedLine(fixLastParaHeaderFromTemplate(
-      LineNumber::getStartNumber(), 12, getSeparateLineColor(FILE_TYPE::MAIN)));
+
+  paraHeader.m_currentParaNo = 12;
+  paraHeader.fixLastParaHeaderFromTemplate();
+  testParagraphHeaderFromContainedLine(paraHeader.getFixedResult());
+
+  paraHeaderLoaded.loadFromLastParaHeader(paraHeader.getFixedResult());
+  paraHeaderLoaded.fixLastParaHeaderFromTemplate();
+  FUNCTION_OUTPUT << paraHeaderLoaded.getFixedResult() << endl;
+  printCompareResult(paraHeader.getFixedResult(),
+                     paraHeaderLoaded.getFixedResult());
+
   SEPERATE("ln6", " finished ");
   testLineHeaderFromContainedLine(R"(<br>)");
   SEPERATE("ln7", " finished ");

@@ -2,6 +2,34 @@
 #include "fileUtil.hpp"
 #include "utf8StringUtil.hpp"
 
+class ParaHeader {
+  static const string firstParaHeader;
+  static const string MiddleParaHeader;
+  static const string lastParaHeader;
+
+public:
+  void loadFromFirstParaHeader(const string &header);
+  void loadFromMiddleParaHeader(const string &header);
+  void loadFromLastParaHeader(const string &header);
+  string getDisplayString();
+
+  void fixFirstParaHeaderFromTemplate();
+  void fixMiddleParaHeaderFromTemplate();
+  void fixLastParaHeaderFromTemplate();
+
+  string getFixedResult() { return m_result; }
+
+  int m_startNumber{0};
+  string m_color{MAIN_SEPERATOR_COLOR};
+  int m_currentParaNo{0};
+  bool m_hidden{false};
+  bool m_lastPara{false};
+
+private:
+  string m_result{""};
+  string m_displayText{""};
+};
+
 string fixFirstParaHeaderFromTemplate(int startNumber, const string &color,
                                       bool hidden = false);
 string fixMiddleParaHeaderFromTemplate(int startNumber, int currentParaNo,

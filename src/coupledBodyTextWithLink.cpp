@@ -328,11 +328,12 @@ void CoupledBodyTextWithLink::scanLines() {
     return;
   }
 
-  string line;
+  string orgLine;
   size_t seqOfLines = 0;
   while (!infile.eof()) // To get you all the lines.
   {
-    getline(infile, line);
+    getline(infile, orgLine);
+    string line = getDisplayString(orgLine);
     if (isEmptyLine(line)) {
       LineInfo info{1, DISPLY_LINE_TYPE::EMPTY, "    "};
       m_lineAttrTable[seqOfLines] = info;
@@ -720,7 +721,7 @@ void testMixedObjects() {
   // after this, there could be only one line number at the beginning
   CoupledBodyTextWithLink bodyText;
   bodyText.setFilePrefixFromFileType(FILE_TYPE::MAIN);
-  bodyText.setFileAndAttachmentNumber("69");
+  bodyText.setFileAndAttachmentNumber("06");
   bodyText.scanLines();
   //  printCompareResult(bodyText.getDisplayString(line), compareTo);
 }
