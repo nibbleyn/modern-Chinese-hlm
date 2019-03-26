@@ -2,22 +2,25 @@
 #include "fileUtil.hpp"
 #include "utf8StringUtil.hpp"
 
+enum class PARA_TYPE { FIRST, MIDDLE, LAST };
+
 class ParaHeader {
   static const string firstParaHeader;
   static const string MiddleParaHeader;
   static const string lastParaHeader;
 
 public:
-  void loadFromFirstParaHeader(const string &header);
-  void loadFromMiddleParaHeader(const string &header);
-  void loadFromLastParaHeader(const string &header);
-  string getDisplayString();
+  void loadFrom(const string &header);
 
-  void fixFirstParaHeaderFromTemplate();
-  void fixMiddleParaHeaderFromTemplate();
-  void fixLastParaHeaderFromTemplate();
+  // if not load from string
+  void markAsFirstParaHeader() { m_type = PARA_TYPE::FIRST; }
+  void markAsMiddleParaHeader() { m_type = PARA_TYPE::MIDDLE; }
+  void markAsLastParaHeader() { m_type = PARA_TYPE::LAST; }
 
+  void fixFromTemplate();
   string getFixedResult() { return m_result; }
+
+  string getDisplayString();
 
   int m_startNumber{0};
   string m_color{MAIN_SEPERATOR_COLOR};
@@ -26,22 +29,28 @@ public:
   bool m_lastPara{false};
 
 private:
+  void readType(const string &header);
+
+  bool isFirstParaHeader() { return m_type == PARA_TYPE::FIRST; }
+  bool isMiddleParaHeader() { return m_type == PARA_TYPE::MIDDLE; }
+  bool isLastParaHeader() { return m_type == PARA_TYPE::LAST; }
+
+  void loadFromFirstParaHeader(const string &header);
+  void loadFromMiddleParaHeader(const string &header);
+  void loadFromLastParaHeader(const string &header);
+
+  void fixFirstParaHeaderFromTemplate();
+  void fixMiddleParaHeaderFromTemplate();
+  void fixLastParaHeaderFromTemplate();
+
+  PARA_TYPE m_type{PARA_TYPE::FIRST};
   string m_result{""};
   string m_displayText{""};
 };
 
-string fixFirstParaHeaderFromTemplate(int startNumber, const string &color,
-                                      bool hidden = false);
-string fixMiddleParaHeaderFromTemplate(int startNumber, int currentParaNo,
-                                       const string &color, bool hidden = false,
-                                       bool lastPara = false);
-string fixLastParaHeaderFromTemplate(int startNumber, int lastParaNo,
-                                     const string &color, bool hidden = false);
-
 static const string defaultUnit = R"(回)";
 static const string attachmentUnit = R"(篇)";
 static const string searchUnit = R"(条)";
-static const string numberingUnit = R"(段)";
 
 string fixFrontParaHeaderFromTemplate(int startNumber, const string &color,
                                       int totalPara,

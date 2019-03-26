@@ -108,6 +108,34 @@ void ParaHeader::loadFromLastParaHeader(const string &header) {
                                         header, R"(id="P)", titleEndChars));
 }
 
+void ParaHeader::readType(const string &header) {
+  if (header.find(topIdBeginChars) != string::npos)
+    m_type = PARA_TYPE::FIRST;
+  else if (header.find(bottomIdBeginChars) != string::npos)
+    m_type = PARA_TYPE::LAST;
+  else if (header.find(citationChapterNo) != string::npos)
+    m_type = PARA_TYPE::MIDDLE;
+}
+
+void ParaHeader::loadFrom(const string &header) {
+  readType(header);
+  if (isFirstParaHeader())
+    loadFromFirstParaHeader(header);
+  else if (isLastParaHeader())
+    loadFromLastParaHeader(header);
+  else
+    loadFromMiddleParaHeader(header);
+}
+
+void ParaHeader::fixFromTemplate() {
+  if (isFirstParaHeader())
+    fixFirstParaHeaderFromTemplate();
+  else if (isLastParaHeader())
+    fixLastParaHeaderFromTemplate();
+  else
+    fixMiddleParaHeaderFromTemplate();
+}
+
 static const string frontParaHeader =
     R"(<tr><td width="50%"><b unhidden> 第1回 - 第QQ回 </b><a unhidden id="PXX" href="#PYY">v向下QQ回</a></td><td width="50%"><a unhidden id="top" href="#bottom">页面底部->||</a></td></tr>)";
 string fixFrontParaHeaderFromTemplate(int startNumber, const string &color,

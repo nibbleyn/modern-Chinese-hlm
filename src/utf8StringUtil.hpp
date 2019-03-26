@@ -57,6 +57,9 @@ static const string bottomIdBeginChars =
     R"(id="bottom")"; // of the body Text file
 static const string imageGroupBeginChars = R"(<div)";
 
+static const string citationChapterNo = R"(第)";
+static const string numberingUnit = R"(段)";
+
 static const string brTab = "<br>"; // start and end of each LINE
 static const string displaySpace = R"( )";
 

@@ -347,7 +347,8 @@ void CoupledBodyText::addLineNumber(const string &separatorColor,
       paraHeader.m_startNumber = LineNumber::getStartNumber();
       paraHeader.m_color = separatorColor;
       paraHeader.m_hidden = hideParaHeader;
-      paraHeader.fixFirstParaHeaderFromTemplate();
+      paraHeader.markAsFirstParaHeader();
+      paraHeader.fixFromTemplate();
       line = paraHeader.getFixedResult();
       stop = true;
     }
@@ -377,7 +378,8 @@ void CoupledBodyText::addLineNumber(const string &separatorColor,
         paraHeader.m_currentParaNo = m_numberOfMiddleParaHeader + 1;
         paraHeader.m_color = separatorColor;
         paraHeader.m_hidden = hideParaHeader;
-        paraHeader.fixLastParaHeaderFromTemplate();
+        paraHeader.markAsLastParaHeader();
+        paraHeader.fixFromTemplate();
         outfile << paraHeader.getFixedResult() << endl;
         break; // end of whole file
       }
@@ -396,7 +398,8 @@ void CoupledBodyText::addLineNumber(const string &separatorColor,
       paraHeader.m_color = separatorColor;
       paraHeader.m_hidden = hideParaHeader;
       paraHeader.m_lastPara = enterLastPara;
-      paraHeader.fixMiddleParaHeaderFromTemplate();
+      paraHeader.markAsMiddleParaHeader();
+      paraHeader.fixFromTemplate();
       outfile << paraHeader.getFixedResult() << endl;
       if (not enterLastPara) {
         lineNo = 1; // LINE index within each group
@@ -426,7 +429,8 @@ void CoupledBodyText::addLineNumber(const string &separatorColor,
           paraHeader.m_color = separatorColor;
           paraHeader.m_hidden = hideParaHeader;
           paraHeader.m_lastPara = enterLastPara;
-          paraHeader.fixMiddleParaHeaderFromTemplate();
+          paraHeader.markAsMiddleParaHeader();
+          paraHeader.fixFromTemplate();
           outfile << paraHeader.getFixedResult() << endl;
           if (not enterLastPara) {
             lineNo = 1; // LINE index within each group
@@ -613,34 +617,37 @@ void testLineNumber() {
   ParaHeader paraHeader;
   paraHeader.m_startNumber = LineNumber::getStartNumber();
   paraHeader.m_color = getSeparateLineColor(FILE_TYPE::MAIN);
-  paraHeader.fixFirstParaHeaderFromTemplate();
+  paraHeader.markAsFirstParaHeader();
+  paraHeader.fixFromTemplate();
   testParagraphHeaderFromContainedLine(paraHeader.getFixedResult());
 
   ParaHeader paraHeaderLoaded;
-  paraHeaderLoaded.loadFromFirstParaHeader(paraHeader.getFixedResult());
-  paraHeaderLoaded.fixFirstParaHeaderFromTemplate();
+  paraHeaderLoaded.loadFrom(paraHeader.getFixedResult());
+  paraHeaderLoaded.fixFromTemplate();
   FUNCTION_OUTPUT << paraHeaderLoaded.getFixedResult() << endl;
   printCompareResult(paraHeader.getFixedResult(),
                      paraHeaderLoaded.getFixedResult());
   SEPERATE("ln4", " finished ");
 
   paraHeader.m_currentParaNo = 7;
-  paraHeader.fixMiddleParaHeaderFromTemplate();
+  paraHeader.markAsMiddleParaHeader();
+  paraHeader.fixFromTemplate();
   testParagraphHeaderFromContainedLine(paraHeader.getFixedResult());
 
-  paraHeaderLoaded.loadFromMiddleParaHeader(paraHeader.getFixedResult());
-  paraHeaderLoaded.fixMiddleParaHeaderFromTemplate();
+  paraHeaderLoaded.loadFrom(paraHeader.getFixedResult());
+  paraHeaderLoaded.fixFromTemplate();
   FUNCTION_OUTPUT << paraHeaderLoaded.getFixedResult() << endl;
   printCompareResult(paraHeader.getFixedResult(),
                      paraHeaderLoaded.getFixedResult());
   SEPERATE("ln5", " finished ");
 
   paraHeader.m_currentParaNo = 12;
-  paraHeader.fixLastParaHeaderFromTemplate();
+  paraHeader.markAsLastParaHeader();
+  paraHeader.fixFromTemplate();
   testParagraphHeaderFromContainedLine(paraHeader.getFixedResult());
 
-  paraHeaderLoaded.loadFromLastParaHeader(paraHeader.getFixedResult());
-  paraHeaderLoaded.fixLastParaHeaderFromTemplate();
+  paraHeaderLoaded.loadFrom(paraHeader.getFixedResult());
+  paraHeaderLoaded.fixFromTemplate();
   FUNCTION_OUTPUT << paraHeaderLoaded.getFixedResult() << endl;
   printCompareResult(paraHeader.getFixedResult(),
                      paraHeaderLoaded.getFixedResult());
