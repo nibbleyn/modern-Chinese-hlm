@@ -179,40 +179,33 @@ void CoupledBodyTextWithLink::render(bool hideParaHeader) {
   }
   ofstream outfile(m_outputFile);
   string inLine{"not found"};
-  int paraNo = 1;
+  ParaHeader paraHeaderLoaded;
   while (!infile.eof()) // To get all the lines.
   {
     getline(infile, inLine); // Saves the line in inLine.
-    LineNumber ln;
-    ln.loadFirstFromContainedLine(inLine);
-    if (ln.isParagraphHeader()) {
-      if (hideParaHeader == false) {
-        string paraString = R"(第)" + TurnToString(paraNo) + R"(段)";
-        if (paraNo == 1)
-          paraString += R"( v向下    页面底部->||)";
-        else
-          paraString += R"( 向下    向上)";
-        paraNo++;
-        outfile << paraString << endl;
-      }
-      continue;
-    }
-
     if (debug >= LOG_INFO) {
       METHOD_OUTPUT << inLine << endl;
-      METHOD_OUTPUT << getDisplayString(inLine) << endl;
     }
-    if (isLeadingBr(inLine)) {
-      outfile << endl;
+    LineNumber ln;
+    ln.loadFirstFromContainedLine(inLine);
+    if (ln.isParagraphHeader() and hideParaHeader == false) {
+      paraHeaderLoaded.loadFrom(inLine);
+      paraHeaderLoaded.fixFromTemplate();
+      if (debug >= LOG_INFO) {
+        METHOD_OUTPUT << paraHeaderLoaded.getDisplayString() << endl;
+      }
+      outfile << paraHeaderLoaded.getDisplayString() << endl;
+    } else if (isLeadingBr(inLine)) {
+      string LF{0x0A};
+      outfile << LF;
     } else if (not isEmptyLine(inLine)) {
       auto outputLine = getDisplayString(inLine);
       auto lastBr = outputLine.find(brTab);
+      if (debug >= LOG_INFO) {
+        METHOD_OUTPUT << outputLine.substr(0, lastBr) << endl;
+      }
       outfile << outputLine.substr(0, lastBr) << endl;
     }
-  }
-  if (hideParaHeader == false) {
-    string paraString = R"(||<-页面顶部    ^向上)";
-    outfile << paraString << endl;
   }
 }
 

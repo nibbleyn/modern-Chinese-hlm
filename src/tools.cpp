@@ -736,7 +736,7 @@ void renderingBodyText(const string &fileType, bool hideParaHeader = false) {
   const string sampleBlock = R"()";
   const string sampleFirstLine = R"()";
   const string sampleWholeLine = R"()";
-  int minTarget = 50, maxTarget = 70;
+  int minTarget = 49, maxTarget = 49;
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     CoupledBodyTextWithLink bodyText;
     bodyText.setFilePrefixFromFileType(getFileTypeFromString(fileType));

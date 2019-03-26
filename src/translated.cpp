@@ -10,7 +10,7 @@ int main(int argc, char **argv) {
   //  int num = 3;
   //	  int num = 4;
   //  int num = 5;
-  int num = 11;
+  int num = 12;
   switch (num) {
   case 1:
     numberJPMHtmls(false);
@@ -44,7 +44,7 @@ int main(int argc, char **argv) {
     testFunctions(2);
     break;
   case 12:
-    tools(14);
+    tools(16);
     break;
   default:
     FUNCTION_OUTPUT << "nothing gets executed." << endl;

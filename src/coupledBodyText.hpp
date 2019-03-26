@@ -30,7 +30,7 @@ public:
   void setFileAndAttachmentNumber(const string &file, int attachNo = 0) {
     m_file = file;
     m_attachNumber = attachNo;
-  };
+  }
 
   using lineNumberSet = set<string>;
   // set options before search
