@@ -17,11 +17,21 @@ public:
    */
   static void loadBodyTextsFromFixBackToOutput();
 
-  void setFilePrefixFromFileType(FILE_TYPE type);
+  void setFilePrefixFromFileType(FILE_TYPE type) {
+    if (type == FILE_TYPE::MAIN)
+      m_filePrefix = MAIN_BODYTEXT_PREFIX;
+    if (type == FILE_TYPE::ATTACHMENT)
+      m_filePrefix = ATTACHMENT_BODYTEXT_PREFIX;
+    if (type == FILE_TYPE::ORIGINAL)
+      m_filePrefix = ORIGINAL_BODYTEXT_PREFIX;
+    if (type == FILE_TYPE::JPM)
+      m_filePrefix = JPM_BODYTEXT_PREFIX;
+  }
   void setFileAndAttachmentNumber(const string &file, int attachNo = 0) {
     m_file = file;
     m_attachNumber = attachNo;
   };
+
   using lineNumberSet = set<string>;
   // set options before search
   void resetBeforeSearch() {

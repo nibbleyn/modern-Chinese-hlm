@@ -9,6 +9,10 @@ class ParaHeader {
   static const string MiddleParaHeader;
   static const string lastParaHeader;
 
+  static const string firstParaHeaderDispText;
+  static const string MiddleParaHeaderDispText;
+  static const string lastParaHeaderDispText;
+
 public:
   void loadFrom(const string &header);
 
@@ -41,6 +45,7 @@ private:
 
   void fixFirstParaHeaderFromTemplate();
   void fixMiddleParaHeaderFromTemplate();
+  void fixUnhiddenMiddleParaHeaderDispTextFromTemplate();
   void fixLastParaHeaderFromTemplate();
 
   PARA_TYPE m_type{PARA_TYPE::FIRST};

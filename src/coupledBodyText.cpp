@@ -43,17 +43,6 @@ void CoupledBodyText::loadBodyTextsFromFixBackToOutput() {
   }
 }
 
-void CoupledBodyText::setFilePrefixFromFileType(FILE_TYPE type) {
-  if (type == FILE_TYPE::MAIN)
-    m_filePrefix = MAIN_BODYTEXT_PREFIX;
-  if (type == FILE_TYPE::ATTACHMENT)
-    m_filePrefix = ATTACHMENT_BODYTEXT_PREFIX;
-  if (type == FILE_TYPE::ORIGINAL)
-    m_filePrefix = ORIGINAL_BODYTEXT_PREFIX;
-  if (type == FILE_TYPE::JPM)
-    m_filePrefix = JPM_BODYTEXT_PREFIX;
-}
-
 void CoupledBodyText::setInputOutputFiles() {
   string attachmentPart{""};
   if (m_attachNumber != 0)
@@ -627,7 +616,8 @@ void testLineNumber() {
   FUNCTION_OUTPUT << paraHeaderLoaded.getFixedResult() << endl;
   printCompareResult(paraHeader.getFixedResult(),
                      paraHeaderLoaded.getFixedResult());
-  SEPERATE("ln4", " finished ");
+  FUNCTION_OUTPUT << "display as:" << endl;
+  FUNCTION_OUTPUT << paraHeaderLoaded.getDisplayString() << endl;
 
   paraHeader.m_currentParaNo = 7;
   paraHeader.markAsMiddleParaHeader();
@@ -639,6 +629,8 @@ void testLineNumber() {
   FUNCTION_OUTPUT << paraHeaderLoaded.getFixedResult() << endl;
   printCompareResult(paraHeader.getFixedResult(),
                      paraHeaderLoaded.getFixedResult());
+  FUNCTION_OUTPUT << "display as:" << endl;
+  FUNCTION_OUTPUT << paraHeaderLoaded.getDisplayString() << endl;
   SEPERATE("ln5", " finished ");
 
   paraHeader.m_currentParaNo = 12;
@@ -651,8 +643,11 @@ void testLineNumber() {
   FUNCTION_OUTPUT << paraHeaderLoaded.getFixedResult() << endl;
   printCompareResult(paraHeader.getFixedResult(),
                      paraHeaderLoaded.getFixedResult());
+  FUNCTION_OUTPUT << "display as:" << endl;
+  FUNCTION_OUTPUT << paraHeaderLoaded.getDisplayString() << endl;
 
   SEPERATE("ln6", " finished ");
+
   testLineHeaderFromContainedLine(R"(<br>)");
   SEPERATE("ln7", " finished ");
   testLineHeaderFromContainedLine(R"(anything)");
