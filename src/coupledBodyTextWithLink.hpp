@@ -7,7 +7,7 @@ static const string TO_CHECK_FILE = "container/toCheck.txt";
 static const string PARA_UP = R"(向上)";
 static const string PARA_DOWN = R"(向下)";
 
-enum class DISPLY_LINE_TYPE { EMPTY, PARA, TEXT };
+enum class DISPLY_LINE_TYPE { EMPTY, PARA, TEXT, IMAGE };
 string getDisplayTypeString(DISPLY_LINE_TYPE type);
 
 class CoupledBodyTextWithLink : public CoupledBodyText {
@@ -25,8 +25,6 @@ public:
   void removePersonalCommentsOverNumberedFiles();
   void removeImageForAutoNumbering() {}
   void addImageBackForManualNumbering() {}
-
-  int sizeAfterRendering(const string &lineStr);
 
   string getDisplayString(const string &originalString);
   void printStringInLines();

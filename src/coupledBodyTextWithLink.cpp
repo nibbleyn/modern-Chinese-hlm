@@ -220,6 +220,9 @@ void CoupledBodyTextWithLink::addLineNumber(const string &separatorColor,
   }
 }
 
+/**
+ * only based on length of string. So font must be same for all characters
+ */
 size_t
 CoupledBodyTextWithLink::getLinesOfDisplayText(const string &dispString) {
   if (m_averageSizeOfOneLine == 0) {
@@ -323,28 +326,45 @@ void CoupledBodyTextWithLink::scanLines() {
 
   string orgLine;
   size_t seqOfLines = 0;
+  ParaHeader paraHeaderLoaded;
+  string dispLine{""};
   while (!infile.eof()) // To get you all the lines.
   {
     getline(infile, orgLine);
-    string line = getDisplayString(orgLine);
-    if (isEmptyLine(line)) {
+    if (debug >= LOG_INFO) {
+      METHOD_OUTPUT << orgLine << endl;
+    }
+    LineNumber ln;
+    ln.loadFirstFromContainedLine(orgLine);
+    if (ln.isParagraphHeader()) {
+      paraHeaderLoaded.loadFrom(orgLine);
+      paraHeaderLoaded.fixFromTemplate();
+      dispLine = paraHeaderLoaded.getDisplayString();
+      if (debug >= LOG_INFO) {
+        METHOD_OUTPUT << dispLine << endl;
+        size_t end = -1;
+        LineInfo info{1, DISPLY_LINE_TYPE::PARA,
+                      utf8substr(dispLine, 0, end, 5)};
+        m_lineAttrTable[seqOfLines] = info;
+      }
+    } else if (isLeadingBr(orgLine)) {
       LineInfo info{1, DISPLY_LINE_TYPE::EMPTY, "    "};
       m_lineAttrTable[seqOfLines] = info;
-    } else if (isParaSeparator(line)) {
+    } else if (not isEmptyLine(orgLine)) {
+
+      auto lastBr = orgLine.find(brTab);
       if (debug >= LOG_INFO) {
-        METHOD_OUTPUT << line << endl; // excluding start line
+        METHOD_OUTPUT << orgLine.substr(0, lastBr) << endl;
       }
-      LineInfo info{1, DISPLY_LINE_TYPE::PARA, PARA_UP};
-      m_lineAttrTable[seqOfLines] = info;
-    } else {
+      dispLine = getDisplayString(orgLine.substr(0, lastBr));
       if (debug >= LOG_INFO) {
-        METHOD_OUTPUT << line << endl; // excluding start line
-        METHOD_OUTPUT << utf8length(line) << endl;
-        METHOD_OUTPUT << getLinesOfDisplayText(line) << endl;
+        METHOD_OUTPUT << dispLine << endl; // excluding start line
+        METHOD_OUTPUT << utf8length(dispLine) << endl;
+        METHOD_OUTPUT << getLinesOfDisplayText(dispLine) << endl;
       }
       size_t end = -1;
-      LineInfo info{getLinesOfDisplayText(line), DISPLY_LINE_TYPE::TEXT,
-                    utf8substr(line, 0, end, 5)};
+      LineInfo info{getLinesOfDisplayText(dispLine), DISPLY_LINE_TYPE::TEXT,
+                    utf8substr(dispLine, 0, end, 5)};
       m_lineAttrTable[seqOfLines] = info;
     }
     seqOfLines++;
@@ -660,14 +680,6 @@ void CoupledBodyTextWithLink::fixLinksFromFile(
   }
 }
 
-/**
- * get size of links, Comments, image reference, poems, personal views embedded
- * to get actual size without rendering one line,
- */
-int CoupledBodyTextWithLink::sizeAfterRendering(const string &lineStr) {
-  return 0;
-}
-
 void testMixedObjects() {
   string line2 =
       R"(前儿老太太（<cite unhidden>贾母</cite>）因要把<a title="梅翰林" href="a050.htm#P15L2"><i hidden>梅翰林</i><sub hidden>第50章15.2节:</sub>你妹妹（<cite unhidden>薛宝琴</cite>）说给宝玉</a>（<a unhidden title="说媒" href="original\c050.htm#P14L2"><i hidden>说媒</i><sub hidden>第50章14.2节:</sub>原文</a>），偏生（<cite unhidden>薛宝琴</cite>）又有了人家（<cite unhidden>梅翰林家</cite>），不然（<cite unhidden>宝琴宝玉他二人</cite>）倒是一门好亲。老太太离了鸳鸯，饭也吃不下去的，哪里就舍得了？（<cite unhidden>凤姐并不知道贾赦要鸳鸯是要<a unhidden title="作兴" href="a071.htm#P7L2"><i hidden>作兴</i><sub hidden>第71章7.2节:</sub>争宠之意</a>（<a unhidden title="作兴" href="original\c071.htm#P5L3"><i hidden>作兴</i><sub hidden>第71章5.3节:</sub>原文</a>）</cite>）（<u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">这句又接到宝玉生日探春让李纨打黛玉，李纨说黛玉<a unhidden title="挨打" href="a063.htm#P13L3"><i hidden>挨打</i><sub hidden>第63章13.3节:</sub>人家不得贵婿反挨打</a>（<a unhidden title="挨打" href="original\c063.htm#P6L3"><i hidden>挨打</i><sub hidden>第63章6.3节:</sub>原文</a>），黛玉的婚姻是镜中花，他们二人的一个不能完成的愿望而已。</u>）)";
@@ -714,7 +726,8 @@ void testMixedObjects() {
   // after this, there could be only one line number at the beginning
   CoupledBodyTextWithLink bodyText;
   bodyText.setFilePrefixFromFileType(FILE_TYPE::MAIN);
-  bodyText.setFileAndAttachmentNumber("06");
+  bodyText.setFileAndAttachmentNumber("49");
   bodyText.scanLines();
+//  bodyText.printStringInLines();
   //  printCompareResult(bodyText.getDisplayString(line), compareTo);
 }
