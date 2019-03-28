@@ -21,6 +21,10 @@ public:
   void markAsMiddleParaHeader() { m_type = PARA_TYPE::MIDDLE; }
   void markAsLastParaHeader() { m_type = PARA_TYPE::LAST; }
 
+  bool isFirstParaHeader() { return m_type == PARA_TYPE::FIRST; }
+  bool isMiddleParaHeader() { return m_type == PARA_TYPE::MIDDLE; }
+  bool isLastParaHeader() { return m_type == PARA_TYPE::LAST; }
+
   void fixFromTemplate();
   string getFixedResult() { return m_result; }
 
@@ -34,10 +38,6 @@ public:
 
 private:
   void readType(const string &header);
-
-  bool isFirstParaHeader() { return m_type == PARA_TYPE::FIRST; }
-  bool isMiddleParaHeader() { return m_type == PARA_TYPE::MIDDLE; }
-  bool isLastParaHeader() { return m_type == PARA_TYPE::LAST; }
 
   void loadFromFirstParaHeader(const string &header);
   void loadFromMiddleParaHeader(const string &header);

@@ -7,6 +7,8 @@ string getDisplayTypeString(DISPLY_LINE_TYPE type) {
     return "para";
   if (type == DISPLY_LINE_TYPE::TEXT)
     return "text";
+  if (type == DISPLY_LINE_TYPE::IMAGE)
+    return "image";
   return "bad";
 }
 
@@ -211,12 +213,35 @@ void CoupledBodyTextWithLink::render(bool hideParaHeader) {
 
 void CoupledBodyTextWithLink::addLineNumber(const string &separatorColor,
                                             bool forceUpdate,
-                                            bool hideParaHeader) {
+                                            bool hideParaHeader) {}
+
+void CoupledBodyTextWithLink::calculateParaHeaderPositions() {
   setInputOutputFiles();
   ifstream infile(m_inputFile);
   if (!infile) {
     METHOD_OUTPUT << "file doesn't exist:" << m_inputFile << endl;
     return;
+  }
+
+  scanLines(); // first scan
+
+  if (m_numberOfFirstParaHeader == 0 or m_numberOfLastParaHeader == 0) {
+    METHOD_OUTPUT << "no top or bottom paragraph found:" << m_inputFile << endl;
+    return;
+    LineNumber::setStartNumber(START_PARA_NUMBER);
+  }
+
+  auto totalLines = 0;
+  for (const auto &element : m_lineAttrTable) {
+    if (totalLines + element.second.numberOfLines > m_SizeOfReferPage) {
+      METHOD_OUTPUT << "add para here" << endl;
+      totalLines = element.second.numberOfLines;
+    } else
+      totalLines += element.second.numberOfLines;
+    METHOD_OUTPUT << totalLines << endl;
+    METHOD_OUTPUT << element.first << "  " << element.second.numberOfLines
+                  << "  " << getDisplayTypeString(element.second.type) << "  "
+                  << element.second.cap << endl;
   }
 }
 
@@ -315,7 +340,13 @@ size_t CoupledBodyTextWithLink::getLinesofReferencePage() {
 }
 
 void CoupledBodyTextWithLink::scanLines() {
-  m_averageSizeOfOneLine = getAverageLineLengthFromReferenceFile();
+  m_numberOfFirstParaHeader = 0;
+  m_numberOfMiddleParaHeader = 0;
+  m_numberOfLastParaHeader = 0;
+  m_numberOfImageGroupNotIncludedInPara = 0;
+  m_lineAttrTable.clear();
+
+  m_SizeOfReferPage = getLinesofReferencePage();
   setInputOutputFiles();
   ifstream infile(m_inputFile);
 
@@ -338,20 +369,27 @@ void CoupledBodyTextWithLink::scanLines() {
     ln.loadFirstFromContainedLine(orgLine);
     if (ln.isParagraphHeader()) {
       paraHeaderLoaded.loadFrom(orgLine);
+      if (paraHeaderLoaded.isFirstParaHeader())
+        m_numberOfFirstParaHeader++;
+      if (paraHeaderLoaded.isLastParaHeader())
+        m_numberOfLastParaHeader++;
+      if (paraHeaderLoaded.isMiddleParaHeader())
+        m_numberOfMiddleParaHeader++;
       paraHeaderLoaded.fixFromTemplate();
       dispLine = paraHeaderLoaded.getDisplayString();
       if (debug >= LOG_INFO) {
         METHOD_OUTPUT << dispLine << endl;
-        size_t end = -1;
-        LineInfo info{1, DISPLY_LINE_TYPE::PARA,
-                      utf8substr(dispLine, 0, end, 5)};
-        m_lineAttrTable[seqOfLines] = info;
       }
+      size_t end = -1;
+      LineInfo info{0, DISPLY_LINE_TYPE::PARA, utf8substr(dispLine, 0, end, 5)};
+      m_lineAttrTable[seqOfLines] = info;
     } else if (isLeadingBr(orgLine)) {
       LineInfo info{1, DISPLY_LINE_TYPE::EMPTY, "    "};
       m_lineAttrTable[seqOfLines] = info;
+    } else if (isImageGroupLine(orgLine)) {
+      LineInfo info{m_SizeOfReferPage - 1, DISPLY_LINE_TYPE::IMAGE, "image"};
+      m_lineAttrTable[seqOfLines] = info;
     } else if (not isEmptyLine(orgLine)) {
-
       auto lastBr = orgLine.find(brTab);
       if (debug >= LOG_INFO) {
         METHOD_OUTPUT << orgLine.substr(0, lastBr) << endl;
@@ -366,14 +404,67 @@ void CoupledBodyTextWithLink::scanLines() {
       LineInfo info{getLinesOfDisplayText(dispLine), DISPLY_LINE_TYPE::TEXT,
                     utf8substr(dispLine, 0, end, 5)};
       m_lineAttrTable[seqOfLines] = info;
+      // try to merge leading BR of this line
+      try {
+        auto previousLine = m_lineAttrTable.at(seqOfLines - 1);
+        if (previousLine.type == DISPLY_LINE_TYPE::EMPTY)
+          m_lineAttrTable.erase(seqOfLines - 1);
+        m_lineAttrTable[seqOfLines].numberOfLines++;
+      } catch (exception &) {
+        METHOD_OUTPUT << "no leading br at line" << seqOfLines - 1 << endl;
+      }
     }
     seqOfLines++;
   }
   printLineAttrTable();
+
+  m_lastSeqNumberOfLine = seqOfLines;
+  using ToDeleteLines = std::set<size_t>;
+  ToDeleteLines lineSet;
+
+  bool deleteBR = false;
+  size_t BRDeleted = 0;
+  size_t lastDeleted = 0;
+  for (const auto &element : m_lineAttrTable) {
+    if (deleteBR == true) {
+      if (element.second.type == DISPLY_LINE_TYPE::EMPTY) {
+        lastDeleted = element.first;
+        lineSet.insert(lastDeleted);
+        BRDeleted++;
+      } else {
+        deleteBR = false;
+        if (BRDeleted > 0) {
+          lineSet.erase(lastDeleted);
+        }
+      }
+    }
+    if (deleteBR == false and element.second.type == DISPLY_LINE_TYPE::IMAGE) {
+      deleteBR = true;
+      BRDeleted = 0;
+    }
+  }
+  for (const auto &element : lineSet) {
+    METHOD_OUTPUT << element << endl;
+    m_lineAttrTable.erase(element);
+  }
+
+  if (debug >= LOG_INFO) {
+    METHOD_OUTPUT << endl;
+    METHOD_OUTPUT << "Result of getNumberOfPara:" << endl;
+    printLineAttrTable();
+    METHOD_OUTPUT << "m_numberOfFirstParaHeader: " << m_numberOfFirstParaHeader
+                  << endl;
+    METHOD_OUTPUT << "m_numberOfMiddleParaHeader: "
+                  << m_numberOfMiddleParaHeader << endl;
+    METHOD_OUTPUT << "m_numberOfLastParaHeader: " << m_numberOfLastParaHeader
+                  << endl;
+    METHOD_OUTPUT << "m_numberOfImageGroupNotIncludedInPara: "
+                  << m_numberOfImageGroupNotIncludedInPara << endl;
+    METHOD_OUTPUT << "m_lastSeqNumberOfLine: " << m_lastSeqNumberOfLine << endl;
+  }
 }
 
 void CoupledBodyTextWithLink::printStringInLines() {
-  m_averageSizeOfOneLine = getAverageLineLengthFromReferenceFile();
   m_SizeOfReferPage = getLinesofReferencePage();
   setInputOutputFiles();
   //  ifstream infile(m_inputFile);
@@ -726,8 +817,8 @@ void testMixedObjects() {
   // after this, there could be only one line number at the beginning
   CoupledBodyTextWithLink bodyText;
   bodyText.setFilePrefixFromFileType(FILE_TYPE::MAIN);
-  bodyText.setFileAndAttachmentNumber("49");
+  bodyText.setFileAndAttachmentNumber("05");
+  //  bodyText.addLineNumber(getSeparateLineColor(FILE_TYPE::MAIN));
   bodyText.scanLines();
-//  bodyText.printStringInLines();
   //  printCompareResult(bodyText.getDisplayString(line), compareTo);
 }

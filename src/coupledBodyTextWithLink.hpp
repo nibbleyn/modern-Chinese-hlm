@@ -29,9 +29,11 @@ public:
   string getDisplayString(const string &originalString);
   void printStringInLines();
   void render(bool hideParaHeader = false);
+
   void addLineNumber(const string &separatorColor, bool forceUpdate = true,
                      bool hideParaHeader = false) override;
   void scanLines();
+  void calculateParaHeaderPositions();
 
 private:
   size_t getAverageLineLengthFromReferenceFile();
@@ -55,6 +57,7 @@ private:
   // line No. -> number of display lines, line type
   using LineAttrTable = std::map<size_t, LineInfo>;
   LineAttrTable m_lineAttrTable;
+  size_t m_lastSeqNumberOfLine{0};
 
   void printLineAttrTable() {
     if (not m_lineAttrTable.empty())
@@ -65,6 +68,8 @@ private:
                     << element.second.cap << endl;
     }
   }
+  using ParaHeaderPosition = std::set<size_t>;
+  ParaHeaderPosition m_paraHeaderPosition;
 
   using LinkPtr = std::unique_ptr<Link>;
   LinkPtr m_linkPtr{nullptr};
