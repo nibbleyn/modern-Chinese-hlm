@@ -5,33 +5,10 @@ extern fileSet keyMissingChapters;
 extern fileSet newAttachmentList;
 
 Link::LinksTable Link::linksTable;
-string Link::outPutFilePath{""};
+string Link::outPutFilePath{emptyString};
 Link::AttachmentSet Link::refAttachmentTable;
 
 LinkFromMain::AttachmentSet LinkFromMain::attachmentTable;
-
-/**
- * a link type is got from the filename it's refer to
- * if no filename appears, it is a link to the same page
- * never called for an link to image
- * @param refereFileName the refer file name part of the link
- * @return link type
- */
-LINK_TYPE getLinKTypeFromReferFileName(const string &refereFileName) {
-  LINK_TYPE type = LINK_TYPE::SAMEPAGE;
-
-  if (refereFileName.find(contentTableFilename) != string::npos or
-      refereFileName.find(MAIN_HTML_PREFIX) != string::npos) {
-    type = LINK_TYPE::MAIN;
-  } else if (refereFileName.find(ATTACHMENT_HTML_PREFIX) != string::npos) {
-    type = LINK_TYPE::ATTACHMENT;
-  } else if (refereFileName.find(ORIGINAL_HTML_PREFIX) != string::npos) {
-    type = LINK_TYPE::ORIGINAL;
-  } else if (refereFileName.find(JPM_HTML_PREFIX) != string::npos) {
-    type = LINK_TYPE::JPM;
-  }
-  return type;
-}
 
 /**
  * there is only one template for all display types supported
@@ -44,54 +21,63 @@ void replaceDisplayLink(string &linkString, LINK_DISPLAY_TYPE type) {
   if (type == LINK_DISPLAY_TYPE::UNHIDDEN)
     return;
 
-  string displayTag = linkStartChars + " " + unhiddenDisplayProperty;
+  string displayTag = linkStartChars + displaySpace + unhiddenDisplayProperty;
   auto displayTagBegin = linkString.find(displayTag);
   linkString.replace(displayTagBegin, displayTag.length(),
                      (type == LINK_DISPLAY_TYPE::DIRECT)
                          ? linkStartChars
-                         : linkStartChars + " " + hiddenDisplayProperty);
+                         : linkStartChars + displaySpace +
+                               hiddenDisplayProperty);
 }
 
 static const string linkToSameFile =
-    R"(<a unhidden title="QQ" href="#YY"><i hidden>QQ</i>ZZ</a>)";
+    R"(<a unhidden title="QQ" href="#YY"><sub hidden>WW</sub>ZZ</a>)";
+
 /**
  * generate real correct link within same file
  * by filling right "refer para" based on key searching
- * avoid literal strings of YY QQ ZZ appear in the original link
+ * NOTE: avoid literal strings of YY QQ WW ZZ in the original link
  * @param type display type
  * @param key the key to use in search within this same file
+ * @param citation the target place identified by section number
  * @param annotation the original annotation
  * @param referPara the target place identified by line number
  * @return link after fixed
  */
 string fixLinkFromSameFileTemplate(LINK_DISPLAY_TYPE type, const string &key,
+                                   const string &citation,
                                    const string &annotation,
                                    const string &referPara) {
   string link = linkToSameFile;
   replaceDisplayLink(link, type);
   if (referPara.empty()) {
-    replacePart(link, R"(#YY)", "");
+    replacePart(link, R"(#YY)", emptyString);
   } else
     replacePart(link, "YY", referPara);
   if (key.empty()) // use top/bottom as reference name
   {
-    replacePart(link, R"(<i hidden>QQ</i>)", key);
+    replacePart(link, R"(<sub hidden>WW</sub>)", emptyString);
+    replacePart(link, R"(title="QQ")", emptyString);
   } else {
     replacePart(link, "QQ", key);
   }
+  replacePart(link, "WW", citation);
   replacePart(link, "ZZ", annotation);
+  if (debug >= LOG_INFO)
+    FUNCTION_OUTPUT << link << endl;
   return link;
 }
 
 static const string linkToMainFile =
-    R"(<a unhidden title="QQ" href="PPa0XX.htm#YY"><i hidden>QQ</i><sub unhidden>WW</sub>ZZ</a>)";
+    R"(<a unhidden title="QQ" href="PPa0XX.htm#YY"><sub hidden>WW</sub>ZZ</a>)";
+
 /**
  * generate real correct link to other main file
  * by filling right "refer para" based on key searching
- * avoid literal strings of PP XX YY QQ WW ZZ appear in the original link
- * to get a unexpected replacement
- * @param path relative path based on the link type, refer to
- * getPathOfReferenceFile()
+ * NOTE: avoid literal strings of QQ PP XX YY WW ZZ
+ * in the original link to get a unexpected replacement
+ * @param path relative path based on the link type
+ * refer to getPathOfReferenceFile()
  * @param filename the target main file's chapter name, e.g. 07
  * @param type display type
  * @param key the key to use in search over target main file
@@ -104,58 +90,65 @@ string fixLinkFromMainTemplate(const string &path, const string &filename,
                                LINK_DISPLAY_TYPE type, const string &key,
                                const string &citation, const string &annotation,
                                const string &referPara) {
-
   string link = linkToMainFile;
   replaceDisplayLink(link, type);
   replacePart(link, "PP", path);
   replacePart(link, "XX", filename);
   if (referPara.empty()) {
-    replacePart(link, R"(#YY)", "");
+    replacePart(link, R"(#YY)", emptyString);
   } else
     replacePart(link, "YY", referPara);
-  if (key.empty()) // use top/bottom as reference name
+  if (key.empty()) // e.g. use top/bottom as reference name
   {
-    replacePart(link, R"(<i hidden>QQ</i><sub unhidden>WW</sub>)", key);
-    replacePart(link, R"(title="QQ")", "");
+    replacePart(link, R"(<sub hidden>WW</sub>)", emptyString);
+    replacePart(link, R"(title="QQ")", emptyString);
   } else {
     replacePart(link, "QQ", key);
   }
   replacePart(link, "WW", citation);
   replacePart(link, "ZZ", annotation);
+  if (debug >= LOG_INFO)
+    FUNCTION_OUTPUT << link << endl;
   return link;
 }
 
 // now only support reverse link from main back to main
 static const string reverseLinkToMainFile =
-    R"(<a unhidden href="a0XX.htm#YY">被引用</a>)";
+    R"(<a unhidden href="a0XX.htm#YY"><sub hidden>WW</sub>被引用</a>)";
 
 string fixLinkFromReverseLinkTemplate(const string &filename,
                                       LINK_DISPLAY_TYPE type,
                                       const string &referPara,
+                                      const string &citation,
                                       const string &annotation) {
-
   string link = reverseLinkToMainFile;
   replaceDisplayLink(link, type);
   replacePart(link, "XX", filename);
   if (referPara.empty()) {
-    replacePart(link, R"(#YY)", "");
+    replacePart(link, R"(#YY)", emptyString);
   } else
     replacePart(link, "YY", referPara);
+  replacePart(link, "WW", citation);
+  if (debug >= LOG_INFO)
+    FUNCTION_OUTPUT << link << endl;
   return link;
 }
 
 static const string linkToOriginalFile =
-    R"(<a unhidden title="QQ" href="PPc0XX.htm#YY"><i hidden>QQ</i><sub unhidden>WW</sub>ZZ</a>)";
+    R"(<a unhidden title="QQ" href="PPc0XX.htm#YY"><sub hidden>WW</sub>ZZ</a>)";
+
 /**
  * generate real correct link to original file
  * by filling right "refer para" based on key searching
- * avoid literal strings of PP XX YY QQ appear in the original link
- * to get a unexpected replacement
- * @param path relative path based on the link type, refer to
- * getPathOfReferenceFile()
+ * NOTE: avoid literal strings of QQ PP XX YY WW
+ * in the original link to get a unexpected replacement
+ * @param path relative path based on the link type
+ * refer to getPathOfReferenceFile()
  * @param filename the target origin file's chapter name, e.g. 07
  * @param key the key to use in search over target original file
+ * @param citation the target place identified by section number
  * @param referPara the target place identified by line number
+ * @param annotation the original annotation
  * @return link after fixed
  */
 string fixLinkFromOriginalTemplate(const string &path, const string &filename,
@@ -166,33 +159,38 @@ string fixLinkFromOriginalTemplate(const string &path, const string &filename,
   replacePart(link, "PP", path);
   replacePart(link, "XX", filename);
   if (referPara.empty()) {
-    replacePart(link, R"(#YY)", "");
+    replacePart(link, R"(#YY)", emptyString);
   } else
     replacePart(link, "YY", referPara);
   if (key.empty()) // use top/bottom as reference name
   {
-    replacePart(link, R"(<i hidden>QQ</i><sub unhidden>WW</sub>)", key);
-    replacePart(link, R"(title="QQ")", "");
+    replacePart(link, R"(<sub hidden>WW</sub>)", emptyString);
+    replacePart(link, R"(title="QQ")", emptyString);
   } else {
     replacePart(link, "QQ", key);
   }
   replacePart(link, "WW", citation);
   replacePart(link, "ZZ", annotation);
+  if (debug >= LOG_INFO)
+    FUNCTION_OUTPUT << link << endl;
   return link;
 }
 
 static const string linkToJPMFile =
-    R"(<a unhidden title="QQ" href="PPdXXX.htm#YY"><i hidden>QQ</i><sub unhidden>WW</sub>ZZ</a>)";
+    R"(<a unhidden title="QQ" href="PPdXXX.htm#YY"><sub hidden>WW</sub>ZZ</a>)";
+
 /**
- * generate real correct link to original file
+ * generate real correct link to jpm file
  * by filling right "refer para" based on key searching
- * avoid literal strings of PP XX YY QQ appear in the original link
- * to get a unexpected replacement
- * @param path relative path based on the link type, refer to
- * getPathOfReferenceFile()
+ * NOTE: avoid literal strings of QQ PP XXX YY WW ZZ
+ * in the original link to get a unexpected replacement
+ * @param path relative path based on the link type
+ * refer to getPathOfReferenceFile()
  * @param filename the target origin file's chapter name, e.g. 07
  * @param key the key to use in search over target original file
+ * @param citation the target place identified by section number
  * @param referPara the target place identified by line number
+ * @param annotation the original annotation
  * @return link after fixed
  */
 string fixLinkFromJPMTemplate(const string &path, const string &filename,
@@ -203,13 +201,13 @@ string fixLinkFromJPMTemplate(const string &path, const string &filename,
   replacePart(link, "PP", path);
   replacePart(link, "XXX", filename);
   if (referPara.empty()) {
-    replacePart(link, R"(#YY)", "");
+    replacePart(link, R"(#YY)", emptyString);
   } else
     replacePart(link, "YY", referPara);
   if (key.empty()) // use top/bottom as reference name
   {
-    replacePart(link, R"(<i hidden>QQ</i><sub unhidden>WW</sub>)", key);
-    replacePart(link, R"(title="QQ")", "");
+    replacePart(link, R"(<sub hidden>WW</sub>)", emptyString);
+    replacePart(link, R"(title="QQ")", emptyString);
   } else {
     replacePart(link, "QQ", key);
   }
@@ -222,15 +220,17 @@ string fixLinkFromJPMTemplate(const string &path, const string &filename,
 
 static const string linkToAttachmentFile =
     R"(<a unhidden href="PPb0XX_YY.htm">ZZ</a>)";
+
 /**
  * generate real correct link to attachment file
- * avoid literal strings of PP XX YY ZZ appear in the original link
- * to get a unexpected replacement
- * @param path relative path based on the link type, refer to
- * getPathOfReferenceFile()
- * @param filename the target attachment file's chapter name, e.g. 07 of b007_3
- * @param attachNo the target attachment file's attachment index, e.g. 3 of
- * b007_3
+ * NOTE: avoid literal strings of PP XX YY ZZ
+ * in the original link to get a unexpected replacement
+ * @param path relative path based on the link type
+ * refer to getPathOfReferenceFile()
+ * @param filename the target attachment file's chapter name,
+ * e.g. 07 of b007_3
+ * @param attachNo the target attachment file's attachment index,
+ * e.g. 3 of b007_3
  * @param annotation the original annotation
  * @return link after fixed
  */
@@ -242,14 +242,13 @@ string fixLinkFromAttachmentTemplate(const string &path, const string &filename,
   replacePart(link, "XX", filename);
   replacePart(link, "YY", attachNo);
   replacePart(link, "ZZ", annotation);
+  if (debug >= LOG_INFO)
+    FUNCTION_OUTPUT << link << endl;
   return link;
 }
 
 static const string linkToImageFile =
     R"(<a unhidden title="IMAGE" href="#XX">（图示：ZZ）</a>)";
-static const string realAnnotationOfImageLinkStartChars =
-    bracketStartChars + R"(图示：)";
-static const string realAnnotationOfImageLinkEndChars = bracketEndChars;
 
 string fixLinkFromImageTemplate(const string &filename,
                                 const string &fullAnnotation,
@@ -258,8 +257,8 @@ string fixLinkFromImageTemplate(const string &filename,
   if (displayProperty != unhiddenDisplayProperty) {
     if (displayProperty == hiddenDisplayProperty)
       replacePart(link, unhiddenDisplayProperty, hiddenDisplayProperty);
-    else
-      replacePart(link, unhiddenDisplayProperty + " ", "");
+    else // direct
+      replacePart(link, unhiddenDisplayProperty + displaySpace, emptyString);
   }
   replacePart(link, "XX", filename);
   replacePart(link, "（图示：ZZ）", fullAnnotation);
@@ -400,8 +399,8 @@ void Link::loadReferenceAttachmentList() {
                      targetFile.end());
     type.erase(remove(type.begin(), type.end(), ' '), type.end());
     // remove only leading and trailing blank for title
-    title = std::regex_replace(title, std::regex("^ +"), "");
-    title = std::regex_replace(title, std::regex(" +$"), "");
+    title = std::regex_replace(title, std::regex("^ +"), emptyString);
+    title = std::regex_replace(title, std::regex(" +$"), emptyString);
     refAttachmentTable[getAttachmentNumber(targetFile)] =
         make_pair(fromLine, make_tuple(targetFile, title,
                                        attachmentTypeFromString(type)));
@@ -426,9 +425,10 @@ void Link::outPutStatisticsToFiles() {
 }
 
 string Link::getWholeString() { return asString(); }
+
 string Link::getDisplayString() {
   if (m_displayType == LINK_DISPLAY_TYPE::HIDDEN)
-    return "";
+    return emptyString;
   else
     return m_displayText;
 }
@@ -436,7 +436,30 @@ string Link::getDisplayString() {
 size_t Link::displaySize() { return getDisplayString().length(); }
 
 /**
- * generated the string of a link from its info like type, key, etc.
+ * must ensure this is not a lineNumber string, which is a normal link also
+ * before calling this method
+ */
+size_t Link::loadFirstFromContainedLine(const string &containedLine,
+                                        size_t after) {
+  m_fullString = getWholeStringBetweenTags(containedLine, linkStartChars,
+                                           linkEndChars, after);
+  if (debug >= LOG_INFO) {
+    METHOD_OUTPUT << "m_fullString: " << endl;
+    METHOD_OUTPUT << m_fullString << endl;
+  }
+  readTypeAndAnnotation(m_fullString);
+  readReferFileName(m_fullString); // second step of construction
+  fixFromString(m_fullString);
+  if (debug >= LOG_INFO) {
+    auto len = length();
+    METHOD_OUTPUT << "after fix length: " << len << endl;
+  }
+  return containedLine.find(linkStartChars, after);
+}
+
+/**
+ * generate the string of a link from its info like type, key, etc.
+ * NOTE: should be consistent with template
  * @return the string of the link
  */
 string Link::asString() {
@@ -444,14 +467,18 @@ string Link::asString() {
     return fixLinkFromImageTemplate(m_imageFilename, m_annotation,
                                     displayPropertyAsString());
   }
-  string part0 = linkStartChars + " " + displayPropertyAsString();
+  // display property
+  string part0 = linkStartChars + displaySpace + displayPropertyAsString();
   if (m_displayType != LINK_DISPLAY_TYPE::DIRECT)
-    part0 += " ";
+    part0 += displaySpace;
+  // key
   if (m_type != LINK_TYPE::ATTACHMENT and not m_usedKey.empty())
-    part0 += titleStartChars + getKey() + titleEndChars;
+    part0 += titleStartChars + getKey() + titleEndChars + displaySpace;
   part0 += referFileMiddleChar;
-  string part1{""}, part2{""}, part3{""};
-  if (m_annotation == returnToContentTable) // type would be SAMEPAGE
+  // default file name for same page
+  string part1{emptyString}, part2{emptyString}, part3{emptyString};
+  // refer file
+  if (m_annotation == returnToContentTable) // should be LinkFromAttachment
   {
     part1 = getPathOfReferenceFile() + contentTableFilename + HTML_SUFFIX;
   } else if (m_type != LINK_TYPE::SAMEPAGE) {
@@ -461,34 +488,34 @@ string Link::asString() {
       part2 = attachmentFileMiddleChar + TurnToString(m_attachmentNumber);
     part3 = HTML_SUFFIX;
   }
-  string part4{""};
+  // refer para, not generated for attachment type of link now
+  string part4{emptyString}, part5{referParaEndChar};
   if (m_type != LINK_TYPE::ATTACHMENT or m_referPara != invalidLineNumber) {
     if (m_annotation != returnToContentTable)
       part4 = referParaMiddleChar + m_referPara;
   }
-  string part5 = referParaEndChar, part6{""}, part7{""};
+  // citation, not generated for attachment type of link now
+  string part7{emptyString};
   if (m_type != LINK_TYPE::ATTACHMENT and not m_usedKey.empty()) {
-    part6 = keyStartChars + getKey() + keyEndChars;
-    // easier to replace to <sub unhidden> if want to display this
-    if (m_type == LINK_TYPE::MAIN or m_type == LINK_TYPE::ORIGINAL or
-        m_type == LINK_TYPE::JPM)
-      part7 = citationStartChars + getReferSection() + citationEndChars;
+    // easier to replace to <sub unhidden> if want to display this like in link
+    // ir-render-able media
+    part7 = citationStartChars + getReferSection() + citationEndChars;
   }
+  // annotation
   string part8 = getAnnotation() + linkEndChars;
-  return (part0 + part1 + part2 + part3 + part4 + part5 + part6 + part7 +
-          part8 + getStringOfLinkToOrigin());
+  return (part0 + part1 + part2 + part3 + part4 + part5 + part7 + part8 +
+          getStringOfLinkToOrigin());
 }
 
 /**
- * get display type HIDDEN, UNHIDDEN, etc. from the link <a> tag attribute.
- * for example, HIDDEN would be returned for below link,
- * <a hidden href="a080.htm#P0L0">
- * and assign displayType member field correspondingly.
+ * get display type HIDDEN, UNHIDDEN, etc. from the link begin tag attribute.
+ * and assign m_displayType member field correspondingly.
+ * NOTE: key should not be these keywords
  * @param linkString the link to check
  */
 void Link::readDisplayType(const string &linkString) {
-  auto hrefStart = linkString.find(referFileMiddleChar);
-  string containedPart = linkString.substr(0, hrefStart);
+  string containedPart = getIncludedStringBetweenTags(
+      linkString, linkStartChars, referFileMiddleChar);
   if (debug >= LOG_INFO)
     FUNCTION_OUTPUT << containedPart << endl;
   if (containedPart.find(unhiddenDisplayProperty) != string::npos) {
@@ -498,47 +525,67 @@ void Link::readDisplayType(const string &linkString) {
   } else {
     m_displayType = LINK_DISPLAY_TYPE::DIRECT;
   }
-  if (debug >= LOG_INFO)
-    METHOD_OUTPUT << "display Type:" << displayPropertyAsString() << endl;
+  if (debug >= LOG_INFO) {
+    if (m_displayType == LINK_DISPLAY_TYPE::DIRECT)
+      METHOD_OUTPUT << "display Type: "
+                    << "direct." << endl;
+    else
+      METHOD_OUTPUT << "display Type: " << displayPropertyAsString() << endl;
+  }
+}
+
+/**
+ * a link type is got from the filename it's refer to
+ * if no filename appears, it is a link to the same page
+ * NOTE: never called for an image type link
+ * @param refereFileName the refer file name part of the link
+ * @return link type
+ */
+LINK_TYPE getLinKTypeFromReferFileName(const string &refereFileName) {
+  LINK_TYPE type = LINK_TYPE::SAMEPAGE;
+
+  if (refereFileName.find(contentTableFilename) != string::npos or
+      refereFileName.find(MAIN_HTML_PREFIX) != string::npos) {
+    type = LINK_TYPE::MAIN;
+  } else if (refereFileName.find(ATTACHMENT_HTML_PREFIX) != string::npos) {
+    type = LINK_TYPE::ATTACHMENT;
+  } else if (refereFileName.find(ORIGINAL_HTML_PREFIX) != string::npos) {
+    type = LINK_TYPE::ORIGINAL;
+  } else if (refereFileName.find(JPM_HTML_PREFIX) != string::npos) {
+    type = LINK_TYPE::JPM;
+  }
+  return type;
 }
 
 /**
  * judge a link is referring to main text, attachment or original text.
- * for example, LINK_TYPE::ATTACHMENT would be returned for below link,
- * <a unhidden href="b018_7.htm">happy</a>
  * and assign type member field correspondingly.
+ * if .htm file extension is found, check prefix
+ * else check title to "IMAGE"
+ * else ignore file extension and viewed as link within samepage
  * @param linkString the link to check
  */
 void Link::readType(const string &linkString) {
   m_type = LINK_TYPE::SAMEPAGE;
-  // special image file with non html suffix, use title to check
-  if (linkString.find(HTML_SUFFIX) == string::npos) // no html to refer
-  {
+  // special image file without .htm suffix, use title to check
+  if (linkString.find(HTML_SUFFIX) == string::npos) {
     if (linkString.find(titleStartChars + imageTypeChars + titleEndChars) !=
         string::npos) {
       m_type = LINK_TYPE::IMAGE;
     }
     return;
   }
-  auto fileEnd = linkString.find(HTML_SUFFIX);
-  string start = referFileMiddleChar;
-  auto fileBegin = linkString.find(start);
-  if (fileBegin == string::npos) // referred file not found
-  {
-    return;
-  }
-  string refereFileName = linkString.substr(
-      fileBegin + start.length(), fileEnd - fileBegin - start.length());
-  m_type = getLinKTypeFromReferFileName(refereFileName);
+
+  string refereFileName = getIncludedStringBetweenTags(
+      linkString, referFileMiddleChar, HTML_SUFFIX);
   if (debug >= LOG_INFO)
     METHOD_OUTPUT << "type seen from prefix: " << refereFileName << endl;
+  m_type = getLinKTypeFromReferFileName(refereFileName);
 }
 
 /**
- * get the referred name in the target file
+ * get the referred para like P4L2 in the target file
  * and assign referPara member field correspondingly.
- * for example, P8L2 would be returned for below link,
- * <a unhidden href="..\original\c080.htm#P8L2">
  * @param linkString the link to check
  */
 void Link::readReferPara(const string &linkString) {
@@ -548,130 +595,94 @@ void Link::readReferPara(const string &linkString) {
   string htmStart = HTML_SUFFIX + referParaMiddleChar;
   if (m_type == LINK_TYPE::SAMEPAGE)
     htmStart = referParaMiddleChar;
-  auto processStart = linkString.find(htmStart);
-  if (processStart == string::npos) // no file to refer
+  if (linkString.find(htmStart) == string::npos) // no file to refer
   {
     if (debug >= LOG_EXCEPTION and m_type != LINK_TYPE::ATTACHMENT)
       METHOD_OUTPUT << "no # found to read referPara from link: " << linkString
                     << endl;
     return;
   }
-  string afterLink = linkString.substr(processStart + htmStart.length(),
-                                       linkString.length() - processStart);
-  auto processEnd = afterLink.find(referParaEndChar);
-  m_referPara = afterLink.substr(0, processEnd);
+  m_referPara =
+      getIncludedStringBetweenTags(linkString, htmStart, titleEndChars);
   if (debug >= LOG_INFO)
     METHOD_OUTPUT << "referPara: " << m_referPara << endl;
 }
 
 /**
- * annotation is the meaning of the link.
- * it is the last part of a link normally, like the final 头一社 in below link,
- * <a href="a043.htm"><i hidden>头2社</i>头一社</a>
- * get this value and assign annotation member field correspondingly.
- * @param linkString the link to analysize
+ * annotation is the last part of a link normally, represents the meaning of the
+ * link. get this value and assign annotation member field correspondingly.
+ * @param linkString the link for analysis
  * @return true if there is target specified
  */
 bool Link::readAnnotation(const string &linkString) {
-  string htmStart = HTML_SUFFIX;
-  if (m_type == LINK_TYPE::SAMEPAGE)
-    htmStart = referParaMiddleChar;
-  if (m_type == LINK_TYPE::IMAGE)
-    htmStart = referParaEndChar;
-  auto processStart = linkString.find(htmStart);
-  if (processStart == string::npos) // no file to refer
-  {
-    if (linkString.find(returnToContentTable) == string::npos) {
-      METHOD_OUTPUT << "no htm or # is found to read annotation from link: "
-                    << linkString << endl;
-      return false;
-    } else {
-      // type would be ignored in this case
-      m_annotation = returnToContentTable;
-      return true;
-    }
-  }
-  string afterLink =
-      linkString.substr(processStart, linkString.length() - processStart);
-  string end = linkEndChars;
-  auto afterLinkEnd = afterLink.find(end);
-  afterLink = afterLink.substr(0, afterLinkEnd);
-  string start = charBeforeAnnotation;
-  auto afterLinkBegin = afterLink.find_last_of(start);
-  while (afterLinkBegin >= commentEndChars.length() - 1) {
-    if (afterLink.substr(afterLinkBegin - commentEndChars.length() + 1,
-                         commentEndChars.length()) != commentEndChars)
-      break;
-    else {
-      // skip this whole comment
-      auto commentStart = afterLink.find_last_of(
-          commentBeginChars, afterLinkBegin - commentEndChars.length());
-      afterLinkBegin = afterLink.find_last_of(
-          start, commentStart - commentBeginChars.length());
+  string htmStart = citationEndChars;
+  if (linkString.find(htmStart) == string::npos) {
+    // deprecated key end tag
+    htmStart = keyEndChars;
+    if (linkString.find(htmStart) == string::npos) {
+      htmStart = referParaEndChar;
     }
   }
   m_annotation =
-      afterLink.substr(afterLinkBegin + start.length(),
-                       afterLink.length() - afterLinkBegin - start.length());
+      getIncludedStringBetweenTags(linkString, htmStart, linkEndChars);
   if (debug >= LOG_INFO)
     METHOD_OUTPUT << "annotation: " << m_annotation << endl;
   return true;
 }
 
 /**
- * key is always in <i hidden></i> part of link.
- * it is one word should be in the target file,
- * thru which the line the word is in could be found
- * and its line number would be used to update referPara,
- * usedKey member field would also get updated.
- * for example, 菱角菱花 is the key to update P0L0 in below link to P8L2,
- * if the line 菱角菱花 is actually in a080.htm line P8L2
- * <a hidden href="..\a080.htm#P0L0"><i hidden>菱角菱花</i>
+ * key is QQ included within title="QQ" part of link.
+ * Be part of title make it a hint also when hovering over this link in browser.
+ * it is one word could be found in the target file,
+ * thru which its embedded line could be found.
+ * that line's line number would be then used to update referPara.
  * needChange member field would also get update if
- * 1. referPara needs update as above
+ * 1. referPara is different before and after finding;
  * 2. key itself needs update like changed to "KeyNotFound".
- * so if tag <i hidden></i> is missing, KeyNotFound would be returned
+ * so if whole title="QQ" is missing, KeyNotFound would be returned
  * and search would not start.
- * else, if the key in this tag cannot be found in target file,
- * KeyNotFound + key would be returned means manual fix is also needed.
- * so if key is still in "KeyNotFound+key" format,
- * which means manual fix is not done, simply return and do nothing.
- * @param linkString the link to analysize
+ * else, if the key included in this tag cannot be found in target file,
+ * KeyNotFound + key would be returned means manual fix of key to use is also
+ * needed. so if key is still in "KeyNotFound+key" format, which means manual
+ * fix is not done, simply return and do nothing.
+ * NOTE: no key is used for image type link,
+ * instead image file name would be
+ * both the id of image and referPara of the link.
+ * key must be kept as IMAGE as its type indicator.
+ * @param linkString the link for analysis
  */
 void Link::readKey(const string &linkString) {
+  if (m_type == LINK_TYPE::ATTACHMENT)
+    return;
   if (m_type == LINK_TYPE::IMAGE) {
     m_usedKey = imageTypeChars;
     return;
   }
 
-  string keyStart = referParaEndChar + keyStartChars;
-  string start = keyStart;
-  auto keyBegin = linkString.find(start);
-  if (keyBegin == string::npos) {
-    // not a link to top/bottom and no key was found, add a "KeyNotFound" key
-    // and return
-    if (m_type != LINK_TYPE::ATTACHMENT and
-        m_referPara != topParagraphIndicator and
+  if (linkString.find(titleStartChars) == string::npos) {
+    // not a link to top/bottom and no key was found
+    // add a "KeyNotFound" key and return
+    if (m_referPara != topParagraphIndicator and
         m_referPara != bottomParagraphIndicator) {
       m_needChange = true;
       m_usedKey = keyNotFound;
     }
-    if (debug >= LOG_EXCEPTION and m_type != LINK_TYPE::ATTACHMENT) {
-      string output = m_usedKey.empty() ? "EMPTY" : m_usedKey;
-      METHOD_OUTPUT << "key string not found, so use key: " << output << endl;
+    if (debug >= LOG_EXCEPTION) {
+      METHOD_OUTPUT << titleStartChars + " not found." << endl;
     }
     return;
   }
-  auto keyEnd = linkString.find(keyEndChars, keyBegin);
-  string stringForSearch = linkString.substr(
-      keyBegin + start.length(), keyEnd - keyBegin - start.length());
-  if (stringForSearch.find(keyNotFound) !=
-      string::npos) // still need manual change to a search-able key
-  {
+
+  string stringForSearch =
+      getIncludedStringBetweenTags(linkString, titleStartChars, titleEndChars);
+  // still need manual fix of this key, so abort
+  if (stringForSearch.find(keyNotFound) != string::npos) {
     m_needChange = false;
     m_usedKey = stringForSearch;
     return;
   }
+
+  // same page link would refer to different bodyText
   CoupledBodyText bodyText(getBodyTextFilePrefix());
   bodyText.resetBeforeSearch();
   // special hack to ignore itself
@@ -681,7 +692,7 @@ void Link::readKey(const string &linkString) {
   bodyText.setFileAndAttachmentNumber(getChapterName(), m_attachmentNumber);
   bool found = bodyText.findKey(stringForSearch);
   if (not found) {
-    m_usedKey = keyNotFound + " " + stringForSearch;
+    m_usedKey = keyNotFound + stringForSearch;
     fixReferPara(changeKey); // will set needChange if found line is different
   } else {
     m_usedKey = stringForSearch;
@@ -690,18 +701,56 @@ void Link::readKey(const string &linkString) {
     if (debug >= LOG_INFO)
       METHOD_OUTPUT << "line number found: " << lineNumber << endl;
     LineNumber ln(lineNumber);
-    string expectedSection =
-        citationChapterNo + TurnToString(m_chapterNumber) + citationChapter +
-        TurnToString(ln.getParaNumber()) + citationChapterParaSeparator +
-        TurnToString(ln.getlineNumber()) + citationPara;
-    fixReferPara(
-        ln.asString()); // will set needChange if found line is different
+    string unitString = defaultUnit;
+    if (m_attachmentNumber != 0)
+      unitString = attachmentFileMiddleChar + TurnToString(m_attachmentNumber) +
+                   attachmentUnit;
+    string expectedSection = citationChapterNo + TurnToString(m_chapterNumber) +
+                             unitString + TurnToString(ln.getParaNumber()) +
+                             citationChapterParaSeparator +
+                             TurnToString(ln.getlineNumber()) + citationPara;
+    // will set needChange if found line is different
+    fixReferPara(ln.asString());
     fixReferSection(expectedSection);
   }
   if (debug >= LOG_INFO)
     METHOD_OUTPUT << "key: " << m_usedKey << endl;
 }
 
+string scanForSubComments(const string &original, const string &fromFile) {
+  string result;
+  using SubStringOffsetTable =
+      std::map<size_t, size_t>; // start offset -> end offset
+  SubStringOffsetTable subStrings;
+  string startTag = commentBeginChars;
+  string endTag = commentEndChars;
+  auto offset = original.find(startTag);
+  do {
+    if (offset == string::npos)
+      break;
+    subStrings[offset] = original.find(endTag, offset);
+    offset = original.find(startTag, offset + 1);
+  } while (true);
+  // concatenate each comment's displayString with rest texts
+  auto endOfSubStringOffset = 0;
+  for (const auto &comment : subStrings) {
+    result += original.substr(endOfSubStringOffset,
+                              comment.first - endOfSubStringOffset);
+    auto current = std::make_unique<Comment>(fromFile);
+    current->loadFirstFromContainedLine(original, endOfSubStringOffset);
+    result += current->getDisplayString();
+    endOfSubStringOffset = comment.second + endTag.length();
+  }
+  result += original.substr(endOfSubStringOffset);
+
+  return result;
+}
+
+/*
+ * the final step of construction
+ * assuming readTypeAndAnnotation and readReferFileName()
+ * was called before, refer to Link class definition
+ */
 void Link::fixFromString(const string &linkString) {
   readDisplayType(linkString);
   readReferPara(linkString);
@@ -710,7 +759,7 @@ void Link::fixFromString(const string &linkString) {
       m_annotation != returnLink and m_annotation != returnToContentTable)
     readKey(linkString); // key would be searched here and replaced
   m_bodyText = m_annotation;
-  m_displayText = scanForSubType(m_bodyText, OBJECT_TYPE::COMMENT, m_fromFile);
+  m_displayText = scanForSubComments(m_bodyText, m_fromFile);
 }
 
 /**
@@ -802,14 +851,35 @@ void LinkFromMain::generateLinkToOrigin() {
                   << endl;
   auto reservedType = m_type;   // only LINK_TYPE::MAIN has origin member
   m_type = LINK_TYPE::ORIGINAL; // temporarily change type to get right path
-  string to = fixLinkFromOriginalTemplate(
-      getPathOfReferenceFile(), getChapterName(), m_usedKey, "", m_referPara);
+  string to =
+      fixLinkFromOriginalTemplate(getPathOfReferenceFile(), getChapterName(),
+                                  m_usedKey, emptyString, m_referPara);
   m_linkPtrToOrigin = std::make_unique<LinkFromMain>(m_fromFile, to);
   m_linkPtrToOrigin->readReferFileName(to);
   m_linkPtrToOrigin->fixFromString(to);
   m_needChange = true;
   m_type = reservedType;
   m_displayText += bracketStartChars + annotationToOriginal + bracketEndChars;
+}
+
+/**
+ * from the type of link to get the filename prefix of target file
+ * all main files are a0XX.htm
+ * all attachment files are b0XX.htm
+ * all original files are c0XX.htm
+ * all jpm files are dXXX.htm
+ * @param type type of link
+ * @return filename prefix of target file
+ */
+string LinkFromMain::getHtmlFileNamePrefix() {
+  string prefix = MAIN_HTML_PREFIX;
+  if (m_type == LINK_TYPE::ORIGINAL)
+    prefix = ORIGINAL_HTML_PREFIX;
+  if (m_type == LINK_TYPE::ATTACHMENT)
+    prefix = ATTACHMENT_HTML_PREFIX;
+  if (m_type == LINK_TYPE::JPM)
+    prefix = JPM_HTML_PREFIX;
+  return prefix;
 }
 
 /**
@@ -824,8 +894,7 @@ void LinkFromMain::generateLinkToOrigin() {
  * @param linkString the link to check
  * @return true only if a right chapter number and attachment number are gotten
  */
-bool LinkFromMain::readReferFileName(const string &link) {
-  string linkString = link;
+bool LinkFromMain::readReferFileName(const string &linkString) {
   if (m_type == LINK_TYPE::IMAGE) {
     m_imageFilename = getIncludedStringBetweenTags(
         linkString, referParaMiddleChar, referParaEndChar);
@@ -835,36 +904,18 @@ bool LinkFromMain::readReferFileName(const string &link) {
   }
 
   string refereFileName = m_fromFile;
-
   if (m_type != LINK_TYPE::SAMEPAGE) {
-    // remove space in the input linkString
-    linkString.erase(remove(linkString.begin(), linkString.end(), ' '),
-                     linkString.end());
-    auto fileEnd = linkString.find(HTML_SUFFIX);
-    if (fileEnd == string::npos) // no file to refer
-    {
-      METHOD_OUTPUT << "there is no file to refer in link: " << linkString
-                    << endl;
-      return false;
-    }
-    string start = referFileMiddleChar;
-    auto fileBegin = linkString.find(start);
-    if (fileBegin == string::npos) // referred file not found
-    {
-      METHOD_OUTPUT << "there is no file to refer in link: " << linkString
-                    << endl;
-    }
-    refereFileName = linkString.substr(fileBegin + start.length(),
-                                       fileEnd - fileBegin - start.length());
-    fileBegin = refereFileName.find(getHtmlFileNamePrefix());
+    refereFileName = getIncludedStringBetweenTags(
+        linkString, referFileMiddleChar, HTML_SUFFIX);
+    // in case there is a ..\ before file name
+    auto fileBegin = refereFileName.find(getHtmlFileNamePrefix());
     if (fileBegin == string::npos) // not find a right file type to refer
     {
       METHOD_OUTPUT << "unsupported type in refer file name in link: "
-                    << linkString << endl;
+                    << refereFileName << endl;
       return false;
     }
-    refereFileName = refereFileName.substr(
-        fileBegin); // in case there is a ..\ before file name
+    refereFileName = refereFileName.substr(fileBegin);
     refereFileName = refereFileName.substr(getHtmlFileNamePrefix().length());
   }
 
@@ -875,11 +926,6 @@ bool LinkFromMain::readReferFileName(const string &link) {
       METHOD_OUTPUT << "no attachment number in link: " << linkString << endl;
       return false;
     }
-    if (debug >= LOG_INFO)
-      METHOD_OUTPUT << "chapterNumber: "
-                    << refereFileName.substr(0, attachmentNumberStart)
-                    << ", attachmentNumber: "
-                    << refereFileName.substr(attachmentNumberStart + 1) << endl;
     m_attachmentNumber =
         TurnToInt(refereFileName.substr(attachmentNumberStart + 1));
     m_chapterNumber =
@@ -899,12 +945,14 @@ bool LinkFromMain::readReferFileName(const string &link) {
  *  \              <-link from main to access main
  *  \attachment\   <-link from attachment to access main to access other
  *  \original\     <- no link in text here
+ *  \jpm\          <- link to jpm
+ *  \pictures\     <- targets of image type of link
  *  \a*.htm        <- main texts
  * @param linkString the link to check
  * @return the level difference between a link and its target
  */
 string LinkFromMain::getPathOfReferenceFile() const {
-  string result{""};
+  string result{emptyString};
   if (m_type == LINK_TYPE::IMAGE)
     result = pictureDirForLinkFromMain;
   if (m_type == LINK_TYPE::ATTACHMENT)
@@ -915,6 +963,7 @@ string LinkFromMain::getPathOfReferenceFile() const {
     result = jpmDirForLinkFromMain;
   return result;
 }
+
 /**
  * log a valid link found by putting it into linksTable
  * which is sorted by ChapterName, referPara, usedKey
@@ -930,12 +979,13 @@ void LinkFromMain::logLink() {
       entry.push_back(detail);
       if (debug >= LOG_INFO)
         METHOD_OUTPUT << "entry.size: " << entry.size()
-                      << " more reference to link: " << getChapterName() << " "
-                      << m_referPara << " " << m_usedKey << endl;
+                      << " more reference to link: " << getChapterName()
+                      << displaySpace << m_referPara << displaySpace
+                      << m_usedKey << endl;
     } catch (exception &) {
       if (debug >= LOG_INFO)
-        METHOD_OUTPUT << "create vector for : " << getChapterName() << " "
-                      << m_referPara << endl;
+        METHOD_OUTPUT << "create vector for : " << getChapterName()
+                      << displaySpace << m_referPara << endl;
       vector<LinkDetails> list;
       list.push_back(detail);
       linksTable[std::make_pair(getChapterName(), m_referPara)] = list;
@@ -966,29 +1016,11 @@ void LinkFromMain::logLink() {
 }
 
 /**
- * from the type of link to get the filename prefix of target file
- * all main files are a0XX.htm
- * all attachment files are b0XX.htm
- * all original files are c0XX.htm
- * @param type type of link
- * @return filename prefix of target file
- */
-string LinkFromMain::getHtmlFileNamePrefix() {
-  string prefix = MAIN_HTML_PREFIX;
-  if (m_type == LINK_TYPE::ORIGINAL)
-    prefix = ORIGINAL_HTML_PREFIX;
-  if (m_type == LINK_TYPE::ATTACHMENT)
-    prefix = ATTACHMENT_HTML_PREFIX;
-  if (m_type == LINK_TYPE::JPM)
-    prefix = JPM_HTML_PREFIX;
-  return prefix;
-}
-
-/**
- * from the type of link to get the filename prefix of bodytext file
- * all main bodytext files are MainXX.txt
- * all attachment bodytext files are AttachXX.txt
- * all original bodytext files are OrgXX.txt
+ * from the type of link to get the filename prefix of bodyText file
+ * all main bodyText files are MainXX.txt
+ * all attachment bodyText files are AttachXX.txt
+ * all original bodyText files are OrgXX.txt
+ * all jpm bodyText files are JpmXXX.txt
  * @param type type of link
  * @return filename prefix of bodytext file
  */
@@ -1032,14 +1064,29 @@ void LinkFromAttachment::generateLinkToOrigin() {
                   << endl;
   auto reservedType = m_type;
   m_type = LINK_TYPE::ORIGINAL; // temporarily change type to get right path
-  string to = fixLinkFromOriginalTemplate(
-      getPathOfReferenceFile(), getChapterName(), m_usedKey, "", m_referPara);
+  string to =
+      fixLinkFromOriginalTemplate(getPathOfReferenceFile(), getChapterName(),
+                                  m_usedKey, emptyString, m_referPara);
   m_linkPtrToOrigin = std::make_unique<LinkFromAttachment>(m_fromFile, to);
   m_linkPtrToOrigin->readReferFileName(to);
   m_linkPtrToOrigin->fixFromString(to);
   m_needChange = true;
   m_type = reservedType;
   m_displayText += bracketStartChars + annotationToOriginal + bracketEndChars;
+}
+
+/**
+ * different from LinkFromMain::getHtmlFileNamePrefix for same page type of link
+ */
+string LinkFromAttachment::getHtmlFileNamePrefix() {
+  string prefix = ATTACHMENT_HTML_PREFIX;
+  if (m_type == LINK_TYPE::JPM)
+    prefix = JPM_HTML_PREFIX;
+  if (m_type == LINK_TYPE::ORIGINAL)
+    prefix = ORIGINAL_HTML_PREFIX;
+  if (m_type == LINK_TYPE::MAIN)
+    prefix = MAIN_HTML_PREFIX;
+  return prefix;
 }
 
 /**
@@ -1057,8 +1104,7 @@ void LinkFromAttachment::generateLinkToOrigin() {
  * @param linkString the link to check
  * @return true only if a right chapter number and attachment number are gotten
  */
-bool LinkFromAttachment::readReferFileName(const string &link) {
-  string linkString = link;
+bool LinkFromAttachment::readReferFileName(const string &linkString) {
   if (m_type == LINK_TYPE::IMAGE) {
     m_imageFilename = getIncludedStringBetweenTags(
         linkString, referParaMiddleChar, referParaEndChar);
@@ -1069,50 +1115,28 @@ bool LinkFromAttachment::readReferFileName(const string &link) {
 
   string refereFileName = m_fromFile;
   if (m_type != LINK_TYPE::SAMEPAGE) {
-    // remove space in the input linkString
-    linkString.erase(remove(linkString.begin(), linkString.end(), ' '),
-                     linkString.end());
-    auto fileEnd = linkString.find(HTML_SUFFIX);
-    if (fileEnd == string::npos) // no file to refer
-    {
-      METHOD_OUTPUT << "there is no file to refer in link: " << linkString
-                    << endl;
-      return false;
-    }
-    string start = referFileMiddleChar;
-    auto fileBegin = linkString.find(start);
-    if (fileBegin == string::npos) // referred file not found
-    {
-      METHOD_OUTPUT << "there is no file to refer in link: " << linkString
-                    << endl;
-    }
-    refereFileName = linkString.substr(fileBegin + start.length(),
-                                       fileEnd - fileBegin - start.length());
-    fileBegin = refereFileName.find(getHtmlFileNamePrefix());
+    refereFileName = getIncludedStringBetweenTags(
+        linkString, referFileMiddleChar, HTML_SUFFIX);
+    // in case there is a ..\ before file name
+    auto fileBegin = refereFileName.find(getHtmlFileNamePrefix());
     if (fileBegin == string::npos) // not find a right file type to refer
     {
       METHOD_OUTPUT << "unsupported type in refer file name in link: "
-                    << linkString << endl;
+                    << refereFileName << endl;
       return false;
     }
-    refereFileName = refereFileName.substr(
-        fileBegin); // in case there is a ..\ before file name
+    refereFileName = refereFileName.substr(fileBegin);
     refereFileName = refereFileName.substr(getHtmlFileNamePrefix().length());
   }
 
   // get chapter number and attachment number if type is LINK_TYPE::ATTACHMENT
+  // or LINK_TYPE::SAMEPAGE
   if (m_type == LINK_TYPE::SAMEPAGE or m_type == LINK_TYPE::ATTACHMENT) {
     auto attachmentNumberStart = refereFileName.find(attachmentFileMiddleChar);
     if (attachmentNumberStart == string::npos) {
       METHOD_OUTPUT << "no attachment number in link: " << linkString << endl;
       return false;
     }
-    if (debug >= LOG_INFO)
-      METHOD_OUTPUT << "chapterNumber: "
-                    << refereFileName.substr(0, attachmentNumberStart)
-                    << ", attachmentNumber: "
-                    << refereFileName.substr(attachmentNumberStart + 1) << endl;
-
     m_attachmentNumber =
         TurnToInt(refereFileName.substr(attachmentNumberStart + 1));
     m_chapterNumber =
@@ -1126,18 +1150,8 @@ bool LinkFromAttachment::readReferFileName(const string &link) {
   return true;
 }
 
-/**
- *  the directory structure is like below
- *  refer to utf8HTML/src
- *  \              <-link from main to access main
- *  \attachment\   <-link from attachment to access main to access other
- *  \original\     <- no link in text here
- *  \a*.htm        <- main texts
- * @param linkString the link to check
- * @return the level difference between a link and its target
- */
 string LinkFromAttachment::getPathOfReferenceFile() const {
-  string result{""};
+  string result{emptyString};
   if (m_type == LINK_TYPE::IMAGE)
     result = pictureDirForLinkFromAttachment;
   if (m_type == LINK_TYPE::MAIN or m_annotation == returnToContentTable)
@@ -1168,7 +1182,8 @@ void LinkFromAttachment::logLink() {
         METHOD_OUTPUT << "not found link for: "
                       << getChapterName() + attachmentFileMiddleChar +
                              TurnToString(m_attachmentNumber)
-                      << " " << m_referPara << " " << m_usedKey << endl;
+                      << displaySpace << m_referPara << displaySpace
+                      << m_usedKey << endl;
       vector<LinkDetails> list;
       list.push_back(detail);
       linksTable[std::make_pair(getChapterName() + attachmentFileMiddleChar +
@@ -1188,445 +1203,15 @@ void LinkFromAttachment::setTypeThruFileNamePrefix(const string &prefix) {
 }
 
 /**
- * from the type of link to get the filename prefix of target file
- * all main files are a0XX.htm
- * all attachment files are b0XX.htm
- * all original files are c0XX.htm
- * @param type type of link
- * @return filename prefix of target file
- */
-string LinkFromAttachment::getHtmlFileNamePrefix() {
-  string prefix = MAIN_HTML_PREFIX;
-  if (m_type == LINK_TYPE::JPM)
-    prefix = JPM_HTML_PREFIX;
-  if (m_type == LINK_TYPE::ORIGINAL)
-    prefix = ORIGINAL_HTML_PREFIX;
-  if (m_type == LINK_TYPE::ATTACHMENT or m_type == LINK_TYPE::SAMEPAGE)
-    prefix = ATTACHMENT_HTML_PREFIX;
-  return prefix;
-}
-
-/**
- * from the type of link to get the filename prefix of bodytext file
- * all main bodytext files are MainXX.txt
- * all attachment bodytext files are AttachXX.txt
- * all original bodytext files are OrgXX.txt
- * @param type type of link
- * @return filename prefix of bodytext file
+ * different from LinkFromMain::getHtmlFileNamePrefix for same page type of link
  */
 string LinkFromAttachment::getBodyTextFilePrefix() {
-  //	  if (m_type == LINK_TYPE::MAIN)
-  string prefix = MAIN_BODYTEXT_PREFIX;
+  string prefix = ATTACHMENT_BODYTEXT_PREFIX;
   if (m_type == LINK_TYPE::JPM)
     prefix = JPM_BODYTEXT_PREFIX;
   if (m_type == LINK_TYPE::ORIGINAL)
     prefix = ORIGINAL_BODYTEXT_PREFIX;
-  if (m_type == LINK_TYPE::ATTACHMENT or m_type == LINK_TYPE::SAMEPAGE)
-    prefix = ATTACHMENT_BODYTEXT_PREFIX;
+  if (m_type == LINK_TYPE::MAIN)
+    prefix = MAIN_BODYTEXT_PREFIX;
   return prefix;
-}
-
-ObjectPtr createObjectFromType(OBJECT_TYPE type, const string &fromFile) {
-  if (type == OBJECT_TYPE::LINENUMBER)
-    return std::make_unique<LineNumber>();
-  else if (type == OBJECT_TYPE::SPACE)
-    return std::make_unique<Space>();
-  else if (type == OBJECT_TYPE::POEM)
-    return std::make_unique<Poem>();
-  else if (type == OBJECT_TYPE::LINKFROMMAIN)
-    return std::make_unique<LinkFromMain>(fromFile);
-  else if (type == OBJECT_TYPE::PERSONALCOMMENT)
-    return std::make_unique<PersonalComment>(fromFile);
-  else if (type == OBJECT_TYPE::POEMTRANSLATION)
-    return std::make_unique<PoemTranslation>(fromFile);
-  else if (type == OBJECT_TYPE::COMMENT)
-    return std::make_unique<Comment>(fromFile);
-  return nullptr;
-}
-
-string getStartTagOfObjectType(OBJECT_TYPE type) {
-  if (type == OBJECT_TYPE::LINENUMBER)
-    return UnhiddenLineNumberStart;
-  else if (type == OBJECT_TYPE::SPACE)
-    return space;
-  else if (type == OBJECT_TYPE::POEM)
-    return poemBeginChars;
-  else if (type == OBJECT_TYPE::LINKFROMMAIN)
-    return linkStartChars;
-  else if (type == OBJECT_TYPE::PERSONALCOMMENT)
-    return personalCommentStartChars;
-  else if (type == OBJECT_TYPE::POEMTRANSLATION)
-    return poemTranslationBeginChars;
-  else if (type == OBJECT_TYPE::COMMENT)
-    return commentBeginChars;
-  return "";
-}
-
-string getEndTagOfObjectType(OBJECT_TYPE type) {
-  if (type == OBJECT_TYPE::LINKFROMMAIN)
-    return linkEndChars;
-  else if (type == OBJECT_TYPE::PERSONALCOMMENT)
-    return personalCommentEndChars;
-  else if (type == OBJECT_TYPE::POEMTRANSLATION)
-    return poemTranslationEndChars;
-  else if (type == OBJECT_TYPE::COMMENT)
-    return commentEndChars;
-  return "";
-}
-
-string scanForSubType(const string &original, OBJECT_TYPE subType,
-                      const string &fromFile) {
-  string result;
-  using SubStringOffsetTable =
-      std::map<size_t, size_t>; // start offset -> end offset
-  SubStringOffsetTable subStrings;
-  auto offset = original.find(getStartTagOfObjectType(subType));
-  do {
-    if (offset == string::npos)
-      break;
-    subStrings[offset] = original.find(getEndTagOfObjectType(subType), offset);
-    offset = original.find(getStartTagOfObjectType(subType), offset + 1);
-  } while (true);
-  auto endOfSubStringOffset = 0;
-  for (const auto &link : subStrings) {
-    result += original.substr(endOfSubStringOffset,
-                              link.first - endOfSubStringOffset);
-    auto current = createObjectFromType(subType, fromFile);
-    current->loadFirstFromContainedLine(original, endOfSubStringOffset);
-    result += current->getDisplayString();
-    endOfSubStringOffset =
-        link.second + getEndTagOfObjectType(subType).length();
-  }
-  result += original.substr(endOfSubStringOffset);
-  return result;
-}
-
-/**
- * must ensure this is not a line number before calling this method
- */
-size_t Link::loadFirstFromContainedLine(const string &containedLine,
-                                        size_t after) {
-  m_fullString = getWholeStringBetweenTags(containedLine, linkStartChars,
-                                           linkEndChars, after);
-  if (debug >= LOG_INFO) {
-    METHOD_OUTPUT << "m_fullString: " << endl;
-    METHOD_OUTPUT << m_fullString << endl;
-  }
-
-  readTypeAndAnnotation(m_fullString);
-  readReferFileName(m_fullString); // second step of construction
-  fixFromString(m_fullString);
-  if (debug >= LOG_INFO)
-    METHOD_OUTPUT << "after fix length: " << length() << endl;
-
-  return containedLine.find(linkStartChars, after);
-}
-
-static const string personalCommentTemplate =
-    R"(<u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">XX</u>)";
-
-string fixPersonalCommentFromTemplate(const string &comment) {
-  string result = personalCommentTemplate;
-  replacePart(result, "XX", comment);
-  return result;
-}
-
-string PersonalComment::getWholeString() {
-  return fixPersonalCommentFromTemplate(m_bodyText);
-}
-string PersonalComment::getDisplayString() { return m_displayText; }
-
-size_t PersonalComment::displaySize() { return getDisplayString().length(); }
-
-size_t PersonalComment::loadFirstFromContainedLine(const string &containedLine,
-                                                   size_t after) {
-  m_fullString = getWholeStringBetweenTags(
-      containedLine, personalCommentStartChars, personalCommentEndChars, after);
-  if (debug >= LOG_INFO) {
-    METHOD_OUTPUT << "m_fullString: " << endl;
-    METHOD_OUTPUT << m_fullString << endl;
-  }
-  m_bodyText = getIncludedStringBetweenTags(
-      m_fullString, endOfPersonalCommentBeginTag, personalCommentEndChars);
-  m_displayText =
-      scanForSubType(m_bodyText, OBJECT_TYPE::LINKFROMMAIN, m_fromFile);
-  return containedLine.find(personalCommentStartChars, after);
-}
-
-static const string poemTranslationTemplate =
-    R"(<samp unhidden font style="font-size: 13.5pt; font-family:楷体; color:#ff00ff">XX</samp>)";
-
-string fixPoemTranslationFromTemplate(const string &translation) {
-  string result = poemTranslationTemplate;
-  replacePart(result, "XX", translation);
-  return result;
-}
-
-string PoemTranslation::getWholeString() {
-  return fixPoemTranslationFromTemplate(m_bodyText);
-}
-string PoemTranslation::getDisplayString() { return m_displayText; }
-
-size_t PoemTranslation::displaySize() { return getDisplayString().length(); }
-
-size_t PoemTranslation::loadFirstFromContainedLine(const string &containedLine,
-                                                   size_t after) {
-  m_fullString = getWholeStringBetweenTags(
-      containedLine, poemTranslationBeginChars, poemTranslationEndChars, after);
-  if (debug >= LOG_INFO) {
-    METHOD_OUTPUT << "m_fullString: " << endl;
-    METHOD_OUTPUT << m_fullString << endl;
-  }
-  m_bodyText = getIncludedStringBetweenTags(
-      m_fullString, endOfPoemTranslationBeginTag, poemTranslationEndChars);
-  m_displayText =
-      scanForSubType(m_bodyText, OBJECT_TYPE::LINKFROMMAIN, m_fromFile);
-  return containedLine.find(poemTranslationBeginChars, after);
-}
-
-static const string commentTemplate =
-    R"(<cite unhidden>XX</cite>)";
-
-string fixCommentFromTemplate(const string &comment) {
-  string result = commentTemplate;
-  replacePart(result, "XX", comment);
-  return result;
-}
-
-string Comment::getWholeString() { return fixCommentFromTemplate(m_bodyText); }
-string Comment::getDisplayString() { return m_displayText; }
-
-size_t Comment::displaySize() { return getDisplayString().length(); }
-
-size_t Comment::loadFirstFromContainedLine(const string &containedLine,
-                                           size_t after) {
-  m_fullString = getWholeStringBetweenTags(containedLine, commentBeginChars,
-                                           commentEndChars, after);
-  if (debug >= LOG_INFO) {
-    METHOD_OUTPUT << "m_fullString: " << endl;
-    METHOD_OUTPUT << m_fullString << endl;
-  }
-  m_bodyText = getIncludedStringBetweenTags(m_fullString, endOfCommentBeginTag,
-                                            commentEndChars);
-  m_displayText =
-      scanForSubType(m_bodyText, OBJECT_TYPE::LINKFROMMAIN, m_fromFile);
-  return containedLine.find(commentBeginChars, after);
-}
-
-/**
- * this function needs numbering first to get a correct target refer line number
- * or copy .txt files under testData to bodyTexts\output
- */
-void testLinkFromMain(string fromFile, string linkString,
-                      bool needToGenerateOrgLink) {
-  FUNCTION_OUTPUT << "original link: " << endl;
-  FUNCTION_OUTPUT << linkString << endl;
-  LinkFromMain lfm(fromFile, linkString);
-  lfm.readReferFileName(linkString); // second step of construction
-  lfm.fixFromString(linkString);
-  if (needToGenerateOrgLink)
-    lfm.generateLinkToOrigin();
-  auto fixed = lfm.asString();
-  FUNCTION_OUTPUT << "need Update: " << lfm.needUpdate() << endl;
-  FUNCTION_OUTPUT << "after fixed: " << endl;
-  FUNCTION_OUTPUT << fixed << endl;
-  FUNCTION_OUTPUT << "display as:" << lfm.getDisplayString() << "||" << endl;
-}
-
-void testLinkFromAttachment(string fromFile, string linkString,
-                            bool needToGenerateOrgLink) {
-  FUNCTION_OUTPUT << "original link: " << endl;
-  FUNCTION_OUTPUT << linkString << endl;
-  LinkFromAttachment lfm(fromFile, linkString);
-  lfm.readReferFileName(linkString); // second step of construction
-  lfm.fixFromString(linkString);
-  FUNCTION_OUTPUT << lfm.getAnnotation() << endl;
-  if (needToGenerateOrgLink)
-    lfm.generateLinkToOrigin();
-  auto fixed = lfm.asString();
-  FUNCTION_OUTPUT << "need Update: " << lfm.needUpdate() << endl;
-  FUNCTION_OUTPUT << "after fixed: " << endl;
-  FUNCTION_OUTPUT << fixed << endl;
-  FUNCTION_OUTPUT << "display as:" << lfm.getDisplayString() << "||" << endl;
-}
-
-void testLink(Link &lfm, string linkString, bool needToGenerateOrgLink) {
-  FUNCTION_OUTPUT << "original link: " << endl;
-  FUNCTION_OUTPUT << linkString << endl;
-
-  //
-  lfm.readReferFileName(linkString); // second step of construction
-  lfm.fixFromString(linkString);
-  if (needToGenerateOrgLink)
-    lfm.generateLinkToOrigin();
-  auto fixed = lfm.asString();
-  FUNCTION_OUTPUT << "need Update: " << lfm.needUpdate() << endl;
-  FUNCTION_OUTPUT << "after fixed: " << endl;
-  FUNCTION_OUTPUT << fixed << endl;
-  FUNCTION_OUTPUT << "display as:" << lfm.getDisplayString() << "||" << endl;
-}
-
-void testLinkOperation() {
-  SEPERATE("testLinkOperation", " starts ");
-
-  FUNCTION_OUTPUT << getIncludedStringBetweenTags(
-                         linkToImageFile, realAnnotationOfImageLinkStartChars,
-                         realAnnotationOfImageLinkEndChars)
-                  << endl;
-  FUNCTION_OUTPUT << getWholeStringBetweenTags(
-                         linkToImageFile, realAnnotationOfImageLinkStartChars,
-                         realAnnotationOfImageLinkEndChars)
-                  << endl;
-
-  //clang-format off
-  testLinkFromAttachment(
-      "07",
-      R"(<a title="IMAGE" href="#nwbt.jpg">（图示：女娲补天）</a>)", false);
-  SEPERATE("direct image link", " finished ");
-
-  testLinkFromAttachment(
-      "07",
-      R"(<a hidden title="IMAGE" href="#nwbt.jpg">（图示：女娲补天）</a>)",
-      false);
-  SEPERATE("hidden image link", " finished ");
-
-  string linkString =
-      R"(<a unhidden href="a080.htm#top">原是)" + commentStart +
-      unhiddenDisplayProperty + endOfBeginTag +
-      R"(薛姨妈1)" + commentEnd +
-      R"(老奶奶)" + commentStart + unhiddenDisplayProperty + endOfBeginTag +
-      R"(薛姨妈1)" + commentEnd +
-      R"(使唤的</a>)";
-  FUNCTION_OUTPUT << "original link: " << endl;
-  FUNCTION_OUTPUT << linkString << endl;
-  LinkFromMain lfm("75", linkString);
-  lfm.readReferFileName(linkString); // second step of construction
-  FUNCTION_OUTPUT << "change to refer to file 57. " << endl;
-  lfm.fixReferFile(57);
-  lfm.fixFromString(linkString);
-  auto fixed = lfm.asString();
-  FUNCTION_OUTPUT << "need Update: " << lfm.needUpdate() << endl;
-  FUNCTION_OUTPUT << "after fixed: " << endl;
-  FUNCTION_OUTPUT << fixed << endl;
-  FUNCTION_OUTPUT << "display as:" << lfm.getDisplayString() << "||" << endl;
-  SEPERATE("fixReferFile", " finished ");
-
-  linkString = fixLinkFromJPMTemplate(jpmDirForLinkFromMain, "017", R"(床帐)",
-                                      "", "P1L1", R"(雪梅相妒，无复桂月争辉)");
-  FUNCTION_OUTPUT << linkString << endl;
-  LinkFromMain link1("05", linkString);
-  testLink(link1, linkString, false);
-
-  SEPERATE("JPM link", " finished ");
-
-  linkString =
-      R"(<a unhidden href="a005.htm#P94" title="海棠"><i hidden>海棠</i>海棠春睡</a>)";
-  LinkFromMain link2("70", linkString);
-  testLink(link2, linkString, false);
-
-  SEPERATE("title fix", " finished ");
-
-  linkString =
-      R"(<a hidden href="a080.htm#top">原是)" + commentStart +
-      unhiddenDisplayProperty + endOfBeginTag +
-      R"(薛姨妈1)" + commentEnd +
-      R"(老奶奶)" + commentStart + unhiddenDisplayProperty + endOfBeginTag +
-      R"(薛姨妈1)" + commentEnd +
-      R"(使唤的</a>)";
-  testLinkFromMain("07", linkString, false);
-
-  SEPERATE("#top", " finished ");
-
-  testLinkFromMain(
-      "07",
-      R"(<a hidden href="attachment\b003_9.htm#P2L3">原是老奶奶（薛姨妈）使唤的</a>)",
-      false);
-  SEPERATE("WARNING:", " SUCH LINK'S REFERPARA WON'T BE FIXED AUTOMATICALLY.");
-
-  SEPERATE("attachment with referPara", " finished ");
-
-  testLinkFromMain(
-      "80",
-      fixLinkFromSameFileTemplate(LINK_DISPLAY_TYPE::UNHIDDEN, "菱角菱花",
-                                  "原是老奶奶（薛姨妈）使唤的", "94"),
-      false);
-  SEPERATE("fixLinkFromSameFileTemplate", " finished ");
-
-  linkString = fixLinkFromMainTemplate(
-      "", "80", LINK_DISPLAY_TYPE::UNHIDDEN, "菱角菱花",
-      "第80章1.1节:", "原是老奶奶（薛姨妈）使唤的", "94");
-  LinkFromMain link("07", linkString);
-  testLink(link, linkString, false);
-
-  SEPERATE("fixLinkFromMainTemplate", " finished ");
-
-  testLinkFromMain("03",
-                   fixLinkFromMainTemplate(
-                       "", "80", LINK_DISPLAY_TYPE::UNHIDDEN, "菱角菱花",
-                       "第80章1.1节:", "原是老奶奶（薛姨妈）使唤的", "94"),
-                   true);
-  SEPERATE("generate original link afterwards", " finished ");
-
-  testLinkFromMain("07",
-                   fixLinkFromOriginalTemplate(originalDirForLinkFromMain, "18",
-                                               "happy",
-                                               "第80章1.1节:", "90101"),
-                   false);
-  SEPERATE("fixLinkFromOriginalTemplate", " finished ");
-
-  testLinkFromMain("07",
-                   fixLinkFromAttachmentTemplate(attachmentDirForLinkFromMain,
-                                                 "18", "7", "happy"),
-                   false);
-  SEPERATE("fixLinkFromOriginalTemplate", " finished ");
-
-  SEPERATE("testLinkFromMain", " finished ");
-
-  string linkString2 = fixLinkFromAttachmentTemplate("", "18", "7", "happy");
-  FUNCTION_OUTPUT << "original link: " << endl;
-  FUNCTION_OUTPUT << linkString2 << endl;
-  LinkFromAttachment lfm1("03_9", linkString2);
-  lfm1.readReferFileName(linkString2); // second step of construction
-  FUNCTION_OUTPUT << "change to refer to file 55_3. " << endl;
-  lfm1.fixReferFile(55, 3);
-  lfm1.fixFromString(linkString2);
-  auto fixed2 = lfm1.asString();
-  FUNCTION_OUTPUT << "need Update: " << lfm1.needUpdate() << endl;
-  FUNCTION_OUTPUT << "after fixed: " << endl;
-  FUNCTION_OUTPUT << fixed2 << endl;
-  FUNCTION_OUTPUT << "display as:" << lfm1.getDisplayString() << "||" << endl;
-  SEPERATE("fixReferFile", " finished ");
-
-  testLinkFromAttachment("1_0",
-                         R"(<a unhidden href="..\aindex.htm">回目录</a>)",
-                         false);
-  SEPERATE("回目录", " finished ");
-
-  testLinkFromAttachment(
-      "03_9",
-      fixLinkFromSameFileTemplate(LINK_DISPLAY_TYPE::UNHIDDEN, "西北",
-                                  "原是老奶奶（薛姨妈）使唤的", "94"),
-      false);
-  SEPERATE("fixLinkFromSameFileTemplate", " finished ");
-
-  testLinkFromAttachment(
-      "03_9",
-      fixLinkFromMainTemplate(
-          R"(..\)", "80", LINK_DISPLAY_TYPE::UNHIDDEN, "菱角菱花",
-          "第80章1.1节:", "原是老奶奶（薛姨妈）使唤的", "94"),
-      true);
-  SEPERATE("fixLinkFromMainTemplate", " finished ");
-
-  testLinkFromAttachment("03_9",
-                         fixLinkFromOriginalTemplate(R"(..\original\)", "80",
-                                                     "菱角菱花",
-                                                     "第80章1.1节:", "94"),
-                         false);
-  SEPERATE("fixLinkFromOriginalTemplate", " finished ");
-
-  testLinkFromAttachment(
-      "03_9", fixLinkFromAttachmentTemplate("", "18", "7", "happy"), false);
-  SEPERATE("fixLinkFromAttachmentTemplate", " finished ");
-  //clang-format on
-  SEPERATE("testLinkFromAttachment", " finished ");
 }

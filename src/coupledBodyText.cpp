@@ -9,7 +9,8 @@ bool isFoundAsNonKeys(const string &line, const string &key) {
     if (keyBegin == string::npos)
       break;
     auto testBeginPos = line.rfind(keyStartChars, keyBegin);
-    // if keyStartChars exists
+    // if keyStartChars exists, deprecated in the future
+    // when keyStartChars is gone
     if (testBeginPos != string::npos and testBeginPos > searchStart) {
       string testStr =
           line.substr(testBeginPos + keyStartChars.length(),
@@ -503,7 +504,6 @@ void CoupledBodyText::addLineNumber(const string &separatorColor,
 }
 
 void testSearchTextIsOnlyPartOfOtherKeys() {
-
   string line1 =
       R"(弄得（<cite unhidden>宝玉</cite>）情色若痴，语言常乱，似染怔忡之疾，慌得袭人等又不敢回贾母，只百般逗他玩笑（<cite unhidden>指望他早日康复</cite>）。（<u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">怔忡，为病名，首见于《济生方·惊悸怔忡健忘门》中“惊者，心卒动而不宁也；悸者,心跳动而怕惊也；怔忡者，心中躁动不安，惕惕然后人将捕之也”,是心悸的一种，是指多因久病体虚、心脏受损导致气血、阴阳亏虚，或邪毒、痰饮、瘀血阻滞心脉，日久导致心失濡养，心脉不畅，从而引起的心中剔剔不安，不能自控的一种病证，常和惊悸合并称为心悸</u>）)";
   string key = R"(怔忡)";

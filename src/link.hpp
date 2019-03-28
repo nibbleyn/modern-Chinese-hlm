@@ -9,6 +9,7 @@ static const string annotationToOriginal = R"(原文)";
 
 // operations over link string template initialization
 string fixLinkFromSameFileTemplate(LINK_DISPLAY_TYPE type, const string &key,
+                                   const string &citation,
                                    const string &annotation,
                                    const string &referPara);
 string fixLinkFromMainTemplate(const string &path, const string &filename,
@@ -18,6 +19,7 @@ string fixLinkFromMainTemplate(const string &path, const string &filename,
 string fixLinkFromReverseLinkTemplate(const string &filename,
                                       LINK_DISPLAY_TYPE type,
                                       const string &referPara,
+                                      const string &citation,
                                       const string &annotation);
 string
 fixLinkFromOriginalTemplate(const string &path, const string &filename,
@@ -40,9 +42,6 @@ static const string returnLink = R"(被引用)";
 static const string returnToContentTable = R"(回目录)";
 static const string contentTableFilename = R"(aindex)";
 static const string citationChapter = R"(章)";
-
-string scanForSubType(const string &original, OBJECT_TYPE subType,
-                      const string &fromFile);
 
 class Link : public Object {
 public:
@@ -230,7 +229,7 @@ public:
       : Link(fromFile, linkString) {}
   ~LinkFromMain(){};
   void generateLinkToOrigin();
-  bool readReferFileName(const string &link);
+  bool readReferFileName(const string &linkString);
 
 private:
   string getPathOfReferenceFile() const override;
@@ -252,7 +251,7 @@ public:
       : Link(fromFile, linkString) {}
   ~LinkFromAttachment(){};
   void generateLinkToOrigin();
-  bool readReferFileName(const string &link);
+  bool readReferFileName(const string &linkString);
   void setTypeThruFileNamePrefix(const string &link);
 
 private:
@@ -277,49 +276,3 @@ private:
   string m_displayText{""};
   string m_fromFile{"81"};
 };
-
-static const string personalCommentStartChars = R"(<u unhidden)";
-static const string personalCommentEndChars = R"(</u>)";
-static const string personalCommentStartRestChars =
-    R"( style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4)";
-static const string endOfPersonalCommentBeginTag = R"(">)";
-
-class PersonalComment : public Object {
-public:
-  PersonalComment(const string &fromFile) : m_fromFile(fromFile) {}
-  string getWholeString();
-  string getDisplayString();
-  size_t displaySize();
-  size_t loadFirstFromContainedLine(const string &containedLine,
-                                    size_t after = 0);
-
-private:
-  string m_displayText{""};
-  string m_fromFile{"81"};
-};
-
-// poemTranslation
-static const string poemTranslationBeginChars = R"(<samp )";
-static const string poemTranslationEndChars = R"(</samp>)";
-static const string endOfPoemTranslationBeginTag = R"(">)";
-
-class PoemTranslation : public Object {
-public:
-  PoemTranslation(const string &fromFile) : m_fromFile(fromFile) {}
-  string getWholeString();
-  string getDisplayString();
-  size_t displaySize();
-  size_t loadFirstFromContainedLine(const string &containedLine,
-                                    size_t after = 0);
-
-private:
-  string m_displayText{""};
-  string m_fromFile{"81"};
-};
-
-using ObjectPtr = std::unique_ptr<Object>;
-ObjectPtr createObjectFromType(OBJECT_TYPE type, const string &fromFile);
-string getStartTagOfObjectType(OBJECT_TYPE type);
-string getEndTagOfObjectType(OBJECT_TYPE type);
-
-void testLinkOperation();

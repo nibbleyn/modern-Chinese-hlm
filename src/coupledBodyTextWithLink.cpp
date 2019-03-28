@@ -1,5 +1,7 @@
 #include "coupledBodyTextWithLink.hpp"
 
+using ObjectPtr = std::unique_ptr<Object>;
+
 string getDisplayTypeString(DISPLY_LINE_TYPE type) {
   if (type == DISPLY_LINE_TYPE::EMPTY)
     return "empty";
@@ -10,6 +12,54 @@ string getDisplayTypeString(DISPLY_LINE_TYPE type) {
   if (type == DISPLY_LINE_TYPE::IMAGE)
     return "image";
   return "bad";
+}
+
+ObjectPtr createObjectFromType(OBJECT_TYPE type, const string &fromFile) {
+  if (type == OBJECT_TYPE::LINENUMBER)
+    return std::make_unique<LineNumber>();
+  else if (type == OBJECT_TYPE::SPACE)
+    return std::make_unique<Space>();
+  else if (type == OBJECT_TYPE::POEM)
+    return std::make_unique<Poem>();
+  else if (type == OBJECT_TYPE::LINKFROMMAIN)
+    return std::make_unique<LinkFromMain>(fromFile);
+  else if (type == OBJECT_TYPE::PERSONALCOMMENT)
+    return std::make_unique<PersonalComment>(fromFile);
+  else if (type == OBJECT_TYPE::POEMTRANSLATION)
+    return std::make_unique<PoemTranslation>(fromFile);
+  else if (type == OBJECT_TYPE::COMMENT)
+    return std::make_unique<Comment>(fromFile);
+  return nullptr;
+}
+
+string getStartTagOfObjectType(OBJECT_TYPE type) {
+  if (type == OBJECT_TYPE::LINENUMBER)
+    return UnhiddenLineNumberStart;
+  else if (type == OBJECT_TYPE::SPACE)
+    return space;
+  else if (type == OBJECT_TYPE::POEM)
+    return poemBeginChars;
+  else if (type == OBJECT_TYPE::LINKFROMMAIN)
+    return linkStartChars;
+  else if (type == OBJECT_TYPE::PERSONALCOMMENT)
+    return personalCommentStartChars;
+  else if (type == OBJECT_TYPE::POEMTRANSLATION)
+    return poemTranslationBeginChars;
+  else if (type == OBJECT_TYPE::COMMENT)
+    return commentBeginChars;
+  return "";
+}
+
+string getEndTagOfObjectType(OBJECT_TYPE type) {
+  if (type == OBJECT_TYPE::LINKFROMMAIN)
+    return linkEndChars;
+  else if (type == OBJECT_TYPE::PERSONALCOMMENT)
+    return personalCommentEndChars;
+  else if (type == OBJECT_TYPE::POEMTRANSLATION)
+    return poemTranslationEndChars;
+  else if (type == OBJECT_TYPE::COMMENT)
+    return commentEndChars;
+  return "";
 }
 
 bool CoupledBodyTextWithLink::isEmbeddedObject(OBJECT_TYPE type,
