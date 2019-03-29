@@ -1,6 +1,8 @@
 #pragma once
-#include "fileUtil.hpp"
-#include "utf8StringUtil.hpp"
+//#include "fileUtil.hpp"
+//#include "utf8StringUtil.hpp"
+
+#include "attachmentFiles.hpp"
 
 enum class PARA_TYPE { FIRST, MIDDLE, LAST };
 

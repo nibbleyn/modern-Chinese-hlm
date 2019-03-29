@@ -1,6 +1,9 @@
 #pragma once
+
+//#include "lineNumber.hpp"
+//#include "paraHeader.hpp"
+
 #include "lineNumber.hpp"
-#include "paraHeader.hpp"
 
 class CoupledBodyText {
 
@@ -27,6 +30,7 @@ public:
     if (type == FILE_TYPE::JPM)
       m_filePrefix = JPM_BODYTEXT_PREFIX;
   }
+
   void setFileAndAttachmentNumber(const string &file, int attachNo = 0) {
     m_file = file;
     m_attachNumber = attachNo;

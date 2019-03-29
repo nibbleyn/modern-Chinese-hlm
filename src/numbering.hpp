@@ -1,6 +1,9 @@
 #pragma once
-#include "container.hpp"
-#include "coupledBodyText.hpp"
+
+//#include "container.hpp"
+//#include "coupledBodyTextWithLink.hpp"
+
+#include "linkFix.hpp"
 
 void numberJPMHtmls(bool forceUpdate = true, bool hideParaHeader = false);
 void numberOriginalHtmls(bool forceUpdate = true, bool hideParaHeader = false);

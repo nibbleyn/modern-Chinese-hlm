@@ -1,5 +1,8 @@
 #pragma once
-#include "attachmentFiles.hpp"
+
+//#include "attachmentFiles.hpp"
+//#include "coupledBodyText.hpp"
+
 #include "coupledBodyText.hpp"
 
 enum class LINK_TYPE { MAIN, ATTACHMENT, ORIGINAL, SAMEPAGE, JPM, IMAGE };

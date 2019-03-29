@@ -239,7 +239,7 @@ string fixLinkFromAttachmentTemplate(const string &path, const string &filename,
 }
 
 static const string linkToImageFile =
-    R"(<a unhidden title="IMAGE" href="#XX">（图示：ZZ）</a>)";
+    R"(<a unhidden title="IMAGE" href="PPXX.htm#YY">（图示：ZZ）</a>)";
 
 string fixLinkFromImageTemplate(const string &filename,
                                 const string &fullAnnotation,
@@ -251,7 +251,7 @@ string fixLinkFromImageTemplate(const string &filename,
     else // direct
       replacePart(link, unhiddenDisplayProperty + displaySpace, emptyString);
   }
-  replacePart(link, "XX", filename);
+  replacePart(link, "YY", filename);
   replacePart(link, "（图示：ZZ）", fullAnnotation);
   return link;
 }

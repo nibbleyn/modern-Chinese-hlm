@@ -1,15 +1,7 @@
-#include "linkFix.hpp"
-#include "numbering.hpp"
-#include "test.hpp"
 #include "tools.hpp"
 
 int main(int argc, char **argv) {
   // change this number to run different functions
-  //  int num = 1;
-  //	  int num = 2;
-  //  int num = 3;
-  //	  int num = 4;
-  //  int num = 5;
   int num = 11;
   switch (num) {
   case 1:
