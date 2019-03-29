@@ -7,5 +7,3 @@ void fixLinksFromMain(bool forceUpdate = true);
 
 // link fixing for attachment files
 void fixLinksFromAttachment(bool forceUpdate = true);
-
-void testContainer(int num);

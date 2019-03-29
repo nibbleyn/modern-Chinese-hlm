@@ -10,4 +10,3 @@ AttachmentNumber getAttachmentNumber(const string &filename);
 string getAttachmentTitle(const string &filename);
 vector<int> getAttachmentFileListForChapter(const string &referFile,
                                             const string &fromDir);
-void testAttachmentOperations();

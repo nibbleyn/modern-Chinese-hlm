@@ -124,5 +124,6 @@ protected:
   };
 };
 
-void testSearchTextIsOnlyPartOfOtherKeys();
-void testLineNumber();
+bool isFoundAsNonKeys(const string &line, const string &key);
+bool isFoundOutsidePersonalComments(const string &line, const string &key) ;
+

@@ -89,18 +89,3 @@ vector<int> getAttachmentFileListForChapter(const string &referFile,
   }
   return attList;
 }
-
-void testAttachmentOperations() {
-  auto attList = getAttachmentFileListForChapter("28", HTML_SRC_ATTACHMENT);
-  sort(attList.begin(), attList.end());
-  for (const auto &attNo : attList) {
-    FUNCTION_OUTPUT << attNo << ", ";
-  }
-  FUNCTION_OUTPUT << endl;
-  attList = getAttachmentFileListForChapter("22", HTML_SRC_ATTACHMENT);
-  sort(attList.begin(), attList.end());
-  for (const auto &attNo : attList) {
-    FUNCTION_OUTPUT << attNo << ", ";
-  }
-  FUNCTION_OUTPUT << endl;
-}

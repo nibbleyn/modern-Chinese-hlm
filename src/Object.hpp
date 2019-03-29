@@ -64,6 +64,3 @@ public:
 
 private:
 };
-
-void testSpace();
-void testPoem();

@@ -149,5 +149,3 @@ private:
     }
   }
 };
-
-void testMixedObjects();

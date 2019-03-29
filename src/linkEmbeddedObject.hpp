@@ -37,5 +37,3 @@ private:
   string m_displayText{""};
   string m_fromFile{"81"};
 };
-
-void testLinkOperation();
