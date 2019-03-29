@@ -4,6 +4,4 @@
 #include "story.hpp"
 #include "test.hpp"
 
-void fixHeaderAndFooter(const string &filename = "084");
-
 void tools(int num);

@@ -872,7 +872,7 @@ void tools(int num) {
     findFirstInFiles();
     break;
   case 15:
-    constructSubStory();
+    reConstructStory("story.htm");
     break;
   case 16:
     renderingBodyText("main");

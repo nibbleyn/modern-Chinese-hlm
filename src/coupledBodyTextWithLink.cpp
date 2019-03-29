@@ -754,4 +754,3 @@ void CoupledBodyTextWithLink::fixLinksFromFile(
     outfile << orgLine << endl;
   }
 }
-

@@ -115,4 +115,3 @@ size_t Comment::loadFirstFromContainedLine(const string &containedLine,
   m_displayText = scanForSubLinks(m_bodyText, m_fromFile);
   return containedLine.find(commentBeginChars, after);
 }
-

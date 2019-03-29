@@ -42,5 +42,3 @@ void reConstructStory(string indexFilename) {
   dispalyLinkRange(ls);
   dispalyLinkRange(pls);
 }
-
-void constructSubStory() {}

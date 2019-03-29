@@ -481,8 +481,8 @@ void testMixedObjects() {
   bodyText.setFilePrefixFromFileType(FILE_TYPE::MAIN);
   bodyText.setFileAndAttachmentNumber("05");
   //  bodyText.addLineNumber(getSeparateLineColor(FILE_TYPE::MAIN));
-  bodyText.scanLines();
-  //  printCompareResult(bodyText.getDisplayString(line), compareTo);
+  //  bodyText.scanLines();
+  printCompareResult(bodyText.getDisplayString(line), compareTo);
 }
 
 void testListContainer() {

@@ -10,6 +10,3 @@ void numberOriginalHtmls(bool forceUpdate = true, bool hideParaHeader = false);
 void numberMainHtmls(bool forceUpdate = true, bool hideParaHeader = false);
 void numberAttachmentHtmls(bool forceUpdate = true,
                            bool hideParaHeader = false);
-
-void reformatTxtFilesForReader();
-void autoSplitBodyText(const string &fileType);

@@ -125,5 +125,4 @@ protected:
 };
 
 bool isFoundAsNonKeys(const string &line, const string &key);
-bool isFoundOutsidePersonalComments(const string &line, const string &key) ;
-
+bool isFoundOutsidePersonalComments(const string &line, const string &key);

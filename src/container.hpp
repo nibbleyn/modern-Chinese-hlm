@@ -183,8 +183,3 @@ private:
   string getInputFileName() const override { return m_filename; }
   string m_filename{TABLE_CONTAINER_FILENAME};
 };
-
-void dissembleAttachments(int minTarget, int maxTarget, int minAttachNo,
-                          int maxAttachNo);
-void assembleAttachments(int minTarget, int maxTarget, int minAttachNo,
-                         int maxAttachNo);

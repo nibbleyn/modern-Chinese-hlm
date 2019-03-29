@@ -109,6 +109,72 @@ void fixReturnLinkForAttachments(int minTarget, int maxTarget) {
 }
 
 /**
+ * dissemble a set of Attachment files of a set of chapters
+ * if minAttachNo>maxAttachNo or both are zero
+ * dissemble all attachments for those chapters
+ * @param minTarget starting from this chapter
+ * @param maxTarget until this chapter
+ * @param minAttachNo for each chapter, start from this attachment
+ * @param maxAttachNo for each chapter, until this attachment
+ */
+void dissembleAttachments(int minTarget, int maxTarget, int minAttachNo,
+                          int maxAttachNo) {
+  CoupledContainer container(FILE_TYPE::ATTACHMENT);
+  vector<int> targetAttachments;
+  bool overAllAttachments = true;
+  if (not(minAttachNo == 0 and maxAttachNo == 0) and
+      minAttachNo <= maxAttachNo) {
+    for (int i = maxAttachNo; i >= minAttachNo; i--)
+      targetAttachments.push_back(i);
+    overAllAttachments = false;
+  }
+  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
+    if (overAllAttachments == true)
+      targetAttachments =
+          getAttachmentFileListForChapter(file, HTML_SRC_ATTACHMENT);
+    for (const auto &attNo : targetAttachments) {
+      container.setFileAndAttachmentNumber(file, attNo);
+      container.dissembleFromHTM();
+    }
+  }
+  if (debug >= LOG_INFO)
+    FUNCTION_OUTPUT << "Attachments dissemble finished. " << endl;
+}
+
+/**
+ * assemble a set of Attachment files of a set of chapters
+ * if minAttachNo>maxAttachNo or both are zero
+ * assemble all attachments for those chapters
+ * @param minTarget starting from this chapter
+ * @param maxTarget until this chapter
+ * @param minAttachNo for each chapter, start from this attachment
+ * @param maxAttachNo for each chapter, until this attachment
+ */
+void assembleAttachments(int minTarget, int maxTarget, int minAttachNo,
+                         int maxAttachNo) {
+  CoupledContainer container(FILE_TYPE::ATTACHMENT);
+  vector<int> targetAttachments;
+  bool overAllAttachments = true;
+  if (not(minAttachNo == 0 and maxAttachNo == 0) and
+      minAttachNo <= maxAttachNo) {
+    for (int i = maxAttachNo; i >= minAttachNo; i--)
+      targetAttachments.push_back(i);
+    overAllAttachments = false;
+  }
+  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
+    if (overAllAttachments == true)
+      targetAttachments =
+          getAttachmentFileListForChapter(file, HTML_SRC_ATTACHMENT);
+    for (const auto &attNo : targetAttachments) {
+      container.setFileAndAttachmentNumber(file, attNo);
+      container.assembleBackToHTM();
+    }
+  }
+  if (debug >= LOG_INFO)
+    FUNCTION_OUTPUT << "assemble finished. " << endl;
+}
+
+/**
  * before this function to work, numbering all main, original files
  * no requirement for numbering attachment files.
  * however, attachment files must be put under HTML_SRC_ATTACHMENT

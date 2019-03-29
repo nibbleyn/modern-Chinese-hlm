@@ -88,11 +88,23 @@ void findFirstInNoAttachmentFiles(const string key, const string &fileType,
 
 void searchKeywordInNoAttachmentFiles(const string &key, const string &fileType,
                                       const string &outputFilename,
-                                      bool searchForAll) {
+                                      bool searchForAll = true) {
   int minTarget = 1, maxTarget = 80;
   findFirstInNoAttachmentFiles(key, fileType, minTarget, maxTarget,
                                outputFilename);
 }
+
+using KeyList = vector<string>;
+
+void searchKeywordInNoAttachmentFiles(KeyList &keyList, const string &fileType,
+                                      const string &outputFilename,
+                                      bool searchForAll = true) {}
+
+void searchByTagInNoAttachmentFiles(const string &tag, const string &fileType,
+                                    const string &outputFilename,
+                                    bool showLineNumberOnly = true) {}
+
+void searchForImages() {}
 
 void findFirstInFiles() {
   searchKeywordInNoAttachmentFiles(R"(周瑞家的)", "original", "xxx1");
