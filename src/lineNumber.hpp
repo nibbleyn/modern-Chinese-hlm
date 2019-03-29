@@ -1,8 +1,8 @@
 #pragma once
 //#include "Object.hpp"
 
-#include "paraHeader.hpp"
 #include "Object.hpp"
+#include "paraHeader.hpp"
 
 static const int START_PARA_NUMBER = 90;
 // line number is placeholder hyperlink since a ParagraphHeader would have href

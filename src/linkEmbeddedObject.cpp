@@ -183,7 +183,7 @@ void testLinkOperation() {
 
   testLinkFromAttachment(
       "07",
-      R"(<a hidden title="IMAGE" href="#nwbt.jpg">（图示：女娲补天）</a>)",
+      R"(<a hidden title="IMAGE" href="a019.htm#tcf.jpg">（图示：探春房）</a>)",
       false);
   SEPERATE("hidden image link", " finished ");
 

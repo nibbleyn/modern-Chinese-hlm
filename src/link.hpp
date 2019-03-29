@@ -37,7 +37,8 @@ string fixLinkFromAttachmentTemplate(const string &path, const string &filename,
                                      const string &attachNo,
                                      const string &annotation);
 string fixLinkFromImageTemplate(
-    const string &filename, const string &annotation,
+    const string &fullReferFilenameWithPathExt, const string &picFilename,
+    const string &annotation,
     const string &displayProperty = unhiddenDisplayProperty);
 
 static const string returnLinkFromAttachmentHeader = R"(返回本章原文)";
@@ -213,7 +214,7 @@ protected:
   using LinkPtr = std::unique_ptr<Link>;
   LinkPtr m_linkPtrToOrigin{nullptr};
   string m_displayText{""};
-  string m_imageFilename{""};
+  string m_imageReferFilename{""};
 };
 
 class LinkFromMain : public Link {

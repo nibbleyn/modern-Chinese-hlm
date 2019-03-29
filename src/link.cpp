@@ -239,9 +239,13 @@ string fixLinkFromAttachmentTemplate(const string &path, const string &filename,
 }
 
 static const string linkToImageFile =
-    R"(<a unhidden title="IMAGE" href="PPXX.htm#YY">（图示：ZZ）</a>)";
+    R"(<a unhidden title="IMAGE" href="XX#YY">（图示：ZZ）</a>)";
 
-string fixLinkFromImageTemplate(const string &filename,
+/**
+ * Note: do not fix path now
+ */
+string fixLinkFromImageTemplate(const string &fullReferFilenameWithPathExt,
+                                const string &picFilename,
                                 const string &fullAnnotation,
                                 const string &displayProperty) {
   auto link = linkToImageFile;
@@ -251,7 +255,8 @@ string fixLinkFromImageTemplate(const string &filename,
     else // direct
       replacePart(link, unhiddenDisplayProperty + displaySpace, emptyString);
   }
-  replacePart(link, "YY", filename);
+  replacePart(link, "XX", fullReferFilenameWithPathExt);
+  replacePart(link, "YY", picFilename);
   replacePart(link, "（图示：ZZ）", fullAnnotation);
   return link;
 }
@@ -296,8 +301,8 @@ size_t Link::loadFirstFromContainedLine(const string &containedLine,
  */
 string Link::asString() {
   if (m_type == LINK_TYPE::IMAGE) {
-    return fixLinkFromImageTemplate(m_imageFilename, m_annotation,
-                                    displayPropertyAsString());
+    return fixLinkFromImageTemplate(m_imageReferFilename, m_referPara,
+                                    m_annotation, displayPropertyAsString());
   }
   // display property
   string part0 = linkStartChars + displaySpace + displayPropertyAsString();
@@ -398,13 +403,18 @@ LINK_TYPE getLinKTypeFromReferFileName(const string &refereFileName) {
  * @param linkString the link to check
  */
 void Link::readType(const string &linkString) {
+  // special link to image, use title to check
+  if (linkString.find(titleStartChars + imageTypeChars + titleEndChars) !=
+      string::npos) {
+    m_type = LINK_TYPE::IMAGE;
+    return;
+  }
+
   m_type = LINK_TYPE::SAMEPAGE;
-  // special image file without .htm suffix, use title to check
   if (linkString.find(HTML_SUFFIX) == string::npos) {
-    if (linkString.find(titleStartChars + imageTypeChars + titleEndChars) !=
-        string::npos) {
-      m_type = LINK_TYPE::IMAGE;
-    }
+    if (debug >= LOG_EXCEPTION)
+      METHOD_OUTPUT << "no .htm file extension found for " << linkString
+                    << endl;
     return;
   }
 
@@ -422,6 +432,11 @@ void Link::readType(const string &linkString) {
  */
 void Link::readReferPara(const string &linkString) {
   if (m_type == LINK_TYPE::IMAGE) {
+    m_referPara = getIncludedStringBetweenTags(linkString, referParaMiddleChar,
+                                               referParaEndChar);
+    if (debug >= LOG_INFO) {
+      METHOD_OUTPUT << "m_referPara: " << m_referPara << endl;
+    }
     return;
   }
   string htmStart = HTML_SUFFIX + referParaMiddleChar;
@@ -648,10 +663,11 @@ string LinkFromMain::getHtmlFileNamePrefix() {
  */
 bool LinkFromMain::readReferFileName(const string &linkString) {
   if (m_type == LINK_TYPE::IMAGE) {
-    m_imageFilename = getIncludedStringBetweenTags(
-        linkString, referParaMiddleChar, referParaEndChar);
-    if (debug >= LOG_INFO)
-      METHOD_OUTPUT << "m_imageFilename: " << m_imageFilename << endl;
+    m_imageReferFilename = getIncludedStringBetweenTags(
+        linkString, referFileMiddleChar, referParaMiddleChar);
+    if (debug >= LOG_INFO) {
+      METHOD_OUTPUT << "m_imageReferFilename: " << m_imageReferFilename << endl;
+    }
     return true;
   }
 
@@ -791,10 +807,11 @@ string LinkFromAttachment::getHtmlFileNamePrefix() {
  */
 bool LinkFromAttachment::readReferFileName(const string &linkString) {
   if (m_type == LINK_TYPE::IMAGE) {
-    m_imageFilename = getIncludedStringBetweenTags(
-        linkString, referParaMiddleChar, referParaEndChar);
-    if (debug >= LOG_INFO)
-      METHOD_OUTPUT << "m_imageFilename: " << m_imageFilename << endl;
+    m_imageReferFilename = getIncludedStringBetweenTags(
+        linkString, referFileMiddleChar, referParaMiddleChar);
+    if (debug >= LOG_INFO) {
+      METHOD_OUTPUT << "m_imageReferFilename: " << m_imageReferFilename << endl;
+    }
     return true;
   }
 
