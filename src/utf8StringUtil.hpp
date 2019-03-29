@@ -37,7 +37,16 @@ static const string bottomParagraphIndicator =
   cout << typeid(*this).name() << "::" << __func__ << "              "
 #define FUNCTION_OUTPUT cout << __func__ << "              "
 
+static const string HTML_SRC_MAIN = "utf8HTML/src/";
 static const string HTML_SRC_ATTACHMENT = "utf8HTML/src/attachment/";
+static const string HTML_SRC_ORIGINAL = "utf8HTML/src/original/";
+static const string HTML_SRC_JPM = "utf8HTML/src/JPM/";
+
+static const string HTML_OUTPUT_MAIN = "utf8HTML/output/";
+static const string HTML_OUTPUT_ATTACHMENT = "utf8HTML/output/attachment/";
+static const string HTML_OUTPUT_ORIGINAL = "utf8HTML/output/original/";
+static const string HTML_OUTPUT_JPM = "utf8HTML/output/JPM/";
+
 static const string HTML_SUFFIX = R"(.htm)";
 
 static const string BODY_TEXT_OUTPUT = "bodyTexts/output/";
