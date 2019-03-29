@@ -9,10 +9,11 @@ void addLineNumbers(int minTarget, int maxTarget, FILE_TYPE targetFileType,
                     bool forceUpdate = true, bool hideParaHeader = false) {
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     string separatorColor = getSeparateLineColor(targetFileType);
-    CoupledBodyText bodyText;
+    CoupledBodyTextWithLink bodyText;
     bodyText.setFilePrefixFromFileType(targetFileType);
     bodyText.setFileAndAttachmentNumber(file);
-    bodyText.addLineNumber(separatorColor, forceUpdate, hideParaHeader);
+    bodyText.validateFormatForNumbering();
+    //    bodyText.addLineNumber(separatorColor, forceUpdate, hideParaHeader);
   }
 }
 
@@ -58,7 +59,7 @@ void addLineNumbersForAttachmentHtml(int minTarget, int maxTarget,
  * before run this
  */
 void numberMainHtmls(bool forceUpdate, bool hideParaHeader) {
-  int minTarget = 1, maxTarget = 80;
+  int minTarget = 5, maxTarget = 5;
   CoupledContainer container(FILE_TYPE::MAIN);
   CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {

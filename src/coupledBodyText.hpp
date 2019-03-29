@@ -61,6 +61,7 @@ public:
   void reformatParagraphToSmallerSize(const string &sampleBlock);
 
   void getNumberOfPara();
+  void validateFormatForNumbering();
 
   // add line number before each paragraph
   virtual void addLineNumber(const string &separatorColor,

@@ -525,3 +525,109 @@ void CoupledBodyText::addLineNumber(const string &separatorColor,
   if (debug >= LOG_INFO)
     METHOD_OUTPUT << "numbering finished." << endl;
 }
+
+void CoupledBodyText::validateFormatForNumbering() {
+  setInputOutputFiles();
+  ifstream infile(m_inputFile);
+  if (!infile) {
+    METHOD_OUTPUT << "file doesn't exist:" << m_inputFile << endl;
+    return;
+  }
+
+  // continue reading till first paragraph header
+  string inLine;
+  bool stop = false; // need to output line even try to stop
+  while (!infile.eof() and
+         not stop) // To get all the lines till first paragraph header
+  {
+    getline(infile, inLine); // Saves the line in inLine.
+    LineNumber ln;
+    ln.loadFirstFromContainedLine(inLine);
+    if (ln.isParagraphHeader()) {
+      if (debug >= LOG_INFO) {
+        METHOD_OUTPUT << "paragraph header found as:" << endl;
+        METHOD_OUTPUT << ln.asString() << endl;
+      }
+      stop = true;
+    }
+  }
+  if (stop == false) {
+    METHOD_OUTPUT << "no top or bottom paragraph found:" << m_inputFile << endl;
+    return;
+  }
+
+  bool expectAnotherHalf = false;
+  bool processedLastParaHeader = false;
+  ParaHeader paraHeaderLoaded;
+  while (!infile.eof()) {
+    getline(infile, inLine); // Saves the line in inLine.
+    LineNumber ln;
+    ln.loadFirstFromContainedLine(inLine);
+    if (ln.isParagraphHeader()) {
+      if (debug >= LOG_INFO) {
+        METHOD_OUTPUT << "paragraph header found as:" << endl;
+        METHOD_OUTPUT << ln.asString() << endl;
+      }
+      paraHeaderLoaded.readType(inLine);
+      processedLastParaHeader = paraHeaderLoaded.isLastParaHeader();
+      expectAnotherHalf = false;
+      continue;
+    }
+
+    if (isEmptyLine(inLine)) {
+      if (debug >= LOG_INFO) {
+        METHOD_OUTPUT << "processed empty line." << endl;
+        METHOD_OUTPUT << inLine << endl;
+      }
+      continue;
+    }
+
+    if (isImageGroupLine(inLine)) {
+      if (debug >= LOG_INFO) {
+        METHOD_OUTPUT << "processed image Group line." << endl;
+        METHOD_OUTPUT << inLine << endl;
+      }
+      continue;
+    }
+
+    if (expectAnotherHalf) {
+      if (isLeadingBr(inLine)) {
+        if (debug >= LOG_INFO) {
+          METHOD_OUTPUT << "processed Leading Br:" << endl;
+          METHOD_OUTPUT << inLine << endl;
+        }
+        // still expectAnotherHalf
+        continue;
+      }
+      if (hasEndingBr(inLine)) {
+        if (debug >= LOG_INFO) {
+          METHOD_OUTPUT << "processed normal Line:" << endl;
+          METHOD_OUTPUT << inLine << endl;
+        }
+        expectAnotherHalf = false;
+        continue;
+      }
+    } else {
+      // must followed by a leading BR
+      if (isLeadingBr(inLine)) {
+        if (debug >= LOG_INFO) {
+          METHOD_OUTPUT << "processed Leading Br." << endl;
+          METHOD_OUTPUT << inLine << endl;
+        }
+        expectAnotherHalf = true;
+      } else {
+        METHOD_OUTPUT << "expectAnotherHalf: " << expectAnotherHalf
+                      << " wrong without leading " << brTab << endl;
+        METHOD_OUTPUT << inLine << endl;
+        exit(1);
+        break;
+      }
+    }
+  }
+  if (processedLastParaHeader == false) {
+    METHOD_OUTPUT << "no bottom paragraph found:" << m_inputFile << endl;
+    return;
+  }
+  if (debug >= LOG_INFO)
+    METHOD_OUTPUT << "validating finished." << endl;
+}

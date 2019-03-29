@@ -16,6 +16,7 @@ class ParaHeader {
   static const string lastParaHeaderDispText;
 
 public:
+  void readType(const string &header);
   void loadFrom(const string &header);
 
   // if not load from string
@@ -39,8 +40,6 @@ public:
   bool m_lastPara{false};
 
 private:
-  void readType(const string &header);
-
   void loadFromFirstParaHeader(const string &header);
   void loadFromMiddleParaHeader(const string &header);
   void loadFromLastParaHeader(const string &header);
