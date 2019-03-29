@@ -117,7 +117,7 @@ string getIncludedStringBetweenTags(const string &originalString,
                                     const string &begin, const string &end,
                                     size_t after) {
   auto beginPos = originalString.find(begin, after);
-  auto endPos = originalString.find(end, beginPos + begin.length() + 1);
+  auto endPos = originalString.find(end, beginPos + begin.length());
   if (beginPos == string::npos or endPos == string::npos)
     return "";
   return originalString.substr(beginPos + begin.length(),
@@ -128,7 +128,7 @@ string getWholeStringBetweenTags(const string &originalString,
                                  const string &begin, const string &end,
                                  size_t after) {
   auto beginPos = originalString.find(begin, after);
-  auto endPos = originalString.find(end, beginPos + begin.length() + 1);
+  auto endPos = originalString.find(end, beginPos + begin.length());
   if (beginPos == string::npos or endPos == string::npos)
     return "";
   return originalString.substr(beginPos, endPos + end.length() - beginPos);

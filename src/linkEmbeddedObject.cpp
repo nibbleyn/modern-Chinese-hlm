@@ -172,6 +172,9 @@ void testLink(Link &lfm, string linkString, bool needToGenerateOrgLink) {
 void testLinkOperation() {
   SEPERATE("testLinkOperation", " starts ");
 
+  auto str = getWholeStringBetweenTags("<111>22>", "<111>", ">");
+  FUNCTION_OUTPUT << str << endl;
+
   //clang-format off
   testLinkFromAttachment(
       "07",

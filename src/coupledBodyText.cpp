@@ -9,6 +9,7 @@ bool isFoundAsNonKeys(const string &line, const string &key) {
     if (keyBegin == string::npos)
       break;
     auto testBeginPos = line.rfind(keyStartChars, keyBegin);
+    auto endOfTag = 0;
     // if keyStartChars exists, deprecated in the future
     // when keyStartChars is gone
     if (testBeginPos != string::npos and testBeginPos > searchStart) {
@@ -17,6 +18,7 @@ bool isFoundAsNonKeys(const string &line, const string &key) {
                       keyBegin - testBeginPos - keyStartChars.length());
       if (testStr.find(keyEndChars) != string::npos)
         return true;
+      endOfTag = line.find(keyEndChars, keyBegin);
     } else {
       testBeginPos = line.rfind(titleStartChars, keyBegin);
       // if titleStartChars exists
@@ -26,10 +28,34 @@ bool isFoundAsNonKeys(const string &line, const string &key) {
                         keyBegin - testBeginPos - titleStartChars.length());
         if (testStr.find(titleEndChars) != string::npos)
           return true;
+        endOfTag = line.find(titleEndChars, keyBegin);
       } else
         return true;
     }
-    searchStart = keyBegin + 1;
+    searchStart = endOfTag + 1;
+  }
+  return false;
+}
+
+bool isFoundOutsidePersonalComments(const string &line, const string &key) {
+  unsigned int searchStart = 0;
+  while (true) {
+    auto keyBegin = line.find(key, searchStart);
+    // no key found any more
+    if (keyBegin == string::npos)
+      break;
+    auto testBeginPos = line.rfind(personalCommentStartChars, keyBegin);
+    // if personalCommentStartChars exists
+    if (testBeginPos != string::npos and testBeginPos > searchStart) {
+      string testStr = line.substr(
+          testBeginPos + personalCommentStartChars.length(),
+          keyBegin - testBeginPos - personalCommentStartChars.length());
+      FUNCTION_OUTPUT << testStr << endl;
+      if (testStr.find(personalCommentEndChars) != string::npos)
+        return true;
+    } else
+      return true;
+    searchStart = line.find(personalCommentEndChars, keyBegin) + 1;
   }
   return false;
 }
@@ -95,8 +121,13 @@ bool CoupledBodyText::findKey(const string &key) {
       continue;
     }
 
-    // if "key" is only part of the key of another link, skip this line
+    // if "keys" found are only part of "key" of another link, skip this line
     if (not isFoundAsNonKeys(line, key)) {
+      continue;
+    }
+
+    // if "keys" found are only part of personal comments, skip them
+    if (not isFoundOutsidePersonalComments(line, key)) {
       continue;
     }
 
@@ -160,14 +191,6 @@ void CoupledBodyText::reformatParagraphToSmallerSize(
   }
   if (debug >= LOG_INFO)
     METHOD_OUTPUT << "reformatting finished." << endl;
-}
-
-// regrouping to make total size smaller
-void CoupledBodyText::regroupingParagraphs(const string &sampleBlock,
-                                           const string &sampleFirstLine,
-                                           const string &sampleWholeLine) {
-  if (debug >= LOG_INFO)
-    METHOD_OUTPUT << "regrouping finished." << endl;
 }
 
 /**
@@ -513,6 +536,17 @@ void testSearchTextIsOnlyPartOfOtherKeys() {
       R"(（<u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">宝玉真病了的时候，不过袭人<a unhidden href="#P94" title="怔忡"><i hidden>怔忡</i>瞒着不回贾母</a>，晨昏定省还是去的</u>）。宝玉方（<cite unhidden>放下笔，先</cite>）去请安（<u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">贾母关切，姊妹们则看在眼里</u>）)";
   FUNCTION_OUTPUT << line2 << endl;
   FUNCTION_OUTPUT << isFoundAsNonKeys(line2, key) << endl;
+
+  key = R"(乖滑)";
+  string line3 =
+      R"(周瑞家的虽不管事（<u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">不过管管<a unhidden title="租子" href="a006.htm#P94"><i hidden>租子</i>出门的事</a></u>），因她素日仗着是王夫人的陪房，原（<cite unhidden>本</cite>）有些体面，（<cite unhidden>又兼</cite>）心性乖滑，专管（<cite unhidden>在</cite>）各处（<cite unhidden>主子面前</cite>）献勤讨好，所以各处房里的主人都喜欢她。（<u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">至此方将两番接待刘姥姥并送宫花等诸事热情之因说明。“体面”对应和费婆子的不同，“陪房和讨好”又对应共同点。</u>）)";
+  FUNCTION_OUTPUT << line3 << endl;
+  FUNCTION_OUTPUT << isFoundOutsidePersonalComments(line3, key) << endl;
+
+  string line4 =
+      R"(周瑞家的听了（<cite unhidden>凤姐的命令</cite>），巴不得一声儿，素日因与这几个人（<cite unhidden>本就</cite>）不睦（<cite unhidden>，越发要趁机公报私仇</cite>），（<cite unhidden>一从凤姐院里</cite>）出来了便（<cite unhidden>一面</cite>）命一个小厮到林之孝家传凤姐的话，立刻叫林之孝家的进（<cite unhidden>园</cite>）来见大奶奶（<cite unhidden>尤氏</cite>），一面又传人立刻捆起（<cite unhidden>犯事的</cite>）这两个婆子来，交到马圈里派人看守。（<u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">凤姐和尤氏本有默契<a unhidden title="宽洪大量" href="#P94"><i hidden>宽洪大量</i>且放着</a>，若不是周瑞家的心性乖滑加上公报私仇，不至于陷害凤姐到众人议论。然而心性乖滑、公报私仇其实恰恰又是说凤姐本人。“素日不睦”已经渐渐带出她们的特殊身份，乃邢夫人陪房，否则也不会跟周瑞家的不睦。</u>）)";
+  FUNCTION_OUTPUT << line4 << endl;
+  FUNCTION_OUTPUT << isFoundOutsidePersonalComments(line4, key) << endl;
 }
 
 void testLineHeader(string lnStr) {

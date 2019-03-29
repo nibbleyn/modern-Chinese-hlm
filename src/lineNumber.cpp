@@ -10,8 +10,6 @@ static const string inBetweenTwoParas = R"(" href=")";
 static const string inBetweenParaAndLineNumber = R"(.)";
 static const string lastPara = R"(<a unhidden id="bottom" href="#top">)";
 
-int LineNumber::StartNumber = START_PARA_NUMBER;
-int LineNumber::Limit = START_PARA_NUMBER * 2;
 /**
  * read from a string of format "PxxLyy"
  * and assign xx to paraNumber

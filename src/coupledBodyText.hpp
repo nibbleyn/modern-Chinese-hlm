@@ -56,11 +56,6 @@ public:
   // reformat to smaller paragraphs
   void reformatParagraphToSmallerSize(const string &sampleBlock);
 
-  // regrouping to make total size smaller
-  void regroupingParagraphs(const string &sampleBlock,
-                            const string &sampleFirstLine,
-                            const string &sampleWholeLine);
-
   void getNumberOfPara();
 
   // add line number before each paragraph

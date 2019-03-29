@@ -745,6 +745,72 @@ void renderingBodyText(const string &fileType, bool hideParaHeader = false) {
   }
 }
 
+void CoupledBodyTextWithLink::removePersonalCommentsOverNumberedFiles() {
+  setInputOutputFiles();
+  ifstream infile(m_inputFile);
+  if (!infile) {
+    METHOD_OUTPUT << "file doesn't exist:" << m_inputFile << endl;
+    return;
+  }
+  ofstream outfile(m_outputFile);
+  string inLine{"not found"};
+  while (!infile.eof()) // To get all the lines.
+  {
+    getline(infile, inLine); // Saves the line in inLine.
+    if (debug >= LOG_INFO)
+      METHOD_OUTPUT << inLine << endl;
+    auto orgLine = inLine; // inLine would change in loop below
+    string start = personalCommentStartChars;
+    string end = personalCommentEndChars;
+    string to_replace = "";
+    // first loop to remove all personal Comments
+    auto removePersonalCommentLine = orgLine;
+    auto personalCommentBegin = removePersonalCommentLine.find(start);
+    while (personalCommentBegin != string::npos) {
+      auto personalCommentEnd = removePersonalCommentLine.find(end);
+      string personalComment = removePersonalCommentLine.substr(
+          personalCommentBegin,
+          personalCommentEnd + end.length() - personalCommentBegin);
+      to_replace = personalComment;
+      auto replaceBegin = orgLine.find(to_replace);
+      orgLine.replace(replaceBegin, to_replace.length(), "");
+      removePersonalCommentLine =
+          removePersonalCommentLine.substr(personalCommentEnd + end.length());
+      // find next personalComment in the removePersonalCommentLine
+      personalCommentBegin = removePersonalCommentLine.find(start);
+    }
+    // the second loop to remove all expected attachment link from result
+    // orgLine
+    auto removeSpecialLinkLine = orgLine;
+    string linkStart = linkStartChars;
+    string linkEnd = linkEndChars;
+    auto specialLinkBegin = removeSpecialLinkLine.find(linkStart);
+    while (specialLinkBegin != string::npos) {
+      auto specialLinkEnd = removeSpecialLinkLine.find(linkEnd);
+      string specialLink = removeSpecialLinkLine.substr(
+          specialLinkBegin,
+          specialLinkEnd + linkEnd.length() - specialLinkBegin);
+      LinkFromAttachment m_linkPtr(m_file, specialLink);
+      auto num = make_pair(m_linkPtr.getchapterNumer(),
+                           m_linkPtr.getattachmentNumber());
+      if (m_linkPtr.isTargetToOtherAttachmentHtm() and
+          LinkFromMain::getAttachmentType(num) == ATTACHMENT_TYPE::PERSONAL) {
+        if (debug >= LOG_INFO)
+          METHOD_OUTPUT << specialLink << endl;
+        to_replace = specialLink;
+        auto replaceBegin = orgLine.find(to_replace);
+        orgLine.replace(replaceBegin, to_replace.length(), "");
+      }
+      removeSpecialLinkLine =
+          removeSpecialLinkLine.substr(specialLinkEnd + linkEnd.length());
+      // find next specialLink in the removeSpecialLinkLine
+      specialLinkBegin = removeSpecialLinkLine.find(linkStart);
+    }
+
+    outfile << orgLine << endl;
+  }
+}
+
 void removePersonalViewpoints() {
   int minTarget = 54, maxTarget = 54;
   FUNCTION_OUTPUT << "to be implemented." << endl;

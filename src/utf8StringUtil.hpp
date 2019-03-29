@@ -77,9 +77,11 @@ static const string endOfBeginTag = R"(>)";
 // links
 static const string linkStartChars = R"(<a)";
 static const string linkEndChars = R"(</a>)";
+static const string personalCommentStartChars = R"(<u unhidden)";
+static const string personalCommentEndChars = R"(</u>)";
 static const string titleStartChars = R"(title=")";
 static const string imageTypeChars = R"(IMAGE)";
-static const string titleEndChars = R"(")";
+static const string titleEndChars = R"(")"; // ! contained by titleStartChars
 static const string referFileMiddleChar = R"(href=")";
 static const string referParaMiddleChar = R"(#)";
 static const string referParaEndChar = R"(">)";
@@ -90,7 +92,6 @@ static const string citationStartChars = R"(<sub hidden>)";
 static const string citationChapterParaSeparator = R"(.)";
 static const string citationPara = R"(节:)";
 static const string citationEndChars = R"(</sub>)";
-static const string charBeforeAnnotation = R"(>)";
 static const string originalLinkStartChars = R"(（)";
 static const string originalLinkEndChars = R"(）)";
 
