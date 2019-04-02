@@ -34,6 +34,7 @@ public:
                      bool hideParaHeader = false) override;
   void scanLines();
   void calculateParaHeaderPositions();
+  void validateParaSize();
 
 private:
   size_t getAverageLineLengthFromReferenceFile();
@@ -71,7 +72,6 @@ private:
 
   struct ParaHeaderInfo {
     size_t seqOfParaHeader{0};
-    size_t seqOfTextLineAbove{0};
     size_t totalLinesAbove{0};
   };
   // line No. -> para No. and above info
@@ -89,20 +89,37 @@ private:
   }
 
   void printLineAttrTable() {
-    if (not m_lineAttrTable.empty())
+    if (not m_lineAttrTable.empty()) {
       METHOD_OUTPUT << "m_lineAttrTable:" << endl;
+      METHOD_OUTPUT << "line No/numberOfLines/type/summary" << endl;
+    }
     for (const auto &element : m_lineAttrTable) {
-      METHOD_OUTPUT << element.first << "  " << element.second.numberOfLines
-                    << "  " << getDisplayTypeString(element.second.type) << "  "
+      METHOD_OUTPUT << element.first << "        "
+                    << element.second.numberOfLines << "          "
+                    << getDisplayTypeString(element.second.type) << "  "
                     << element.second.cap << endl;
     }
   }
+
+  void printOversizedLines() {
+    for (const auto &element : m_lineAttrTable) {
+      if (element.second.numberOfLines > m_SizeOfReferPage) {
+        METHOD_OUTPUT << "file:      " << m_file << endl;
+        METHOD_OUTPUT << element.first << "        "
+                      << element.second.numberOfLines << "          "
+                      << getDisplayTypeString(element.second.type) << "  "
+                      << element.second.cap << endl;
+      }
+    }
+  }
   void printParaHeaderTable() {
-    if (not m_paraHeaderTable.empty())
+    if (not m_paraHeaderTable.empty()) {
       METHOD_OUTPUT << "m_paraHeaderTable:" << endl;
+      METHOD_OUTPUT << "line No/seqOfParaHeader/totalLinesAbove" << endl;
+    }
     for (const auto &element : m_paraHeaderTable) {
-      METHOD_OUTPUT << element.first << "  " << element.second.seqOfParaHeader
-                    << "  " << element.second.seqOfTextLineAbove << "  "
+      METHOD_OUTPUT << element.first << "        "
+                    << element.second.seqOfParaHeader << "                  "
                     << element.second.totalLinesAbove << endl;
     }
   }

@@ -254,9 +254,11 @@ string CoupledBodyTextWithLink::getDisplayString(const string &originalString) {
         METHOD_OUTPUT << result << "|8|" << endl;
       auto current = createObjectFromType(type, m_file);
       current->loadFirstFromContainedLine(originalString, offset);
-      METHOD_OUTPUT << "whole string: " << current->getWholeString() << endl;
-      METHOD_OUTPUT << "display as:" << current->getDisplayString() << "||"
-                    << endl;
+      if (debug >= LOG_INFO) {
+        METHOD_OUTPUT << "whole string: " << current->getWholeString() << endl;
+        METHOD_OUTPUT << "display as:" << current->getDisplayString() << "||"
+                      << endl;
+      }
       result += current->getDisplayString();
       if (debug >= LOG_INFO)
         METHOD_OUTPUT << result << "|0|" << endl;
@@ -282,7 +284,8 @@ string CoupledBodyTextWithLink::getDisplayString(const string &originalString) {
       m_foundTypes[type] = nextOffsetOfSameType;
       m_offsetOfTypes[nextOffsetOfSameType] = type;
     }
-    printOffsetToObjectType();
+    if (debug >= LOG_INFO)
+      printOffsetToObjectType();
   } while (true);
   if (endOfSubStringOffset < originalString.length())
     result += originalString.substr(endOfSubStringOffset);

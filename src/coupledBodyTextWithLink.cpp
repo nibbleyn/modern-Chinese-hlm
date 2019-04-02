@@ -149,7 +149,7 @@ void CoupledBodyTextWithLink::scanLines() {
       if (paraHeaderLoaded.isFirstParaHeader()) {
         m_numberOfFirstParaHeader++;
         if (isAutoNumbering()) {
-          ParaHeaderInfo info{0, seqOfLines, 0};
+          ParaHeaderInfo info{0, 0};
           m_paraHeaderTable[seqOfLines] = info;
         }
       } else if (paraHeaderLoaded.isLastParaHeader()) {
@@ -199,7 +199,6 @@ void CoupledBodyTextWithLink::scanLines() {
     }
     seqOfLines++;
   }
-  printLineAttrTable();
 
   using ToDeleteLines = std::set<size_t>;
   ToDeleteLines lineSet;
@@ -208,6 +207,8 @@ void CoupledBodyTextWithLink::scanLines() {
   size_t BRDeleted = 0;
   size_t lastDeleted = 0;
   for (const auto &element : m_lineAttrTable) {
+    if (isAutoNumbering() and element.second.type == DISPLY_LINE_TYPE::PARA)
+      lineSet.insert(element.first);
     if (deleteBR == true) {
       if (element.second.type == DISPLY_LINE_TYPE::EMPTY) {
         lastDeleted = element.first;
@@ -226,14 +227,14 @@ void CoupledBodyTextWithLink::scanLines() {
     }
   }
   for (const auto &element : lineSet) {
-    METHOD_OUTPUT << element << endl;
+    if (debug >= LOG_INFO)
+      METHOD_OUTPUT << element << endl;
     m_lineAttrTable.erase(element);
   }
 
   if (debug >= LOG_INFO) {
     METHOD_OUTPUT << endl;
     METHOD_OUTPUT << "Result of getNumberOfPara:" << endl;
-    printLineAttrTable();
     METHOD_OUTPUT << "m_numberOfFirstParaHeader: " << m_numberOfFirstParaHeader
                   << endl;
     METHOD_OUTPUT << "m_numberOfMiddleParaHeader: "
@@ -243,6 +244,7 @@ void CoupledBodyTextWithLink::scanLines() {
     METHOD_OUTPUT << "m_numberOfImageGroupNotIncludedInPara: "
                   << m_numberOfImageGroupNotIncludedInPara << endl;
     METHOD_OUTPUT << "m_lastSeqNumberOfLine: " << m_lastSeqNumberOfLine << endl;
+    printLineAttrTable();
   }
 }
 
@@ -267,26 +269,34 @@ void CoupledBodyTextWithLink::calculateParaHeaderPositions() {
   size_t lastAdded = 0;
   for (const auto &element : m_lineAttrTable) {
     if (totalLines + element.second.numberOfLines > m_SizeOfReferPage) {
-      METHOD_OUTPUT << "add para here" << endl;
-      ParaHeaderInfo info{paraNo++, lastAdded, totalLines};
-      m_paraHeaderTable[element.first] = info;
+      if (debug >= LOG_INFO)
+        METHOD_OUTPUT << "add para here" << endl;
+      ParaHeaderInfo info{paraNo++, totalLines};
+      m_paraHeaderTable[lastAdded] = info;
       lastAdded = element.first;
       totalLines = element.second.numberOfLines;
     } else {
       lastAdded = element.first;
       totalLines += element.second.numberOfLines;
     }
-    METHOD_OUTPUT << totalLines << endl;
-    METHOD_OUTPUT << element.first << "  " << element.second.numberOfLines
-                  << "  " << getDisplayTypeString(element.second.type) << "  "
-                  << element.second.cap << endl;
+    if (debug >= LOG_INFO) {
+      METHOD_OUTPUT << totalLines << endl;
+      METHOD_OUTPUT << element.first << "  " << element.second.numberOfLines
+                    << "  " << getDisplayTypeString(element.second.type) << "  "
+                    << element.second.cap << endl;
+    }
   }
   if (m_numberOfLastParaHeader != 0 and isAutoNumbering()) {
-    ParaHeaderInfo info{paraNo, m_lastSeqNumberOfLine, 0};
+    ParaHeaderInfo info{paraNo, 0};
     m_paraHeaderTable[m_lastSeqNumberOfLine] = info;
   }
+  if (debug >= LOG_INFO)
+    printParaHeaderTable();
+}
 
-  printParaHeaderTable();
+void CoupledBodyTextWithLink::validateParaSize() {
+  scanLines();
+  printOversizedLines();
 }
 
 void CoupledBodyTextWithLink::addLineNumber(const string &separatorColor,

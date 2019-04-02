@@ -5,7 +5,7 @@ int main(int argc, char **argv) {
   int num = 1;
   switch (num) {
   case 1:
-    numberJPMHtmls(false);
+    numberJPMHtmls(2, false);
     break;
   case 2:
     numberOriginalHtmls(false);

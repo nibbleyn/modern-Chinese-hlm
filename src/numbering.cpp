@@ -87,8 +87,13 @@ void numberOriginalHtmls(bool forceUpdate, bool hideParaHeader) {
   FUNCTION_OUTPUT << "Numbering Original Html finished. " << endl;
 }
 
-void numberJPMHtmls(bool forceUpdate, bool hideParaHeader) {
-  int minTarget = 1, maxTarget = 1;
+void numberJPMHtmls(int num, bool forceUpdate, bool hideParaHeader) {
+  auto oldDebug = debug;
+  if (num == 2) {
+    debug = LOG_EXCEPTION;
+  }
+
+  int minTarget = 1, maxTarget = 100;
   CoupledContainer container(FILE_TYPE::JPM);
   //  CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
   for (const auto &file : buildFileSet(minTarget, maxTarget, 3)) {
@@ -100,14 +105,30 @@ void numberJPMHtmls(bool forceUpdate, bool hideParaHeader) {
     CoupledBodyTextWithLink bodyText;
     bodyText.setFilePrefixFromFileType(FILE_TYPE::JPM);
     bodyText.setFileAndAttachmentNumber(file);
-    bodyText.addLineNumber(separatorColor, forceUpdate, hideParaHeader);
+    switch (num) {
+    case 1:
+      bodyText.validateFormatForNumbering();
+      break;
+    case 2:
+      bodyText.validateParaSize();
+      break;
+    case 3:
+      bodyText.addLineNumber(separatorColor, forceUpdate, hideParaHeader);
+      break;
+    default:
+      FUNCTION_OUTPUT << "no test executed." << endl;
+    }
   }
   CoupledBodyText::loadBodyTextsFromFixBackToOutput();
   for (const auto &file : buildFileSet(minTarget, maxTarget, 3)) {
     container.setFileAndAttachmentNumber(file);
     container.assembleBackToHTM();
   }
-  FUNCTION_OUTPUT << "Numbering JPM Html finished. " << endl;
+  if (debug >= LOG_INFO)
+    FUNCTION_OUTPUT << "Numbering JPM Html finished. " << endl;
+  if (num == 2) {
+    debug = oldDebug;
+  }
 }
 
 void numberAttachmentHtmls(bool forceUpdate, bool hideParaHeader) {
