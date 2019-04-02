@@ -1,23 +1,6 @@
 #include "numbering.hpp"
 
 /**
- * numbering lines a set of Original body text files
- * @param minTarget starting from this file
- * @param maxTarget until this file
- */
-void addLineNumbers(int minTarget, int maxTarget, FILE_TYPE targetFileType,
-                    bool forceUpdate = true, bool hideParaHeader = false) {
-  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
-    string separatorColor = getSeparateLineColor(targetFileType);
-    CoupledBodyTextWithLink bodyText;
-    bodyText.setFilePrefixFromFileType(targetFileType);
-    bodyText.setFileAndAttachmentNumber(file);
-    bodyText.validateFormatForNumbering();
-    //    bodyText.addLineNumber(separatorColor, forceUpdate, hideParaHeader);
-  }
-}
-
-/**
  * numbering lines of a set of Attachment body text files of a set of chapters
  * if minAttachNo>maxAttachNo or both are zero
  * Numbering all attachments for those chapters
@@ -46,7 +29,7 @@ void addLineNumbersForAttachmentHtml(int minTarget, int maxTarget,
     for (const auto &attNo : targetAttachments) {
       FILE_TYPE targetFileType = FILE_TYPE::ATTACHMENT;
       string separatorColor = getSeparateLineColor(targetFileType);
-      CoupledBodyText bodyText;
+      CoupledBodyTextWithLink bodyText;
       bodyText.setFilePrefixFromFileType(targetFileType);
       bodyText.setFileAndAttachmentNumber(file, attNo);
       bodyText.addLineNumber(separatorColor, forceUpdate, hideParaHeader);
@@ -66,8 +49,13 @@ void numberMainHtmls(bool forceUpdate, bool hideParaHeader) {
     container.setFileAndAttachmentNumber(file);
     container.dissembleFromHTM();
   }
-  addLineNumbers(minTarget, maxTarget, FILE_TYPE::MAIN, forceUpdate,
-                 hideParaHeader);
+  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
+    string separatorColor = getSeparateLineColor(FILE_TYPE::MAIN);
+    CoupledBodyTextWithLink bodyText;
+    bodyText.setFilePrefixFromFileType(FILE_TYPE::MAIN);
+    bodyText.setFileAndAttachmentNumber(file);
+    bodyText.addLineNumber(separatorColor, forceUpdate, hideParaHeader);
+  }
   CoupledBodyText::loadBodyTextsFromFixBackToOutput();
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     container.setFileAndAttachmentNumber(file);
@@ -84,8 +72,13 @@ void numberOriginalHtmls(bool forceUpdate, bool hideParaHeader) {
     container.setFileAndAttachmentNumber(file);
     container.dissembleFromHTM();
   }
-  addLineNumbers(minTarget, maxTarget, FILE_TYPE::ORIGINAL, forceUpdate,
-                 hideParaHeader);
+  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
+    string separatorColor = getSeparateLineColor(FILE_TYPE::ORIGINAL);
+    CoupledBodyTextWithLink bodyText;
+    bodyText.setFilePrefixFromFileType(FILE_TYPE::ORIGINAL);
+    bodyText.setFileAndAttachmentNumber(file);
+    bodyText.addLineNumber(separatorColor, forceUpdate, hideParaHeader);
+  }
   CoupledBodyText::loadBodyTextsFromFixBackToOutput();
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     container.setFileAndAttachmentNumber(file);
@@ -95,17 +88,22 @@ void numberOriginalHtmls(bool forceUpdate, bool hideParaHeader) {
 }
 
 void numberJPMHtmls(bool forceUpdate, bool hideParaHeader) {
-  int minTarget = 1, maxTarget = 100;
+  int minTarget = 1, maxTarget = 1;
   CoupledContainer container(FILE_TYPE::JPM);
-  CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
-  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
+  //  CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
+  for (const auto &file : buildFileSet(minTarget, maxTarget, 3)) {
     container.setFileAndAttachmentNumber(file);
     container.dissembleFromHTM();
   }
-  addLineNumbers(minTarget, maxTarget, FILE_TYPE::JPM, forceUpdate,
-                 hideParaHeader);
+  for (const auto &file : buildFileSet(minTarget, maxTarget, 3)) {
+    string separatorColor = getSeparateLineColor(FILE_TYPE::JPM);
+    CoupledBodyTextWithLink bodyText;
+    bodyText.setFilePrefixFromFileType(FILE_TYPE::JPM);
+    bodyText.setFileAndAttachmentNumber(file);
+    bodyText.addLineNumber(separatorColor, forceUpdate, hideParaHeader);
+  }
   CoupledBodyText::loadBodyTextsFromFixBackToOutput();
-  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
+  for (const auto &file : buildFileSet(minTarget, maxTarget, 3)) {
     container.setFileAndAttachmentNumber(file);
     container.assembleBackToHTM();
   }

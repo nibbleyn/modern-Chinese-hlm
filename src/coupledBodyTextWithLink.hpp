@@ -59,6 +59,35 @@ private:
   LineAttrTable m_lineAttrTable;
   size_t m_lastSeqNumberOfLine{0};
 
+  bool isInLineAttrTable(size_t seqOfLines) {
+    try {
+      m_lineAttrTable.at(seqOfLines);
+      return true;
+    } catch (exception &) {
+      // std::out_of_range if not existed
+      return false;
+    }
+  }
+
+  struct ParaHeaderInfo {
+    size_t seqOfParaHeader{0};
+    size_t seqOfTextLineAbove{0};
+    size_t totalLinesAbove{0};
+  };
+  // line No. -> para No. and above info
+  using ParaHeaderTable = std::map<size_t, ParaHeaderInfo>;
+  ParaHeaderTable m_paraHeaderTable;
+
+  bool isInParaHeaderTable(size_t seqOfLines) {
+    try {
+      m_paraHeaderTable.at(seqOfLines);
+      return true;
+    } catch (exception &) {
+      // std::out_of_range if not existed
+      return false;
+    }
+  }
+
   void printLineAttrTable() {
     if (not m_lineAttrTable.empty())
       METHOD_OUTPUT << "m_lineAttrTable:" << endl;
@@ -68,6 +97,16 @@ private:
                     << element.second.cap << endl;
     }
   }
+  void printParaHeaderTable() {
+    if (not m_paraHeaderTable.empty())
+      METHOD_OUTPUT << "m_paraHeaderTable:" << endl;
+    for (const auto &element : m_paraHeaderTable) {
+      METHOD_OUTPUT << element.first << "  " << element.second.seqOfParaHeader
+                    << "  " << element.second.seqOfTextLineAbove << "  "
+                    << element.second.totalLinesAbove << endl;
+    }
+  }
+
   using ParaHeaderPosition = std::set<size_t>;
   ParaHeaderPosition m_paraHeaderPosition;
 

@@ -536,10 +536,8 @@ void CoupledBodyText::validateFormatForNumbering() {
 
   // continue reading till first paragraph header
   string inLine;
-  bool stop = false; // need to output line even try to stop
-  while (!infile.eof() and
-         not stop) // To get all the lines till first paragraph header
-  {
+  bool stop = false;
+  while (!infile.eof() and not stop) {
     getline(infile, inLine); // Saves the line in inLine.
     LineNumber ln;
     ln.loadFirstFromContainedLine(inLine);

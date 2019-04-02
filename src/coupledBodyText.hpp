@@ -62,6 +62,8 @@ public:
 
   void getNumberOfPara();
   void validateFormatForNumbering();
+  void disableAutoNumbering() { m_autoNumbering = false; }
+  bool isAutoNumbering() { return m_autoNumbering; }
 
   // add line number before each paragraph
   virtual void addLineNumber(const string &separatorColor,
@@ -86,7 +88,7 @@ protected:
   lineNumberSet m_result;
   string m_searchError{""};
   bool m_onlyFirst{true};
-  bool m_autoNumbering{false};
+  bool m_autoNumbering{true};
 
   // apperance of imageGroup -> counts of BR afterwards, missing a paraheader
   // afterwards
