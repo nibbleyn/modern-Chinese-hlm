@@ -31,10 +31,12 @@ public:
   void render(bool hideParaHeader = false);
 
   void addLineNumber(const string &separatorColor, bool forceUpdate = true,
-                     bool hideParaHeader = false) override;
+                     bool hideParaHeader = false);
   void scanLines();
   void calculateParaHeaderPositions();
   void validateParaSize();
+  void disableAutoNumbering() { m_autoNumbering = false; }
+  bool isAutoNumbering() { return m_autoNumbering; }
 
 private:
   size_t getAverageLineLengthFromReferenceFile();

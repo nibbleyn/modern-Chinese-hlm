@@ -60,15 +60,7 @@ public:
   // reformat to smaller paragraphs
   void reformatParagraphToSmallerSize(const string &sampleBlock);
 
-  void getNumberOfPara();
   void validateFormatForNumbering();
-  void disableAutoNumbering() { m_autoNumbering = false; }
-  bool isAutoNumbering() { return m_autoNumbering; }
-
-  // add line number before each paragraph
-  virtual void addLineNumber(const string &separatorColor,
-                             bool forceUpdate = true,
-                             bool hideParaHeader = false);
 
   // fix wrong html pair
   void fixTagPairBegin(const string &signOfTagAfterReplaceTag,

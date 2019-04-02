@@ -412,6 +412,44 @@ void fixHeaderAndFooterForJPMHtmls() {
   FUNCTION_OUTPUT << "fixHeaderAndFooter for JPM Htmls finished. " << endl;
 }
 
+// reformat to smaller paragraphs
+void CoupledBodyText::reformatParagraphToSmallerSize(
+    const string &sampleBlock) {
+  setInputOutputFiles();
+  ifstream infile(m_inputFile);
+  if (!infile) {
+    METHOD_OUTPUT << "file doesn't exist:" << m_inputFile << endl;
+    return;
+  }
+  ofstream outfile(m_outputFile);
+  if (debug >= LOG_INFO)
+    METHOD_OUTPUT << utf8length(sampleBlock) << endl;
+  if (debug >= LOG_INFO)
+    METHOD_OUTPUT << sampleBlock << endl;
+  // continue reading
+  string inLine;
+  string CR{0x0D};
+  string LF{0x0A};
+  string CRLF{0x0D, 0x0A};
+  while (!infile.eof()) {
+    getline(infile, inLine); // Saves the line in inLine.
+    size_t end = -1;
+    do {
+      string line = utf8substr(inLine, end + 1, end, utf8length(sampleBlock));
+      if (not line.empty()) {
+        auto outputLine = line + CRLF;
+        if (debug >= LOG_INFO)
+          METHOD_OUTPUT << outputLine << CR << CRLF;
+        outfile << outputLine << CR << CRLF;
+      }
+      if (utf8length(line) < utf8length(sampleBlock) - 1)
+        break;
+    } while (true);
+  }
+  if (debug >= LOG_INFO)
+    METHOD_OUTPUT << "reformatting finished." << endl;
+}
+
 void CoupledBodyText::fixPersonalView() {
   setInputOutputFiles();
   ifstream infile(m_inputFile);
