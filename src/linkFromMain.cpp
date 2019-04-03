@@ -146,4 +146,3 @@ string LinkFromMain::getBodyTextFilePrefix() {
     prefix = JPM_BODYTEXT_PREFIX;
   return prefix;
 }
-

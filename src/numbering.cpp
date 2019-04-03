@@ -95,7 +95,7 @@ void numberJPMHtmls(int num, bool forceUpdate, bool hideParaHeader) {
 
   int minTarget = 1, maxTarget = 100;
   CoupledContainer container(FILE_TYPE::JPM);
-  //  CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
+  CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
   for (const auto &file : buildFileSet(minTarget, maxTarget, 3)) {
     container.setFileAndAttachmentNumber(file);
     container.dissembleFromHTM();
@@ -124,7 +124,7 @@ void numberJPMHtmls(int num, bool forceUpdate, bool hideParaHeader) {
     container.setFileAndAttachmentNumber(file);
     container.assembleBackToHTM();
   }
-    FUNCTION_OUTPUT << "Numbering JPM Html finished. " << endl;
+  FUNCTION_OUTPUT << "Numbering JPM Html finished. " << endl;
   if (num == 2) {
     debug = oldDebug;
   }

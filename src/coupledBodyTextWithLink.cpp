@@ -372,6 +372,10 @@ void CoupledBodyTextWithLink::addLineNumber(const string &separatorColor,
         }
         // needs to append para header afterwards
         if (inParaTable) {
+          auto patchBrs =
+              m_SizeOfReferPage - m_paraHeaderTable[seqOfLines].totalLinesAbove;
+          while (patchBrs-- > 0)
+            outfile << brTab << endl;
           enterLastPara = (para == m_paraHeaderTable.size() - 2);
           paraHeader.m_currentParaNo = para++;
           paraHeader.m_lastPara = enterLastPara;
