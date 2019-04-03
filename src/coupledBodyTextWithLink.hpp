@@ -4,8 +4,6 @@
 static const string REFERENCE_LINES = "container/referLines.txt";
 static const string REFERENCE_PAGE = "container/referPage.txt";
 static const string TO_CHECK_FILE = "container/toCheck.txt";
-static const string PARA_UP = R"(向上)";
-static const string PARA_DOWN = R"(向下)";
 
 enum class DISPLY_LINE_TYPE { EMPTY, PARA, TEXT, IMAGE };
 string getDisplayTypeString(DISPLY_LINE_TYPE type);
@@ -23,8 +21,6 @@ public:
                         int maxLine = 0);
 
   void removePersonalCommentsOverNumberedFiles();
-  void removeImageForAutoNumbering() {}
-  void addImageBackForManualNumbering() {}
 
   string getDisplayString(const string &originalString);
   void printStringInLines();
@@ -32,26 +28,24 @@ public:
 
   void addLineNumber(const string &separatorColor, bool forceUpdate = true,
                      bool hideParaHeader = false);
-  void scanLines();
-  void calculateParaHeaderPositions();
   void validateParaSize();
+
   void disableAutoNumbering() { m_autoNumbering = false; }
   bool isAutoNumbering() { return m_autoNumbering; }
 
 private:
+  size_t m_averageSizeOfOneLine{0};
+  size_t m_SizeOfReferPage{0};
   size_t getAverageLineLengthFromReferenceFile();
   size_t getLinesofReferencePage();
-  bool isParaSeparator(const string &inLine) {
-    return (inLine.find(PARA_UP) != string::npos and
-            inLine.find(PARA_DOWN) != string::npos);
-  };
   size_t getLinesOfDisplayText(const string &dispString);
+  void scanLines();
+  void calculateParaHeaderPositions();
+
   void searchForEmbededLinks();
   void scanForTypes(const string &containedLine);
   bool isEmbeddedObject(OBJECT_TYPE type, size_t offset);
 
-  size_t m_averageSizeOfOneLine{0};
-  size_t m_SizeOfReferPage{0};
   struct LineInfo {
     size_t numberOfLines{0};
     DISPLY_LINE_TYPE type{DISPLY_LINE_TYPE::EMPTY};

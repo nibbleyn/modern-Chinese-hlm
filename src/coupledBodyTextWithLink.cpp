@@ -120,7 +120,6 @@ void CoupledBodyTextWithLink::scanLines() {
   m_numberOfFirstParaHeader = 0;
   m_numberOfMiddleParaHeader = 0;
   m_numberOfLastParaHeader = 0;
-  m_numberOfImageGroupNotIncludedInPara = 0;
   m_lineAttrTable.clear();
 
   m_SizeOfReferPage = getLinesofReferencePage();
@@ -241,8 +240,6 @@ void CoupledBodyTextWithLink::scanLines() {
                   << m_numberOfMiddleParaHeader << endl;
     METHOD_OUTPUT << "m_numberOfLastParaHeader: " << m_numberOfLastParaHeader
                   << endl;
-    METHOD_OUTPUT << "m_numberOfImageGroupNotIncludedInPara: "
-                  << m_numberOfImageGroupNotIncludedInPara << endl;
     METHOD_OUTPUT << "m_lastSeqNumberOfLine: " << m_lastSeqNumberOfLine << endl;
     printLineAttrTable();
   }

@@ -124,7 +124,6 @@ void numberJPMHtmls(int num, bool forceUpdate, bool hideParaHeader) {
     container.setFileAndAttachmentNumber(file);
     container.assembleBackToHTM();
   }
-  if (debug >= LOG_INFO)
     FUNCTION_OUTPUT << "Numbering JPM Html finished. " << endl;
   if (num == 2) {
     debug = oldDebug;

@@ -82,23 +82,9 @@ protected:
   bool m_onlyFirst{true};
   bool m_autoNumbering{true};
 
-  // apperance of imageGroup -> counts of BR afterwards, missing a paraheader
-  // afterwards
-  using BrAfterImageGroupTable = std::map<size_t, pair<size_t, bool>>;
   int m_numberOfFirstParaHeader{0};
   int m_numberOfMiddleParaHeader{0};
   int m_numberOfLastParaHeader{0};
-  int m_numberOfImageGroupNotIncludedInPara{0};
-  BrAfterImageGroupTable m_brTable;
-
-  void printBrAfterImageGroupTable() {
-    if (not m_brTable.empty())
-      METHOD_OUTPUT << "m_brTable:" << endl;
-    for (const auto &element : m_brTable) {
-      METHOD_OUTPUT << element.first << "  " << element.second.first << "  "
-                    << element.second.second << endl;
-    }
-  }
 
   void setInputOutputFiles();
   void removeNbspsAndSpaces(string &inLine);
