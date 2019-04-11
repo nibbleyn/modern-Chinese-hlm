@@ -281,7 +281,7 @@ void CoupledBodyTextWithLink::scanByRenderingLines() {
 
   if (debug >= LOG_INFO) {
     METHOD_OUTPUT << endl;
-    METHOD_OUTPUT << "Result of getNumberOfPara:" << endl;
+    METHOD_OUTPUT << "Result of scanByRenderingLines:" << endl;
     METHOD_OUTPUT << "m_numberOfFirstParaHeader: " << m_numberOfFirstParaHeader
                   << endl;
     METHOD_OUTPUT << "m_numberOfLastParaHeader: " << m_numberOfLastParaHeader
@@ -343,7 +343,7 @@ void CoupledBodyTextWithLink::fixLinksFromFile(
   while (!infile.eof()) // To get all the lines.
   {
     getline(infile, m_inLine); // Saves the line in m_inLine.
-    string orgLine = m_inLine;   // m_inLine would change in loop below
+    string orgLine = m_inLine; // m_inLine would change in loop below
     LineNumber ln;
     ln.loadFirstFromContainedLine(orgLine);
     if (ln.isParagraphHeader() or not ln.valid() or

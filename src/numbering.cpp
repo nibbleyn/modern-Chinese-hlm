@@ -41,7 +41,7 @@ void addLineNumbersForAttachmentHtml(int minTarget, int maxTarget,
  * before run this
  */
 void numberMainHtmls(bool forceUpdate, bool hideParaHeader) {
-  int minTarget = 71, maxTarget = 71;
+  int minTarget = 7, maxTarget = 7;
   CoupledContainer container(FILE_TYPE::MAIN);
   //  CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {

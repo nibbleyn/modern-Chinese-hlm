@@ -117,11 +117,23 @@ protected:
     }
   }
 
+  size_t findEarlierLineInLineAttrTable(size_t seqOfLines) {
+    size_t result = seqOfLines - 1;
+    while (true) {
+      if (result == 0 or isInLineAttrTable(result))
+        break;
+      result--;
+    }
+    return result;
+  }
+
   void printLineAttrTable() {
     if (not m_lineAttrTable.empty()) {
       METHOD_OUTPUT << "m_lineAttrTable:" << endl;
       METHOD_OUTPUT << "line No/numberOfLines/type/summary" << endl;
-    }
+    } else
+      METHOD_OUTPUT << "no entry in m_lineAttrTable." << endl;
+
     for (const auto &element : m_lineAttrTable) {
       METHOD_OUTPUT << element.first << "        "
                     << element.second.numberOfLines << "          "
@@ -144,14 +156,15 @@ protected:
     }
   }
 
-  size_t findEarlierLineInImgGroupFollowingParaTable(size_t seqOfLines) {
-    size_t result = seqOfLines--;
-    while (true) {
-      if (result == 0 or isInImgGroupFollowingParaTable(result))
-        break;
-      result--;
+  void printImgGroupFollowingParaTable() {
+    if (not m_imgGroupFollowingParaTable.empty()) {
+      METHOD_OUTPUT << "m_imgGroupFollowingParaTable:" << endl;
+      METHOD_OUTPUT << "img Group line No/line No to add para below" << endl;
+    } else
+      METHOD_OUTPUT << "no entry in m_imgGroupFollowingParaTable." << endl;
+    for (const auto &element : m_imgGroupFollowingParaTable) {
+      METHOD_OUTPUT << element.first << "        " << element.second << endl;
     }
-    return result;
   }
 
   void removeNbspsAndSpaces();

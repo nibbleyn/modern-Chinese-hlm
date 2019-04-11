@@ -247,11 +247,11 @@ void CoupledBodyText::addParaHeader(ofstream &outfile) {
   } else if (m_para == m_numberOfMiddleParaHeader + m_numberOfFirstParaHeader) {
     addlastParaHeader(outfile);
   } else {
-    bool enterLastPara = (m_para == m_numberOfMiddleParaHeader + m_numberOfFirstParaHeader - 1);
+    bool enterLastPara =
+        (m_para == m_numberOfMiddleParaHeader + m_numberOfFirstParaHeader - 1);
     addMiddleParaHeader(outfile, enterLastPara);
   }
 }
-
 
 void CoupledBodyText::scanByLines() {
 
@@ -308,9 +308,10 @@ void CoupledBodyText::scanByLines() {
     } else if (not isEmptyLine(m_inLine)) {
       if (processImgGroup) {
         // at least one BR in between, which should be true if validated
-        if (lastImgGroupEnd != lastImgGroupBegin)
-          lastImgGroupEnd =
-              findEarlierLineInImgGroupFollowingParaTable(lastImgGroupEnd);
+        if (lastImgGroupEnd != lastImgGroupBegin and
+            isInLineAttrTable(lastImgGroupEnd) and
+            m_lineAttrTable[lastImgGroupEnd].type == DISPLY_LINE_TYPE::EMPTY)
+          lastImgGroupEnd = findEarlierLineInLineAttrTable(lastImgGroupEnd);
         m_imgGroupFollowingParaTable[lastImgGroupBegin] = lastImgGroupEnd;
         processImgGroup = false;
       }
@@ -329,7 +330,7 @@ void CoupledBodyText::scanByLines() {
 
   if (debug >= LOG_INFO) {
     METHOD_OUTPUT << endl;
-    METHOD_OUTPUT << "Result of getNumberOfPara:" << endl;
+    METHOD_OUTPUT << "Result of scanByLines:" << endl;
     METHOD_OUTPUT << "m_numberOfFirstParaHeader: " << m_numberOfFirstParaHeader
                   << endl;
     METHOD_OUTPUT << "m_numberOfMiddleParaHeader: "
@@ -338,11 +339,12 @@ void CoupledBodyText::scanByLines() {
                   << endl;
     METHOD_OUTPUT << "m_lastSeqNumberOfLine: " << m_lastSeqNumberOfLine << endl;
     printLineAttrTable();
+    printImgGroupFollowingParaTable();
   }
 }
 
 void CoupledBodyText::paraGuidedNumbering(bool forceUpdate,
-                                                  bool hideParaHeader) {
+                                          bool hideParaHeader) {
 
   ifstream infile(m_inputFile);
   ofstream outfile(m_outputFile);

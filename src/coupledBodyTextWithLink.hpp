@@ -67,11 +67,13 @@ private:
       }
     }
   }
+
   void printParaHeaderTable() {
     if (not m_paraHeaderTable.empty()) {
       METHOD_OUTPUT << "m_paraHeaderTable:" << endl;
       METHOD_OUTPUT << "line No/seqOfParaHeader/totalLinesAbove" << endl;
-    }
+    } else
+      METHOD_OUTPUT << "no entry in m_paraHeaderTable." << endl;
     for (const auto &element : m_paraHeaderTable) {
       METHOD_OUTPUT << element.first << "        "
                     << element.second.seqOfParaHeader << "                  "
@@ -115,6 +117,10 @@ private:
   PoemTranslationStringTable m_poemTranslationStringTable;
 
   void printOffsetToObjectType() {
+    if (not m_offsetOfTypes.empty())
+      METHOD_OUTPUT << "m_offsetOfTypes:" << endl;
+    else
+      METHOD_OUTPUT << "no entry in m_offsetOfTypes." << endl;
     for (const auto &element : m_offsetOfTypes) {
       METHOD_OUTPUT << element.first << "  "
                     << getNameOfObjectType(element.second) << endl;
@@ -122,6 +128,10 @@ private:
   }
 
   void printObjectTypeToOffset() {
+    if (not m_foundTypes.empty())
+      METHOD_OUTPUT << "m_foundTypes:" << endl;
+    else
+      METHOD_OUTPUT << "no entry in m_foundTypes." << endl;
     for (const auto &element : m_foundTypes) {
       METHOD_OUTPUT << getNameOfObjectType(element.first) << "  "
                     << element.second << endl;
@@ -130,6 +140,8 @@ private:
   void printLinkStringTable() {
     if (not m_linkStringTable.empty())
       METHOD_OUTPUT << "m_linkStringTable:" << endl;
+    else
+      METHOD_OUTPUT << "no entry in m_linkStringTable." << endl;
     for (const auto &element : m_linkStringTable) {
       METHOD_OUTPUT << element.first << "  " << element.second.endOffset << "  "
                     << element.second.embedded << endl;
@@ -139,6 +151,8 @@ private:
   void printCommentStringTable() {
     if (not m_commentStringTable.empty())
       METHOD_OUTPUT << "m_commentStringTable:" << endl;
+    else
+      METHOD_OUTPUT << "no entry in m_commentStringTable." << endl;
     for (const auto &element : m_commentStringTable) {
       METHOD_OUTPUT << element.first << "  " << element.second.endOffset << "  "
                     << element.second.embedded << endl;
@@ -148,6 +162,8 @@ private:
   void printPersonalCommentStringTable() {
     if (not m_personalCommentStringTable.empty())
       METHOD_OUTPUT << "m_personalCommentStringTable:" << endl;
+    else
+      METHOD_OUTPUT << "no entry in m_personalCommentStringTable." << endl;
     for (const auto &element : m_personalCommentStringTable) {
       METHOD_OUTPUT << element.first << "  " << element.second << endl;
     }
@@ -156,6 +172,8 @@ private:
   void printPoemTranslationStringTable() {
     if (not m_poemTranslationStringTable.empty())
       METHOD_OUTPUT << "m_poemTranslationStringTable:" << endl;
+    else
+      METHOD_OUTPUT << "no entry in m_poemTranslationStringTable." << endl;
     for (const auto &element : m_poemTranslationStringTable) {
       METHOD_OUTPUT << element.first << "  " << element.second << endl;
     }
@@ -164,5 +182,4 @@ private:
   void searchForEmbededLinks();
   void scanForTypes(const string &containedLine);
   bool isEmbeddedObject(OBJECT_TYPE type, size_t offset);
-
 };
