@@ -5,9 +5,6 @@ static const string REFERENCE_LINES = "container/referLines.txt";
 static const string REFERENCE_PAGE = "container/referPage.txt";
 static const string TO_CHECK_FILE = "container/toCheck.txt";
 
-enum class DISPLY_LINE_TYPE { EMPTY, PARA, TEXT, IMAGE };
-string getDisplayTypeString(DISPLY_LINE_TYPE type);
-
 class CoupledBodyTextWithLink : public CoupledBodyText {
 public:
   CoupledBodyTextWithLink() = default;
@@ -15,83 +12,31 @@ public:
       : CoupledBodyText(filePrefix) {}
   virtual ~CoupledBodyTextWithLink(){};
 
+  void validateParaSize();
+
+  void disableAutoNumbering() { m_autoNumbering = false; }
+  void addLineNumber(bool forceUpdate = true, bool hideParaHeader = false);
+
   void fixLinksFromFile(fileSet referMainFiles, fileSet referOriginalFiles,
                         fileSet referJPMFiles, bool forceUpdate = true,
                         int minPara = 0, int maxPara = 0, int minLine = 0,
                         int maxLine = 0);
 
-  void removePersonalCommentsOverNumberedFiles();
-
   string getDisplayString(const string &originalString);
+
   void printStringInLines();
   void render(bool hideParaHeader = false);
 
-  void addLineNumber(bool forceUpdate = true, bool hideParaHeader = false);
-  void validateParaSize();
-
-  void disableAutoNumbering() { m_autoNumbering = false; }
-  bool isAutoNumbering() { return m_autoNumbering; }
+  void removePersonalCommentsOverNumberedFiles();
 
 private:
+  bool isAutoNumbering() { return m_autoNumbering; }
+
   size_t m_averageSizeOfOneLine{0};
   size_t m_SizeOfReferPage{0};
   size_t getAverageLineLengthFromReferenceFile();
   size_t getLinesofReferencePage();
   size_t getLinesOfDisplayText(const string &dispString);
-  void scanByRenderingLines();
-  void calculateParaHeaderPositions();
-  void paraGeneratedNumbering(bool forceUpdate, bool hideParaHeader);
-
-  void scanByLines();
-  void paraGuidedNumbering(bool forceUpdate, bool hideParaHeader);
-
-  void searchForEmbededLinks();
-  void scanForTypes(const string &containedLine);
-  bool isEmbeddedObject(OBJECT_TYPE type, size_t offset);
-
-  struct LineInfo {
-    size_t numberOfLines{0};
-    DISPLY_LINE_TYPE type{DISPLY_LINE_TYPE::EMPTY};
-    string cap{""};
-  };
-  // line No. -> number of display lines, line type
-  using LineAttrTable = std::map<size_t, LineInfo>;
-  LineAttrTable m_lineAttrTable;
-  size_t m_lastSeqNumberOfLine{0};
-
-  bool isInLineAttrTable(size_t seqOfLines) {
-    try {
-      m_lineAttrTable.at(seqOfLines);
-      return true;
-    } catch (exception &) {
-      // std::out_of_range if not existed
-      return false;
-    }
-  }
-
-  // line No.of image group -> line No. before following para header to add
-  using ImgGroupFollowingParaTable = std::map<size_t, size_t>;
-  ImgGroupFollowingParaTable m_imgGroupFollowingParaTable;
-
-  bool isInImgGroupFollowingParaTable(size_t seqOfLines) {
-    try {
-      m_imgGroupFollowingParaTable.at(seqOfLines);
-      return true;
-    } catch (exception &) {
-      // std::out_of_range if not existed
-      return false;
-    }
-  }
-
-  size_t findEarlierLineInImgGroupFollowingParaTable(size_t seqOfLines) {
-    size_t result = seqOfLines--;
-    while (true) {
-      if (result == 0 or isInImgGroupFollowingParaTable(result))
-        break;
-      result--;
-    }
-    return result;
-  }
 
   struct ParaHeaderInfo {
     size_t seqOfParaHeader{0};
@@ -108,19 +53,6 @@ private:
     } catch (exception &) {
       // std::out_of_range if not existed
       return false;
-    }
-  }
-
-  void printLineAttrTable() {
-    if (not m_lineAttrTable.empty()) {
-      METHOD_OUTPUT << "m_lineAttrTable:" << endl;
-      METHOD_OUTPUT << "line No/numberOfLines/type/summary" << endl;
-    }
-    for (const auto &element : m_lineAttrTable) {
-      METHOD_OUTPUT << element.first << "        "
-                    << element.second.numberOfLines << "          "
-                    << getDisplayTypeString(element.second.type) << "  "
-                    << element.second.cap << endl;
     }
   }
 
@@ -147,8 +79,9 @@ private:
     }
   }
 
-  using ParaHeaderPosition = std::set<size_t>;
-  ParaHeaderPosition m_paraHeaderPosition;
+  void scanByRenderingLines();
+  void calculateParaHeaderPositions();
+  void paraGeneratedNumbering(bool forceUpdate, bool hideParaHeader);
 
   using LinkPtr = std::unique_ptr<Link>;
   LinkPtr m_linkPtr{nullptr};
@@ -227,4 +160,9 @@ private:
       METHOD_OUTPUT << element.first << "  " << element.second << endl;
     }
   }
+
+  void searchForEmbededLinks();
+  void scanForTypes(const string &containedLine);
+  bool isEmbeddedObject(OBJECT_TYPE type, size_t offset);
+
 };

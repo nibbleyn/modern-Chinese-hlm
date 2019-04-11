@@ -2,18 +2,6 @@
 
 using ObjectPtr = std::unique_ptr<Object>;
 
-string getDisplayTypeString(DISPLY_LINE_TYPE type) {
-  if (type == DISPLY_LINE_TYPE::EMPTY)
-    return "empty";
-  if (type == DISPLY_LINE_TYPE::PARA)
-    return "para";
-  if (type == DISPLY_LINE_TYPE::TEXT)
-    return "text";
-  if (type == DISPLY_LINE_TYPE::IMAGE)
-    return "image";
-  return "bad";
-}
-
 ObjectPtr createObjectFromType(OBJECT_TYPE type, const string &fromFile) {
   if (type == OBJECT_TYPE::LINENUMBER)
     return std::make_unique<LineNumber>();

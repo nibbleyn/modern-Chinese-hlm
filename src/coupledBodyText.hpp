@@ -5,19 +5,16 @@
 
 #include "lineNumber.hpp"
 
+enum class DISPLY_LINE_TYPE { EMPTY, PARA, TEXT, IMAGE };
+string getDisplayTypeString(DISPLY_LINE_TYPE type);
+
 class CoupledBodyText {
 
 public:
   CoupledBodyText() = default;
   CoupledBodyText(const string &filePrefix) : m_filePrefix(filePrefix) {}
   virtual ~CoupledBodyText(){};
-  /**
-   * load files under BODY_TEXT_OUTPUT directory with files under BODY_TEXT_FIX
-   * i.e. from afterFix to output
-   * for continue link fixing after numbering..
-   * BODY_TEXT_OUTPUT currently is only to output, no backup would be done for
-   * it
-   */
+
   static void loadBodyTextsFromFixBackToOutput();
 
   void setFilePrefixFromFileType(FILE_TYPE type) {
@@ -35,6 +32,8 @@ public:
     m_file = file;
     m_attachNumber = attachNo;
   }
+
+  void validateFormatForNumbering();
 
   using lineNumberSet = set<string>;
   // set options before search
@@ -57,11 +56,6 @@ public:
   }
   lineNumberSet getResultLineSet() { return m_result; };
 
-  // reformat to smaller paragraphs
-  void reformatParagraphToSmallerSize(const string &sampleBlock);
-
-  void validateFormatForNumbering();
-
   // fix wrong html pair
   void fixTagPairBegin(const string &signOfTagAfterReplaceTag,
                        const string &from, const string &to);
@@ -69,40 +63,18 @@ public:
                      const string &from, const string &to,
                      const string &skipTagPairBegin = "");
   void fixPersonalView();
+  // reformat to smaller paragraphs
+  void reformatParagraphToSmallerSize(const string &sampleBlock);
 
 protected:
   string m_filePrefix{"Main"};
   string m_file{"01"};
+  int m_attachNumber{0};
   string m_inputFile{""};
   string m_outputFile{""};
-  int m_attachNumber{0};
-  lineNumberSet m_ignoreSet;
-  lineNumberSet m_result;
-  string m_searchError{""};
-  bool m_onlyFirst{true};
-  bool m_autoNumbering{true};
-
-  size_t m_numberOfFirstParaHeader{0};
-  size_t m_numberOfMiddleParaHeader{0};
-  size_t m_numberOfLastParaHeader{0};
-
   void setInputOutputFiles();
 
-  // used for numbering
-  string m_inLine{};
-  size_t m_para{0};
-  size_t m_lineNo{1}; // LINE index within each group
-  ParaHeader m_paraHeader;
-
-  void removeNbspsAndSpaces();
-  void removeOldLineNumber();
-
-  void numberingLine(ofstream &outfile, bool forceUpdate = true,
-                     bool hideParaHeader = false);
-  void addFirstParaHeader(ofstream &outfile);
-  void addlastParaHeader(ofstream &outfile);
-  void addMiddleParaHeader(ofstream &outfile, bool enterLastPara);
-  void addParaHeader(ofstream &outfile);
+  bool m_autoNumbering{true};
 
   bool isImageGroupLine(const string &inLine) {
     return (inLine.find(imageGroupBeginChars) != string::npos);
@@ -118,6 +90,92 @@ protected:
   bool hasEndingBr(const string &inLine) {
     return (inLine.find(brTab) != string::npos and not isLeadingBr(inLine));
   };
+
+  // used for numbering
+  string m_inLine{};
+  size_t m_para{0};
+  size_t m_lineNo{1}; // LINE index within each group
+  ParaHeader m_paraHeader;
+
+  struct LineInfo {
+    size_t numberOfLines{0};
+    DISPLY_LINE_TYPE type{DISPLY_LINE_TYPE::EMPTY};
+    string cap{""};
+  };
+  // line No. -> number of display lines, line type
+  using LineAttrTable = std::map<size_t, LineInfo>;
+  LineAttrTable m_lineAttrTable;
+  size_t m_lastSeqNumberOfLine{0};
+
+  bool isInLineAttrTable(size_t seqOfLines) {
+    try {
+      m_lineAttrTable.at(seqOfLines);
+      return true;
+    } catch (exception &) {
+      // std::out_of_range if not existed
+      return false;
+    }
+  }
+
+  void printLineAttrTable() {
+    if (not m_lineAttrTable.empty()) {
+      METHOD_OUTPUT << "m_lineAttrTable:" << endl;
+      METHOD_OUTPUT << "line No/numberOfLines/type/summary" << endl;
+    }
+    for (const auto &element : m_lineAttrTable) {
+      METHOD_OUTPUT << element.first << "        "
+                    << element.second.numberOfLines << "          "
+                    << getDisplayTypeString(element.second.type) << "  "
+                    << element.second.cap << endl;
+    }
+  }
+
+  // line No.of image group -> line No. before following para header to add
+  using ImgGroupFollowingParaTable = std::map<size_t, size_t>;
+  ImgGroupFollowingParaTable m_imgGroupFollowingParaTable;
+
+  bool isInImgGroupFollowingParaTable(size_t seqOfLines) {
+    try {
+      m_imgGroupFollowingParaTable.at(seqOfLines);
+      return true;
+    } catch (exception &) {
+      // std::out_of_range if not existed
+      return false;
+    }
+  }
+
+  size_t findEarlierLineInImgGroupFollowingParaTable(size_t seqOfLines) {
+    size_t result = seqOfLines--;
+    while (true) {
+      if (result == 0 or isInImgGroupFollowingParaTable(result))
+        break;
+      result--;
+    }
+    return result;
+  }
+
+  void removeNbspsAndSpaces();
+  void removeOldLineNumber();
+
+  void numberingLine(ofstream &outfile, bool forceUpdate = true,
+                     bool hideParaHeader = false);
+
+  void addFirstParaHeader(ofstream &outfile);
+  void addlastParaHeader(ofstream &outfile);
+  void addMiddleParaHeader(ofstream &outfile, bool enterLastPara);
+  void addParaHeader(ofstream &outfile);
+
+  size_t m_numberOfFirstParaHeader{0};
+  size_t m_numberOfMiddleParaHeader{0};
+  size_t m_numberOfLastParaHeader{0};
+
+  void scanByLines();
+  void paraGuidedNumbering(bool forceUpdate, bool hideParaHeader);
+
+  lineNumberSet m_ignoreSet;
+  lineNumberSet m_result;
+  string m_searchError{""};
+  bool m_onlyFirst{true};
 };
 
 bool isFoundAsNonKeys(const string &line, const string &key);
