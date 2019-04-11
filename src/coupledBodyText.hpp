@@ -82,13 +82,28 @@ protected:
   bool m_onlyFirst{true};
   bool m_autoNumbering{true};
 
-  int m_numberOfFirstParaHeader{0};
-  int m_numberOfMiddleParaHeader{0};
-  int m_numberOfLastParaHeader{0};
+  size_t m_numberOfFirstParaHeader{0};
+  size_t m_numberOfMiddleParaHeader{0};
+  size_t m_numberOfLastParaHeader{0};
 
   void setInputOutputFiles();
-  void removeNbspsAndSpaces(string &inLine);
-  void removeOldLineNumber(string &inLine);
+
+  // used for numbering
+  string m_inLine{};
+  size_t m_para{0};
+  size_t m_lineNo{1}; // LINE index within each group
+  ParaHeader m_paraHeader;
+
+  void removeNbspsAndSpaces();
+  void removeOldLineNumber();
+
+  void numberingLine(ofstream &outfile, bool forceUpdate = true,
+                     bool hideParaHeader = false);
+  void addFirstParaHeader(ofstream &outfile);
+  void addlastParaHeader(ofstream &outfile);
+  void addMiddleParaHeader(ofstream &outfile, bool enterLastPara);
+  void addParaHeader(ofstream &outfile);
+
   bool isImageGroupLine(const string &inLine) {
     return (inLine.find(imageGroupBeginChars) != string::npos);
   }

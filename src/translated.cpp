@@ -2,7 +2,7 @@
 
 int main(int argc, char **argv) {
   // change this number to run different functions
-  int num = 1;
+  int num = 3;
   switch (num) {
   case 1:
     numberJPMHtmls(3, false);

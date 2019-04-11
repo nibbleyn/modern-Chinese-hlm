@@ -458,50 +458,49 @@ void CoupledBodyText::fixPersonalView() {
     return;
   }
   ofstream outfile(m_outputFile);
-  string inLine{"not found"};
   bool unpairFound{false};
   while (!infile.eof()) // To get all the lines.
   {
-    getline(infile, inLine); // Saves the line in inLine.
+    getline(infile, m_inLine); // Saves the line in m_inLine.
     if (debug >= LOG_INFO)
-      FUNCTION_OUTPUT << inLine << endl;
-    if (isLeadingBr(inLine)) {
-      outfile << inLine << endl;
+      FUNCTION_OUTPUT << m_inLine << endl;
+    if (isLeadingBr(m_inLine)) {
+      outfile << m_inLine << endl;
       continue;
     }
 
     LineNumber ln;
-    ln.loadFirstFromContainedLine(inLine);
+    ln.loadFirstFromContainedLine(m_inLine);
     // assume only one unpaired personalComment
-    auto personalCommentBegin = inLine.find(personalCommentStartChars);
-    auto personalCommentEnd = inLine.find(personalCommentEndChars);
+    auto personalCommentBegin = m_inLine.find(personalCommentStartChars);
+    auto personalCommentEnd = m_inLine.find(personalCommentEndChars);
     if (unpairFound == true) {
       if (ln.valid()) // remove old line number
       {
-        removeOldLineNumber(inLine);
+        removeOldLineNumber();
       }
-      removeNbspsAndSpaces(inLine);
-      inLine = ln.getWholeString() + doubleSpace + displaySpace +
-               personalCommentStartChars + personalCommentStartRestChars +
-               endOfPersonalCommentBeginTag + inLine;
+      removeNbspsAndSpaces();
+      m_inLine = ln.getWholeString() + doubleSpace + displaySpace +
+                 personalCommentStartChars + personalCommentStartRestChars +
+                 endOfPersonalCommentBeginTag + m_inLine;
       if (personalCommentEnd != string::npos) {
         unpairFound = false;
       } else {
         const string endOfLineBr = R"(<br>)";
-        if (inLine.find(endOfLineBr) != string::npos)
-          inLine.replace(inLine.find(endOfLineBr), endOfLineBr.length(),
-                         personalCommentEndChars + endOfLineBr);
+        if (m_inLine.find(endOfLineBr) != string::npos)
+          m_inLine.replace(m_inLine.find(endOfLineBr), endOfLineBr.length(),
+                           personalCommentEndChars + endOfLineBr);
       }
-      FUNCTION_OUTPUT << inLine << endl;
+      FUNCTION_OUTPUT << m_inLine << endl;
     } else if (personalCommentBegin != string::npos and
                personalCommentEnd == string::npos) {
       unpairFound = true;
       const string endOfLineBr = R"(<br>)";
-      if (inLine.find(endOfLineBr) != string::npos)
-        inLine.replace(inLine.find(endOfLineBr), endOfLineBr.length(),
-                       personalCommentEndChars + endOfLineBr);
+      if (m_inLine.find(endOfLineBr) != string::npos)
+        m_inLine.replace(m_inLine.find(endOfLineBr), endOfLineBr.length(),
+                         personalCommentEndChars + endOfLineBr);
     }
-    outfile << inLine << endl;
+    outfile << m_inLine << endl;
   }
 }
 

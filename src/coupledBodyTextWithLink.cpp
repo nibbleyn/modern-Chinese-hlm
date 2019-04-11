@@ -75,16 +75,16 @@ size_t CoupledBodyTextWithLink::getAverageLineLengthFromReferenceFile() {
 
 size_t CoupledBodyTextWithLink::getLinesofReferencePage() {
   m_averageSizeOfOneLine = getAverageLineLengthFromReferenceFile();
-  ifstream infile(REFERENCE_PAGE);
-  if (!infile) {
+  ifstream referPageFile(REFERENCE_PAGE);
+  if (!referPageFile) {
     METHOD_OUTPUT << "file doesn't exist:" << REFERENCE_PAGE << endl;
     return 0;
   }
   auto totalLines = 0;
   string line;
-  while (!infile.eof()) // To get you all the lines.
+  while (!referPageFile.eof()) // To get you all the lines.
   {
-    getline(infile, line);
+    getline(referPageFile, line);
     totalLines += getLinesOfDisplayText(line);
     if (debug >= LOG_INFO) {
       METHOD_OUTPUT << line << endl; // excluding start line
@@ -98,16 +98,16 @@ void CoupledBodyTextWithLink::printStringInLines() {
   m_SizeOfReferPage = getLinesofReferencePage();
   setInputOutputFiles();
   //  ifstream infile(m_inputFile);
-  ifstream infile(TO_CHECK_FILE);
-  if (!infile) {
+  ifstream checkFile(TO_CHECK_FILE);
+  if (!checkFile) {
     METHOD_OUTPUT << "file doesn't exist:" << m_inputFile << endl;
     return;
   }
 
   string line;
-  while (!infile.eof()) // To get you all the lines.
+  while (!checkFile.eof()) // To get you all the lines.
   {
-    getline(infile, line);
+    getline(checkFile, line);
     if (debug >= LOG_INFO) {
       METHOD_OUTPUT << line << endl; // excluding start line
       METHOD_OUTPUT << utf8length(line) << endl;
@@ -116,150 +116,9 @@ void CoupledBodyTextWithLink::printStringInLines() {
   }
 }
 
-void CoupledBodyTextWithLink::scanLines() {
-  m_numberOfFirstParaHeader = 0;
-  m_numberOfMiddleParaHeader = 0;
-  m_numberOfLastParaHeader = 0;
-  m_lineAttrTable.clear();
-
-  m_SizeOfReferPage = getLinesofReferencePage();
-  setInputOutputFiles();
-  ifstream infile(m_inputFile);
-
-  if (!infile) {
-    METHOD_OUTPUT << "file doesn't exist:" << m_inputFile << endl;
-    return;
-  }
-
-  string orgLine;
-  size_t seqOfLines = 0;
-  ParaHeader paraHeaderLoaded;
-  string dispLine{""};
-  while (!infile.eof()) // To get you all the lines.
-  {
-    getline(infile, orgLine);
-    if (debug >= LOG_INFO) {
-      METHOD_OUTPUT << orgLine << endl;
-    }
-    LineNumber ln;
-    ln.loadFirstFromContainedLine(orgLine);
-    if (ln.isParagraphHeader()) {
-      paraHeaderLoaded.loadFrom(orgLine);
-      if (paraHeaderLoaded.isFirstParaHeader()) {
-        m_numberOfFirstParaHeader++;
-        if (isAutoNumbering()) {
-          ParaHeaderInfo info{0, 0};
-          m_paraHeaderTable[seqOfLines] = info;
-        }
-      } else if (paraHeaderLoaded.isLastParaHeader()) {
-        m_numberOfLastParaHeader++;
-        m_lastSeqNumberOfLine = seqOfLines;
-        break;
-      } else if (paraHeaderLoaded.isMiddleParaHeader())
-        m_numberOfMiddleParaHeader++;
-      paraHeaderLoaded.fixFromTemplate();
-      dispLine = paraHeaderLoaded.getDisplayString();
-      if (debug >= LOG_INFO) {
-        METHOD_OUTPUT << dispLine << endl;
-      }
-      size_t end = -1;
-      LineInfo info{0, DISPLY_LINE_TYPE::PARA, utf8substr(dispLine, 0, end, 5)};
-      m_lineAttrTable[seqOfLines] = info;
-    } else if (isLeadingBr(orgLine)) {
-      LineInfo info{1, DISPLY_LINE_TYPE::EMPTY, "    "};
-      m_lineAttrTable[seqOfLines] = info;
-    } else if (isImageGroupLine(orgLine)) {
-      LineInfo info{m_SizeOfReferPage - 1, DISPLY_LINE_TYPE::IMAGE, "image"};
-      m_lineAttrTable[seqOfLines] = info;
-    } else if (not isEmptyLine(orgLine)) {
-      auto lastBr = orgLine.find(brTab);
-      if (debug >= LOG_INFO) {
-        METHOD_OUTPUT << orgLine.substr(0, lastBr) << endl;
-      }
-      dispLine = getDisplayString(orgLine.substr(0, lastBr));
-      if (debug >= LOG_INFO) {
-        METHOD_OUTPUT << dispLine << endl; // excluding start line
-        METHOD_OUTPUT << utf8length(dispLine) << endl;
-        METHOD_OUTPUT << getLinesOfDisplayText(dispLine) << endl;
-      }
-      size_t end = -1;
-      LineInfo info{getLinesOfDisplayText(dispLine), DISPLY_LINE_TYPE::TEXT,
-                    utf8substr(dispLine, 0, end, 5)};
-      m_lineAttrTable[seqOfLines] = info;
-      // try to merge leading BR of this line
-      try {
-        auto previousLine = m_lineAttrTable.at(seqOfLines - 1);
-        if (previousLine.type == DISPLY_LINE_TYPE::EMPTY)
-          m_lineAttrTable.erase(seqOfLines - 1);
-        m_lineAttrTable[seqOfLines].numberOfLines++;
-      } catch (exception &) {
-        METHOD_OUTPUT << "no leading br at line" << seqOfLines - 1 << endl;
-      }
-    }
-    seqOfLines++;
-  }
-
-  using ToDeleteLines = std::set<size_t>;
-  ToDeleteLines lineSet;
-
-  bool deleteBR = false;
-  size_t BRDeleted = 0;
-  size_t lastDeleted = 0;
-  for (const auto &element : m_lineAttrTable) {
-    if (isAutoNumbering() and element.second.type == DISPLY_LINE_TYPE::PARA)
-      lineSet.insert(element.first);
-    if (deleteBR == true) {
-      if (element.second.type == DISPLY_LINE_TYPE::EMPTY) {
-        lastDeleted = element.first;
-        lineSet.insert(lastDeleted);
-        BRDeleted++;
-      } else {
-        deleteBR = false;
-        if (BRDeleted > 0) {
-          lineSet.erase(lastDeleted);
-        }
-      }
-    }
-    if (deleteBR == false and element.second.type == DISPLY_LINE_TYPE::IMAGE) {
-      deleteBR = true;
-      BRDeleted = 0;
-    }
-  }
-  for (const auto &element : lineSet) {
-    if (debug >= LOG_INFO)
-      METHOD_OUTPUT << element << endl;
-    m_lineAttrTable.erase(element);
-  }
-
-  if (debug >= LOG_INFO) {
-    METHOD_OUTPUT << endl;
-    METHOD_OUTPUT << "Result of getNumberOfPara:" << endl;
-    METHOD_OUTPUT << "m_numberOfFirstParaHeader: " << m_numberOfFirstParaHeader
-                  << endl;
-    METHOD_OUTPUT << "m_numberOfMiddleParaHeader: "
-                  << m_numberOfMiddleParaHeader << endl;
-    METHOD_OUTPUT << "m_numberOfLastParaHeader: " << m_numberOfLastParaHeader
-                  << endl;
-    METHOD_OUTPUT << "m_lastSeqNumberOfLine: " << m_lastSeqNumberOfLine << endl;
-    printLineAttrTable();
-  }
-}
-
 void CoupledBodyTextWithLink::calculateParaHeaderPositions() {
-  setInputOutputFiles();
-  ifstream infile(m_inputFile);
-  if (!infile) {
-    METHOD_OUTPUT << "file doesn't exist:" << m_inputFile << endl;
-    return;
-  }
 
-  scanLines(); // first scan
-
-  if (m_numberOfFirstParaHeader == 0 or m_numberOfLastParaHeader == 0) {
-    METHOD_OUTPUT << "no top or bottom paragraph found:" << m_inputFile << endl;
-    return;
-    LineNumber::setStartNumber(START_PARA_NUMBER);
-  }
+  m_numberOfMiddleParaHeader = 0;
 
   size_t totalLines = 0;
   size_t paraNo = 1;
@@ -276,28 +135,26 @@ void CoupledBodyTextWithLink::calculateParaHeaderPositions() {
       lastAdded = element.first;
       totalLines += element.second.numberOfLines;
     }
-    if (debug >= LOG_INFO) {
-      METHOD_OUTPUT << totalLines << endl;
-      METHOD_OUTPUT << element.first << "  " << element.second.numberOfLines
-                    << "  " << getDisplayTypeString(element.second.type) << "  "
-                    << element.second.cap << endl;
-    }
   }
-  if (m_numberOfLastParaHeader != 0 and isAutoNumbering()) {
+  if (m_numberOfLastParaHeader != 0) {
+    // reset this value
+    m_numberOfMiddleParaHeader = paraNo - 1;
     ParaHeaderInfo info{paraNo, 0};
     m_paraHeaderTable[m_lastSeqNumberOfLine] = info;
   }
-  if (debug >= LOG_INFO)
+  if (debug >= LOG_INFO) {
     printParaHeaderTable();
+    METHOD_OUTPUT << "m_numberOfMiddleParaHeader: "
+                  << m_numberOfMiddleParaHeader << endl;
+  }
 }
 
 void CoupledBodyTextWithLink::validateParaSize() {
-  scanLines();
+  scanByRenderingLines();
   printOversizedLines();
 }
 
-void CoupledBodyTextWithLink::addLineNumber(const string &separatorColor,
-                                            bool forceUpdate,
+void CoupledBodyTextWithLink::addLineNumber(bool forceUpdate,
                                             bool hideParaHeader) {
   setInputOutputFiles();
   ifstream infile(m_inputFile);
@@ -306,96 +163,316 @@ void CoupledBodyTextWithLink::addLineNumber(const string &separatorColor,
     return;
   }
   ofstream outfile(m_outputFile);
-
-  if (isAutoNumbering()) {
-    calculateParaHeaderPositions();
+  if (!outfile) {
+    METHOD_OUTPUT << "file doesn't exist:" << m_outputFile << endl;
+    return;
   }
 
-  size_t para = 0; // paragraph index
-  ParaHeader paraHeader;
-  int lineNo = 1; // LINE index within each group
+  if (isAutoNumbering()) {
+    m_SizeOfReferPage = getLinesofReferencePage();
+    scanByRenderingLines(); // first scan
+    calculateParaHeaderPositions();
+    paraGeneratedNumbering(forceUpdate, hideParaHeader);
+  } else {
+    scanByLines(); // first scan
+    paraGuidedNumbering(forceUpdate, hideParaHeader);
+  }
+
+  if (debug >= LOG_INFO)
+    METHOD_OUTPUT << "numbering finished." << endl;
+}
+
+void CoupledBodyTextWithLink::paraGeneratedNumbering(bool forceUpdate,
+                                                     bool hideParaHeader) {
+  ifstream infile(m_inputFile);
+  ofstream outfile(m_outputFile);
+
   size_t seqOfLines = 0;
-  bool enterLastPara = false;
-  string inLine;
+  m_para = 0;
+  m_lineNo = 1;
+  bool afterImgGroup = false;
   while (!infile.eof()) {
-    // Saves the line in inLine.
-    getline(infile, inLine);
-    // output directly if not in both tables
+    getline(infile, m_inLine);
     auto inLineTable = isInLineAttrTable(seqOfLines);
-    auto inParaTable = isInParaHeaderTable(seqOfLines);
-    if (inLineTable == false and inParaTable == false)
-      outfile << inLine << endl;
-    else {
-      if (inParaTable) {
-        // first para Header
-        if (m_paraHeaderTable[seqOfLines].seqOfParaHeader == 0) {
-          paraHeader.loadFrom(inLine);
-          paraHeader.fixFromTemplate();
-          outfile << paraHeader.getFixedResult() << endl;
-          para = 1;
-          if (debug >= LOG_INFO) {
-            METHOD_OUTPUT << "processed :" << endl;
-            METHOD_OUTPUT << inLine << endl;
-          }
-        } else if (para == m_paraHeaderTable.size() - 1) {
-          paraHeader.markAsLastParaHeader();
-          paraHeader.fixFromTemplate();
-          outfile << paraHeader.getFixedResult() << endl;
-          if (debug >= LOG_INFO) {
-            METHOD_OUTPUT << "processed :" << endl;
-            METHOD_OUTPUT << inLine << endl;
-          }
+    // first and last para headers
+    // pure empty line or non-last BRs after imageGroup
+    if (inLineTable == false) {
+      // only the first and last para headers
+      if (isInParaHeaderTable(seqOfLines)) {
+        addParaHeader(outfile);
+        if (m_para == m_numberOfMiddleParaHeader + 1) {
           break;
         }
+      } else
+        outfile << m_inLine << endl;
+    } else {
+      // discard old BRs and para headers
+      if ((afterImgGroup == false and
+           m_lineAttrTable[seqOfLines].type == DISPLY_LINE_TYPE::EMPTY) or
+          m_lineAttrTable[seqOfLines].type != DISPLY_LINE_TYPE::PARA) {
+        // skip output
+        seqOfLines++;
+        continue;
       }
-      // needs numbering
-      if (inLineTable and
-          m_lineAttrTable[seqOfLines].type == DISPLY_LINE_TYPE::TEXT) {
-        LineNumber ln;
-        ln.loadFirstFromContainedLine(inLine);
-
-        LineNumber newLn(para, lineNo);
-        if (forceUpdate or not ln.equal(newLn)) {
-          if (ln.valid()) // remove old line number
-          {
-            removeOldLineNumber(inLine);
-          }
-          removeNbspsAndSpaces(inLine);
-          outfile << newLn.getWholeString() << doubleSpace << displaySpace
-                  << inLine << endl; // Prints our line
-        } else
-          outfile << inLine << endl;
-        lineNo++;
-        if (debug >= LOG_INFO) {
-          METHOD_OUTPUT << "processed :" << endl;
-          METHOD_OUTPUT << inLine << endl;
-        }
-        // needs to append para header afterwards
-        if (inParaTable) {
-          auto patchBrs =
-              m_SizeOfReferPage - m_paraHeaderTable[seqOfLines].totalLinesAbove;
-          while (patchBrs-- > 0)
-            outfile << brTab << endl;
-          enterLastPara = (para == m_paraHeaderTable.size() - 2);
-          paraHeader.m_currentParaNo = para++;
-          paraHeader.m_lastPara = enterLastPara;
-          paraHeader.markAsMiddleParaHeader();
-          paraHeader.fixFromTemplate();
-          outfile << paraHeader.getFixedResult() << endl;
-          if (not enterLastPara) {
-            lineNo = 1; // LINE index within each group
-          }
-          if (debug >= LOG_INFO) {
-            METHOD_OUTPUT << "para header added :" << endl;
-            METHOD_OUTPUT << paraHeader.getFixedResult() << endl;
-          }
-        }
+      if (m_lineAttrTable[seqOfLines].type == DISPLY_LINE_TYPE::IMAGE) {
+        outfile << m_inLine << endl;
+        afterImgGroup = true;
+      } else if (m_lineAttrTable[seqOfLines].type == DISPLY_LINE_TYPE::EMPTY)
+        outfile << m_inLine << endl;
+      else if (m_lineAttrTable[seqOfLines].type == DISPLY_LINE_TYPE::TEXT)
+        numberingLine(outfile, forceUpdate, hideParaHeader); // needs numbering
+      // needs to append para header afterwards
+      if (isInParaHeaderTable(seqOfLines)) {
+        auto patchBrs =
+            m_SizeOfReferPage - m_paraHeaderTable[seqOfLines].totalLinesAbove;
+        while (patchBrs-- > 0)
+          outfile << brTab << endl;
+        addParaHeader(outfile);
       }
     }
     seqOfLines++;
   }
-  if (debug >= LOG_INFO)
-    METHOD_OUTPUT << "numbering finished." << endl;
+}
+
+void CoupledBodyTextWithLink::paraGuidedNumbering(bool forceUpdate,
+                                                  bool hideParaHeader) {
+
+  ifstream infile(m_inputFile);
+  ofstream outfile(m_outputFile);
+
+  m_para = 0;
+  m_lineNo = 1;
+  size_t seqOfLines = 0;
+  bool needAddParaAfterImgGroup = false;
+  size_t lineBeforeParaHeader = 0;
+  while (!infile.eof()) {
+    // Saves the line in m_inLine.
+    getline(infile, m_inLine);
+    if (debug >= LOG_INFO) {
+      METHOD_OUTPUT << seqOfLines << ": " << m_inLine << endl;
+    }
+    auto inLineTable = isInLineAttrTable(seqOfLines);
+    // output directly if not in m_lineAttrTable or BRs
+    if (inLineTable == false or
+        m_lineAttrTable[seqOfLines].type == DISPLY_LINE_TYPE::EMPTY) {
+      outfile << m_inLine << endl;
+    } else if (m_lineAttrTable[seqOfLines].type == DISPLY_LINE_TYPE::IMAGE) {
+      // no numbering of image group
+      outfile << m_inLine << endl;
+      if (isInImgGroupFollowingParaTable(seqOfLines)) {
+        needAddParaAfterImgGroup = true;
+        lineBeforeParaHeader = m_imgGroupFollowingParaTable[seqOfLines];
+      }
+    } else if (m_lineAttrTable[seqOfLines].type == DISPLY_LINE_TYPE::TEXT) {
+      numberingLine(outfile, forceUpdate, hideParaHeader);
+    } else if (m_lineAttrTable[seqOfLines].type == DISPLY_LINE_TYPE::PARA) {
+      addParaHeader(outfile);
+    }
+    if (needAddParaAfterImgGroup and seqOfLines == lineBeforeParaHeader) {
+      addParaHeader(outfile);
+    }
+    seqOfLines++;
+  }
+}
+
+void CoupledBodyTextWithLink::scanByLines() {
+
+  m_numberOfFirstParaHeader = 0;
+  m_numberOfMiddleParaHeader = 0;
+  m_numberOfLastParaHeader = 0;
+  m_lineAttrTable.clear();
+  m_imgGroupFollowingParaTable.clear();
+
+  ifstream infile(m_inputFile);
+
+  bool processImgGroup = false;
+  size_t lastImgGroupBegin = 0;
+  size_t lastImgGroupEnd = 0;
+
+  size_t seqOfLines = 0;
+  while (!infile.eof()) // To get you all the lines.
+  {
+    getline(infile, m_inLine);
+    if (debug >= LOG_INFO) {
+      METHOD_OUTPUT << m_inLine << endl;
+    }
+    LineNumber ln;
+    ln.loadFirstFromContainedLine(m_inLine);
+    if (ln.isParagraphHeader()) {
+      m_paraHeader.loadFrom(m_inLine);
+      LineInfo info{0, DISPLY_LINE_TYPE::PARA, ln.asString()};
+      m_lineAttrTable[seqOfLines] = info;
+      if (m_paraHeader.isFirstParaHeader()) {
+        m_numberOfFirstParaHeader++;
+      } else if (m_paraHeader.isLastParaHeader()) {
+        m_numberOfLastParaHeader++;
+        m_lastSeqNumberOfLine = seqOfLines;
+        break;
+      } else if (m_paraHeader.isMiddleParaHeader())
+        m_numberOfMiddleParaHeader++;
+      if (processImgGroup)
+        processImgGroup = false;
+    } else if (isLeadingBr(m_inLine)) {
+      LineInfo info{1, DISPLY_LINE_TYPE::EMPTY, "<BR>"};
+      m_lineAttrTable[seqOfLines] = info;
+      if (processImgGroup)
+        lastImgGroupEnd = seqOfLines;
+    } else if (isImageGroupLine(m_inLine)) {
+      // last image Group just goes before this one
+      if (processImgGroup) {
+        m_imgGroupFollowingParaTable[lastImgGroupBegin] = lastImgGroupEnd;
+      }
+      LineInfo info{0, DISPLY_LINE_TYPE::IMAGE, "image"};
+      m_lineAttrTable[seqOfLines] = info;
+      processImgGroup = true;
+      lastImgGroupBegin = seqOfLines;
+      lastImgGroupEnd = seqOfLines;
+    } else if (not isEmptyLine(m_inLine)) {
+      if (processImgGroup) {
+        // at least one BR in between, which should be true if validated
+        if (lastImgGroupEnd != lastImgGroupBegin)
+          lastImgGroupEnd =
+              findEarlierLineInImgGroupFollowingParaTable(lastImgGroupEnd);
+        m_imgGroupFollowingParaTable[lastImgGroupBegin] = lastImgGroupEnd;
+        processImgGroup = false;
+      }
+      auto lastBr = m_inLine.find(brTab);
+      if (debug >= LOG_INFO) {
+        METHOD_OUTPUT << m_inLine.substr(0, lastBr) << endl;
+      }
+      size_t end = -1;
+      LineInfo info{0, DISPLY_LINE_TYPE::TEXT, utf8substr(m_inLine, 0, end, 5)};
+      m_lineAttrTable[seqOfLines] = info;
+    }
+    seqOfLines++;
+  }
+
+  m_numberOfMiddleParaHeader += m_imgGroupFollowingParaTable.size();
+
+  if (debug >= LOG_INFO) {
+    METHOD_OUTPUT << endl;
+    METHOD_OUTPUT << "Result of getNumberOfPara:" << endl;
+    METHOD_OUTPUT << "m_numberOfFirstParaHeader: " << m_numberOfFirstParaHeader
+                  << endl;
+    METHOD_OUTPUT << "m_numberOfMiddleParaHeader: "
+                  << m_numberOfMiddleParaHeader << endl;
+    METHOD_OUTPUT << "m_numberOfLastParaHeader: " << m_numberOfLastParaHeader
+                  << endl;
+    METHOD_OUTPUT << "m_lastSeqNumberOfLine: " << m_lastSeqNumberOfLine << endl;
+    printLineAttrTable();
+  }
+}
+
+void CoupledBodyTextWithLink::scanByRenderingLines() {
+  m_numberOfFirstParaHeader = 0;
+  m_numberOfLastParaHeader = 0;
+  m_lineAttrTable.clear();
+  m_paraHeaderTable.clear();
+
+  ifstream infile(m_inputFile);
+
+  size_t seqOfLines = 0;
+  while (!infile.eof()) {
+    getline(infile, m_inLine);
+    if (debug >= LOG_INFO) {
+      METHOD_OUTPUT << m_inLine << endl;
+    }
+    LineNumber ln;
+    ln.loadFirstFromContainedLine(m_inLine);
+    if (ln.isParagraphHeader()) {
+      m_paraHeader.loadFrom(m_inLine);
+      if (m_paraHeader.isFirstParaHeader()) {
+        m_numberOfFirstParaHeader++;
+        ParaHeaderInfo info{0, 0};
+        m_paraHeaderTable[seqOfLines] = info;
+      } else if (m_paraHeader.isLastParaHeader()) {
+        m_numberOfLastParaHeader++;
+        m_lastSeqNumberOfLine = seqOfLines;
+        break;
+      } else {
+        // any old middle para headers would not output
+        LineInfo info{0, DISPLY_LINE_TYPE::PARA, "para"};
+        m_lineAttrTable[seqOfLines] = info;
+      }
+    } else if (isLeadingBr(m_inLine)) {
+      LineInfo info{1, DISPLY_LINE_TYPE::EMPTY, "<BR>"};
+      m_lineAttrTable[seqOfLines] = info;
+    } else if (isImageGroupLine(m_inLine)) {
+      LineInfo info{m_SizeOfReferPage - 1, DISPLY_LINE_TYPE::IMAGE, "image"};
+      m_lineAttrTable[seqOfLines] = info;
+    } else if (not isEmptyLine(m_inLine)) {
+      auto lastBr = m_inLine.find(brTab);
+      if (debug >= LOG_INFO) {
+        METHOD_OUTPUT << m_inLine.substr(0, lastBr) << endl;
+      }
+      string dispLine = getDisplayString(m_inLine.substr(0, lastBr));
+      if (debug >= LOG_INFO) {
+        METHOD_OUTPUT << dispLine << endl; // excluding start line
+        METHOD_OUTPUT << utf8length(dispLine) << endl;
+        METHOD_OUTPUT << getLinesOfDisplayText(dispLine) << endl;
+      }
+      size_t end = -1;
+      LineInfo info{getLinesOfDisplayText(dispLine), DISPLY_LINE_TYPE::TEXT,
+                    utf8substr(dispLine, 0, end, 5)};
+      m_lineAttrTable[seqOfLines] = info;
+      // try to merge leading BR of this line
+      try {
+        auto previousLine = m_lineAttrTable.at(seqOfLines - 1);
+        // so that this leading BR would output
+        if (previousLine.type == DISPLY_LINE_TYPE::EMPTY)
+          m_lineAttrTable.erase(seqOfLines - 1);
+        m_lineAttrTable[seqOfLines].numberOfLines++;
+      } catch (exception &) {
+        METHOD_OUTPUT << "no leading br at line" << seqOfLines - 1 << endl;
+        exit(1);
+      }
+    }
+    seqOfLines++;
+  }
+
+  using ToDeleteLines = std::set<size_t>;
+  ToDeleteLines lineSet;
+
+  bool deleteBR = false;
+  size_t BRDeleted = 0;
+  size_t lastDeleted = 0;
+  for (const auto &element : m_lineAttrTable) {
+    if (deleteBR == true) {
+      if (element.second.type == DISPLY_LINE_TYPE::EMPTY) {
+        lastDeleted = element.first;
+        lineSet.insert(lastDeleted);
+        BRDeleted++;
+      } else {
+        deleteBR = false;
+        if (BRDeleted > 0) {
+          // except for this line, all other leading BRs would not output
+          lineSet.erase(lastDeleted);
+        }
+      }
+    }
+    if (deleteBR == false and element.second.type == DISPLY_LINE_TYPE::IMAGE) {
+      deleteBR = true;
+      BRDeleted = 0;
+    }
+  }
+
+  // delete all leading BRs after image group so that they would output
+  for (const auto &element : lineSet) {
+    if (debug >= LOG_INFO)
+      METHOD_OUTPUT << element << endl;
+    m_lineAttrTable.erase(element);
+  }
+
+  if (debug >= LOG_INFO) {
+    METHOD_OUTPUT << endl;
+    METHOD_OUTPUT << "Result of getNumberOfPara:" << endl;
+    METHOD_OUTPUT << "m_numberOfFirstParaHeader: " << m_numberOfFirstParaHeader
+                  << endl;
+    METHOD_OUTPUT << "m_numberOfLastParaHeader: " << m_numberOfLastParaHeader
+                  << endl;
+    METHOD_OUTPUT << "m_lastSeqNumberOfLine: " << m_lastSeqNumberOfLine << endl;
+    printLineAttrTable();
+  }
 }
 
 /**
@@ -414,11 +491,10 @@ void CoupledBodyTextWithLink::fixLinksFromFile(
     return;
   }
   ofstream outfile(m_outputFile);
-  string inLine{""};
   while (!infile.eof()) // To get all the lines.
   {
-    getline(infile, inLine); // Saves the line in inLine.
-    auto orgLine = inLine;   // inLine would change in loop below
+    getline(infile, m_inLine); // Saves the line in m_inLine.
+    auto orgLine = m_inLine;   // m_inLine would change in loop below
     LineNumber ln;
     ln.loadFirstFromContainedLine(orgLine);
     if (ln.isParagraphHeader() or not ln.valid() or
@@ -426,20 +502,20 @@ void CoupledBodyTextWithLink::fixLinksFromFile(
       outfile << orgLine << endl;
       continue; // not fix headers or non-numbered lines
     }
-    inLine = inLine.substr(
+    m_inLine = m_inLine.substr(
         ln.generateLinePrefix().length()); // skip line number link
     if (debug >= LOG_INFO)
-      METHOD_OUTPUT << inLine << endl;
+      METHOD_OUTPUT << m_inLine << endl;
     auto start = linkStartChars;
     string targetFile{""};
     do {
-      auto linkBegin = inLine.find(start);
+      auto linkBegin = m_inLine.find(start);
       if (linkBegin == string::npos) // no link any more, continue with next
                                      // line
         break;
-      auto linkEnd = inLine.find(linkEndChars, linkBegin);
-      auto link =
-          inLine.substr(linkBegin, linkEnd + linkEndChars.length() - linkBegin);
+      auto linkEnd = m_inLine.find(linkEndChars, linkBegin);
+      auto link = m_inLine.substr(linkBegin,
+                                  linkEnd + linkEndChars.length() - linkBegin);
 
       if (m_attachNumber == 0) {
         m_linkPtr = std::make_unique<LinkFromMain>(m_file, link);
@@ -475,13 +551,14 @@ void CoupledBodyTextWithLink::fixLinksFromFile(
           string next = originalLinkStartChars + linkStartChars;
           bool needAddOrginalLink = true;
           // still have above "next" and </a>
-          if (inLine.length() >
+          if (m_inLine.length() >
               (link.length() + next.length() + linkEndChars.length())) {
-            if (inLine.substr(linkEnd + linkEndChars.length(), next.length()) ==
-                next) {
+            if (m_inLine.substr(linkEnd + linkEndChars.length(),
+                                next.length()) == next) {
               // skip </a> and first parenthesis of next
-              auto followingLink = inLine.substr(
-                  linkEnd + next.length() + 2); // find next link in the inLine
+              auto followingLink =
+                  m_inLine.substr(linkEnd + next.length() +
+                                  2); // find next link in the m_inLine
               if (m_attachNumber == 0) {
                 m_followingLinkPtr =
                     std::make_unique<LinkFromMain>(m_file, followingLink);
@@ -537,8 +614,8 @@ void CoupledBodyTextWithLink::fixLinksFromFile(
           }
         }
       }
-      inLine = inLine.substr(
-          linkEnd + linkEndChars.length()); // find next link in the inLine
+      m_inLine = m_inLine.substr(
+          linkEnd + linkEndChars.length()); // find next link in the m_inLine
     } while (1);
     outfile << orgLine << endl;
   }

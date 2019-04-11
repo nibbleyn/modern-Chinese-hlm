@@ -26,8 +26,7 @@ public:
   void printStringInLines();
   void render(bool hideParaHeader = false);
 
-  void addLineNumber(const string &separatorColor, bool forceUpdate = true,
-                     bool hideParaHeader = false);
+  void addLineNumber(bool forceUpdate = true, bool hideParaHeader = false);
   void validateParaSize();
 
   void disableAutoNumbering() { m_autoNumbering = false; }
@@ -39,8 +38,12 @@ private:
   size_t getAverageLineLengthFromReferenceFile();
   size_t getLinesofReferencePage();
   size_t getLinesOfDisplayText(const string &dispString);
-  void scanLines();
+  void scanByRenderingLines();
   void calculateParaHeaderPositions();
+  void paraGeneratedNumbering(bool forceUpdate, bool hideParaHeader);
+
+  void scanByLines();
+  void paraGuidedNumbering(bool forceUpdate, bool hideParaHeader);
 
   void searchForEmbededLinks();
   void scanForTypes(const string &containedLine);
@@ -64,6 +67,30 @@ private:
       // std::out_of_range if not existed
       return false;
     }
+  }
+
+  // line No.of image group -> line No. before following para header to add
+  using ImgGroupFollowingParaTable = std::map<size_t, size_t>;
+  ImgGroupFollowingParaTable m_imgGroupFollowingParaTable;
+
+  bool isInImgGroupFollowingParaTable(size_t seqOfLines) {
+    try {
+      m_imgGroupFollowingParaTable.at(seqOfLines);
+      return true;
+    } catch (exception &) {
+      // std::out_of_range if not existed
+      return false;
+    }
+  }
+
+  size_t findEarlierLineInImgGroupFollowingParaTable(size_t seqOfLines) {
+    size_t result = seqOfLines--;
+    while (true) {
+      if (result == 0 or isInImgGroupFollowingParaTable(result))
+        break;
+      result--;
+    }
+    return result;
   }
 
   struct ParaHeaderInfo {

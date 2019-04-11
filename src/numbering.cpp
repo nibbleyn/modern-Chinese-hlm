@@ -28,11 +28,10 @@ void addLineNumbersForAttachmentHtml(int minTarget, int maxTarget,
           getAttachmentFileListForChapter(file, HTML_SRC_ATTACHMENT);
     for (const auto &attNo : targetAttachments) {
       FILE_TYPE targetFileType = FILE_TYPE::ATTACHMENT;
-      string separatorColor = getSeparateLineColor(targetFileType);
       CoupledBodyTextWithLink bodyText;
       bodyText.setFilePrefixFromFileType(targetFileType);
       bodyText.setFileAndAttachmentNumber(file, attNo);
-      bodyText.addLineNumber(separatorColor, forceUpdate, hideParaHeader);
+      bodyText.addLineNumber(forceUpdate, hideParaHeader);
     }
   }
 }
@@ -42,19 +41,19 @@ void addLineNumbersForAttachmentHtml(int minTarget, int maxTarget,
  * before run this
  */
 void numberMainHtmls(bool forceUpdate, bool hideParaHeader) {
-  int minTarget = 5, maxTarget = 5;
+  int minTarget = 71, maxTarget = 71;
   CoupledContainer container(FILE_TYPE::MAIN);
-  CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
+  //  CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     container.setFileAndAttachmentNumber(file);
     container.dissembleFromHTM();
   }
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
-    string separatorColor = getSeparateLineColor(FILE_TYPE::MAIN);
     CoupledBodyTextWithLink bodyText;
     bodyText.setFilePrefixFromFileType(FILE_TYPE::MAIN);
     bodyText.setFileAndAttachmentNumber(file);
-    bodyText.addLineNumber(separatorColor, forceUpdate, hideParaHeader);
+    bodyText.disableAutoNumbering();
+    bodyText.addLineNumber(forceUpdate, hideParaHeader);
   }
   CoupledBodyText::loadBodyTextsFromFixBackToOutput();
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
@@ -73,11 +72,10 @@ void numberOriginalHtmls(bool forceUpdate, bool hideParaHeader) {
     container.dissembleFromHTM();
   }
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
-    string separatorColor = getSeparateLineColor(FILE_TYPE::ORIGINAL);
     CoupledBodyTextWithLink bodyText;
     bodyText.setFilePrefixFromFileType(FILE_TYPE::ORIGINAL);
     bodyText.setFileAndAttachmentNumber(file);
-    bodyText.addLineNumber(separatorColor, forceUpdate, hideParaHeader);
+    bodyText.addLineNumber(forceUpdate, hideParaHeader);
   }
   CoupledBodyText::loadBodyTextsFromFixBackToOutput();
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
@@ -101,7 +99,6 @@ void numberJPMHtmls(int num, bool forceUpdate, bool hideParaHeader) {
     container.dissembleFromHTM();
   }
   for (const auto &file : buildFileSet(minTarget, maxTarget, 3)) {
-    string separatorColor = getSeparateLineColor(FILE_TYPE::JPM);
     CoupledBodyTextWithLink bodyText;
     bodyText.setFilePrefixFromFileType(FILE_TYPE::JPM);
     bodyText.setFileAndAttachmentNumber(file);
@@ -113,7 +110,7 @@ void numberJPMHtmls(int num, bool forceUpdate, bool hideParaHeader) {
       bodyText.validateParaSize();
       break;
     case 3:
-      bodyText.addLineNumber(separatorColor, forceUpdate, hideParaHeader);
+      bodyText.addLineNumber(forceUpdate, hideParaHeader);
       break;
     default:
       FUNCTION_OUTPUT << "no test executed." << endl;

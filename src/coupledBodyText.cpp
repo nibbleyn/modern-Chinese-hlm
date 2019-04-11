@@ -155,25 +155,94 @@ bool CoupledBodyText::findKey(const string &key) {
   return found;
 }
 
-void CoupledBodyText::removeNbspsAndSpaces(string &inLine) {
+void CoupledBodyText::removeNbspsAndSpaces() {
   // remove existing nbsps and spaces
-  auto iterBegin = inLine.begin();
-  while (iterBegin < inLine.end()) {
+  auto iterBegin = m_inLine.begin();
+  while (iterBegin < m_inLine.end()) {
     if (*iterBegin == displaySpace.at(0))
       ++iterBegin;
     else if (*iterBegin == space.at(0) and
-             (iterBegin + space.length() < inLine.end()) and
+             (iterBegin + space.length() < m_inLine.end()) and
              (string(iterBegin, iterBegin + space.length()) == space)) {
       iterBegin += space.length();
     } else
       break;
   }
-  inLine = string(iterBegin, inLine.end());
+  m_inLine = string(iterBegin, m_inLine.end());
 }
 
-void CoupledBodyText::removeOldLineNumber(string &inLine) {
-  auto linkEnd = inLine.find(LineNumberEnd);
-  inLine = inLine.substr(linkEnd + LineNumberEnd.length());
+void CoupledBodyText::removeOldLineNumber() {
+  auto linkEnd = m_inLine.find(LineNumberEnd);
+  m_inLine = m_inLine.substr(linkEnd + LineNumberEnd.length());
+}
+
+void CoupledBodyText::numberingLine(ofstream &outfile, bool forceUpdate,
+                                    bool hideParaHeader) {
+  LineNumber ln;
+  ln.loadFirstFromContainedLine(m_inLine);
+  LineNumber newLn(m_para, m_lineNo);
+  if (forceUpdate or not ln.equal(newLn)) {
+    if (ln.valid()) // remove old line number
+    {
+      removeOldLineNumber();
+    }
+    removeNbspsAndSpaces();
+    outfile << newLn.getWholeString() << doubleSpace << displaySpace << m_inLine
+            << endl; // Prints our line
+  } else
+    outfile << m_inLine << endl;
+  m_lineNo++;
+  if (debug >= LOG_INFO) {
+    METHOD_OUTPUT << "processed :" << endl;
+    METHOD_OUTPUT << m_inLine << endl;
+  }
+}
+
+void CoupledBodyText::addFirstParaHeader(ofstream &outfile) {
+  m_paraHeader.loadFrom(m_inLine);
+  m_paraHeader.fixFromTemplate();
+  outfile << m_paraHeader.getFixedResult() << endl;
+  m_para = 1;
+  if (debug >= LOG_INFO) {
+    METHOD_OUTPUT << "processed :" << endl;
+    METHOD_OUTPUT << m_inLine << endl;
+  }
+}
+
+void CoupledBodyText::addlastParaHeader(ofstream &outfile) {
+  m_paraHeader.markAsLastParaHeader();
+  m_paraHeader.fixFromTemplate();
+  outfile << m_paraHeader.getFixedResult() << endl;
+  if (debug >= LOG_INFO) {
+    METHOD_OUTPUT << "processed :" << endl;
+    METHOD_OUTPUT << m_inLine << endl;
+  }
+}
+
+void CoupledBodyText::addMiddleParaHeader(ofstream &outfile,
+                                          bool enterLastPara) {
+  m_paraHeader.m_currentParaNo = m_para++;
+  m_paraHeader.m_lastPara = enterLastPara;
+  m_paraHeader.markAsMiddleParaHeader();
+  m_paraHeader.fixFromTemplate();
+  outfile << m_paraHeader.getFixedResult() << endl;
+  m_lineNo = 1; // LINE index within each group
+  if (debug >= LOG_INFO) {
+    METHOD_OUTPUT << "para header added :" << endl;
+    METHOD_OUTPUT << m_paraHeader.getFixedResult() << endl;
+  }
+}
+
+void CoupledBodyText::addParaHeader(ofstream &outfile) {
+  // first para Header
+  if (m_para == 0) {
+    addFirstParaHeader(outfile);
+  } else if (m_para == m_numberOfMiddleParaHeader + 1) {
+    addlastParaHeader(outfile);
+  } else {
+    bool enterLastPara = (m_para == m_numberOfMiddleParaHeader);
+    addMiddleParaHeader(outfile, enterLastPara);
+  }
 }
 
 void CoupledBodyText::validateFormatForNumbering() {
