@@ -135,9 +135,11 @@ void CoupledBodyTextWithLink::paraGeneratedNumbering(bool forceUpdate,
   size_t seqOfLines = 0;
   m_para = 0;
   m_lineNo = 1;
-  bool afterImgGroup = false;
   while (!infile.eof()) {
     getline(infile, m_inLine);
+    if (debug >= LOG_INFO) {
+      METHOD_OUTPUT << seqOfLines << ": " << m_inLine << endl;
+    }
     auto inLineTable = isInLineAttrTable(seqOfLines);
     // first and last para headers
     // pure empty line or non-last BRs after imageGroup
@@ -152,20 +154,14 @@ void CoupledBodyTextWithLink::paraGeneratedNumbering(bool forceUpdate,
         outfile << m_inLine << endl;
     } else {
       // discard old BRs and para headers
-      if ((afterImgGroup == false and
-           m_lineAttrTable[seqOfLines].type == DISPLY_LINE_TYPE::EMPTY) or
-          m_lineAttrTable[seqOfLines].type != DISPLY_LINE_TYPE::PARA) {
-        // skip output
-        seqOfLines++;
-        continue;
+      if (m_lineAttrTable[seqOfLines].numberOfLines != 0) {
+        if (m_lineAttrTable[seqOfLines].type == DISPLY_LINE_TYPE::IMAGE or
+            m_lineAttrTable[seqOfLines].type == DISPLY_LINE_TYPE::EMPTY) {
+          outfile << m_inLine << endl;
+        } else if (m_lineAttrTable[seqOfLines].type == DISPLY_LINE_TYPE::TEXT)
+          numberingLine(outfile, forceUpdate,
+                        hideParaHeader); // needs numbering
       }
-      if (m_lineAttrTable[seqOfLines].type == DISPLY_LINE_TYPE::IMAGE) {
-        outfile << m_inLine << endl;
-        afterImgGroup = true;
-      } else if (m_lineAttrTable[seqOfLines].type == DISPLY_LINE_TYPE::EMPTY)
-        outfile << m_inLine << endl;
-      else if (m_lineAttrTable[seqOfLines].type == DISPLY_LINE_TYPE::TEXT)
-        numberingLine(outfile, forceUpdate, hideParaHeader); // needs numbering
       // needs to append para header afterwards
       if (isInParaHeaderTable(seqOfLines)) {
         auto patchBrs =
@@ -211,7 +207,7 @@ void CoupledBodyTextWithLink::scanByRenderingLines() {
         m_lineAttrTable[seqOfLines] = info;
       }
     } else if (isLeadingBr(m_inLine)) {
-      LineInfo info{1, DISPLY_LINE_TYPE::EMPTY, "<BR>"};
+      LineInfo info{0, DISPLY_LINE_TYPE::EMPTY, "<BR>"};
       m_lineAttrTable[seqOfLines] = info;
     } else if (isImageGroupLine(m_inLine)) {
       LineInfo info{m_SizeOfReferPage - 1, DISPLY_LINE_TYPE::IMAGE, "image"};
@@ -263,6 +259,7 @@ void CoupledBodyTextWithLink::scanByRenderingLines() {
         if (BRDeleted > 0) {
           // except for this line, all other leading BRs would not output
           lineSet.erase(lastDeleted);
+          m_lineAttrTable[lastDeleted].numberOfLines = 1;
         }
       }
     }
