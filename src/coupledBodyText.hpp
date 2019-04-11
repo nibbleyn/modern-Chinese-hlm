@@ -15,6 +15,7 @@ public:
   CoupledBodyText(const string &filePrefix) : m_filePrefix(filePrefix) {}
   virtual ~CoupledBodyText(){};
 
+  // used for configuring
   static void loadBodyTextsFromFixBackToOutput();
 
   void setFilePrefixFromFileType(FILE_TYPE type) {
@@ -33,8 +34,10 @@ public:
     m_attachNumber = attachNo;
   }
 
+  // used for numbering
   void validateFormatForNumbering();
 
+  // used for searching
   using lineNumberSet = set<string>;
   // set options before search
   void resetBeforeSearch() {
@@ -45,7 +48,6 @@ public:
   void addIgnoreLines(const string &line) { m_ignoreSet.insert(line); }
   void searchForAll() { m_onlyFirst = false; }
 
-  // search
   bool findKey(const string &key);
 
   // get search results
@@ -56,6 +58,7 @@ public:
   }
   lineNumberSet getResultLineSet() { return m_result; };
 
+  // used by tools
   // fix wrong html pair
   void fixTagPairBegin(const string &signOfTagAfterReplaceTag,
                        const string &from, const string &to);
@@ -67,6 +70,7 @@ public:
   void reformatParagraphToSmallerSize(const string &sampleBlock);
 
 protected:
+  // used for configuring
   string m_filePrefix{"Main"};
   string m_file{"01"};
   int m_attachNumber{0};
@@ -74,6 +78,7 @@ protected:
   string m_outputFile{""};
   void setInputOutputFiles();
 
+  bool isAutoNumbering() { return m_autoNumbering; }
   bool m_autoNumbering{true};
 
   bool isImageGroupLine(const string &inLine) {
@@ -185,6 +190,7 @@ protected:
   void scanByLines();
   void paraGuidedNumbering(bool forceUpdate, bool hideParaHeader);
 
+  // used for searching
   lineNumberSet m_ignoreSet;
   lineNumberSet m_result;
   string m_searchError{""};

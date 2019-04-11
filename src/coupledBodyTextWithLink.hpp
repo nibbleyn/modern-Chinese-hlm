@@ -12,26 +12,27 @@ public:
       : CoupledBodyText(filePrefix) {}
   virtual ~CoupledBodyTextWithLink(){};
 
+  // used for Auto-numbering
   void validateParaSize();
-
   void disableAutoNumbering() { m_autoNumbering = false; }
   void addLineNumber(bool forceUpdate = true, bool hideParaHeader = false);
 
+  // used for link-fixing
   void fixLinksFromFile(fileSet referMainFiles, fileSet referOriginalFiles,
                         fileSet referJPMFiles, bool forceUpdate = true,
                         int minPara = 0, int maxPara = 0, int minLine = 0,
                         int maxLine = 0);
 
+  // used for rendering
   string getDisplayString(const string &originalString);
 
+  // used by tools
   void printStringInLines();
   void render(bool hideParaHeader = false);
-
   void removePersonalCommentsOverNumberedFiles();
 
 private:
-  bool isAutoNumbering() { return m_autoNumbering; }
-
+  // used for Auto-numbering
   size_t m_averageSizeOfOneLine{0};
   size_t m_SizeOfReferPage{0};
   size_t getAverageLineLengthFromReferenceFile();
@@ -85,10 +86,7 @@ private:
   void calculateParaHeaderPositions();
   void paraGeneratedNumbering(bool forceUpdate, bool hideParaHeader);
 
-  using LinkPtr = std::unique_ptr<Link>;
-  LinkPtr m_linkPtr{nullptr};
-  LinkPtr m_followingLinkPtr{nullptr};
-
+  // used for rendering
   using OffsetToObjectType = std::map<size_t, OBJECT_TYPE>;
   using ObjectTypeToOffset = std::map<OBJECT_TYPE, size_t>;
   OffsetToObjectType m_offsetOfTypes;
@@ -182,4 +180,9 @@ private:
   void searchForEmbededLinks();
   void scanForTypes(const string &containedLine);
   bool isEmbeddedObject(OBJECT_TYPE type, size_t offset);
+
+  // used for link-fixing
+  using LinkPtr = std::unique_ptr<Link>;
+  LinkPtr m_linkPtr{nullptr};
+  LinkPtr m_followingLinkPtr{nullptr};
 };
