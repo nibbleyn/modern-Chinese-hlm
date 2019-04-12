@@ -29,6 +29,8 @@ public:
       m_filePrefix = JPM_BODYTEXT_PREFIX;
   }
 
+  bool isMainBodyText() { return m_filePrefix == MAIN_BODYTEXT_PREFIX; }
+
   void setFileAndAttachmentNumber(const string &file, int attachNo = 0) {
     m_file = file;
     m_attachNumber = attachNo;
@@ -47,6 +49,8 @@ public:
   }
   void addIgnoreLines(const string &line) { m_ignoreSet.insert(line); }
   void searchForAll() { m_onlyFirst = false; }
+
+  void ignorePersonalComments() { m_ignorePersonalComments = true; }
 
   bool findKey(const string &key);
 
@@ -191,6 +195,7 @@ protected:
   void paraGuidedNumbering(bool forceUpdate, bool hideParaHeader);
 
   // used for searching
+  bool m_ignorePersonalComments{false};
   lineNumberSet m_ignoreSet;
   lineNumberSet m_result;
   string m_searchError{""};

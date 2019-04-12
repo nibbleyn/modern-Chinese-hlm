@@ -2,7 +2,7 @@
 
 int main(int argc, char **argv) {
   // change this number to run different functions
-  int num = 14;
+  int num = 5;
   switch (num) {
   case 13:
     refreshBodyTexts(MAIN);

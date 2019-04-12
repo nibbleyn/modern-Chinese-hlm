@@ -473,7 +473,8 @@ bool CoupledBodyText::findKey(const string &key) {
     }
 
     // if "keys" found are only part of personal comments, skip them
-    if (not isFoundOutsidePersonalComments(line, key)) {
+    if (m_ignorePersonalComments and
+        not isFoundOutsidePersonalComments(line, key)) {
       continue;
     }
 

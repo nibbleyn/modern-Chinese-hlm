@@ -537,6 +537,8 @@ void Link::readKey(const string &linkString) {
     bodyText.addIgnoreLines(m_fromLine.asString());
   }
   bodyText.setFileAndAttachmentNumber(getChapterName(), m_attachmentNumber);
+  if (bodyText.isMainBodyText())
+    bodyText.ignorePersonalComments();
   bool found = bodyText.findKey(stringForSearch);
   if (not found) {
     m_usedKey = keyNotFound + stringForSearch;
