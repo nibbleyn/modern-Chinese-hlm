@@ -35,7 +35,7 @@ void findFirstInNoAttachmentFiles(const string key, const string &fileType,
           Link::LinkDetails detail{
               key, file, line,
               fixLinkFromMainTemplate("", file, LINK_DISPLAY_TYPE::DIRECT, key,
-                                      expectedSection, key, line)};
+                                      expectedSection, expectedSection, line)};
           resultLinkList[file].push_back(detail);
         }
         total++;
@@ -107,7 +107,7 @@ void searchByTagInNoAttachmentFiles(const string &tag, const string &fileType,
 void searchForImages() {}
 
 void findFirstInFiles() {
-  searchKeywordInNoAttachmentFiles(R"(周瑞家的)", "original", "xxx1");
+  searchKeywordInNoAttachmentFiles(R"(司棋)", "main", "xxx1");
 
   //  searchKeywordInNoAttachmentFiles(R"(聚赌嫖娼)", "main", "xxx3");
   //  searchKeywordInNoAttachmentFiles(R"(头一社)", "original", "xxx4");

@@ -98,6 +98,7 @@ static const string keyStartChars = R"(<i hidden>)";
 static const string keyEndChars = R"(</i>)";
 static const string changeKey = R"(changeKey)";
 static const string citationStartChars = R"(<sub hidden>)";
+static const string unhiddenCitationStartChars = R"(<sub unhidden>)";
 static const string citationChapterParaSeparator = R"(.)";
 static const string citationPara = R"(节:)";
 static const string citationEndChars = R"(</sub>)";

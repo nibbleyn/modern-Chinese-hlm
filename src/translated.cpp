@@ -2,8 +2,16 @@
 
 int main(int argc, char **argv) {
   // change this number to run different functions
-  int num = 3;
+  int num = 14;
   switch (num) {
+  case 13:
+    refreshBodyTexts(MAIN);
+    refreshBodyTexts(ORIGINAL);
+    refreshBodyTexts(JPM);
+    break;
+  case 14:
+    refreshAttachmentBodyTexts();
+    break;
   case 1:
     numberJPMHtmls(3, false);
     break;
@@ -36,7 +44,7 @@ int main(int argc, char **argv) {
     testFunctions(11);
     break;
   case 12:
-    tools(16);
+    tools(14);
     break;
   default:
     FUNCTION_OUTPUT << "nothing gets executed." << endl;
