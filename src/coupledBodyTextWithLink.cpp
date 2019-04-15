@@ -1,5 +1,131 @@
 #include "coupledBodyTextWithLink.hpp"
 
+void CoupledBodyTextWithLink::fixLinksWithinOneLine(
+    fileSet referMainFiles, fileSet referOriginalFiles, fileSet referJPMFiles,
+    bool forceUpdate, int minPara, int maxPara, int minLine, int maxLine) {
+
+  LineNumber ln;
+  ln.loadFirstFromContainedLine(m_inLine);
+  if (ln.isParagraphHeader() or not ln.valid() or
+      not ln.isWithinLineRange(minPara, maxPara, minLine, maxLine)) {
+    return;
+  }
+  string toProcess = m_inLine;
+  toProcess = toProcess.substr(
+      ln.generateLinePrefix().length()); // skip line number link
+  if (debug >= LOG_INFO)
+    METHOD_OUTPUT << toProcess << endl;
+  auto start = linkStartChars;
+  string targetFile{""};
+  do {
+    auto linkBegin = toProcess.find(start);
+    if (linkBegin == string::npos) // no link any more, continue with next
+                                   // line
+      break;
+    auto linkEnd = toProcess.find(linkEndChars, linkBegin);
+    auto link = toProcess.substr(linkBegin,
+                                 linkEnd + linkEndChars.length() - linkBegin);
+
+    if (m_attachNumber == 0) {
+      m_linkPtr = std::make_unique<LinkFromMain>(m_file, link);
+    } else {
+      m_linkPtr = std::make_unique<LinkFromAttachment>(
+          m_file + attachmentFileMiddleChar + TurnToString(m_attachNumber),
+          link);
+    }
+    m_linkPtr->readReferFileName(link); // second step of construction, this is
+                                        // needed to check isTargetToSelfHtm
+    if (m_linkPtr->isTargetToOtherAttachmentHtm()) {
+      m_linkPtr->fixFromString(link); // third step of construction
+      m_linkPtr->setSourcePara(ln);
+      m_linkPtr->doStatistics();
+    }
+    if (m_linkPtr->isTargetToSelfHtm()) {
+      m_linkPtr->setSourcePara(ln);
+      m_linkPtr->fixFromString(link);             // third step of construction
+      if (forceUpdate or m_linkPtr->needUpdate()) // replace old value
+      {
+        auto orglinkBegin = m_inLine.find(link);
+        m_inLine.replace(orglinkBegin, link.length(), m_linkPtr->asString());
+      }
+    }
+    if (m_linkPtr->isTargetToOtherMainHtm()) {
+      targetFile = m_linkPtr->getChapterName();
+      auto e = find(referMainFiles.begin(), referMainFiles.end(), targetFile);
+      if (e != referMainFiles.end()) // need to check and fix
+      {
+        m_linkPtr->fixFromString(link); // third step of construction
+        m_linkPtr->setSourcePara(ln);
+        string next = originalLinkStartChars + linkStartChars;
+        bool needAddOrginalLink = true;
+        // still have above "next" and </a>
+        if (toProcess.length() >
+            (link.length() + next.length() + linkEndChars.length())) {
+          if (toProcess.substr(linkEnd + linkEndChars.length(),
+                               next.length()) == next) {
+            // skip </a> and first parenthesis of next
+            auto followingLink = toProcess.substr(
+                linkEnd + next.length() + 2); // find next link in the toProcess
+            if (m_attachNumber == 0) {
+              m_followingLinkPtr =
+                  std::make_unique<LinkFromMain>(m_file, followingLink);
+            } else {
+              m_followingLinkPtr = std::make_unique<LinkFromAttachment>(
+                  m_file + attachmentFileMiddleChar +
+                      TurnToString(m_attachNumber),
+                  followingLink);
+            }
+            if (m_followingLinkPtr->isTargetToOriginalHtm()) {
+              needAddOrginalLink = false;
+            }
+          }
+        }
+        if (needAddOrginalLink)
+          m_linkPtr->generateLinkToOrigin();
+        m_linkPtr->doStatistics();
+        if (forceUpdate or m_linkPtr->needUpdate()) // replace old value
+        {
+          auto orglinkBegin = m_inLine.find(link);
+          m_inLine.replace(orglinkBegin, link.length(), m_linkPtr->asString());
+        }
+      }
+    }
+    if (m_linkPtr->isTargetToJPMHtm()) {
+      targetFile = m_linkPtr->getChapterName();
+      auto e = find(referJPMFiles.begin(), referJPMFiles.end(), targetFile);
+      if (e != referJPMFiles.end()) // need to check and fix
+      {
+        m_linkPtr->fixFromString(link); // third step of construction
+        if (forceUpdate or m_linkPtr->needUpdate()) // replace old value
+        {
+          auto orglinkBegin = m_inLine.find(link);
+          if (debug >= LOG_INFO)
+            SEPERATE("isTargetToJPMHtm", m_inLine + "\n" + link);
+          m_inLine.replace(orglinkBegin, link.length(), m_linkPtr->asString());
+        }
+      }
+    }
+    if (m_linkPtr->isTargetToOriginalHtm()) {
+      targetFile = m_linkPtr->getChapterName();
+      auto e = find(referOriginalFiles.begin(), referOriginalFiles.end(),
+                    targetFile);
+      if (e != referOriginalFiles.end()) // need to check and fix
+      {
+        m_linkPtr->fixFromString(link); // third step of construction
+        if (forceUpdate or m_linkPtr->needUpdate()) // replace old value
+        {
+          auto orglinkBegin = m_inLine.find(link);
+          if (debug >= LOG_INFO)
+            SEPERATE("isTargetToOriginalHtm", m_inLine + "\n" + link);
+          m_inLine.replace(orglinkBegin, link.length(), m_linkPtr->asString());
+        }
+      }
+    }
+    toProcess = toProcess.substr(
+        linkEnd + linkEndChars.length()); // find next link in the m_inLine
+  } while (1);
+}
+
 /**
  * only based on length of string. So font must be same for all characters
  */
@@ -73,12 +199,12 @@ size_t CoupledBodyTextWithLink::getAverageLineLengthFromReferenceFile() {
   return totalSizes / totalLines;
 }
 
-size_t CoupledBodyTextWithLink::getLinesofReferencePage() {
+void CoupledBodyTextWithLink::getLinesofReferencePage() {
   m_averageSizeOfOneLine = getAverageLineLengthFromReferenceFile();
   ifstream referPageFile(REFERENCE_PAGE);
   if (!referPageFile) {
     METHOD_OUTPUT << "file doesn't exist:" << REFERENCE_PAGE << endl;
-    return 0;
+    m_SizeOfReferPage = 0;
   }
   auto totalLines = 0;
   string line;
@@ -91,7 +217,7 @@ size_t CoupledBodyTextWithLink::getLinesofReferencePage() {
       METHOD_OUTPUT << totalLines << endl;
     }
   }
-  return totalLines;
+  m_SizeOfReferPage = totalLines;
 }
 
 void CoupledBodyTextWithLink::calculateParaHeaderPositions() {
@@ -277,7 +403,6 @@ void CoupledBodyTextWithLink::scanByRenderingLines() {
   }
 
   if (debug >= LOG_INFO) {
-    METHOD_OUTPUT << endl;
     METHOD_OUTPUT << "Result of scanByRenderingLines:" << endl;
     METHOD_OUTPUT << "m_numberOfFirstParaHeader: " << m_numberOfFirstParaHeader
                   << endl;
@@ -308,7 +433,7 @@ void CoupledBodyTextWithLink::addLineNumber(bool forceUpdate,
   }
 
   if (isAutoNumbering()) {
-    m_SizeOfReferPage = getLinesofReferencePage();
+    getLinesofReferencePage();
     scanByRenderingLines(); // first scan
     calculateParaHeaderPositions();
     paraGeneratedNumbering(forceUpdate, hideParaHeader);
@@ -340,129 +465,8 @@ void CoupledBodyTextWithLink::fixLinksFromFile(
   while (!infile.eof()) // To get all the lines.
   {
     getline(infile, m_inLine); // Saves the line in m_inLine.
-    string orgLine = m_inLine; // m_inLine would change in loop below
-    LineNumber ln;
-    ln.loadFirstFromContainedLine(orgLine);
-    if (ln.isParagraphHeader() or not ln.valid() or
-        not ln.isWithinLineRange(minPara, maxPara, minLine, maxLine)) {
-      outfile << orgLine << endl;
-      continue; // not fix headers or non-numbered lines
-    }
-    m_inLine = m_inLine.substr(
-        ln.generateLinePrefix().length()); // skip line number link
-    if (debug >= LOG_INFO)
-      METHOD_OUTPUT << m_inLine << endl;
-    auto start = linkStartChars;
-    string targetFile{""};
-    do {
-      auto linkBegin = m_inLine.find(start);
-      if (linkBegin == string::npos) // no link any more, continue with next
-                                     // line
-        break;
-      auto linkEnd = m_inLine.find(linkEndChars, linkBegin);
-      auto link = m_inLine.substr(linkBegin,
-                                  linkEnd + linkEndChars.length() - linkBegin);
-
-      if (m_attachNumber == 0) {
-        m_linkPtr = std::make_unique<LinkFromMain>(m_file, link);
-      } else {
-        m_linkPtr = std::make_unique<LinkFromAttachment>(
-            m_file + attachmentFileMiddleChar + TurnToString(m_attachNumber),
-            link);
-      }
-      m_linkPtr->readReferFileName(
-          link); // second step of construction, this is
-                 // needed to check isTargetToSelfHtm
-      if (m_linkPtr->isTargetToOtherAttachmentHtm()) {
-        m_linkPtr->fixFromString(link); // third step of construction
-        m_linkPtr->setSourcePara(ln);
-        m_linkPtr->doStatistics();
-      }
-      if (m_linkPtr->isTargetToSelfHtm()) {
-        m_linkPtr->setSourcePara(ln);
-        m_linkPtr->fixFromString(link); // third step of construction
-        if (forceUpdate or m_linkPtr->needUpdate()) // replace old value
-        {
-          auto orglinkBegin = orgLine.find(link);
-          orgLine.replace(orglinkBegin, link.length(), m_linkPtr->asString());
-        }
-      }
-      if (m_linkPtr->isTargetToOtherMainHtm()) {
-        targetFile = m_linkPtr->getChapterName();
-        auto e = find(referMainFiles.begin(), referMainFiles.end(), targetFile);
-        if (e != referMainFiles.end()) // need to check and fix
-        {
-          m_linkPtr->fixFromString(link); // third step of construction
-          m_linkPtr->setSourcePara(ln);
-          string next = originalLinkStartChars + linkStartChars;
-          bool needAddOrginalLink = true;
-          // still have above "next" and </a>
-          if (m_inLine.length() >
-              (link.length() + next.length() + linkEndChars.length())) {
-            if (m_inLine.substr(linkEnd + linkEndChars.length(),
-                                next.length()) == next) {
-              // skip </a> and first parenthesis of next
-              auto followingLink =
-                  m_inLine.substr(linkEnd + next.length() +
-                                  2); // find next link in the m_inLine
-              if (m_attachNumber == 0) {
-                m_followingLinkPtr =
-                    std::make_unique<LinkFromMain>(m_file, followingLink);
-              } else {
-                m_followingLinkPtr = std::make_unique<LinkFromAttachment>(
-                    m_file + attachmentFileMiddleChar +
-                        TurnToString(m_attachNumber),
-                    followingLink);
-              }
-              if (m_followingLinkPtr->isTargetToOriginalHtm()) {
-                needAddOrginalLink = false;
-              }
-            }
-          }
-          if (needAddOrginalLink)
-            m_linkPtr->generateLinkToOrigin();
-          m_linkPtr->doStatistics();
-          if (forceUpdate or m_linkPtr->needUpdate()) // replace old value
-          {
-            auto orglinkBegin = orgLine.find(link);
-            orgLine.replace(orglinkBegin, link.length(), m_linkPtr->asString());
-          }
-        }
-      }
-      if (m_linkPtr->isTargetToJPMHtm()) {
-        targetFile = m_linkPtr->getChapterName();
-        auto e = find(referJPMFiles.begin(), referJPMFiles.end(), targetFile);
-        if (e != referJPMFiles.end()) // need to check and fix
-        {
-          m_linkPtr->fixFromString(link); // third step of construction
-          if (forceUpdate or m_linkPtr->needUpdate()) // replace old value
-          {
-            auto orglinkBegin = orgLine.find(link);
-            if (debug >= LOG_INFO)
-              SEPERATE("isTargetToJPMHtm", orgLine + "\n" + link);
-            orgLine.replace(orglinkBegin, link.length(), m_linkPtr->asString());
-          }
-        }
-      }
-      if (m_linkPtr->isTargetToOriginalHtm()) {
-        targetFile = m_linkPtr->getChapterName();
-        auto e = find(referOriginalFiles.begin(), referOriginalFiles.end(),
-                      targetFile);
-        if (e != referOriginalFiles.end()) // need to check and fix
-        {
-          m_linkPtr->fixFromString(link); // third step of construction
-          if (forceUpdate or m_linkPtr->needUpdate()) // replace old value
-          {
-            auto orglinkBegin = orgLine.find(link);
-            if (debug >= LOG_INFO)
-              SEPERATE("isTargetToOriginalHtm", orgLine + "\n" + link);
-            orgLine.replace(orglinkBegin, link.length(), m_linkPtr->asString());
-          }
-        }
-      }
-      m_inLine = m_inLine.substr(
-          linkEnd + linkEndChars.length()); // find next link in the m_inLine
-    } while (1);
-    outfile << orgLine << endl;
+    fixLinksWithinOneLine(referMainFiles, referOriginalFiles, referJPMFiles,
+                          forceUpdate);
+    outfile << m_inLine << endl;
   }
 }

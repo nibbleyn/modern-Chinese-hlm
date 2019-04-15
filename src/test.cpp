@@ -434,7 +434,7 @@ void testLinkOperation() {
 }
 
 void CoupledBodyTextWithLink::printStringInLines() {
-  m_SizeOfReferPage = getLinesofReferencePage();
+  getLinesofReferencePage();
   setInputOutputFiles();
   //  ifstream infile(m_inputFile);
   ifstream checkFile(TO_CHECK_FILE);

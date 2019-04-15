@@ -22,6 +22,12 @@ public:
                         fileSet referJPMFiles, bool forceUpdate = true,
                         int minPara = 0, int maxPara = 0, int minLine = 0,
                         int maxLine = 0);
+  void setLineToFix(const string &originalString) { m_inLine = originalString; }
+  string getFixedLine() const { return m_inLine; }
+  void fixLinksWithinOneLine(fileSet referMainFiles, fileSet referOriginalFiles,
+                             fileSet referJPMFiles, bool forceUpdate = true,
+                             int minPara = 0, int maxPara = 0, int minLine = 0,
+                             int maxLine = 0);
 
   // used for rendering
   string getDisplayString(const string &originalString);
@@ -36,7 +42,7 @@ private:
   size_t m_averageSizeOfOneLine{0};
   size_t m_SizeOfReferPage{0};
   size_t getAverageLineLengthFromReferenceFile();
-  size_t getLinesofReferencePage();
+  void getLinesofReferencePage();
   size_t getLinesOfDisplayText(const string &dispString);
 
   struct ParaHeaderInfo {
@@ -85,6 +91,8 @@ private:
   void scanByRenderingLines();
   void calculateParaHeaderPositions();
   void paraGeneratedNumbering(bool forceUpdate, bool hideParaHeader);
+
+  void doStatisticsByScanningLines();
 
   // used for rendering
   using OffsetToObjectType = std::map<size_t, OBJECT_TYPE>;

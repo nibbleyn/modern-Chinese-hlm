@@ -299,8 +299,6 @@ void LinkFromMain::logLink() {
 
 static const string HTML_OUTPUT_LINKS_FROM_ATTACHMENT_LIST =
     "utf8HTML/output/LinksFromAttachment.txt";
-static const string HTML_OUTPUT_ATTACHMENT_FROM_ATTACHMENT_LIST =
-    "utf8HTML/output/AttachmentsFromAttachment.txt";
 
 /**
  * reset statistics data structure for re-do it during link fixing

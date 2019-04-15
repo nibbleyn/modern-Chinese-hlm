@@ -195,7 +195,7 @@ void numberJPMHtmls(int num, bool forceUpdate, bool hideParaHeader) {
       bodyText.validateParaSize();
       break;
     case 3:
-      bodyText.disableAutoNumbering();
+      //      bodyText.disableAutoNumbering();
       bodyText.addLineNumber(forceUpdate, hideParaHeader);
       break;
     default:

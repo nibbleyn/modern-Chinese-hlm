@@ -3,6 +3,9 @@
 
 extern int debug;
 
+int LineNumber::StartNumber = START_PARA_NUMBER;
+int LineNumber::Limit = START_PARA_NUMBER * 2;
+
 static const string endOfLineNumber =
     R"(")"; // to try special case like "bottom"
 static const string endOfGeneratedLineNumber = R"(>)";
