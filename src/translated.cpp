@@ -2,7 +2,7 @@
 
 int main(int argc, char **argv) {
   // change this number to run different functions
-  int num = 1;
+  int num = 12;
   switch (num) {
   case 13:
     refreshBodyTexts(MAIN);
@@ -44,7 +44,7 @@ int main(int argc, char **argv) {
     testFunctions(11);
     break;
   case 12:
-    tools(14);
+    tools(15);
     break;
   default:
     FUNCTION_OUTPUT << "nothing gets executed." << endl;

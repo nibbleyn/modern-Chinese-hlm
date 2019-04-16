@@ -501,3 +501,32 @@ bool CoupledBodyText::findKey(const string &key) {
   }
   return found;
 }
+
+void CoupledBodyText::fetchLineTexts() {
+  setInputOutputFiles();
+  m_resultLines.clear();
+  ifstream infile(m_inputFile);
+  if (infile) {
+    LineNumber begin = m_range.first;
+    LineNumber end = m_range.second;
+    if (begin.asString() <= end.asString()) {
+      while (!infile.eof()) // To get you all the lines.
+      {
+        getline(infile, m_inLine);
+        if (debug >= LOG_INFO) {
+          METHOD_OUTPUT << m_inLine << endl;
+        }
+        LineNumber ln;
+        ln.loadFirstFromContainedLine(m_inLine);
+        if (ln.isParagraphHeader() or not ln.valid()) {
+          continue;
+        }
+        if (ln.asString() < begin.asString())
+          continue;
+        else if (ln.asString() > end.asString())
+          break;
+        m_resultLines[ln.asString()] = m_inLine;
+      }
+    }
+  }
+}

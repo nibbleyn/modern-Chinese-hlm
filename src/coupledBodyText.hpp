@@ -62,6 +62,16 @@ public:
   }
   lineNumberSet getResultLineSet() { return m_result; };
 
+  // fetch lines by range
+  using lineNumberSetByRange = pair<LineNumber, LineNumber>;
+
+  void setStartOfRange(const LineNumber &ln) { m_range.first = ln; }
+  void setEndOfRange(const LineNumber &ln) { m_range.second = ln; }
+
+  // lineNumber -> text of that line
+  using lineSet = map<string, string>;
+  void fetchLineTexts();
+
   // used by tools
   // fix wrong html pair
   void fixTagPairBegin(const string &signOfTagAfterReplaceTag,
@@ -200,6 +210,9 @@ protected:
   lineNumberSet m_result;
   string m_searchError{""};
   bool m_onlyFirst{true};
+
+  lineNumberSetByRange m_range;
+  lineSet m_resultLines;
 };
 
 bool isFoundAsNonKeys(const string &line, const string &key);

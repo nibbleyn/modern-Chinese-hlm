@@ -1,18 +1,16 @@
 #include "coupledBodyTextWithLink.hpp"
 
-void CoupledBodyTextWithLink::fixLinksWithinOneLine(
-    fileSet referMainFiles, fileSet referOriginalFiles, fileSet referJPMFiles,
-    bool forceUpdate, int minPara, int maxPara, int minLine, int maxLine) {
+void CoupledBodyTextWithLink::fixLinksWithinOneLine(fileSet referMainFiles,
+                                                    fileSet referOriginalFiles,
+                                                    fileSet referJPMFiles,
+                                                    bool forceUpdate) {
 
   LineNumber ln;
   ln.loadFirstFromContainedLine(m_inLine);
-  if (ln.isParagraphHeader() or not ln.valid() or
-      not ln.isWithinLineRange(minPara, maxPara, minLine, maxLine)) {
-    return;
-  }
   string toProcess = m_inLine;
-  toProcess = toProcess.substr(
-      ln.generateLinePrefix().length()); // skip line number link
+  if (ln.valid())
+    toProcess = toProcess.substr(
+        ln.generateLinePrefix().length()); // skip line number link
   if (debug >= LOG_INFO)
     METHOD_OUTPUT << toProcess << endl;
   auto start = linkStartChars;
@@ -123,7 +121,7 @@ void CoupledBodyTextWithLink::fixLinksWithinOneLine(
     }
     toProcess = toProcess.substr(
         linkEnd + linkEndChars.length()); // find next link in the m_inLine
-  } while (1);
+  } while (true);
 }
 
 /**
@@ -465,6 +463,12 @@ void CoupledBodyTextWithLink::fixLinksFromFile(
   while (!infile.eof()) // To get all the lines.
   {
     getline(infile, m_inLine); // Saves the line in m_inLine.
+    LineNumber ln;
+    ln.loadFirstFromContainedLine(m_inLine);
+    if (ln.isParagraphHeader() or not ln.valid() or
+        not ln.isWithinLineRange(minPara, maxPara, minLine, maxLine)) {
+      continue;
+    }
     fixLinksWithinOneLine(referMainFiles, referOriginalFiles, referJPMFiles,
                           forceUpdate);
     outfile << m_inLine << endl;

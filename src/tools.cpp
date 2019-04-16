@@ -909,7 +909,7 @@ void tools(int num) {
     findFirstInFiles();
     break;
   case 15:
-    reConstructStory("story.htm");
+    reConstructStory("mapping.txt", "story.htm");
     break;
   case 16:
     renderingBodyText("main");

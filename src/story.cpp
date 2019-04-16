@@ -1,19 +1,12 @@
 #include "story.hpp"
 
-void dispalyLinkRange(LinkRange fs) {
-  for (const auto &link : fs) {
-    FUNCTION_OUTPUT << link.first << "   " << link.second << endl;
-  }
-}
-
 /**
  * give a set of links, create a sub-story by following these links
  * @param filename
  */
-void reConstructStory(string indexFilename) {
-  LinkRange cs;  // startChapter, endChapter
-  LinkRange ls;  // startLine, endLine
-  LinkRange pls; // startPara startLine, endPara endLine
+void reConstructStory(const string &indexFilename,
+                      const string &outputFilename) {
+  ListContainer container(outputFilename);
   ifstream infile(indexFilename);
   if (!infile) // doesn't exist
   {
@@ -37,8 +30,7 @@ void reConstructStory(string indexFilename) {
     getline(infile, endChapter, '#');
     getline(infile, endPara, '.');
     getline(infile, endLine, '\n');
+    FUNCTION_OUTPUT << startChapter << startPara << startLine << endl;
+    FUNCTION_OUTPUT << endChapter << endPara << endLine << endl;
   }
-  dispalyLinkRange(cs);
-  dispalyLinkRange(ls);
-  dispalyLinkRange(pls);
 }

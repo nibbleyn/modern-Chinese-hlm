@@ -23,11 +23,9 @@ public:
                         int minPara = 0, int maxPara = 0, int minLine = 0,
                         int maxLine = 0);
   void setLineToFix(const string &originalString) { m_inLine = originalString; }
-  string getFixedLine() const { return m_inLine; }
   void fixLinksWithinOneLine(fileSet referMainFiles, fileSet referOriginalFiles,
-                             fileSet referJPMFiles, bool forceUpdate = true,
-                             int minPara = 0, int maxPara = 0, int minLine = 0,
-                             int maxLine = 0);
+                             fileSet referJPMFiles, bool forceUpdate = true);
+  string getFixedLine() const { return m_inLine; }
 
   // used for rendering
   string getDisplayString(const string &originalString);
