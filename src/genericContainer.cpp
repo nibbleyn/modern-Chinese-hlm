@@ -4,8 +4,8 @@
  * to get ready to write new text in this file which would be composed into
  * container htm
  */
-void ListContainer::addExistingFrontParagraphs() {
-  string outputBodyTextFile = getOutputBodyTextFile();
+void ListContainer::clearExistingBodyText() {
+  string outputBodyTextFile = getOutputBodyTextFilePath();
   if (debug >= LOG_INFO)
     METHOD_OUTPUT << "clear content in: " << outputBodyTextFile << endl;
   ofstream outfile(outputBodyTextFile);
@@ -17,7 +17,7 @@ void ListContainer::addExistingFrontParagraphs() {
  * @param containerNumber the selected container to put into
  */
 void ListContainer::appendParagraphInBodyText(const string &text) {
-  string outputBodyTextFile = getOutputBodyTextFile();
+  string outputBodyTextFile = getOutputBodyTextFilePath();
   if (debug >= LOG_INFO)
     METHOD_OUTPUT << "append Paragraph In BodyText: " << outputBodyTextFile
                   << endl;
@@ -26,11 +26,21 @@ void ListContainer::appendParagraphInBodyText(const string &text) {
   outfile << "<br>" << text << "</br>" << endl;
 }
 
+void ListContainer::appendParagrapHeader(const string &header) {
+  string outputBodyTextFile = getOutputBodyTextFilePath();
+  if (debug >= LOG_INFO)
+    METHOD_OUTPUT << "append Paragraph In BodyText: " << outputBodyTextFile
+                  << endl;
+  ofstream outfile;
+  outfile.open(outputBodyTextFile, std::ios_base::app);
+  outfile << header << endl;
+}
+
 const string TableContainer::BODY_TEXT_STARTER = R"(3front.txt)";
 const string TableContainer::BODY_TEXT_DESSERT = R"(3back.txt)";
 
 void TableContainer::addExistingFrontParagraphs() {
-  string outputBodyTextFile = getOutputBodyTextFile();
+  string outputBodyTextFile = getOutputBodyTextFilePath();
   if (debug >= LOG_INFO)
     METHOD_OUTPUT << "init content in: " << outputBodyTextFile << endl;
   ofstream outfile(outputBodyTextFile, std::ios_base::app);
@@ -53,7 +63,7 @@ void TableContainer::addExistingFrontParagraphs() {
 }
 
 void TableContainer::finishBodyTextFile() {
-  string outputBodyTextFile = getOutputBodyTextFile();
+  string outputBodyTextFile = getOutputBodyTextFilePath();
   if (debug >= LOG_INFO)
     METHOD_OUTPUT << "append content in: " << outputBodyTextFile << endl;
   ofstream outfile;
@@ -78,7 +88,7 @@ void TableContainer::finishBodyTextFile() {
 
 void TableContainer::insertFrontParagrapHeader(int totalPara,
                                                const string &units) {
-  string outputBodyTextFile = getOutputBodyTextFile();
+  string outputBodyTextFile = getOutputBodyTextFilePath();
   if (debug >= LOG_INFO)
     METHOD_OUTPUT << "append content in: " << outputBodyTextFile << endl;
   ofstream outfile;
@@ -96,7 +106,7 @@ void TableContainer::insertMiddleParagrapHeader(bool enterLastPara,
                                                 int endParaNo, int totalPara,
                                                 int preTotalPara,
                                                 const string &units) {
-  string outputBodyTextFile = getOutputBodyTextFile();
+  string outputBodyTextFile = getOutputBodyTextFilePath();
   if (debug >= LOG_INFO)
     METHOD_OUTPUT << "append content in: " << outputBodyTextFile << endl;
   ofstream outfile;
@@ -117,7 +127,7 @@ void TableContainer::insertMiddleParagrapHeader(bool enterLastPara,
 
 void TableContainer::insertBackParagrapHeader(int seqOfPara, int totalPara,
                                               const string &units) {
-  string outputBodyTextFile = getOutputBodyTextFile();
+  string outputBodyTextFile = getOutputBodyTextFilePath();
   if (debug >= LOG_INFO)
     METHOD_OUTPUT << "append content in: " << outputBodyTextFile << endl;
   ofstream outfile;
@@ -130,7 +140,7 @@ void TableContainer::insertBackParagrapHeader(int seqOfPara, int totalPara,
 }
 
 void TableContainer::appendLeftParagraphInBodyText(const string &text) {
-  string outputBodyTextFile = getOutputBodyTextFile();
+  string outputBodyTextFile = getOutputBodyTextFilePath();
   if (debug >= LOG_INFO)
     METHOD_OUTPUT << "append Paragraph In BodyText: " << outputBodyTextFile
                   << endl;
@@ -140,7 +150,7 @@ void TableContainer::appendLeftParagraphInBodyText(const string &text) {
 }
 
 void TableContainer::appendRightParagraphInBodyText(const string &text) {
-  string outputBodyTextFile = getOutputBodyTextFile();
+  string outputBodyTextFile = getOutputBodyTextFilePath();
   if (debug >= LOG_INFO)
     METHOD_OUTPUT << "append Paragraph In BodyText: " << outputBodyTextFile
                   << endl;
@@ -152,9 +162,9 @@ void TableContainer::appendRightParagraphInBodyText(const string &text) {
 void GenericContainer::assembleBackToHTM(const string &title,
                                          const string &displayTitle) {
 
-  string inputHtmlFile = getInputHtmlFile();
-  string inputBodyTextFile = getOutputBodyTextFile();
-  string outputFile = getoutputHtmlFile();
+  string inputHtmlFile = getInputHtmlFilePath();
+  string inputBodyTextFile = getOutputBodyTextFilePath();
+  string outputFile = getoutputHtmlFilepath();
 
   ifstream inHtmlFile(inputHtmlFile);
   if (!inHtmlFile) // doesn't exist

@@ -7,7 +7,7 @@
 
 enum class DISPLY_LINE_TYPE { EMPTY, PARA, TEXT, IMAGE };
 string getDisplayTypeString(DISPLY_LINE_TYPE type);
-static const LineNumber BEGIN_OF_WHOLE_BODYTEXT = LineNumber(1,1);
+static const LineNumber BEGIN_OF_WHOLE_BODYTEXT = LineNumber(1, 1);
 static const LineNumber END_OF_WHOLE_BODYTEXT = LineNumber();
 
 class CoupledBodyText {
@@ -73,6 +73,8 @@ public:
   // lineNumber -> text of that line
   using lineSet = map<string, string>;
   void fetchLineTexts();
+  void setOutputBodyTextFilePath(const string &absolutePath);
+  void appendLinesIntoBodyTextFile();
 
   // used by tools
   // fix wrong html pair
@@ -215,6 +217,17 @@ protected:
 
   lineNumberSetByRange m_range;
   lineSet m_resultLines;
+
+  void printResultLines() {
+    if (not m_resultLines.empty()) {
+      METHOD_OUTPUT << "m_resultLines:" << endl;
+      METHOD_OUTPUT << "lineNumber/line text" << endl;
+    } else
+      METHOD_OUTPUT << "no entry in m_resultLines." << endl;
+    for (const auto &element : m_resultLines) {
+      METHOD_OUTPUT << element.first << "        " << element.second << endl;
+    }
+  }
 };
 
 bool isFoundAsNonKeys(const string &line, const string &key);

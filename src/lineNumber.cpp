@@ -13,6 +13,12 @@ static const string inBetweenTwoParas = R"(" href=")";
 static const string inBetweenParaAndLineNumber = R"(.)";
 static const string lastPara = R"(<a unhidden id="bottom" href="#top">)";
 
+bool operator>(LineNumber const &ln1, LineNumber const &ln2) {
+  return (ln1.getParaNumber() > ln2.getParaNumber() or
+          (ln1.getParaNumber() == ln2.getParaNumber() and
+           ln1.getlineNumber() > ln2.getlineNumber()));
+}
+
 /**
  * read from a string of format "PxxLyy"
  * and assign xx to paraNumber

@@ -20,7 +20,7 @@ protected:
   string m_htmlOutputFilePath{HTML_OUTPUT_MAIN};
   string m_bodyTextInputFilePath{BODY_TEXT_OUTPUT};
   string m_bodyTextOutputFilePath{BODY_TEXT_FIX};
-  virtual string getInputHtmlFile() = 0;
+  virtual string getInputHtmlFilePath() = 0;
 };
 
 /**
@@ -67,7 +67,7 @@ private:
   string m_translatedTitle{""};
 
   string getBodyTextFilePrefix();
-  string getInputHtmlFile() {
+  string getInputHtmlFilePath() {
     string attachmentPart{""};
     if (m_fileType == FILE_TYPE::ATTACHMENT)
       attachmentPart =
@@ -75,7 +75,7 @@ private:
     return m_htmlInputFilePath + getHtmlFileNamePrefix(m_fileType) + m_file +
            attachmentPart + HTML_SUFFIX;
   }
-  string getoutputHtmlFile() {
+  string getoutputHtmlFilepath() {
     string attachmentPart{""};
     if (m_fileType == FILE_TYPE::ATTACHMENT)
       attachmentPart =
@@ -83,7 +83,7 @@ private:
     return m_htmlOutputFilePath + getHtmlFileNamePrefix(m_fileType) + m_file +
            attachmentPart + HTML_SUFFIX;
   }
-  string getBodyTextFile() {
+  string getBodyTextFilePath() {
     string attachmentPart{""};
     if (m_fileType == FILE_TYPE::ATTACHMENT)
       attachmentPart =
@@ -114,16 +114,16 @@ public:
   string getOutputFilePath() {
     return m_htmlOutputFilePath + m_outputFilename + HTML_SUFFIX;
   }
+  string getOutputBodyTextFilePath() {
+    return m_bodyTextOutputFilePath + getInputFileName() + BODY_TEXT_SUFFIX;
+  }
 
 protected:
   string m_outputFilename{"output"};
-  string getOutputBodyTextFile() {
-    return m_bodyTextOutputFilePath + getInputFileName() + BODY_TEXT_SUFFIX;
-  }
-  string getInputHtmlFile() {
+  string getInputHtmlFilePath() {
     return m_htmlInputFilePath + getInputFileName() + HTML_SUFFIX;
   }
-  string getoutputHtmlFile() {
+  string getoutputHtmlFilepath() {
     return m_htmlOutputFilePath + m_outputFilename + HTML_SUFFIX;
   }
 };
@@ -136,8 +136,9 @@ public:
   ListContainer() = default;
   ListContainer(const string &filename) : GenericContainer(filename) {}
   // process bodyText change directly, instead of thru CoupledBodyText
-  void addExistingFrontParagraphs();
+  void clearExistingBodyText();
   void appendParagraphInBodyText(const string &text);
+  void appendParagrapHeader(const string &header);
 
 private:
   string getInputFileName() const override { return LIST_CONTAINER_FILENAME; }

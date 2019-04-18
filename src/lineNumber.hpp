@@ -69,6 +69,7 @@ public:
   bool equal(const string &lnStr) { return (lnStr == asString()); }
   int getParaNumber() const { return m_paraNumber; }
   int getlineNumber() const { return m_lineNumber; }
+  friend bool operator>(LineNumber const &, LineNumber const &);
 
 private:
   void readFromString(const string &name);

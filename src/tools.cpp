@@ -241,8 +241,8 @@ void fixTagsOfMainBodyText(int minTarget, int maxTarget) {
 }
 
 void CoupledContainer::makeSingleLineHeaderAndFooter() {
-  string inputHtmlFile = getInputHtmlFile();
-  string outputHtmlFile = getoutputHtmlFile();
+  string inputHtmlFile = getInputHtmlFilePath();
+  string outputHtmlFile = getoutputHtmlFilepath();
 
   ifstream inHtmlFile(inputHtmlFile);
   if (!inHtmlFile) // doesn't exist
@@ -305,7 +305,7 @@ void CoupledContainer::makeSingleLineHeaderAndFooter() {
 }
 
 void CoupledContainer::fetchOriginalAndTranslatedTitles() {
-  string inputHtmlFile = getInputHtmlFile();
+  string inputHtmlFile = getInputHtmlFilePath();
   ifstream inHtmlFile(inputHtmlFile);
   if (!inHtmlFile) // doesn't exist
   {
@@ -338,8 +338,8 @@ void CoupledContainer::fetchOriginalAndTranslatedTitles() {
 }
 
 void CoupledContainer::fixHeaderAndFooter() {
-  string inputHtmlFile = getInputHtmlFile();
-  string outputHtmlFile = getoutputHtmlFile();
+  string inputHtmlFile = getInputHtmlFilePath();
+  string outputHtmlFile = getoutputHtmlFilepath();
 
   ifstream inHtmlFile(inputHtmlFile);
   if (!inHtmlFile) // doesn't exist
@@ -909,7 +909,7 @@ void tools(int num) {
     findFirstInFiles();
     break;
   case 15:
-    reConstructStory("mapping.txt", "story.htm");
+    reConstructStory("mapping.txt", "story");
     break;
   case 16:
     renderingBodyText("main");

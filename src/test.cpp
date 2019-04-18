@@ -522,9 +522,20 @@ void testListContainer() {
   lfm.fixFromString(link);
   link = lfm.asString();
 
-  container.addExistingFrontParagraphs();
+  container.clearExistingBodyText();
+  ParaHeader paraHeader;
+  paraHeader.m_startNumber = LineNumber::getStartNumber();
+  paraHeader.m_color = getSeparateLineColor(FILE_TYPE::MAIN);
+  paraHeader.markAsFirstParaHeader();
+  paraHeader.fixFromTemplate();
+  container.appendParagrapHeader(paraHeader.getFixedResult());
   container.appendParagraphInBodyText(link);
   container.appendParagraphInBodyText("18 links are found.");
+  paraHeader.m_currentParaNo = 1;
+  paraHeader.markAsLastParaHeader();
+  paraHeader.fixFromTemplate();
+  paraHeader.fixFromTemplate();
+  container.appendParagrapHeader(paraHeader.getFixedResult());
   container.assembleBackToHTM("test", "test container");
   FUNCTION_OUTPUT << "result is in file " << container.getOutputFilePath()
                   << endl;
@@ -574,7 +585,7 @@ void testFunctions(int num) {
     testAttachmentOperations();
     break;
   case 5:
-    testContainer(2);
+    testContainer(1);
     break;
   case 8:
     testPoem();

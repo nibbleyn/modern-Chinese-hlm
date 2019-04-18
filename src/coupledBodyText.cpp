@@ -509,7 +509,7 @@ void CoupledBodyText::fetchLineTexts() {
   if (infile) {
     LineNumber begin = m_range.first;
     LineNumber end = m_range.second;
-    if (end.equal(END_OF_WHOLE_BODYTEXT) or begin.asString() <= end.asString()) {
+    if (end.equal(END_OF_WHOLE_BODYTEXT) or not(begin > end)) {
       while (!infile.eof()) // To get you all the lines.
       {
         getline(infile, m_inLine);
@@ -521,13 +521,31 @@ void CoupledBodyText::fetchLineTexts() {
         if (ln.isParagraphHeader() or not ln.valid()) {
           continue;
         }
-        bool finished = end.equal(END_OF_WHOLE_BODYTEXT)? false:(ln.asString() > end.asString());
-        if (ln.asString() < begin.asString())
+        bool finished = end.equal(END_OF_WHOLE_BODYTEXT) ? false : (ln > end);
+        if (begin > ln)
           continue;
         else if (finished)
           break;
         m_resultLines[ln.asString()] = m_inLine;
       }
     }
+  }
+  printResultLines();
+}
+
+void CoupledBodyText::setOutputBodyTextFilePath(const string &absolutePath) {
+  m_outputFile = absolutePath;
+
+  if (debug >= LOG_INFO) {
+    METHOD_OUTPUT << "output file is: " << m_outputFile << endl;
+  }
+}
+
+void CoupledBodyText::appendLinesIntoBodyTextFile() {
+  ofstream outfile;
+  outfile.open(m_outputFile, std::ios_base::app);
+  for (const auto &line : m_resultLines) {
+    outfile << brTab << endl;
+    outfile << line.second << endl; // Prints our line
   }
 }

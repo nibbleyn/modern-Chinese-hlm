@@ -48,9 +48,9 @@ string CoupledContainer::getBodyTextFilePrefix() {
 void CoupledContainer::assembleBackToHTM(const string &title,
                                          const string &displayTitle) {
 
-  string inputHtmlFile = getInputHtmlFile();
-  string inputBodyTextFile = getBodyTextFile();
-  string outputFile = getoutputHtmlFile();
+  string inputHtmlFile = getInputHtmlFilePath();
+  string inputBodyTextFile = getBodyTextFilePath();
+  string outputFile = getoutputHtmlFilepath();
 
   ifstream inHtmlFile(inputHtmlFile);
   if (!inHtmlFile) // doesn't exist
@@ -182,8 +182,8 @@ void CoupledContainer::backupAndOverwriteAllInputHtmlFiles() {
 }
 
 void CoupledContainer::dissembleFromHTM() {
-  string inputHtmlFile = getInputHtmlFile();
-  string outputBodyTextFile = getBodyTextFile();
+  string inputHtmlFile = getInputHtmlFilePath();
+  string outputBodyTextFile = getBodyTextFilePath();
 
   ifstream infile(inputHtmlFile);
   if (!infile) // doesn't exist

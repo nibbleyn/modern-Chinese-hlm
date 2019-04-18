@@ -45,7 +45,7 @@ void findFirstInNoAttachmentFiles(const string key, const string &fileType,
   bool asList = false;
   if (asList) {
     ListContainer container(outputFilename);
-    container.addExistingFrontParagraphs();
+    container.clearExistingBodyText();
     for (const auto &chapter : resultLinkList) {
       container.appendParagraphInBodyText("found in " + fileType + " : " +
                                           chapter.first + HTML_SUFFIX + " :");
