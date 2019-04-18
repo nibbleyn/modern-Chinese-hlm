@@ -7,6 +7,8 @@
 
 enum class DISPLY_LINE_TYPE { EMPTY, PARA, TEXT, IMAGE };
 string getDisplayTypeString(DISPLY_LINE_TYPE type);
+static const LineNumber BEGIN_OF_WHOLE_BODYTEXT = LineNumber(1,1);
+static const LineNumber END_OF_WHOLE_BODYTEXT = LineNumber();
 
 class CoupledBodyText {
 

@@ -62,13 +62,13 @@ public:
   }
   bool isWithinLineRange(int minPara = 0, int maxPara = 0, int minLine = 0,
                          int maxLine = 0);
-  bool equal(LineNumber &ln) {
+  bool equal(const LineNumber &ln) {
     return (m_lineNumber == ln.getlineNumber() and
             m_paraNumber == ln.getParaNumber());
   }
   bool equal(const string &lnStr) { return (lnStr == asString()); }
-  int getParaNumber() { return m_paraNumber; }
-  int getlineNumber() { return m_lineNumber; }
+  int getParaNumber() const { return m_paraNumber; }
+  int getlineNumber() const { return m_lineNumber; }
 
 private:
   void readFromString(const string &name);

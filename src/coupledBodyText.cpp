@@ -509,7 +509,7 @@ void CoupledBodyText::fetchLineTexts() {
   if (infile) {
     LineNumber begin = m_range.first;
     LineNumber end = m_range.second;
-    if (begin.asString() <= end.asString()) {
+    if (end.equal(END_OF_WHOLE_BODYTEXT) or begin.asString() <= end.asString()) {
       while (!infile.eof()) // To get you all the lines.
       {
         getline(infile, m_inLine);
@@ -521,9 +521,10 @@ void CoupledBodyText::fetchLineTexts() {
         if (ln.isParagraphHeader() or not ln.valid()) {
           continue;
         }
+        bool finished = end.equal(END_OF_WHOLE_BODYTEXT)? false:(ln.asString() > end.asString());
         if (ln.asString() < begin.asString())
           continue;
-        else if (ln.asString() > end.asString())
+        else if (finished)
           break;
         m_resultLines[ln.asString()] = m_inLine;
       }
