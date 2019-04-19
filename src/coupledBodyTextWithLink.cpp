@@ -439,6 +439,7 @@ void CoupledBodyTextWithLink::addLineNumber(bool forceUpdate,
     scanByLines(); // first scan
     paraGuidedNumbering(forceUpdate, hideParaHeader);
   }
+  doStatisticsByScanningLines();
 
   if (debug >= LOG_INFO)
     METHOD_OUTPUT << "numbering finished." << endl;

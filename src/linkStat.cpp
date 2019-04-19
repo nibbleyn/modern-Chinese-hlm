@@ -13,7 +13,8 @@ Link::AttachmentSet Link::refAttachmentTable;
 LinkFromMain::AttachmentSet LinkFromMain::attachmentTable;
 
 /**
- * output linksTable to file HTML_OUTPUT_LINKS_LIST
+ * output linksTable to file specified in linkDetailFilePath and
+ * keyDetailFilePath
  */
 void Link::displayFixedLinks() {
   if (linksTable.empty())

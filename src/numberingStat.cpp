@@ -1,5 +1,34 @@
 #include "coupledBodyTextWithLink.hpp"
 
+CoupledBodyTextWithLink::LinesTable CoupledBodyTextWithLink::linesTable;
+string CoupledBodyTextWithLink::referFilePrefix{emptyString};
+string CoupledBodyTextWithLink::lineDetailFilePath{emptyString};
+
+void CoupledBodyTextWithLink::setReferFilePrefix(const string &prefix) {
+  referFilePrefix = prefix;
+}
+
+void CoupledBodyTextWithLink::setStatisticsOutputFilePath(const string &path) {
+  lineDetailFilePath = path;
+}
+/**
+ * output linesTable to file specified in lineDetailFilePath
+ */
+void CoupledBodyTextWithLink::displayNumberedLines() {
+  if (linesTable.empty())
+    return;
+  FUNCTION_OUTPUT << lineDetailFilePath << " is created." << endl;
+  ofstream lineDetailOutfile(lineDetailFilePath);
+  for (const auto &para : linesTable) {
+    auto paraPos = para.first;
+    auto lineList = para.second;
+    // para itself
+    lineDetailOutfile << referFilePrefix << paraPos.first << ","
+                      << paraPos.second << endl;
+    // lines included
+  }
+}
+
 void CoupledBodyTextWithLink::doStatisticsByScanningLines() {
 
   m_numberOfFirstParaHeader = 0;
@@ -26,9 +55,9 @@ void CoupledBodyTextWithLink::doStatisticsByScanningLines() {
       } else if (m_paraHeader.isMiddleParaHeader())
         m_numberOfMiddleParaHeader++;
     } else if (isImageGroupLine(m_inLine)) {
-      // record the para it belongs to
+      // record the para it belongs to into linesTable
     } else if (not isEmptyLine(m_inLine)) {
-      // record its lineNumber
+      // record its lineNumber into linesTable
     }
   }
 

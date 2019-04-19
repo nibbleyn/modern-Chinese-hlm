@@ -121,6 +121,9 @@ void refreshAttachmentBodyTexts(int minTarget, int maxTarget, int minAttachNo,
   dissembleAttachments(minTarget, maxTarget, minAttachNo, maxAttachNo);
 }
 
+static const string HTML_OUTPUT_LINES_OF_MAIN =
+    "utf8HTML/output/LinesOfMain.txt";
+
 /**
  * copy main files into HTML_OUTPUT
  * before run this
@@ -133,6 +136,9 @@ void numberMainHtmls(bool forceUpdate, bool hideParaHeader) {
     container.setFileAndAttachmentNumber(file);
     container.dissembleFromHTM();
   }
+  CoupledBodyTextWithLink::setReferFilePrefix(MAIN_BODYTEXT_PREFIX);
+  CoupledBodyTextWithLink::setStatisticsOutputFilePath(
+      HTML_OUTPUT_LINES_OF_MAIN);
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     CoupledBodyTextWithLink bodyText;
     bodyText.setFilePrefixFromFileType(FILE_TYPE::MAIN);
@@ -140,6 +146,7 @@ void numberMainHtmls(bool forceUpdate, bool hideParaHeader) {
     bodyText.disableAutoNumbering();
     bodyText.addLineNumber(forceUpdate, hideParaHeader);
   }
+  CoupledBodyTextWithLink::displayNumberedLines();
   CoupledBodyText::loadBodyTextsFromFixBackToOutput();
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     container.setFileAndAttachmentNumber(file);
@@ -147,6 +154,9 @@ void numberMainHtmls(bool forceUpdate, bool hideParaHeader) {
   }
   FUNCTION_OUTPUT << "Numbering Main Html finished. " << endl;
 }
+
+static const string HTML_OUTPUT_LINES_OF_ORIGINAL =
+    "utf8HTML/output/LinesOfOriginal.txt";
 
 void numberOriginalHtmls(bool forceUpdate, bool hideParaHeader) {
   int minTarget = 1, maxTarget = 80;
@@ -156,12 +166,16 @@ void numberOriginalHtmls(bool forceUpdate, bool hideParaHeader) {
     container.setFileAndAttachmentNumber(file);
     container.dissembleFromHTM();
   }
+  CoupledBodyTextWithLink::setReferFilePrefix(ORIGINAL_BODYTEXT_PREFIX);
+  CoupledBodyTextWithLink::setStatisticsOutputFilePath(
+      HTML_OUTPUT_LINES_OF_ORIGINAL);
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     CoupledBodyTextWithLink bodyText;
     bodyText.setFilePrefixFromFileType(FILE_TYPE::ORIGINAL);
     bodyText.setFileAndAttachmentNumber(file);
     bodyText.addLineNumber(forceUpdate, hideParaHeader);
   }
+  CoupledBodyTextWithLink::displayNumberedLines();
   CoupledBodyText::loadBodyTextsFromFixBackToOutput();
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     container.setFileAndAttachmentNumber(file);
@@ -169,6 +183,8 @@ void numberOriginalHtmls(bool forceUpdate, bool hideParaHeader) {
   }
   FUNCTION_OUTPUT << "Numbering Original Html finished. " << endl;
 }
+
+static const string HTML_OUTPUT_LINES_OF_JPM = "utf8HTML/output/LinesOfJPM.txt";
 
 void numberJPMHtmls(int num, bool forceUpdate, bool hideParaHeader) {
   auto oldDebug = debug;
@@ -182,6 +198,11 @@ void numberJPMHtmls(int num, bool forceUpdate, bool hideParaHeader) {
   for (const auto &file : buildFileSet(minTarget, maxTarget, 3)) {
     container.setFileAndAttachmentNumber(file);
     container.dissembleFromHTM();
+  }
+  if (num == 3) {
+    CoupledBodyTextWithLink::setReferFilePrefix(JPM_BODYTEXT_PREFIX);
+    CoupledBodyTextWithLink::setStatisticsOutputFilePath(
+        HTML_OUTPUT_LINES_OF_JPM);
   }
   for (const auto &file : buildFileSet(minTarget, maxTarget, 3)) {
     CoupledBodyTextWithLink bodyText;
@@ -202,6 +223,8 @@ void numberJPMHtmls(int num, bool forceUpdate, bool hideParaHeader) {
       FUNCTION_OUTPUT << "no test executed." << endl;
     }
   }
+  if (num == 3)
+    CoupledBodyTextWithLink::displayNumberedLines();
   CoupledBodyText::loadBodyTextsFromFixBackToOutput();
   for (const auto &file : buildFileSet(minTarget, maxTarget, 3)) {
     container.setFileAndAttachmentNumber(file);
@@ -213,6 +236,9 @@ void numberJPMHtmls(int num, bool forceUpdate, bool hideParaHeader) {
   }
 }
 
+static const string HTML_OUTPUT_LINES_OF_ATTACHMENTS =
+    "utf8HTML/output/LinesOfAttachments.txt";
+
 void numberAttachmentHtmls(bool forceUpdate, bool hideParaHeader) {
   int minTarget = 1, maxTarget = 80;
   int minAttachNo = 1, maxAttachNo = 50;
@@ -220,9 +246,13 @@ void numberAttachmentHtmls(bool forceUpdate, bool hideParaHeader) {
   CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
   dissembleAttachments(minTarget, maxTarget, minAttachNo,
                        maxAttachNo); // dissemble html to bodytext
+  CoupledBodyTextWithLink::setReferFilePrefix(ATTACHMENT_BODYTEXT_PREFIX);
+  CoupledBodyTextWithLink::setStatisticsOutputFilePath(
+      HTML_OUTPUT_LINES_OF_ATTACHMENTS);
   addLineNumbersForAttachmentHtml(
       minTarget, maxTarget, minAttachNo, maxAttachNo, forceUpdate,
       hideParaHeader); // reformat bodytext by adding line number
+  CoupledBodyTextWithLink::displayNumberedLines();
   CoupledBodyText::loadBodyTextsFromFixBackToOutput();
   assembleAttachments(minTarget, maxTarget, minAttachNo, maxAttachNo);
   FUNCTION_OUTPUT << "Numbering Attachment Html finished. " << endl;

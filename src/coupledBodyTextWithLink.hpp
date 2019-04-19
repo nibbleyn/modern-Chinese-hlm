@@ -7,6 +7,23 @@ static const string TO_CHECK_FILE = "container/toCheck.txt";
 
 class CoupledBodyTextWithLink : public CoupledBodyText {
 public:
+  struct LineDetails {
+    size_t numberOfLines{0};
+    bool isImgGroup{false};
+    set<OBJECT_TYPE> objectContains;
+  };
+  // statistics about paras
+  // chapter number (added with attachment number if over fromAttachmentLinks),
+  // Para -> vector of LineDetails
+  using LinesTable = map<std::pair<string, string>, vector<LineDetails>>;
+  static string referFilePrefix;
+  static string lineDetailFilePath;
+  static LinesTable linesTable;
+  static void setReferFilePrefix(const string &prefix);
+  static void setStatisticsOutputFilePath(const string &path);
+  static void displayNumberedLines();
+
+public:
   CoupledBodyTextWithLink() = default;
   CoupledBodyTextWithLink(const string &filePrefix)
       : CoupledBodyText(filePrefix) {}
