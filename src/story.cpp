@@ -1,8 +1,10 @@
 #include "story.hpp"
 
 /**
- * give a set of links, create a sub-story by following these links
- * @param filename
+ * give a set of start, end para pairs, create a sub-story by get them out of
+ * original files
+ * @param indexFilename mapping file
+ * @param outputFilename result html file
  */
 void reConstructStory(const string &indexFilename,
                       const string &outputFilename) {

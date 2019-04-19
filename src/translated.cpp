@@ -1,3 +1,4 @@
+#include "contentTable.hpp"
 #include "tools.hpp"
 
 int main(int argc, char **argv) {
@@ -11,6 +12,24 @@ int main(int argc, char **argv) {
     break;
   case 14:
     refreshAttachmentBodyTexts();
+    break;
+  case 15:
+    generateContentTableForMainHtmls();
+    break;
+  case 16:
+    generateContentTableForOriginalHtmls();
+    break;
+  case 17:
+    generateContentTableForJPMHtmls();
+    break;
+  case 18:
+    generateContentTableForReferenceAttachments();
+    break;
+  case 19:
+    generateContentTableForPersonalAttachments();
+    break;
+  case 20:
+    findFirstInFiles();
     break;
   case 1:
     numberJPMHtmls(3, false);
@@ -39,6 +58,9 @@ int main(int argc, char **argv) {
     break;
   case 9:
     numberAttachmentHtmls(false, true);
+    break;
+  case 10:
+    reConstructStory("mapping.txt", "story");
     break;
   case 11:
     testFunctions(5);
