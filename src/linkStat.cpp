@@ -5,7 +5,9 @@ extern fileSet keyMissingChapters;
 extern fileSet newAttachmentList;
 
 Link::LinksTable Link::linksTable;
-string Link::outPutFilePath{emptyString};
+string Link::referFilePrefix{emptyString};
+string Link::linkDetailFilePath{emptyString};
+string Link::keyDetailFilePath{emptyString};
 Link::AttachmentSet Link::refAttachmentTable;
 
 LinkFromMain::AttachmentSet LinkFromMain::attachmentTable;
@@ -16,22 +18,34 @@ LinkFromMain::AttachmentSet LinkFromMain::attachmentTable;
 void Link::displayFixedLinks() {
   if (linksTable.empty())
     return;
-  FUNCTION_OUTPUT << outPutFilePath << " is created." << endl;
-  ofstream outfile(outPutFilePath);
-  outfile << "all links processed:" << endl;
-  outfile << "---------------------------------" << endl;
+  FUNCTION_OUTPUT << linkDetailFilePath << " is created." << endl;
+  FUNCTION_OUTPUT << keyDetailFilePath << " is created." << endl;
+  ofstream linkDetailOutfile(linkDetailFilePath);
+  ofstream keyDetailOutfile(keyDetailFilePath);
+  linkDetailOutfile << "all links processed:" << endl;
+  linkDetailOutfile << "---------------------------------" << endl;
   for (const auto &link : linksTable) {
     auto target = link.first;
     auto fromList = link.second;
     // link itself
-    outfile << "link:" << target.first << "," << target.second << endl;
+    linkDetailOutfile << "link:" << referFilePrefix << target.first << ","
+                      << target.second << endl;
+    keyDetailOutfile << referFilePrefix << target.first << ":" << target.second
+                     << endl;
+    using KeySet = set<string>;
+    KeySet keySet;
     sort(fromList.begin(), fromList.end(),
          [](LinkDetails a, LinkDetails b) { return a.key < b.key; });
     for (const auto &from : fromList) {
-      outfile << "key: " << from.key << ",linked from:" << from.fromFile << ","
-              << from.fromLine << ":" << endl
-              << "    " << from.link << endl;
+      linkDetailOutfile << "key: " << from.key
+                        << ",linked from:" << from.fromFile << ","
+                        << from.fromLine << ":" << endl
+                        << "    " << from.link << endl;
+      keySet.insert(from.key);
     }
+    for (const auto &key : keySet)
+      keyDetailOutfile << key << " ";
+    keyDetailOutfile << endl;
   }
 }
 
@@ -166,8 +180,8 @@ void Link::resetStatisticsAndLoadReferenceAttachmentList() {
  */
 void Link::outPutStatisticsToFiles() {
   displayFixedLinks();
-  FUNCTION_OUTPUT << "links information are written into: " << outPutFilePath
-                  << endl;
+  FUNCTION_OUTPUT << "links information are written into: "
+                  << linkDetailFilePath << " and " << keyDetailFilePath << endl;
 }
 
 /**
@@ -191,6 +205,8 @@ bool isAnnotationMatch(string annotation, string title) {
 
 static const string HTML_OUTPUT_LINKS_FROM_MAIN_LIST =
     "utf8HTML/output/LinksFromMain.txt";
+static const string HTML_OUTPUT_KEY_OF_LINKS_FROM_MAIN_LIST =
+    "utf8HTML/output/KeysOfLinksFromMain.txt";
 static const string HTML_OUTPUT_ATTACHMENT_FROM_MAIN_LIST =
     "utf8HTML/output/AttachmentsFromMain.txt";
 
@@ -245,7 +261,9 @@ void LinkFromMain::resetStatisticsAndLoadReferenceAttachmentList() {
  * output statistics from link fixing of links from main files
  */
 void LinkFromMain::outPutStatisticsToFiles() {
-  outPutFilePath = HTML_OUTPUT_LINKS_FROM_MAIN_LIST;
+  referFilePrefix = MAIN_HTML_PREFIX;
+  linkDetailFilePath = HTML_OUTPUT_LINKS_FROM_MAIN_LIST;
+  keyDetailFilePath = HTML_OUTPUT_KEY_OF_LINKS_FROM_MAIN_LIST;
   Link::outPutStatisticsToFiles();
   displayAttachments();
 }
@@ -299,6 +317,8 @@ void LinkFromMain::logLink() {
 
 static const string HTML_OUTPUT_LINKS_FROM_ATTACHMENT_LIST =
     "utf8HTML/output/LinksFromAttachment.txt";
+static const string HTML_OUTPUT_KEY_OF_LINKS_FROM_ATTACHMENT_LIST =
+    "utf8HTML/output/KeysOfLinksFromAttachment.txt";
 
 /**
  * reset statistics data structure for re-do it during link fixing
@@ -311,7 +331,9 @@ void LinkFromAttachment::resetStatisticsAndLoadReferenceAttachmentList() {
  * output statistics from link fixing of links from attachment files
  */
 void LinkFromAttachment::outPutStatisticsToFiles() {
-  outPutFilePath = HTML_OUTPUT_LINKS_FROM_ATTACHMENT_LIST;
+  referFilePrefix = ATTACHMENT_HTML_PREFIX;
+  linkDetailFilePath = HTML_OUTPUT_LINKS_FROM_ATTACHMENT_LIST;
+  keyDetailFilePath = HTML_OUTPUT_KEY_OF_LINKS_FROM_ATTACHMENT_LIST;
   Link::outPutStatisticsToFiles();
 }
 

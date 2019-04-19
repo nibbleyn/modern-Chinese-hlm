@@ -59,7 +59,9 @@ public:
   // chapter number (added with attachment number if over fromAttachmentLinks),
   // referPara -> vector<key, fromFile, fromLine, Link string>
   using LinksTable = map<std::pair<string, string>, vector<LinkDetails>>;
-  static string outPutFilePath;
+  static string referFilePrefix;
+  static string linkDetailFilePath;
+  static string keyDetailFilePath;
   static LinksTable linksTable;
   static void displayFixedLinks();
 

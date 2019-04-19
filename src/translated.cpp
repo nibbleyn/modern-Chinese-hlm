@@ -49,6 +49,15 @@ int main(int argc, char **argv) {
   case 6:
     fixLinksFromAttachment(false);
     break;
+  case 10:
+    reConstructStory("mapping.txt", "story");
+    break;
+  case 11:
+    testFunctions(5);
+    break;
+  case 12:
+    tools(15);
+    break;
     //   hidden paragraph headers, no force update
   case 7:
     numberOriginalHtmls(false, true);
@@ -58,15 +67,6 @@ int main(int argc, char **argv) {
     break;
   case 9:
     numberAttachmentHtmls(false, true);
-    break;
-  case 10:
-    reConstructStory("mapping.txt", "story");
-    break;
-  case 11:
-    testFunctions(5);
-    break;
-  case 12:
-    tools(15);
     break;
   default:
     FUNCTION_OUTPUT << "nothing gets executed." << endl;
