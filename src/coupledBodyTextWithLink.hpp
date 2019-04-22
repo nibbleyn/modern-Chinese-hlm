@@ -10,7 +10,7 @@ public:
   struct LineDetails {
     size_t numberOfLines{0};
     bool isImgGroup{false};
-    set<OBJECT_TYPE> objectContains;
+    set<Object::OBJECT_TYPE> objectContains;
   };
   // statistics about paras
   // chapter number (added with attachment number if over fromAttachmentLinks),
@@ -33,6 +33,7 @@ public:
   void validateParaSize();
   void disableAutoNumbering() { m_autoNumbering = false; }
   void addLineNumber(bool forceUpdate = true, bool hideParaHeader = false);
+  void doStatisticsByScanningLines();
 
   // used for link-fixing
   void fixLinksFromFile(fileSet referMainFiles, fileSet referOriginalFiles,
@@ -107,11 +108,9 @@ private:
   void calculateParaHeaderPositions();
   void paraGeneratedNumbering(bool forceUpdate, bool hideParaHeader);
 
-  void doStatisticsByScanningLines();
-
   // used for rendering
-  using OffsetToObjectType = std::map<size_t, OBJECT_TYPE>;
-  using ObjectTypeToOffset = std::map<OBJECT_TYPE, size_t>;
+  using OffsetToObjectType = std::map<size_t, Object::OBJECT_TYPE>;
+  using ObjectTypeToOffset = std::map<Object::OBJECT_TYPE, size_t>;
   OffsetToObjectType m_offsetOfTypes;
   ObjectTypeToOffset m_foundTypes;
 
@@ -144,7 +143,7 @@ private:
       METHOD_OUTPUT << "no entry in m_offsetOfTypes." << endl;
     for (const auto &element : m_offsetOfTypes) {
       METHOD_OUTPUT << element.first << "  "
-                    << getNameOfObjectType(element.second) << endl;
+                    << Object::getNameOfObjectType(element.second) << endl;
     }
   }
 
@@ -154,7 +153,7 @@ private:
     else
       METHOD_OUTPUT << "no entry in m_foundTypes." << endl;
     for (const auto &element : m_foundTypes) {
-      METHOD_OUTPUT << getNameOfObjectType(element.first) << "  "
+      METHOD_OUTPUT << Object::getNameOfObjectType(element.first) << "  "
                     << element.second << endl;
     }
   }
@@ -202,10 +201,22 @@ private:
 
   void searchForEmbededLinks();
   void scanForTypes(const string &containedLine);
-  bool isEmbeddedObject(OBJECT_TYPE type, size_t offset);
+  bool isEmbeddedObject(Object::OBJECT_TYPE type, size_t offset);
 
   // used for link-fixing
   using LinkPtr = std::unique_ptr<Link>;
   LinkPtr m_linkPtr{nullptr};
   LinkPtr m_followingLinkPtr{nullptr};
+
+  void printLinesTable() {
+    if (not linesTable.empty()) {
+      METHOD_OUTPUT << "linesTable:" << endl;
+      METHOD_OUTPUT << "chapter/ParaNumber/" << endl;
+    } else
+      METHOD_OUTPUT << "no entry in linesTable." << endl;
+    for (const auto &element : linesTable) {
+      METHOD_OUTPUT << element.first.first << "        " << element.first.second
+                    << "        " << endl;
+    }
+  }
 };

@@ -19,11 +19,6 @@ private:
   string m_fromFile{"81"};
 };
 
-// poemTranslation
-static const string poemTranslationBeginChars = R"(<samp )";
-static const string poemTranslationEndChars = R"(</samp>)";
-static const string endOfPoemTranslationBeginTag = R"(">)";
-
 class PoemTranslation : public Object {
 public:
   PoemTranslation(const string &fromFile) : m_fromFile(fromFile) {}

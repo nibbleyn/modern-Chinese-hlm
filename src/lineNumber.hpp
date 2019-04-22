@@ -7,7 +7,6 @@
 static const int START_PARA_NUMBER = 90;
 // line number is placeholder hyperlink since a ParagraphHeader would have href
 // attribute and is a line number also
-static const string UnhiddenLineNumberStart = R"(<a unhidden id=")";
 static const string HiddenLineNumberStart = R"(<a hidden id=")";
 static const string LineNumberEnd = R"(</a>)";
 class LineNumber : public Object {

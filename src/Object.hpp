@@ -1,21 +1,89 @@
 #pragma once
 #include "utf8StringUtil.hpp"
 
-enum class OBJECT_TYPE {
-  SPACE,
-  LINENUMBER,
-  POEM,
-  POEMTRANSLATION,
-  LINKFROMMAIN,
-  LINKFROMATTACHMENT,
-  COMMENT,
-  PERSONALCOMMENT,
-  BR
-};
+static const string poemTranslationBeginChars = R"(<samp )";
+static const string UnhiddenLineNumberStart = R"(<a unhidden id=")";
+static const string space = R"(&nbsp;)";
+static const string doubleSpace = space + space;
+static const string fourSpace = space + space + space + space;
+static const string poemBeginChars = R"(<strong )";
+static const string poemEndChars = R"(</strong>)";
+static const string poemTranslationEndChars = R"(</samp>)";
+static const string endOfPoemTranslationBeginTag = R"(">)";
 
-string getNameOfObjectType(OBJECT_TYPE type);
+static const string nameOfLineNumberType = R"(LINENUMBER)";
+static const string nameOfSpaceType = R"(SPACE)";
+static const string nameOfPoemType = R"(POEM)";
+static const string nameOfPoemTranslationType = R"(POEMTRANSLATION)";
+static const string nameOfLinkFromMainType = R"(LINKFROMMAIN)";
+static const string nameOfLinkFromAttachmentType = R"(LINKFROMATTACHMENT)";
+static const string nameOfCommentType = R"(COMMENT)";
+static const string nameOfPersonalCommentType = R"(PERSONALCOMMENT)";
 
 class Object {
+public:
+  enum class OBJECT_TYPE {
+    SPACE,
+    LINENUMBER,
+    POEM,
+    POEMTRANSLATION,
+    LINKFROMMAIN,
+    LINKFROMATTACHMENT,
+    COMMENT,
+    PERSONALCOMMENT,
+    BR
+  };
+  using LIST_OF_OBJECT_TYPES = vector<Object::OBJECT_TYPE>;
+  static LIST_OF_OBJECT_TYPES listOfObjectTypes;
+
+  static string getStartTagOfObjectType(OBJECT_TYPE type) {
+    if (type == OBJECT_TYPE::LINENUMBER)
+      return UnhiddenLineNumberStart;
+    else if (type == Object::OBJECT_TYPE::SPACE)
+      return space;
+    else if (type == Object::OBJECT_TYPE::POEM)
+      return poemBeginChars;
+    else if (type == Object::OBJECT_TYPE::LINKFROMMAIN)
+      return linkStartChars;
+    else if (type == Object::OBJECT_TYPE::PERSONALCOMMENT)
+      return personalCommentStartChars;
+    else if (type == Object::OBJECT_TYPE::POEMTRANSLATION)
+      return poemTranslationBeginChars;
+    else if (type == Object::OBJECT_TYPE::COMMENT)
+      return commentBeginChars;
+    return emptyString;
+  }
+
+  static string getEndTagOfObjectType(OBJECT_TYPE type) {
+    if (type == OBJECT_TYPE::LINKFROMMAIN)
+      return linkEndChars;
+    else if (type == OBJECT_TYPE::PERSONALCOMMENT)
+      return personalCommentEndChars;
+    else if (type == OBJECT_TYPE::POEMTRANSLATION)
+      return poemTranslationEndChars;
+    else if (type == OBJECT_TYPE::COMMENT)
+      return commentEndChars;
+    return emptyString;
+  }
+
+  static string getNameOfObjectType(OBJECT_TYPE type) {
+    if (type == OBJECT_TYPE::LINENUMBER)
+      return nameOfLineNumberType;
+    else if (type == OBJECT_TYPE::SPACE)
+      return nameOfSpaceType;
+    else if (type == OBJECT_TYPE::POEM)
+      return nameOfPoemType;
+    else if (type == OBJECT_TYPE::LINKFROMMAIN)
+      return nameOfLinkFromMainType;
+    else if (type == OBJECT_TYPE::PERSONALCOMMENT)
+      return nameOfPersonalCommentType;
+    else if (type == OBJECT_TYPE::POEMTRANSLATION)
+      return nameOfPoemTranslationType;
+    else if (type == OBJECT_TYPE::COMMENT)
+      return nameOfCommentType;
+    return emptyString;
+  }
+
 public:
   Object() = default;
   virtual ~Object(){};
@@ -36,9 +104,6 @@ protected:
   string m_fullString{""};
 };
 
-static const string space = R"(&nbsp;)";
-static const string doubleSpace = space + space;
-static const string fourSpace = space + space + space + space;
 class Space : public Object {
 public:
   Space() = default;
@@ -47,12 +112,8 @@ public:
   size_t loadFirstFromContainedLine(const string &containedLine,
                                     size_t after = 0);
   size_t displaySize() { return displaySpace.length(); };
-
-private:
 };
 
-static const string poemBeginChars = R"(<strong )";
-static const string poemEndChars = R"(</strong>)";
 class Poem : public Object {
 public:
   Poem() = default;
@@ -61,6 +122,4 @@ public:
   size_t loadFirstFromContainedLine(const string &containedLine,
                                     size_t after = 0);
   size_t displaySize();
-
-private:
 };

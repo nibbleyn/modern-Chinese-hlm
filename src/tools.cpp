@@ -592,19 +592,6 @@ void reformatTxtFilesForReader() {
                   << " finished. " << endl;
 }
 
-void renderingBodyText(const string &fileType, bool hideParaHeader = false) {
-  const string sampleBlock = R"()";
-  const string sampleFirstLine = R"()";
-  const string sampleWholeLine = R"()";
-  int minTarget = 49, maxTarget = 49;
-  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
-    CoupledBodyTextWithLink bodyText;
-    bodyText.setFilePrefixFromFileType(getFileTypeFromString(fileType));
-    bodyText.setFileAndAttachmentNumber(file);
-    bodyText.render();
-  }
-}
-
 void CoupledBodyTextWithLink::removePersonalCommentsOverNumberedFiles() {
   setInputOutputFiles();
   ifstream infile(m_inputFile);
@@ -704,17 +691,14 @@ void tools(int num) {
   case 5:
     fixPersonalViewForJPMHtmls();
     break;
-  case 11:
+  case 6:
     ConvertNonPrefixedGb2312FilesToUtf8();
     break;
-  case 12:
+  case 7:
     removePersonalViewpoints();
     break;
-  case 13:
+  case 8:
     fixTagPairEnd();
-    break;
-  case 16:
-    renderingBodyText("main");
     break;
   default:
     FUNCTION_OUTPUT << "invalid tool." << endl;

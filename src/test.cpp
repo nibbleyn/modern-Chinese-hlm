@@ -501,10 +501,37 @@ void testMixedObjects() {
   // after this, there could be only one line number at the beginning
   CoupledBodyTextWithLink bodyText;
   bodyText.setFilePrefixFromFileType(FILE_TYPE::MAIN);
-  bodyText.setFileAndAttachmentNumber("05");
-  //  bodyText.addLineNumber(getSeparateLineColor(FILE_TYPE::MAIN));
-  //  bodyText.scanLines();
   printCompareResult(bodyText.getDisplayString(line), compareTo);
+}
+
+void testAddLineNumber() {
+  CoupledBodyTextWithLink bodyText;
+  bodyText.setFilePrefixFromFileType(FILE_TYPE::MAIN);
+  bodyText.setFileAndAttachmentNumber("05");
+  bodyText.addLineNumber();
+}
+
+void renderingBodyText(const string &fileType = "main",
+                       bool hideParaHeader = false) {
+  const string sampleBlock = R"()";
+  const string sampleFirstLine = R"()";
+  const string sampleWholeLine = R"()";
+  int minTarget = 49, maxTarget = 49;
+  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
+    CoupledBodyTextWithLink bodyText;
+    bodyText.setFilePrefixFromFileType(getFileTypeFromString(fileType));
+    bodyText.setFileAndAttachmentNumber(file);
+    bodyText.render();
+  }
+}
+
+void testRender() { renderingBodyText(); }
+
+void testNumberingStatistics() {
+  CoupledBodyTextWithLink bodyText;
+  bodyText.setFilePrefixFromFileType(FILE_TYPE::MAIN);
+  bodyText.setFileAndAttachmentNumber("72");
+  bodyText.doStatisticsByScanningLines();
 }
 
 void testListContainer() {
@@ -587,10 +614,19 @@ void testFunctions(int num) {
   case 5:
     testContainer(1);
     break;
+  case 6:
+    testAddLineNumber();
+    break;
+  case 7:
+    testNumberingStatistics();
+    break;
   case 8:
-    testPoem();
+    testRender();
     break;
   case 9:
+    testPoem();
+    break;
+  case 10:
     testSpace();
     break;
   case 11:
