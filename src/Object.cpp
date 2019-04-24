@@ -3,10 +3,9 @@
 extern int debug;
 
 Object::LIST_OF_OBJECT_TYPES Object::listOfObjectTypes = {
-    Object::OBJECT_TYPE::LINENUMBER,         Object::OBJECT_TYPE::POEM,
-    Object::OBJECT_TYPE::POEMTRANSLATION,    Object::OBJECT_TYPE::LINKFROMMAIN,
-    Object::OBJECT_TYPE::LINKFROMATTACHMENT, Object::OBJECT_TYPE::COMMENT,
-    Object::OBJECT_TYPE::PERSONALCOMMENT};
+    Object::OBJECT_TYPE::LINENUMBER,      Object::OBJECT_TYPE::POEM,
+    Object::OBJECT_TYPE::POEMTRANSLATION, Object::OBJECT_TYPE::LINKFROMMAIN,
+    Object::OBJECT_TYPE::COMMENT,         Object::OBJECT_TYPE::PERSONALCOMMENT};
 
 size_t Space::loadFirstFromContainedLine(const string &containedLine,
                                          size_t after) {

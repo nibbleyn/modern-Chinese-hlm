@@ -11,34 +11,45 @@ void CoupledBodyTextWithLink::setReferFilePrefix(const string &prefix) {
 void CoupledBodyTextWithLink::setStatisticsOutputFilePath(const string &path) {
   lineDetailFilePath = path;
 }
+
+void CoupledBodyTextWithLink::clearExistingNumberingStatistics() {
+  if (debug >= LOG_INFO)
+    FUNCTION_OUTPUT << "clear content in: " << lineDetailFilePath << endl;
+  ofstream outfile(lineDetailFilePath);
+}
+
 /**
  * output linesTable to file specified in lineDetailFilePath
  */
-void CoupledBodyTextWithLink::displayNumberedLines() {
+void CoupledBodyTextWithLink::appendNumberingStatistics() {
   if (linesTable.empty())
     return;
   FUNCTION_OUTPUT << lineDetailFilePath << " is created." << endl;
-  ofstream lineDetailOutfile(lineDetailFilePath);
+  ofstream lineDetailOutfile(lineDetailFilePath, std::ios_base::app);
   for (const auto &para : linesTable) {
     auto paraPos = para.first;
     auto lineList = para.second;
     // para itself
-    lineDetailOutfile << referFilePrefix << paraPos.first << ","
-                      << paraPos.second << endl;
+    lineDetailOutfile << paraPos.first << "," << paraPos.second << endl;
     // lines included
 
     // summing up total lines and report over-sized para
   }
 }
 
-void CoupledBodyTextWithLink::doStatisticsByScanningLines() {
+void CoupledBodyTextWithLink::doStatisticsByScanningLines(
+    bool overFixedBodyText) {
 
   m_numberOfFirstParaHeader = 0;
   m_numberOfMiddleParaHeader = 0;
   m_numberOfLastParaHeader = 0;
   linesTable.clear();
 
-  ifstream infile(m_inputFile);
+  ifstream infile;
+  if (overFixedBodyText)
+    infile.open(m_outputFile);
+  else
+    infile.open(m_inputFile);
   LineNumber currentPara;
 
   while (!infile.eof()) // To get you all the lines.
@@ -79,7 +90,7 @@ void CoupledBodyTextWithLink::doStatisticsByScanningLines() {
         linesTable[std::make_pair(m_filePrefix + m_file,
                                   currentPara.asString())] = list;
       }
-    } else if (not isEmptyLine(m_inLine)) {
+    } else if (hasEndingBr(m_inLine)) {
       // record the para it belongs to into linesTable
       LineDetails detail{0, false, set<Object::OBJECT_TYPE>()};
       for (const auto &type : Object::listOfObjectTypes) {
@@ -119,4 +130,5 @@ void CoupledBodyTextWithLink::doStatisticsByScanningLines() {
                   << endl;
     printLinesTable();
   }
+  appendNumberingStatistics();
 }

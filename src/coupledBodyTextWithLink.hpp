@@ -21,7 +21,8 @@ public:
   static LinesTable linesTable;
   static void setReferFilePrefix(const string &prefix);
   static void setStatisticsOutputFilePath(const string &path);
-  static void displayNumberedLines();
+  static void clearExistingNumberingStatistics();
+  static void appendNumberingStatistics();
 
 public:
   CoupledBodyTextWithLink() = default;
@@ -33,7 +34,7 @@ public:
   void validateParaSize();
   void disableAutoNumbering() { m_autoNumbering = false; }
   void addLineNumber(bool forceUpdate = true, bool hideParaHeader = false);
-  void doStatisticsByScanningLines();
+  void doStatisticsByScanningLines(bool overFixedBodyText = false);
 
   // used for link-fixing
   void fixLinksFromFile(fileSet referMainFiles, fileSet referOriginalFiles,

@@ -439,7 +439,7 @@ void CoupledBodyTextWithLink::addLineNumber(bool forceUpdate,
     scanByLines(); // first scan
     paraGuidedNumbering(forceUpdate, hideParaHeader);
   }
-  doStatisticsByScanningLines();
+  doStatisticsByScanningLines(true);
 
   if (debug >= LOG_INFO)
     METHOD_OUTPUT << "numbering finished." << endl;
@@ -468,6 +468,7 @@ void CoupledBodyTextWithLink::fixLinksFromFile(
     ln.loadFirstFromContainedLine(m_inLine);
     if (ln.isParagraphHeader() or not ln.valid() or
         not ln.isWithinLineRange(minPara, maxPara, minLine, maxLine)) {
+    	outfile << m_inLine << endl;
       continue;
     }
     fixLinksWithinOneLine(referMainFiles, referOriginalFiles, referJPMFiles,
