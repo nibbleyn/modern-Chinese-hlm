@@ -290,10 +290,11 @@ CoupledBodyTextWithLink::getContainedObjectTypes(const string &originalString) {
     if (not isEmbeddedObject(type, offset)) {
       string text = originalString.substr(endOfSubStringOffset,
                                           offset - endOfSubStringOffset);
+      string pureBlank(offset - endOfSubStringOffset, ' ');
       if (debug >= LOG_INFO)
         METHOD_OUTPUT << text << endl;
-      if (offset > endOfSubStringOffset and text != bracketStartChars and
-          text != bracketEndChars and
+      if (offset > endOfSubStringOffset and text != pureBlank and
+          text != bracketStartChars and text != bracketEndChars and
           text != bracketEndChars + bracketStartChars and
           text != bracketStartChars + bracketEndChars)
         pureTextFound = true;
@@ -326,9 +327,11 @@ CoupledBodyTextWithLink::getContainedObjectTypes(const string &originalString) {
       printOffsetToObjectType();
   } while (true);
   string lastPart = originalString.substr(endOfSubStringOffset);
+  string pureBlank(lastPart.length(), ' ');
   if (debug >= LOG_INFO)
     METHOD_OUTPUT << lastPart << endl;
-  if (lastPart != brTab and lastPart != bracketEndChars and
+  if (lastPart != emptyString and lastPart != pureBlank and
+      lastPart != brTab and lastPart != bracketEndChars and
       lastPart != (bracketEndChars + brTab))
     pureTextFound = true;
   if (pureTextFound)

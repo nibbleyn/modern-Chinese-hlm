@@ -502,9 +502,18 @@ void testMixedObjects() {
   CoupledBodyTextWithLink bodyText;
   bodyText.setFilePrefixFromFileType(FILE_TYPE::MAIN);
   printCompareResult(bodyText.getDisplayString(line), compareTo);
+
   string line10 =
       R"(（<u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">不问不成人的事情，反而问谁说的，全都是王家的体面更重要。<a unhidden href="attachment\b062_2.htm">旧诗 哭刘司户二首</a></u>）)";
-  auto typeSet = bodyText.getContainedObjectTypes(line10);
+  string line11 =
+      R"(<a unhidden id="P1L1">1.1</a>&nbsp;&nbsp; <u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">总批：此回专为佞佛邀福者下一针砭。</u><br>)";
+  string line12 =
+      R"(<a unhidden id="P1L2">1.2</a>&nbsp;&nbsp; <u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">玉皇庙，两番描写，俱是热闹时候。即后文荐亡，亦是热闹之时，特特与永福寺对照也，看他平空撰出两付对联，一个疏头，却使玉皇庙是真庙，吴道官、西门庆等俱是活人。妙绝之笔。</u><br>)";
+  string line13 =
+      R"(<a unhidden id="P1L5">1.5</a>&nbsp;&nbsp; <u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">篇末偏于道家法事之后，又撰一段佛事，使王姑子彰明较著，谈一回野孤禅，与上文道事相映成趣也。然而三十二祖投胎，又明为孝哥预描一影。则孝哥生几露，而西门死几发矣。可畏哉玉皇庙寄名，接王姑子谈经，与后千金喜舍，接二姑子印经，又是遥对章法。</u>）<br>)";
+
+  line = line13;
+  auto typeSet = bodyText.getContainedObjectTypes(line);
   for (const auto &type : typeSet) {
     FUNCTION_OUTPUT << "  " << Object::getNameOfObjectType(type) << endl;
   }
