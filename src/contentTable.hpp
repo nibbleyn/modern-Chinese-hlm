@@ -1,5 +1,5 @@
 #pragma once
-#include "test.hpp"
+#include "linkFix.hpp"
 
 void generateContentTableForMainHtmls();
 void generateContentTableForOriginalHtmls();

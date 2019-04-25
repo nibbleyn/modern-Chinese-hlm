@@ -1,4 +1,8 @@
 #include "contentTable.hpp"
+#include "numbering.hpp"
+#include "search.hpp"
+#include "story.hpp"
+#include "test.hpp"
 #include "tools.hpp"
 
 int main(int argc, char **argv) {
