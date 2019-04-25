@@ -113,6 +113,34 @@ protected:
   bool hasEndingBr(const string &inLine) {
     return (inLine.find(brTab) != string::npos and not isLeadingBr(inLine));
   };
+  bool isMixedOfSpaceBrackets(const string &inLine) {
+    string toChange = inLine;
+    while (true) {
+      if (toChange.find(bracketStartChars) == string::npos)
+        break;
+      toChange.replace(toChange.find(bracketStartChars),
+                       bracketStartChars.length(), emptyString);
+    }
+    while (true) {
+      if (toChange.find(bracketEndChars) == string::npos)
+        break;
+      toChange.replace(toChange.find(bracketEndChars), bracketEndChars.length(),
+                       emptyString);
+    }
+    toChange.erase(remove(toChange.begin(), toChange.end(), ' '),
+                   toChange.end());
+    return (toChange == emptyString);
+  };
+
+  bool isMixedOfSpaceBracketsBr(const string &inLine) {
+    string toChange = inLine;
+    while (true) {
+      if (toChange.find(brTab) == string::npos)
+        break;
+      toChange.replace(toChange.find(brTab), brTab.length(), emptyString);
+    }
+    return isMixedOfSpaceBrackets(toChange);
+  };
 
   // used for numbering
   string m_inLine{};

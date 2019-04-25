@@ -293,10 +293,7 @@ CoupledBodyTextWithLink::getContainedObjectTypes(const string &originalString) {
       string pureBlank(offset - endOfSubStringOffset, ' ');
       if (debug >= LOG_INFO)
         METHOD_OUTPUT << text << endl;
-      if (offset > endOfSubStringOffset and text != pureBlank and
-          text != bracketStartChars and text != bracketEndChars and
-          text != bracketEndChars + bracketStartChars and
-          text != bracketStartChars + bracketEndChars)
+      if (offset > endOfSubStringOffset and not isMixedOfSpaceBrackets(text))
         pureTextFound = true;
       resultSet.insert(type);
       auto current = createObjectFromType(type, m_file);
@@ -330,9 +327,7 @@ CoupledBodyTextWithLink::getContainedObjectTypes(const string &originalString) {
   string pureBlank(lastPart.length(), ' ');
   if (debug >= LOG_INFO)
     METHOD_OUTPUT << lastPart << endl;
-  if (lastPart != emptyString and lastPart != pureBlank and
-      lastPart != brTab and lastPart != bracketEndChars and
-      lastPart != (bracketEndChars + brTab))
+  if (lastPart != emptyString and not isMixedOfSpaceBracketsBr(lastPart))
     pureTextFound = true;
   if (pureTextFound)
     resultSet.insert(Object::OBJECT_TYPE::TEXT);
