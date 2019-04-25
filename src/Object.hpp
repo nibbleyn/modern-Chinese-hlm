@@ -87,6 +87,14 @@ public:
     return emptyString;
   }
 
+  static string typeSetAsString(SET_OF_OBJECT_TYPES typeSet) {
+    string result;
+    for (const auto &type : typeSet) {
+      result += " " + getNameOfObjectType(type);
+    }
+    return result;
+  }
+
 public:
   Object() = default;
   virtual ~Object(){};

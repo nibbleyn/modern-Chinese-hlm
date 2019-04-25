@@ -32,8 +32,14 @@ void CoupledBodyTextWithLink::appendNumberingStatistics() {
     // para itself
     lineDetailOutfile << paraPos.first << "," << paraPos.second << endl;
     // lines included
-
     // summing up total lines and report over-sized para
+    auto totalNumberOfLines = 0;
+    for (const auto &line : lineList){
+    	auto typeStr = line.isImgGroup?"Image":"Text";
+    	lineDetailOutfile << typeStr << " : " << line.numberOfLines << " lines, type: "    			<< Object::typeSetAsString(line.objectContains)  << endl;
+    	totalNumberOfLines += line.numberOfLines;
+    }
+    lineDetailOutfile << "total number of lines: " << totalNumberOfLines << endl;
   }
 }
 

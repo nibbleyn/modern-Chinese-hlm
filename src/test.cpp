@@ -514,9 +514,7 @@ void testMixedObjects() {
 
   line = line13;
   auto typeSet = bodyText.getContainedObjectTypes(line);
-  for (const auto &type : typeSet) {
-    FUNCTION_OUTPUT << "  " << Object::getNameOfObjectType(type) << endl;
-  }
+  FUNCTION_OUTPUT << Object::typeSetAsString(typeSet) << endl;
 }
 
 void testAddLineNumber() {
