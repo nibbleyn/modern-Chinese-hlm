@@ -502,6 +502,12 @@ void testMixedObjects() {
   CoupledBodyTextWithLink bodyText;
   bodyText.setFilePrefixFromFileType(FILE_TYPE::MAIN);
   printCompareResult(bodyText.getDisplayString(line), compareTo);
+  string line10 =
+      R"(（<u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">不问不成人的事情，反而问谁说的，全都是王家的体面更重要。<a unhidden href="attachment\b062_2.htm">旧诗 哭刘司户二首</a></u>）)";
+  auto typeSet = bodyText.getContainedObjectTypes(line10);
+  for (const auto &type : typeSet) {
+    FUNCTION_OUTPUT << "  " << Object::getNameOfObjectType(type) << endl;
+  }
 }
 
 void testAddLineNumber() {

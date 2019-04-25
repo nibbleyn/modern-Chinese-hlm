@@ -468,7 +468,7 @@ void CoupledBodyTextWithLink::fixLinksFromFile(
     ln.loadFirstFromContainedLine(m_inLine);
     if (ln.isParagraphHeader() or not ln.valid() or
         not ln.isWithinLineRange(minPara, maxPara, minLine, maxLine)) {
-    	outfile << m_inLine << endl;
+      outfile << m_inLine << endl;
       continue;
     }
     fixLinksWithinOneLine(referMainFiles, referOriginalFiles, referJPMFiles,

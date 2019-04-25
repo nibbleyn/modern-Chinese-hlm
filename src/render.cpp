@@ -266,6 +266,70 @@ string CoupledBodyTextWithLink::getDisplayString(const string &originalString) {
   return result;
 }
 
+Object::SET_OF_OBJECT_TYPES
+CoupledBodyTextWithLink::getContainedObjectTypes(const string &originalString) {
+  Object::SET_OF_OBJECT_TYPES resultSet;
+  if (debug >= LOG_INFO)
+    METHOD_OUTPUT << originalString.length() << endl;
+  scanForTypes(originalString);
+  if (debug >= LOG_INFO) {
+    printOffsetToObjectType();
+    printLinkStringTable();
+    printCommentStringTable();
+    printPersonalCommentStringTable();
+    printPoemTranslationStringTable();
+  }
+  unsigned int endOfSubStringOffset = 0;
+  do {
+    if (m_offsetOfTypes.empty())
+      break;
+    auto first = m_offsetOfTypes.begin();
+    auto type = first->second;
+    auto offset = first->first;
+    if (not isEmbeddedObject(type, offset)) {
+      if (debug >= LOG_INFO)
+        METHOD_OUTPUT << endOfSubStringOffset << " "
+                      << offset - endOfSubStringOffset << " "
+                      << originalString.substr(endOfSubStringOffset,
+                                               offset - endOfSubStringOffset)
+                      << endl;
+      resultSet.insert(type);
+      auto current = createObjectFromType(type, m_file);
+      current->loadFirstFromContainedLine(originalString, offset);
+      // should add length of substring above loadFirstFromContainedLine gets
+      // so require the string be fixed before
+      endOfSubStringOffset = offset + current->length();
+      if (debug >= LOG_INFO)
+        METHOD_OUTPUT << current->length() << " " << endOfSubStringOffset
+                      << endl;
+    }
+    m_offsetOfTypes.erase(first);
+    auto nextOffsetOfSameType =
+        originalString.find(Object::getStartTagOfObjectType(type), offset + 1);
+    do {
+      if (nextOffsetOfSameType != string::npos and
+          isEmbeddedObject(type, nextOffsetOfSameType))
+        nextOffsetOfSameType = originalString.find(
+            Object::getStartTagOfObjectType(type), nextOffsetOfSameType + 1);
+      else
+        break;
+    } while (true);
+    if (nextOffsetOfSameType != string::npos) {
+      m_foundTypes[type] = nextOffsetOfSameType;
+      m_offsetOfTypes[nextOffsetOfSameType] = type;
+    }
+    if (debug >= LOG_INFO)
+      printOffsetToObjectType();
+  } while (true);
+  m_foundTypes.clear();
+  m_offsetOfTypes.clear();
+  m_linkStringTable.clear();
+  m_commentStringTable.clear();
+  m_personalCommentStringTable.clear();
+  m_poemTranslationStringTable.clear();
+  return resultSet;
+}
+
 void CoupledBodyTextWithLink::render(bool hideParaHeader) {
   setInputOutputFiles();
   ifstream infile(m_inputFile);

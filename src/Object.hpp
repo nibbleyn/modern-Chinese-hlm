@@ -33,8 +33,8 @@ public:
     PERSONALCOMMENT,
     BR
   };
-  using LIST_OF_OBJECT_TYPES = vector<Object::OBJECT_TYPE>;
-  static LIST_OF_OBJECT_TYPES listOfObjectTypes;
+  using SET_OF_OBJECT_TYPES = set<Object::OBJECT_TYPE>;
+  static SET_OF_OBJECT_TYPES setOfObjectTypes;
 
   static string getStartTagOfObjectType(OBJECT_TYPE type) {
     if (type == OBJECT_TYPE::LINENUMBER)

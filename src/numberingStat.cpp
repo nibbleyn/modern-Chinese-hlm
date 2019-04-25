@@ -72,7 +72,7 @@ void CoupledBodyTextWithLink::doStatisticsByScanningLines(
       currentPara = ln;
     } else if (isImageGroupLine(m_inLine)) {
       // record the para it belongs to into linesTable
-      LineDetails detail{0, true, set<Object::OBJECT_TYPE>()};
+      LineDetails detail{0, true, Object::SET_OF_OBJECT_TYPES()};
       try {
         auto &entry = linesTable.at(
             std::make_pair(m_filePrefix + m_file, currentPara.asString()));
@@ -92,13 +92,7 @@ void CoupledBodyTextWithLink::doStatisticsByScanningLines(
       }
     } else if (hasEndingBr(m_inLine)) {
       // record the para it belongs to into linesTable
-      LineDetails detail{0, false, set<Object::OBJECT_TYPE>()};
-      for (const auto &type : Object::listOfObjectTypes) {
-        auto offset = m_inLine.find(Object::getStartTagOfObjectType(type));
-        if (offset != string::npos) {
-          detail.objectContains.insert(type);
-        }
-      }
+      LineDetails detail{0, false, getContainedObjectTypes(m_inLine)};
       try {
         auto &entry = linesTable.at(
             std::make_pair(m_filePrefix + m_file, currentPara.asString()));

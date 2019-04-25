@@ -2,7 +2,7 @@
 
 extern int debug;
 
-Object::LIST_OF_OBJECT_TYPES Object::listOfObjectTypes = {
+Object::SET_OF_OBJECT_TYPES Object::setOfObjectTypes = {
     Object::OBJECT_TYPE::LINENUMBER,      Object::OBJECT_TYPE::POEM,
     Object::OBJECT_TYPE::POEMTRANSLATION, Object::OBJECT_TYPE::LINKFROMMAIN,
     Object::OBJECT_TYPE::COMMENT,         Object::OBJECT_TYPE::PERSONALCOMMENT};

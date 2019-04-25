@@ -10,7 +10,7 @@ public:
   struct LineDetails {
     size_t numberOfLines{0};
     bool isImgGroup{false};
-    set<Object::OBJECT_TYPE> objectContains;
+    Object::SET_OF_OBJECT_TYPES objectContains;
   };
   // statistics about paras
   // chapter number (added with attachment number if over fromAttachmentLinks),
@@ -48,6 +48,8 @@ public:
 
   // used for rendering
   string getDisplayString(const string &originalString);
+  Object::SET_OF_OBJECT_TYPES
+  getContainedObjectTypes(const string &originalString);
 
   // used by tools
   void printStringInLines();

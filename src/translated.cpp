@@ -53,7 +53,7 @@ int main(int argc, char **argv) {
     reConstructStory("mapping.txt", "story");
     break;
   case 16:
-    testFunctions(7);
+    testFunctions(11);
     break;
   case 17:
     tools(15);
