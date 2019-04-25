@@ -280,6 +280,7 @@ CoupledBodyTextWithLink::getContainedObjectTypes(const string &originalString) {
     printPoemTranslationStringTable();
   }
   unsigned int endOfSubStringOffset = 0;
+  bool pureTextFound = false;
   do {
     if (m_offsetOfTypes.empty())
       break;
@@ -287,12 +288,15 @@ CoupledBodyTextWithLink::getContainedObjectTypes(const string &originalString) {
     auto type = first->second;
     auto offset = first->first;
     if (not isEmbeddedObject(type, offset)) {
+      string text = originalString.substr(endOfSubStringOffset,
+                                          offset - endOfSubStringOffset);
       if (debug >= LOG_INFO)
-        METHOD_OUTPUT << endOfSubStringOffset << " "
-                      << offset - endOfSubStringOffset << " "
-                      << originalString.substr(endOfSubStringOffset,
-                                               offset - endOfSubStringOffset)
-                      << endl;
+        METHOD_OUTPUT << text << endl;
+      if (offset > endOfSubStringOffset and text != bracketStartChars and
+          text != bracketEndChars and
+          text != bracketEndChars + bracketStartChars and
+          text != bracketStartChars + bracketEndChars)
+        pureTextFound = true;
       resultSet.insert(type);
       auto current = createObjectFromType(type, m_file);
       current->loadFirstFromContainedLine(originalString, offset);
@@ -321,6 +325,14 @@ CoupledBodyTextWithLink::getContainedObjectTypes(const string &originalString) {
     if (debug >= LOG_INFO)
       printOffsetToObjectType();
   } while (true);
+  string lastPart = originalString.substr(endOfSubStringOffset);
+  if (debug >= LOG_INFO)
+    METHOD_OUTPUT << lastPart << endl;
+  if (lastPart != brTab and lastPart != bracketEndChars and
+      lastPart != (bracketEndChars + brTab))
+    pureTextFound = true;
+  if (pureTextFound)
+    resultSet.insert(Object::OBJECT_TYPE::TEXT);
   m_foundTypes.clear();
   m_offsetOfTypes.clear();
   m_linkStringTable.clear();

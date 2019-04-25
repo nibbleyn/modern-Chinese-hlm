@@ -19,6 +19,7 @@ static const string nameOfLinkFromMainType = R"(LINKFROMMAIN)";
 static const string nameOfLinkFromAttachmentType = R"(LINKFROMATTACHMENT)";
 static const string nameOfCommentType = R"(COMMENT)";
 static const string nameOfPersonalCommentType = R"(PERSONALCOMMENT)";
+static const string nameOfTextType = R"(TEXT)";
 
 class Object {
 public:
@@ -31,7 +32,7 @@ public:
     LINKFROMATTACHMENT,
     COMMENT,
     PERSONALCOMMENT,
-    BR
+    TEXT
   };
   using SET_OF_OBJECT_TYPES = set<Object::OBJECT_TYPE>;
   static SET_OF_OBJECT_TYPES setOfObjectTypes;
@@ -81,6 +82,8 @@ public:
       return nameOfPoemTranslationType;
     else if (type == OBJECT_TYPE::COMMENT)
       return nameOfCommentType;
+    else if (type == OBJECT_TYPE::TEXT)
+      return nameOfTextType;
     return emptyString;
   }
 
