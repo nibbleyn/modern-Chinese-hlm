@@ -28,87 +28,6 @@ void displayNewlyAddedAttachments() {
 }
 
 /**
- * check lineNumber from refAttachmentList about a link to attachment
- * and put that lineNumber in that attachment file header
- * @param filename
- */
-void fixReturnLinkForAttachmentFile(const string &referFile,
-                                    const string &inputHtmlFile,
-                                    const string &outputFile) {
-  ifstream inHtmlFile(inputHtmlFile);
-  if (!inHtmlFile) // doesn't exist
-  {
-    FUNCTION_OUTPUT << "HTM file doesn't exist:" << inputHtmlFile << endl;
-    return;
-  }
-  ofstream outfile(outputFile);
-  string line{""};
-  while (!inHtmlFile.eof()) // To get you all the lines.
-  {
-    getline(inHtmlFile, line); // Saves the line in line.
-    auto textBegin = line.find(returnLinkFromAttachmentHeader);
-    if (textBegin == string::npos) {
-      outfile << line << endl;
-      continue;
-    } else {
-      auto orgLine = line; // inLine would change in loop below
-      auto start = linkStartChars;
-      string link{""};
-      while (true) {
-        auto linkBegin = line.find(start);
-        if (linkBegin == string::npos) // no link any more, continue with next
-                                       // line
-          break;
-        auto linkEnd = line.find(linkEndChars, linkBegin);
-        link = line.substr(linkBegin, linkEnd + 4 - linkBegin);
-        LinkFromAttachment lfm(referFile,
-                               link); // get only type and annotation
-        if (lfm.getAnnotation() == returnLinkFromAttachmentHeader)
-          break;
-        else
-          line = line.substr(linkEnd + 4); // find next link in the line
-      }
-      if (not link.empty()) {
-        LinkFromAttachment lfm(referFile, link);
-        auto num = getAttachmentNumber(
-            getHtmlFileNamePrefix(FILE_TYPE::ATTACHMENT) + referFile);
-        // special hack to make sure using a0... as return file name
-        lfm.setTypeThruFileNamePrefix("main"); // must return to main html
-        lfm.fixReferFile(num.first);
-        lfm.fixReferPara(LinkFromMain::getFromLineOfAttachment(num));
-        if (lfm.needUpdate()) // replace old value
-        {
-          auto orglinkBegin = orgLine.find(link);
-          orgLine.replace(orglinkBegin, link.length(), lfm.asString());
-        }
-      }
-      outfile << orgLine << endl;
-    }
-  }
-}
-
-void fixReturnLinkForAttachments(int minTarget, int maxTarget) {
-  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
-    auto targetAttachments =
-        getAttachmentFileListForChapter(file, HTML_SRC_ATTACHMENT);
-    for (const auto &attNo : targetAttachments) {
-      string inputHtmlFile =
-          HTML_SRC_ATTACHMENT + getHtmlFileNamePrefix(FILE_TYPE::ATTACHMENT) +
-          file + attachmentFileMiddleChar + TurnToString(attNo) + HTML_SUFFIX;
-      string outputFile = HTML_OUTPUT_ATTACHMENT +
-                          getHtmlFileNamePrefix(FILE_TYPE::ATTACHMENT) + file +
-                          attachmentFileMiddleChar + TurnToString(attNo) +
-                          HTML_SUFFIX;
-      fixReturnLinkForAttachmentFile(file + attachmentFileMiddleChar +
-                                         TurnToString(attNo),
-                                     inputHtmlFile, outputFile);
-    }
-  }
-  if (debug >= LOG_INFO)
-    FUNCTION_OUTPUT << "fix Return Link finished. " << endl;
-}
-
-/**
  * before this function to work, numbering all main, original files
  * no requirement for numbering attachment files.
  * however, attachment files must be put under HTML_SRC_ATTACHMENT
@@ -138,12 +57,24 @@ void fixLinksFromMainHtmls(bool forceUpdate) {
         buildFileSet(minReferenceToOriginal, maxReferenceToOriginal),
         buildFileSet(minReferenceToJPM, maxReferenceToJPM), forceUpdate);
   }
+  if (debug >= LOG_INFO)
+    FUNCTION_OUTPUT << "Links fixing  finished. " << endl;
   CoupledBodyText::loadBodyTextsFromFixBackToOutput();
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     container.setFileAndAttachmentNumber(file);
     container.assembleBackToHTM();
   }
-  fixReturnLinkForAttachments(minTarget, maxTarget);
+  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
+    auto targetAttachments =
+        getAttachmentFileListForChapter(file, HTML_SRC_ATTACHMENT);
+    CoupledContainer attachmentContainer(FILE_TYPE::ATTACHMENT);
+    for (const auto &attNo : targetAttachments) {
+      attachmentContainer.setFileAndAttachmentNumber(file, attNo);
+      attachmentContainer.fixReturnLinkForAttachmentFile();
+    }
+  }
+  if (debug >= LOG_INFO)
+    FUNCTION_OUTPUT << "Return Link fixing finished. " << endl;
 }
 
 void fixLinksFromMain(bool forceUpdate) {

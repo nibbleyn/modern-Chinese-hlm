@@ -4,7 +4,7 @@
 //#include "lineNumber.hpp"
 //#include "paraHeader.hpp"
 
-#include "lineNumber.hpp"
+#include "link.hpp"
 
 static const string LIST_CONTAINER_FILENAME = "1";
 static const string TABLE_CONTAINER_FILENAME = "2";
@@ -55,6 +55,7 @@ public:
   void fetchOriginalAndTranslatedTitles();
   string getOriginalTitle() { return m_originalTitle; };
   string getTranslatedTitle() { return m_translatedTitle; };
+  void fixReturnLinkForAttachmentFile();
   void dissembleFromHTM();
   void assembleBackToHTM(const string &title = "",
                          const string &displayTitle = "");

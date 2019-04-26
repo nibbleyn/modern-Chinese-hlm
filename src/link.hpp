@@ -8,6 +8,15 @@
 enum class LINK_TYPE { MAIN, ATTACHMENT, ORIGINAL, SAMEPAGE, JPM, IMAGE };
 enum class LINK_DISPLAY_TYPE { DIRECT, HIDDEN, UNHIDDEN };
 
+enum class ATTACHMENT_TYPE { PERSONAL, REFERENCE, NON_EXISTED };
+
+using AttachmentNumber = pair<int, int>; // chapter number, attachment number
+AttachmentNumber getAttachmentNumber(const string &filename);
+
+string getAttachmentTitle(const string &filename);
+vector<int> getAttachmentFileListForChapter(const string &referFile,
+                                            const string &fromDir);
+
 static const string annotationToOriginal = R"(原文)";
 
 // operations over link string template initialization

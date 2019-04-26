@@ -13,17 +13,15 @@ void CoupledBodyTextWithLink::fixLinksWithinOneLine(fileSet referMainFiles,
         ln.generateLinePrefix().length()); // skip line number link
   if (debug >= LOG_INFO)
     METHOD_OUTPUT << toProcess << endl;
-  auto start = linkStartChars;
   string targetFile{""};
   do {
-    auto linkBegin = toProcess.find(start);
-    if (linkBegin == string::npos) // no link any more, continue with next
-                                   // line
+    if (toProcess.find(linkStartChars) ==
+        string::npos) // no link any more, continue with next
+                      // line
       break;
-    auto linkEnd = toProcess.find(linkEndChars, linkBegin);
-    auto link = toProcess.substr(linkBegin,
-                                 linkEnd + linkEndChars.length() - linkBegin);
-
+    auto linkEnd = toProcess.find(linkEndChars, toProcess.find(linkStartChars));
+    auto link =
+        getWholeStringBetweenTags(toProcess, linkStartChars, linkEndChars);
     if (m_attachNumber == 0) {
       m_linkPtr = std::make_unique<LinkFromMain>(m_file, link);
     } else {

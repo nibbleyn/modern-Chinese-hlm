@@ -105,6 +105,10 @@ ATTACHMENT_TYPE Link::getAttachmentType(AttachmentNumber num) {
 
 static const string HTML_SRC_REF_ATTACHMENT_LIST =
     "utf8HTML/src/RefAttachments.txt";
+static const string fromParaOfReferenceAttachment = R"(from:)";
+static const string fromFileOfReferenceAttachment = R"( name:)";
+static const string titleOfReferenceAttachment = R"( title:)";
+static const string typeOfReferenceAttachment = R"( type:)";
 
 /**
  * load refAttachmentTable from HTML_SRC_REF_ATTACHMENT
@@ -137,19 +141,12 @@ void Link::loadReferenceAttachmentList() {
     if (typeBegin != string::npos) {
       type = line.substr(typeBegin + start.length());
     }
-    start = "title:";
-    auto titleBegin = line.find(start);
-    string title = line.substr(titleBegin + start.length(),
-                               typeBegin - titleBegin - start.length());
-    start = "name:";
-    auto nameBegin = line.find(start);
-    string targetFile = line.substr(nameBegin + start.length(),
-                                    titleBegin - nameBegin - start.length());
-
-    start = "from:";
-    auto fromBegin = line.find(start);
-    string fromLine = line.substr(fromBegin + start.length(),
-                                  nameBegin - fromBegin - start.length());
+    string title = getWholeStringBetweenTags(line, titleOfReferenceAttachment,
+                                             typeOfReferenceAttachment);
+    string targetFile = getWholeStringBetweenTags(
+        line, fromFileOfReferenceAttachment, titleOfReferenceAttachment);
+    string fromLine = getWholeStringBetweenTags(
+        line, fromParaOfReferenceAttachment, fromFileOfReferenceAttachment);
     if (debug >= LOG_INFO)
       FUNCTION_OUTPUT << "from:" << fromLine << " name:" << targetFile
                       << " title:" << title << " type:" << type << endl;

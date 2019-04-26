@@ -230,3 +230,66 @@ void CoupledContainer::dissembleFromHTM() {
   else if (debug >= LOG_INFO)
     METHOD_OUTPUT << "dissemble finished for " << inputHtmlFile << endl;
 }
+
+/**
+ * check lineNumber from refAttachmentList about a link to attachment
+ * and put that lineNumber in that attachment file header
+ * @param filename
+ */
+void CoupledContainer::fixReturnLinkForAttachmentFile() {
+  string inputHtmlFile = getInputHtmlFilePath();
+  string outputFile = getoutputHtmlFilepath();
+
+  ifstream inHtmlFile(inputHtmlFile);
+  if (!inHtmlFile) // doesn't exist
+  {
+    METHOD_OUTPUT << "HTM file doesn't exist:" << inputHtmlFile << endl;
+    return;
+  }
+
+  ofstream outfile(outputFile);
+  string line{""};
+  string referFile =
+      m_file + attachmentFileMiddleChar + TurnToString(m_attachmentNumber);
+  while (!inHtmlFile.eof()) // To get you all the lines.
+  {
+    getline(inHtmlFile, line); // Saves the line in line.
+    auto textBegin = line.find(returnLinkFromAttachmentHeader);
+    if (textBegin == string::npos) {
+      outfile << line << endl;
+      continue;
+    } else {
+      auto orgLine = line; // inLine would change in loop below
+      string link{""};
+      while (true) {
+        auto linkBegin = line.find(linkStartChars);
+        if (linkBegin == string::npos) // no link any more, continue with next
+                                       // line
+          break;
+        link = getWholeStringBetweenTags(line, linkStartChars, linkEndChars);
+        LinkFromAttachment lfm(referFile,
+                               link); // get only type and annotation
+        if (lfm.getAnnotation() == returnLinkFromAttachmentHeader)
+          break;
+        else
+          line = line.substr(linkBegin +
+                             lfm.length()); // find next link in the line
+      }
+      if (not link.empty()) {
+        LinkFromAttachment lfm(referFile, link);
+        auto num = getAttachmentNumber(
+            getHtmlFileNamePrefix(FILE_TYPE::ATTACHMENT) + referFile);
+        // special hack to make sure using a0... as return file name
+        lfm.setTypeThruFileNamePrefix("main"); // must return to main html
+        lfm.fixReferFile(num.first);
+        lfm.fixReferPara(LinkFromMain::getFromLineOfAttachment(num));
+        if (lfm.needUpdate()) // replace old value
+        {
+          auto orglinkBegin = orgLine.find(link);
+          orgLine.replace(orglinkBegin, link.length(), lfm.asString());
+        }
+      }
+      outfile << orgLine << endl;
+    }
+  }
+}
