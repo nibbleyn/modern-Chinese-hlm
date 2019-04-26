@@ -1,5 +1,43 @@
 #include "fileUtil.hpp"
 
+static const std::string attachmentNotExisted = R"(file doesn't exist.)";
+static const std::string titleNotExisted = R"(title doesn't exist.)";
+
+/**
+ * find in <title>xxx</title> part of attachment file header
+ * the title of the attachment
+ * if the file or the title is not found
+ * return corresponding error message as one of below,
+ * file doesn't exist.
+ * title doesn't exist.
+ * @param filename the attachment file without .htm, e.g. b003_7
+ * @return the title found or error message
+ */
+std::string getAttachmentTitle(const std::string &filename) {
+  std::string inputFile = HTML_SRC_ATTACHMENT + filename + HTML_SUFFIX;
+  std::ifstream infile(inputFile);
+  if (!infile) {
+    return attachmentNotExisted;
+  }
+  std::string inLine{""};
+  while (!infile.eof()) // To get all the lines.
+  {
+    getline(infile, inLine); // Saves the line in inLine.
+    auto beginPos = inLine.find(htmlTitleStart);
+    if (beginPos != std::string::npos) {
+      auto endPos =
+          inLine.find(htmlTitleEnd, beginPos + htmlTitleStart.length());
+      if (endPos == std::string::npos)
+        return titleNotExisted;
+      return inLine.substr(beginPos + htmlTitleStart.length(),
+                           endPos - htmlTitleStart.length() - beginPos);
+    }
+    if (inLine.find(endOfHtmlHead) != std::string::npos)
+      return titleNotExisted;
+  }
+  return titleNotExisted;
+}
+
 /**
  * from the type of file to get the filename prefix of target file
  * all main files are a0XX.htm

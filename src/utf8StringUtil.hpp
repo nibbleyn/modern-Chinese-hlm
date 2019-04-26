@@ -36,28 +36,6 @@ static const string bottomParagraphIndicator =
   cout << typeid(*this).name() << "::" << __func__ << "              "
 #define FUNCTION_OUTPUT cout << __func__ << "              "
 
-static const string HTML_SRC_MAIN = R"(utf8HTML/src/)";
-static const string HTML_SRC_ATTACHMENT = R"(utf8HTML/src/attachment/)";
-static const string HTML_SRC_ORIGINAL = R"(utf8HTML/src/original/)";
-static const string HTML_SRC_JPM = R"(utf8HTML/src/JPM/)";
-
-static const string HTML_OUTPUT_MAIN = R"(utf8HTML/output/)";
-static const string HTML_OUTPUT_ATTACHMENT = R"(utf8HTML/output/attachment/)";
-static const string HTML_OUTPUT_ORIGINAL = R"(utf8HTML/output/original/)";
-static const string HTML_OUTPUT_JPM = R"(utf8HTML/output/JPM/)";
-
-static const string HTML_SUFFIX = R"(.htm)";
-
-static const string BODY_TEXT_OUTPUT = R"(bodyTexts/output/)";
-static const string BODY_TEXT_FIX = R"(bodyTexts/afterFix/)";
-static const string BODY_TEXT_SUFFIX = R"(.txt)";
-
-static const string htmlFileFinalLine =
-    R"(</html>)"; // last line of the html file
-static const string endOfHtmlHead = R"(/head)";
-static const string htmlTitleStart = R"(<title>)";
-static const string htmlTitleEnd = R"(</title>)";
-
 static const string lineNumberIdBeginChars =
     R"(id="P)"; // of each paragraph and line number
 static const string topIdBeginChars = R"(id="top")"; // of the body Text file

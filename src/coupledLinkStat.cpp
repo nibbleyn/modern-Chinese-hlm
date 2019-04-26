@@ -294,40 +294,6 @@ void LinkFromMain::outPutStatisticsToFiles() {
   displayAttachments();
 }
 
-static const string attachmentNotExisted = R"(file doesn't exist.)";
-static const string titleNotExisted = R"(title doesn't exist.)";
-
-/**
- * find in <title>xxx</title> part of attachment file header
- * the title of the attachment
- * if the file or the title is not found
- * return corresponding error message as one of below,
- * file doesn't exist.
- * title doesn't exist.
- * @param filename the attachment file without .htm, e.g. b003_7
- * @return the title found or error message
- */
-string getAttachmentTitle(const string &filename) {
-  string inputFile = HTML_SRC_ATTACHMENT + filename + HTML_SUFFIX;
-  ifstream infile(inputFile);
-  if (!infile) {
-    return attachmentNotExisted;
-  }
-  string inLine{""};
-  while (!infile.eof()) // To get all the lines.
-  {
-    getline(infile, inLine); // Saves the line in inLine.
-    if (inLine.find(htmlTitleStart) != string::npos) {
-      if (inLine.find(htmlTitleEnd) == string::npos)
-        return titleNotExisted;
-      return getIncludedStringBetweenTags(inLine, htmlTitleStart, htmlTitleEnd);
-    }
-    if (inLine.find(endOfHtmlHead) != string::npos)
-      return titleNotExisted;
-  }
-  return titleNotExisted;
-}
-
 void LinkFromMain::logLink() {
 
   if (isTargetToOtherMainHtm()) {
