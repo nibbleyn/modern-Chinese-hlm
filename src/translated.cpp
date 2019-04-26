@@ -7,8 +7,26 @@
 
 int main(int argc, char **argv) {
   // change this number to run different functions
-  int num = 16;
+  int num = 13;
   switch (num) {
+  case 9:
+    numberJPMHtmls(3, false);
+    break;
+  case 10:
+    numberOriginalHtmls(false);
+    break;
+  case 11:
+    numberMainHtmls(false);
+    break;
+  case 12:
+    numberAttachmentHtmls(false);
+    break;
+  case 13:
+    fixLinksFromMain(false);
+    break;
+  case 15:
+    reConstructStory("mapping.txt", "story");
+    break;
   case 1:
     refreshBodyTexts(MAIN);
     refreshBodyTexts(ORIGINAL);
@@ -35,26 +53,8 @@ int main(int argc, char **argv) {
   case 8:
     findFirstInFiles();
     break;
-  case 9:
-    numberJPMHtmls(3, false);
-    break;
-  case 10:
-    numberOriginalHtmls(false);
-    break;
-  case 11:
-    numberMainHtmls(false);
-    break;
-  case 12:
-    numberAttachmentHtmls(false);
-    break;
-  case 13:
-    fixLinksFromMain(false);
-    break;
   case 14:
     fixLinksFromAttachment(false);
-    break;
-  case 15:
-    reConstructStory("mapping.txt", "story");
     break;
   case 16:
     testFunctions(11);

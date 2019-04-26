@@ -33,6 +33,7 @@ public:
   // used for Auto-numbering
   void validateParaSize();
   void disableAutoNumbering() { m_autoNumbering = false; }
+  void disableNumberingStatistics() { m_numberingStatistics = false; }
   void addLineNumber(bool forceUpdate = true, bool hideParaHeader = false);
   void doStatisticsByScanningLines(bool overFixedBodyText = false);
 

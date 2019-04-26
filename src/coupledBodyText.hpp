@@ -97,7 +97,9 @@ protected:
   void setInputOutputFiles();
 
   bool isAutoNumbering() { return m_autoNumbering; }
+  bool isNumberingStatistics() { return m_numberingStatistics; }
   bool m_autoNumbering{true};
+  bool m_numberingStatistics{true};
 
   bool isImageGroupLine(const string &inLine) {
     return (inLine.find(imageGroupBeginChars) != string::npos);

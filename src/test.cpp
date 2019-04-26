@@ -510,7 +510,7 @@ void testMixedObjects() {
   string line12 =
       R"(<a unhidden id="P1L2">1.2</a>&nbsp;&nbsp; <u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">玉皇庙，两番描写，俱是热闹时候。即后文荐亡，亦是热闹之时，特特与永福寺对照也，看他平空撰出两付对联，一个疏头，却使玉皇庙是真庙，吴道官、西门庆等俱是活人。妙绝之笔。</u><br>)";
   string line13 =
-      R"(<a unhidden id="P1L5">1.5</a>&nbsp;&nbsp; <u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">篇末偏于道家法事之后，又撰一段佛事，使王姑子彰明较著，谈一回野孤禅，与上文道事相映成趣也。然而三十二祖投胎，又明为孝哥预描一影。则孝哥生几露，而西门死几发矣。可畏哉玉皇庙寄名，接王姑子谈经，与后千金喜舍，接二姑子印经，又是遥对章法。</u>）<br>)";
+      R"(<a unhidden id="P9L3">9.3</a>&nbsp;&nbsp; <strong unhidden>惯养娇生笑你痴，菱花空对雪澌澌。好防佳节元宵后，便是烟消火灭时。</strong>&nbsp;&nbsp;&nbsp;&nbsp;<samp unhidden font style="font-size: 12pt; font-family: 宋体; color:#ff00ff">你这么痴心 娇生惯养她，实在是可笑。你知道她有多么生不逢时吗？<a unhidden title="菱角菱花" href="a080.htm#P1L1"><sub hidden>第80回1.1节:</sub>菱角菱花皆盛于秋</a>（<a unhidden title="菱角菱花" href="original\c080.htm#P1L3"><sub hidden>第80回1.3节:</sub>原文</a>），可却毫无办法要面对茫茫大雪。要小心元宵佳节一过，一切都会烟消云散（<cite unhidden> <a unhidden title="清净孤独" href="a022.htm#P13L4"><sub hidden>第22回13.4节:</sub>不详灯谜</a>（<a unhidden title="清净孤独" href="original\c022.htm#P12L1"><sub hidden>第22回12.1节:</sub>原文</a>）、<a unhidden title="进贡" href="a054.htm#P13L1"><sub hidden>第54回13.1节:</sub>聋子放炮仗</a>（<a unhidden title="进贡" href="original\c054.htm#P8L2"><sub hidden>第54回8.2节:</sub>原文</a>）、<a unhidden title="按爵" href="a058.htm#P1L2"><sub hidden>第58回1.2节:</sub>老太妃薨毙</a>（<a unhidden title="按爵" href="original\c058.htm#P1L2"><sub hidden>第58回1.2节:</sub>原文</a>）。</cite>）</samp><br>)";
 
   line = line13;
   auto typeSet = bodyText.getContainedObjectTypes(line);

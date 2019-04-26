@@ -32,6 +32,7 @@ void addLineNumbersForAttachmentHtml(int minTarget, int maxTarget,
       bodyText.setFilePrefixFromFileType(targetFileType);
       bodyText.setFileAndAttachmentNumber(file, attNo);
       bodyText.disableAutoNumbering();
+      bodyText.disableNumberingStatistics();
       bodyText.addLineNumber(forceUpdate, hideParaHeader);
     }
   }
@@ -175,6 +176,7 @@ void numberOriginalHtmls(bool forceUpdate, bool hideParaHeader) {
     bodyText.setFilePrefixFromFileType(FILE_TYPE::ORIGINAL);
     bodyText.setFileAndAttachmentNumber(file);
     bodyText.disableAutoNumbering();
+    bodyText.disableNumberingStatistics();
     bodyText.addLineNumber(forceUpdate, hideParaHeader);
   }
   CoupledBodyText::loadBodyTextsFromFixBackToOutput();
