@@ -1,9 +1,9 @@
 #pragma once
 #include "linkEmbeddedObject.hpp"
 
-static const string REFERENCE_LINES = "container/referLines.txt";
-static const string REFERENCE_PAGE = "container/referPage.txt";
-static const string TO_CHECK_FILE = "container/toCheck.txt";
+static const string REFERENCE_LINES = R"(container/referLines.txt)";
+static const string REFERENCE_PAGE = R"(container/referPage.txt)";
+static const string TO_CHECK_FILE = R"(container/toCheck.txt)";
 
 class CoupledBodyTextWithLink : public CoupledBodyText {
 public:

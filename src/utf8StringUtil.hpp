@@ -72,6 +72,9 @@ static const string numberingUnit = R"(段)";
 static const string brTab = "<br>"; // start and end of each LINE
 static const string displaySpace = R"( )";
 static const string emptyString = "";
+static const string CR{0x0D};
+static const string LF{0x0A};
+static const string CRLF{0x0D, 0x0A};
 
 static const string keyNotFound = R"(KeyNotFound)";
 static const string attachmentFileMiddleChar = R"(_)";
@@ -115,9 +118,12 @@ static const string endOfCommentBeginTag = R"(>)";
 
 string formatIntoZeroPatchedChapterNumber(int chapterNumber, int digits);
 
+static const int THREE_DIGIT_FILENAME = 3;
+static const int TWO_DIGIT_FILENAME = 2;
+
 // operations to construct a group of file names
 using fileSet = set<string>;
-fileSet buildFileSet(int min, int max, int digits = 2);
+fileSet buildFileSet(int min, int max, int digits = TWO_DIGIT_FILENAME);
 
 void replacePart(string &linkString, const string &key,
                  const string &toReplace);

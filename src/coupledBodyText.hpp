@@ -1,7 +1,7 @@
 #pragma once
 
-#include "paraHeader.hpp"
 #include "lineNumber.hpp"
+#include "paraHeader.hpp"
 
 enum class DISPLY_LINE_TYPE { EMPTY, PARA, TEXT, IMAGE };
 string getDisplayTypeString(DISPLY_LINE_TYPE type);
@@ -45,7 +45,7 @@ public:
   void resetBeforeSearch() {
     m_ignoreSet.clear();
     m_result.clear();
-    m_searchError = "";
+    m_searchError = emptyString;
   }
   void addIgnoreLines(const string &line) { m_ignoreSet.insert(line); }
   void searchForAll() { m_onlyFirst = false; }
@@ -58,7 +58,7 @@ public:
   string getFirstResultLine() {
     if (not m_result.empty())
       return *(m_result.begin());
-    return "";
+    return emptyString;
   }
   lineNumberSet getResultLineSet() { return m_result; };
 
@@ -80,18 +80,18 @@ public:
                        const string &from, const string &to);
   void fixTagPairEnd(const string &signOfTagBeforeReplaceTag,
                      const string &from, const string &to,
-                     const string &skipTagPairBegin = "");
+                     const string &skipTagPairBegin = emptyString);
   void fixPersonalView();
   // reformat to smaller paragraphs
   void reformatParagraphToSmallerSize(const string &sampleBlock);
 
 protected:
   // used for configuring
-  string m_filePrefix{"Main"};
-  string m_file{"01"};
+  string m_filePrefix{MAIN_BODYTEXT_PREFIX};
+  string m_file{emptyString};
   int m_attachNumber{0};
-  string m_inputFile{""};
-  string m_outputFile{""};
+  string m_inputFile{emptyString};
+  string m_outputFile{emptyString};
   void setInputOutputFiles();
 
   bool isAutoNumbering() { return m_autoNumbering; }
@@ -103,12 +103,12 @@ protected:
     return (inLine.find(imageGroupBeginChars) != string::npos);
   }
   bool isEmptyLine(const string &inLine) {
-    return (inLine == "") or (inLine == "\r") or (inLine == "\n") or
-           (inLine == "\r\n");
+    return (inLine == emptyString) or (inLine == CR) or (inLine == LF) or
+           (inLine == CRLF);
   }
   bool isLeadingBr(const string &inLine) {
-    return (inLine == brTab) or (inLine == brTab + "\r") or
-           (inLine == brTab + "\n") or (inLine == brTab + "\r\n");
+    return (inLine == brTab) or (inLine == brTab + CR) or
+           (inLine == brTab + LF) or (inLine == brTab + CRLF);
   };
   bool hasEndingBr(const string &inLine) {
     return (inLine.find(brTab) != string::npos and not isLeadingBr(inLine));
@@ -151,7 +151,7 @@ protected:
   struct LineInfo {
     size_t numberOfLines{0};
     DISPLY_LINE_TYPE type{DISPLY_LINE_TYPE::EMPTY};
-    string cap{""};
+    string cap{emptyString};
   };
   // line No. -> number of display lines, line type
   using LineAttrTable = std::map<size_t, LineInfo>;
@@ -240,7 +240,7 @@ protected:
   bool m_ignorePersonalComments{false};
   lineNumberSet m_ignoreSet;
   lineNumberSet m_result;
-  string m_searchError{""};
+  string m_searchError{emptyString};
   bool m_onlyFirst{true};
 
   lineNumberSetByRange m_range;

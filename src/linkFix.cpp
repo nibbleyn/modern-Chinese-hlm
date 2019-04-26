@@ -36,10 +36,13 @@ void displayNewlyAddedAttachments() {
  * and save them into HTML_OUTPUT_ATTACHMENT just like assembleAttachments
  */
 void fixLinksFromMainHtmls(bool forceUpdate) {
-  int minTarget = 1, maxTarget = 80;
-  int minReferenceToMain = 1, maxReferenceToMain = 80;
-  int minReferenceToOriginal = 1, maxReferenceToOriginal = 80;
-  int minReferenceToJPM = 1, maxReferenceToJPM = 100;
+  int minTarget = MAIN_MIN_CHAPTER_NUMBER, maxTarget = MAIN_MAX_CHAPTER_NUMBER;
+  int minReferenceToMain = MAIN_MIN_CHAPTER_NUMBER,
+      maxReferenceToMain = MAIN_MAX_CHAPTER_NUMBER;
+  int minReferenceToOriginal = MAIN_MIN_CHAPTER_NUMBER,
+      maxReferenceToOriginal = MAIN_MAX_CHAPTER_NUMBER;
+  int minReferenceToJPM = JPM_MIN_CHAPTER_NUMBER,
+      maxReferenceToJPM = JPM_MAX_CHAPTER_NUMBER;
   CoupledContainer container(FILE_TYPE::MAIN);
   CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
@@ -89,11 +92,14 @@ void fixLinksFromMain(bool forceUpdate) {
 }
 
 void fixLinksFromAttachmentHtmls(bool forceUpdate) {
-  int minTarget = 1, maxTarget = 80;
-  int minReferenceToMain = 1, maxReferenceToMain = 80;
-  int minReferenceToOriginal = 1, maxReferenceToOriginal = 80;
-  int minReferenceToJPM = 1, maxReferenceToJPM = 100;
-  int minAttachNo = 1, maxAttachNo = 50;
+  int minTarget = MAIN_MIN_CHAPTER_NUMBER, maxTarget = MAIN_MAX_CHAPTER_NUMBER;
+  int minReferenceToMain = MAIN_MIN_CHAPTER_NUMBER,
+      maxReferenceToMain = MAIN_MAX_CHAPTER_NUMBER;
+  int minReferenceToOriginal = MAIN_MIN_CHAPTER_NUMBER,
+      maxReferenceToOriginal = MAIN_MAX_CHAPTER_NUMBER;
+  int minReferenceToJPM = JPM_MIN_CHAPTER_NUMBER,
+      maxReferenceToJPM = JPM_MAX_CHAPTER_NUMBER;
+  int minAttachNo = MIN_ATTACHMENT_NUMBER, maxAttachNo = MAX_ATTACHMENT_NUMBER;
   // if to fix all attachments
   //  int minAttachNo = 0, maxAttachNo = 0;
   vector<int> targetAttachments;

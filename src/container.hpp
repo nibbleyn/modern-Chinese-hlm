@@ -2,9 +2,9 @@
 
 #include "link.hpp"
 
-static const string LIST_CONTAINER_FILENAME = "1";
-static const string TABLE_CONTAINER_FILENAME = "2";
-static const string TABLE_CONTAINER_FILENAME_SMALLER_FONT = "3";
+static const string LIST_CONTAINER_FILENAME = R"(1)";
+static const string TABLE_CONTAINER_FILENAME = R"(2)";
+static const string TABLE_CONTAINER_FILENAME_SMALLER_FONT = R"(3)";
 
 class Container {
 public:
@@ -54,19 +54,19 @@ public:
   void fixReturnLinkForAttachmentFile();
   vector<int> getAttachmentFileListForChapter(const string &fromDir);
   void dissembleFromHTM();
-  void assembleBackToHTM(const string &title = "",
-                         const string &displayTitle = "");
+  void assembleBackToHTM(const string &title = emptyString,
+                         const string &displayTitle = emptyString);
 
 private:
   FILE_TYPE m_fileType{FILE_TYPE::MAIN};
-  string m_file{"01"};
+  string m_file{emptyString};
   int m_attachmentNumber{0};
-  string m_originalTitle{""};
-  string m_translatedTitle{""};
+  string m_originalTitle{emptyString};
+  string m_translatedTitle{emptyString};
 
   string getBodyTextFilePrefix();
   string getInputHtmlFilePath() {
-    string attachmentPart{""};
+    string attachmentPart{emptyString};
     if (m_fileType == FILE_TYPE::ATTACHMENT)
       attachmentPart =
           attachmentFileMiddleChar + TurnToString(m_attachmentNumber);
@@ -74,7 +74,7 @@ private:
            attachmentPart + HTML_SUFFIX;
   }
   string getoutputHtmlFilepath() {
-    string attachmentPart{""};
+    string attachmentPart{emptyString};
     if (m_fileType == FILE_TYPE::ATTACHMENT)
       attachmentPart =
           attachmentFileMiddleChar + TurnToString(m_attachmentNumber);
@@ -82,7 +82,7 @@ private:
            attachmentPart + HTML_SUFFIX;
   }
   string getBodyTextFilePath() {
-    string attachmentPart{""};
+    string attachmentPart{emptyString};
     if (m_fileType == FILE_TYPE::ATTACHMENT)
       attachmentPart =
           attachmentFileMiddleChar + TurnToString(m_attachmentNumber);
@@ -91,10 +91,10 @@ private:
   }
 };
 
-static const string defaultTitle = "XXX";
-static const string defaultDisplayTitle = "YYY";
-static const string HTML_CONTAINER = "container/container";
-static const string BODY_TEXT_CONTAINER = "container/";
+static const string defaultTitle = R"(XXX)";
+static const string defaultDisplayTitle = R"(YYY)";
+static const string HTML_CONTAINER = R"(container/container)";
+static const string BODY_TEXT_CONTAINER = R"(container/)";
 
 class GenericContainer : public Container {
 public:
@@ -107,8 +107,8 @@ public:
   }
   virtual ~GenericContainer(){};
   virtual string getInputFileName() const = 0;
-  void assembleBackToHTM(const string &title = "",
-                         const string &displayTitle = "");
+  void assembleBackToHTM(const string &title = emptyString,
+                         const string &displayTitle = emptyString);
   string getOutputFilePath() {
     return m_htmlOutputFilePath + m_outputFilename + HTML_SUFFIX;
   }

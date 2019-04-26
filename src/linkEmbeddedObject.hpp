@@ -15,8 +15,8 @@ public:
                                     size_t after = 0);
 
 private:
-  string m_displayText{""};
-  string m_fromFile{"81"};
+  string m_displayText{emptyString};
+  string m_fromFile{emptyString};
 };
 
 class PoemTranslation : public Object {
@@ -29,6 +29,6 @@ public:
                                     size_t after = 0);
 
 private:
-  string m_displayText{""};
-  string m_fromFile{"81"};
+  string m_displayText{emptyString};
+  string m_fromFile{emptyString};
 };

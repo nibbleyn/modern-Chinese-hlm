@@ -131,14 +131,14 @@ void refreshAttachmentBodyTexts(int minTarget, int maxTarget, int minAttachNo,
 }
 
 static const string HTML_OUTPUT_LINES_OF_MAIN =
-    "utf8HTML/output/LinesOfMain.txt";
+    R"(utf8HTML/output/LinesOfMain.txt)";
 
 /**
  * copy main files into HTML_OUTPUT
  * before run this
  */
 void numberMainHtmls(bool forceUpdate, bool hideParaHeader) {
-  int minTarget = 1, maxTarget = 80;
+  int minTarget = MAIN_MIN_CHAPTER_NUMBER, maxTarget = MAIN_MAX_CHAPTER_NUMBER;
   CoupledContainer container(FILE_TYPE::MAIN);
   CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
@@ -165,10 +165,10 @@ void numberMainHtmls(bool forceUpdate, bool hideParaHeader) {
 }
 
 static const string HTML_OUTPUT_LINES_OF_ORIGINAL =
-    "utf8HTML/output/LinesOfOriginal.txt";
+    R"(utf8HTML/output/LinesOfOriginal.txt)";
 
 void numberOriginalHtmls(bool forceUpdate, bool hideParaHeader) {
-  int minTarget = 1, maxTarget = 80;
+  int minTarget = MAIN_MIN_CHAPTER_NUMBER, maxTarget = MAIN_MAX_CHAPTER_NUMBER;
   CoupledContainer container(FILE_TYPE::ORIGINAL);
   CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
@@ -194,7 +194,8 @@ void numberOriginalHtmls(bool forceUpdate, bool hideParaHeader) {
   FUNCTION_OUTPUT << "Numbering Original Html finished. " << endl;
 }
 
-static const string HTML_OUTPUT_LINES_OF_JPM = "utf8HTML/output/LinesOfJPM.txt";
+static const string HTML_OUTPUT_LINES_OF_JPM =
+    R"(utf8HTML/output/LinesOfJPM.txt)";
 
 void numberJPMHtmls(int num, bool forceUpdate, bool hideParaHeader) {
   auto oldDebug = debug;
@@ -202,10 +203,11 @@ void numberJPMHtmls(int num, bool forceUpdate, bool hideParaHeader) {
     debug = LOG_EXCEPTION;
   }
 
-  int minTarget = 72, maxTarget = 72;
+  int minTarget = JPM_MIN_CHAPTER_NUMBER, maxTarget = JPM_MAX_CHAPTER_NUMBER;
   CoupledContainer container(FILE_TYPE::JPM);
   CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
-  for (const auto &file : buildFileSet(minTarget, maxTarget, 3)) {
+  for (const auto &file :
+       buildFileSet(minTarget, maxTarget, THREE_DIGIT_FILENAME)) {
     container.setFileAndAttachmentNumber(file);
     container.dissembleFromHTM();
   }
@@ -214,7 +216,8 @@ void numberJPMHtmls(int num, bool forceUpdate, bool hideParaHeader) {
     CoupledBodyTextWithLink::setStatisticsOutputFilePath(
         HTML_OUTPUT_LINES_OF_JPM);
   }
-  for (const auto &file : buildFileSet(minTarget, maxTarget, 3)) {
+  for (const auto &file :
+       buildFileSet(minTarget, maxTarget, THREE_DIGIT_FILENAME)) {
     CoupledBodyTextWithLink bodyText;
     bodyText.setFilePrefixFromFileType(FILE_TYPE::JPM);
     bodyText.setFileAndAttachmentNumber(file);
@@ -234,7 +237,8 @@ void numberJPMHtmls(int num, bool forceUpdate, bool hideParaHeader) {
     }
   }
   CoupledBodyText::loadBodyTextsFromFixBackToOutput();
-  for (const auto &file : buildFileSet(minTarget, maxTarget, 3)) {
+  for (const auto &file :
+       buildFileSet(minTarget, maxTarget, THREE_DIGIT_FILENAME)) {
     container.setFileAndAttachmentNumber(file);
     container.assembleBackToHTM();
   }
@@ -245,11 +249,11 @@ void numberJPMHtmls(int num, bool forceUpdate, bool hideParaHeader) {
 }
 
 static const string HTML_OUTPUT_LINES_OF_ATTACHMENTS =
-    "utf8HTML/output/LinesOfAttachments.txt";
+    R"(utf8HTML/output/LinesOfAttachments.txt)";
 
 void numberAttachmentHtmls(bool forceUpdate, bool hideParaHeader) {
-  int minTarget = 1, maxTarget = 80;
-  int minAttachNo = 1, maxAttachNo = 50;
+  int minTarget = MAIN_MIN_CHAPTER_NUMBER, maxTarget = MAIN_MAX_CHAPTER_NUMBER;
+  int minAttachNo = MIN_ATTACHMENT_NUMBER, maxAttachNo = MAX_ATTACHMENT_NUMBER;
   CoupledContainer container(FILE_TYPE::ATTACHMENT);
   CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
   dissembleAttachments(minTarget, maxTarget, minAttachNo,

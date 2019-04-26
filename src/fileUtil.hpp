@@ -14,6 +14,13 @@ extern int debug;
 
 enum class FILE_TYPE { MAIN, ATTACHMENT, ORIGINAL, JPM };
 
+static const int MAIN_MIN_CHAPTER_NUMBER = 1;
+static const int MAIN_MAX_CHAPTER_NUMBER = 80;
+static const int JPM_MIN_CHAPTER_NUMBER = 1;
+static const int JPM_MAX_CHAPTER_NUMBER = 100;
+static const int MIN_ATTACHMENT_NUMBER = 1;
+static const int MAX_ATTACHMENT_NUMBER = 50;
+
 static const std::string MAIN_HTML_PREFIX = R"(a0)";
 static const std::string ORIGINAL_HTML_PREFIX = R"(c0)";
 static const std::string ATTACHMENT_HTML_PREFIX = R"(b0)";

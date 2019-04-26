@@ -400,7 +400,8 @@ void CoupledContainer::fixHeaderAndFooter() {
 
 void fixHeaderAndFooterForJPMHtml(int minTarget, int maxTarget) {
   CoupledContainer container(FILE_TYPE::JPM);
-  for (const auto &file : buildFileSet(minTarget, maxTarget, 3)) {
+  for (const auto &file :
+       buildFileSet(minTarget, maxTarget, THREE_DIGIT_FILENAME)) {
     container.setFileAndAttachmentNumber(file);
     container.fixHeaderAndFooter();
   }
@@ -428,9 +429,6 @@ void CoupledBodyText::reformatParagraphToSmallerSize(
     METHOD_OUTPUT << sampleBlock << endl;
   // continue reading
   string inLine;
-  string CR{0x0D};
-  string LF{0x0A};
-  string CRLF{0x0D, 0x0A};
   while (!infile.eof()) {
     getline(infile, inLine); // Saves the line in inLine.
     size_t end = -1;
@@ -505,20 +503,23 @@ void CoupledBodyText::fixPersonalView() {
 }
 
 void fixPersonalViewForJPMHtmls() {
-  int minTarget = 1, maxTarget = 100;
+  int minTarget = JPM_MIN_CHAPTER_NUMBER, maxTarget = JPM_MAX_CHAPTER_NUMBER;
   CoupledContainer container(FILE_TYPE::JPM);
-  for (const auto &file : buildFileSet(minTarget, maxTarget, 3)) {
+  for (const auto &file :
+       buildFileSet(minTarget, maxTarget, THREE_DIGIT_FILENAME)) {
     container.setFileAndAttachmentNumber(file);
     container.dissembleFromHTM();
   }
-  for (const auto &file : buildFileSet(minTarget, maxTarget, 3)) {
+  for (const auto &file :
+       buildFileSet(minTarget, maxTarget, THREE_DIGIT_FILENAME)) {
     CoupledBodyText bodyText;
     bodyText.setFilePrefixFromFileType(FILE_TYPE::JPM);
     bodyText.setFileAndAttachmentNumber(file);
     bodyText.fixPersonalView();
   }
   CoupledBodyText::loadBodyTextsFromFixBackToOutput();
-  for (const auto &file : buildFileSet(minTarget, maxTarget, 3)) {
+  for (const auto &file :
+       buildFileSet(minTarget, maxTarget, THREE_DIGIT_FILENAME)) {
     container.setFileAndAttachmentNumber(file);
     container.assembleBackToHTM();
   }
@@ -526,7 +527,7 @@ void fixPersonalViewForJPMHtmls() {
 }
 
 void fixHeaderAndFooterForMainHtmls() {
-  int minTarget = 1, maxTarget = 80;
+  int minTarget = MAIN_MIN_CHAPTER_NUMBER, maxTarget = MAIN_MAX_CHAPTER_NUMBER;
   CoupledContainer container(FILE_TYPE::MAIN);
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     container.setFileAndAttachmentNumber(file);
@@ -536,8 +537,8 @@ void fixHeaderAndFooterForMainHtmls() {
 }
 
 void fixHeaderAndFooterForAttachmentHtmls() {
-  int minTarget = 1, maxTarget = 80;
-  int minAttachNo = 1, maxAttachNo = 50;
+  int minTarget = MAIN_MIN_CHAPTER_NUMBER, maxTarget = MAIN_MAX_CHAPTER_NUMBER;
+  int minAttachNo = MIN_ATTACHMENT_NUMBER, maxAttachNo = MAX_ATTACHMENT_NUMBER;
   vector<int> targetAttachments;
   bool overAllAttachments = true;
   if (not(minAttachNo == 0 and maxAttachNo == 0) and
@@ -563,7 +564,7 @@ void fixHeaderAndFooterForAttachmentHtmls() {
 }
 
 void fixHeaderAndFooterForOriginalHtmls() {
-  int minTarget = 1, maxTarget = 80;
+  int minTarget = MAIN_MIN_CHAPTER_NUMBER, maxTarget = MAIN_MAX_CHAPTER_NUMBER;
   CoupledContainer container(FILE_TYPE::ORIGINAL);
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     container.setFileAndAttachmentNumber(file);
@@ -588,7 +589,7 @@ void reformatTxtFilesForReader() {
   const string example =
       R"(话说安童领着书信，辞了黄通判，径往山东大道而来。打听巡按御史在东昌府住扎，姓曾，双名孝序，【夹批：曾者，争也。序即天叙有典之叙，盖作者为世所厄不能自全其孝，故抑郁愤懑)";
 
-  int minTarget = 1, maxTarget = 100;
+  int minTarget = JPM_MIN_CHAPTER_NUMBER, maxTarget = JPM_MAX_CHAPTER_NUMBER;
   reformatTxtFiles(minTarget, maxTarget, example);
   FUNCTION_OUTPUT << "reformat files from " << minTarget << " to " << maxTarget
                   << " finished. " << endl;

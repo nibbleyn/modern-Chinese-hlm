@@ -2,10 +2,13 @@
 
 #include "linkFix.hpp"
 
-void refreshBodyTexts(const string &kind, int minTarget = 1,
-                      int maxTarget = 80);
-void refreshAttachmentBodyTexts(int minTarget = 1, int maxTarget = 80,
-                                int minAttachNo = 1, int maxAttachNo = 50);
+void refreshBodyTexts(const string &kind,
+                      int minTarget = MAIN_MIN_CHAPTER_NUMBER,
+                      int maxTarget = MAIN_MAX_CHAPTER_NUMBER);
+void refreshAttachmentBodyTexts(int minTarget = MAIN_MIN_CHAPTER_NUMBER,
+                                int maxTarget = MAIN_MAX_CHAPTER_NUMBER,
+                                int minAttachNo = MIN_ATTACHMENT_NUMBER,
+                                int maxAttachNo = MAX_ATTACHMENT_NUMBER);
 
 void numberJPMHtmls(int num, bool forceUpdate = true,
                     bool hideParaHeader = false);

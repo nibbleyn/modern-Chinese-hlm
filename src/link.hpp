@@ -51,10 +51,10 @@ static const string citationChapter = R"(章)";
 class Link : public Object {
 public:
   struct LinkDetails {
-    string key{""};
-    string fromFile{""};
-    string fromLine{""};
-    string link{""};
+    string key{emptyString};
+    string fromFile{emptyString};
+    string fromLine{emptyString};
+    string link{emptyString};
   };
   // statistics about links
   // chapter number (added with attachment number if over fromAttachmentLinks),
@@ -178,7 +178,7 @@ protected:
   }
 
   string displayPropertyAsString() {
-    string result{""};
+    string result{emptyString};
     if (m_displayType == LINK_DISPLAY_TYPE::UNHIDDEN)
       result = unhiddenDisplayProperty;
     if (m_displayType == LINK_DISPLAY_TYPE::HIDDEN)
@@ -189,7 +189,7 @@ protected:
     if (m_linkPtrToOrigin != nullptr)
       return originalLinkStartChars + m_linkPtrToOrigin->asString() +
              originalLinkEndChars;
-    return "";
+    return emptyString;
   }
   void recordMissingKeyLink();
 
@@ -205,19 +205,19 @@ protected:
 protected:
   LINK_TYPE m_type{LINK_TYPE::MAIN};
   LINK_DISPLAY_TYPE m_displayType{LINK_DISPLAY_TYPE::UNHIDDEN};
-  string m_fromFile{"81"};
+  string m_fromFile{emptyString};
   LineNumber m_fromLine;
   int m_chapterNumber{0};
   int m_attachmentNumber{0};
   string m_referPara{invalidLineNumber}; // might be top bottom
   string m_referSection{"0.0"};
-  string m_usedKey{""};
-  string m_annotation{""};
+  string m_usedKey{emptyString};
+  string m_annotation{emptyString};
   bool m_needChange{false};
   using LinkPtr = std::unique_ptr<Link>;
   LinkPtr m_linkPtrToOrigin{nullptr};
-  string m_displayText{""};
-  string m_imageReferFilename{""};
+  string m_displayText{emptyString};
+  string m_imageReferFilename{emptyString};
 };
 
 class LinkFromMain : public Link {
@@ -280,6 +280,6 @@ public:
                                     size_t after = 0);
 
 private:
-  string m_displayText{""};
-  string m_fromFile{"81"};
+  string m_displayText{emptyString};
+  string m_fromFile{emptyString};
 };

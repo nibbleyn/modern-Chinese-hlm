@@ -35,7 +35,7 @@ std::vector<int> createParaList(int first, int incremental, int max) {
 }
 
 void generateContentTableForMainHtmls() {
-  int minTarget = 1, maxTarget = 80;
+  int minTarget = MAIN_MIN_CHAPTER_NUMBER, maxTarget = MAIN_MAX_CHAPTER_NUMBER;
   CoupledContainer container(FILE_TYPE::MAIN);
   TableContainer outputContainer(MAIN_INDEX);
   outputContainer.setInputFileName(TABLE_CONTAINER_FILENAME_SMALLER_FONT);
@@ -84,7 +84,7 @@ void generateContentTableForMainHtmls() {
 }
 
 void generateContentTableForOriginalHtmls() {
-  int minTarget = 1, maxTarget = 80;
+  int minTarget = MAIN_MIN_CHAPTER_NUMBER, maxTarget = MAIN_MAX_CHAPTER_NUMBER;
   CoupledContainer container(FILE_TYPE::ORIGINAL);
   TableContainer outputContainer(ORG_INDEX);
   auto paraList = createParaList(18, 22, 70);
@@ -129,7 +129,7 @@ void generateContentTableForOriginalHtmls() {
 }
 
 void generateContentTableForJPMHtmls() {
-  int minTarget = 1, maxTarget = 100;
+  int minTarget = JPM_MIN_CHAPTER_NUMBER, maxTarget = JPM_MAX_CHAPTER_NUMBER;
   CoupledContainer container(FILE_TYPE::JPM);
   TableContainer outputContainer(JPM_INDEX);
   auto paraList = createParaList(18, 22, 90);
@@ -141,7 +141,8 @@ void generateContentTableForJPMHtmls() {
   int i = 1;
   int seqOfPara = 1;
   int totalPara = 0;
-  for (const auto &file : buildFileSet(minTarget, maxTarget, 3)) {
+  for (const auto &file :
+       buildFileSet(minTarget, maxTarget, THREE_DIGIT_FILENAME)) {
     container.setFileAndAttachmentNumber(file);
     container.fetchOriginalAndTranslatedTitles();
     auto link = fixLinkFromJPMTemplate(jpmDirForLinkFromMain, file, "", "", "",

@@ -3,7 +3,7 @@
 
 using namespace std;
 
-static const string GB2312_HTML_SRC = "gb2312HTML/";
+static const string GB2312_HTML_SRC = R"(gb2312HTML/)";
 
 // fix gb2312 files to utf8 format files
 void convertFromGB2312ToUtf8(string referFile, string format, FILE_TYPE type,

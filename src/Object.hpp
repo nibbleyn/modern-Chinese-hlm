@@ -90,7 +90,7 @@ public:
   static string typeSetAsString(SET_OF_OBJECT_TYPES typeSet) {
     string result;
     for (const auto &type : typeSet) {
-      result += " " + getNameOfObjectType(type);
+      result += displaySpace + getNameOfObjectType(type);
     }
     return result;
   }
@@ -111,8 +111,8 @@ public:
                                             size_t after = 0) = 0;
 
 protected:
-  string m_bodyText{""};
-  string m_fullString{""};
+  string m_bodyText{emptyString};
+  string m_fullString{emptyString};
 };
 
 class Space : public Object {

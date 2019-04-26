@@ -50,7 +50,7 @@ public:
   bool isPureTextOnly() { return (m_paraNumber == 0); }
   string generateLinePrefix();
   string asString() {
-    string result{""};
+    string result{emptyString};
     if (m_paraNumber != 0)
       result = leadingChar + TurnToString(m_paraNumber);
     if (m_lineNumber != 0)

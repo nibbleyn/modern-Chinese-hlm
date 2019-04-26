@@ -136,10 +136,10 @@ void gb2312FixAttachment(int minTarget, int maxTarget) {
 }
 
 void ConvertPrefixedGb2312FilesToUtf8() {
-  gb2312FixMain(1, 80);
-  gb2312FixAttachment(1, 80);
-  gb2312FixJPM(1, 100);
-  gb2312FixOriginal(1, 80);
+  gb2312FixMain(MAIN_MIN_CHAPTER_NUMBER, MAIN_MAX_CHAPTER_NUMBER);
+  gb2312FixAttachment(MAIN_MIN_CHAPTER_NUMBER, MAIN_MAX_CHAPTER_NUMBER);
+  gb2312FixJPM(JPM_MIN_CHAPTER_NUMBER, JPM_MAX_CHAPTER_NUMBER);
+  gb2312FixOriginal(MAIN_MIN_CHAPTER_NUMBER, MAIN_MAX_CHAPTER_NUMBER);
 }
 
 void ConvertNonPrefixedGb2312FilesToUtf8() {

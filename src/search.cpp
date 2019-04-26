@@ -89,7 +89,7 @@ void findFirstInNoAttachmentFiles(const string key, const string &fileType,
 void searchKeywordInNoAttachmentFiles(const string &key, const string &fileType,
                                       const string &outputFilename,
                                       bool searchForAll = true) {
-  int minTarget = 1, maxTarget = 80;
+  int minTarget = MAIN_MIN_CHAPTER_NUMBER, maxTarget = MAIN_MAX_CHAPTER_NUMBER;
   findFirstInNoAttachmentFiles(key, fileType, minTarget, maxTarget,
                                outputFilename);
 }
