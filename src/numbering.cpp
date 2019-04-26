@@ -23,9 +23,12 @@ void addLineNumbersForAttachmentHtml(int minTarget, int maxTarget,
     overAllAttachments = false;
   }
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
-    if (overAllAttachments == true)
+    if (overAllAttachments == true) {
+      CoupledContainer container(FILE_TYPE::ATTACHMENT);
+      container.setFileAndAttachmentNumber(file);
       targetAttachments =
-          getAttachmentFileListForChapter(file, HTML_SRC_ATTACHMENT);
+          container.getAttachmentFileListForChapter(HTML_SRC_ATTACHMENT);
+    }
     for (const auto &attNo : targetAttachments) {
       FILE_TYPE targetFileType = FILE_TYPE::ATTACHMENT;
       CoupledBodyTextWithLink bodyText;
@@ -59,9 +62,11 @@ void dissembleAttachments(int minTarget, int maxTarget, int minAttachNo,
     overAllAttachments = false;
   }
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
-    if (overAllAttachments == true)
+    if (overAllAttachments == true) {
+      container.setFileAndAttachmentNumber(file);
       targetAttachments =
-          getAttachmentFileListForChapter(file, HTML_SRC_ATTACHMENT);
+          container.getAttachmentFileListForChapter(HTML_SRC_ATTACHMENT);
+    }
     for (const auto &attNo : targetAttachments) {
       container.setFileAndAttachmentNumber(file, attNo);
       container.dissembleFromHTM();
@@ -92,9 +97,11 @@ void assembleAttachments(int minTarget, int maxTarget, int minAttachNo,
     overAllAttachments = false;
   }
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
-    if (overAllAttachments == true)
+    if (overAllAttachments == true) {
+      container.setFileAndAttachmentNumber(file);
       targetAttachments =
-          getAttachmentFileListForChapter(file, HTML_SRC_ATTACHMENT);
+          container.getAttachmentFileListForChapter(HTML_SRC_ATTACHMENT);
+    }
     for (const auto &attNo : targetAttachments) {
       container.setFileAndAttachmentNumber(file, attNo);
       container.assembleBackToHTM();

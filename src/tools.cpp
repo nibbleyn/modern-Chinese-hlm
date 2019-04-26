@@ -548,9 +548,11 @@ void fixHeaderAndFooterForAttachmentHtmls() {
   }
   CoupledContainer container(FILE_TYPE::ATTACHMENT);
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
-    if (overAllAttachments == true)
+    if (overAllAttachments == true) {
+      container.setFileAndAttachmentNumber(file);
       targetAttachments =
-          getAttachmentFileListForChapter(file, HTML_SRC_ATTACHMENT);
+          container.getAttachmentFileListForChapter(HTML_SRC_ATTACHMENT);
+    }
     for (const auto &attNo : targetAttachments) {
       container.setFileAndAttachmentNumber(file, attNo);
       container.makeSingleLineHeaderAndFooter();

@@ -127,7 +127,9 @@ void gb2312FixJPM(int minTarget, int maxTarget) {
 
 void gb2312FixAttachment(int minTarget, int maxTarget) {
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
-    auto attList = getAttachmentFileListForChapter(file, GB2312_HTML_SRC);
+    CoupledContainer container(FILE_TYPE::MAIN);
+    container.setFileAndAttachmentNumber(file);
+    auto attList = container.getAttachmentFileListForChapter(GB2312_HTML_SRC);
     for (const auto &attNo : attList)
       convertFromGB2312ToUtf8(file, "htm", FILE_TYPE::ATTACHMENT, attNo);
   }

@@ -277,11 +277,10 @@ void CoupledContainer::fixReturnLinkForAttachmentFile() {
       }
       if (not link.empty()) {
         LinkFromAttachment lfm(referFile, link);
-        auto num = getAttachmentNumber(
-            getHtmlFileNamePrefix(FILE_TYPE::ATTACHMENT) + referFile);
         // special hack to make sure using a0... as return file name
         lfm.setTypeThruFileNamePrefix("main"); // must return to main html
-        lfm.fixReferFile(num.first);
+        lfm.fixReferFile(TurnToInt(m_file));
+        AttachmentNumber num(TurnToInt(m_file), m_attachmentNumber);
         lfm.fixReferPara(LinkFromMain::getFromLineOfAttachment(num));
         if (lfm.needUpdate()) // replace old value
         {
@@ -292,4 +291,29 @@ void CoupledContainer::fixReturnLinkForAttachmentFile() {
       outfile << orgLine << endl;
     }
   }
+}
+
+/**
+ * get all attachment files for referFile under fromDir
+ * for example, if there are b003_1.html b003_5.html and b003_15.html
+ * this function would return {1,5,15} for referFile "03"
+ * @param referFile the 2-digit string part of refer file
+ * @param fromDir where its attachment files are under
+ * @return the vector of attachment numbers
+ */
+vector<int>
+CoupledContainer::getAttachmentFileListForChapter(const string &fromDir) {
+  vector<string> filenameList;
+  vector<int> attList;
+  Poco::File(fromDir).list(filenameList);
+  for (const auto &file : filenameList) {
+    if (file.find(getHtmlFileNamePrefix(FILE_TYPE::ATTACHMENT) + m_file) !=
+        string::npos) {
+      string attNo = getIncludedStringBetweenTags(
+          file, attachmentFileMiddleChar, HTML_SUFFIX);
+
+      attList.push_back(TurnToInt(attNo));
+    }
+  }
+  return attList;
 }

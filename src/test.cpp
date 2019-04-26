@@ -4,13 +4,16 @@ int debug = LOG_INFO;
 // int debug = LOG_EXCEPTION;
 
 void testAttachmentOperations() {
-  auto attList = getAttachmentFileListForChapter("28", HTML_SRC_ATTACHMENT);
+  CoupledContainer container(FILE_TYPE::MAIN);
+  container.setFileAndAttachmentNumber("28");
+  auto attList = container.getAttachmentFileListForChapter(HTML_SRC_ATTACHMENT);
   sort(attList.begin(), attList.end());
   for (const auto &attNo : attList) {
     FUNCTION_OUTPUT << attNo << ", ";
   }
   FUNCTION_OUTPUT << endl;
-  attList = getAttachmentFileListForChapter("22", HTML_SRC_ATTACHMENT);
+  container.setFileAndAttachmentNumber("22");
+  attList = container.getAttachmentFileListForChapter(HTML_SRC_ATTACHMENT);
   sort(attList.begin(), attList.end());
   for (const auto &attNo : attList) {
     FUNCTION_OUTPUT << attNo << ", ";

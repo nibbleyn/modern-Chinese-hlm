@@ -65,8 +65,9 @@ void fixLinksFromMainHtmls(bool forceUpdate) {
     container.assembleBackToHTM();
   }
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
+    container.setFileAndAttachmentNumber(file);
     auto targetAttachments =
-        getAttachmentFileListForChapter(file, HTML_SRC_ATTACHMENT);
+        container.getAttachmentFileListForChapter(HTML_SRC_ATTACHMENT);
     CoupledContainer attachmentContainer(FILE_TYPE::ATTACHMENT);
     for (const auto &attNo : targetAttachments) {
       attachmentContainer.setFileAndAttachmentNumber(file, attNo);
@@ -107,9 +108,11 @@ void fixLinksFromAttachmentHtmls(bool forceUpdate) {
   dissembleAttachments(minTarget, maxTarget, minAttachNo,
                        maxAttachNo); // dissemble html to bodytext
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
-    if (overAllAttachments == true)
+    if (overAllAttachments == true) {
+      container.setFileAndAttachmentNumber(file);
       targetAttachments =
-          getAttachmentFileListForChapter(file, HTML_SRC_ATTACHMENT);
+          container.getAttachmentFileListForChapter(HTML_SRC_ATTACHMENT);
+    }
     for (const auto &attNo : targetAttachments) {
       CoupledBodyTextWithLink bodyText;
       bodyText.setFilePrefixFromFileType(FILE_TYPE::ATTACHMENT);

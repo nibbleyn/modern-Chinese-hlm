@@ -111,6 +111,32 @@ static const string titleOfReferenceAttachment = R"( title:)";
 static const string typeOfReferenceAttachment = R"( type:)";
 
 /**
+ * get chapter number and attachment number from an attachment file name
+ * for example with input b001_15 would return pair <1,15>
+ * @param filename the attachment file without .htm, e.g. b003_7
+ * @return pair of chapter number and attachment number
+ */
+AttachmentNumber getAttachmentNumber(const string &filename) {
+  AttachmentNumber num(0, 0);
+  string start = getHtmlFileNamePrefix(FILE_TYPE::ATTACHMENT);
+  auto fileBegin = filename.find(start);
+  if (fileBegin == string::npos) // referred file not found
+  {
+    return num;
+  }
+  auto chapter = filename.substr(fileBegin + start.length(), 2);
+  num.first = TurnToInt(chapter);
+  auto seqStart = filename.find(attachmentFileMiddleChar);
+  if (seqStart == string::npos) // no file to refer
+  {
+    return num;
+  }
+  auto seq = filename.substr(seqStart + 1, filename.length() - seqStart);
+  num.second = TurnToInt(seq);
+  return num;
+}
+
+/**
  * load refAttachmentTable from HTML_SRC_REF_ATTACHMENT
  * read file and add entry of attachment found before into target list.
  * by using refAttachmentTable and attachmentList and doing below iteratively
@@ -264,6 +290,40 @@ void LinkFromMain::outPutStatisticsToFiles() {
   keyDetailFilePath = HTML_OUTPUT_KEY_OF_LINKS_FROM_MAIN_LIST;
   Link::outPutStatisticsToFiles();
   displayAttachments();
+}
+
+static const string attachmentNotExisted = R"(file doesn't exist.)";
+static const string titleNotExisted = R"(title doesn't exist.)";
+
+/**
+ * find in <title>xxx</title> part of attachment file header
+ * the title of the attachment
+ * if the file or the title is not found
+ * return corresponding error message as one of below,
+ * file doesn't exist.
+ * title doesn't exist.
+ * @param filename the attachment file without .htm, e.g. b003_7
+ * @return the title found or error message
+ */
+string getAttachmentTitle(const string &filename) {
+  string inputFile = HTML_SRC_ATTACHMENT + filename + HTML_SUFFIX;
+  ifstream infile(inputFile);
+  if (!infile) {
+    return attachmentNotExisted;
+  }
+  string inLine{""};
+  while (!infile.eof()) // To get all the lines.
+  {
+    getline(infile, inLine); // Saves the line in inLine.
+    if (inLine.find(htmlTitleStart) != string::npos) {
+      if (inLine.find(htmlTitleEnd) == string::npos)
+        return titleNotExisted;
+      return getIncludedStringBetweenTags(inLine, htmlTitleStart, htmlTitleEnd);
+    }
+    if (inLine.find(endOfHtmlHead) != string::npos)
+      return titleNotExisted;
+  }
+  return titleNotExisted;
 }
 
 void LinkFromMain::logLink() {

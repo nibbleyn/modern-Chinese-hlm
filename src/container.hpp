@@ -56,6 +56,7 @@ public:
   string getOriginalTitle() { return m_originalTitle; };
   string getTranslatedTitle() { return m_translatedTitle; };
   void fixReturnLinkForAttachmentFile();
+  vector<int> getAttachmentFileListForChapter(const string &fromDir);
   void dissembleFromHTM();
   void assembleBackToHTM(const string &title = "",
                          const string &displayTitle = "");
