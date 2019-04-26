@@ -5,6 +5,9 @@
 #include "test.hpp"
 #include "tools.hpp"
 
+int debug = LOG_INFO;
+// int debug = LOG_EXCEPTION;
+
 int main(int argc, char **argv) {
   // change this number to run different functions
   int num = 13;

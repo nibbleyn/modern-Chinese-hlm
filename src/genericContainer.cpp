@@ -1,5 +1,6 @@
-#include "container.hpp"
+#include "genericContainer.hpp"
 
+extern int debug;
 /**
  * to get ready to write new text in this file which would be composed into
  * container htm

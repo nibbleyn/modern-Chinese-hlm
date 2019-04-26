@@ -1,8 +1,5 @@
 #include "test.hpp"
 
-int debug = LOG_INFO;
-// int debug = LOG_EXCEPTION;
-
 void testAttachmentOperations() {
   CoupledContainer container(FILE_TYPE::MAIN);
   container.setFileAndAttachmentNumber("28");
@@ -259,7 +256,7 @@ void testLinkFromAttachment(string fromFile, string linkString,
   FUNCTION_OUTPUT << "display as:" << lfm.getDisplayString() << "||" << endl;
 }
 
-void testLink(Link &lfm, string linkString, bool needToGenerateOrgLink) {
+void testLink(CoupledLink &lfm, string linkString, bool needToGenerateOrgLink) {
   FUNCTION_OUTPUT << "original link: " << endl;
   FUNCTION_OUTPUT << linkString << endl;
 

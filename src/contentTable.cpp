@@ -175,7 +175,7 @@ void generateContentTableForJPMHtmls() {
 void generateContentTableForReferenceAttachments() {
   LinkFromMain::loadReferenceAttachmentList();
   ListContainer container(REFERENCE_ATTACHMENT_INDEX);
-  auto table = Link::refAttachmentTable;
+  auto table = CoupledLink::refAttachmentTable;
   for (const auto &attachment : table) {
     auto attachmentName = attachment.first;
     auto entry = attachment.second.second;
@@ -201,7 +201,7 @@ void generateContentTableForReferenceAttachments() {
 void generateContentTableForPersonalAttachments() {
   LinkFromMain::loadReferenceAttachmentList();
   ListContainer container(PERSONAL_ATTACHMENT_INDEX);
-  auto table = Link::refAttachmentTable;
+  auto table = CoupledLink::refAttachmentTable;
   for (const auto &attachment : table) {
     auto attachmentName = attachment.first;
     auto entry = attachment.second.second;

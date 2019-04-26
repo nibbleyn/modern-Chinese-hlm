@@ -1,6 +1,6 @@
 #pragma once
 
-#include "linkFix.hpp"
+#include "coupledLinkFix.hpp"
 
 void refreshBodyTexts(const string &kind,
                       int minTarget = MAIN_MIN_CHAPTER_NUMBER,

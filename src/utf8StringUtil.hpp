@@ -1,5 +1,4 @@
 #pragma once
-
 #include <fstream>
 #include <iomanip>
 #include <sstream>
@@ -68,6 +67,10 @@ static const string imageGroupBeginChars = R"(<div)";
 
 static const string citationChapterNo = R"(第)";
 static const string numberingUnit = R"(段)";
+
+static const string defaultUnit = R"(回)";
+static const string attachmentUnit = R"(篇)";
+static const string searchUnit = R"(条)";
 
 static const string brTab = "<br>"; // start and end of each LINE
 static const string displaySpace = R"( )";

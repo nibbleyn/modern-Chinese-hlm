@@ -52,10 +52,6 @@ private:
   string m_displayText{""};
 };
 
-static const string defaultUnit = R"(回)";
-static const string attachmentUnit = R"(篇)";
-static const string searchUnit = R"(条)";
-
 string fixFrontParaHeaderFromTemplate(int startNumber, const string &color,
                                       int totalPara,
                                       const string &units = defaultUnit,

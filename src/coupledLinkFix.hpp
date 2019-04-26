@@ -1,6 +1,7 @@
 #pragma once
-#include "container.hpp"
 #include "coupledBodyTextWithLink.hpp"
+#include "coupledContainer.hpp"
+#include "genericContainer.hpp"
 
 void dissembleAttachments(int minTarget, int maxTarget, int minAttachNo,
                           int maxAttachNo);

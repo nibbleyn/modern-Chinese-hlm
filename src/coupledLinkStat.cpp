@@ -1,14 +1,14 @@
-#include "link.hpp"
+#include "coupledLink.hpp"
 #include <regex>
 
 extern fileSet keyMissingChapters;
 extern fileSet newAttachmentList;
 
-Link::LinksTable Link::linksTable;
-string Link::referFilePrefix{emptyString};
-string Link::linkDetailFilePath{emptyString};
-string Link::keyDetailFilePath{emptyString};
-Link::AttachmentSet Link::refAttachmentTable;
+CoupledLink::LinksTable CoupledLink::linksTable;
+string CoupledLink::referFilePrefix{emptyString};
+string CoupledLink::linkDetailFilePath{emptyString};
+string CoupledLink::keyDetailFilePath{emptyString};
+CoupledLink::AttachmentSet CoupledLink::refAttachmentTable;
 
 LinkFromMain::AttachmentSet LinkFromMain::attachmentTable;
 
@@ -16,7 +16,7 @@ LinkFromMain::AttachmentSet LinkFromMain::attachmentTable;
  * output linksTable to file specified in linkDetailFilePath and
  * keyDetailFilePath
  */
-void Link::displayFixedLinks() {
+void CoupledLink::displayFixedLinks() {
   if (linksTable.empty())
     return;
   FUNCTION_OUTPUT << linkDetailFilePath << " is created." << endl;
@@ -89,7 +89,7 @@ ATTACHMENT_TYPE attachmentTypeFromString(const string &str) {
  * removePersonalViewpoints() referenceAttachmentType means reference to other
  * stories or about a person
  */
-ATTACHMENT_TYPE Link::getAttachmentType(AttachmentNumber num) {
+ATTACHMENT_TYPE CoupledLink::getAttachmentType(AttachmentNumber num) {
   ATTACHMENT_TYPE attachmentType = ATTACHMENT_TYPE::NON_EXISTED;
   try {
     auto entry = refAttachmentTable.at(num).second;
@@ -146,7 +146,7 @@ AttachmentNumber getAttachmentNumber(const string &filename) {
  * 3. manually changing type in the output attachmentList
  * 4. overwriting refAttachmentTable by this output attachmentList
  */
-void Link::loadReferenceAttachmentList() {
+void CoupledLink::loadReferenceAttachmentList() {
   ifstream infile(HTML_SRC_REF_ATTACHMENT_LIST);
   if (!infile) {
     FUNCTION_OUTPUT << "file doesn't exist:" << HTML_SRC_REF_ATTACHMENT_LIST
@@ -193,7 +193,7 @@ void Link::loadReferenceAttachmentList() {
 /**
  * reset the general data structure to log info about links
  */
-void Link::resetStatisticsAndLoadReferenceAttachmentList() {
+void CoupledLink::resetStatisticsAndLoadReferenceAttachmentList() {
   linksTable.clear();
   loadReferenceAttachmentList();
 }
@@ -202,7 +202,7 @@ void Link::resetStatisticsAndLoadReferenceAttachmentList() {
  * output links to specified file
  * before calling this function, specifying output file
  */
-void Link::outPutStatisticsToFiles() {
+void CoupledLink::outPutStatisticsToFiles() {
   displayFixedLinks();
   FUNCTION_OUTPUT << "links information are written into: "
                   << linkDetailFilePath << " and " << keyDetailFilePath << endl;
@@ -211,7 +211,9 @@ void Link::outPutStatisticsToFiles() {
 /**
  * record this file as one who has links of wrong/un-found key
  */
-void Link::recordMissingKeyLink() { keyMissingChapters.insert(m_fromFile); }
+void CoupledLink::recordMissingKeyLink() {
+  keyMissingChapters.insert(m_fromFile);
+}
 
 /**
  * check whether the annotation of a link to attachment
@@ -277,7 +279,7 @@ string LinkFromMain::getFromLineOfAttachment(AttachmentNumber num) {
  * reset statistics data structure for re-do it during link fixing
  */
 void LinkFromMain::resetStatisticsAndLoadReferenceAttachmentList() {
-  Link::resetStatisticsAndLoadReferenceAttachmentList();
+  CoupledLink::resetStatisticsAndLoadReferenceAttachmentList();
   attachmentTable.clear();
 }
 
@@ -288,7 +290,7 @@ void LinkFromMain::outPutStatisticsToFiles() {
   referFilePrefix = MAIN_HTML_PREFIX;
   linkDetailFilePath = HTML_OUTPUT_LINKS_FROM_MAIN_LIST;
   keyDetailFilePath = HTML_OUTPUT_KEY_OF_LINKS_FROM_MAIN_LIST;
-  Link::outPutStatisticsToFiles();
+  CoupledLink::outPutStatisticsToFiles();
   displayAttachments();
 }
 
@@ -382,7 +384,7 @@ static const string HTML_OUTPUT_KEY_OF_LINKS_FROM_ATTACHMENT_LIST =
  * reset statistics data structure for re-do it during link fixing
  */
 void LinkFromAttachment::resetStatisticsAndLoadReferenceAttachmentList() {
-  Link::resetStatisticsAndLoadReferenceAttachmentList();
+  CoupledLink::resetStatisticsAndLoadReferenceAttachmentList();
 }
 
 /**
@@ -392,7 +394,7 @@ void LinkFromAttachment::outPutStatisticsToFiles() {
   referFilePrefix = ATTACHMENT_HTML_PREFIX;
   linkDetailFilePath = HTML_OUTPUT_LINKS_FROM_ATTACHMENT_LIST;
   keyDetailFilePath = HTML_OUTPUT_KEY_OF_LINKS_FROM_ATTACHMENT_LIST;
-  Link::outPutStatisticsToFiles();
+  CoupledLink::outPutStatisticsToFiles();
 }
 
 /**

@@ -4,7 +4,7 @@ void findFirstInNoAttachmentFiles(const string key, const string &fileType,
                                   int minTarget, int maxTarget,
                                   const string &outputFilename) {
   FILE_TYPE targetFileType = getFileTypeFromString(fileType);
-  using LinksList = map<string, vector<Link::LinkDetails>>;
+  using LinksList = map<string, vector<CoupledLink::LinkDetails>>;
   LinksList resultLinkList;
   resultLinkList.clear();
   int total = 0;
@@ -26,13 +26,13 @@ void findFirstInNoAttachmentFiles(const string key, const string &fileType,
             TurnToString(ln.getParaNumber()) + R"(.)" +
             TurnToString(ln.getlineNumber()) + R"(节:)";
         if (targetFileType == FILE_TYPE::ORIGINAL) {
-          Link::LinkDetails detail{
+          CoupledLink::LinkDetails detail{
               key, file, line,
               fixLinkFromOriginalTemplate(originalDirForLinkFromMain, file, key,
                                           expectedSection, line)};
           resultLinkList[file].push_back(detail);
         } else if (targetFileType == FILE_TYPE::MAIN) {
-          Link::LinkDetails detail{
+          CoupledLink::LinkDetails detail{
               key, file, line,
               fixLinkFromMainTemplate("", file, LINK_DISPLAY_TYPE::DIRECT, key,
                                       expectedSection, expectedSection, line)};

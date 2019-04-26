@@ -1,15 +1,16 @@
 #pragma once
-
-#include "coupledBodyText.hpp"
+#include "fileUtil.hpp"
+#include "lineNumber.hpp"
 
 enum class LINK_TYPE { MAIN, ATTACHMENT, ORIGINAL, SAMEPAGE, JPM, IMAGE };
 enum class LINK_DISPLAY_TYPE { DIRECT, HIDDEN, UNHIDDEN };
 
 enum class ATTACHMENT_TYPE { PERSONAL, REFERENCE, NON_EXISTED };
-
 using AttachmentNumber = pair<int, int>; // chapter number, attachment number
 
+static const string returnLinkFromAttachmentHeader = R"(返回本章原文)";
 static const string annotationToOriginal = R"(原文)";
+static const string contentTableFilename = R"(aindex)";
 
 // operations over link string template initialization
 string fixLinkFromSameFileTemplate(LINK_DISPLAY_TYPE type, const string &key,
@@ -42,42 +43,7 @@ string fixLinkFromImageTemplate(
     const string &annotation,
     const string &displayProperty = unhiddenDisplayProperty);
 
-static const string returnLinkFromAttachmentHeader = R"(返回本章原文)";
-static const string returnLink = R"(被引用)";
-static const string returnToContentTable = R"(回目录)";
-static const string contentTableFilename = R"(aindex)";
-static const string citationChapter = R"(章)";
-
 class Link : public Object {
-public:
-  struct LinkDetails {
-    string key{emptyString};
-    string fromFile{emptyString};
-    string fromLine{emptyString};
-    string link{emptyString};
-  };
-  // statistics about links
-  // chapter number (added with attachment number if over fromAttachmentLinks),
-  // referPara -> vector<key, fromFile, fromLine, Link string>
-  using LinksTable = map<std::pair<string, string>, vector<LinkDetails>>;
-  static string referFilePrefix;
-  static string linkDetailFilePath;
-  static string keyDetailFilePath;
-  static LinksTable linksTable;
-  static void displayFixedLinks();
-
-  // statistics about links to attachments
-  using AttachmentFileNameTitleAndType =
-      std::tuple<string, string, ATTACHMENT_TYPE>; // filename, title, type
-  // attachment number -> fromLine, <filename, title, type>
-  using AttachmentSet =
-      map<AttachmentNumber, pair<string, AttachmentFileNameTitleAndType>>;
-  // imported attachment list
-  static AttachmentSet refAttachmentTable;
-  static ATTACHMENT_TYPE getAttachmentType(AttachmentNumber num);
-  static void loadReferenceAttachmentList();
-  static void resetStatisticsAndLoadReferenceAttachmentList();
-  static void outPutStatisticsToFiles();
 
 public:
   Link() = default;
@@ -87,20 +53,10 @@ public:
       : m_fromFile(fromFile) {
     readTypeAndAnnotation(linkString);
   }
-  // the second step to read target file name
-  virtual bool readReferFileName(const string &link) = 0;
-  // the last step also including fixing
-  void fixFromString(const string &linkString);
 
   virtual ~Link(){};
   Link(const Link &) = delete;
   Link &operator=(const Link &) = delete;
-  string getWholeString();
-  string getDisplayString();
-  size_t displaySize();
-  size_t loadFirstFromContainedLine(const string &containedLine,
-                                    size_t after = 0);
-  string asString();
   LINK_TYPE getType() { return m_type; }
   bool isTargetToImage() { return (m_type == LINK_TYPE::IMAGE); };
   bool isTargetToJPMHtm() { return (m_type == LINK_TYPE::JPM); };
@@ -131,12 +87,6 @@ public:
       return formatIntoZeroPatchedChapterNumber(m_chapterNumber, 3);
     return formatIntoZeroPatchedChapterNumber(m_chapterNumber, 2);
   }
-  void doStatistics() {
-    if (m_usedKey.find(keyNotFound) != string::npos) {
-      recordMissingKeyLink();
-    } else
-      logLink();
-  }
 
   void fixReferFile(int chapter, int attachNo = 0) {
     if (m_chapterNumber != chapter) {
@@ -154,24 +104,15 @@ public:
       m_needChange = true;
     }
   }
-  void fixReferSection(const string &expectedSection) {
-    if (m_referSection != expectedSection) {
-      m_referSection = expectedSection;
-      m_needChange = true;
-    }
-  }
-  virtual void generateLinkToOrigin() = 0;
+  void setTypeThruFileNamePrefix(const string &link);
 
 protected:
   LINK_DISPLAY_TYPE getDisplayType() { return m_displayType; }
-  string getKey() { return m_usedKey; }
-  string getReferSection() { return m_referSection; }
 
   void readDisplayType(const string &linkString);
   void readType(const string &linkString);
   void readReferPara(const string &linkString);
   bool readAnnotation(const string &linkString);
-  void readKey(const string &linkString);
   void readTypeAndAnnotation(const string &linkString) {
     readType(linkString);
     readAnnotation(linkString);
@@ -185,22 +126,6 @@ protected:
       result = hiddenDisplayProperty;
     return result;
   }
-  string getStringOfLinkToOrigin() {
-    if (m_linkPtrToOrigin != nullptr)
-      return originalLinkStartChars + m_linkPtrToOrigin->asString() +
-             originalLinkEndChars;
-    return emptyString;
-  }
-  void recordMissingKeyLink();
-
-  // utility to convert link type with filename
-  // samepage link would refer to different file prefix
-  virtual string getHtmlFileNamePrefix() = 0;
-  virtual string getBodyTextFilePrefix() = 0;
-
-  // main and attachment html files are in different directories
-  virtual string getPathOfReferenceFile() const = 0;
-  virtual void logLink() = 0;
 
 protected:
   LINK_TYPE m_type{LINK_TYPE::MAIN};
@@ -210,76 +135,7 @@ protected:
   int m_chapterNumber{0};
   int m_attachmentNumber{0};
   string m_referPara{invalidLineNumber}; // might be top bottom
-  string m_referSection{"0.0"};
-  string m_usedKey{emptyString};
   string m_annotation{emptyString};
   bool m_needChange{false};
-  using LinkPtr = std::unique_ptr<Link>;
-  LinkPtr m_linkPtrToOrigin{nullptr};
   string m_displayText{emptyString};
-  string m_imageReferFilename{emptyString};
-};
-
-class LinkFromMain : public Link {
-public:
-  static AttachmentSet attachmentTable;
-  static void displayAttachments();
-  static string getFromLineOfAttachment(AttachmentNumber num);
-
-  static void resetStatisticsAndLoadReferenceAttachmentList();
-  static void outPutStatisticsToFiles();
-
-public:
-  LinkFromMain() = default;
-  LinkFromMain(const string &fromFile) : Link(fromFile) {}
-  LinkFromMain(const string &fromFile, const string &linkString)
-      : Link(fromFile, linkString) {}
-  ~LinkFromMain(){};
-  void generateLinkToOrigin();
-  bool readReferFileName(const string &linkString);
-
-private:
-  string getPathOfReferenceFile() const override;
-  void logLink();
-
-  // utility to convert link type with filename
-  string getHtmlFileNamePrefix();
-  string getBodyTextFilePrefix();
-};
-
-class LinkFromAttachment : public Link {
-public:
-  static void resetStatisticsAndLoadReferenceAttachmentList();
-  static void outPutStatisticsToFiles();
-
-public:
-  LinkFromAttachment(const string &fromFile) : Link(fromFile) {}
-  LinkFromAttachment(const string &fromFile, const string &linkString)
-      : Link(fromFile, linkString) {}
-  ~LinkFromAttachment(){};
-  void generateLinkToOrigin();
-  bool readReferFileName(const string &linkString);
-  void setTypeThruFileNamePrefix(const string &link);
-
-private:
-  string getPathOfReferenceFile() const override;
-  void logLink();
-
-  // utility to convert link type with filename
-  string getHtmlFileNamePrefix();
-  string getBodyTextFilePrefix();
-};
-
-class Comment : public Object {
-public:
-  Comment(const string &fromFile) : m_fromFile(fromFile) {}
-  string getWholeString();
-  string getDisplayString();
-  size_t displaySize();
-  size_t loadFirstFromContainedLine(const string &containedLine,
-                                    size_t after = 0);
-
-private:
-  string m_displayText{emptyString};
-  string m_fromFile{emptyString};
 };

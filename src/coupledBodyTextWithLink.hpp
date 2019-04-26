@@ -208,7 +208,7 @@ private:
   bool isEmbeddedObject(Object::OBJECT_TYPE type, size_t offset);
 
   // used for link-fixing
-  using LinkPtr = std::unique_ptr<Link>;
+  using LinkPtr = std::unique_ptr<CoupledLink>;
   LinkPtr m_linkPtr{nullptr};
   LinkPtr m_followingLinkPtr{nullptr};
 

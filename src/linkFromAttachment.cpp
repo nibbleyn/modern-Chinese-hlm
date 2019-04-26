@@ -1,4 +1,4 @@
-#include "link.hpp"
+#include "coupledLink.hpp"
 
 /**
  * generate the link to original file after a link to main file from attachment
@@ -107,15 +107,6 @@ string LinkFromAttachment::getPathOfReferenceFile() const {
   if (m_type == LINK_TYPE::JPM)
     result = jpmDirForLinkFromAttachment;
   return result;
-}
-
-/**
- * change target type thru specifying a type prefix
- * @param prefix type prefix
- */
-void LinkFromAttachment::setTypeThruFileNamePrefix(const string &prefix) {
-  if (prefix == "main")
-    m_type = LINK_TYPE::MAIN;
 }
 
 /**

@@ -1,5 +1,5 @@
 #pragma once
-#include "linkFix.hpp"
+#include "coupledLinkFix.hpp"
 
 // make a sub story
 void reConstructStory(const string &indexFilename,
