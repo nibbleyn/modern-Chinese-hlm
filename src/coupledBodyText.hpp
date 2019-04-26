@@ -1,8 +1,6 @@
 #pragma once
 
-//#include "lineNumber.hpp"
-//#include "paraHeader.hpp"
-
+#include "paraHeader.hpp"
 #include "lineNumber.hpp"
 
 enum class DISPLY_LINE_TYPE { EMPTY, PARA, TEXT, IMAGE };

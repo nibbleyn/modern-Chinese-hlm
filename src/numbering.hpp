@@ -1,8 +1,5 @@
 #pragma once
 
-//#include "container.hpp"
-//#include "coupledBodyTextWithLink.hpp"
-
 #include "linkFix.hpp"
 
 void refreshBodyTexts(const string &kind, int minTarget = 1,
