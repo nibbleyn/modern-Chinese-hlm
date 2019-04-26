@@ -62,8 +62,8 @@ void CoupledBodyTextWithLink::fixLinksWithinOneLine(fileSet referMainFiles,
           if (toProcess.substr(linkEnd + linkEndChars.length(),
                                next.length()) == next) {
             // skip </a> and first parenthesis of next
-            auto followingLink = toProcess.substr(
-                linkEnd + next.length() + 2); // find next link in the toProcess
+            auto followingLink = getWholeStringBetweenTags(
+                toProcess, linkStartChars, linkEndChars, linkEnd);
             if (m_attachNumber == 0) {
               m_followingLinkPtr =
                   std::make_unique<LinkFromMain>(m_file, followingLink);
