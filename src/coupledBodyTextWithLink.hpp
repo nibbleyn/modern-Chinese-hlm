@@ -1,5 +1,5 @@
 #pragma once
-#include "linkEmbeddedObject.hpp"
+#include "coupledLinkEmbeddedObject.hpp"
 
 static const string REFERENCE_LINES = R"(container/referLines.txt)";
 static const string REFERENCE_PAGE = R"(container/referPage.txt)";

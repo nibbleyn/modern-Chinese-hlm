@@ -1,6 +1,6 @@
 #pragma once
 
-#include "coupledLinkFix.hpp"
+#include "libraryInterface.hpp"
 
 void refreshBodyTexts(const string &kind,
                       int minTarget = MAIN_MIN_CHAPTER_NUMBER,
@@ -16,3 +16,9 @@ void numberOriginalHtmls(bool forceUpdate = true, bool hideParaHeader = false);
 void numberMainHtmls(bool forceUpdate = true, bool hideParaHeader = false);
 void numberAttachmentHtmls(bool forceUpdate = true,
                            bool hideParaHeader = false);
+
+// link fixing for main files
+void fixLinksFromMain(bool forceUpdate = true);
+
+// link fixing for attachment files
+void fixLinksFromAttachment(bool forceUpdate = true);

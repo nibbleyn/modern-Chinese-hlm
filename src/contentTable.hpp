@@ -1,5 +1,5 @@
 #pragma once
-#include "coupledLinkFix.hpp"
+#include "libraryInterface.hpp"
 
 void generateContentTableForMainHtmls();
 void generateContentTableForOriginalHtmls();

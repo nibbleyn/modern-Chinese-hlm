@@ -1,5 +1,5 @@
 #include "contentTable.hpp"
-#include "numbering.hpp"
+#include "numberingAndLinkFixing.hpp"
 #include "search.hpp"
 #include "story.hpp"
 #include "test.hpp"

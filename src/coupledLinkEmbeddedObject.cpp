@@ -1,4 +1,4 @@
-#include "linkEmbeddedObject.hpp"
+#include "coupledLinkEmbeddedObject.hpp"
 
 string scanForSubLinks(const string &original, const string &fromFile) {
   string result;

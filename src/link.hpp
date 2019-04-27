@@ -1,5 +1,4 @@
 #pragma once
-#include "fileUtil.hpp"
 #include "lineNumber.hpp"
 
 enum class LINK_TYPE { MAIN, ATTACHMENT, ORIGINAL, SAMEPAGE, JPM, IMAGE };
@@ -11,6 +10,14 @@ using AttachmentNumber = pair<int, int>; // chapter number, attachment number
 static const string returnLinkFromAttachmentHeader = R"(返回本章原文)";
 static const string annotationToOriginal = R"(原文)";
 static const string contentTableFilename = R"(aindex)";
+
+static const std::string TARGET_FILE_EXT = R"(.htm)";
+
+// same value with those defined in fileUtil.hpp
+static const std::string MAIN_TYPE_HTML_TARGET = R"(a0)";
+static const std::string ORIGINAL_TYPE_HTML_TARGET = R"(c0)";
+static const std::string ATTACHMENT_TYPE_HTML_TARGET = R"(b0)";
+static const std::string JPM_TYPE_HTML_TARGET = R"(d)";
 
 // operations over link string template initialization
 string fixLinkFromSameFileTemplate(LINK_DISPLAY_TYPE type, const string &key,

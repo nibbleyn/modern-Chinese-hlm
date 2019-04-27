@@ -307,13 +307,13 @@ LINK_TYPE getLinKTypeFromReferFileName(const string &refereFileName) {
   LINK_TYPE type = LINK_TYPE::SAMEPAGE;
 
   if (refereFileName.find(contentTableFilename) != string::npos or
-      refereFileName.find(MAIN_HTML_PREFIX) != string::npos) {
+      refereFileName.find(MAIN_TYPE_HTML_TARGET) != string::npos) {
     type = LINK_TYPE::MAIN;
-  } else if (refereFileName.find(ATTACHMENT_HTML_PREFIX) != string::npos) {
+  } else if (refereFileName.find(ATTACHMENT_TYPE_HTML_TARGET) != string::npos) {
     type = LINK_TYPE::ATTACHMENT;
-  } else if (refereFileName.find(ORIGINAL_HTML_PREFIX) != string::npos) {
+  } else if (refereFileName.find(ORIGINAL_TYPE_HTML_TARGET) != string::npos) {
     type = LINK_TYPE::ORIGINAL;
-  } else if (refereFileName.find(JPM_HTML_PREFIX) != string::npos) {
+  } else if (refereFileName.find(JPM_TYPE_HTML_TARGET) != string::npos) {
     type = LINK_TYPE::JPM;
   }
   return type;
@@ -344,7 +344,7 @@ void Link::readType(const string &linkString) {
   }
 
   m_type = LINK_TYPE::SAMEPAGE;
-  if (linkString.find(HTML_SUFFIX) == string::npos) {
+  if (linkString.find(TARGET_FILE_EXT) == string::npos) {
     if (debug >= LOG_EXCEPTION)
       METHOD_OUTPUT << "no .htm file extension found for " << linkString
                     << endl;
@@ -352,7 +352,7 @@ void Link::readType(const string &linkString) {
   }
 
   string refereFileName = getIncludedStringBetweenTags(
-      linkString, referFileMiddleChar, HTML_SUFFIX);
+      linkString, referFileMiddleChar, TARGET_FILE_EXT);
   if (debug >= LOG_INFO)
     METHOD_OUTPUT << "type seen from prefix: " << refereFileName << endl;
   m_type = getLinKTypeFromReferFileName(refereFileName);
@@ -372,7 +372,7 @@ void Link::readReferPara(const string &linkString) {
     }
     return;
   }
-  string htmStart = HTML_SUFFIX + referParaMiddleChar;
+  string htmStart = TARGET_FILE_EXT + referParaMiddleChar;
   if (m_type == LINK_TYPE::SAMEPAGE)
     htmStart = referParaMiddleChar;
   if (linkString.find(htmStart) == string::npos) // no file to refer
