@@ -92,6 +92,9 @@ static const string commentStart =
 static const string commentEnd = commentEndChars + bracketEndChars;
 static const string endOfCommentBeginTag = R"(>)";
 
+static const int THREE_DIGIT_FILENAME = 3;
+static const int TWO_DIGIT_FILENAME = 2;
+
 string formatIntoZeroPatchedChapterNumber(int chapterNumber, int digits);
 
 void replacePart(string &linkString, const string &key,

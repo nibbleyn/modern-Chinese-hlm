@@ -48,28 +48,7 @@ private:
   string m_translatedTitle{emptyString};
 
   string getBodyTextFilePrefix();
-  string getInputHtmlFilePath() {
-    string attachmentPart{emptyString};
-    if (m_fileType == FILE_TYPE::ATTACHMENT)
-      attachmentPart =
-          attachmentFileMiddleChar + TurnToString(m_attachmentNumber);
-    return m_htmlInputFilePath + getHtmlFileNamePrefix(m_fileType) + m_file +
-           attachmentPart + HTML_SUFFIX;
-  }
-  string getoutputHtmlFilepath() {
-    string attachmentPart{emptyString};
-    if (m_fileType == FILE_TYPE::ATTACHMENT)
-      attachmentPart =
-          attachmentFileMiddleChar + TurnToString(m_attachmentNumber);
-    return m_htmlOutputFilePath + getHtmlFileNamePrefix(m_fileType) + m_file +
-           attachmentPart + HTML_SUFFIX;
-  }
-  string getBodyTextFilePath() {
-    string attachmentPart{emptyString};
-    if (m_fileType == FILE_TYPE::ATTACHMENT)
-      attachmentPart =
-          attachmentFileMiddleChar + TurnToString(m_attachmentNumber);
-    return m_bodyTextInputFilePath + getBodyTextFilePrefix() + m_file +
-           attachmentPart + BODY_TEXT_SUFFIX;
-  }
+  string getInputHtmlFilePath();
+  string getoutputHtmlFilepath();
+  string getBodyTextFilePath();
 };

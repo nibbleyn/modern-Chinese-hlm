@@ -6,11 +6,31 @@
 using Poco::Process;
 using Poco::ProcessHandle;
 
+void convertFromGB2312ToUtf8(string inputFile, string outputFile) {
+  if (debug >= LOG_INFO)
+    FUNCTION_OUTPUT << inputFile << endl;
+  string cmd("iconv");
+  vector<string> args;
+  args.push_back("-c");
+  args.push_back(inputFile);
+  args.push_back("-f");
+  args.push_back("gb2312");
+  args.push_back("-t");
+  args.push_back("utf8");
+  Poco::Pipe outPipe;
+  ProcessHandle ph = Process::launch(cmd, args, 0, &outPipe, 0);
+  Poco::PipeInputStream istr(outPipe);
+  if (debug >= LOG_INFO)
+    FUNCTION_OUTPUT << outputFile << endl;
+  ofstream ostr(outputFile);
+  Poco::StreamCopier::copyStream(istr, ostr);
+}
+
 /**
  * all files are converted from GB2312_HTML_SRC whatever type is
  */
 void convertFromGB2312ToUtf8(string referFile, string format, FILE_TYPE type,
-                             int attachNo) {
+                             int attachNo = MIN_ATTACHMENT_NUMBER) {
   string inputFile{""}, outputFile{""};
   if (format == "htm") {
     string attachmentPart{""};
@@ -39,26 +59,6 @@ void convertFromGB2312ToUtf8(string referFile, string format, FILE_TYPE type,
       FUNCTION_OUTPUT << outputFile << endl;
   }
   convertFromGB2312ToUtf8(inputFile, outputFile);
-}
-
-void convertFromGB2312ToUtf8(string inputFile, string outputFile) {
-  if (debug >= LOG_INFO)
-    FUNCTION_OUTPUT << inputFile << endl;
-  string cmd("iconv");
-  vector<string> args;
-  args.push_back("-c");
-  args.push_back(inputFile);
-  args.push_back("-f");
-  args.push_back("gb2312");
-  args.push_back("-t");
-  args.push_back("utf8");
-  Poco::Pipe outPipe;
-  ProcessHandle ph = Process::launch(cmd, args, 0, &outPipe, 0);
-  Poco::PipeInputStream istr(outPipe);
-  if (debug >= LOG_INFO)
-    FUNCTION_OUTPUT << outputFile << endl;
-  ofstream ostr(outputFile);
-  Poco::StreamCopier::copyStream(istr, ostr);
 }
 
 void convertNonPrefixedAttachmentFilesFromGB2312ToUtf8() {

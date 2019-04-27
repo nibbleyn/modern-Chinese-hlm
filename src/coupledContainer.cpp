@@ -46,6 +46,33 @@ string CoupledContainer::getBodyTextFilePrefix() {
   return MAIN_BODYTEXT_PREFIX;
 }
 
+string CoupledContainer::getInputHtmlFilePath() {
+  string attachmentPart{emptyString};
+  if (m_fileType == FILE_TYPE::ATTACHMENT)
+    attachmentPart =
+        attachmentFileMiddleChar + TurnToString(m_attachmentNumber);
+  return m_htmlInputFilePath + getHtmlFileNamePrefix(m_fileType) + m_file +
+         attachmentPart + HTML_SUFFIX;
+}
+
+string CoupledContainer::getoutputHtmlFilepath() {
+  string attachmentPart{emptyString};
+  if (m_fileType == FILE_TYPE::ATTACHMENT)
+    attachmentPart =
+        attachmentFileMiddleChar + TurnToString(m_attachmentNumber);
+  return m_htmlOutputFilePath + getHtmlFileNamePrefix(m_fileType) + m_file +
+         attachmentPart + HTML_SUFFIX;
+}
+
+string CoupledContainer::getBodyTextFilePath() {
+  string attachmentPart{emptyString};
+  if (m_fileType == FILE_TYPE::ATTACHMENT)
+    attachmentPart =
+        attachmentFileMiddleChar + TurnToString(m_attachmentNumber);
+  return m_bodyTextInputFilePath + getBodyTextFilePrefix() + m_file +
+         attachmentPart + BODY_TEXT_SUFFIX;
+}
+
 void CoupledContainer::assembleBackToHTM(const string &title,
                                          const string &displayTitle) {
 
