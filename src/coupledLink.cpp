@@ -1,5 +1,4 @@
 #include "coupledLink.hpp"
-#include <regex>
 
 string CoupledLink::getWholeString() { return asString(); }
 

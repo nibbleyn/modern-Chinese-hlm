@@ -1,5 +1,4 @@
 #include "lineNumber.hpp"
-#include <regex>
 
 extern int debug;
 

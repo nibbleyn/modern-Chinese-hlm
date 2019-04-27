@@ -1,5 +1,4 @@
 #include "coupledLink.hpp"
-#include <regex>
 
 extern fileSet keyMissingChapters;
 extern fileSet newAttachmentList;
@@ -92,8 +91,8 @@ ATTACHMENT_TYPE attachmentTypeFromString(const string &str) {
 ATTACHMENT_TYPE CoupledLink::getAttachmentType(AttachmentNumber num) {
   ATTACHMENT_TYPE attachmentType = ATTACHMENT_TYPE::NON_EXISTED;
   try {
-    auto entry = refAttachmentTable.at(num).second;
-    attachmentType = GetTupleElement(entry, 2);
+    auto entry = refAttachmentTable.at(num);
+    attachmentType = entry.type;
   } catch (exception &) {
     if (debug >= LOG_EXCEPTION)
       FUNCTION_OUTPUT << "not found info in refAttachmentTable about: "
@@ -184,9 +183,9 @@ void CoupledLink::loadReferenceAttachmentList() {
     // remove only leading and trailing blank for title
     title = std::regex_replace(title, std::regex("^ +"), emptyString);
     title = std::regex_replace(title, std::regex(" +$"), emptyString);
-    refAttachmentTable[getAttachmentNumber(targetFile)] =
-        make_pair(fromLine, make_tuple(targetFile, title,
-                                       attachmentTypeFromString(type)));
+    AttachmentDetails detail{targetFile, fromLine, title,
+                             attachmentTypeFromString(type)};
+    refAttachmentTable[getAttachmentNumber(targetFile)] = detail;
   }
 }
 
@@ -244,13 +243,11 @@ void LinkFromMain::displayAttachments() {
     return;
   ofstream outfile(HTML_OUTPUT_ATTACHMENT_FROM_MAIN_LIST);
   for (const auto &attachment : attachmentTable) {
-    AttachmentFileNameTitleAndType entry = attachment.second.second;
+    auto entry = attachment.second;
 
-    outfile << "from:" << attachment.second.first
-            << " name:" << GetTupleElement(entry, 0)
-            << " title:" << GetTupleElement(entry, 1)
-            << " type:" << attachmentTypeAsString(GetTupleElement(entry, 2))
-            << endl;
+    outfile << "from:" << entry.fromfilename << " name:" << entry.fromLine
+            << " title:" << entry.title
+            << " type:" << attachmentTypeAsString(entry.type) << endl;
   }
   FUNCTION_OUTPUT << "attachment information are written into: "
                   << HTML_OUTPUT_ATTACHMENT_FROM_MAIN_LIST << endl;
@@ -265,7 +262,7 @@ void LinkFromMain::displayAttachments() {
 string LinkFromMain::getFromLineOfAttachment(AttachmentNumber num) {
   string result = topParagraphIndicator;
   try {
-    result = attachmentTable.at(num).first;
+    result = attachmentTable.at(num).fromLine;
   } catch (exception &) {
     if (debug >= LOG_INFO)
       FUNCTION_OUTPUT << "fromLine not found in attachmentTable about: "
@@ -327,11 +324,12 @@ void LinkFromMain::logLink() {
     if (getSourceChapterName() == getChapterName()) {
       if (type == ATTACHMENT_TYPE::NON_EXISTED)
         newAttachmentList.insert(targetFile);
-      attachmentTable[num] = make_pair(
-          m_fromLine.asString(), make_tuple(targetFile, title,
-                                            (type == ATTACHMENT_TYPE::PERSONAL)
-                                                ? ATTACHMENT_TYPE::PERSONAL
-                                                : ATTACHMENT_TYPE::REFERENCE));
+
+      AttachmentDetails detail{targetFile, m_fromLine.asString(), title,
+                               (type == ATTACHMENT_TYPE::PERSONAL)
+                                   ? ATTACHMENT_TYPE::PERSONAL
+                                   : ATTACHMENT_TYPE::REFERENCE};
+      refAttachmentTable[getAttachmentNumber(targetFile)] = detail;
     }
     if (not isAnnotationMatch(getAnnotation(), title)) {
       METHOD_OUTPUT << m_fromFile << " has a link to " << targetFile

@@ -1,14 +1,11 @@
 #pragma once
-#include <fstream>
 #include <iomanip>
-#include <sstream>
-
-#include <cmath>
 #include <iostream>
+#include <sstream>
+#include <string>
+
 #include <regex>
 #include <set>
-#include <string>
-#include <tuple>
 
 using namespace std;
 
@@ -25,8 +22,6 @@ static const string topParagraphIndicator =
     R"(top)"; // of the body Text file
 static const string bottomParagraphIndicator =
     R"(bottom)"; // of the body Text file
-
-#define GetTupleElement(x, y) std::get<y>(x)
 
 #define SEPERATE(x, y)                                                         \
   cout << "*************************line " << __LINE__ << ": " << x << y       \
@@ -98,13 +93,6 @@ static const string commentEnd = commentEndChars + bracketEndChars;
 static const string endOfCommentBeginTag = R"(>)";
 
 string formatIntoZeroPatchedChapterNumber(int chapterNumber, int digits);
-
-static const int THREE_DIGIT_FILENAME = 3;
-static const int TWO_DIGIT_FILENAME = 2;
-
-// operations to construct a group of file names
-using fileSet = set<string>;
-fileSet buildFileSet(int min, int max, int digits = TWO_DIGIT_FILENAME);
 
 void replacePart(string &linkString, const string &key,
                  const string &toReplace);

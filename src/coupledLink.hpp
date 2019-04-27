@@ -1,6 +1,7 @@
 #pragma once
 #include "coupledBodyText.hpp"
 #include "link.hpp"
+using fileSet = set<string>;
 
 static const string returnLink = R"(被引用)";
 static const string returnToContentTable = R"(回目录)";
@@ -25,11 +26,13 @@ public:
   static void displayFixedLinks();
 
   // statistics about links to attachments
-  using AttachmentFileNameTitleAndType =
-      std::tuple<string, string, ATTACHMENT_TYPE>; // filename, title, type
-  // attachment number -> fromLine, <filename, title, type>
-  using AttachmentSet =
-      map<AttachmentNumber, pair<string, AttachmentFileNameTitleAndType>>;
+  struct AttachmentDetails {
+    string fromfilename{emptyString};
+    string fromLine{emptyString};
+    string title{emptyString};
+    ATTACHMENT_TYPE type{ATTACHMENT_TYPE::NON_EXISTED};
+  };
+  using AttachmentSet = map<AttachmentNumber, AttachmentDetails>;
   // imported attachment list
   static AttachmentSet refAttachmentTable;
   static ATTACHMENT_TYPE getAttachmentType(AttachmentNumber num);

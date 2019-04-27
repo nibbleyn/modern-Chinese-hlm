@@ -178,8 +178,8 @@ void generateContentTableForReferenceAttachments() {
   auto table = CoupledLink::refAttachmentTable;
   for (const auto &attachment : table) {
     auto attachmentName = attachment.first;
-    auto entry = attachment.second.second;
-    ATTACHMENT_TYPE attachmentType = GetTupleElement(entry, 2);
+    auto entry = attachment.second;
+    ATTACHMENT_TYPE attachmentType = entry.type;
 
     if (attachmentType == ATTACHMENT_TYPE::REFERENCE) {
       string name = citationChapterNo + TurnToString(attachmentName.first) +
@@ -188,8 +188,7 @@ void generateContentTableForReferenceAttachments() {
       container.appendParagraphInBodyText(fixLinkFromAttachmentTemplate(
           attachmentDirForLinkFromMain,
           formatIntoZeroPatchedChapterNumber(attachmentName.first, 2),
-          TurnToString(attachmentName.second),
-          name + GetTupleElement(entry, 1)));
+          TurnToString(attachmentName.second), name + entry.fromLine));
     }
   }
   container.assembleBackToHTM(REFERENCE_ATTACHMENT_TITLE,
@@ -204,8 +203,8 @@ void generateContentTableForPersonalAttachments() {
   auto table = CoupledLink::refAttachmentTable;
   for (const auto &attachment : table) {
     auto attachmentName = attachment.first;
-    auto entry = attachment.second.second;
-    ATTACHMENT_TYPE attachmentType = GetTupleElement(entry, 2);
+    auto entry = attachment.second;
+    ATTACHMENT_TYPE attachmentType = entry.type;
 
     if (attachmentType == ATTACHMENT_TYPE::PERSONAL) {
       string name = citationChapterNo + TurnToString(attachmentName.first) +
@@ -214,8 +213,7 @@ void generateContentTableForPersonalAttachments() {
       container.appendParagraphInBodyText(fixLinkFromAttachmentTemplate(
           attachmentDirForLinkFromMain,
           formatIntoZeroPatchedChapterNumber(attachmentName.first, 2),
-          TurnToString(attachmentName.second),
-          name + GetTupleElement(entry, 1)));
+          TurnToString(attachmentName.second), name + entry.fromLine));
     }
   }
   container.assembleBackToHTM(PERSONAL_ATTACHMENT_TITLE,
