@@ -256,14 +256,13 @@ void numberAttachmentHtmls(bool forceUpdate, bool hideParaHeader) {
   int minAttachNo = MIN_ATTACHMENT_NUMBER, maxAttachNo = MAX_ATTACHMENT_NUMBER;
   CoupledContainer container(FILE_TYPE::ATTACHMENT);
   CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
-  dissembleAttachments(minTarget, maxTarget, minAttachNo,
-                       maxAttachNo); // dissemble html to bodytext
+  dissembleAttachments(minTarget, maxTarget, minAttachNo, maxAttachNo);
   CoupledBodyTextWithLink::setReferFilePrefix(ATTACHMENT_BODYTEXT_PREFIX);
   CoupledBodyTextWithLink::setStatisticsOutputFilePath(
       HTML_OUTPUT_LINES_OF_ATTACHMENTS);
-  addLineNumbersForAttachmentHtml(
-      minTarget, maxTarget, minAttachNo, maxAttachNo, forceUpdate,
-      hideParaHeader); // reformat bodytext by adding line number
+  // reformat bodytext by adding line number
+  addLineNumbersForAttachmentHtml(minTarget, maxTarget, minAttachNo,
+                                  maxAttachNo, forceUpdate, hideParaHeader);
   CoupledBodyText::loadBodyTextsFromFixBackToOutput();
   assembleAttachments(minTarget, maxTarget, minAttachNo, maxAttachNo);
   FUNCTION_OUTPUT << "Numbering Attachment Html finished. " << endl;
@@ -299,12 +298,10 @@ void displayNewlyAddedAttachments() {
 /**
  * before this function to work, numbering all main, original files
  * no requirement for numbering attachment files.
- * however, attachment files must be put under HTML_SRC_ATTACHMENT
- * for getting titles of them.
- * and fixReturnLinkForAttachments would fix these attachment files
- * and save them into HTML_OUTPUT_ATTACHMENT just like assembleAttachments
  */
-void fixLinksFromMainHtmls(bool forceUpdate) {
+void fixLinksFromMain(bool forceUpdate) {
+  clearReport();
+
   int minTarget = MAIN_MIN_CHAPTER_NUMBER, maxTarget = MAIN_MAX_CHAPTER_NUMBER;
   int minReferenceToMain = MAIN_MIN_CHAPTER_NUMBER,
       maxReferenceToMain = MAIN_MAX_CHAPTER_NUMBER;
@@ -312,15 +309,22 @@ void fixLinksFromMainHtmls(bool forceUpdate) {
       maxReferenceToOriginal = MAIN_MAX_CHAPTER_NUMBER;
   int minReferenceToJPM = JPM_MIN_CHAPTER_NUMBER,
       maxReferenceToJPM = JPM_MAX_CHAPTER_NUMBER;
+
+  // load files from output back to src
   CoupledContainer container(FILE_TYPE::MAIN);
   CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
+
+  // load known reference attachment list
+  LinkFromMain::resetStatisticsAndLoadReferenceAttachmentList();
+
+  // dissemble html files
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     container.setFileAndAttachmentNumber(file);
     container.dissembleFromHTM();
   }
-  for (const auto &file :
-       buildFileSet(minTarget, maxTarget)) // files need to be fixed
-  {
+
+  // fix links in body texts
+  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     CoupledBodyTextWithLink bodyText;
     bodyText.setFilePrefixFromFileType(FILE_TYPE::MAIN);
     bodyText.setFileAndAttachmentNumber(file);
@@ -329,13 +333,20 @@ void fixLinksFromMainHtmls(bool forceUpdate) {
         buildFileSet(minReferenceToOriginal, maxReferenceToOriginal),
         buildFileSet(minReferenceToJPM, maxReferenceToJPM), forceUpdate);
   }
+
   if (debug >= LOG_INFO)
     FUNCTION_OUTPUT << "Links fixing  finished. " << endl;
+
+  // load fixed body texts back to output directory
   CoupledBodyText::loadBodyTextsFromFixBackToOutput();
+
+  // assemble back htmls to output directory
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     container.setFileAndAttachmentNumber(file);
     container.assembleBackToHTM();
   }
+
+  // fix return links of attachments to output directory
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     container.setFileAndAttachmentNumber(file);
     auto targetAttachments =
@@ -348,19 +359,15 @@ void fixLinksFromMainHtmls(bool forceUpdate) {
   }
   if (debug >= LOG_INFO)
     FUNCTION_OUTPUT << "Return Link fixing finished. " << endl;
-}
 
-void fixLinksFromMain(bool forceUpdate) {
-  clearReport();
-  LinkFromMain::resetStatisticsAndLoadReferenceAttachmentList();
-  fixLinksFromMainHtmls(forceUpdate);
+  // statistics of links fixing
   LinkFromMain::outPutStatisticsToFiles();
   displayMainFilesOfMissingKey();
   displayNewlyAddedAttachments();
   FUNCTION_OUTPUT << "fixLinksFromMain finished. " << endl;
 }
 
-void fixLinksFromAttachmentHtmls(bool forceUpdate) {
+void fixLinksFromAttachment(bool forceUpdate) {
   int minTarget = MAIN_MIN_CHAPTER_NUMBER, maxTarget = MAIN_MAX_CHAPTER_NUMBER;
   int minReferenceToMain = MAIN_MIN_CHAPTER_NUMBER,
       maxReferenceToMain = MAIN_MAX_CHAPTER_NUMBER;
@@ -378,16 +385,23 @@ void fixLinksFromAttachmentHtmls(bool forceUpdate) {
       targetAttachments.push_back(i);
     overAllAttachments = false;
   }
+  // load files from output back to src
   CoupledContainer container(FILE_TYPE::ATTACHMENT);
   CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
-  dissembleAttachments(minTarget, maxTarget, minAttachNo,
-                       maxAttachNo); // dissemble html to bodytext
+
+  // load known reference attachment list
+  LinkFromAttachment::resetStatisticsAndLoadReferenceAttachmentList();
+
+  // dissemble html files
+  dissembleAttachments(minTarget, maxTarget, minAttachNo, maxAttachNo);
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     if (overAllAttachments == true) {
       container.setFileAndAttachmentNumber(file);
       targetAttachments =
           container.getAttachmentFileListForChapter(HTML_SRC_ATTACHMENT);
     }
+
+    // fix links in body texts
     for (const auto &attNo : targetAttachments) {
       CoupledBodyTextWithLink bodyText;
       bodyText.setFilePrefixFromFileType(FILE_TYPE::ATTACHMENT);
@@ -398,13 +412,13 @@ void fixLinksFromAttachmentHtmls(bool forceUpdate) {
           buildFileSet(minReferenceToJPM, maxReferenceToJPM), forceUpdate);
     }
   }
-  CoupledBodyText::loadBodyTextsFromFixBackToOutput();
-  assembleAttachments(minTarget, maxTarget, minAttachNo, maxAttachNo);
-}
 
-void fixLinksFromAttachment(bool forceUpdate) {
-  LinkFromAttachment::resetStatisticsAndLoadReferenceAttachmentList();
-  fixLinksFromAttachmentHtmls(forceUpdate);
+  // load fixed body texts back to output directory
+  CoupledBodyText::loadBodyTextsFromFixBackToOutput();
+
+  // dissemble html files
+  assembleAttachments(minTarget, maxTarget, minAttachNo, maxAttachNo);
+  // statistics of links fixing
   LinkFromAttachment::outPutStatisticsToFiles();
   FUNCTION_OUTPUT << "fixLinksFromAttachment finished. " << endl;
 }

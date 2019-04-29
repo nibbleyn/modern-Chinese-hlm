@@ -348,9 +348,8 @@ void CoupledBodyTextWithLink::render(bool hideParaHeader) {
   ofstream outfile(m_outputFile);
   string inLine{"not found"};
   ParaHeader paraHeaderLoaded;
-  while (!infile.eof()) // To get all the lines.
-  {
-    getline(infile, inLine); // Saves the line in inLine.
+  while (!infile.eof()) {
+    getline(infile, inLine);
     if (debug >= LOG_INFO) {
       METHOD_OUTPUT << inLine << endl;
     }

@@ -41,8 +41,7 @@ void convertFromGB2312ToUtf8(string referFile, string format, FILE_TYPE type,
     if (debug >= LOG_INFO)
       FUNCTION_OUTPUT << inputFile << endl;
     ifstream infile(inputFile);
-    if (!infile) // doesn't exist
-    {
+    if (!infile) {
       FUNCTION_OUTPUT << "file doesn't exist:" << inputFile << endl;
       return;
     }

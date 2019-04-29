@@ -150,7 +150,8 @@ protected:
   // used for numbering
   string m_inLine{};
   size_t m_para{0};
-  size_t m_lineNo{1}; // LINE index within each group
+  // LINE index within each group
+  size_t m_lineNo{1};
   ParaHeader m_paraHeader;
 
   struct LineInfo {

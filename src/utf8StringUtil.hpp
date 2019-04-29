@@ -18,10 +18,10 @@ const int LOG_INFO = 2;
 static const string leadingChar = R"(P)";
 static const string middleChar = R"(L)";
 static const string invalidLineNumber = R"(P0L0)";
-static const string topParagraphIndicator =
-    R"(top)"; // of the body Text file
-static const string bottomParagraphIndicator =
-    R"(bottom)"; // of the body Text file
+// top of the body Text file
+static const string topParagraphIndicator = R"(top)";
+// bottom of the body Text file
+static const string bottomParagraphIndicator = R"(bottom)";
 
 #define SEPERATE(x, y)                                                         \
   cout << "*************************line " << __LINE__ << ": " << x << y       \
@@ -30,12 +30,12 @@ static const string bottomParagraphIndicator =
 #define METHOD_OUTPUT                                                          \
   cout << typeid(*this).name() << "::" << __func__ << "              "
 #define FUNCTION_OUTPUT cout << __func__ << "              "
-
-static const string lineNumberIdBeginChars =
-    R"(id="P)"; // of each paragraph and line number
-static const string topIdBeginChars = R"(id="top")"; // of the body Text file
-static const string bottomIdBeginChars =
-    R"(id="bottom")"; // of the body Text file
+// start of each paragraph and line number
+static const string lineNumberIdBeginChars = R"(id="P)";
+// top of the body Text file
+static const string topIdBeginChars = R"(id="top")";
+// bottom of the body Text file
+static const string bottomIdBeginChars = R"(id="bottom")";
 static const string imageGroupBeginChars = R"(<div)";
 
 static const string citationChapterNo = R"(第)";
@@ -45,7 +45,8 @@ static const string defaultUnit = R"(回)";
 static const string attachmentUnit = R"(篇)";
 static const string searchUnit = R"(条)";
 
-static const string brTab = "<br>"; // start and end of each LINE
+// start and end of each LINE
+static const string brTab = "<br>";
 static const string displaySpace = R"( )";
 static const string emptyString = "";
 static const string CR{0x0D};

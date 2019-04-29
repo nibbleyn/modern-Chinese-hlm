@@ -2,8 +2,8 @@
 
 string scanForSubLinks(const string &original, const string &fromFile) {
   string result;
-  using SubStringOffsetTable =
-      std::map<size_t, size_t>; // start offset -> end offset
+  // start offset -> end offset
+  using SubStringOffsetTable = std::map<size_t, size_t>;
   SubStringOffsetTable subStrings;
   string startTag = linkStartChars;
   string endTag = linkEndChars;

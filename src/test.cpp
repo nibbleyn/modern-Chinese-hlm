@@ -228,7 +228,8 @@ void testLinkFromMain(string fromFile, string linkString,
   FUNCTION_OUTPUT << "original link: " << endl;
   FUNCTION_OUTPUT << linkString << endl;
   LinkFromMain lfm(fromFile, linkString);
-  lfm.readReferFileName(linkString); // second step of construction
+  // second step of construction
+  lfm.readReferFileName(linkString);
   lfm.fixFromString(linkString);
   if (needToGenerateOrgLink)
     lfm.generateLinkToOrigin();
@@ -244,7 +245,8 @@ void testLinkFromAttachment(string fromFile, string linkString,
   FUNCTION_OUTPUT << "original link: " << endl;
   FUNCTION_OUTPUT << linkString << endl;
   LinkFromAttachment lfm(fromFile, linkString);
-  lfm.readReferFileName(linkString); // second step of construction
+  // second step of construction
+  lfm.readReferFileName(linkString);
   lfm.fixFromString(linkString);
   FUNCTION_OUTPUT << lfm.getAnnotation() << endl;
   if (needToGenerateOrgLink)
@@ -260,8 +262,8 @@ void testLink(CoupledLink &lfm, string linkString, bool needToGenerateOrgLink) {
   FUNCTION_OUTPUT << "original link: " << endl;
   FUNCTION_OUTPUT << linkString << endl;
 
-  //
-  lfm.readReferFileName(linkString); // second step of construction
+  // second step of construction
+  lfm.readReferFileName(linkString);
   lfm.fixFromString(linkString);
   if (needToGenerateOrgLink)
     lfm.generateLinkToOrigin();
@@ -300,7 +302,8 @@ void testLinkOperation() {
   FUNCTION_OUTPUT << "original link: " << endl;
   FUNCTION_OUTPUT << linkString << endl;
   LinkFromMain lfm("75", linkString);
-  lfm.readReferFileName(linkString); // second step of construction
+  // second step of construction
+  lfm.readReferFileName(linkString);
   FUNCTION_OUTPUT << "change to refer to file 57. " << endl;
   lfm.fixReferFile(57);
   lfm.fixFromString(linkString);
@@ -387,7 +390,8 @@ void testLinkOperation() {
   FUNCTION_OUTPUT << "original link: " << endl;
   FUNCTION_OUTPUT << linkString2 << endl;
   LinkFromAttachment lfm1("03_9", linkString2);
-  lfm1.readReferFileName(linkString2); // second step of construction
+  // second step of construction
+  lfm1.readReferFileName(linkString2);
   FUNCTION_OUTPUT << "change to refer to file 55_3. " << endl;
   lfm1.fixReferFile(55, 3);
   lfm1.fixFromString(linkString2);
@@ -444,11 +448,10 @@ void CoupledBodyTextWithLink::printStringInLines() {
   }
 
   string line;
-  while (!checkFile.eof()) // To get you all the lines.
-  {
+  while (!checkFile.eof()) {
     getline(checkFile, line);
     if (debug >= LOG_INFO) {
-      METHOD_OUTPUT << line << endl; // excluding start line
+      METHOD_OUTPUT << line << endl;
       METHOD_OUTPUT << utf8length(line) << endl;
       METHOD_OUTPUT << getLinesOfDisplayText(line) << endl;
     }
@@ -558,7 +561,8 @@ void testListContainer() {
                                      "菱角菱花", "第80章1.1节:", "94");
 
   LinkFromMain lfm("", link);
-  lfm.readReferFileName(link); // second step of construction
+  // second step of construction
+  lfm.readReferFileName(link);
   lfm.fixFromString(link);
   link = lfm.asString();
 
@@ -587,8 +591,8 @@ void testTableContainer() {
   container.appendLeftParagraphInBodyText("line1-left");
   container.appendRightParagraphInBodyText("line1-right");
   container.appendLeftParagraphInBodyText("line2-left");
-  container.appendRightParagraphInBodyText(
-      ""); // if only 3 is added, patch last right part
+  // if only 3 is added, patch last right part
+  container.appendRightParagraphInBodyText(emptyString);
   container.insertBackParagrapHeader(0, 4, searchUnit);
   container.assembleBackToHTM("content index table", "content");
   FUNCTION_OUTPUT << "result is in file: " << container.getOutputFilePath()

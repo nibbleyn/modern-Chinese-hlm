@@ -4,9 +4,8 @@ extern int debug;
 
 int LineNumber::StartNumber = START_PARA_NUMBER;
 int LineNumber::Limit = START_PARA_NUMBER * 2;
-
-static const string endOfLineNumber =
-    R"(")"; // to try special case like "bottom"
+// to try special case like "bottom"
+static const string endOfLineNumber = R"(")";
 static const string endOfGeneratedLineNumber = R"(>)";
 static const string inBetweenTwoParas = R"(" href=")";
 static const string inBetweenParaAndLineNumber = R"(.)";
@@ -39,7 +38,8 @@ void LineNumber::readFromString(const string &name) {
                       << endl;
     }
   } else
-    m_paraNumber = TurnToInt(name.substr(0)); // temporarily accept non-P number
+    // temporarily accept non-P number
+    m_paraNumber = TurnToInt(name.substr(0));
 }
 
 /**
@@ -55,8 +55,8 @@ size_t LineNumber::loadFirstFromContainedLine(const string &containedLine,
     begin = HiddenLineNumberStart;
     beginPos = containedLine.find(begin, after);
   }
-  if (beginPos != string::npos) // found name in lineName
-  {
+  // found name in lineName
+  if (beginPos != string::npos) {
     string end = linkEndChars;
     auto endPos = containedLine.find(end, beginPos);
 
@@ -122,9 +122,11 @@ bool LineNumber::isWithinLineRange(int minPara, int maxPara, int minLine,
   bool lessThanMax = true;
   // only support para now
   if (minPara != 0)
-    biggerThanMin = m_paraNumber >= minPara; // inclusive
+    // inclusive
+    biggerThanMin = m_paraNumber >= minPara;
   if (maxPara != 0)
-    lessThanMax = m_paraNumber <= maxPara; // inclusive
+    // inclusive
+    lessThanMax = m_paraNumber <= maxPara;
   return (biggerThanMin and lessThanMax);
 }
 

@@ -129,11 +129,11 @@ void CoupledBodyText::fixTagPairBegin(const string &signOfTagAfterReplaceTag,
   // continue reading till first paragraph header
   string inLine{""};
 
-  while (!infile.eof()) // To get all the lines.
-  {
-    getline(infile, inLine); // Saves the line in inLine.
+  while (!infile.eof()) {
+    getline(infile, inLine);
     unsigned int before = 0, after = 0;
-    auto orgLine = inLine; // inLine would change in loop below
+    // inLine would change in loop below
+    auto orgLine = inLine;
     auto signBegin = inLine.find(signOfTagAfterReplaceTag);
     if (signBegin != string::npos) {
       // at most two
@@ -165,16 +165,16 @@ void CoupledBodyText::fixTagPairEnd(const string &signOfTagBeforeReplaceTag,
   // continue reading till first paragraph header
   string inLine{""};
   auto cutLength{0};
-  while (!infile.eof()) // To get all the lines.
-  {
-    getline(infile, inLine); // Saves the line in inLine.
+  while (!infile.eof()) {
+    getline(infile, inLine);
     occurences.clear();
     cutLength = 0;
-    auto orgLine = inLine; // inLine would change in loop below
+    // inLine would change in loop below
+    auto orgLine = inLine;
     do {
       auto signBegin = inLine.find(signOfTagBeforeReplaceTag);
-      if (signBegin == string::npos) // no signOfTagBeforeReplaceTag any more,
-                                     // continue with next line
+      // no signOfTagBeforeReplaceTag any more, continue with next line
+      if (signBegin == string::npos)
         break;
       auto fromBegin = inLine.find(from, signBegin);
       if (not skipTagPairBegin.empty()) {
@@ -199,8 +199,8 @@ void CoupledBodyText::fixTagPairEnd(const string &signOfTagBeforeReplaceTag,
                       << endl;
       FUNCTION_OUTPUT << orgLine.substr(cutLength + signBegin) << endl;
       occurences.insert(orgFromBegin);
-      inLine = inLine.substr(fromBegin +
-                             from.length()); // find next link in the inLine
+      // find next link in the inLine
+      inLine = inLine.substr(fromBegin + from.length());
       cutLength += fromBegin + from.length();
     } while (1);
     for (const auto &pos : occurences) {
@@ -223,9 +223,8 @@ void fixTagPairEnd() {
 
 void fixTagsOfMainBodyText(int minTarget, int maxTarget) {
   bool fixTag = false;
-  for (const auto &file :
-       buildFileSet(minTarget, maxTarget)) // files need to be fixed
-  {
+  // files need to be fixed
+  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     CoupledBodyTextWithLink bodyText;
     bodyText.setFilePrefixFromFileType(FILE_TYPE::MAIN);
     bodyText.setFileAndAttachmentNumber(file);
@@ -245,8 +244,7 @@ void CoupledContainer::makeSingleLineHeaderAndFooter() {
   string outputHtmlFile = getoutputHtmlFilepath();
 
   ifstream inHtmlFile(inputHtmlFile);
-  if (!inHtmlFile) // doesn't exist
-  {
+  if (!inHtmlFile) {
     FUNCTION_OUTPUT << "file doesn't exist:" << inputHtmlFile << endl;
     return;
   }
@@ -254,9 +252,8 @@ void CoupledContainer::makeSingleLineHeaderAndFooter() {
   string line{""};
 
   string singleLineHeader;
-  while (!inHtmlFile.eof()) // To get you all the lines.
-  {
-    getline(inHtmlFile, line); // Saves the line in line.
+  while (!inHtmlFile.eof()) {
+    getline(inHtmlFile, line);
     auto linkBegin = line.find(topIdBeginChars);
     if (linkBegin != string::npos) {
       break;
@@ -267,16 +264,17 @@ void CoupledContainer::makeSingleLineHeaderAndFooter() {
     }
   }
   FUNCTION_OUTPUT << singleLineHeader << endl;
-  outHtmlFile << singleLineHeader << endl; // excluding start line
-  outHtmlFile << line << endl;             // output start line
+  // excluding start line
+  outHtmlFile << singleLineHeader << endl;
+  // output start line
+  outHtmlFile << line << endl;
   if (inHtmlFile.eof()) {
     FUNCTION_OUTPUT << "source " << inputHtmlFile
                     << " has no start mark:" << topIdBeginChars << endl;
     return;
   }
-  while (!inHtmlFile.eof()) // To get you all the lines.
-  {
-    getline(inHtmlFile, line);   // Saves the line in line.
+  while (!inHtmlFile.eof()) {
+    getline(inHtmlFile, line);
     outHtmlFile << line << endl; // output line
     auto linkEnd = line.find(bottomIdBeginChars);
 
@@ -290,15 +288,14 @@ void CoupledContainer::makeSingleLineHeaderAndFooter() {
     return;
   }
   string singleLineFooter;
-  while (!inHtmlFile.eof()) // To get you all the lines.
-  {
-    getline(inHtmlFile, line); // Saves the line in line.
+  while (!inHtmlFile.eof()) {
+    getline(inHtmlFile, line);
     line = std::regex_replace(line, std::regex("(?:\\t)"), " ");
     line = std::regex_replace(line, std::regex("(?:\\r\\n|\\n|\\r)"), "");
     singleLineFooter += line;
   }
   FUNCTION_OUTPUT << singleLineFooter << endl;
-  outHtmlFile << singleLineFooter << endl; // excluding start line
+  outHtmlFile << singleLineFooter << endl;
   if (debug >= LOG_INFO)
     FUNCTION_OUTPUT << "makeSingleLineHeaderAndFooter finished for "
                     << outputHtmlFile << endl;
@@ -307,15 +304,13 @@ void CoupledContainer::makeSingleLineHeaderAndFooter() {
 void CoupledContainer::fetchOriginalAndTranslatedTitles() {
   string inputHtmlFile = getInputHtmlFilePath();
   ifstream inHtmlFile(inputHtmlFile);
-  if (!inHtmlFile) // doesn't exist
-  {
+  if (!inHtmlFile) {
     FUNCTION_OUTPUT << "file doesn't exist:" << inputHtmlFile << endl;
     return;
   }
   string line{""};
-  while (!inHtmlFile.eof()) // To get you all the lines.
-  {
-    getline(inHtmlFile, line); // Saves the line in line.
+  while (!inHtmlFile.eof()) {
+    getline(inHtmlFile, line);
     auto linkBegin = line.find(topIdBeginChars);
     if (linkBegin != string::npos) {
       break;
@@ -342,8 +337,7 @@ void CoupledContainer::fixHeaderAndFooter() {
   string outputHtmlFile = getoutputHtmlFilepath();
 
   ifstream inHtmlFile(inputHtmlFile);
-  if (!inHtmlFile) // doesn't exist
-  {
+  if (!inHtmlFile) {
     FUNCTION_OUTPUT << "file doesn't exist:" << inputHtmlFile << endl;
     return;
   }
@@ -351,9 +345,8 @@ void CoupledContainer::fixHeaderAndFooter() {
   string line{""};
 
   string singleLineHeader;
-  while (!inHtmlFile.eof()) // To get you all the lines.
-  {
-    getline(inHtmlFile, line); // Saves the line in line.
+  while (!inHtmlFile.eof()) {
+    getline(inHtmlFile, line);
     auto linkBegin = line.find(topIdBeginChars);
     if (linkBegin != string::npos) {
       break;
@@ -362,16 +355,16 @@ void CoupledContainer::fixHeaderAndFooter() {
   }
   fixHeader(singleLineHeader, m_file);
   FUNCTION_OUTPUT << singleLineHeader << endl;
-  outHtmlFile << singleLineHeader << endl; // excluding start line
-  outHtmlFile << line << endl;             // output start line
+  outHtmlFile << singleLineHeader << endl;
+  // output start line
+  outHtmlFile << line << endl;
   if (inHtmlFile.eof()) {
     FUNCTION_OUTPUT << "source " << inputHtmlFile
                     << " has no start mark:" << topIdBeginChars << endl;
     return;
   }
-  while (!inHtmlFile.eof()) // To get you all the lines.
-  {
-    getline(inHtmlFile, line);   // Saves the line in line.
+  while (!inHtmlFile.eof()) {
+    getline(inHtmlFile, line);
     outHtmlFile << line << endl; // output line
     auto linkEnd = line.find(bottomIdBeginChars);
 
@@ -385,14 +378,13 @@ void CoupledContainer::fixHeaderAndFooter() {
     return;
   }
   string singleLineFooter;
-  while (!inHtmlFile.eof()) // To get you all the lines.
-  {
-    getline(inHtmlFile, line); // Saves the line in line.
+  while (!inHtmlFile.eof()) {
+    getline(inHtmlFile, line);
     singleLineFooter += line;
   }
   fixFooter(singleLineFooter, m_file);
   FUNCTION_OUTPUT << singleLineFooter << endl;
-  outHtmlFile << singleLineFooter << endl; // excluding start line
+  outHtmlFile << singleLineFooter << endl;
   if (debug >= LOG_INFO)
     FUNCTION_OUTPUT << "fixHeaderAndFooter finished for " << outputHtmlFile
                     << endl;
@@ -430,7 +422,7 @@ void CoupledBodyText::reformatParagraphToSmallerSize(
   // continue reading
   string inLine;
   while (!infile.eof()) {
-    getline(infile, inLine); // Saves the line in inLine.
+    getline(infile, inLine);
     size_t end = -1;
     do {
       string line = utf8substr(inLine, end + 1, end, utf8length(sampleBlock));
@@ -457,9 +449,8 @@ void CoupledBodyText::fixPersonalView() {
   }
   ofstream outfile(m_outputFile);
   bool unpairFound{false};
-  while (!infile.eof()) // To get all the lines.
-  {
-    getline(infile, m_inLine); // Saves the line in m_inLine.
+  while (!infile.eof()) {
+    getline(infile, m_inLine);
     if (debug >= LOG_INFO)
       FUNCTION_OUTPUT << m_inLine << endl;
     if (isLeadingBr(m_inLine)) {
@@ -473,8 +464,8 @@ void CoupledBodyText::fixPersonalView() {
     auto personalCommentBegin = m_inLine.find(personalCommentStartChars);
     auto personalCommentEnd = m_inLine.find(personalCommentEndChars);
     if (unpairFound == true) {
-      if (ln.valid()) // remove old line number
-      {
+      // remove old line number if invalid
+      if (ln.valid()) {
         removeOldLineNumber();
       }
       removeNbspsAndSpaces();
@@ -604,12 +595,12 @@ void CoupledBodyTextWithLink::removePersonalCommentsOverNumberedFiles() {
   }
   ofstream outfile(m_outputFile);
   string inLine{"not found"};
-  while (!infile.eof()) // To get all the lines.
-  {
-    getline(infile, inLine); // Saves the line in inLine.
+  while (!infile.eof()) {
+    getline(infile, inLine);
     if (debug >= LOG_INFO)
       METHOD_OUTPUT << inLine << endl;
-    auto orgLine = inLine; // inLine would change in loop below
+    // inLine would change in loop below
+    auto orgLine = inLine;
     string start = personalCommentStartChars;
     string end = personalCommentEndChars;
     string to_replace = "";
@@ -666,9 +657,7 @@ void removePersonalViewpoints() {
   FUNCTION_OUTPUT << "to be implemented." << endl;
   FUNCTION_OUTPUT << "to remove <u> pairs." << endl;
   FUNCTION_OUTPUT << "and to remove personal attachment link." << endl;
-  for (const auto &file :
-       buildFileSet(minTarget, maxTarget)) // files need to be fixed
-  {
+  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     CoupledBodyTextWithLink bodyText;
     bodyText.setFilePrefixFromFileType(FILE_TYPE::MAIN);
     bodyText.setFileAndAttachmentNumber(file);

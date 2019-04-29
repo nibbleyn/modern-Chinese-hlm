@@ -49,17 +49,16 @@ void TableContainer::addExistingFrontParagraphs() {
   string starterFile = m_bodyTextInputFilePath + BODY_TEXT_STARTER;
 
   ifstream inStarterFile(starterFile);
-  if (!inStarterFile) // doesn't exist
-  {
+  if (!inStarterFile) {
     METHOD_OUTPUT << "Starter file doesn't exist:" << starterFile << endl;
     return;
   }
 
-  while (!inStarterFile.eof()) // To get you all the lines.
-  {
+  while (!inStarterFile.eof()) {
     string line{""};
-    getline(inStarterFile, line); // Saves the line in line.
-    outfile << line << endl;      // excluding start line
+    getline(inStarterFile, line);
+    // excluding start line
+    outfile << line << endl;
   }
 }
 
@@ -73,17 +72,16 @@ void TableContainer::finishBodyTextFile() {
   string dessertFile = m_bodyTextInputFilePath + BODY_TEXT_DESSERT;
 
   ifstream inDessertFile(dessertFile);
-  if (!inDessertFile) // doesn't exist
-  {
+  if (!inDessertFile) {
     METHOD_OUTPUT << "Dessert file doesn't exist:" << dessertFile << endl;
     return;
   }
 
-  while (!inDessertFile.eof()) // To get you all the lines.
-  {
+  while (!inDessertFile.eof()) {
     string line{""};
-    getline(inDessertFile, line); // Saves the line in line.
-    outfile << line << endl;      // excluding start line
+    getline(inDessertFile, line);
+    // excluding start line
+    outfile << line << endl;
   }
 }
 
@@ -168,25 +166,24 @@ void GenericContainer::assembleBackToHTM(const string &title,
   string outputFile = getoutputHtmlFilepath();
 
   ifstream inHtmlFile(inputHtmlFile);
-  if (!inHtmlFile) // doesn't exist
-  {
+  if (!inHtmlFile) {
     METHOD_OUTPUT << "file doesn't exist:" << inputHtmlFile << endl;
     return;
   }
   ifstream inBodyTextFile(inputBodyTextFile);
-  if (!inBodyTextFile) // doesn't exist
-  {
+  if (!inBodyTextFile) {
     METHOD_OUTPUT << "file doesn't exist:" << inputBodyTextFile << endl;
     return;
   }
   ofstream outfile(outputFile);
   string line{""};
   bool started = false;
-  string start = topIdBeginChars;  // first line
-  string end = bottomIdBeginChars; // last line
-  while (!inHtmlFile.eof())        // To get you all the lines.
-  {
-    getline(inHtmlFile, line); // Saves the line in line.
+  // first line
+  string start = topIdBeginChars;
+  // last line
+  string end = bottomIdBeginChars;
+  while (!inHtmlFile.eof()) {
+    getline(inHtmlFile, line);
     if (not started) {
       auto linkBegin = line.find(start);
       if (linkBegin != string::npos) {
@@ -204,8 +201,9 @@ void GenericContainer::assembleBackToHTM(const string &title,
           line.replace(titleBegin, defaultDisplayTitle.length(), displayTitle);
       }
       if (debug >= LOG_INFO)
-        METHOD_OUTPUT << line << endl; // including end line
-      outfile << line << endl;         // excluding start line
+        METHOD_OUTPUT << line << endl;
+      // excluding start line
+      outfile << line << endl;
     }
   }
   if (inHtmlFile.eof() and not started) {
@@ -214,16 +212,15 @@ void GenericContainer::assembleBackToHTM(const string &title,
     return;
   }
   bool ended = false;
-  while (!inBodyTextFile.eof()) // To get you all the lines.
-  {
-    getline(inBodyTextFile, line); // Saves the line in line.
+  while (!inBodyTextFile.eof()) {
+    getline(inBodyTextFile, line);
     if (debug >= LOG_INFO)
-      METHOD_OUTPUT << line << endl; // including end line
-    outfile << line << endl;         // including end line
+      METHOD_OUTPUT << line << endl;
+    // including end line
+    outfile << line << endl;
   }
-  while (!inHtmlFile.eof()) // To get you all the lines.
-  {
-    getline(inHtmlFile, line); // Saves the line in line.
+  while (!inHtmlFile.eof()) {
+    getline(inHtmlFile, line);
     if (not ended) {
       auto linkEnd = line.find(end);
       if (linkEnd != string::npos) {
@@ -232,8 +229,9 @@ void GenericContainer::assembleBackToHTM(const string &title,
       }
     } else {
       if (debug >= LOG_INFO)
-        METHOD_OUTPUT << line << endl; // including end line
-      outfile << line << endl;         // excluding end line
+        METHOD_OUTPUT << line << endl;
+      // including end line
+      outfile << line << endl;
     }
   }
 }

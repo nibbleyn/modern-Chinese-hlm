@@ -17,7 +17,8 @@ string currentTimeStamp() {
  * @return current Date and Time
  */
 string currentDateTime() {
-  time_t t = time(0); // get time now
+  // get time now
+  time_t t = time(0);
   tm *now = localtime(&t);
 
   ostringstream ss_msg;
@@ -81,14 +82,14 @@ void CoupledContainer::assembleBackToHTM(const string &title,
   string outputFile = getoutputHtmlFilepath();
 
   ifstream inHtmlFile(inputHtmlFile);
-  if (!inHtmlFile) // doesn't exist
-  {
+  // if file doesn't exist
+  if (!inHtmlFile) {
     METHOD_OUTPUT << "HTM file doesn't exist:" << inputHtmlFile << endl;
     return;
   }
   ifstream inBodyTextFile(inputBodyTextFile);
-  if (!inBodyTextFile) // doesn't exist
-  {
+  // if file doesn't exist
+  if (!inBodyTextFile) {
     METHOD_OUTPUT << "Body text file doesn't exist:" << inputBodyTextFile
                   << endl;
     return;
@@ -97,12 +98,12 @@ void CoupledContainer::assembleBackToHTM(const string &title,
   ofstream outfile(outputFile);
   string line{""};
   bool started = false;
-
-  string start = topIdBeginChars;  // first line
-  string end = bottomIdBeginChars; // last line
-  while (!inHtmlFile.eof())        // To get you all the lines.
-  {
-    getline(inHtmlFile, line); // Saves the line in line.
+  // first line
+  string start = topIdBeginChars;
+  // last line
+  string end = bottomIdBeginChars;
+  while (!inHtmlFile.eof()) {
+    getline(inHtmlFile, line);
     if (not started) {
       auto linkBegin = line.find(start);
       if (linkBegin != string::npos) {
@@ -119,7 +120,8 @@ void CoupledContainer::assembleBackToHTM(const string &title,
         if (titleBegin != string::npos)
           line.replace(titleBegin, defaultDisplayTitle.length(), displayTitle);
       }
-      outfile << line << endl; // excluding start line
+      // excluding start line
+      outfile << line << endl;
     }
   }
   if (inHtmlFile.eof() and not started) {
@@ -128,11 +130,11 @@ void CoupledContainer::assembleBackToHTM(const string &title,
     return;
   }
   bool ended = false;
-  while (!inBodyTextFile.eof()) // To get you all the lines.
-  {
-    getline(inBodyTextFile, line); // Saves the line in line.
+  while (!inBodyTextFile.eof()) {
+    getline(inBodyTextFile, line);
     if (not ended) {
-      outfile << line << endl; // including end line
+      // including end line
+      outfile << line << endl;
       auto linkEnd = line.find(end);
       if (linkEnd != string::npos) {
         ended = true;
@@ -146,9 +148,8 @@ void CoupledContainer::assembleBackToHTM(const string &title,
     return;
   }
   ended = false;
-  while (!inHtmlFile.eof()) // To get you all the lines.
-  {
-    getline(inHtmlFile, line); // Saves the line in line.
+  while (!inHtmlFile.eof()) {
+    getline(inHtmlFile, line);
 
     if (not ended) {
       auto linkEnd = line.find(end);
@@ -157,9 +158,11 @@ void CoupledContainer::assembleBackToHTM(const string &title,
         continue;
       }
     } else {
-      outfile << line << endl; // excluding end line
+      // excluding end line
+      outfile << line << endl;
       if (line.find(htmlFileFinalLine) != string::npos) {
-        break; // including this final line
+        // including this final line
+        break;
       }
     }
   }
@@ -214,8 +217,8 @@ void CoupledContainer::dissembleFromHTM() {
   string outputBodyTextFile = getBodyTextFilePath();
 
   ifstream infile(inputHtmlFile);
-  if (!infile) // doesn't exist
-  {
+  // if file doesn't exist
+  if (!infile) {
     METHOD_OUTPUT << "file doesn't exist:" << inputHtmlFile << endl;
     return;
   }
@@ -225,26 +228,28 @@ void CoupledContainer::dissembleFromHTM() {
 
   string start = topIdBeginChars;
   string end = bottomIdBeginChars;
-  while (!infile.eof()) // To get you all the lines.
-  {
-    getline(infile, line); // Saves the line in line.
+  while (!infile.eof()) {
+    getline(infile, line);
     if (not started) {
       auto linkBegin = line.find(start);
       if (linkBegin != string::npos) {
         started = true;
-        outfile << line << endl; // including the top paragraph
+        // including the top paragraph
+        outfile << line << endl;
         continue;
       }
-    } else // started
-    {
+    } else {
+      // started
       if (not ended) {
         auto linkEnd = line.find(end);
         if (linkEnd != string::npos) {
           ended = true;
-          outfile << line << endl; // including the end paragraph
+          // including the end paragraph
+          outfile << line << endl;
           break;
         } else
-          outfile << line << endl; // including all lines in between
+          // including all lines in between
+          outfile << line << endl;
         continue;
       }
     }
@@ -269,8 +274,8 @@ void CoupledContainer::fixReturnLinkForAttachmentFile() {
   string outputFile = getoutputHtmlFilepath();
 
   ifstream inHtmlFile(inputHtmlFile);
-  if (!inHtmlFile) // doesn't exist
-  {
+  // if file doesn't exist
+  if (!inHtmlFile) {
     METHOD_OUTPUT << "HTM file doesn't exist:" << inputHtmlFile << endl;
     return;
   }
@@ -279,39 +284,40 @@ void CoupledContainer::fixReturnLinkForAttachmentFile() {
   string line{""};
   string referFile =
       m_file + attachmentFileMiddleChar + TurnToString(m_attachmentNumber);
-  while (!inHtmlFile.eof()) // To get you all the lines.
-  {
-    getline(inHtmlFile, line); // Saves the line in line.
+  while (!inHtmlFile.eof()) {
+    getline(inHtmlFile, line);
     auto textBegin = line.find(returnLinkFromAttachmentHeader);
     if (textBegin == string::npos) {
       outfile << line << endl;
       continue;
     } else {
-      auto orgLine = line; // inLine would change in loop below
+      // varible line would change in loop below
+      auto orgLine = line;
       string link{""};
       while (true) {
         auto linkBegin = line.find(linkStartChars);
-        if (linkBegin == string::npos) // no link any more, continue with next
-                                       // line
+        // no link any more, continue with next line
+        if (linkBegin == string::npos)
           break;
         link = getWholeStringBetweenTags(line, linkStartChars, linkEndChars);
-        LinkFromAttachment lfm(referFile,
-                               link); // get only type and annotation
+        // get only type and annotation
+        LinkFromAttachment lfm(referFile, link);
         if (lfm.getAnnotation() == returnLinkFromAttachmentHeader)
           break;
         else
-          line = line.substr(linkBegin +
-                             lfm.length()); // find next link in the line
+          // find next link in the line
+          line = line.substr(linkBegin + lfm.length());
       }
       if (not link.empty()) {
         LinkFromAttachment lfm(referFile, link);
         // special hack to make sure using a0... as return file name
-        lfm.setTypeThruFileNamePrefix("main"); // must return to main html
+        // must return to main html
+        lfm.setTypeThruFileNamePrefix(MAIN_TYPE_HTML_TARGET);
         lfm.fixReferFile(TurnToInt(m_file));
         AttachmentNumber num(TurnToInt(m_file), m_attachmentNumber);
         lfm.fixReferPara(LinkFromMain::getFromLineOfAttachment(num));
-        if (lfm.needUpdate()) // replace old value
-        {
+        // replace old value
+        if (lfm.needUpdate()) {
           auto orglinkBegin = orgLine.find(link);
           orgLine.replace(orglinkBegin, link.length(), lfm.asString());
         }

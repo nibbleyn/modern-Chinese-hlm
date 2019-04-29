@@ -119,15 +119,15 @@ AttachmentNumber getAttachmentNumber(const string &filename) {
   AttachmentNumber num(0, 0);
   string start = getHtmlFileNamePrefix(FILE_TYPE::ATTACHMENT);
   auto fileBegin = filename.find(start);
-  if (fileBegin == string::npos) // referred file not found
-  {
+  // referred file not found
+  if (fileBegin == string::npos) {
     return num;
   }
   auto chapter = filename.substr(fileBegin + start.length(), 2);
   num.first = TurnToInt(chapter);
   auto seqStart = filename.find(attachmentFileMiddleChar);
-  if (seqStart == string::npos) // no file to refer
-  {
+  // no file to refer
+  if (seqStart == string::npos) {
     return num;
   }
   auto seq = filename.substr(seqStart + 1, filename.length() - seqStart);
@@ -156,7 +156,7 @@ void CoupledLink::loadReferenceAttachmentList() {
   string line;
   // To search in all the lines in referred file
   while (!infile.eof()) {
-    getline(infile, line); // Saves the line
+    getline(infile, line);
     if (line.empty())
       break;
 

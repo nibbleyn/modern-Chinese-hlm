@@ -7,8 +7,10 @@ void LinkFromMain::generateLinkToOrigin() {
   if (debug >= LOG_INFO)
     METHOD_OUTPUT << "create link to original main html thru key: " << m_usedKey
                   << endl;
-  auto reservedType = m_type;   // only LINK_TYPE::MAIN has origin member
-  m_type = LINK_TYPE::ORIGINAL; // temporarily change type to get right path
+  // only LINK_TYPE::MAIN has origin member
+  auto reservedType = m_type;
+  // temporarily change type to get right path
+  m_type = LINK_TYPE::ORIGINAL;
   string to =
       fixLinkFromOriginalTemplate(getPathOfReferenceFile(), getChapterName(),
                                   m_usedKey, emptyString, m_referPara);
@@ -68,8 +70,8 @@ bool LinkFromMain::readReferFileName(const string &linkString) {
         linkString, referFileMiddleChar, HTML_SUFFIX);
     // in case there is a ..\ before file name
     auto fileBegin = refereFileName.find(getHtmlFileNamePrefix());
-    if (fileBegin == string::npos) // not find a right file type to refer
-    {
+    // not find a right file type to refer
+    if (fileBegin == string::npos) {
       METHOD_OUTPUT << "unsupported type in refer file name in link: "
                     << refereFileName << endl;
       return false;

@@ -46,8 +46,8 @@ string fixLinkFromSameFileTemplate(LINK_DISPLAY_TYPE type, const string &key,
     replacePart(link, R"(#YY)", emptyString);
   } else
     replacePart(link, "YY", referPara);
-  if (key.empty()) // use top/bottom as reference name
-  {
+  // in case use top/bottom as reference name
+  if (key.empty()) {
     replacePart(link, R"(<sub hidden>WW</sub>)", emptyString);
     replacePart(link, R"(title="QQ")", emptyString);
   } else {
@@ -90,8 +90,8 @@ string fixLinkFromMainTemplate(const string &path, const string &filename,
     replacePart(link, R"(#YY)", emptyString);
   } else
     replacePart(link, "YY", referPara);
-  if (key.empty()) // e.g. use top/bottom as reference name
-  {
+  // in case use top/bottom as reference name
+  if (key.empty()) {
     replacePart(link, R"(<sub hidden>WW</sub>)", emptyString);
     replacePart(link, R"(title="QQ")", emptyString);
   } else {
@@ -154,8 +154,8 @@ string fixLinkFromOriginalTemplate(const string &path, const string &filename,
     replacePart(link, R"(#YY)", emptyString);
   } else
     replacePart(link, "YY", referPara);
-  if (key.empty()) // use top/bottom as reference name
-  {
+  // in case use top/bottom as reference name
+  if (key.empty()) {
     replacePart(link, R"(<sub hidden>WW</sub>)", emptyString);
     replacePart(link, R"(title="QQ")", emptyString);
   } else {
@@ -196,8 +196,8 @@ string fixLinkFromJPMTemplate(const string &path, const string &filename,
     replacePart(link, R"(#YY)", emptyString);
   } else
     replacePart(link, "YY", referPara);
-  if (key.empty()) // use top/bottom as reference name
-  {
+  // in case use top/bottom as reference name
+  if (key.empty()) {
     replacePart(link, R"(<sub hidden>WW</sub>)", emptyString);
     replacePart(link, R"(title="QQ")", emptyString);
   } else {
@@ -253,7 +253,8 @@ string fixLinkFromImageTemplate(const string &fullReferFilenameWithPathExt,
   if (displayProperty != unhiddenDisplayProperty) {
     if (displayProperty == hiddenDisplayProperty)
       replacePart(link, unhiddenDisplayProperty, hiddenDisplayProperty);
-    else // direct
+    else
+      // direct
       replacePart(link, unhiddenDisplayProperty + displaySpace, emptyString);
   }
   replacePart(link, "XX", fullReferFilenameWithPathExt);
@@ -322,7 +323,7 @@ LINK_TYPE getLinKTypeFromReferFileName(const string &refereFileName) {
  * @param prefix type prefix
  */
 void Link::setTypeThruFileNamePrefix(const string &prefix) {
-  if (prefix == "main")
+  if (prefix == MAIN_TYPE_HTML_TARGET)
     m_type = LINK_TYPE::MAIN;
 }
 
@@ -374,8 +375,8 @@ void Link::readReferPara(const string &linkString) {
   string htmStart = TARGET_FILE_EXT + referParaMiddleChar;
   if (m_type == LINK_TYPE::SAMEPAGE)
     htmStart = referParaMiddleChar;
-  if (linkString.find(htmStart) == string::npos) // no file to refer
-  {
+  // no file to refer
+  if (linkString.find(htmStart) == string::npos) {
     if (debug >= LOG_EXCEPTION and m_type != LINK_TYPE::ATTACHMENT)
       METHOD_OUTPUT << "no # found to read referPara from link: " << linkString
                     << endl;

@@ -61,8 +61,7 @@ void CoupledBodyTextWithLink::doStatisticsByScanningLines(
     infile.open(m_inputFile);
   LineNumber currentPara;
 
-  while (!infile.eof()) // To get you all the lines.
-  {
+  while (!infile.eof()) {
     getline(infile, m_inLine);
     if (debug >= LOG_INFO) {
       METHOD_OUTPUT << m_inLine << endl;

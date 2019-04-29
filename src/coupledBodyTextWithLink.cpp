@@ -8,16 +8,15 @@ void CoupledBodyTextWithLink::fixLinksWithinOneLine(fileSet referMainFiles,
   LineNumber ln;
   ln.loadFirstFromContainedLine(m_inLine);
   string toProcess = m_inLine;
+  // skip link of line number
   if (ln.valid())
-    toProcess = toProcess.substr(
-        ln.generateLinePrefix().length()); // skip line number link
+    toProcess = toProcess.substr(ln.generateLinePrefix().length());
   if (debug >= LOG_INFO)
     METHOD_OUTPUT << toProcess << endl;
   string targetFile{""};
   do {
-    if (toProcess.find(linkStartChars) ==
-        string::npos) // no link any more, continue with next
-                      // line
+    // no link any more, continue with next line
+    if (toProcess.find(linkStartChars) == string::npos)
       break;
     auto linkEnd = toProcess.find(linkEndChars, toProcess.find(linkStartChars));
     auto link =
@@ -29,18 +28,20 @@ void CoupledBodyTextWithLink::fixLinksWithinOneLine(fileSet referMainFiles,
           m_file + attachmentFileMiddleChar + TurnToString(m_attachNumber),
           link);
     }
-    m_linkPtr->readReferFileName(link); // second step of construction, this is
-                                        // needed to check isTargetToSelfHtm
+    // second step of construction, this is needed to check isTargetToSelfHtm
+    m_linkPtr->readReferFileName(link);
     if (m_linkPtr->isTargetToOtherAttachmentHtm()) {
-      m_linkPtr->fixFromString(link); // third step of construction
+      // third step of construction
+      m_linkPtr->fixFromString(link);
       m_linkPtr->setSourcePara(ln);
       m_linkPtr->doStatistics();
     }
     if (m_linkPtr->isTargetToSelfHtm()) {
       m_linkPtr->setSourcePara(ln);
-      m_linkPtr->fixFromString(link);             // third step of construction
-      if (forceUpdate or m_linkPtr->needUpdate()) // replace old value
-      {
+      // third step of construction
+      m_linkPtr->fixFromString(link);
+      // replace old value
+      if (forceUpdate or m_linkPtr->needUpdate()) {
         auto orglinkBegin = m_inLine.find(link);
         m_inLine.replace(orglinkBegin, link.length(), m_linkPtr->asString());
       }
@@ -48,9 +49,10 @@ void CoupledBodyTextWithLink::fixLinksWithinOneLine(fileSet referMainFiles,
     if (m_linkPtr->isTargetToOtherMainHtm()) {
       targetFile = m_linkPtr->getChapterName();
       auto e = find(referMainFiles.begin(), referMainFiles.end(), targetFile);
-      if (e != referMainFiles.end()) // need to check and fix
-      {
-        m_linkPtr->fixFromString(link); // third step of construction
+      // need to check and fix
+      if (e != referMainFiles.end()) {
+        // third step of construction
+        m_linkPtr->fixFromString(link);
         m_linkPtr->setSourcePara(ln);
         string next = originalLinkStartChars + linkStartChars;
         bool needAddOrginalLink = true;
@@ -79,8 +81,8 @@ void CoupledBodyTextWithLink::fixLinksWithinOneLine(fileSet referMainFiles,
         if (needAddOrginalLink)
           m_linkPtr->generateLinkToOrigin();
         m_linkPtr->doStatistics();
-        if (forceUpdate or m_linkPtr->needUpdate()) // replace old value
-        {
+        // replace old value
+        if (forceUpdate or m_linkPtr->needUpdate()) {
           auto orglinkBegin = m_inLine.find(link);
           m_inLine.replace(orglinkBegin, link.length(), m_linkPtr->asString());
         }
@@ -89,11 +91,12 @@ void CoupledBodyTextWithLink::fixLinksWithinOneLine(fileSet referMainFiles,
     if (m_linkPtr->isTargetToJPMHtm()) {
       targetFile = m_linkPtr->getChapterName();
       auto e = find(referJPMFiles.begin(), referJPMFiles.end(), targetFile);
-      if (e != referJPMFiles.end()) // need to check and fix
-      {
-        m_linkPtr->fixFromString(link); // third step of construction
-        if (forceUpdate or m_linkPtr->needUpdate()) // replace old value
-        {
+      // need to check and fix
+      if (e != referJPMFiles.end()) {
+        // third step of construction
+        m_linkPtr->fixFromString(link);
+        // replace old value
+        if (forceUpdate or m_linkPtr->needUpdate()) {
           auto orglinkBegin = m_inLine.find(link);
           if (debug >= LOG_INFO)
             SEPERATE("isTargetToJPMHtm", m_inLine + "\n" + link);
@@ -105,11 +108,12 @@ void CoupledBodyTextWithLink::fixLinksWithinOneLine(fileSet referMainFiles,
       targetFile = m_linkPtr->getChapterName();
       auto e = find(referOriginalFiles.begin(), referOriginalFiles.end(),
                     targetFile);
-      if (e != referOriginalFiles.end()) // need to check and fix
-      {
-        m_linkPtr->fixFromString(link); // third step of construction
-        if (forceUpdate or m_linkPtr->needUpdate()) // replace old value
-        {
+      // need to check and fix
+      if (e != referOriginalFiles.end()) {
+        // third step of construction
+        m_linkPtr->fixFromString(link);
+        // replace old value
+        if (forceUpdate or m_linkPtr->needUpdate()) {
           auto orglinkBegin = m_inLine.find(link);
           if (debug >= LOG_INFO)
             SEPERATE("isTargetToOriginalHtm", m_inLine + "\n" + link);
@@ -117,8 +121,8 @@ void CoupledBodyTextWithLink::fixLinksWithinOneLine(fileSet referMainFiles,
         }
       }
     }
-    toProcess = toProcess.substr(
-        linkEnd + linkEndChars.length()); // find next link in the m_inLine
+    // continue to find next link in the m_inLine
+    toProcess = toProcess.substr(linkEnd + linkEndChars.length());
   } while (true);
 }
 
@@ -168,8 +172,8 @@ CoupledBodyTextWithLink::getLinesOfDisplayText(const string &dispString) {
 
 size_t CoupledBodyTextWithLink::getAverageLineLengthFromReferenceFile() {
   ifstream referLinesFile(REFERENCE_LINES);
-  if (!referLinesFile) // doesn't exist
-  {
+  // if file doesn't exist
+  if (!referLinesFile) {
     METHOD_OUTPUT << "referLines file doesn't exist:" << REFERENCE_LINES
                   << endl;
     return 0;
@@ -178,8 +182,7 @@ size_t CoupledBodyTextWithLink::getAverageLineLengthFromReferenceFile() {
   auto totalSizes = 0;
   auto totalLines = 0;
 
-  while (!referLinesFile.eof()) // To get you all the lines.
-  {
+  while (!referLinesFile.eof()) {
     string line{""};
     getline(referLinesFile, line);
     line = std::regex_replace(line, std::regex("(?:\\r\\n|\\n|\\r)"), "");
@@ -204,12 +207,12 @@ void CoupledBodyTextWithLink::getLinesofReferencePage() {
   }
   auto totalLines = 0;
   string line;
-  while (!referPageFile.eof()) // To get you all the lines.
-  {
+  while (!referPageFile.eof()) {
     getline(referPageFile, line);
     totalLines += getLinesOfDisplayText(line);
     if (debug >= LOG_INFO) {
-      METHOD_OUTPUT << line << endl; // excluding start line
+      // excluding start line
+      METHOD_OUTPUT << line << endl;
       METHOD_OUTPUT << totalLines << endl;
     }
   }
@@ -281,8 +284,8 @@ void CoupledBodyTextWithLink::paraGeneratedNumbering(bool forceUpdate,
             m_lineAttrTable[seqOfLines].type == DISPLY_LINE_TYPE::EMPTY) {
           outfile << m_inLine << endl;
         } else if (m_lineAttrTable[seqOfLines].type == DISPLY_LINE_TYPE::TEXT)
-          numberingLine(outfile, forceUpdate,
-                        hideParaHeader); // needs numbering
+          // needs numbering
+          numberingLine(outfile, forceUpdate, hideParaHeader);
       }
       // needs to append para header afterwards
       if (isInParaHeaderTable(seqOfLines)) {
@@ -341,7 +344,8 @@ void CoupledBodyTextWithLink::scanByRenderingLines() {
       }
       string dispLine = getDisplayString(m_inLine.substr(0, lastBr));
       if (debug >= LOG_INFO) {
-        METHOD_OUTPUT << dispLine << endl; // excluding start line
+        // excluding start line
+        METHOD_OUTPUT << dispLine << endl;
         METHOD_OUTPUT << utf8length(dispLine) << endl;
         METHOD_OUTPUT << getLinesOfDisplayText(dispLine) << endl;
       }
@@ -430,11 +434,13 @@ void CoupledBodyTextWithLink::addLineNumber(bool forceUpdate,
 
   if (isAutoNumbering()) {
     getLinesofReferencePage();
-    scanByRenderingLines(); // first scan
+    // first scan
+    scanByRenderingLines();
     calculateParaHeaderPositions();
     paraGeneratedNumbering(forceUpdate, hideParaHeader);
   } else {
-    scanByLines(); // first scan
+    // first scan
+    scanByLines();
     paraGuidedNumbering(forceUpdate, hideParaHeader);
   }
   if (isNumberingStatistics())
@@ -460,9 +466,8 @@ void CoupledBodyTextWithLink::fixLinksFromFile(
     return;
   }
   ofstream outfile(m_outputFile);
-  while (!infile.eof()) // To get all the lines.
-  {
-    getline(infile, m_inLine); // Saves the line in m_inLine.
+  while (!infile.eof()) {
+    getline(infile, m_inLine);
     LineNumber ln;
     ln.loadFirstFromContainedLine(m_inLine);
     if (ln.isParagraphHeader() or not ln.valid() or

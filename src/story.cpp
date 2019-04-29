@@ -10,8 +10,7 @@ void reConstructStory(const string &indexFilename,
                       const string &outputFilename) {
   ListContainer container(outputFilename);
   ifstream infile(indexFilename);
-  if (!infile) // doesn't exist
-  {
+  if (!infile) {
     FUNCTION_OUTPUT << "file doesn't exist:" << indexFilename << endl;
     return;
   }
@@ -29,11 +28,11 @@ void reConstructStory(const string &indexFilename,
   if (!infile.eof())
     getline(infile, title);
   else
-    return; // empty file
+    // empty file
+    return;
   FUNCTION_OUTPUT << title << endl;
   FILE_TYPE targetFileType = getFileTypeFromString("main");
-  while (!infile.eof()) // To get you all the lines.
-  {
+  while (!infile.eof()) {
     string startChapter, startPara, startLine;
     getline(infile, startChapter, '#');
     getline(infile, startPara, '.');

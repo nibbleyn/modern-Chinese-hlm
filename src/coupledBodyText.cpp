@@ -30,7 +30,7 @@ void CoupledBodyText::validateFormatForNumbering() {
   string inLine;
   bool stop = false;
   while (!infile.eof() and not stop) {
-    getline(infile, inLine); // Saves the line in inLine.
+    getline(infile, inLine);
     LineNumber ln;
     ln.loadFirstFromContainedLine(inLine);
     if (ln.isParagraphHeader()) {
@@ -50,7 +50,7 @@ void CoupledBodyText::validateFormatForNumbering() {
   bool processedLastParaHeader = false;
   ParaHeader paraHeaderLoaded;
   while (!infile.eof()) {
-    getline(infile, inLine); // Saves the line in inLine.
+    getline(infile, inLine);
     LineNumber ln;
     ln.loadFirstFromContainedLine(inLine);
     if (ln.isParagraphHeader()) {
@@ -175,14 +175,14 @@ void CoupledBodyText::numberingLine(ofstream &outfile, bool forceUpdate,
   LineNumber ln;
   ln.loadFirstFromContainedLine(m_inLine);
   LineNumber newLn(m_para, m_lineNo);
+  // remove old line number if forced or invalid
   if (forceUpdate or not ln.equal(newLn)) {
-    if (ln.valid()) // remove old line number
-    {
+    if (ln.valid()) {
       removeOldLineNumber();
     }
     removeNbspsAndSpaces();
     outfile << newLn.getWholeString() << doubleSpace << displaySpace << m_inLine
-            << endl; // Prints our line
+            << endl;
   } else
     outfile << m_inLine << endl;
   m_lineNo++;
@@ -221,7 +221,7 @@ void CoupledBodyText::addMiddleParaHeader(ofstream &outfile,
   m_paraHeader.markAsMiddleParaHeader();
   m_paraHeader.fixFromTemplate();
   outfile << m_paraHeader.getFixedResult() << endl;
-  m_lineNo = 1; // LINE index within each group
+  m_lineNo = 1;
   if (debug >= LOG_INFO) {
     METHOD_OUTPUT << "para header added :" << endl;
     METHOD_OUTPUT << m_paraHeader.getFixedResult() << endl;
@@ -256,8 +256,7 @@ void CoupledBodyText::scanByLines() {
   size_t lastImgGroupEnd = 0;
 
   size_t seqOfLines = 0;
-  while (!infile.eof()) // To get you all the lines.
-  {
+  while (!infile.eof()) {
     getline(infile, m_inLine);
     if (debug >= LOG_INFO) {
       METHOD_OUTPUT << m_inLine << endl;
@@ -440,13 +439,12 @@ bool CoupledBodyText::findKey(const string &key) {
     return false;
   }
   bool found = false;
-  // To search in all the lines in referred file
   while (!infile.eof()) {
     string line{""};
-    getline(infile, line); // Saves the line
+    getline(infile, line);
 
-    if (line.find(key) == string::npos) // not appear in this line
-    {
+    // if not appear in this line
+    if (line.find(key) == string::npos) {
       continue;
     }
 
@@ -498,8 +496,7 @@ void CoupledBodyText::fetchLineTexts() {
     LineNumber begin = m_range.first;
     LineNumber end = m_range.second;
     if (end.equal(END_OF_WHOLE_BODYTEXT) or not(begin > end)) {
-      while (!infile.eof()) // To get you all the lines.
-      {
+      while (!infile.eof()) {
         getline(infile, m_inLine);
         if (debug >= LOG_INFO) {
           METHOD_OUTPUT << m_inLine << endl;
@@ -534,6 +531,6 @@ void CoupledBodyText::appendLinesIntoBodyTextFile() {
   outfile.open(m_outputFile, std::ios_base::app);
   for (const auto &line : m_resultLines) {
     outfile << brTab << endl;
-    outfile << line.second << endl; // Prints our line
+    outfile << line.second << endl;
   }
 }

@@ -20,9 +20,8 @@ std::string getAttachmentTitle(const std::string &filename) {
     return attachmentNotExisted;
   }
   std::string inLine{""};
-  while (!infile.eof()) // To get all the lines.
-  {
-    getline(infile, inLine); // Saves the line in inLine.
+  while (!infile.eof()) {
+    getline(infile, inLine);
     auto beginPos = inLine.find(htmlTitleStart);
     if (beginPos != std::string::npos) {
       auto endPos =

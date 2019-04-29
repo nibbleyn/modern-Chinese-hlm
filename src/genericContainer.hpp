@@ -77,8 +77,8 @@ public:
   void insertBackParagrapHeader(int seqOfPara, int totalPara,
                                 const string &units = defaultUnit);
   void appendLeftParagraphInBodyText(const string &text);
-  void appendRightParagraphInBodyText(
-      const string &text); // text could be null for last right column
+  // text could be null for last right column
+  void appendRightParagraphInBodyText(const string &text);
   void finishBodyTextFile();
   void setInputFileName(const string &name) { m_filename = name; }
 
