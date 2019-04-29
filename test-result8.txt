@@ -1,0 +1,10 @@
+*************************line 625: HLM test started *************************
+5Space::loadFirstFromContainedLine              m_fullString: 
+5Space::loadFirstFromContainedLine              &nbsp;
+testSpace              first appearance offset: 
+testSpace              31
+testSpace              length: 6 display size: 1
+testSpace              whole string: 
+testSpace              &nbsp;
+testSpace              display as: ||
+

@@ -1,0 +1,18 @@
+*************************line 625: HLM test started *************************
+4Poem::loadFirstFromContainedLine              m_fullString: 
+4Poem::loadFirstFromContainedLine              <strong unhidden>杜鹃无语正黄昏，荷锄归去掩重门。青灯照壁人初睡，冷雨敲窗被未温。</strong>
+testPoem              length: 122 display size: 96
+testPoem              whole string: 
+testPoem              <strong unhidden>杜鹃无语正黄昏，荷锄归去掩重门。青灯照壁人初睡，冷雨敲窗被未温。</strong>
+testPoem              display as:
+testPoem              杜鹃无语正黄昏，荷锄归去掩重门。青灯照壁人初睡，冷雨敲窗被未温。||
+4Poem::loadFirstFromContainedLine              m_fullString: 
+4Poem::loadFirstFromContainedLine              <strong unhidden>杜鹃无语正黄昏，荷锄归去掩重门。青灯照壁人初睡，冷雨敲窗被未温。</strong>
+testPoem              first appearance offset: 
+testPoem              44
+testPoem              length: 122 display size: 96
+testPoem              whole string: 
+testPoem              <strong unhidden>杜鹃无语正黄昏，荷锄归去掩重门。青灯照壁人初睡，冷雨敲窗被未温。</strong>
+testPoem              display as:
+testPoem              杜鹃无语正黄昏，荷锄归去掩重门。青灯照壁人初睡，冷雨敲窗被未温。||
+
