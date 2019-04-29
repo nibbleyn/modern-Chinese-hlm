@@ -1,18 +1,6 @@
 #include "coupledBodyText.hpp"
 #include <functional> // std::greater
 
-string getDisplayTypeString(DISPLY_LINE_TYPE type) {
-  if (type == DISPLY_LINE_TYPE::EMPTY)
-    return "empty";
-  if (type == DISPLY_LINE_TYPE::PARA)
-    return "para";
-  if (type == DISPLY_LINE_TYPE::TEXT)
-    return "text";
-  if (type == DISPLY_LINE_TYPE::IMAGE)
-    return "image";
-  return "bad";
-}
-
 /**
  * load files under BODY_TEXT_OUTPUT directory with files under BODY_TEXT_FIX
  * i.e. from afterFix to output

@@ -91,8 +91,10 @@ public:
   void setSourcePara(LineNumber fp) { m_fromLine = fp; }
   string getChapterName() {
     if ((m_type == LINK_TYPE::JPM))
-      return formatIntoZeroPatchedChapterNumber(m_chapterNumber, THREE_DIGIT_FILENAME);
-    return formatIntoZeroPatchedChapterNumber(m_chapterNumber, TWO_DIGIT_FILENAME);
+      return formatIntoZeroPatchedChapterNumber(m_chapterNumber,
+                                                THREE_DIGIT_FILENAME);
+    return formatIntoZeroPatchedChapterNumber(m_chapterNumber,
+                                              TWO_DIGIT_FILENAME);
   }
 
   void fixReferFile(int chapter, int attachNo = 0) {

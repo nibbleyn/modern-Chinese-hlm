@@ -4,7 +4,12 @@
 #include "paraHeader.hpp"
 
 enum class DISPLY_LINE_TYPE { EMPTY, PARA, TEXT, IMAGE };
-string getDisplayTypeString(DISPLY_LINE_TYPE type);
+static const string DISPLY_LINE_EMPTY = R"(empty)";
+static const string DISPLY_LINE_PARA = R"(para)";
+static const string DISPLY_LINE_TEXT = R"(text)";
+static const string DISPLY_LINE_IMAGE = R"(image)";
+static const string DISPLY_LINE_BAD = R"(bad)";
+
 static const LineNumber BEGIN_OF_WHOLE_BODYTEXT = LineNumber(1, 1);
 static const LineNumber END_OF_WHOLE_BODYTEXT = LineNumber();
 
@@ -176,6 +181,18 @@ protected:
       result--;
     }
     return result;
+  }
+
+  string getDisplayTypeString(DISPLY_LINE_TYPE type) {
+    if (type == DISPLY_LINE_TYPE::EMPTY)
+      return DISPLY_LINE_EMPTY;
+    if (type == DISPLY_LINE_TYPE::PARA)
+      return DISPLY_LINE_PARA;
+    if (type == DISPLY_LINE_TYPE::TEXT)
+      return DISPLY_LINE_TEXT;
+    if (type == DISPLY_LINE_TYPE::IMAGE)
+      return DISPLY_LINE_IMAGE;
+    return DISPLY_LINE_BAD;
   }
 
   void printLineAttrTable() {
