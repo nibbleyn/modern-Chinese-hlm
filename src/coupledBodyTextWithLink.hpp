@@ -34,7 +34,8 @@ public:
   void validateParaSize();
   void disableAutoNumbering() { m_autoNumbering = false; }
   void disableNumberingStatistics() { m_numberingStatistics = false; }
-  void addLineNumber(bool forceUpdate = true, bool hideParaHeader = false);
+  void hideParaHeader() { m_hideParaHeader = true; }
+  void addLineNumber(bool forceUpdate = true);
   void doStatisticsByScanningLines(bool overFixedBodyText = false);
 
   // used for link-fixing
@@ -110,7 +111,7 @@ private:
 
   void scanByRenderingLines();
   void calculateParaHeaderPositions();
-  void paraGeneratedNumbering(bool forceUpdate, bool hideParaHeader);
+  void paraGeneratedNumbering(bool forceUpdate);
 
   // used for rendering
   using OffsetToObjectType = std::map<size_t, Object::OBJECT_TYPE>;

@@ -194,7 +194,8 @@ void CoupledBodyText::numberingLine(ofstream &outfile, bool forceUpdate) {
 void CoupledBodyText::addFirstParaHeader(ofstream &outfile) {
   m_paraHeader.loadFrom(m_inLine);
   m_paraHeader.fixFromTemplate();
-  outfile << m_paraHeader.getFixedResult() << endl;
+  if (not m_hideParaHeader)
+    outfile << m_paraHeader.getFixedResult() << endl;
   m_para = 1;
   if (debug >= LOG_INFO) {
     METHOD_OUTPUT << "processed :" << endl;
@@ -206,7 +207,8 @@ void CoupledBodyText::addlastParaHeader(ofstream &outfile) {
   m_paraHeader.setCurrentParaNo(m_para++);
   m_paraHeader.markAsLastParaHeader();
   m_paraHeader.fixFromTemplate();
-  outfile << m_paraHeader.getFixedResult() << endl;
+  if (not m_hideParaHeader)
+    outfile << m_paraHeader.getFixedResult() << endl;
   if (debug >= LOG_INFO) {
     METHOD_OUTPUT << "processed :" << endl;
     METHOD_OUTPUT << m_inLine << endl;
@@ -219,7 +221,8 @@ void CoupledBodyText::addMiddleParaHeader(ofstream &outfile,
   m_paraHeader.markAsMiddleParaHeader();
   m_paraHeader.markAsLastMiddleParaHeader(enterLastPara);
   m_paraHeader.fixFromTemplate();
-  outfile << m_paraHeader.getFixedResult() << endl;
+  if (not m_hideParaHeader)
+    outfile << m_paraHeader.getFixedResult() << endl;
   m_lineNo = 1;
   if (debug >= LOG_INFO) {
     METHOD_OUTPUT << "para header added :" << endl;
@@ -329,8 +332,7 @@ void CoupledBodyText::scanByLines() {
   }
 }
 
-void CoupledBodyText::paraGuidedNumbering(bool forceUpdate,
-                                          bool hideParaHeader) {
+void CoupledBodyText::paraGuidedNumbering(bool forceUpdate) {
 
   ifstream infile(m_inputFile);
   ofstream outfile(m_outputFile);
@@ -360,12 +362,10 @@ void CoupledBodyText::paraGuidedNumbering(bool forceUpdate,
       }
     } else if (m_lineAttrTable[seqOfLines].type == DISPLY_LINE_TYPE::TEXT) {
       numberingLine(outfile, forceUpdate);
-    } else if (not hideParaHeader and
-               m_lineAttrTable[seqOfLines].type == DISPLY_LINE_TYPE::PARA) {
+    } else if (m_lineAttrTable[seqOfLines].type == DISPLY_LINE_TYPE::PARA) {
       addParaHeader(outfile);
     }
-    if (not hideParaHeader and needAddParaAfterImgGroup and
-        seqOfLines == lineBeforeParaHeader) {
+    if (needAddParaAfterImgGroup and seqOfLines == lineBeforeParaHeader) {
       addParaHeader(outfile);
     }
     seqOfLines++;

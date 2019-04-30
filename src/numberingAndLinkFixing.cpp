@@ -36,7 +36,9 @@ void addLineNumbersForAttachmentHtml(int minTarget, int maxTarget,
       bodyText.setFileAndAttachmentNumber(file, attNo);
       bodyText.disableAutoNumbering();
       bodyText.disableNumberingStatistics();
-      bodyText.addLineNumber(forceUpdate, hideParaHeader);
+      if (hideParaHeader)
+        bodyText.hideParaHeader();
+      bodyText.addLineNumber(forceUpdate);
     }
   }
 }
@@ -154,7 +156,9 @@ void numberMainHtmls(bool forceUpdate, bool hideParaHeader) {
     bodyText.setFilePrefixFromFileType(FILE_TYPE::MAIN);
     bodyText.setFileAndAttachmentNumber(file);
     bodyText.disableAutoNumbering();
-    bodyText.addLineNumber(forceUpdate, hideParaHeader);
+    if (hideParaHeader)
+      bodyText.hideParaHeader();
+    bodyText.addLineNumber(forceUpdate);
   }
   CoupledBodyText::loadBodyTextsFromFixBackToOutput();
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
@@ -184,7 +188,9 @@ void numberOriginalHtmls(bool forceUpdate, bool hideParaHeader) {
     bodyText.setFileAndAttachmentNumber(file);
     bodyText.disableAutoNumbering();
     bodyText.disableNumberingStatistics();
-    bodyText.addLineNumber(forceUpdate, hideParaHeader);
+    if (hideParaHeader)
+      bodyText.hideParaHeader();
+    bodyText.addLineNumber(forceUpdate);
   }
   CoupledBodyText::loadBodyTextsFromFixBackToOutput();
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
@@ -230,7 +236,9 @@ void numberJPMHtmls(int num, bool forceUpdate, bool hideParaHeader) {
       break;
     case 3:
       //      bodyText.disableAutoNumbering();
-      bodyText.addLineNumber(forceUpdate, hideParaHeader);
+      if (hideParaHeader)
+        bodyText.hideParaHeader();
+      bodyText.addLineNumber(forceUpdate);
       break;
     default:
       FUNCTION_OUTPUT << "no test executed." << endl;

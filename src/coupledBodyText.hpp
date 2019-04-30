@@ -249,9 +249,10 @@ protected:
   size_t m_numberOfFirstParaHeader{0};
   size_t m_numberOfMiddleParaHeader{0};
   size_t m_numberOfLastParaHeader{0};
+  bool m_hideParaHeader{false};
 
   void scanByLines();
-  void paraGuidedNumbering(bool forceUpdate, bool hideParaHeader);
+  void paraGuidedNumbering(bool forceUpdate);
 
   // used for searching
   bool m_ignorePersonalComments{false};

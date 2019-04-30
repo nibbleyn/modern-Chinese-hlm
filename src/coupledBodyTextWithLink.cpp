@@ -252,8 +252,7 @@ void CoupledBodyTextWithLink::calculateParaHeaderPositions() {
   }
 }
 
-void CoupledBodyTextWithLink::paraGeneratedNumbering(bool forceUpdate,
-                                                     bool hideParaHeader) {
+void CoupledBodyTextWithLink::paraGeneratedNumbering(bool forceUpdate) {
   ifstream infile(m_inputFile);
   ofstream outfile(m_outputFile);
 
@@ -270,7 +269,7 @@ void CoupledBodyTextWithLink::paraGeneratedNumbering(bool forceUpdate,
     // pure empty line or non-last BRs after imageGroup
     if (inLineTable == false) {
       // only the first and last para headers
-      if (not hideParaHeader and isInParaHeaderTable(seqOfLines)) {
+      if (isInParaHeaderTable(seqOfLines)) {
         addParaHeader(outfile);
         if (m_para == m_numberOfMiddleParaHeader + 1) {
           break;
@@ -288,7 +287,7 @@ void CoupledBodyTextWithLink::paraGeneratedNumbering(bool forceUpdate,
           numberingLine(outfile, forceUpdate);
       }
       // needs to append para header afterwards
-      if (not hideParaHeader and isInParaHeaderTable(seqOfLines)) {
+      if (isInParaHeaderTable(seqOfLines)) {
         auto patchBrs =
             m_SizeOfReferPage - m_paraHeaderTable[seqOfLines].totalLinesAbove;
         while (patchBrs-- > 0)
@@ -418,8 +417,7 @@ void CoupledBodyTextWithLink::validateParaSize() {
   printOversizedLines();
 }
 
-void CoupledBodyTextWithLink::addLineNumber(bool forceUpdate,
-                                            bool hideParaHeader) {
+void CoupledBodyTextWithLink::addLineNumber(bool forceUpdate) {
   setInputOutputFiles();
   ifstream infile(m_inputFile);
   if (!infile) {
@@ -437,11 +435,11 @@ void CoupledBodyTextWithLink::addLineNumber(bool forceUpdate,
     // first scan
     scanByRenderingLines();
     calculateParaHeaderPositions();
-    paraGeneratedNumbering(forceUpdate, hideParaHeader);
+    paraGeneratedNumbering(forceUpdate);
   } else {
     // first scan
     scanByLines();
-    paraGuidedNumbering(forceUpdate, hideParaHeader);
+    paraGuidedNumbering(forceUpdate);
   }
   if (isNumberingStatistics())
     doStatisticsByScanningLines(true);
