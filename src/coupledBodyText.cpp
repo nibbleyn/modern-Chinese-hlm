@@ -48,7 +48,7 @@ void CoupledBodyText::validateFormatForNumbering() {
 
   bool expectAnotherHalf = false;
   bool processedLastParaHeader = false;
-  ParaHeader paraHeaderLoaded;
+  CoupledParaHeader paraHeaderLoaded;
   while (!infile.eof()) {
     getline(infile, inLine);
     LineNumber ln;
@@ -204,7 +204,7 @@ void CoupledBodyText::addFirstParaHeader(ofstream &outfile) {
 }
 
 void CoupledBodyText::addlastParaHeader(ofstream &outfile) {
-  m_paraHeader.m_currentParaNo = m_para++;
+  m_paraHeader.setCurrentParaNo(m_para++);
   m_paraHeader.markAsLastParaHeader();
   m_paraHeader.fixFromTemplate();
   outfile << m_paraHeader.getFixedResult() << endl;
@@ -216,9 +216,9 @@ void CoupledBodyText::addlastParaHeader(ofstream &outfile) {
 
 void CoupledBodyText::addMiddleParaHeader(ofstream &outfile,
                                           bool enterLastPara) {
-  m_paraHeader.m_currentParaNo = m_para++;
-  m_paraHeader.m_lastPara = enterLastPara;
+  m_paraHeader.setCurrentParaNo(m_para++);
   m_paraHeader.markAsMiddleParaHeader();
+  m_paraHeader.markAsLastMiddleParaHeader(enterLastPara);
   m_paraHeader.fixFromTemplate();
   outfile << m_paraHeader.getFixedResult() << endl;
   m_lineNo = 1;

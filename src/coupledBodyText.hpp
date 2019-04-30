@@ -152,7 +152,7 @@ protected:
   size_t m_para{0};
   // LINE index within each group
   size_t m_lineNo{1};
-  ParaHeader m_paraHeader;
+  CoupledParaHeader m_paraHeader;
 
   struct LineInfo {
     size_t numberOfLines{0};

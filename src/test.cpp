@@ -171,14 +171,13 @@ void testLineNumber() {
       R"(<a unhidden id="P12L8">12.8</a>　　原来 这一个名唤 贾蔷，也系 宁国府 正派玄孙，父母早亡，从小 跟贾珍过活，如今 长了十六岁，比 贾蓉 生得还 风流俊俏。贾蓉、贾蔷兄弟二人最相亲厚，常相共处。<br>)");
   SEPERATE("ln3", " finished ");
 
-  ParaHeader paraHeader;
-  paraHeader.m_startNumber = LineNumber::getStartNumber();
-  paraHeader.m_color = getSeparateLineColor(FILE_TYPE::MAIN);
+  CoupledParaHeader paraHeader;
+  paraHeader.setStartNumber(LineNumber::getStartNumber());
   paraHeader.markAsFirstParaHeader();
   paraHeader.fixFromTemplate();
   testParagraphHeaderFromContainedLine(paraHeader.getFixedResult());
 
-  ParaHeader paraHeaderLoaded;
+  CoupledParaHeader paraHeaderLoaded;
   paraHeaderLoaded.loadFrom(paraHeader.getFixedResult());
   paraHeaderLoaded.fixFromTemplate();
   FUNCTION_OUTPUT << paraHeaderLoaded.getFixedResult() << endl;
@@ -187,7 +186,7 @@ void testLineNumber() {
   FUNCTION_OUTPUT << "display as:" << endl;
   FUNCTION_OUTPUT << paraHeaderLoaded.getDisplayString() << endl;
 
-  paraHeader.m_currentParaNo = 7;
+  paraHeader.setCurrentParaNo(7);
   paraHeader.markAsMiddleParaHeader();
   paraHeader.fixFromTemplate();
   testParagraphHeaderFromContainedLine(paraHeader.getFixedResult());
@@ -201,7 +200,7 @@ void testLineNumber() {
   FUNCTION_OUTPUT << paraHeaderLoaded.getDisplayString() << endl;
   SEPERATE("ln5", " finished ");
 
-  paraHeader.m_currentParaNo = 12;
+  paraHeader.setCurrentParaNo(12);
   paraHeader.markAsLastParaHeader();
   paraHeader.fixFromTemplate();
   testParagraphHeaderFromContainedLine(paraHeader.getFixedResult());
@@ -575,15 +574,15 @@ void testListContainer() {
   link = lfm.asString();
 
   container.clearExistingBodyText();
-  ParaHeader paraHeader;
-  paraHeader.m_startNumber = LineNumber::getStartNumber();
-  paraHeader.m_color = getSeparateLineColor(FILE_TYPE::MAIN);
+  CoupledParaHeader paraHeader;
+  paraHeader.setStartNumber(LineNumber::getStartNumber());
   paraHeader.markAsFirstParaHeader();
   paraHeader.fixFromTemplate();
   container.appendParagrapHeader(paraHeader.getFixedResult());
   container.appendParagraphInBodyText(link);
   container.appendParagraphInBodyText("18 links are found.");
-  paraHeader.m_currentParaNo = 1;
+
+  paraHeader.setCurrentParaNo(1);
   paraHeader.markAsLastParaHeader();
   paraHeader.fixFromTemplate();
   paraHeader.fixFromTemplate();

@@ -1,5 +1,7 @@
 #pragma once
+
 #include "container.hpp"
+#include "paraHeader.hpp"
 
 static const string HTML_CONTAINER = R"(container/container)";
 static const string BODY_TEXT_CONTAINER = R"(container/)";

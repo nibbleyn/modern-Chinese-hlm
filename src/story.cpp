@@ -17,9 +17,8 @@ void reConstructStory(const string &indexFilename,
   container.clearExistingBodyText();
 
   // cannot change to hold quite many lines yet.
-  ParaHeader paraHeader;
-  paraHeader.m_startNumber = LineNumber::getStartNumber();
-  paraHeader.m_color = getSeparateLineColor(FILE_TYPE::MAIN);
+  CoupledParaHeader paraHeader;
+  paraHeader.setStartNumber(LineNumber::getStartNumber());
   paraHeader.markAsFirstParaHeader();
   paraHeader.fixFromTemplate();
   container.appendParagrapHeader(paraHeader.getFixedResult());
@@ -55,7 +54,7 @@ void reConstructStory(const string &indexFilename,
     bodyText.setOutputBodyTextFilePath(container.getOutputBodyTextFilePath());
     bodyText.appendLinesIntoBodyTextFile();
   }
-  paraHeader.m_currentParaNo = 1;
+  paraHeader.setCurrentParaNo(1);
   paraHeader.markAsLastParaHeader();
   paraHeader.fixFromTemplate();
   container.appendParagrapHeader(paraHeader.getFixedResult());

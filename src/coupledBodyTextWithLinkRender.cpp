@@ -347,7 +347,7 @@ void CoupledBodyTextWithLink::render(bool hideParaHeader) {
   }
   ofstream outfile(m_outputFile);
   string inLine{"not found"};
-  ParaHeader paraHeaderLoaded;
+  CoupledParaHeader paraHeaderLoaded;
   while (!infile.eof()) {
     getline(infile, inLine);
     if (debug >= LOG_INFO) {

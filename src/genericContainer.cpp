@@ -92,9 +92,12 @@ void TableContainer::insertFrontParagrapHeader(int totalPara,
     METHOD_OUTPUT << "append content in: " << outputBodyTextFile << endl;
   ofstream outfile;
   outfile.open(outputBodyTextFile);
-  LineNumber::setStartNumber(START_PARA_NUMBER);
-  string line = fixFrontParaHeaderFromTemplate(LineNumber::getStartNumber(), "",
-                                               totalPara, units, false);
+  GenericParaHeader paraHeader;
+  paraHeader.setTotalParaNumber(totalPara);
+  paraHeader.setUnits(units);
+  paraHeader.markAsFirstParaHeader();
+  paraHeader.fixFromTemplate();
+  string line = paraHeader.getFixedResult();
   if (debug >= LOG_INFO)
     METHOD_OUTPUT << line << endl;
   outfile << line << endl;
@@ -110,15 +113,17 @@ void TableContainer::insertMiddleParagrapHeader(bool enterLastPara,
     METHOD_OUTPUT << "append content in: " << outputBodyTextFile << endl;
   ofstream outfile;
   outfile.open(outputBodyTextFile, std::ios_base::app);
-  string line;
-  if (enterLastPara) {
-    line = insertParaHeaderFromTemplate(LineNumber::getStartNumber(), seqOfPara,
-                                        startParaNo, endParaNo, totalPara,
-                                        preTotalPara, "", units, false, true);
-  } else
-    line = insertParaHeaderFromTemplate(LineNumber::getStartNumber(), seqOfPara,
-                                        startParaNo, endParaNo, totalPara,
-                                        preTotalPara, "", units, false, false);
+  GenericParaHeader paraHeader;
+  paraHeader.setTotalParaNumber(totalPara);
+  paraHeader.setpreTotalParaNumber(preTotalPara);
+  paraHeader.setSeqOfPara(seqOfPara);
+  paraHeader.setStartParaNo(startParaNo);
+  paraHeader.setEndParaNo(endParaNo);
+  paraHeader.setUnits(units);
+  paraHeader.markAsMiddleParaHeader();
+  paraHeader.markAsLastMiddleParaHeader(enterLastPara);
+  paraHeader.fixFromTemplate();
+  string line = paraHeader.getFixedResult();
   if (debug >= LOG_INFO)
     METHOD_OUTPUT << line << endl;
   outfile << line << endl;
@@ -131,8 +136,13 @@ void TableContainer::insertBackParagrapHeader(int seqOfPara, int totalPara,
     METHOD_OUTPUT << "append content in: " << outputBodyTextFile << endl;
   ofstream outfile;
   outfile.open(outputBodyTextFile, std::ios_base::app);
-  string line = fixBackParaHeaderFromTemplate(
-      LineNumber::getStartNumber(), seqOfPara, totalPara, "", units, false);
+  GenericParaHeader paraHeader;
+  paraHeader.setTotalParaNumber(totalPara);
+  paraHeader.setSeqOfPara(seqOfPara);
+  paraHeader.setUnits(units);
+  paraHeader.markAsLastParaHeader();
+  paraHeader.fixFromTemplate();
+  string line = paraHeader.getFixedResult();
   if (debug >= LOG_INFO)
     METHOD_OUTPUT << line << endl;
   outfile << line << endl;

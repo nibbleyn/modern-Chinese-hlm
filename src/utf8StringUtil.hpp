@@ -32,10 +32,6 @@ static const string bottomParagraphIndicator = R"(bottom)";
 #define FUNCTION_OUTPUT cout << __func__ << "              "
 // start of each paragraph and line number
 static const string lineNumberIdBeginChars = R"(id="P)";
-// top of the body Text file
-static const string topIdBeginChars = R"(id="top")";
-// bottom of the body Text file
-static const string bottomIdBeginChars = R"(id="bottom")";
 static const string imageGroupBeginChars = R"(<div)";
 
 static const string citationChapterNo = R"(第)";

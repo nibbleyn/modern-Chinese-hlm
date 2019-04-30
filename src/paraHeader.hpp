@@ -2,24 +2,27 @@
 #include "fileUtil.hpp"
 #include "utf8StringUtil.hpp"
 
+static const string topIdBeginChars = R"(id="top")";
+static const string bottomIdBeginChars = R"(id="bottom")";
+
 enum class PARA_TYPE { FIRST, MIDDLE, LAST };
 
+static const int DEFAULT_START_PARA_NUMBER = 90;
+
 class ParaHeader {
-  static const string firstParaHeader;
-  static const string MiddleParaHeader;
-  static const string lastParaHeader;
-
-  static const string firstParaHeaderDispText;
-  static const string MiddleParaHeaderDispText;
-  static const string lastParaHeaderDispText;
-
 public:
+  virtual ~ParaHeader(){};
   void readType(const string &header);
   void loadFrom(const string &header);
+
+  void setStartNumber(int num) { m_startNumber = num; }
+  void setCurrentParaNo(int num) { m_currentParaNo = num; }
+  void setColor(const string &color) { m_color = color; }
 
   // if not load from string
   void markAsFirstParaHeader() { m_type = PARA_TYPE::FIRST; }
   void markAsMiddleParaHeader() { m_type = PARA_TYPE::MIDDLE; }
+  void markAsLastMiddleParaHeader(bool last) { m_lastPara = last; }
   void markAsLastParaHeader() { m_type = PARA_TYPE::LAST; }
 
   bool isFirstParaHeader() { return m_type == PARA_TYPE::FIRST; }
@@ -29,42 +32,70 @@ public:
   void fixFromTemplate();
   string getFixedResult() { return m_result; }
 
-  string getDisplayString();
+  virtual string getDisplayString() = 0;
 
-  int m_startNumber{0};
-  string m_color{MAIN_SEPERATOR_COLOR};
-  int m_currentParaNo{0};
-  bool m_hidden{false};
-  bool m_lastPara{false};
-
-private:
+protected:
   void loadFromFirstParaHeader(const string &header);
   void loadFromMiddleParaHeader(const string &header);
   void loadFromLastParaHeader(const string &header);
 
-  void fixFirstParaHeaderFromTemplate();
-  void fixMiddleParaHeaderFromTemplate();
-  void fixUnhiddenMiddleParaHeaderDispTextFromTemplate();
-  void fixLastParaHeaderFromTemplate();
+  virtual void fixFirstParaHeaderFromTemplate() = 0;
+  virtual void fixMiddleParaHeaderFromTemplate() = 0;
+  virtual void fixLastParaHeaderFromTemplate() = 0;
+
+  int m_startNumber{DEFAULT_START_PARA_NUMBER};
+  string m_color{MAIN_SEPERATOR_COLOR};
+  int m_currentParaNo{0};
+  bool m_hidden{false};
+  bool m_lastPara{false};
 
   PARA_TYPE m_type{PARA_TYPE::FIRST};
   string m_result{""};
   string m_displayText{""};
 };
 
-string fixFrontParaHeaderFromTemplate(int startNumber, const string &color,
-                                      int totalPara,
-                                      const string &units = defaultUnit,
-                                      bool hidden = false);
+class CoupledParaHeader : public ParaHeader {
+  static const string firstParaHeader;
+  static const string MiddleParaHeader;
+  static const string lastParaHeader;
 
-string insertParaHeaderFromTemplate(int startNumber, int seqOfPara,
-                                    int startParaNo, int endParaNo,
-                                    int totalPara, int preTotalPara,
-                                    const string &color,
-                                    const string &units = defaultUnit,
-                                    bool hidden = false, bool lastPara = false);
+  static const string firstParaHeaderDispText;
+  static const string MiddleParaHeaderDispText;
+  static const string lastParaHeaderDispText;
 
-string fixBackParaHeaderFromTemplate(int startNumber, int seqOfPara,
-                                     int totalPara, const string &color,
-                                     const string &units = defaultUnit,
-                                     bool hidden = false);
+public:
+  string getDisplayString();
+
+private:
+  void fixFirstParaHeaderFromTemplate();
+  void fixMiddleParaHeaderFromTemplate();
+  void fixUnhiddenMiddleParaHeaderDispTextFromTemplate();
+  void fixLastParaHeaderFromTemplate();
+};
+
+class GenericParaHeader : public ParaHeader {
+  static const string firstParaHeader;
+  static const string MiddleParaHeader;
+  static const string lastParaHeader;
+
+public:
+  void setUnits(const string &unit) { m_units = unit; }
+  void setTotalParaNumber(int total) { m_totalPara = total; }
+  void setpreTotalParaNumber(int total) { m_preTotalPara = total; }
+  void setSeqOfPara(int seq) { m_seqOfPara = seq; }
+  void setStartParaNo(int num) { m_startParaNo = num; }
+  void setEndParaNo(int num) { m_endParaNo = num; }
+
+  string getDisplayString() { return emptyString; }
+
+private:
+  string m_units{defaultUnit};
+  int m_totalPara{0};
+  int m_preTotalPara{0};
+  int m_seqOfPara{0};
+  int m_startParaNo{0};
+  int m_endParaNo{0};
+  void fixFirstParaHeaderFromTemplate();
+  void fixMiddleParaHeaderFromTemplate();
+  void fixLastParaHeaderFromTemplate();
+};
