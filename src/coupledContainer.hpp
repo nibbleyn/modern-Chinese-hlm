@@ -2,6 +2,11 @@
 #include "container.hpp"
 #include "coupledLink.hpp"
 
+const string strongTitleBeginChars = R"(<strong unhidden>)";
+const string strongTitleEndChars = R"(</strong>)";
+const string sampTitleBeginChars = R"(<samp unhidden>)";
+const string sampTitleEndChars = R"(</samp>)";
+
 /**
  * used for features like removePersonalViewpoints, numbering and linkfixing
  * etc.

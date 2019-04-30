@@ -1,10 +1,5 @@
 #include "tools.hpp"
 
-const string strongTitleBeginChars = R"(<strong unhidden>)";
-const string strongTitleEndChars = R"(</strong>)";
-const string sampTitleBeginChars = R"(<samp unhidden>)";
-const string sampTitleEndChars = R"(</samp>)";
-
 void fixFooter(string &footer, const string &filename) {
   string previous =
       formatIntoZeroPatchedChapterNumber(TurnToInt(filename) - 1, 3);
@@ -299,37 +294,6 @@ void CoupledContainer::makeSingleLineHeaderAndFooter() {
   if (debug >= LOG_INFO)
     FUNCTION_OUTPUT << "makeSingleLineHeaderAndFooter finished for "
                     << outputHtmlFile << endl;
-}
-
-void CoupledContainer::fetchOriginalAndTranslatedTitles() {
-  string inputHtmlFile = getInputHtmlFilePath();
-  ifstream inHtmlFile(inputHtmlFile);
-  if (!inHtmlFile) {
-    FUNCTION_OUTPUT << "file doesn't exist:" << inputHtmlFile << endl;
-    return;
-  }
-  string line{""};
-  while (!inHtmlFile.eof()) {
-    getline(inHtmlFile, line);
-    auto linkBegin = line.find(topIdBeginChars);
-    if (linkBegin != string::npos) {
-      break;
-    }
-    auto strongTitleBegin = line.find(strongTitleBeginChars);
-    if (strongTitleBegin != string::npos) {
-      auto strongTitleEnd = line.find(strongTitleEndChars, strongTitleBegin);
-      m_originalTitle = line.substr(
-          strongTitleBegin + strongTitleBeginChars.length(),
-          strongTitleEnd - strongTitleBegin - strongTitleBeginChars.length());
-    }
-    auto sampTitleBegin = line.find(sampTitleBeginChars);
-    if (sampTitleBegin != string::npos) {
-      auto sampTitleEnd = line.find(sampTitleEndChars, sampTitleBegin);
-      m_translatedTitle = line.substr(
-          sampTitleBegin + sampTitleBeginChars.length(),
-          sampTitleEnd - sampTitleBegin - sampTitleBeginChars.length());
-    }
-  }
 }
 
 void CoupledContainer::fixHeaderAndFooter() {

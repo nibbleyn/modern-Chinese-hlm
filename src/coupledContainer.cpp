@@ -351,3 +351,37 @@ CoupledContainer::getAttachmentFileListForChapter(const string &fromDir) {
   }
   return attList;
 }
+
+void CoupledContainer::fetchOriginalAndTranslatedTitles() {
+  string inputHtmlFile = getInputHtmlFilePath();
+  ifstream inHtmlFile(inputHtmlFile);
+  if (!inHtmlFile) {
+    FUNCTION_OUTPUT << "file doesn't exist:" << inputHtmlFile << endl;
+    return;
+  }
+  string line{""};
+  while (!inHtmlFile.eof()) {
+    getline(inHtmlFile, line);
+    if (debug >= LOG_INFO) {
+      METHOD_OUTPUT << line << endl;
+    }
+    auto linkBegin = line.find(topIdBeginChars);
+    if (linkBegin != string::npos) {
+      break;
+    }
+    auto strongTitleBegin = line.find(strongTitleBeginChars);
+    if (strongTitleBegin != string::npos) {
+      auto strongTitleEnd = line.find(strongTitleEndChars, strongTitleBegin);
+      m_originalTitle = line.substr(
+          strongTitleBegin + strongTitleBeginChars.length(),
+          strongTitleEnd - strongTitleBegin - strongTitleBeginChars.length());
+    }
+    auto sampTitleBegin = line.find(sampTitleBeginChars);
+    if (sampTitleBegin != string::npos) {
+      auto sampTitleEnd = line.find(sampTitleEndChars, sampTitleBegin);
+      m_translatedTitle = line.substr(
+          sampTitleBegin + sampTitleBeginChars.length(),
+          sampTitleEnd - sampTitleBegin - sampTitleBeginChars.length());
+    }
+  }
+}

@@ -1,8 +1,8 @@
 #pragma once
-#include <string>
+#include "paraHeader.hpp"
 
-static const std::string defaultTitle = R"(XXX)";
-static const std::string defaultDisplayTitle = R"(YYY)";
+static const string defaultTitle = R"(XXX)";
+static const string defaultDisplayTitle = R"(YYY)";
 
 class Container {
 public:
@@ -10,9 +10,9 @@ public:
   virtual ~Container(){};
 
 protected:
-  std::string m_htmlInputFilePath;
-  std::string m_htmlOutputFilePath;
-  std::string m_bodyTextInputFilePath;
-  std::string m_bodyTextOutputFilePath;
+  string m_htmlInputFilePath{HTML_SRC_MAIN};
+  string m_htmlOutputFilePath{HTML_OUTPUT_MAIN};
+  string m_bodyTextInputFilePath{BODY_TEXT_OUTPUT};
+  string m_bodyTextOutputFilePath{BODY_TEXT_FIX};
   virtual std::string getInputHtmlFilePath() = 0;
 };

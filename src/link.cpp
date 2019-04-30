@@ -49,7 +49,7 @@ string fixLinkFromSameFileTemplate(LINK_DISPLAY_TYPE type, const string &key,
   // in case use top/bottom as reference name
   if (key.empty()) {
     replacePart(link, R"(<sub hidden>WW</sub>)", emptyString);
-    replacePart(link, R"(title="QQ")", emptyString);
+    replacePart(link, R"( title="QQ")", emptyString);
   } else {
     replacePart(link, "QQ", key);
   }
@@ -93,7 +93,7 @@ string fixLinkFromMainTemplate(const string &path, const string &filename,
   // in case use top/bottom as reference name
   if (key.empty()) {
     replacePart(link, R"(<sub hidden>WW</sub>)", emptyString);
-    replacePart(link, R"(title="QQ")", emptyString);
+    replacePart(link, R"( title="QQ")", emptyString);
   } else {
     replacePart(link, "QQ", key);
   }
@@ -157,7 +157,7 @@ string fixLinkFromOriginalTemplate(const string &path, const string &filename,
   // in case use top/bottom as reference name
   if (key.empty()) {
     replacePart(link, R"(<sub hidden>WW</sub>)", emptyString);
-    replacePart(link, R"(title="QQ")", emptyString);
+    replacePart(link, R"( title="QQ")", emptyString);
   } else {
     replacePart(link, "QQ", key);
   }
@@ -199,7 +199,7 @@ string fixLinkFromJPMTemplate(const string &path, const string &filename,
   // in case use top/bottom as reference name
   if (key.empty()) {
     replacePart(link, R"(<sub hidden>WW</sub>)", emptyString);
-    replacePart(link, R"(title="QQ")", emptyString);
+    replacePart(link, R"( title="QQ")", emptyString);
   } else {
     replacePart(link, "QQ", key);
   }
