@@ -270,7 +270,7 @@ void CoupledBodyTextWithLink::paraGeneratedNumbering(bool forceUpdate,
     // pure empty line or non-last BRs after imageGroup
     if (inLineTable == false) {
       // only the first and last para headers
-      if (isInParaHeaderTable(seqOfLines)) {
+      if (not hideParaHeader and isInParaHeaderTable(seqOfLines)) {
         addParaHeader(outfile);
         if (m_para == m_numberOfMiddleParaHeader + 1) {
           break;
@@ -285,10 +285,10 @@ void CoupledBodyTextWithLink::paraGeneratedNumbering(bool forceUpdate,
           outfile << m_inLine << endl;
         } else if (m_lineAttrTable[seqOfLines].type == DISPLY_LINE_TYPE::TEXT)
           // needs numbering
-          numberingLine(outfile, forceUpdate, hideParaHeader);
+          numberingLine(outfile, forceUpdate);
       }
       // needs to append para header afterwards
-      if (isInParaHeaderTable(seqOfLines)) {
+      if (not hideParaHeader and isInParaHeaderTable(seqOfLines)) {
         auto patchBrs =
             m_SizeOfReferPage - m_paraHeaderTable[seqOfLines].totalLinesAbove;
         while (patchBrs-- > 0)

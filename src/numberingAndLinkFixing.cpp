@@ -113,7 +113,7 @@ void assembleAttachments(int minTarget, int maxTarget, int minAttachNo,
 
 void refreshBodyTexts(const string &kind, int minTarget, int maxTarget) {
   CoupledContainer container(getFileTypeFromString(kind));
-  auto digits = (kind == JPM) ? 3 : 2;
+  auto digits = (kind == JPM) ? THREE_DIGIT_FILENAME : TWO_DIGIT_FILENAME;
   if (kind == MAIN)
     CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
   for (const auto &file : buildFileSet(minTarget, maxTarget, digits)) {

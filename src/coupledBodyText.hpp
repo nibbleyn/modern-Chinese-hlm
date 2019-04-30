@@ -239,8 +239,7 @@ protected:
   void removeNbspsAndSpaces();
   void removeOldLineNumber();
 
-  void numberingLine(ofstream &outfile, bool forceUpdate = true,
-                     bool hideParaHeader = false);
+  void numberingLine(ofstream &outfile, bool forceUpdate = true);
 
   void addFirstParaHeader(ofstream &outfile);
   void addlastParaHeader(ofstream &outfile);
