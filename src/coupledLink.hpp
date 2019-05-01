@@ -1,7 +1,7 @@
 #pragma once
 #include "coupledBodyText.hpp"
 #include "link.hpp"
-using fileSet = set<string>;
+using FileSet = set<string>;
 
 static const string returnLink = R"(被引用)";
 static const string returnToContentTable = R"(回目录)";

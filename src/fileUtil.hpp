@@ -69,6 +69,15 @@ static const std::string originalDirForLinkFromAttachment = R"(..\original\)";
 static const std::string jpmDirForLinkFromAttachment = R"(..\JPM\)";
 static const std::string pictureDirForLinkFromAttachment = R"(..\pictures\)";
 
+static const std::string HTML_OUTPUT_LINES_OF_MAIN =
+    R"(utf8HTML/output/LinesOfMain.txt)";
+static const std::string HTML_OUTPUT_LINES_OF_JPM =
+    R"(utf8HTML/output/LinesOfJPM.txt)";
+static const std::string HTML_OUTPUT_LINES_OF_ORIGINAL =
+    R"(utf8HTML/output/LinesOfOriginal.txt)";
+static const std::string HTML_OUTPUT_LINES_OF_ATTACHMENTS =
+    R"(utf8HTML/output/LinesOfAttachments.txt)";
+
 std::string getAttachmentTitle(const std::string &filename);
 
 enum class FILE_TYPE { MAIN, ATTACHMENT, ORIGINAL, JPM };
@@ -76,3 +85,5 @@ enum class FILE_TYPE { MAIN, ATTACHMENT, ORIGINAL, JPM };
 std::string getHtmlFileNamePrefix(FILE_TYPE type);
 std::string getSeparateLineColor(FILE_TYPE type);
 FILE_TYPE getFileTypeFromString(const std::string &fileType);
+std::string getFilePrefixFromFileType(FILE_TYPE type);
+std::string getStatisticsOutputFilePathFromString(const std::string &fileType);

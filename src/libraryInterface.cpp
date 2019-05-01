@@ -11,8 +11,8 @@
  * @param digits the length of the chapter string
  * @return a set of strings in fileSet
  */
-fileSet buildFileSet(int minValue, int maxValue, int digits) {
-  fileSet fs;
+FileSet buildFileSet(int minValue, int maxValue, int digits) {
+  FileSet fs;
   auto numberOfDigits = static_cast<int>(log10(maxValue)) + 1;
   for (int i = minValue; i <= maxValue; i++) {
     fs.insert(formatIntoZeroPatchedChapterNumber(

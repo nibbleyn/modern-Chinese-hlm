@@ -1,8 +1,8 @@
 #include "coupledBodyTextWithLink.hpp"
 
-void CoupledBodyTextWithLink::fixLinksWithinOneLine(fileSet referMainFiles,
-                                                    fileSet referOriginalFiles,
-                                                    fileSet referJPMFiles) {
+void CoupledBodyTextWithLink::fixLinksWithinOneLine(FileSet referMainFiles,
+                                                    FileSet referOriginalFiles,
+                                                    FileSet referJPMFiles) {
 
   LineNumber ln;
   ln.loadFirstFromContainedLine(m_inLine);
@@ -452,9 +452,9 @@ void CoupledBodyTextWithLink::addLineNumber() {
  * @param file
  * @param referFiles
  */
-void CoupledBodyTextWithLink::fixLinksFromFile(fileSet referMainFiles,
-                                               fileSet referOriginalFiles,
-                                               fileSet referJPMFiles,
+void CoupledBodyTextWithLink::fixLinksFromFile(FileSet referMainFiles,
+                                               FileSet referOriginalFiles,
+                                               FileSet referJPMFiles,
                                                int minPara, int maxPara,
                                                int minLine, int maxLine) {
   setInputOutputFiles();

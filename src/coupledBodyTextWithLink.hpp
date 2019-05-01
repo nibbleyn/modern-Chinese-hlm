@@ -41,12 +41,12 @@ public:
   void doStatisticsByScanningLines(bool overFixedBodyText = false);
 
   // used for link-fixing
-  void fixLinksFromFile(fileSet referMainFiles, fileSet referOriginalFiles,
-                        fileSet referJPMFiles, int minPara = 0, int maxPara = 0,
+  void fixLinksFromFile(FileSet referMainFiles, FileSet referOriginalFiles,
+                        FileSet referJPMFiles, int minPara = 0, int maxPara = 0,
                         int minLine = 0, int maxLine = 0);
   void setLineToFix(const string &originalString) { m_inLine = originalString; }
-  void fixLinksWithinOneLine(fileSet referMainFiles, fileSet referOriginalFiles,
-                             fileSet referJPMFiles);
+  void fixLinksWithinOneLine(FileSet referMainFiles, FileSet referOriginalFiles,
+                             FileSet referJPMFiles);
   string getFixedLine() const { return m_inLine; }
 
   // used for rendering

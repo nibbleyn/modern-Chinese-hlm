@@ -5,4 +5,4 @@
 #include "genericContainer.hpp"
 
 // operations to construct a group of file names
-fileSet buildFileSet(int min, int max, int digits = TWO_DIGIT_FILENAME);
+FileSet buildFileSet(int min, int max, int digits = TWO_DIGIT_FILENAME);

@@ -16,13 +16,13 @@ int main(int argc, char **argv) {
     numberJPMHtmls(3, false);
     break;
   case 2:
-    numberOriginalHtmls(false);
+    numberOriginalHtmls(3, false);
     break;
   case 3:
-    numberMainHtmls(false);
+    numberMainHtmls(3, false);
     break;
   case 4:
-    numberAttachmentHtmls(false);
+    numberAttachmentHtmls(3, false);
     break;
   case 5:
     fixLinksFromMain(false);

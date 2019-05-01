@@ -65,6 +65,27 @@ FILE_TYPE getFileTypeFromString(const std::string &fileType) {
     return FILE_TYPE::JPM;
   return FILE_TYPE::MAIN;
 }
+
+std::string getFilePrefixFromFileType(FILE_TYPE type) {
+  if (type == FILE_TYPE::ATTACHMENT)
+    return ATTACHMENT_BODYTEXT_PREFIX;
+  if (type == FILE_TYPE::ORIGINAL)
+    return ORIGINAL_BODYTEXT_PREFIX;
+  if (type == FILE_TYPE::JPM)
+    return JPM_BODYTEXT_PREFIX;
+  return MAIN_BODYTEXT_PREFIX;
+}
+
+std::string getStatisticsOutputFilePathFromString(const std::string &fileType) {
+  if (fileType == ATTACHMENT)
+    return HTML_OUTPUT_LINES_OF_ATTACHMENTS;
+  if (fileType == ORIGINAL)
+    return HTML_OUTPUT_LINES_OF_ORIGINAL;
+  if (fileType == JPM)
+    return HTML_OUTPUT_LINES_OF_JPM;
+  return HTML_OUTPUT_LINES_OF_MAIN;
+}
+
 /**
  * the background of original file is different from main file
  * and so their separator line between paragraphs

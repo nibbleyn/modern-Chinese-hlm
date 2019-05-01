@@ -1,7 +1,7 @@
 #include "coupledLink.hpp"
 
-extern fileSet keyMissingChapters;
-extern fileSet newAttachmentList;
+extern FileSet keyMissingChapters;
+extern FileSet newAttachmentList;
 
 CoupledLink::LinksTable CoupledLink::linksTable;
 string CoupledLink::referFilePrefix{emptyString};
