@@ -10,53 +10,53 @@ int debug = LOG_INFO;
 
 int main(int argc, char **argv) {
   // change this number to run different functions
-  int num = 13;
+  int num = 16;
   switch (num) {
-  case 9:
+  case 1:
     numberJPMHtmls(3, false);
     break;
-  case 10:
+  case 2:
     numberOriginalHtmls(false);
     break;
-  case 11:
+  case 3:
     numberMainHtmls(false);
     break;
-  case 12:
+  case 4:
     numberAttachmentHtmls(false);
     break;
-  case 13:
+  case 5:
     fixLinksFromMain(false);
     break;
-  case 15:
+  case 6:
     reConstructStory("mapping.txt", "story");
     break;
-  case 1:
+  case 7:
     refreshBodyTexts(MAIN);
     refreshBodyTexts(ORIGINAL);
-    refreshBodyTexts(JPM);
-    break;
-  case 2:
-    refreshAttachmentBodyTexts();
-    break;
-  case 3:
-    generateContentTableForMainHtmls();
-    break;
-  case 4:
-    generateContentTableForOriginalHtmls();
-    break;
-  case 5:
-    generateContentTableForJPMHtmls();
-    break;
-  case 6:
-    generateContentTableForReferenceAttachments();
-    break;
-  case 7:
-    generateContentTableForPersonalAttachments();
+    refreshBodyTexts(JPM,JPM_MIN_CHAPTER_NUMBER,JPM_MAX_CHAPTER_NUMBER);
     break;
   case 8:
-    findFirstInFiles();
+    refreshAttachmentBodyTexts();
+    break;
+  case 9:
+    generateContentTableForMainHtmls();
+    break;
+  case 10:
+    generateContentTableForOriginalHtmls();
+    break;
+  case 11:
+    generateContentTableForJPMHtmls();
+    break;
+  case 12:
+    generateContentTableForReferenceAttachments();
+    break;
+  case 13:
+    generateContentTableForPersonalAttachments();
     break;
   case 14:
+    findFirstInFiles();
+    break;
+  case 15:
     fixLinksFromAttachment(false);
     break;
   case 16:
@@ -64,16 +64,6 @@ int main(int argc, char **argv) {
     break;
   case 17:
     tools(15);
-    break;
-    //   hidden paragraph headers, no force update
-  case 18:
-    numberOriginalHtmls(false, true);
-    break;
-  case 19:
-    numberMainHtmls(false, true);
-    break;
-  case 20:
-    numberAttachmentHtmls(false, true);
     break;
   default:
     FUNCTION_OUTPUT << "nothing gets executed." << endl;
