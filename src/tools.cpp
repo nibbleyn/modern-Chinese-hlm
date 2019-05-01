@@ -494,22 +494,11 @@ void fixHeaderAndFooterForMainHtmls() {
 void fixHeaderAndFooterForAttachmentHtmls() {
   int minTarget = MAIN_MIN_CHAPTER_NUMBER, maxTarget = MAIN_MAX_CHAPTER_NUMBER;
   int minAttachNo = MIN_ATTACHMENT_NUMBER, maxAttachNo = MAX_ATTACHMENT_NUMBER;
-  vector<int> targetAttachments;
-  bool overAllAttachments = true;
-  if (not(minAttachNo == 0 and maxAttachNo == 0) and
-      minAttachNo <= maxAttachNo) {
-    for (int i = maxAttachNo; i >= minAttachNo; i--)
-      targetAttachments.push_back(i);
-    overAllAttachments = false;
-  }
-  CoupledContainer container(FILE_TYPE::ATTACHMENT);
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
-    if (overAllAttachments == true) {
-      container.setFileAndAttachmentNumber(file);
-      targetAttachments =
-          container.getAttachmentFileListForChapter(HTML_SRC_ATTACHMENT);
-    }
-    for (const auto &attNo : targetAttachments) {
+    CoupledContainer container(FILE_TYPE::ATTACHMENT);
+    container.setFileAndAttachmentNumber(file);
+    for (const auto &attNo :
+         container.getAttachmentFileList(minAttachNo, maxAttachNo)) {
       container.setFileAndAttachmentNumber(file, attNo);
       container.makeSingleLineHeaderAndFooter();
     }

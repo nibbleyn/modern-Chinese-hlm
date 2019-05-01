@@ -1,120 +1,5 @@
 #include "numberingAndLinkFixing.hpp"
 
-/**
- * numbering lines of a set of Attachment body text files of a set of chapters
- * if minAttachNo>maxAttachNo or both are zero
- * Numbering all attachments for those chapters
- * @param minTarget starting from this chapter
- * @param maxTarget until this chapter
- * @param minAttachNo for each chapter, start from this attachment
- * @param maxAttachNo for each chapter, until this attachment
- */
-void addLineNumbersForAttachmentHtml(int minTarget, int maxTarget,
-                                     int minAttachNo, int maxAttachNo,
-                                     bool forceUpdateLineNumber = true,
-                                     bool hideParaHeader = false) {
-
-  vector<int> targetAttachments;
-  bool overAllAttachments = true;
-  if (not(minAttachNo == 0 and maxAttachNo == 0) and
-      minAttachNo <= maxAttachNo) {
-    for (int i = maxAttachNo; i >= minAttachNo; i--)
-      targetAttachments.push_back(i);
-    overAllAttachments = false;
-  }
-  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
-    if (overAllAttachments == true) {
-      CoupledContainer container(FILE_TYPE::ATTACHMENT);
-      container.setFileAndAttachmentNumber(file);
-      targetAttachments =
-          container.getAttachmentFileListForChapter(HTML_SRC_ATTACHMENT);
-    }
-    for (const auto &attNo : targetAttachments) {
-      FILE_TYPE targetFileType = FILE_TYPE::ATTACHMENT;
-      CoupledBodyTextWithLink bodyText;
-      bodyText.setFilePrefixFromFileType(targetFileType);
-      bodyText.setFileAndAttachmentNumber(file, attNo);
-      bodyText.disableAutoNumbering();
-      bodyText.disableNumberingStatistics();
-      if (forceUpdateLineNumber)
-        bodyText.forceUpdateLineNumber();
-      if (hideParaHeader)
-        bodyText.hideParaHeader();
-      bodyText.addLineNumber();
-    }
-  }
-}
-
-/**
- * dissemble a set of Attachment files of a set of chapters
- * if minAttachNo>maxAttachNo or both are zero
- * dissemble all attachments for those chapters
- * @param minTarget starting from this chapter
- * @param maxTarget until this chapter
- * @param minAttachNo for each chapter, start from this attachment
- * @param maxAttachNo for each chapter, until this attachment
- */
-void dissembleAttachments(int minTarget, int maxTarget, int minAttachNo,
-                          int maxAttachNo) {
-  CoupledContainer container(FILE_TYPE::ATTACHMENT);
-  vector<int> targetAttachments;
-  bool overAllAttachments = true;
-  if (not(minAttachNo == 0 and maxAttachNo == 0) and
-      minAttachNo <= maxAttachNo) {
-    for (int i = maxAttachNo; i >= minAttachNo; i--)
-      targetAttachments.push_back(i);
-    overAllAttachments = false;
-  }
-  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
-    if (overAllAttachments == true) {
-      container.setFileAndAttachmentNumber(file);
-      targetAttachments =
-          container.getAttachmentFileListForChapter(HTML_SRC_ATTACHMENT);
-    }
-    for (const auto &attNo : targetAttachments) {
-      container.setFileAndAttachmentNumber(file, attNo);
-      container.dissembleFromHTM();
-    }
-  }
-  if (debug >= LOG_INFO)
-    FUNCTION_OUTPUT << "Attachments dissemble finished. " << endl;
-}
-
-/**
- * assemble a set of Attachment files of a set of chapters
- * if minAttachNo>maxAttachNo or both are zero
- * assemble all attachments for those chapters
- * @param minTarget starting from this chapter
- * @param maxTarget until this chapter
- * @param minAttachNo for each chapter, start from this attachment
- * @param maxAttachNo for each chapter, until this attachment
- */
-void assembleAttachments(int minTarget, int maxTarget, int minAttachNo,
-                         int maxAttachNo) {
-  CoupledContainer container(FILE_TYPE::ATTACHMENT);
-  vector<int> targetAttachments;
-  bool overAllAttachments = true;
-  if (not(minAttachNo == 0 and maxAttachNo == 0) and
-      minAttachNo <= maxAttachNo) {
-    for (int i = maxAttachNo; i >= minAttachNo; i--)
-      targetAttachments.push_back(i);
-    overAllAttachments = false;
-  }
-  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
-    if (overAllAttachments == true) {
-      container.setFileAndAttachmentNumber(file);
-      targetAttachments =
-          container.getAttachmentFileListForChapter(HTML_SRC_ATTACHMENT);
-    }
-    for (const auto &attNo : targetAttachments) {
-      container.setFileAndAttachmentNumber(file, attNo);
-      container.assembleBackToHTM();
-    }
-  }
-  if (debug >= LOG_INFO)
-    FUNCTION_OUTPUT << "assemble finished. " << endl;
-}
-
 void refreshBodyTexts(const string &kind, int minTarget, int maxTarget) {
   CoupledContainer container(getFileTypeFromString(kind));
   auto digits = (kind == JPM) ? THREE_DIGIT_FILENAME : TWO_DIGIT_FILENAME;
@@ -125,13 +10,6 @@ void refreshBodyTexts(const string &kind, int minTarget, int maxTarget) {
     container.dissembleFromHTM();
   }
   FUNCTION_OUTPUT << "Refreshing " << kind << " BodyTexts finished. " << endl;
-}
-
-void refreshAttachmentBodyTexts(int minTarget, int maxTarget, int minAttachNo,
-                                int maxAttachNo) {
-  CoupledContainer container(FILE_TYPE::ATTACHMENT);
-  CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
-  dissembleAttachments(minTarget, maxTarget, minAttachNo, maxAttachNo);
 }
 
 static const string HTML_OUTPUT_LINES_OF_MAIN =
@@ -214,7 +92,6 @@ void numberJPMHtmls(int num, bool forceUpdateLineNumber, bool hideParaHeader) {
   if (num == 2) {
     debug = LOG_EXCEPTION;
   }
-
   int minTarget = JPM_MIN_CHAPTER_NUMBER, maxTarget = JPM_MAX_CHAPTER_NUMBER;
   CoupledContainer container(FILE_TYPE::JPM);
   CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
@@ -262,27 +139,6 @@ void numberJPMHtmls(int num, bool forceUpdateLineNumber, bool hideParaHeader) {
   if (num == 2) {
     debug = oldDebug;
   }
-}
-
-static const string HTML_OUTPUT_LINES_OF_ATTACHMENTS =
-    R"(utf8HTML/output/LinesOfAttachments.txt)";
-
-void numberAttachmentHtmls(bool forceUpdateLineNumber, bool hideParaHeader) {
-  int minTarget = MAIN_MIN_CHAPTER_NUMBER, maxTarget = MAIN_MAX_CHAPTER_NUMBER;
-  int minAttachNo = MIN_ATTACHMENT_NUMBER, maxAttachNo = MAX_ATTACHMENT_NUMBER;
-  CoupledContainer container(FILE_TYPE::ATTACHMENT);
-  CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
-  dissembleAttachments(minTarget, maxTarget, minAttachNo, maxAttachNo);
-  CoupledBodyTextWithLink::setReferFilePrefix(ATTACHMENT_BODYTEXT_PREFIX);
-  CoupledBodyTextWithLink::setStatisticsOutputFilePath(
-      HTML_OUTPUT_LINES_OF_ATTACHMENTS);
-  // reformat bodytext by adding line number
-  addLineNumbersForAttachmentHtml(minTarget, maxTarget, minAttachNo,
-                                  maxAttachNo, forceUpdateLineNumber,
-                                  hideParaHeader);
-  CoupledBodyText::loadBodyTextsFromFixBackToOutput();
-  assembleAttachments(minTarget, maxTarget, minAttachNo, maxAttachNo);
-  FUNCTION_OUTPUT << "Numbering Attachment Html finished. " << endl;
 }
 
 fileSet keyMissingChapters;
@@ -367,11 +223,9 @@ void fixLinksFromMain(bool forceUpdateLink) {
 
   // fix return links of attachments to output directory
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
-    container.setFileAndAttachmentNumber(file);
-    auto targetAttachments =
-        container.getAttachmentFileListForChapter(HTML_SRC_ATTACHMENT);
     CoupledContainer attachmentContainer(FILE_TYPE::ATTACHMENT);
-    for (const auto &attNo : targetAttachments) {
+    attachmentContainer.setFileAndAttachmentNumber(file);
+    for (const auto &attNo : attachmentContainer.getAttachmentFileList()) {
       attachmentContainer.setFileAndAttachmentNumber(file, attNo);
       attachmentContainer.fixReturnLinkForAttachmentFile();
     }
@@ -386,6 +240,97 @@ void fixLinksFromMain(bool forceUpdateLink) {
   FUNCTION_OUTPUT << "fixLinksFromMain finished. " << endl;
 }
 
+/**
+ * dissemble a set of Attachment files of a set of chapters
+ * if minAttachNo>maxAttachNo or both are zero
+ * dissemble all attachments for those chapters
+ * @param minTarget starting from this chapter
+ * @param maxTarget until this chapter
+ * @param minAttachNo for each chapter, start from this attachment
+ * @param maxAttachNo for each chapter, until this attachment
+ */
+void dissembleAttachments(int minTarget, int maxTarget, int minAttachNo,
+                          int maxAttachNo) {
+  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
+    CoupledContainer container(FILE_TYPE::ATTACHMENT);
+    container.setFileAndAttachmentNumber(file);
+    for (const auto &attNo :
+         container.getAttachmentFileList(minAttachNo, maxAttachNo)) {
+      container.setFileAndAttachmentNumber(file, attNo);
+      container.dissembleFromHTM();
+    }
+  }
+  if (debug >= LOG_INFO)
+    FUNCTION_OUTPUT << "Attachments dissemble finished. " << endl;
+}
+
+/**
+ * assemble a set of Attachment files of a set of chapters
+ * if minAttachNo>maxAttachNo or both are zero
+ * assemble all attachments for those chapters
+ * @param minTarget starting from this chapter
+ * @param maxTarget until this chapter
+ * @param minAttachNo for each chapter, start from this attachment
+ * @param maxAttachNo for each chapter, until this attachment
+ */
+void assembleAttachments(int minTarget, int maxTarget, int minAttachNo,
+                         int maxAttachNo) {
+
+  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
+    CoupledContainer container(FILE_TYPE::ATTACHMENT);
+    container.setFileAndAttachmentNumber(file);
+    for (const auto &attNo :
+         container.getAttachmentFileList(minAttachNo, maxAttachNo)) {
+      container.setFileAndAttachmentNumber(file, attNo);
+      container.assembleBackToHTM();
+    }
+  }
+  if (debug >= LOG_INFO)
+    FUNCTION_OUTPUT << "assemble finished. " << endl;
+}
+
+void refreshAttachmentBodyTexts(int minTarget, int maxTarget, int minAttachNo,
+                                int maxAttachNo) {
+  CoupledContainer container(FILE_TYPE::ATTACHMENT);
+  CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
+  dissembleAttachments(minTarget, maxTarget, minAttachNo, maxAttachNo);
+}
+
+static const string HTML_OUTPUT_LINES_OF_ATTACHMENTS =
+    R"(utf8HTML/output/LinesOfAttachments.txt)";
+
+void numberAttachmentHtmls(bool forceUpdateLineNumber, bool hideParaHeader) {
+  int minTarget = MAIN_MIN_CHAPTER_NUMBER, maxTarget = MAIN_MAX_CHAPTER_NUMBER;
+  int minAttachNo = MIN_ATTACHMENT_NUMBER, maxAttachNo = MAX_ATTACHMENT_NUMBER;
+  CoupledContainer container(FILE_TYPE::ATTACHMENT);
+  CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
+  dissembleAttachments(minTarget, maxTarget, minAttachNo, maxAttachNo);
+  CoupledBodyTextWithLink::setReferFilePrefix(ATTACHMENT_BODYTEXT_PREFIX);
+  CoupledBodyTextWithLink::setStatisticsOutputFilePath(
+      HTML_OUTPUT_LINES_OF_ATTACHMENTS);
+  // reformat bodytext by adding line number
+  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
+    CoupledContainer container(FILE_TYPE::ATTACHMENT);
+    container.setFileAndAttachmentNumber(file);
+    for (const auto &attNo :
+         container.getAttachmentFileList(minAttachNo, maxAttachNo)) {
+      CoupledBodyTextWithLink bodyText;
+      bodyText.setFilePrefixFromFileType(FILE_TYPE::ATTACHMENT);
+      bodyText.setFileAndAttachmentNumber(file, attNo);
+      bodyText.disableAutoNumbering();
+      bodyText.disableNumberingStatistics();
+      if (forceUpdateLineNumber)
+        bodyText.forceUpdateLineNumber();
+      if (hideParaHeader)
+        bodyText.hideParaHeader();
+      bodyText.addLineNumber();
+    }
+  }
+  CoupledBodyText::loadBodyTextsFromFixBackToOutput();
+  assembleAttachments(minTarget, maxTarget, minAttachNo, maxAttachNo);
+  FUNCTION_OUTPUT << "Numbering Attachment Html finished. " << endl;
+}
+
 void fixLinksFromAttachment(bool forceUpdateLink) {
   int minTarget = MAIN_MIN_CHAPTER_NUMBER, maxTarget = MAIN_MAX_CHAPTER_NUMBER;
   int minReferenceToMain = MAIN_MIN_CHAPTER_NUMBER,
@@ -395,15 +340,6 @@ void fixLinksFromAttachment(bool forceUpdateLink) {
   int minReferenceToJPM = JPM_MIN_CHAPTER_NUMBER,
       maxReferenceToJPM = JPM_MAX_CHAPTER_NUMBER;
   int minAttachNo = MIN_ATTACHMENT_NUMBER, maxAttachNo = MAX_ATTACHMENT_NUMBER;
-  // if to fix all attachments
-  //  int minAttachNo = 0, maxAttachNo = 0;
-  vector<int> targetAttachments;
-  bool overAllAttachments = true;
-  if (minAttachNo != 0 and maxAttachNo != 0 and minAttachNo <= maxAttachNo) {
-    for (int i = maxAttachNo; i >= minAttachNo; i--)
-      targetAttachments.push_back(i);
-    overAllAttachments = false;
-  }
   // load files from output back to src
   CoupledContainer container(FILE_TYPE::ATTACHMENT);
   CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
@@ -413,15 +349,14 @@ void fixLinksFromAttachment(bool forceUpdateLink) {
 
   // dissemble html files
   dissembleAttachments(minTarget, maxTarget, minAttachNo, maxAttachNo);
-  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
-    if (overAllAttachments == true) {
-      container.setFileAndAttachmentNumber(file);
-      targetAttachments =
-          container.getAttachmentFileListForChapter(HTML_SRC_ATTACHMENT);
-    }
 
-    // fix links in body texts
-    for (const auto &attNo : targetAttachments) {
+  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
+    CoupledContainer container(FILE_TYPE::ATTACHMENT);
+    container.setFileAndAttachmentNumber(file);
+    // if to fix all attachments
+    //  set minAttachNo = 0, maxAttachNo = 0;
+    for (const auto &attNo :
+         container.getAttachmentFileList(minAttachNo, maxAttachNo)) {
       CoupledBodyTextWithLink bodyText;
       bodyText.setFilePrefixFromFileType(FILE_TYPE::ATTACHMENT);
       bodyText.setFileAndAttachmentNumber(file, attNo);

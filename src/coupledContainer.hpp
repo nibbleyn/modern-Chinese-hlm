@@ -40,7 +40,10 @@ public:
   string getOriginalTitle() { return m_originalTitle; };
   string getTranslatedTitle() { return m_translatedTitle; };
   void fixReturnLinkForAttachmentFile();
-  vector<int> getAttachmentFileListForChapter(const string &fromDir);
+  using AttachmentNumberList = set<int>;
+  AttachmentNumberList getAttachmentFileList(int minAttachNo = 0,
+                                             int maxAttachNo = 0);
+  AttachmentNumberList getAttachmentFileListForChapter(const string &fromDir);
   void dissembleFromHTM();
   void assembleBackToHTM(const string &title = emptyString,
                          const string &displayTitle = emptyString);

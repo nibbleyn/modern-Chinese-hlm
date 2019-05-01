@@ -327,6 +327,21 @@ void CoupledContainer::fixReturnLinkForAttachmentFile() {
   }
 }
 
+CoupledContainer::AttachmentNumberList
+CoupledContainer::getAttachmentFileList(int minAttachNo, int maxAttachNo) {
+  auto listOfNumbersFromFiles =
+      getAttachmentFileListForChapter(m_htmlInputFilePath);
+  if ((minAttachNo == 0 and maxAttachNo == 0) or maxAttachNo < minAttachNo) {
+    return listOfNumbersFromFiles;
+  }
+  AttachmentNumberList result;
+  for (int i = maxAttachNo; i >= minAttachNo; i--) {
+    if (listOfNumbersFromFiles.count(i))
+      result.insert(i);
+  }
+  return result;
+}
+
 /**
  * get all attachment files for referFile under fromDir
  * for example, if there are b003_1.html b003_5.html and b003_15.html
@@ -335,18 +350,17 @@ void CoupledContainer::fixReturnLinkForAttachmentFile() {
  * @param fromDir where its attachment files are under
  * @return the vector of attachment numbers
  */
-vector<int>
+CoupledContainer::AttachmentNumberList
 CoupledContainer::getAttachmentFileListForChapter(const string &fromDir) {
   vector<string> filenameList;
-  vector<int> attList;
+  AttachmentNumberList attList;
   Poco::File(fromDir).list(filenameList);
   for (const auto &file : filenameList) {
     if (file.find(getHtmlFileNamePrefix(FILE_TYPE::ATTACHMENT) + m_file) !=
         string::npos) {
       string attNo = getIncludedStringBetweenTags(
           file, attachmentFileMiddleChar, HTML_SUFFIX);
-
-      attList.push_back(TurnToInt(attNo));
+      attList.insert(TurnToInt(attNo));
     }
   }
   return attList;

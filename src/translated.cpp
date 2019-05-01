@@ -33,7 +33,7 @@ int main(int argc, char **argv) {
   case 7:
     refreshBodyTexts(MAIN);
     refreshBodyTexts(ORIGINAL);
-    refreshBodyTexts(JPM,JPM_MIN_CHAPTER_NUMBER,JPM_MAX_CHAPTER_NUMBER);
+    refreshBodyTexts(JPM, JPM_MIN_CHAPTER_NUMBER, JPM_MAX_CHAPTER_NUMBER);
     break;
   case 8:
     refreshAttachmentBodyTexts();
@@ -60,7 +60,7 @@ int main(int argc, char **argv) {
     fixLinksFromAttachment(false);
     break;
   case 16:
-    testFunctions(11);
+    testFunctions(4);
     break;
   case 17:
     tools(15);

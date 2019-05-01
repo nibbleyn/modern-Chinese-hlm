@@ -2,20 +2,16 @@
 #include <array>
 
 void testAttachmentOperations() {
-  CoupledContainer container(FILE_TYPE::MAIN);
+  CoupledContainer container(FILE_TYPE::ATTACHMENT);
   container.setFileAndAttachmentNumber("28");
-  auto attList = container.getAttachmentFileListForChapter(HTML_SRC_ATTACHMENT);
-  sort(attList.begin(), attList.end());
   FUNCTION_OUTPUT << "attachments for 28:" << endl;
-  for (const auto &attNo : attList) {
+  for (const auto &attNo : container.getAttachmentFileList(2, 5)) {
     FUNCTION_OUTPUT << attNo << endl;
   }
   FUNCTION_OUTPUT << endl;
   container.setFileAndAttachmentNumber("22");
-  attList = container.getAttachmentFileListForChapter(HTML_SRC_ATTACHMENT);
-  sort(attList.begin(), attList.end());
   FUNCTION_OUTPUT << "attachments for 22:" << endl;
-  for (const auto &attNo : attList) {
+  for (const auto &attNo : container.getAttachmentFileList(5, 2)) {
     FUNCTION_OUTPUT << attNo << endl;
   }
   FUNCTION_OUTPUT << endl;
