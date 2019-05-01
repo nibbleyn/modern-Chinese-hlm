@@ -99,33 +99,6 @@ void fixLinksFromMain(bool forceUpdateLink) {
   FUNCTION_OUTPUT << "fixLinksFromMain finished. " << endl;
 }
 
-void refreshBodyTexts(const string &kind, int minTarget, int maxTarget) {
-  CoupledContainer container(getFileTypeFromString(kind));
-  auto digits = (kind == JPM) ? THREE_DIGIT_FILENAME : TWO_DIGIT_FILENAME;
-  if (kind == MAIN)
-    CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
-  for (const auto &file : buildFileSet(minTarget, maxTarget, digits)) {
-    container.setFileAndAttachmentNumber(file);
-    container.dissembleFromHTM();
-  }
-  FUNCTION_OUTPUT << "Refreshing " << kind << " BodyTexts finished. " << endl;
-}
-
-void refreshAttachmentBodyTexts(int minTarget, int maxTarget, int minAttachNo,
-                                int maxAttachNo) {
-  CoupledContainer container(FILE_TYPE::ATTACHMENT);
-  CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
-  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
-    CoupledContainer container(FILE_TYPE::ATTACHMENT);
-    container.setFileAndAttachmentNumber(file);
-    for (const auto &attNo :
-         container.getAttachmentFileList(minAttachNo, maxAttachNo)) {
-      container.setFileAndAttachmentNumber(file, attNo);
-      container.dissembleFromHTM();
-    }
-  }
-}
-
 void fixLinksFromAttachment(bool forceUpdateLink) {
   int minTarget = MAIN_MIN_CHAPTER_NUMBER, maxTarget = MAIN_MAX_CHAPTER_NUMBER;
   int minReferenceToMain = MAIN_MIN_CHAPTER_NUMBER,
@@ -358,10 +331,38 @@ void numberAttachmentHtmls(int num, bool forceUpdateLineNumber,
   numbering.m_disableAutoNumbering = disableAutoNumbering;
   numbering.m_forceUpdateLineNumber = forceUpdateLineNumber;
   numbering.m_hideParaHeader = hideParaHeader;
-  numbering.m_kind = MAIN;
+  numbering.m_kind = ATTACHMENT;
   numbering.m_minTarget = MAIN_MIN_CHAPTER_NUMBER;
   numbering.m_maxTarget = MAIN_MAX_CHAPTER_NUMBER;
   //	numbering.m_minAttachNo = MIN_ATTACHMENT_NUMBER;
   //	numbering.m_maxAttachNo = MAX_ATTACHMENT_NUMBER;
   numbering.numberHtmls();
+}
+
+
+void refreshBodyTexts(const string &kind, int minTarget, int maxTarget) {
+  CoupledContainer container(getFileTypeFromString(kind));
+  auto digits = (kind == JPM) ? THREE_DIGIT_FILENAME : TWO_DIGIT_FILENAME;
+  if (kind == MAIN)
+    CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
+  for (const auto &file : buildFileSet(minTarget, maxTarget, digits)) {
+    container.setFileAndAttachmentNumber(file);
+    container.dissembleFromHTM();
+  }
+  FUNCTION_OUTPUT << "Refreshing " << kind << " BodyTexts finished. " << endl;
+}
+
+void refreshAttachmentBodyTexts(int minTarget, int maxTarget, int minAttachNo,
+                                int maxAttachNo) {
+  CoupledContainer container(FILE_TYPE::ATTACHMENT);
+  CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
+  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
+    CoupledContainer container(FILE_TYPE::ATTACHMENT);
+    container.setFileAndAttachmentNumber(file);
+    for (const auto &attNo :
+         container.getAttachmentFileList(minAttachNo, maxAttachNo)) {
+      container.setFileAndAttachmentNumber(file, attNo);
+      container.dissembleFromHTM();
+    }
+  }
 }
