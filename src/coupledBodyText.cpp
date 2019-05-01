@@ -170,12 +170,12 @@ void CoupledBodyText::removeOldLineNumber() {
   m_inLine = m_inLine.substr(linkEnd + LineNumberEnd.length());
 }
 
-void CoupledBodyText::numberingLine(ofstream &outfile, bool forceUpdate) {
+void CoupledBodyText::numberingLine(ofstream &outfile) {
   LineNumber ln;
   ln.loadFirstFromContainedLine(m_inLine);
   LineNumber newLn(m_para, m_lineNo);
   // remove old line number if forced or invalid
-  if (forceUpdate or not ln.equal(newLn)) {
+  if (m_forceUpdateLineNumber or not ln.equal(newLn)) {
     if (ln.valid()) {
       removeOldLineNumber();
     }
@@ -332,7 +332,7 @@ void CoupledBodyText::scanByLines() {
   }
 }
 
-void CoupledBodyText::paraGuidedNumbering(bool forceUpdate) {
+void CoupledBodyText::paraGuidedNumbering() {
 
   ifstream infile(m_inputFile);
   ofstream outfile(m_outputFile);
@@ -361,7 +361,7 @@ void CoupledBodyText::paraGuidedNumbering(bool forceUpdate) {
         lineBeforeParaHeader = m_imgGroupFollowingParaTable[seqOfLines];
       }
     } else if (m_lineAttrTable[seqOfLines].type == DISPLY_LINE_TYPE::TEXT) {
-      numberingLine(outfile, forceUpdate);
+      numberingLine(outfile);
     } else if (m_lineAttrTable[seqOfLines].type == DISPLY_LINE_TYPE::PARA) {
       addParaHeader(outfile);
     }

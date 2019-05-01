@@ -239,7 +239,7 @@ protected:
   void removeNbspsAndSpaces();
   void removeOldLineNumber();
 
-  void numberingLine(ofstream &outfile, bool forceUpdate = true);
+  void numberingLine(ofstream &outfile);
 
   void addFirstParaHeader(ofstream &outfile);
   void addlastParaHeader(ofstream &outfile);
@@ -250,9 +250,10 @@ protected:
   size_t m_numberOfMiddleParaHeader{0};
   size_t m_numberOfLastParaHeader{0};
   bool m_hideParaHeader{false};
+  bool m_forceUpdateLineNumber{false};
 
   void scanByLines();
-  void paraGuidedNumbering(bool forceUpdate);
+  void paraGuidedNumbering();
 
   // used for searching
   bool m_ignorePersonalComments{false};

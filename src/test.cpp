@@ -534,8 +534,7 @@ void testAddLineNumber() {
   bodyText.addLineNumber();
 }
 
-void renderingBodyText(const string &fileType = "main",
-                       bool hideParaHeader = false) {
+void renderingBodyText(const string &fileType = MAIN) {
   const string sampleBlock = R"()";
   const string sampleFirstLine = R"()";
   const string sampleWholeLine = R"()";

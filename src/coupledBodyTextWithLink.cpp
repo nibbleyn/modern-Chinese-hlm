@@ -2,8 +2,7 @@
 
 void CoupledBodyTextWithLink::fixLinksWithinOneLine(fileSet referMainFiles,
                                                     fileSet referOriginalFiles,
-                                                    fileSet referJPMFiles,
-                                                    bool forceUpdate) {
+                                                    fileSet referJPMFiles) {
 
   LineNumber ln;
   ln.loadFirstFromContainedLine(m_inLine);
@@ -41,7 +40,7 @@ void CoupledBodyTextWithLink::fixLinksWithinOneLine(fileSet referMainFiles,
       // third step of construction
       m_linkPtr->fixFromString(link);
       // replace old value
-      if (forceUpdate or m_linkPtr->needUpdate()) {
+      if (m_forceUpdateLink or m_linkPtr->needUpdate()) {
         auto orglinkBegin = m_inLine.find(link);
         m_inLine.replace(orglinkBegin, link.length(), m_linkPtr->asString());
       }
@@ -82,7 +81,7 @@ void CoupledBodyTextWithLink::fixLinksWithinOneLine(fileSet referMainFiles,
           m_linkPtr->generateLinkToOrigin();
         m_linkPtr->doStatistics();
         // replace old value
-        if (forceUpdate or m_linkPtr->needUpdate()) {
+        if (m_forceUpdateLink or m_linkPtr->needUpdate()) {
           auto orglinkBegin = m_inLine.find(link);
           m_inLine.replace(orglinkBegin, link.length(), m_linkPtr->asString());
         }
@@ -96,7 +95,7 @@ void CoupledBodyTextWithLink::fixLinksWithinOneLine(fileSet referMainFiles,
         // third step of construction
         m_linkPtr->fixFromString(link);
         // replace old value
-        if (forceUpdate or m_linkPtr->needUpdate()) {
+        if (m_forceUpdateLink or m_linkPtr->needUpdate()) {
           auto orglinkBegin = m_inLine.find(link);
           if (debug >= LOG_INFO)
             SEPERATE("isTargetToJPMHtm", m_inLine + "\n" + link);
@@ -113,7 +112,7 @@ void CoupledBodyTextWithLink::fixLinksWithinOneLine(fileSet referMainFiles,
         // third step of construction
         m_linkPtr->fixFromString(link);
         // replace old value
-        if (forceUpdate or m_linkPtr->needUpdate()) {
+        if (m_forceUpdateLink or m_linkPtr->needUpdate()) {
           auto orglinkBegin = m_inLine.find(link);
           if (debug >= LOG_INFO)
             SEPERATE("isTargetToOriginalHtm", m_inLine + "\n" + link);
@@ -252,7 +251,7 @@ void CoupledBodyTextWithLink::calculateParaHeaderPositions() {
   }
 }
 
-void CoupledBodyTextWithLink::paraGeneratedNumbering(bool forceUpdate) {
+void CoupledBodyTextWithLink::paraGeneratedNumbering() {
   ifstream infile(m_inputFile);
   ofstream outfile(m_outputFile);
 
@@ -284,7 +283,7 @@ void CoupledBodyTextWithLink::paraGeneratedNumbering(bool forceUpdate) {
           outfile << m_inLine << endl;
         } else if (m_lineAttrTable[seqOfLines].type == DISPLY_LINE_TYPE::TEXT)
           // needs numbering
-          numberingLine(outfile, forceUpdate);
+          numberingLine(outfile);
       }
       // needs to append para header afterwards
       if (isInParaHeaderTable(seqOfLines)) {
@@ -417,7 +416,7 @@ void CoupledBodyTextWithLink::validateParaSize() {
   printOversizedLines();
 }
 
-void CoupledBodyTextWithLink::addLineNumber(bool forceUpdate) {
+void CoupledBodyTextWithLink::addLineNumber() {
   setInputOutputFiles();
   ifstream infile(m_inputFile);
   if (!infile) {
@@ -435,11 +434,11 @@ void CoupledBodyTextWithLink::addLineNumber(bool forceUpdate) {
     // first scan
     scanByRenderingLines();
     calculateParaHeaderPositions();
-    paraGeneratedNumbering(forceUpdate);
+    paraGeneratedNumbering();
   } else {
     // first scan
     scanByLines();
-    paraGuidedNumbering(forceUpdate);
+    paraGuidedNumbering();
   }
   if (isNumberingStatistics())
     doStatisticsByScanningLines(true);
@@ -453,9 +452,11 @@ void CoupledBodyTextWithLink::addLineNumber(bool forceUpdate) {
  * @param file
  * @param referFiles
  */
-void CoupledBodyTextWithLink::fixLinksFromFile(
-    fileSet referMainFiles, fileSet referOriginalFiles, fileSet referJPMFiles,
-    bool forceUpdate, int minPara, int maxPara, int minLine, int maxLine) {
+void CoupledBodyTextWithLink::fixLinksFromFile(fileSet referMainFiles,
+                                               fileSet referOriginalFiles,
+                                               fileSet referJPMFiles,
+                                               int minPara, int maxPara,
+                                               int minLine, int maxLine) {
   setInputOutputFiles();
 
   ifstream infile(m_inputFile);
@@ -473,8 +474,7 @@ void CoupledBodyTextWithLink::fixLinksFromFile(
       outfile << m_inLine << endl;
       continue;
     }
-    fixLinksWithinOneLine(referMainFiles, referOriginalFiles, referJPMFiles,
-                          forceUpdate);
+    fixLinksWithinOneLine(referMainFiles, referOriginalFiles, referJPMFiles);
     outfile << m_inLine << endl;
   }
 }

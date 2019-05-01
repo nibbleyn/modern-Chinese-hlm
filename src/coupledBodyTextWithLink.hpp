@@ -35,17 +35,18 @@ public:
   void disableAutoNumbering() { m_autoNumbering = false; }
   void disableNumberingStatistics() { m_numberingStatistics = false; }
   void hideParaHeader() { m_hideParaHeader = true; }
-  void addLineNumber(bool forceUpdate = true);
+  void forceUpdateLineNumber() { m_forceUpdateLineNumber = true; }
+  void forceUpdateLink() { m_forceUpdateLink = true; }
+  void addLineNumber();
   void doStatisticsByScanningLines(bool overFixedBodyText = false);
 
   // used for link-fixing
   void fixLinksFromFile(fileSet referMainFiles, fileSet referOriginalFiles,
-                        fileSet referJPMFiles, bool forceUpdate = true,
-                        int minPara = 0, int maxPara = 0, int minLine = 0,
-                        int maxLine = 0);
+                        fileSet referJPMFiles, int minPara = 0, int maxPara = 0,
+                        int minLine = 0, int maxLine = 0);
   void setLineToFix(const string &originalString) { m_inLine = originalString; }
   void fixLinksWithinOneLine(fileSet referMainFiles, fileSet referOriginalFiles,
-                             fileSet referJPMFiles, bool forceUpdate = true);
+                             fileSet referJPMFiles);
   string getFixedLine() const { return m_inLine; }
 
   // used for rendering
@@ -55,7 +56,7 @@ public:
 
   // used by tools
   void printStringInLines();
-  void render(bool hideParaHeader = false);
+  void render();
   void removePersonalCommentsOverNumberedFiles();
 
 private:
@@ -111,7 +112,7 @@ private:
 
   void scanByRenderingLines();
   void calculateParaHeaderPositions();
-  void paraGeneratedNumbering(bool forceUpdate);
+  void paraGeneratedNumbering();
 
   // used for rendering
   using OffsetToObjectType = std::map<size_t, Object::OBJECT_TYPE>;
@@ -212,6 +213,7 @@ private:
   using LinkPtr = std::unique_ptr<CoupledLink>;
   LinkPtr m_linkPtr{nullptr};
   LinkPtr m_followingLinkPtr{nullptr};
+  bool m_forceUpdateLink{false};
 
   void printLinesTable() {
     if (not linesTable.empty()) {

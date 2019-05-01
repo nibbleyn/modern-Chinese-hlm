@@ -11,7 +11,7 @@
  */
 void addLineNumbersForAttachmentHtml(int minTarget, int maxTarget,
                                      int minAttachNo, int maxAttachNo,
-                                     bool forceUpdate = true,
+                                     bool forceUpdateLineNumber = true,
                                      bool hideParaHeader = false) {
 
   vector<int> targetAttachments;
@@ -36,9 +36,11 @@ void addLineNumbersForAttachmentHtml(int minTarget, int maxTarget,
       bodyText.setFileAndAttachmentNumber(file, attNo);
       bodyText.disableAutoNumbering();
       bodyText.disableNumberingStatistics();
+      if (forceUpdateLineNumber)
+        bodyText.forceUpdateLineNumber();
       if (hideParaHeader)
         bodyText.hideParaHeader();
-      bodyText.addLineNumber(forceUpdate);
+      bodyText.addLineNumber();
     }
   }
 }
@@ -139,7 +141,7 @@ static const string HTML_OUTPUT_LINES_OF_MAIN =
  * copy main files into HTML_OUTPUT
  * before run this
  */
-void numberMainHtmls(bool forceUpdate, bool hideParaHeader) {
+void numberMainHtmls(bool forceUpdateLineNumber, bool hideParaHeader) {
   int minTarget = MAIN_MIN_CHAPTER_NUMBER, maxTarget = MAIN_MAX_CHAPTER_NUMBER;
   CoupledContainer container(FILE_TYPE::MAIN);
   CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
@@ -156,9 +158,11 @@ void numberMainHtmls(bool forceUpdate, bool hideParaHeader) {
     bodyText.setFilePrefixFromFileType(FILE_TYPE::MAIN);
     bodyText.setFileAndAttachmentNumber(file);
     bodyText.disableAutoNumbering();
+    if (forceUpdateLineNumber)
+      bodyText.forceUpdateLineNumber();
     if (hideParaHeader)
       bodyText.hideParaHeader();
-    bodyText.addLineNumber(forceUpdate);
+    bodyText.addLineNumber();
   }
   CoupledBodyText::loadBodyTextsFromFixBackToOutput();
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
@@ -171,7 +175,7 @@ void numberMainHtmls(bool forceUpdate, bool hideParaHeader) {
 static const string HTML_OUTPUT_LINES_OF_ORIGINAL =
     R"(utf8HTML/output/LinesOfOriginal.txt)";
 
-void numberOriginalHtmls(bool forceUpdate, bool hideParaHeader) {
+void numberOriginalHtmls(bool forceUpdateLineNumber, bool hideParaHeader) {
   int minTarget = MAIN_MIN_CHAPTER_NUMBER, maxTarget = MAIN_MAX_CHAPTER_NUMBER;
   CoupledContainer container(FILE_TYPE::ORIGINAL);
   CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
@@ -188,9 +192,11 @@ void numberOriginalHtmls(bool forceUpdate, bool hideParaHeader) {
     bodyText.setFileAndAttachmentNumber(file);
     bodyText.disableAutoNumbering();
     bodyText.disableNumberingStatistics();
+    if (forceUpdateLineNumber)
+      bodyText.forceUpdateLineNumber();
     if (hideParaHeader)
       bodyText.hideParaHeader();
-    bodyText.addLineNumber(forceUpdate);
+    bodyText.addLineNumber();
   }
   CoupledBodyText::loadBodyTextsFromFixBackToOutput();
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
@@ -203,7 +209,7 @@ void numberOriginalHtmls(bool forceUpdate, bool hideParaHeader) {
 static const string HTML_OUTPUT_LINES_OF_JPM =
     R"(utf8HTML/output/LinesOfJPM.txt)";
 
-void numberJPMHtmls(int num, bool forceUpdate, bool hideParaHeader) {
+void numberJPMHtmls(int num, bool forceUpdateLineNumber, bool hideParaHeader) {
   auto oldDebug = debug;
   if (num == 2) {
     debug = LOG_EXCEPTION;
@@ -236,9 +242,11 @@ void numberJPMHtmls(int num, bool forceUpdate, bool hideParaHeader) {
       break;
     case 3:
       //      bodyText.disableAutoNumbering();
+      if (forceUpdateLineNumber)
+        bodyText.forceUpdateLineNumber();
       if (hideParaHeader)
         bodyText.hideParaHeader();
-      bodyText.addLineNumber(forceUpdate);
+      bodyText.addLineNumber();
       break;
     default:
       FUNCTION_OUTPUT << "no test executed." << endl;
@@ -259,7 +267,7 @@ void numberJPMHtmls(int num, bool forceUpdate, bool hideParaHeader) {
 static const string HTML_OUTPUT_LINES_OF_ATTACHMENTS =
     R"(utf8HTML/output/LinesOfAttachments.txt)";
 
-void numberAttachmentHtmls(bool forceUpdate, bool hideParaHeader) {
+void numberAttachmentHtmls(bool forceUpdateLineNumber, bool hideParaHeader) {
   int minTarget = MAIN_MIN_CHAPTER_NUMBER, maxTarget = MAIN_MAX_CHAPTER_NUMBER;
   int minAttachNo = MIN_ATTACHMENT_NUMBER, maxAttachNo = MAX_ATTACHMENT_NUMBER;
   CoupledContainer container(FILE_TYPE::ATTACHMENT);
@@ -270,7 +278,8 @@ void numberAttachmentHtmls(bool forceUpdate, bool hideParaHeader) {
       HTML_OUTPUT_LINES_OF_ATTACHMENTS);
   // reformat bodytext by adding line number
   addLineNumbersForAttachmentHtml(minTarget, maxTarget, minAttachNo,
-                                  maxAttachNo, forceUpdate, hideParaHeader);
+                                  maxAttachNo, forceUpdateLineNumber,
+                                  hideParaHeader);
   CoupledBodyText::loadBodyTextsFromFixBackToOutput();
   assembleAttachments(minTarget, maxTarget, minAttachNo, maxAttachNo);
   FUNCTION_OUTPUT << "Numbering Attachment Html finished. " << endl;
@@ -307,7 +316,7 @@ void displayNewlyAddedAttachments() {
  * before this function to work, numbering all main, original files
  * no requirement for numbering attachment files.
  */
-void fixLinksFromMain(bool forceUpdate) {
+void fixLinksFromMain(bool forceUpdateLink) {
   clearReport();
 
   int minTarget = MAIN_MIN_CHAPTER_NUMBER, maxTarget = MAIN_MAX_CHAPTER_NUMBER;
@@ -336,10 +345,12 @@ void fixLinksFromMain(bool forceUpdate) {
     CoupledBodyTextWithLink bodyText;
     bodyText.setFilePrefixFromFileType(FILE_TYPE::MAIN);
     bodyText.setFileAndAttachmentNumber(file);
+    if (forceUpdateLink)
+      bodyText.forceUpdateLink();
     bodyText.fixLinksFromFile(
         buildFileSet(minReferenceToMain, maxReferenceToMain),
         buildFileSet(minReferenceToOriginal, maxReferenceToOriginal),
-        buildFileSet(minReferenceToJPM, maxReferenceToJPM), forceUpdate);
+        buildFileSet(minReferenceToJPM, maxReferenceToJPM));
   }
 
   if (debug >= LOG_INFO)
@@ -375,7 +386,7 @@ void fixLinksFromMain(bool forceUpdate) {
   FUNCTION_OUTPUT << "fixLinksFromMain finished. " << endl;
 }
 
-void fixLinksFromAttachment(bool forceUpdate) {
+void fixLinksFromAttachment(bool forceUpdateLink) {
   int minTarget = MAIN_MIN_CHAPTER_NUMBER, maxTarget = MAIN_MAX_CHAPTER_NUMBER;
   int minReferenceToMain = MAIN_MIN_CHAPTER_NUMBER,
       maxReferenceToMain = MAIN_MAX_CHAPTER_NUMBER;
@@ -414,10 +425,12 @@ void fixLinksFromAttachment(bool forceUpdate) {
       CoupledBodyTextWithLink bodyText;
       bodyText.setFilePrefixFromFileType(FILE_TYPE::ATTACHMENT);
       bodyText.setFileAndAttachmentNumber(file, attNo);
+      if (forceUpdateLink)
+        bodyText.forceUpdateLink();
       bodyText.fixLinksFromFile(
           buildFileSet(minReferenceToMain, maxReferenceToMain),
           buildFileSet(minReferenceToOriginal, maxReferenceToOriginal),
-          buildFileSet(minReferenceToJPM, maxReferenceToJPM), forceUpdate);
+          buildFileSet(minReferenceToJPM, maxReferenceToJPM));
     }
   }
 

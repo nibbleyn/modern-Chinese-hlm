@@ -338,7 +338,7 @@ CoupledBodyTextWithLink::getContainedObjectTypes(const string &originalString) {
   return resultSet;
 }
 
-void CoupledBodyTextWithLink::render(bool hideParaHeader) {
+void CoupledBodyTextWithLink::render() {
   setInputOutputFiles();
   ifstream infile(m_inputFile);
   if (!infile) {
@@ -355,13 +355,14 @@ void CoupledBodyTextWithLink::render(bool hideParaHeader) {
     }
     LineNumber ln;
     ln.loadFirstFromContainedLine(inLine);
-    if (ln.isParagraphHeader() and hideParaHeader == false) {
+    if (ln.isParagraphHeader()) {
       paraHeaderLoaded.loadFrom(inLine);
       paraHeaderLoaded.fixFromTemplate();
       if (debug >= LOG_INFO) {
         METHOD_OUTPUT << paraHeaderLoaded.getDisplayString() << endl;
       }
-      outfile << paraHeaderLoaded.getDisplayString() << endl;
+      if (not m_hideParaHeader)
+        outfile << paraHeaderLoaded.getDisplayString() << endl;
     } else if (isLeadingBr(inLine)) {
       string LF{0x0A};
       outfile << LF;
