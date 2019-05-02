@@ -1,6 +1,8 @@
 #pragma once
+#include "attachmentTable.hpp"
 #include "coupledBodyText.hpp"
 #include "link.hpp"
+
 using FileSet = set<string>;
 
 static const string returnLink = R"(被引用)";
@@ -25,18 +27,6 @@ public:
   static LinksTable linksTable;
   static void displayFixedLinks();
 
-  // statistics about links to attachments
-  struct AttachmentDetails {
-    string fromfilename{emptyString};
-    string fromLine{emptyString};
-    string title{emptyString};
-    ATTACHMENT_TYPE type{ATTACHMENT_TYPE::NON_EXISTED};
-  };
-  using AttachmentSet = map<AttachmentNumber, AttachmentDetails>;
-  // imported attachment list
-  static AttachmentSet refAttachmentTable;
-  static ATTACHMENT_TYPE getAttachmentType(AttachmentNumber num);
-  static void loadReferenceAttachmentList();
   static void resetStatisticsAndLoadReferenceAttachmentList();
   static void outPutStatisticsToFiles();
 
@@ -53,11 +43,11 @@ public:
 
   virtual ~CoupledLink(){};
 
-  string getWholeString();
-  string getDisplayString();
-  size_t displaySize();
+  string getWholeString() override;
+  string getDisplayString() override;
+  size_t displaySize() override;
   size_t loadFirstFromContainedLine(const string &containedLine,
-                                    size_t after = 0);
+                                    size_t after = 0) override;
   string asString();
   void doStatistics() {
     if (m_usedKey.find(keyNotFound) != string::npos) {
@@ -105,9 +95,7 @@ protected:
 
 class LinkFromMain : public CoupledLink {
 public:
-  static AttachmentSet attachmentTable;
-  static void displayAttachments();
-  static string getFromLineOfAttachment(AttachmentNumber num);
+  static AttachmentList attachmentTable;
 
   static FileSet keyMissingChapters;
   static FileSet newAttachmentList;
@@ -115,7 +103,6 @@ public:
   static void displayMainFilesOfMissingKey();
   static void displayNewlyAddedAttachments();
 
-  static void resetStatisticsAndLoadReferenceAttachmentList();
   static void outPutStatisticsToFiles();
 
 public:

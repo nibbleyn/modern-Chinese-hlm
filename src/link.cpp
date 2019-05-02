@@ -409,3 +409,25 @@ bool Link::readAnnotation(const string &linkString) {
     METHOD_OUTPUT << "annotation: " << m_annotation << endl;
   return true;
 }
+
+string Link::getWholeString() { return m_fullString; }
+
+string Link::getDisplayString() { return m_annotation; }
+
+size_t Link::displaySize() { return m_annotation.length(); }
+
+/**
+ * must ensure this is not a lineNumber string, which is a normal link also
+ * before calling this method
+ */
+size_t Link::loadFirstFromContainedLine(const string &containedLine,
+                                        size_t after) {
+  m_fullString = getWholeStringBetweenTags(containedLine, linkStartChars,
+                                           linkEndChars, after);
+  if (debug >= LOG_INFO) {
+    METHOD_OUTPUT << "m_fullString: " << endl;
+    METHOD_OUTPUT << m_fullString << endl;
+  }
+  readTypeAndAnnotation(m_fullString);
+  return containedLine.find(linkStartChars, after);
+}

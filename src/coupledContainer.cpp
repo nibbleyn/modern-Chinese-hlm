@@ -1,5 +1,7 @@
 #include "coupledContainer.hpp"
 
+AttachmentList CoupledContainer::refAttachmentTable;
+
 /**
  * seconds from EPOCH as the timestamp
  * used for unique name in backup etc.
@@ -301,7 +303,7 @@ void CoupledContainer::fixReturnLinkForAttachmentFile() {
           break;
         link = getWholeStringBetweenTags(line, linkStartChars, linkEndChars);
         // get only type and annotation
-        LinkFromAttachment lfm(referFile, link);
+        Link lfm(referFile, link);
         if (lfm.getAnnotation() == returnLinkFromAttachmentHeader)
           break;
         else
@@ -309,18 +311,17 @@ void CoupledContainer::fixReturnLinkForAttachmentFile() {
           line = line.substr(linkBegin + link.length());
       }
       if (not link.empty()) {
-        LinkFromAttachment lfm(referFile, link);
+        Link lfm(referFile, link);
         // special hack to make sure using a0... as return file name
         // must return to main html
         lfm.setTypeThruFileNamePrefix(MAIN_TYPE_HTML_TARGET);
-        lfm.readReferFileName(link);
         lfm.fixReferFile(TurnToInt(m_file));
         AttachmentNumber num(TurnToInt(m_file), m_attachmentNumber);
-        lfm.fixReferPara(LinkFromMain::getFromLineOfAttachment(num));
+        lfm.fixReferPara(refAttachmentTable.getFromLineOfAttachment(num));
         // replace old value
         if (lfm.needUpdate()) {
           auto orglinkBegin = orgLine.find(link);
-          orgLine.replace(orglinkBegin, link.length(), lfm.asString());
+          orgLine.replace(orglinkBegin, link.length(), link);
         }
       }
       outfile << orgLine << endl;

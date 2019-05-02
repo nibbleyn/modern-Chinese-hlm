@@ -4,9 +4,8 @@ CoupledLink::LinksTable CoupledLink::linksTable;
 string CoupledLink::referFilePrefix{emptyString};
 string CoupledLink::linkDetailFilePath{emptyString};
 string CoupledLink::keyDetailFilePath{emptyString};
-CoupledLink::AttachmentSet CoupledLink::refAttachmentTable;
 
-LinkFromMain::AttachmentSet LinkFromMain::attachmentTable;
+AttachmentList LinkFromMain::attachmentTable;
 
 /**
  * output linksTable to file specified in linkDetailFilePath and
@@ -47,148 +46,10 @@ void CoupledLink::displayFixedLinks() {
 }
 
 /**
- * personalAttachmentType means a personal review could be removed thru
- * removePersonalViewpoints() referenceAttachmentType means reference to other
- * stories or about a person
- */
-static const string personalAttachmentType = R"(1)";
-static const string referenceAttachmentType = R"(0)";
-
-/**
- * the string to write into file of a type
- * @param type ATTACHMENT_TYPE to convert
- * @return corresponding string
- */
-string attachmentTypeAsString(ATTACHMENT_TYPE type) {
-  return (type == ATTACHMENT_TYPE::PERSONAL) ? personalAttachmentType
-                                             : referenceAttachmentType;
-}
-
-/**
- * convert string read from file back to type
- * @param str referenceAttachmentType or personalAttachmentType from file
- * @return REFERENCE or PERSONAL
- */
-ATTACHMENT_TYPE attachmentTypeFromString(const string &str) {
-  return (str == personalAttachmentType) ? ATTACHMENT_TYPE::PERSONAL
-                                         : ATTACHMENT_TYPE::REFERENCE;
-}
-
-/**
- * find the type of one attachment from refAttachmentTable
- * which is loaded from loadReferenceAttachmentList()
- * @param num pair of chapter number and attachment number
- * @return personalAttachmentType if found in refAttachmentTable with value
- * personalAttachmentType otherwise, return referenceAttachmentType if founded
- * with value referenceAttachmentType otherwise, return "2"
- *  personalAttachmentType means a personal review could be removed thru
- * removePersonalViewpoints() referenceAttachmentType means reference to other
- * stories or about a person
- */
-ATTACHMENT_TYPE CoupledLink::getAttachmentType(AttachmentNumber num) {
-  ATTACHMENT_TYPE attachmentType = ATTACHMENT_TYPE::NON_EXISTED;
-  try {
-    auto entry = refAttachmentTable.at(num);
-    attachmentType = entry.type;
-  } catch (exception &) {
-    if (debug >= LOG_EXCEPTION)
-      FUNCTION_OUTPUT << "not found info in refAttachmentTable about: "
-                      << num.first << attachmentFileMiddleChar << num.second
-                      << endl;
-  }
-  return attachmentType;
-}
-
-static const string HTML_SRC_REF_ATTACHMENT_LIST =
-    "utf8HTML/src/RefAttachments.txt";
-static const string fromParaOfReferenceAttachment = R"(from:)";
-static const string fromFileOfReferenceAttachment = R"( name:)";
-static const string titleOfReferenceAttachment = R"( title:)";
-static const string typeOfReferenceAttachment = R"( type:)";
-
-/**
- * get chapter number and attachment number from an attachment file name
- * for example with input b001_15 would return pair <1,15>
- * @param filename the attachment file without .htm, e.g. b003_7
- * @return pair of chapter number and attachment number
- */
-AttachmentNumber getAttachmentNumber(const string &filename) {
-  AttachmentNumber num(0, 0);
-  string start = getHtmlFileNamePrefix(FILE_TYPE::ATTACHMENT);
-  auto fileBegin = filename.find(start);
-  // referred file not found
-  if (fileBegin == string::npos) {
-    return num;
-  }
-  auto chapter = filename.substr(fileBegin + start.length(), 2);
-  num.first = TurnToInt(chapter);
-  auto seqStart = filename.find(attachmentFileMiddleChar);
-  // no file to refer
-  if (seqStart == string::npos) {
-    return num;
-  }
-  auto seq = filename.substr(seqStart + 1, filename.length() - seqStart);
-  num.second = TurnToInt(seq);
-  return num;
-}
-
-/**
- * load refAttachmentTable from HTML_SRC_REF_ATTACHMENT
- * read file and add entry of attachment found before into target list.
- * by using refAttachmentTable and attachmentList and doing below iteratively
- * we can keep old changes of type and only need to change added links
- * 1. loading from refAttachmentTable,
- * 2. output to attachmentList during link fixing
- * 3. manually changing type in the output attachmentList
- * 4. overwriting refAttachmentTable by this output attachmentList
- */
-void CoupledLink::loadReferenceAttachmentList() {
-  ifstream infile(HTML_SRC_REF_ATTACHMENT_LIST);
-  if (!infile) {
-    FUNCTION_OUTPUT << "file doesn't exist:" << HTML_SRC_REF_ATTACHMENT_LIST
-                    << endl;
-    return;
-  }
-  refAttachmentTable.clear();
-  string line;
-  // To search in all the lines in referred file
-  while (!infile.eof()) {
-    getline(infile, line);
-    if (line.empty())
-      break;
-
-    string type = referenceAttachmentType;
-    auto typeBegin = line.find(typeOfReferenceAttachment);
-    if (typeBegin != string::npos) {
-      type = line.substr(typeBegin + typeOfReferenceAttachment.length());
-    }
-    string title = getIncludedStringBetweenTags(
-        line, titleOfReferenceAttachment, typeOfReferenceAttachment);
-    string targetFile = getIncludedStringBetweenTags(
-        line, fromFileOfReferenceAttachment, titleOfReferenceAttachment);
-    string fromLine = getIncludedStringBetweenTags(
-        line, fromParaOfReferenceAttachment, fromFileOfReferenceAttachment);
-    if (debug >= LOG_INFO)
-      FUNCTION_OUTPUT << fromParaOfReferenceAttachment << fromLine
-                      << fromFileOfReferenceAttachment << targetFile
-                      << titleOfReferenceAttachment << title
-                      << typeOfReferenceAttachment << type << endl;
-    type.erase(remove(type.begin(), type.end(), ' '), type.end());
-    // remove only leading and trailing blank for title
-    title = std::regex_replace(title, std::regex("^ +"), emptyString);
-    title = std::regex_replace(title, std::regex(" +$"), emptyString);
-    AttachmentDetails detail{targetFile, fromLine, title,
-                             attachmentTypeFromString(type)};
-    refAttachmentTable[getAttachmentNumber(targetFile)] = detail;
-  }
-}
-
-/**
  * reset the general data structure to log info about links
  */
 void CoupledLink::resetStatisticsAndLoadReferenceAttachmentList() {
   linksTable.clear();
-  loadReferenceAttachmentList();
 }
 
 /**
@@ -223,51 +84,6 @@ static const string HTML_OUTPUT_ATTACHMENT_FROM_MAIN_LIST =
     "utf8HTML/output/AttachmentsFromMain.txt";
 
 /**
- * output all attachment info into specified file
- */
-void LinkFromMain::displayAttachments() {
-  if (attachmentTable.empty())
-    return;
-  ofstream outfile(HTML_OUTPUT_ATTACHMENT_FROM_MAIN_LIST);
-  for (const auto &attachment : attachmentTable) {
-    auto entry = attachment.second;
-
-    outfile << "from:" << entry.fromfilename << " name:" << entry.fromLine
-            << " title:" << entry.title
-            << " type:" << attachmentTypeAsString(entry.type) << endl;
-  }
-  FUNCTION_OUTPUT << "attachment information are written into: "
-                  << HTML_OUTPUT_ATTACHMENT_FROM_MAIN_LIST << endl;
-}
-
-/**
- * find fromLine of one attachment from attachmentTable
- * which is calculated during link fixing
- * @param num pair of chapter number and attachment number
- * @return the fromLine stored if existed, otherwise "top"
- */
-string LinkFromMain::getFromLineOfAttachment(AttachmentNumber num) {
-  string result = topParagraphIndicator;
-  try {
-    result = attachmentTable.at(num).fromLine;
-  } catch (exception &) {
-    if (debug >= LOG_INFO)
-      FUNCTION_OUTPUT << "fromLine not found in attachmentTable about: "
-                      << num.first << attachmentFileMiddleChar << num.second
-                      << endl;
-  }
-  return result;
-}
-
-/**
- * reset statistics data structure for re-do it during link fixing
- */
-void LinkFromMain::resetStatisticsAndLoadReferenceAttachmentList() {
-  CoupledLink::resetStatisticsAndLoadReferenceAttachmentList();
-  attachmentTable.clear();
-}
-
-/**
  * output statistics from link fixing of links from main files
  */
 void LinkFromMain::outPutStatisticsToFiles() {
@@ -275,7 +91,7 @@ void LinkFromMain::outPutStatisticsToFiles() {
   linkDetailFilePath = HTML_OUTPUT_LINKS_FROM_MAIN_LIST;
   keyDetailFilePath = HTML_OUTPUT_KEY_OF_LINKS_FROM_MAIN_LIST;
   CoupledLink::outPutStatisticsToFiles();
-  displayAttachments();
+  attachmentTable.saveAttachmentList();
 }
 
 void LinkFromMain::logLink() {
@@ -307,7 +123,7 @@ void LinkFromMain::logLink() {
                       TurnToString(getattachmentNumber());
     auto num = make_pair(getchapterNumer(), getattachmentNumber());
     auto title = getAttachmentTitle(targetFile);
-    auto type = getAttachmentType(num);
+    auto type = attachmentTable.getAttachmentType(num);
     if (getSourceChapterName() == getChapterName()) {
       if (type == ATTACHMENT_TYPE::NON_EXISTED)
         newAttachmentList.insert(targetFile);
@@ -316,7 +132,8 @@ void LinkFromMain::logLink() {
                                (type == ATTACHMENT_TYPE::PERSONAL)
                                    ? ATTACHMENT_TYPE::PERSONAL
                                    : ATTACHMENT_TYPE::REFERENCE};
-      refAttachmentTable[getAttachmentNumber(targetFile)] = detail;
+      attachmentTable.addOrUpdateOneItem(getAttachmentNumber(targetFile),
+                                         detail);
     }
     if (not isAnnotationMatch(getAnnotation(), title)) {
       METHOD_OUTPUT << m_fromFile << " has a link to " << targetFile

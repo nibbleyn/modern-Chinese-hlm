@@ -1,23 +1,20 @@
 #pragma once
 #include "lineNumber.hpp"
 
+// same value with those defined in fileUtil.hpp
+static const std::string MAIN_TYPE_HTML_TARGET = R"(a0)";
+static const std::string ORIGINAL_TYPE_HTML_TARGET = R"(c0)";
+static const std::string ATTACHMENT_TYPE_HTML_TARGET = R"(b0)";
+static const std::string JPM_TYPE_HTML_TARGET = R"(d)";
+
 enum class LINK_TYPE { MAIN, ATTACHMENT, ORIGINAL, SAMEPAGE, JPM, IMAGE };
 enum class LINK_DISPLAY_TYPE { DIRECT, HIDDEN, UNHIDDEN };
-
-enum class ATTACHMENT_TYPE { PERSONAL, REFERENCE, NON_EXISTED };
-using AttachmentNumber = pair<int, int>; // chapter number, attachment number
 
 static const string returnLinkFromAttachmentHeader = R"(返回本章原文)";
 static const string annotationToOriginal = R"(原文)";
 static const string contentTableFilename = R"(aindex)";
 
 static const std::string TARGET_FILE_EXT = R"(.htm)";
-
-// same value with those defined in fileUtil.hpp
-static const std::string MAIN_TYPE_HTML_TARGET = R"(a0)";
-static const std::string ORIGINAL_TYPE_HTML_TARGET = R"(c0)";
-static const std::string ATTACHMENT_TYPE_HTML_TARGET = R"(b0)";
-static const std::string JPM_TYPE_HTML_TARGET = R"(d)";
 
 // operations over link string template initialization
 string fixLinkFromSameFileTemplate(LINK_DISPLAY_TYPE type, const string &key,
@@ -114,6 +111,12 @@ public:
     }
   }
   void setTypeThruFileNamePrefix(const string &link);
+
+  string getWholeString();
+  string getDisplayString();
+  size_t displaySize();
+  size_t loadFirstFromContainedLine(const string &containedLine,
+                                    size_t after = 0);
 
 protected:
   LINK_DISPLAY_TYPE getDisplayType() { return m_displayType; }
