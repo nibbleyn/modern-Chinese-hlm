@@ -36,7 +36,7 @@ void Numbering::numberHtmls() {
 
   increaseDebugLevel();
   m_fileType = getFileTypeFromString(m_kind);
-  CoupledContainer container(m_fileType);
+  m_container.setFileType(m_fileType);
 
   CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
 
@@ -55,14 +55,14 @@ void Numbering::numberHtmls() {
         m_minReferenceToJPM, m_maxReferenceToJPM, THREE_DIGIT_FILENAME);
   }
 
-  dissembleHtmls(container);
+  dissembleHtmls();
 
   m_bodyText.setFilePrefixFromFileType(m_fileType);
-  runCommandOverEachFile(container);
+  runCommandOverEachFile();
 
   CoupledBodyText::loadBodyTextsFromFixBackToOutput();
 
-  assembleHtmls(container);
+  assembleHtmls();
 
   fixReturnLink();
   outputLinkFixingStatistics();
@@ -70,55 +70,54 @@ void Numbering::numberHtmls() {
   METHOD_OUTPUT << m_kind << " Html is done processing. " << endl;
 }
 
-void NumberingNonAttachment::dissembleHtmls(CoupledContainer &container) {
+void NumberingNonAttachment::dissembleHtmls() {
   for (const auto &file : m_fileSet) {
-    container.setFileAndAttachmentNumber(file);
-    container.dissembleFromHTM();
+    m_container.setFileAndAttachmentNumber(file);
+    m_container.dissembleFromHTM();
   }
 }
 
-void NumberingNonAttachment::assembleHtmls(CoupledContainer &container) {
+void NumberingNonAttachment::assembleHtmls() {
   for (const auto &file : m_fileSet) {
-    container.setFileAndAttachmentNumber(file);
-    container.assembleBackToHTM();
+    m_container.setFileAndAttachmentNumber(file);
+    m_container.assembleBackToHTM();
   }
 }
 
-void NumberingNonAttachment::runCommandOverEachFile(
-    CoupledContainer &container) {
+void NumberingNonAttachment::runCommandOverEachFile() {
   for (const auto &file : m_fileSet) {
     m_bodyText.setFileAndAttachmentNumber(file);
     execute();
   }
 }
 
-void NumberingAttachment::dissembleHtmls(CoupledContainer &container) {
+void NumberingAttachment::dissembleHtmls() {
   for (const auto &file : m_fileSet) {
-    container.setFileAndAttachmentNumber(file);
+    m_container.setFileAndAttachmentNumber(file);
     for (const auto &attNo :
-         container.getAttachmentFileList(m_minAttachNo, m_maxAttachNo)) {
-      container.setFileAndAttachmentNumber(file, attNo);
-      container.dissembleFromHTM();
+         m_container.getAttachmentFileList(m_minAttachNo, m_maxAttachNo)) {
+      m_container.setFileAndAttachmentNumber(file, attNo);
+      m_container.dissembleFromHTM();
     }
   }
 }
 
-void NumberingAttachment::assembleHtmls(CoupledContainer &container) {
+void NumberingAttachment::assembleHtmls() {
   for (const auto &file : m_fileSet) {
-    container.setFileAndAttachmentNumber(file);
+    m_container.setFileAndAttachmentNumber(file);
     for (const auto &attNo :
-         container.getAttachmentFileList(m_minAttachNo, m_maxAttachNo)) {
-      container.setFileAndAttachmentNumber(file, attNo);
-      container.assembleBackToHTM();
+         m_container.getAttachmentFileList(m_minAttachNo, m_maxAttachNo)) {
+      m_container.setFileAndAttachmentNumber(file, attNo);
+      m_container.assembleBackToHTM();
     }
   }
 }
 
-void NumberingAttachment::runCommandOverEachFile(CoupledContainer &container) {
+void NumberingAttachment::runCommandOverEachFile() {
   for (const auto &file : m_fileSet) {
-    container.setFileAndAttachmentNumber(file);
+    m_container.setFileAndAttachmentNumber(file);
     for (const auto &attNo :
-         container.getAttachmentFileList(m_minAttachNo, m_maxAttachNo)) {
+         m_container.getAttachmentFileList(m_minAttachNo, m_maxAttachNo)) {
       m_bodyText.setFileAndAttachmentNumber(file, attNo);
       m_bodyText.disableAutoNumbering();
       m_bodyText.disableNumberingStatistics();
@@ -130,7 +129,8 @@ void Numbering::fixReturnLink() {
   if (m_command == COMMAND::fixLinksFromMainFile and m_fixReturnLink)
     // fix return links of attachments to output directory
     for (const auto &file : m_fileSet) {
-      CoupledContainer attachmentContainer(FILE_TYPE::ATTACHMENT);
+      CoupledContainer attachmentContainer;
+      attachmentContainer.setFileType(FILE_TYPE::ATTACHMENT);
       attachmentContainer.setFileAndAttachmentNumber(file);
       for (const auto &attNo : attachmentContainer.getAttachmentFileList()) {
         attachmentContainer.setFileAndAttachmentNumber(file, attNo);
@@ -267,11 +267,13 @@ void validateParaSizeForAutoNumberingJPMHtmls() {
 }
 
 void refreshBodyTexts(const string &kind, int minTarget, int maxTarget) {
-  CoupledContainer container(getFileTypeFromString(kind));
-  auto digits = (kind == JPM) ? THREE_DIGIT_FILENAME : TWO_DIGIT_FILENAME;
+
   if (kind == MAIN)
     CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
+  auto digits = (kind == JPM) ? THREE_DIGIT_FILENAME : TWO_DIGIT_FILENAME;
   for (const auto &file : buildFileSet(minTarget, maxTarget, digits)) {
+    CoupledContainer container;
+    container.setFileType(getFileTypeFromString(kind));
     container.setFileAndAttachmentNumber(file);
     container.dissembleFromHTM();
   }
@@ -280,10 +282,11 @@ void refreshBodyTexts(const string &kind, int minTarget, int maxTarget) {
 
 void refreshAttachmentBodyTexts(int minTarget, int maxTarget, int minAttachNo,
                                 int maxAttachNo) {
-  CoupledContainer container(FILE_TYPE::ATTACHMENT);
+
   CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
-    CoupledContainer container(FILE_TYPE::ATTACHMENT);
+    CoupledContainer container;
+    container.setFileType(FILE_TYPE::ATTACHMENT);
     container.setFileAndAttachmentNumber(file);
     for (const auto &attNo :
          container.getAttachmentFileList(minAttachNo, maxAttachNo)) {

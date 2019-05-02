@@ -355,7 +355,8 @@ void CoupledContainer::fixHeaderAndFooter() {
 }
 
 void fixHeaderAndFooterForJPMHtml(int minTarget, int maxTarget) {
-  CoupledContainer container(FILE_TYPE::JPM);
+  CoupledContainer container;
+  container.setFileType(FILE_TYPE::JPM);
   for (const auto &file :
        buildFileSet(minTarget, maxTarget, THREE_DIGIT_FILENAME)) {
     container.setFileAndAttachmentNumber(file);
@@ -459,7 +460,8 @@ void CoupledBodyText::fixPersonalView() {
 
 void fixPersonalViewForJPMHtmls() {
   int minTarget = JPM_MIN_CHAPTER_NUMBER, maxTarget = JPM_MAX_CHAPTER_NUMBER;
-  CoupledContainer container(FILE_TYPE::JPM);
+  CoupledContainer container;
+  container.setFileType(FILE_TYPE::JPM);
   for (const auto &file :
        buildFileSet(minTarget, maxTarget, THREE_DIGIT_FILENAME)) {
     container.setFileAndAttachmentNumber(file);
@@ -483,7 +485,8 @@ void fixPersonalViewForJPMHtmls() {
 
 void fixHeaderAndFooterForMainHtmls() {
   int minTarget = MAIN_MIN_CHAPTER_NUMBER, maxTarget = MAIN_MAX_CHAPTER_NUMBER;
-  CoupledContainer container(FILE_TYPE::MAIN);
+  CoupledContainer container;
+  container.setFileType(FILE_TYPE::MAIN);
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     container.setFileAndAttachmentNumber(file);
     container.makeSingleLineHeaderAndFooter();
@@ -495,7 +498,8 @@ void fixHeaderAndFooterForAttachmentHtmls() {
   int minTarget = MAIN_MIN_CHAPTER_NUMBER, maxTarget = MAIN_MAX_CHAPTER_NUMBER;
   int minAttachNo = MIN_ATTACHMENT_NUMBER, maxAttachNo = MAX_ATTACHMENT_NUMBER;
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
-    CoupledContainer container(FILE_TYPE::ATTACHMENT);
+    CoupledContainer container;
+    container.setFileType(FILE_TYPE::ATTACHMENT);
     container.setFileAndAttachmentNumber(file);
     for (const auto &attNo :
          container.getAttachmentFileList(minAttachNo, maxAttachNo)) {
@@ -509,7 +513,8 @@ void fixHeaderAndFooterForAttachmentHtmls() {
 
 void fixHeaderAndFooterForOriginalHtmls() {
   int minTarget = MAIN_MIN_CHAPTER_NUMBER, maxTarget = MAIN_MAX_CHAPTER_NUMBER;
-  CoupledContainer container(FILE_TYPE::ORIGINAL);
+  CoupledContainer container;
+  container.setFileType(FILE_TYPE::ORIGINAL);
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     container.setFileAndAttachmentNumber(file);
     container.makeSingleLineHeaderAndFooter();

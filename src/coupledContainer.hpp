@@ -12,10 +12,19 @@ const string sampTitleEndChars = R"(</samp>)";
  * etc.
  */
 class CoupledContainer : public Container {
+public:
+  static void backupAndOverwriteAllInputHtmlFiles();
 
 public:
   CoupledContainer() = default;
-  CoupledContainer(FILE_TYPE fileType) : m_fileType(fileType) {
+
+  void setFileAndAttachmentNumber(const string &file, int attachNo = 0) {
+    m_file = file;
+    m_attachmentNumber = attachNo;
+  };
+
+  void setFileType(FILE_TYPE fileType) {
+    m_fileType = fileType;
     if (fileType == FILE_TYPE::ATTACHMENT) {
       m_htmlInputFilePath = HTML_SRC_ATTACHMENT;
       m_htmlOutputFilePath = HTML_OUTPUT_ATTACHMENT;
@@ -28,12 +37,6 @@ public:
     }
   }
 
-  static void backupAndOverwriteAllInputHtmlFiles();
-
-  void setFileAndAttachmentNumber(const string &file, int attachNo = 0) {
-    m_file = file;
-    m_attachmentNumber = attachNo;
-  };
   void makeSingleLineHeaderAndFooter();
   void fixHeaderAndFooter();
   void fetchOriginalAndTranslatedTitles();

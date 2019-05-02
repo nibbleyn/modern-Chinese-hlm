@@ -2,7 +2,8 @@
 #include <array>
 
 void testAttachmentOperations() {
-  CoupledContainer container(FILE_TYPE::ATTACHMENT);
+  CoupledContainer container;
+  container.setFileType(FILE_TYPE::ATTACHMENT);
   container.setFileAndAttachmentNumber("28");
   FUNCTION_OUTPUT << "attachments for 28:" << endl;
   for (const auto &attNo : container.getAttachmentFileList(2, 5)) {

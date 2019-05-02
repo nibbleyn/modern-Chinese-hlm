@@ -36,7 +36,9 @@ std::vector<int> createParaList(int first, int incremental, int max) {
 
 void generateContentTableForMainHtmls() {
   int minTarget = MAIN_MIN_CHAPTER_NUMBER, maxTarget = MAIN_MAX_CHAPTER_NUMBER;
-  CoupledContainer container(FILE_TYPE::MAIN);
+  CoupledContainer container;
+  container.setFileType(FILE_TYPE::MAIN);
+
   TableContainer outputContainer(MAIN_INDEX);
   outputContainer.setInputFileName(TABLE_CONTAINER_FILENAME_SMALLER_FONT);
   auto paraList = createParaList(6, 10, 70);
@@ -85,7 +87,8 @@ void generateContentTableForMainHtmls() {
 
 void generateContentTableForOriginalHtmls() {
   int minTarget = MAIN_MIN_CHAPTER_NUMBER, maxTarget = MAIN_MAX_CHAPTER_NUMBER;
-  CoupledContainer container(FILE_TYPE::ORIGINAL);
+  CoupledContainer container;
+  container.setFileType(FILE_TYPE::ORIGINAL);
   TableContainer outputContainer(ORG_INDEX);
   auto paraList = createParaList(18, 22, 70);
   std::sort(paraList.begin(), paraList.end());
@@ -130,7 +133,8 @@ void generateContentTableForOriginalHtmls() {
 
 void generateContentTableForJPMHtmls() {
   int minTarget = JPM_MIN_CHAPTER_NUMBER, maxTarget = JPM_MAX_CHAPTER_NUMBER;
-  CoupledContainer container(FILE_TYPE::JPM);
+  CoupledContainer container;
+  container.setFileType(FILE_TYPE::JPM);
   TableContainer outputContainer(JPM_INDEX);
   auto paraList = createParaList(18, 22, 90);
   std::sort(paraList.begin(), paraList.end());

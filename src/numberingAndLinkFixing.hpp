@@ -15,57 +15,65 @@ public:
 public:
   Numbering() = default;
   virtual ~Numbering(){};
+
   COMMAND m_command{COMMAND::addLineNumber};
+
   string m_kind{MAIN};
-  FILE_TYPE m_fileType{FILE_TYPE::MAIN};
   int m_filenameDigit{TWO_DIGIT_FILENAME};
-  FileSet m_fileSet;
   int m_minTarget{MAIN_MIN_CHAPTER_NUMBER};
   int m_maxTarget{MAIN_MAX_CHAPTER_NUMBER};
   int m_minAttachNo{0};
   int m_maxAttachNo{0};
+
+  // for numbering
   bool m_forceUpdateLineNumber{true};
   bool m_hideParaHeader{false};
   bool m_disableAutoNumbering{true};
-  bool m_fixReturnLink{true};
-  CoupledBodyTextWithLink m_bodyText;
-  void numberHtmls();
 
+  // for link fixing
   int m_minReferenceToMain{MAIN_MIN_CHAPTER_NUMBER};
   int m_maxReferenceToMain{MAIN_MAX_CHAPTER_NUMBER};
   int m_minReferenceToOriginal{MAIN_MIN_CHAPTER_NUMBER};
   int m_maxReferenceToOriginal{MAIN_MAX_CHAPTER_NUMBER};
   int m_minReferenceToJPM{JPM_MIN_CHAPTER_NUMBER};
   int m_maxReferenceToJPM{JPM_MAX_CHAPTER_NUMBER};
+  bool m_fixReturnLink{true};
   bool m_forceUpdateLink{true};
+
+  void numberHtmls();
+
+protected:
+  FILE_TYPE m_fileType{FILE_TYPE::MAIN};
+  FileSet m_fileSet;
   FileSet m_referenceToMainfileSet;
   FileSet m_referenceToOriginalfileSet;
   FileSet m_referenceToJPMfileSet;
-
-protected:
-  virtual void dissembleHtmls(CoupledContainer &container) = 0;
-  virtual void assembleHtmls(CoupledContainer &container) = 0;
-  virtual void runCommandOverEachFile(CoupledContainer &container) = 0;
+  CoupledContainer m_container;
+  CoupledBodyTextWithLink m_bodyText;
+  virtual void dissembleHtmls() = 0;
+  virtual void assembleHtmls() = 0;
+  virtual void runCommandOverEachFile() = 0;
   void execute();
   void fixReturnLink();
   void setupNumberingStatistics();
   void setupLinkFixingStatistics();
   void outputLinkFixingStatistics();
+
   int m_storedDebugLevel{0};
   void increaseDebugLevel();
   void restoreDebugLevel();
 };
 
 class NumberingNonAttachment : public Numbering {
-  void dissembleHtmls(CoupledContainer &container);
-  void assembleHtmls(CoupledContainer &container);
-  void runCommandOverEachFile(CoupledContainer &container);
+  void dissembleHtmls();
+  void assembleHtmls();
+  void runCommandOverEachFile();
 };
 
 class NumberingAttachment : public Numbering {
-  void dissembleHtmls(CoupledContainer &container);
-  void assembleHtmls(CoupledContainer &container);
-  void runCommandOverEachFile(CoupledContainer &container);
+  void dissembleHtmls();
+  void assembleHtmls();
+  void runCommandOverEachFile();
 };
 
 void numberJPMHtmls(bool forceUpdateLineNumber = true,
