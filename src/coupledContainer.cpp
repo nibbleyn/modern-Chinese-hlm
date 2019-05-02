@@ -379,23 +379,16 @@ void CoupledContainer::fetchOriginalAndTranslatedTitles() {
     if (debug >= LOG_INFO) {
       METHOD_OUTPUT << line << endl;
     }
-    auto linkBegin = line.find(topIdBeginChars);
-    if (linkBegin != string::npos) {
+    if (line.find(topIdBeginChars) != string::npos) {
       break;
     }
-    auto strongTitleBegin = line.find(strongTitleBeginChars);
-    if (strongTitleBegin != string::npos) {
-      auto strongTitleEnd = line.find(strongTitleEndChars, strongTitleBegin);
-      m_originalTitle = line.substr(
-          strongTitleBegin + strongTitleBeginChars.length(),
-          strongTitleEnd - strongTitleBegin - strongTitleBeginChars.length());
+    if (line.find(strongTitleBeginChars) != string::npos) {
+      m_originalTitle = getIncludedStringBetweenTags(
+          line, strongTitleBeginChars, strongTitleEndChars);
     }
-    auto sampTitleBegin = line.find(sampTitleBeginChars);
-    if (sampTitleBegin != string::npos) {
-      auto sampTitleEnd = line.find(sampTitleEndChars, sampTitleBegin);
-      m_translatedTitle = line.substr(
-          sampTitleBegin + sampTitleBeginChars.length(),
-          sampTitleEnd - sampTitleBegin - sampTitleBeginChars.length());
+    if (line.find(sampTitleBeginChars) != string::npos) {
+      m_translatedTitle = getIncludedStringBetweenTags(
+          line, sampTitleBeginChars, sampTitleEndChars);
     }
   }
 }

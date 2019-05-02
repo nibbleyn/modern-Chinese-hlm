@@ -2,7 +2,7 @@
 
 #include "libraryInterface.hpp"
 
-class Numbering {
+class Commander {
 public:
   enum class COMMAND {
     validateFormatForNumbering,
@@ -13,8 +13,8 @@ public:
   };
 
 public:
-  Numbering() = default;
-  virtual ~Numbering(){};
+  Commander() = default;
+  virtual ~Commander(){};
 
   COMMAND m_command{COMMAND::addLineNumber};
 
@@ -40,7 +40,7 @@ public:
   bool m_fixReturnLink{true};
   bool m_forceUpdateLink{true};
 
-  void numberHtmls();
+  void runCommandOverFiles();
 
 protected:
   FILE_TYPE m_fileType{FILE_TYPE::MAIN};
@@ -64,13 +64,13 @@ protected:
   void restoreDebugLevel();
 };
 
-class NumberingNonAttachment : public Numbering {
+class NonAttachmentCommander : public Commander {
   void dissembleHtmls();
   void assembleHtmls();
   void runCommandOverEachFile();
 };
 
-class NumberingAttachment : public Numbering {
+class AttachmentCommander : public Commander {
   void dissembleHtmls();
   void assembleHtmls();
   void runCommandOverEachFile();

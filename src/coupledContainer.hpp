@@ -37,24 +37,35 @@ public:
     }
   }
 
-  void makeSingleLineHeaderAndFooter();
-  void fixHeaderAndFooter();
-  void fetchOriginalAndTranslatedTitles();
-  string getOriginalTitle() { return m_originalTitle; };
-  string getTranslatedTitle() { return m_translatedTitle; };
-  void fixReturnLinkForAttachmentFile();
+  // dissemble/assemble before/after working on bodyText
+  void dissembleFromHTM();
+  void assembleBackToHTM(const string &title = emptyString,
+                         const string &displayTitle = emptyString);
+  // get attachment numbers for a chapter
   using AttachmentNumberList = set<int>;
   AttachmentNumberList getAttachmentFileList(int minAttachNo = 0,
                                              int maxAttachNo = 0);
   AttachmentNumberList getAttachmentFileListForChapter(const string &fromDir);
-  void dissembleFromHTM();
-  void assembleBackToHTM(const string &title = emptyString,
-                         const string &displayTitle = emptyString);
+
+  // fix return link after fix links in main files
+  void fixReturnLinkForAttachmentFile();
+
+  // to create content table
+  void fetchOriginalAndTranslatedTitles();
+  string getOriginalTitle() { return m_originalTitle; };
+  string getTranslatedTitle() { return m_translatedTitle; };
+
+  // tools to fix headers
+  void makeSingleLineHeaderAndFooter();
+  void fixHeaderAndFooter();
 
 private:
   FILE_TYPE m_fileType{FILE_TYPE::MAIN};
+
   string m_file{emptyString};
   int m_attachmentNumber{0};
+
+  // to create content table
   string m_originalTitle{emptyString};
   string m_translatedTitle{emptyString};
 
