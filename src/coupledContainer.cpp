@@ -306,13 +306,14 @@ void CoupledContainer::fixReturnLinkForAttachmentFile() {
           break;
         else
           // find next link in the line
-          line = line.substr(linkBegin + lfm.length());
+          line = line.substr(linkBegin + link.length());
       }
       if (not link.empty()) {
         LinkFromAttachment lfm(referFile, link);
         // special hack to make sure using a0... as return file name
         // must return to main html
         lfm.setTypeThruFileNamePrefix(MAIN_TYPE_HTML_TARGET);
+        lfm.readReferFileName(link);
         lfm.fixReferFile(TurnToInt(m_file));
         AttachmentNumber num(TurnToInt(m_file), m_attachmentNumber);
         lfm.fixReferPara(LinkFromMain::getFromLineOfAttachment(num));

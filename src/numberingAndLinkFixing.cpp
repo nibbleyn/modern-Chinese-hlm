@@ -304,6 +304,8 @@ void fixLinksFromMain(bool forceUpdateLink) {
   NonAttachmentCommander commander;
   commander.m_command = Commander::COMMAND::fixLinksFromMainFile;
   commander.m_kind = MAIN;
+  commander.m_minTarget = MAIN_MIN_CHAPTER_NUMBER;
+  commander.m_maxTarget = MAIN_MAX_CHAPTER_NUMBER;
   commander.runCommandOverFiles();
 }
 
@@ -311,6 +313,8 @@ void fixLinksFromAttachment(bool forceUpdateLink) {
   AttachmentCommander commander;
   commander.m_command = Commander::COMMAND::fixLinksFromAttachmentFile;
   commander.m_kind = ATTACHMENT;
+  commander.m_minTarget = MAIN_MIN_CHAPTER_NUMBER;
+  commander.m_maxTarget = MAIN_MAX_CHAPTER_NUMBER;
   commander.m_fixReturnLink = false;
   commander.runCommandOverFiles();
 }

@@ -157,25 +157,22 @@ void CoupledLink::loadReferenceAttachmentList() {
     if (line.empty())
       break;
 
-    string start = "type:";
     string type = referenceAttachmentType;
-    auto typeBegin = line.find(start);
+    auto typeBegin = line.find(typeOfReferenceAttachment);
     if (typeBegin != string::npos) {
-      type = line.substr(typeBegin + start.length());
+      type = line.substr(typeBegin + typeOfReferenceAttachment.length());
     }
-    string title = getWholeStringBetweenTags(line, titleOfReferenceAttachment,
-                                             typeOfReferenceAttachment);
-    string targetFile = getWholeStringBetweenTags(
+    string title = getIncludedStringBetweenTags(
+        line, titleOfReferenceAttachment, typeOfReferenceAttachment);
+    string targetFile = getIncludedStringBetweenTags(
         line, fromFileOfReferenceAttachment, titleOfReferenceAttachment);
-    string fromLine = getWholeStringBetweenTags(
+    string fromLine = getIncludedStringBetweenTags(
         line, fromParaOfReferenceAttachment, fromFileOfReferenceAttachment);
     if (debug >= LOG_INFO)
-      FUNCTION_OUTPUT << "from:" << fromLine << " name:" << targetFile
-                      << " title:" << title << " type:" << type << endl;
-    fromLine.erase(remove(fromLine.begin(), fromLine.end(), ' '),
-                   fromLine.end());
-    targetFile.erase(remove(targetFile.begin(), targetFile.end(), ' '),
-                     targetFile.end());
+      FUNCTION_OUTPUT << fromParaOfReferenceAttachment << fromLine
+                      << fromFileOfReferenceAttachment << targetFile
+                      << titleOfReferenceAttachment << title
+                      << typeOfReferenceAttachment << type << endl;
     type.erase(remove(type.begin(), type.end(), ' '), type.end());
     // remove only leading and trailing blank for title
     title = std::regex_replace(title, std::regex("^ +"), emptyString);
