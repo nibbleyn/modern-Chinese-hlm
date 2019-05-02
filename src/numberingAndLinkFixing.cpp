@@ -1,178 +1,15 @@
 #include "numberingAndLinkFixing.hpp"
 
-FileSet keyMissingChapters;
-FileSet newAttachmentList;
-
-void clearReport() {
-  keyMissingChapters.clear();
-  newAttachmentList.clear();
-}
-
-void displayMainFilesOfMissingKey() {
-  if (keyMissingChapters.empty())
-    return;
-  FUNCTION_OUTPUT << "files which has missing key links:" << endl;
-  for (const auto &file : keyMissingChapters) {
-    FUNCTION_OUTPUT << getHtmlFileNamePrefix(FILE_TYPE::MAIN) + file + ".htm"
-                    << endl;
-  }
-}
-
-void displayNewlyAddedAttachments() {
-  if (newAttachmentList.empty())
-    return;
-  FUNCTION_OUTPUT << "Newly Added Attachments:" << endl;
-  for (const auto &file : newAttachmentList) {
-    FUNCTION_OUTPUT << file + ".htm" << endl;
-  }
-}
-
-/**
- * before this function to work, numbering all main, original files
- * no requirement for numbering attachment files.
- */
-void fixLinksFromMain(bool forceUpdateLink) {
-  clearReport();
-
-  int minTarget = MAIN_MIN_CHAPTER_NUMBER, maxTarget = MAIN_MAX_CHAPTER_NUMBER;
-  int minReferenceToMain = MAIN_MIN_CHAPTER_NUMBER,
-      maxReferenceToMain = MAIN_MAX_CHAPTER_NUMBER;
-  int minReferenceToOriginal = MAIN_MIN_CHAPTER_NUMBER,
-      maxReferenceToOriginal = MAIN_MAX_CHAPTER_NUMBER;
-  int minReferenceToJPM = JPM_MIN_CHAPTER_NUMBER,
-      maxReferenceToJPM = JPM_MAX_CHAPTER_NUMBER;
-
-  // load files from output back to src
-  CoupledContainer container(FILE_TYPE::MAIN);
-  CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
-
-  // load known reference attachment list
-  LinkFromMain::resetStatisticsAndLoadReferenceAttachmentList();
-
-  // dissemble html files
-  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
-    container.setFileAndAttachmentNumber(file);
-    container.dissembleFromHTM();
-  }
-
-  // fix links in body texts
-  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
-    CoupledBodyTextWithLink bodyText;
-    bodyText.setFilePrefixFromFileType(FILE_TYPE::MAIN);
-    bodyText.setFileAndAttachmentNumber(file);
-    if (forceUpdateLink)
-      bodyText.forceUpdateLink();
-    bodyText.fixLinksFromFile(
-        buildFileSet(minReferenceToMain, maxReferenceToMain),
-        buildFileSet(minReferenceToOriginal, maxReferenceToOriginal),
-        buildFileSet(minReferenceToJPM, maxReferenceToJPM));
-  }
-
-  if (debug >= LOG_INFO)
-    FUNCTION_OUTPUT << "Links fixing  finished. " << endl;
-
-  // load fixed body texts back to output directory
-  CoupledBodyText::loadBodyTextsFromFixBackToOutput();
-
-  // assemble back htmls to output directory
-  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
-    container.setFileAndAttachmentNumber(file);
-    container.assembleBackToHTM();
-  }
-
-  // fix return links of attachments to output directory
-  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
-    CoupledContainer attachmentContainer(FILE_TYPE::ATTACHMENT);
-    attachmentContainer.setFileAndAttachmentNumber(file);
-    for (const auto &attNo : attachmentContainer.getAttachmentFileList()) {
-      attachmentContainer.setFileAndAttachmentNumber(file, attNo);
-      attachmentContainer.fixReturnLinkForAttachmentFile();
-    }
-  }
-  if (debug >= LOG_INFO)
-    FUNCTION_OUTPUT << "Return Link fixing finished. " << endl;
-
-  // statistics of links fixing
-  LinkFromMain::outPutStatisticsToFiles();
-  displayMainFilesOfMissingKey();
-  displayNewlyAddedAttachments();
-  FUNCTION_OUTPUT << "fixLinksFromMain finished. " << endl;
-}
-
-void fixLinksFromAttachment(bool forceUpdateLink) {
-  int minTarget = MAIN_MIN_CHAPTER_NUMBER, maxTarget = MAIN_MAX_CHAPTER_NUMBER;
-  int minReferenceToMain = MAIN_MIN_CHAPTER_NUMBER,
-      maxReferenceToMain = MAIN_MAX_CHAPTER_NUMBER;
-  int minReferenceToOriginal = MAIN_MIN_CHAPTER_NUMBER,
-      maxReferenceToOriginal = MAIN_MAX_CHAPTER_NUMBER;
-  int minReferenceToJPM = JPM_MIN_CHAPTER_NUMBER,
-      maxReferenceToJPM = JPM_MAX_CHAPTER_NUMBER;
-  int minAttachNo = MIN_ATTACHMENT_NUMBER, maxAttachNo = MAX_ATTACHMENT_NUMBER;
-  // load files from output back to src
-  CoupledContainer container(FILE_TYPE::ATTACHMENT);
-  CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
-
-  // load known reference attachment list
-  LinkFromAttachment::resetStatisticsAndLoadReferenceAttachmentList();
-
-  // dissemble html files
-  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
-    CoupledContainer container(FILE_TYPE::ATTACHMENT);
-    container.setFileAndAttachmentNumber(file);
-    for (const auto &attNo :
-         container.getAttachmentFileList(minAttachNo, maxAttachNo)) {
-      container.setFileAndAttachmentNumber(file, attNo);
-      container.dissembleFromHTM();
-    }
-  }
-
-  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
-    CoupledContainer container(FILE_TYPE::ATTACHMENT);
-    container.setFileAndAttachmentNumber(file);
-    // if to fix all attachments
-    //  set minAttachNo = 0, maxAttachNo = 0;
-    for (const auto &attNo :
-         container.getAttachmentFileList(minAttachNo, maxAttachNo)) {
-      CoupledBodyTextWithLink bodyText;
-      bodyText.setFilePrefixFromFileType(FILE_TYPE::ATTACHMENT);
-      bodyText.setFileAndAttachmentNumber(file, attNo);
-      if (forceUpdateLink)
-        bodyText.forceUpdateLink();
-      bodyText.fixLinksFromFile(
-          buildFileSet(minReferenceToMain, maxReferenceToMain),
-          buildFileSet(minReferenceToOriginal, maxReferenceToOriginal),
-          buildFileSet(minReferenceToJPM, maxReferenceToJPM));
-    }
-  }
-
-  // load fixed body texts back to output directory
-  CoupledBodyText::loadBodyTextsFromFixBackToOutput();
-
-  // dissemble html files
-  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
-    CoupledContainer container(FILE_TYPE::ATTACHMENT);
-    container.setFileAndAttachmentNumber(file);
-    for (const auto &attNo :
-         container.getAttachmentFileList(minAttachNo, maxAttachNo)) {
-      container.setFileAndAttachmentNumber(file, attNo);
-      container.assembleBackToHTM();
-    }
-  }
-  // statistics of links fixing
-  LinkFromAttachment::outPutStatisticsToFiles();
-  FUNCTION_OUTPUT << "fixLinksFromAttachment finished. " << endl;
-}
-
 void Numbering::execute() {
   switch (m_command) {
-  case 1:
+  case COMMAND::validateFormatForNumbering:
     m_bodyText.validateFormatForNumbering();
     break;
-  case 2:
+  case COMMAND::validateParaSizeForAutoNumbering:
     if (not m_disableAutoNumbering)
       m_bodyText.validateParaSize();
     break;
-  case 3:
+  case COMMAND::addLineNumber:
     if (m_disableAutoNumbering)
       m_bodyText.disableAutoNumbering();
     if (m_forceUpdateLineNumber)
@@ -181,46 +18,56 @@ void Numbering::execute() {
       m_bodyText.hideParaHeader();
     m_bodyText.addLineNumber();
     break;
+  case COMMAND::fixLinksFromMainFile:
+  case COMMAND::fixLinksFromAttachmentFile:
+    if (m_forceUpdateLink)
+      m_bodyText.forceUpdateLink();
+    m_bodyText.fixLinksFromFile(m_referenceToMainfileSet,
+                                m_referenceToOriginalfileSet,
+                                m_referenceToJPMfileSet);
+    break;
+
   default:
-    FUNCTION_OUTPUT << "no command executed." << endl;
+    METHOD_OUTPUT << "no command executed." << endl;
   }
 }
 
 void Numbering::numberHtmls() {
 
-  auto oldDebug = debug;
-  if (m_command == 2) {
-    debug = LOG_EXCEPTION;
-  }
-
-  auto fileType = getFileTypeFromString(m_kind);
-  CoupledContainer container(fileType);
+  increaseDebugLevel();
+  m_fileType = getFileTypeFromString(m_kind);
+  CoupledContainer container(m_fileType);
 
   CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
 
-  auto m_fileSet = buildFileSet(m_minTarget, m_maxTarget, m_filenameDigit);
+  setupNumberingStatistics();
+  setupLinkFixingStatistics();
+
+  m_fileSet = buildFileSet(m_minTarget, m_maxTarget, m_filenameDigit);
+
+  if (m_command == COMMAND::fixLinksFromMainFile or
+      m_command == COMMAND::fixLinksFromAttachmentFile) {
+    m_referenceToMainfileSet = buildFileSet(
+        m_minReferenceToMain, m_maxReferenceToMain, TWO_DIGIT_FILENAME);
+    m_referenceToOriginalfileSet = buildFileSet(
+        m_minReferenceToOriginal, m_maxReferenceToOriginal, TWO_DIGIT_FILENAME);
+    m_referenceToJPMfileSet = buildFileSet(
+        m_minReferenceToJPM, m_maxReferenceToJPM, THREE_DIGIT_FILENAME);
+  }
 
   dissembleHtmls(container);
 
-  if (m_command == 3) {
-    CoupledBodyTextWithLink::setReferFilePrefix(
-        getFilePrefixFromFileType(fileType));
-    CoupledBodyTextWithLink::setStatisticsOutputFilePath(
-        getStatisticsOutputFilePathFromString(m_kind));
-  }
-
-  m_bodyText.setFilePrefixFromFileType(fileType);
-  runOverEachFile(container);
+  m_bodyText.setFilePrefixFromFileType(m_fileType);
+  runCommandOverEachFile(container);
 
   CoupledBodyText::loadBodyTextsFromFixBackToOutput();
 
   assembleHtmls(container);
 
-  if (m_command == 2) {
-    debug = oldDebug;
-  }
-
-  FUNCTION_OUTPUT << "Numbering" << m_kind << " Html finished. " << endl;
+  fixReturnLink();
+  outputLinkFixingStatistics();
+  restoreDebugLevel();
+  METHOD_OUTPUT << m_kind << " Html is done processing. " << endl;
 }
 
 void NumberingNonAttachment::dissembleHtmls(CoupledContainer &container) {
@@ -237,7 +84,8 @@ void NumberingNonAttachment::assembleHtmls(CoupledContainer &container) {
   }
 }
 
-void NumberingNonAttachment::runOverEachFile(CoupledContainer &container) {
+void NumberingNonAttachment::runCommandOverEachFile(
+    CoupledContainer &container) {
   for (const auto &file : m_fileSet) {
     m_bodyText.setFileAndAttachmentNumber(file);
     execute();
@@ -266,7 +114,7 @@ void NumberingAttachment::assembleHtmls(CoupledContainer &container) {
   }
 }
 
-void NumberingAttachment::runOverEachFile(CoupledContainer &container) {
+void NumberingAttachment::runCommandOverEachFile(CoupledContainer &container) {
   for (const auto &file : m_fileSet) {
     container.setFileAndAttachmentNumber(file);
     for (const auto &attNo :
@@ -278,15 +126,73 @@ void NumberingAttachment::runOverEachFile(CoupledContainer &container) {
     }
   }
 }
+void Numbering::fixReturnLink() {
+  if (m_command == COMMAND::fixLinksFromMainFile and m_fixReturnLink)
+    // fix return links of attachments to output directory
+    for (const auto &file : m_fileSet) {
+      CoupledContainer attachmentContainer(FILE_TYPE::ATTACHMENT);
+      attachmentContainer.setFileAndAttachmentNumber(file);
+      for (const auto &attNo : attachmentContainer.getAttachmentFileList()) {
+        attachmentContainer.setFileAndAttachmentNumber(file, attNo);
+        attachmentContainer.fixReturnLinkForAttachmentFile();
+      }
+    }
+}
+
+void Numbering::setupNumberingStatistics() {
+  if (m_command == COMMAND::addLineNumber) {
+    CoupledBodyTextWithLink::setReferFilePrefix(
+        getFilePrefixFromFileType(m_fileType));
+    CoupledBodyTextWithLink::setStatisticsOutputFilePath(
+        getStatisticsOutputFilePathFromString(m_kind));
+  }
+}
+
+void Numbering::setupLinkFixingStatistics() {
+  if (m_command == COMMAND::fixLinksFromMainFile) {
+    // load known reference attachment list
+    LinkFromMain::resetStatisticsAndLoadReferenceAttachmentList();
+    LinkFromMain::clearReport();
+  }
+  if (m_command == COMMAND::fixLinksFromAttachmentFile) {
+    // load known reference attachment list
+    LinkFromAttachment::resetStatisticsAndLoadReferenceAttachmentList();
+  }
+}
+
+void Numbering::outputLinkFixingStatistics() {
+  if (m_command == COMMAND::fixLinksFromMainFile) {
+    // statistics of links fixing
+    LinkFromMain::outPutStatisticsToFiles();
+    LinkFromMain::displayMainFilesOfMissingKey();
+    LinkFromMain::displayNewlyAddedAttachments();
+  }
+  if (m_command == COMMAND::fixLinksFromAttachmentFile)
+    // statistics of links fixing
+    LinkFromAttachment::outPutStatisticsToFiles();
+}
+
+void Numbering::increaseDebugLevel() {
+  m_storedDebugLevel = debug;
+  if (m_command == COMMAND::validateParaSizeForAutoNumbering) {
+    debug = LOG_EXCEPTION;
+  }
+}
+
+void Numbering::restoreDebugLevel() {
+  if (m_command == COMMAND::validateParaSizeForAutoNumbering) {
+    debug = m_storedDebugLevel;
+  }
+}
 
 /**
  * copy main files into HTML_OUTPUT
  * before run this
  */
-void numberMainHtmls(int num, bool forceUpdateLineNumber, bool hideParaHeader,
+void numberMainHtmls(bool forceUpdateLineNumber, bool hideParaHeader,
                      bool disableAutoNumbering) {
   NumberingNonAttachment numbering;
-  numbering.m_command = num;
+  numbering.m_command = Numbering::COMMAND::addLineNumber;
   numbering.m_disableAutoNumbering = disableAutoNumbering;
   numbering.m_forceUpdateLineNumber = forceUpdateLineNumber;
   numbering.m_hideParaHeader = hideParaHeader;
@@ -296,10 +202,10 @@ void numberMainHtmls(int num, bool forceUpdateLineNumber, bool hideParaHeader,
   numbering.numberHtmls();
 }
 
-void numberOriginalHtmls(int num, bool forceUpdateLineNumber,
-                         bool hideParaHeader, bool disableAutoNumbering) {
+void numberOriginalHtmls(bool forceUpdateLineNumber, bool hideParaHeader,
+                         bool disableAutoNumbering) {
   NumberingNonAttachment numbering;
-  numbering.m_command = num;
+  numbering.m_command = Numbering::COMMAND::addLineNumber;
   numbering.m_disableAutoNumbering = disableAutoNumbering;
   numbering.m_forceUpdateLineNumber = forceUpdateLineNumber;
   numbering.m_hideParaHeader = hideParaHeader;
@@ -309,10 +215,10 @@ void numberOriginalHtmls(int num, bool forceUpdateLineNumber,
   numbering.numberHtmls();
 }
 
-void numberJPMHtmls(int num, bool forceUpdateLineNumber, bool hideParaHeader,
+void numberJPMHtmls(bool forceUpdateLineNumber, bool hideParaHeader,
                     bool disableAutoNumbering) {
   NumberingNonAttachment numbering;
-  numbering.m_command = num;
+  numbering.m_command = Numbering::COMMAND::addLineNumber;
   numbering.m_disableAutoNumbering = disableAutoNumbering;
   numbering.m_forceUpdateLineNumber = forceUpdateLineNumber;
   numbering.m_hideParaHeader = hideParaHeader;
@@ -323,11 +229,11 @@ void numberJPMHtmls(int num, bool forceUpdateLineNumber, bool hideParaHeader,
   numbering.numberHtmls();
 }
 
-void numberAttachmentHtmls(int num, bool forceUpdateLineNumber,
-                           bool hideParaHeader, bool disableAutoNumbering) {
+void numberAttachmentHtmls(bool forceUpdateLineNumber, bool hideParaHeader,
+                           bool disableAutoNumbering) {
 
   NumberingAttachment numbering;
-  numbering.m_command = num;
+  numbering.m_command = Numbering::COMMAND::addLineNumber;
   numbering.m_disableAutoNumbering = disableAutoNumbering;
   numbering.m_forceUpdateLineNumber = forceUpdateLineNumber;
   numbering.m_hideParaHeader = hideParaHeader;
@@ -339,6 +245,26 @@ void numberAttachmentHtmls(int num, bool forceUpdateLineNumber,
   numbering.numberHtmls();
 }
 
+void validateMainHtmls() {
+  NumberingNonAttachment numbering;
+  numbering.m_command = Numbering::COMMAND::validateFormatForNumbering;
+  numbering.m_kind = MAIN;
+  numbering.numberHtmls();
+}
+
+void validateAttachmentHtmls() {
+  NumberingAttachment numbering;
+  numbering.m_command = Numbering::COMMAND::validateFormatForNumbering;
+  numbering.m_kind = ATTACHMENT;
+  numbering.numberHtmls();
+}
+
+void validateParaSizeForAutoNumberingJPMHtmls() {
+  NumberingNonAttachment numbering;
+  numbering.m_command = Numbering::COMMAND::validateParaSizeForAutoNumbering;
+  numbering.m_kind = JPM;
+  numbering.numberHtmls();
+}
 
 void refreshBodyTexts(const string &kind, int minTarget, int maxTarget) {
   CoupledContainer container(getFileTypeFromString(kind));
@@ -365,4 +291,23 @@ void refreshAttachmentBodyTexts(int minTarget, int maxTarget, int minAttachNo,
       container.dissembleFromHTM();
     }
   }
+}
+
+/**
+ * before this function to work, numbering all main, original files
+ * no requirement for numbering attachment files.
+ */
+void fixLinksFromMain(bool forceUpdateLink) {
+  NumberingNonAttachment numbering;
+  numbering.m_command = Numbering::COMMAND::fixLinksFromMainFile;
+  numbering.m_kind = MAIN;
+  numbering.numberHtmls();
+}
+
+void fixLinksFromAttachment(bool forceUpdateLink) {
+  NumberingAttachment numbering;
+  numbering.m_command = Numbering::COMMAND::fixLinksFromAttachmentFile;
+  numbering.m_kind = ATTACHMENT;
+  numbering.m_fixReturnLink = false;
+  numbering.numberHtmls();
 }

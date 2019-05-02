@@ -13,16 +13,16 @@ int main(int argc, char **argv) {
   int num = 16;
   switch (num) {
   case 1:
-    numberJPMHtmls(3, false);
+    numberJPMHtmls(false);
     break;
   case 2:
-    numberOriginalHtmls(3, false);
+    numberOriginalHtmls(false);
     break;
   case 3:
-    numberMainHtmls(3, false);
+    numberMainHtmls(false);
     break;
   case 4:
-    numberAttachmentHtmls(3, false);
+    numberAttachmentHtmls(false);
     break;
   case 5:
     fixLinksFromMain(false);
@@ -64,6 +64,15 @@ int main(int argc, char **argv) {
     break;
   case 17:
     tools(15);
+    break;
+  case 18:
+    validateMainHtmls();
+    break;
+  case 19:
+    validateAttachmentHtmls();
+    break;
+  case 20:
+    validateParaSizeForAutoNumberingJPMHtmls();
     break;
   default:
     FUNCTION_OUTPUT << "nothing gets executed." << endl;

@@ -1,8 +1,5 @@
 #include "coupledLink.hpp"
 
-extern FileSet keyMissingChapters;
-extern FileSet newAttachmentList;
-
 CoupledLink::LinksTable CoupledLink::linksTable;
 string CoupledLink::referFilePrefix{emptyString};
 string CoupledLink::linkDetailFilePath{emptyString};
@@ -205,13 +202,6 @@ void CoupledLink::outPutStatisticsToFiles() {
   displayFixedLinks();
   FUNCTION_OUTPUT << "links information are written into: "
                   << linkDetailFilePath << " and " << keyDetailFilePath << endl;
-}
-
-/**
- * record this file as one who has links of wrong/un-found key
- */
-void CoupledLink::recordMissingKeyLink() {
-  keyMissingChapters.insert(m_fromFile);
 }
 
 /**

@@ -83,7 +83,7 @@ protected:
              originalLinkEndChars;
     return emptyString;
   }
-  void recordMissingKeyLink();
+  virtual void recordMissingKeyLink() = 0;
 
   // utility to convert link type with filename
   // samepage link would refer to different file prefix
@@ -109,6 +109,12 @@ public:
   static void displayAttachments();
   static string getFromLineOfAttachment(AttachmentNumber num);
 
+  static FileSet keyMissingChapters;
+  static FileSet newAttachmentList;
+  static void clearReport();
+  static void displayMainFilesOfMissingKey();
+  static void displayNewlyAddedAttachments();
+
   static void resetStatisticsAndLoadReferenceAttachmentList();
   static void outPutStatisticsToFiles();
 
@@ -124,6 +130,7 @@ public:
 private:
   string getPathOfReferenceFile() const override;
   void logLink();
+  void recordMissingKeyLink();
 
   // utility to convert link type with filename
   string getHtmlFileNamePrefix();
@@ -146,7 +153,7 @@ public:
 private:
   string getPathOfReferenceFile() const override;
   void logLink();
-
+  void recordMissingKeyLink(){};
   // utility to convert link type with filename
   string getHtmlFileNamePrefix();
   string getBodyTextFilePrefix();
