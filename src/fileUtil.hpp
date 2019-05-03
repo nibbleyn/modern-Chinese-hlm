@@ -13,7 +13,6 @@
 extern int debug;
 
 static const std::string HTML_SRC_MAIN = R"(utf8HTML/src/)";
-static const std::string HTML_SRC_ATTACHMENT = R"(utf8HTML/src/attachment/)";
 static const std::string HTML_SRC_ORIGINAL = R"(utf8HTML/src/original/)";
 static const std::string HTML_SRC_JPM = R"(utf8HTML/src/JPM/)";
 
@@ -25,14 +24,9 @@ static const std::string HTML_OUTPUT_JPM = R"(utf8HTML/output/JPM/)";
 
 static const std::string BODY_TEXT_OUTPUT = R"(bodyTexts/output/)";
 static const std::string BODY_TEXT_FIX = R"(bodyTexts/afterFix/)";
-static const std::string BODY_TEXT_SUFFIX = R"(.txt)";
 
-static const std::string HTML_SUFFIX = R"(.htm)";
 // last line of the html file
 static const std::string htmlFileFinalLine = R"(</html>)";
-static const std::string endOfHtmlHead = R"(/head)";
-static const std::string htmlTitleStart = R"(<title>)";
-static const std::string htmlTitleEnd = R"(</title>)";
 
 static const int MAIN_MIN_CHAPTER_NUMBER = 1;
 static const int MAIN_MAX_CHAPTER_NUMBER = 80;
@@ -67,8 +61,6 @@ static const std::string HTML_OUTPUT_LINES_OF_ORIGINAL =
     R"(utf8HTML/output/LinesOfOriginal.txt)";
 static const std::string HTML_OUTPUT_LINES_OF_ATTACHMENTS =
     R"(utf8HTML/output/LinesOfAttachments.txt)";
-
-std::string getAttachmentTitle(const std::string &filename);
 
 enum class FILE_TYPE { MAIN, ATTACHMENT, ORIGINAL, JPM };
 

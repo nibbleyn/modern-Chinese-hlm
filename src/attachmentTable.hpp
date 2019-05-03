@@ -2,6 +2,13 @@
 #include "link.hpp"
 #include <fstream>
 
+static const string HTML_SRC_REF_ATTACHMENT_LIST =
+    "utf8HTML/src/RefAttachments.txt";
+static const std::string HTML_SRC_ATTACHMENT = R"(utf8HTML/src/attachment/)";
+static const std::string htmlTitleStart = R"(<title>)";
+static const std::string htmlTitleEnd = R"(</title>)";
+static const std::string endOfHtmlHead = R"(/head)";
+
 enum class ATTACHMENT_TYPE { PERSONAL, REFERENCE, NON_EXISTED };
 using AttachmentNumber =
     std::pair<int, int>; // chapter number, attachment number
@@ -27,10 +34,11 @@ string attachmentTypeAsString(ATTACHMENT_TYPE type);
 ATTACHMENT_TYPE attachmentTypeFromString(const string &str);
 AttachmentNumber getAttachmentNumber(const string &filename);
 
-static const string HTML_SRC_REF_ATTACHMENT_LIST =
-    "utf8HTML/src/RefAttachments.txt";
-
 class AttachmentList {
+public:
+  static bool isTitleMatch(string annotation, string title);
+  static string getAttachmentTitleFromFile(AttachmentNumber num);
+
 public:
   void setSourceFile(const string &filepath) { m_sourceFile = filepath; }
   void loadReferenceAttachmentList();
@@ -42,6 +50,7 @@ public:
   std::set<string> allAttachmentsAsLinksByType(ATTACHMENT_TYPE type);
 
 private:
+  string getAttachmentTitle(AttachmentNumber num);
   AttachmentSet m_table;
   using AttachmentNumberSet = std::set<AttachmentNumber>;
   AttachmentNumberSet m_newlyAddedAttachmentSet;

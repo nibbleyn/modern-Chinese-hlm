@@ -60,26 +60,10 @@ void CoupledLink::outPutStatisticsToFiles() {
                   << linkDetailFilePath << " and " << keyDetailFilePath << endl;
 }
 
-/**
- * check whether the annotation of a link to attachment
- * matches the attachment file's tile
- * if the attachment file doesn't exist or have a title, skip this check
- * @param annotation of a link to attachment
- * @param title of the attachment file
- * @return true if matched
- */
-bool isAnnotationMatch(string annotation, string title) {
-  if (title == "file doesn't exist." or title == "title doesn't exist.")
-    return true;
-  return (annotation == title);
-}
-
 static const string HTML_OUTPUT_LINKS_FROM_MAIN_LIST =
     "utf8HTML/output/LinksFromMain.txt";
 static const string HTML_OUTPUT_KEY_OF_LINKS_FROM_MAIN_LIST =
     "utf8HTML/output/KeysOfLinksFromMain.txt";
-static const string HTML_OUTPUT_ATTACHMENT_FROM_MAIN_LIST =
-    "utf8HTML/output/AttachmentsFromMain.txt";
 
 /**
  * output statistics from link fixing of links from main files
@@ -120,7 +104,7 @@ void LinkFromMain::logLink() {
                       attachmentFileMiddleChar +
                       TurnToString(getattachmentNumber());
     auto num = make_pair(getchapterNumer(), getattachmentNumber());
-    auto title = getAttachmentTitle(targetFile);
+    auto title = AttachmentList::getAttachmentTitleFromFile(num);
     auto type = attachmentTable.getAttachmentType(num);
     if (getSourceChapterName() == getChapterName()) {
       AttachmentDetails detail{targetFile, m_fromLine.asString(), title,
@@ -130,7 +114,7 @@ void LinkFromMain::logLink() {
       attachmentTable.addOrUpdateOneItem(getAttachmentNumber(targetFile),
                                          detail);
     }
-    if (not isAnnotationMatch(getAnnotation(), title)) {
+    if (not AttachmentList::isTitleMatch(getAnnotation(), title)) {
       METHOD_OUTPUT << m_fromFile << " has a link to " << targetFile
                     << " with annotation: " << getAnnotation()
                     << " differs from title: " << title << endl;

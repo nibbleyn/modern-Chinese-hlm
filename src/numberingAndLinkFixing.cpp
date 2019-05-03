@@ -274,7 +274,6 @@ void validateParaSizeForAutoNumberingJPMHtmls() {
 }
 
 void refreshBodyTexts(const string &kind, int minTarget, int maxTarget) {
-
   if (kind == MAIN)
     CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
   auto digits = (kind == JPM) ? THREE_DIGIT_FILENAME : TWO_DIGIT_FILENAME;
@@ -289,7 +288,6 @@ void refreshBodyTexts(const string &kind, int minTarget, int maxTarget) {
 
 void refreshAttachmentBodyTexts(int minTarget, int maxTarget, int minAttachNo,
                                 int maxAttachNo) {
-
   CoupledContainer::backupAndOverwriteAllInputHtmlFiles();
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     CoupledContainer container;

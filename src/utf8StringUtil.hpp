@@ -30,6 +30,10 @@ static const string bottomParagraphIndicator = R"(bottom)";
 #define METHOD_OUTPUT                                                          \
   cout << typeid(*this).name() << "::" << __func__ << "              "
 #define FUNCTION_OUTPUT cout << __func__ << "              "
+
+static const std::string BODY_TEXT_SUFFIX = R"(.txt)";
+static const std::string HTML_SUFFIX = R"(.htm)";
+
 // start of each paragraph and line number
 static const string lineNumberIdBeginChars = R"(id="P)";
 static const string imageGroupBeginChars = R"(<div)";

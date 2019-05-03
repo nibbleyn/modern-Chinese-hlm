@@ -2,6 +2,36 @@
 
 extern int debug;
 
+static const std::string attachmentNotExisted = R"(file doesn't exist.)";
+static const std::string titleNotExisted = R"(title doesn't exist.)";
+
+string AttachmentList::getAttachmentTitleFromFile(AttachmentNumber num) {
+  std::string inputFile =
+      HTML_SRC_ATTACHMENT + ATTACHMENT_TYPE_HTML_TARGET +
+      formatIntoZeroPatchedChapterNumber(num.first, TWO_DIGIT_FILENAME) +
+      attachmentFileMiddleChar + TurnToString(num.second) + HTML_SUFFIX;
+  std::ifstream infile(inputFile);
+  if (!infile) {
+    return attachmentNotExisted;
+  }
+  std::string inLine{""};
+  while (!infile.eof()) {
+    getline(infile, inLine);
+    if (inLine.find(htmlTitleStart) != std::string::npos) {
+      return getIncludedStringBetweenTags(inLine, htmlTitleStart, htmlTitleEnd);
+    }
+    if (inLine.find(endOfHtmlHead) != std::string::npos)
+      return titleNotExisted;
+  }
+  return titleNotExisted;
+}
+
+bool AttachmentList::isTitleMatch(string annotation, string title) {
+  if (title == attachmentNotExisted or title == titleNotExisted)
+    return true;
+  return (annotation == title);
+}
+
 /**
  * the string to write into file of a type
  * @param type ATTACHMENT_TYPE to convert
@@ -109,6 +139,7 @@ void AttachmentList::addOrUpdateOneItem(AttachmentNumber num,
     m_newlyAddedAttachmentSet.insert(num);
   else
     m_notUpdatedAttachmentSet.erase(num);
+
   m_table[num] = detail;
 }
 
@@ -155,6 +186,25 @@ string AttachmentList::getFromLineOfAttachment(AttachmentNumber num) {
   return result;
 }
 
+/**
+ * find fromLine of one attachment from attachmentTable
+ * which is calculated during link fixing
+ * @param num pair of chapter number and attachment number
+ * @return the fromLine stored if existed, otherwise "top"
+ */
+string AttachmentList::getAttachmentTitle(AttachmentNumber num) {
+  string result = topParagraphIndicator;
+  try {
+    result = m_table.at(num).title;
+  } catch (exception &) {
+    if (debug >= LOG_INFO)
+      METHOD_OUTPUT << "fromLine not found in attachmentTable about: "
+                    << num.first << attachmentFileMiddleChar << num.second
+                    << endl;
+  }
+  return result;
+}
+
 ATTACHMENT_TYPE AttachmentList::getAttachmentType(AttachmentNumber num) {
   ATTACHMENT_TYPE attachmentType = ATTACHMENT_TYPE::NON_EXISTED;
   try {
@@ -175,7 +225,7 @@ void AttachmentList::displayNewlyAddedAttachments() {
   METHOD_OUTPUT << "Newly Added Attachments:" << endl;
   for (const auto &num : m_newlyAddedAttachmentSet) {
     METHOD_OUTPUT << num.first << attachmentFileMiddleChar << num.second
-                  << ".htm" << endl;
+                  << HTML_SUFFIX << endl;
   }
 }
 
