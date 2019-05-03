@@ -1,4 +1,5 @@
 #include "numberingAndLinkFixing.hpp"
+#include "contentTable.hpp"
 
 void Commander::execute() {
   switch (m_command) {
@@ -64,8 +65,8 @@ void Commander::runCommandOverFiles() {
 
   assembleHtmls();
 
-  fixReturnLink();
   outputLinkFixingStatistics();
+  updateAttachmentContentTableAndfixReturnLink();
   restoreDebugLevel();
   METHOD_OUTPUT << "Done processing. " << endl;
 }
@@ -125,18 +126,24 @@ void AttachmentCommander::runCommandOverEachFile() {
     }
   }
 }
-void Commander::fixReturnLink() {
-  if (m_command == COMMAND::fixLinksFromMainFile and m_fixReturnLink)
-    // fix return links of attachments to output directory
-    for (const auto &file : m_fileSet) {
-      CoupledContainer attachmentContainer;
-      attachmentContainer.setFileType(FILE_TYPE::ATTACHMENT);
-      attachmentContainer.setFileAndAttachmentNumber(file);
-      for (const auto &attNo : attachmentContainer.getAttachmentFileList()) {
-        attachmentContainer.setFileAndAttachmentNumber(file, attNo);
-        attachmentContainer.fixReturnLinkForAttachmentFile();
+void Commander::updateAttachmentContentTableAndfixReturnLink() {
+  if (m_command == COMMAND::fixLinksFromMainFile) {
+    CoupledContainer::refAttachmentTable.loadReferenceAttachmentList();
+
+    generateContentTableForReferenceAttachments(false);
+    generateContentTableForPersonalAttachments(false);
+    if (m_fixReturnLink)
+      // fix return links of attachments to output directory
+      for (const auto &file : m_fileSet) {
+        CoupledContainer attachmentContainer;
+        attachmentContainer.setFileType(FILE_TYPE::ATTACHMENT);
+        attachmentContainer.setFileAndAttachmentNumber(file);
+        for (const auto &attNo : attachmentContainer.getAttachmentFileList()) {
+          attachmentContainer.setFileAndAttachmentNumber(file, attNo);
+          attachmentContainer.fixReturnLinkForAttachmentFile();
+        }
       }
-    }
+  }
 }
 
 void Commander::setupNumberingStatistics() {
@@ -152,11 +159,11 @@ void Commander::setupLinkFixingStatistics() {
   if (m_command == COMMAND::fixLinksFromMainFile) {
     // load known reference attachment list
     LinkFromMain::resetStatisticsAndLoadReferenceAttachmentList();
-    LinkFromMain::clearReport();
+    LinkFromMain::clearLinkTable();
   }
   if (m_command == COMMAND::fixLinksFromAttachmentFile) {
     // load known reference attachment list
-    LinkFromAttachment::resetStatisticsAndLoadReferenceAttachmentList();
+    LinkFromAttachment::clearLinkTable();
   }
 }
 

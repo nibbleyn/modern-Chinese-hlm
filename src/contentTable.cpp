@@ -176,8 +176,10 @@ void generateContentTableForJPMHtmls() {
   FUNCTION_OUTPUT << "generateContentTable for JPM Htmls finished. " << endl;
 }
 
-void generateContentTableForReferenceAttachments() {
-  CoupledContainer::refAttachmentTable.loadReferenceAttachmentList();
+void generateContentTableForReferenceAttachments(
+    bool needToReloadAttachmentList) {
+  if (needToReloadAttachmentList)
+    CoupledContainer::refAttachmentTable.loadReferenceAttachmentList();
   ListContainer container(REFERENCE_ATTACHMENT_INDEX);
   for (const auto &link :
        CoupledContainer::refAttachmentTable.allAttachmentsAsLinksByType(
@@ -190,8 +192,10 @@ void generateContentTableForReferenceAttachments() {
                   << endl;
 }
 
-void generateContentTableForPersonalAttachments() {
-  CoupledContainer::refAttachmentTable.loadReferenceAttachmentList();
+void generateContentTableForPersonalAttachments(
+    bool needToReloadAttachmentList) {
+  if (needToReloadAttachmentList)
+    CoupledContainer::refAttachmentTable.loadReferenceAttachmentList();
   ListContainer container(PERSONAL_ATTACHMENT_INDEX);
   auto table = CoupledContainer::refAttachmentTable;
   for (const auto &link :

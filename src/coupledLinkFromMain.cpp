@@ -2,7 +2,10 @@
 
 FileSet LinkFromMain::keyMissingChapters;
 
-void LinkFromMain::clearReport() { keyMissingChapters.clear(); }
+void LinkFromMain::resetStatisticsAndLoadReferenceAttachmentList() {
+  keyMissingChapters.clear();
+  attachmentTable.loadReferenceAttachmentList();
+}
 
 void LinkFromMain::displayMainFilesOfMissingKey() {
   if (keyMissingChapters.empty())

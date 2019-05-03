@@ -48,9 +48,7 @@ void CoupledLink::displayFixedLinks() {
 /**
  * reset the general data structure to log info about links
  */
-void CoupledLink::resetStatisticsAndLoadReferenceAttachmentList() {
-  linksTable.clear();
-}
+void CoupledLink::clearLinkTable() { linksTable.clear(); }
 
 /**
  * output links to specified file
@@ -148,9 +146,7 @@ static const string HTML_OUTPUT_KEY_OF_LINKS_FROM_ATTACHMENT_LIST =
 /**
  * reset statistics data structure for re-do it during link fixing
  */
-void LinkFromAttachment::resetStatisticsAndLoadReferenceAttachmentList() {
-  CoupledLink::resetStatisticsAndLoadReferenceAttachmentList();
-}
+void LinkFromAttachment::resetStatisticsAndLoadReferenceAttachmentList() {}
 
 /**
  * output statistics from link fixing of links from attachment files

@@ -26,7 +26,7 @@ public:
   static LinksTable linksTable;
   static void displayFixedLinks();
 
-  static void resetStatisticsAndLoadReferenceAttachmentList();
+  static void clearLinkTable();
   static void outPutStatisticsToFiles();
 
 public:
@@ -97,7 +97,7 @@ public:
   static AttachmentList attachmentTable;
 
   static FileSet keyMissingChapters;
-  static void clearReport();
+  static void resetStatisticsAndLoadReferenceAttachmentList();
   static void displayMainFilesOfMissingKey();
 
   static void outPutStatisticsToFiles();

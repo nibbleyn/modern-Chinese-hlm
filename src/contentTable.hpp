@@ -4,5 +4,7 @@
 void generateContentTableForMainHtmls();
 void generateContentTableForOriginalHtmls();
 void generateContentTableForJPMHtmls();
-void generateContentTableForReferenceAttachments();
-void generateContentTableForPersonalAttachments();
+void generateContentTableForReferenceAttachments(
+    bool needToReloadAttachmentList = true);
+void generateContentTableForPersonalAttachments(
+    bool needToReloadAttachmentList = true);
