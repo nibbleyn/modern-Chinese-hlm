@@ -23,6 +23,8 @@ public:
   string getOutputFilePath() {
     return m_htmlOutputFilePath + m_outputFilename + HTML_SUFFIX;
   }
+  void clearExistingBodyText();
+
   string getOutputBodyTextFilePath() {
     return m_bodyTextOutputFilePath + getInputFileName() + BODY_TEXT_SUFFIX;
   }
@@ -65,7 +67,6 @@ public:
   ListContainer() = default;
   ListContainer(const string &filename) : LinkSetContainer(filename) {}
   // process bodyText change directly, instead of thru CoupledBodyText
-  void clearExistingBodyText();
   void appendParagraphInBodyText(const string &text);
   void appendParagrapHeader(const string &header);
   void outputToBodyTextFromLinkList();
@@ -89,7 +90,8 @@ public:
   TableContainer(const string &filename) : LinkSetContainer(filename) {}
 
   // process bodyText change directly, instead of thru CoupledBodyText
-  void addExistingFrontParagraphs();
+  void addExistingFrontLinks();
+  void enableAddExistingFrontLinks() { m_enableAddExistingFrontLinks = true; }
   void insertFrontParagrapHeader(int totalPara,
                                  const string &units = defaultUnit);
   void insertMiddleParagrapHeader(bool enterLastPara, int seqOfPara,
@@ -108,4 +110,5 @@ public:
 private:
   string getInputFileName() const override { return m_filename; }
   string m_filename{TABLE_CONTAINER_FILENAME};
+  bool m_enableAddExistingFrontLinks{false};
 };

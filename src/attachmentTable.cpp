@@ -242,10 +242,11 @@ AttachmentList::allAttachmentsAsLinksByType(ATTACHMENT_TYPE type) {
                     defaultUnit + citationChapterNo +
                     TurnToString(attachmentName.second) + attachmentUnit;
       result.insert(fixLinkFromAttachmentTemplate(
-          attachmentDirForLinkFromMain, TurnToString(attachmentName.first),
+          attachmentDirForLinkFromMain,
+          formatIntoZeroPatchedChapterNumber(attachmentName.first,
+                                             TWO_DIGIT_FILENAME),
           TurnToString(attachmentName.second),
-          name + bracketStartChars + fromParaOfReferenceAttachment +
-              entry.fromLine + bracketEndChars));
+          name + displaySpace + entry.title));
     }
   }
   return result;

@@ -33,6 +33,7 @@ void generateContentTableForMainHtmls() {
   outputContainer.createParaListFrom(6, 10, 70);
   outputContainer.addOneParaHeaderPosition(72);
   outputContainer.setMaxTarget(MAIN_MAX_CHAPTER_NUMBER);
+  outputContainer.enableAddExistingFrontLinks();
 
   outputContainer.clearLinkStringSet();
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
@@ -99,10 +100,11 @@ void generateContentTableForReferenceAttachments(
     bool needToReloadAttachmentList) {
   if (needToReloadAttachmentList)
     CoupledBodyTextContainer::refAttachmentTable.loadReferenceAttachmentList();
-  ListContainer container(REFERENCE_ATTACHMENT_INDEX);
+  TableContainer container(REFERENCE_ATTACHMENT_INDEX);
   container.assignLinkStringSet(
       CoupledBodyTextContainer::refAttachmentTable.allAttachmentsAsLinksByType(
           ATTACHMENT_TYPE::REFERENCE));
+  container.hideParaHeaders();
   container.outputToBodyTextFromLinkList();
   container.assembleBackToHTM(REFERENCE_ATTACHMENT_TITLE,
                               REFERENCE_ATTACHMENT_DISPLAY_TITLE);
@@ -114,10 +116,11 @@ void generateContentTableForPersonalAttachments(
     bool needToReloadAttachmentList) {
   if (needToReloadAttachmentList)
     CoupledBodyTextContainer::refAttachmentTable.loadReferenceAttachmentList();
-  ListContainer container(PERSONAL_ATTACHMENT_INDEX);
+  TableContainer container(PERSONAL_ATTACHMENT_INDEX);
   container.assignLinkStringSet(
       CoupledBodyTextContainer::refAttachmentTable.allAttachmentsAsLinksByType(
           ATTACHMENT_TYPE::PERSONAL));
+  container.hideParaHeaders();
   container.outputToBodyTextFromLinkList();
   container.assembleBackToHTM(PERSONAL_ATTACHMENT_TITLE,
                               PERSONAL_ATTACHMENT_DISPLAY_TITLE);

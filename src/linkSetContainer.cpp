@@ -5,7 +5,7 @@ extern int debug;
  * to get ready to write new text in this file which would be composed into
  * container htm
  */
-void ListContainer::clearExistingBodyText() {
+void LinkSetContainer::clearExistingBodyText() {
   string outputBodyTextFile = getOutputBodyTextFilePath();
   if (debug >= LOG_INFO)
     METHOD_OUTPUT << "clear content in: " << outputBodyTextFile << endl;
@@ -38,6 +38,7 @@ void ListContainer::appendParagrapHeader(const string &header) {
 }
 
 void ListContainer::outputToBodyTextFromLinkList() {
+  clearExistingBodyText();
   for (const auto &link : m_linkStringSet) {
     appendParagraphInBodyText(link);
   }
@@ -46,7 +47,7 @@ void ListContainer::outputToBodyTextFromLinkList() {
 const string TableContainer::BODY_TEXT_STARTER = R"(3front.txt)";
 const string TableContainer::BODY_TEXT_DESSERT = R"(3back.txt)";
 
-void TableContainer::addExistingFrontParagraphs() {
+void TableContainer::addExistingFrontLinks() {
   string outputBodyTextFile = getOutputBodyTextFilePath();
   if (debug >= LOG_INFO)
     METHOD_OUTPUT << "init content in: " << outputBodyTextFile << endl;
@@ -175,11 +176,13 @@ void TableContainer::appendRightParagraphInBodyText(const string &text) {
 }
 
 void TableContainer::outputToBodyTextFromLinkList() {
+  clearExistingBodyText();
   sort(m_paraHeaderPositionSet.begin(), m_paraHeaderPositionSet.end());
   auto start = m_paraHeaderPositionSet.begin();
   if (not m_hideParaHeaders)
     insertFrontParagrapHeader(*start);
-  addExistingFrontParagraphs();
+  if (m_enableAddExistingFrontLinks)
+    addExistingFrontLinks();
   int i = 1;
   int seqOfPara = 1;
   int totalPara = 0;
