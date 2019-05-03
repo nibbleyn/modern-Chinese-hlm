@@ -103,7 +103,7 @@ void LinkFromMain::logLink() {
     auto targetFile = getHtmlFileNamePrefix() + getChapterName() +
                       attachmentFileMiddleChar +
                       TurnToString(getattachmentNumber());
-    auto num = make_pair(getchapterNumer(), getattachmentNumber());
+    auto num = make_pair(getChapterName(), TurnToString(getattachmentNumber()));
     auto title = AttachmentList::getAttachmentTitleFromFile(num);
     auto type = attachmentTable.getAttachmentType(num);
     if (getSourceChapterName() == getChapterName()) {

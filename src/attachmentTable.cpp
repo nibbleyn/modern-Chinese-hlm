@@ -8,8 +8,8 @@ static const std::string titleNotExisted = R"(title doesn't exist.)";
 string AttachmentList::getAttachmentTitleFromFile(AttachmentNumber num) {
   std::string inputFile =
       HTML_SRC_ATTACHMENT + ATTACHMENT_TYPE_HTML_TARGET +
-      formatIntoZeroPatchedChapterNumber(num.first, TWO_DIGIT_FILENAME) +
-      attachmentFileMiddleChar + TurnToString(num.second) + HTML_SUFFIX;
+      num.first +
+      attachmentFileMiddleChar + num.second + HTML_SUFFIX;
   std::ifstream infile(inputFile);
   if (!infile) {
     return attachmentNotExisted;
@@ -59,19 +59,19 @@ ATTACHMENT_TYPE attachmentTypeFromString(const string &str) {
  * @return pair of chapter number and attachment number
  */
 AttachmentNumber getAttachmentNumber(const string &filename) {
-  AttachmentNumber num(0, 0);
+  AttachmentNumber num(emptyString, emptyString);
   // referred file not found
   if (filename.find(ATTACHMENT_TYPE_HTML_TARGET) == string::npos) {
     return num;
   }
-  num.first = TurnToInt(getIncludedStringBetweenTags(
-      filename, ATTACHMENT_TYPE_HTML_TARGET, attachmentFileMiddleChar));
+  num.first = getIncludedStringBetweenTags(
+      filename, ATTACHMENT_TYPE_HTML_TARGET, attachmentFileMiddleChar);
   if (filename.find(attachmentFileMiddleChar) == string::npos) {
     return num;
   }
   num.second =
-      TurnToInt(filename.substr(filename.find(attachmentFileMiddleChar) +
-                                attachmentFileMiddleChar.length()));
+      filename.substr(filename.find(attachmentFileMiddleChar) +
+                                attachmentFileMiddleChar.length());
   return num;
 }
 
@@ -238,14 +238,13 @@ AttachmentList::allAttachmentsAsLinksByType(ATTACHMENT_TYPE type) {
     ATTACHMENT_TYPE attachmentType = entry.type;
 
     if (attachmentType == type) {
-      string name = citationChapterNo + TurnToString(attachmentName.first) +
+      string name = citationChapterNo + attachmentName.first +
                     attachmentUnit + ATTACHMENT_TYPE_HTML_TARGET +
-                    TurnToString(attachmentName.second) + R"(: )";
+                    attachmentName.second + R"(: )";
       result.insert(fixLinkFromAttachmentTemplate(
           attachmentDirForLinkFromMain,
-          formatIntoZeroPatchedChapterNumber(attachmentName.first,
-                                             TWO_DIGIT_FILENAME),
-          TurnToString(attachmentName.second), name + entry.fromLine));
+          attachmentName.first,
+          attachmentName.second, name + entry.fromLine));
     }
   }
   return result;

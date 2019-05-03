@@ -316,7 +316,7 @@ void CoupledContainer::fixReturnLinkForAttachmentFile() {
         // must return to main html
         lfm.setTypeThruFileNamePrefix(MAIN_TYPE_HTML_TARGET);
         lfm.fixReferFile(TurnToInt(m_file));
-        AttachmentNumber num(TurnToInt(m_file), m_attachmentNumber);
+        AttachmentNumber num(m_file, TurnToString(m_attachmentNumber));
         lfm.fixReferPara(refAttachmentTable.getFromLineOfAttachment(num));
         // replace old value
         if (lfm.needUpdate()) {

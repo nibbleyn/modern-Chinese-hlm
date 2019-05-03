@@ -11,7 +11,7 @@ static const std::string endOfHtmlHead = R"(/head)";
 
 enum class ATTACHMENT_TYPE { PERSONAL, REFERENCE, NON_EXISTED };
 using AttachmentNumber =
-    std::pair<int, int>; // chapter number, attachment number
+    std::pair<string, string>; // chapter number, attachment number
 
 // statistics about links to attachments
 struct AttachmentDetails {
