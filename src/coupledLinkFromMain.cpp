@@ -37,7 +37,7 @@ void LinkFromMain::generateLinkToOrigin() {
   string to =
       fixLinkFromOriginalTemplate(getPathOfReferenceFile(), getChapterName(),
                                   m_usedKey, emptyString, m_referPara);
-  m_linkPtrToOrigin = std::make_unique<LinkFromMain>(m_fromFile, to);
+  m_linkPtrToOrigin = make_unique<LinkFromMain>(m_fromFile, to);
   m_linkPtrToOrigin->readReferFileName(to);
   m_linkPtrToOrigin->fixFromString(to);
   m_needChange = true;

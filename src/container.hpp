@@ -14,5 +14,5 @@ protected:
   string m_htmlOutputFilePath{HTML_OUTPUT_MAIN};
   string m_bodyTextInputFilePath{BODY_TEXT_OUTPUT};
   string m_bodyTextOutputFilePath{BODY_TEXT_FIX};
-  virtual std::string getInputHtmlFilePath() = 0;
+  virtual string getInputHtmlFilePath() = 0;
 };

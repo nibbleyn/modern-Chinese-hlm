@@ -2,20 +2,20 @@
 #include "lineNumber.hpp"
 
 // same value with those defined in fileUtil.hpp
-static const std::string MAIN_TYPE_HTML_TARGET = R"(a0)";
-static const std::string ORIGINAL_TYPE_HTML_TARGET = R"(c0)";
-static const std::string ATTACHMENT_TYPE_HTML_TARGET = R"(b0)";
-static const std::string JPM_TYPE_HTML_TARGET = R"(d)";
+static const string MAIN_TYPE_HTML_TARGET = R"(a0)";
+static const string ORIGINAL_TYPE_HTML_TARGET = R"(c0)";
+static const string ATTACHMENT_TYPE_HTML_TARGET = R"(b0)";
+static const string JPM_TYPE_HTML_TARGET = R"(d)";
 
-static const std::string attachmentDirForLinkFromMain = R"(attachment\)";
-static const std::string originalDirForLinkFromMain = R"(original\)";
-static const std::string jpmDirForLinkFromMain = R"(JPM\)";
-static const std::string pictureDirForLinkFromMain = R"(pictures\)";
+static const string attachmentDirForLinkFromMain = R"(attachment\)";
+static const string originalDirForLinkFromMain = R"(original\)";
+static const string jpmDirForLinkFromMain = R"(JPM\)";
+static const string pictureDirForLinkFromMain = R"(pictures\)";
 
-static const std::string mainDirForLinkFromAttachment = R"(..\)";
-static const std::string originalDirForLinkFromAttachment = R"(..\original\)";
-static const std::string jpmDirForLinkFromAttachment = R"(..\JPM\)";
-static const std::string pictureDirForLinkFromAttachment = R"(..\pictures\)";
+static const string mainDirForLinkFromAttachment = R"(..\)";
+static const string originalDirForLinkFromAttachment = R"(..\original\)";
+static const string jpmDirForLinkFromAttachment = R"(..\JPM\)";
+static const string pictureDirForLinkFromAttachment = R"(..\pictures\)";
 
 enum class LINK_TYPE { MAIN, ATTACHMENT, ORIGINAL, SAMEPAGE, JPM, IMAGE };
 enum class LINK_DISPLAY_TYPE { DIRECT, HIDDEN, UNHIDDEN };
@@ -24,7 +24,7 @@ static const string returnLinkFromAttachmentHeader = R"(返回本章原文)";
 static const string annotationToOriginal = R"(原文)";
 static const string contentTableFilename = R"(aindex)";
 
-static const std::string TARGET_FILE_EXT = R"(.htm)";
+static const string TARGET_FILE_EXT = R"(.htm)";
 
 // operations over link string template initialization
 string fixLinkFromSameFileTemplate(LINK_DISPLAY_TYPE type, const string &key,

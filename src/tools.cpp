@@ -156,7 +156,7 @@ void CoupledBodyText::fixTagPairEnd(const string &signOfTagBeforeReplaceTag,
     return;
   }
   ofstream outfile(m_outputFile);
-  std::set<int, std::greater<int>> occurences;
+  set<int, greater<int>> occurences;
   // continue reading till first paragraph header
   string inLine{""};
   auto cutLength{0};
@@ -234,7 +234,7 @@ void fixTagsOfMainBodyText(int minTarget, int maxTarget) {
   }
 }
 
-void CoupledContainer::makeSingleLineHeaderAndFooter() {
+void CoupledBodyTextContainer::makeSingleLineHeaderAndFooter() {
   string inputHtmlFile = getInputHtmlFilePath();
   string outputHtmlFile = getoutputHtmlFilepath();
 
@@ -253,8 +253,8 @@ void CoupledContainer::makeSingleLineHeaderAndFooter() {
     if (linkBegin != string::npos) {
       break;
     } else {
-      line = std::regex_replace(line, std::regex("(?:\\t)"), " ");
-      line = std::regex_replace(line, std::regex("(?:\\r\\n|\\n|\\r)"), "");
+      line = regex_replace(line, regex("(?:\\t)"), " ");
+      line = regex_replace(line, regex("(?:\\r\\n|\\n|\\r)"), "");
       singleLineHeader += line;
     }
   }
@@ -285,8 +285,8 @@ void CoupledContainer::makeSingleLineHeaderAndFooter() {
   string singleLineFooter;
   while (!inHtmlFile.eof()) {
     getline(inHtmlFile, line);
-    line = std::regex_replace(line, std::regex("(?:\\t)"), " ");
-    line = std::regex_replace(line, std::regex("(?:\\r\\n|\\n|\\r)"), "");
+    line = regex_replace(line, regex("(?:\\t)"), " ");
+    line = regex_replace(line, regex("(?:\\r\\n|\\n|\\r)"), "");
     singleLineFooter += line;
   }
   FUNCTION_OUTPUT << singleLineFooter << endl;
@@ -296,7 +296,7 @@ void CoupledContainer::makeSingleLineHeaderAndFooter() {
                     << outputHtmlFile << endl;
 }
 
-void CoupledContainer::fixHeaderAndFooter() {
+void CoupledBodyTextContainer::fixHeaderAndFooter() {
   string inputHtmlFile = getInputHtmlFilePath();
   string outputHtmlFile = getoutputHtmlFilepath();
 
@@ -355,7 +355,7 @@ void CoupledContainer::fixHeaderAndFooter() {
 }
 
 void fixHeaderAndFooterForJPMHtml(int minTarget, int maxTarget) {
-  CoupledContainer container;
+  CoupledBodyTextContainer container;
   container.setFileType(FILE_TYPE::JPM);
   for (const auto &file :
        buildFileSet(minTarget, maxTarget, THREE_DIGIT_FILENAME)) {
@@ -460,7 +460,7 @@ void CoupledBodyText::fixPersonalView() {
 
 void fixPersonalViewForJPMHtmls() {
   int minTarget = JPM_MIN_CHAPTER_NUMBER, maxTarget = JPM_MAX_CHAPTER_NUMBER;
-  CoupledContainer container;
+  CoupledBodyTextContainer container;
   container.setFileType(FILE_TYPE::JPM);
   for (const auto &file :
        buildFileSet(minTarget, maxTarget, THREE_DIGIT_FILENAME)) {
@@ -485,7 +485,7 @@ void fixPersonalViewForJPMHtmls() {
 
 void fixHeaderAndFooterForMainHtmls() {
   int minTarget = MAIN_MIN_CHAPTER_NUMBER, maxTarget = MAIN_MAX_CHAPTER_NUMBER;
-  CoupledContainer container;
+  CoupledBodyTextContainer container;
   container.setFileType(FILE_TYPE::MAIN);
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     container.setFileAndAttachmentNumber(file);
@@ -498,7 +498,7 @@ void fixHeaderAndFooterForAttachmentHtmls() {
   int minTarget = MAIN_MIN_CHAPTER_NUMBER, maxTarget = MAIN_MAX_CHAPTER_NUMBER;
   int minAttachNo = MIN_ATTACHMENT_NUMBER, maxAttachNo = MAX_ATTACHMENT_NUMBER;
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
-    CoupledContainer container;
+    CoupledBodyTextContainer container;
     container.setFileType(FILE_TYPE::ATTACHMENT);
     container.setFileAndAttachmentNumber(file);
     for (const auto &attNo :
@@ -513,7 +513,7 @@ void fixHeaderAndFooterForAttachmentHtmls() {
 
 void fixHeaderAndFooterForOriginalHtmls() {
   int minTarget = MAIN_MIN_CHAPTER_NUMBER, maxTarget = MAIN_MAX_CHAPTER_NUMBER;
-  CoupledContainer container;
+  CoupledBodyTextContainer container;
   container.setFileType(FILE_TYPE::ORIGINAL);
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     container.setFileAndAttachmentNumber(file);
@@ -545,7 +545,7 @@ void reformatTxtFilesForReader() {
 }
 
 // must be called after called
-// CoupledContainer::refAttachmentTable.loadReferenceAttachmentList();
+// CoupledBodyTextContainer::refAttachmentTable.loadReferenceAttachmentList();
 void CoupledBodyTextWithLink::removePersonalCommentsOverNumberedFiles() {
   setInputOutputFiles();
   ifstream infile(m_inputFile);
@@ -593,7 +593,7 @@ void CoupledBodyTextWithLink::removePersonalCommentsOverNumberedFiles() {
       auto num = make_pair(m_linkPtr.getChapterName(),
     		  TurnToString(m_linkPtr.getattachmentNumber()));
       if (m_linkPtr.isTargetToOtherAttachmentHtm() and
-          CoupledContainer::refAttachmentTable.getAttachmentType(num) ==
+          CoupledBodyTextContainer::refAttachmentTable.getAttachmentType(num) ==
               ATTACHMENT_TYPE::PERSONAL) {
         if (debug >= LOG_INFO)
           METHOD_OUTPUT << specialLink << endl;

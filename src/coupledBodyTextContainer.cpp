@@ -1,6 +1,6 @@
-#include "coupledContainer.hpp"
+#include "coupledBodyTextContainer.hpp"
 
-AttachmentList CoupledContainer::refAttachmentTable;
+AttachmentList CoupledBodyTextContainer::refAttachmentTable;
 
 /**
  * seconds from EPOCH as the timestamp
@@ -39,7 +39,7 @@ string currentDateTime() {
  * @param type type of file
  * @return filename prefix of bodytext file
  */
-string CoupledContainer::getBodyTextFilePrefix() {
+string CoupledBodyTextContainer::getBodyTextFilePrefix() {
   if (m_fileType == FILE_TYPE::ORIGINAL)
     return ORIGINAL_BODYTEXT_PREFIX;
   if (m_fileType == FILE_TYPE::ATTACHMENT)
@@ -49,7 +49,7 @@ string CoupledContainer::getBodyTextFilePrefix() {
   return MAIN_BODYTEXT_PREFIX;
 }
 
-string CoupledContainer::getInputHtmlFilePath() {
+string CoupledBodyTextContainer::getInputHtmlFilePath() {
   string attachmentPart{emptyString};
   if (m_fileType == FILE_TYPE::ATTACHMENT)
     attachmentPart =
@@ -58,7 +58,7 @@ string CoupledContainer::getInputHtmlFilePath() {
          attachmentPart + HTML_SUFFIX;
 }
 
-string CoupledContainer::getoutputHtmlFilepath() {
+string CoupledBodyTextContainer::getoutputHtmlFilepath() {
   string attachmentPart{emptyString};
   if (m_fileType == FILE_TYPE::ATTACHMENT)
     attachmentPart =
@@ -67,7 +67,7 @@ string CoupledContainer::getoutputHtmlFilepath() {
          attachmentPart + HTML_SUFFIX;
 }
 
-string CoupledContainer::getBodyTextFilePath() {
+string CoupledBodyTextContainer::getBodyTextFilePath() {
   string attachmentPart{emptyString};
   if (m_fileType == FILE_TYPE::ATTACHMENT)
     attachmentPart =
@@ -76,7 +76,7 @@ string CoupledContainer::getBodyTextFilePath() {
          attachmentPart + BODY_TEXT_SUFFIX;
 }
 
-void CoupledContainer::assembleBackToHTM(const string &title,
+void CoupledBodyTextContainer::assembleBackToHTM(const string &title,
                                          const string &displayTitle) {
 
   string inputHtmlFile = getInputHtmlFilePath();
@@ -180,7 +180,7 @@ void CoupledContainer::assembleBackToHTM(const string &title,
  * and load newly copied files from HTML_OUTPUT_MAIN to HTML_SRC_MAIN
  * then dissemble would happen from HTML_SRC_MAIN afterwards
  */
-void CoupledContainer::backupAndOverwriteAllInputHtmlFiles() {
+void CoupledBodyTextContainer::backupAndOverwriteAllInputHtmlFiles() {
   string dir = HTML_SRC_MAIN.substr(0, HTML_SRC_MAIN.find_last_of('/'));
   string BACKUP = dir + currentTimeStamp();
   if (debug >= LOG_INFO)
@@ -214,7 +214,7 @@ void CoupledContainer::backupAndOverwriteAllInputHtmlFiles() {
   }
 }
 
-void CoupledContainer::dissembleFromHTM() {
+void CoupledBodyTextContainer::dissembleFromHTM() {
   string inputHtmlFile = getInputHtmlFilePath();
   string outputBodyTextFile = getBodyTextFilePath();
 
@@ -271,7 +271,7 @@ void CoupledContainer::dissembleFromHTM() {
  * and put that lineNumber in that attachment file header
  * @param filename
  */
-void CoupledContainer::fixReturnLinkForAttachmentFile() {
+void CoupledBodyTextContainer::fixReturnLinkForAttachmentFile() {
   string inputHtmlFile = getInputHtmlFilePath();
   string outputFile = getoutputHtmlFilepath();
 
@@ -329,8 +329,8 @@ void CoupledContainer::fixReturnLinkForAttachmentFile() {
   }
 }
 
-CoupledContainer::AttachmentNumberList
-CoupledContainer::getAttachmentFileList(int minAttachNo, int maxAttachNo) {
+CoupledBodyTextContainer::AttachmentNumberList
+CoupledBodyTextContainer::getAttachmentFileList(int minAttachNo, int maxAttachNo) {
   auto listOfNumbersFromFiles =
       getAttachmentFileListForChapter(m_htmlInputFilePath);
   if ((minAttachNo == 0 and maxAttachNo == 0) or maxAttachNo < minAttachNo) {
@@ -352,8 +352,8 @@ CoupledContainer::getAttachmentFileList(int minAttachNo, int maxAttachNo) {
  * @param fromDir where its attachment files are under
  * @return the vector of attachment numbers
  */
-CoupledContainer::AttachmentNumberList
-CoupledContainer::getAttachmentFileListForChapter(const string &fromDir) {
+CoupledBodyTextContainer::AttachmentNumberList
+CoupledBodyTextContainer::getAttachmentFileListForChapter(const string &fromDir) {
   vector<string> filenameList;
   AttachmentNumberList attList;
   Poco::File(fromDir).list(filenameList);
@@ -368,7 +368,7 @@ CoupledContainer::getAttachmentFileListForChapter(const string &fromDir) {
   return attList;
 }
 
-void CoupledContainer::fetchOriginalAndTranslatedTitles() {
+void CoupledBodyTextContainer::fetchOriginalAndTranslatedTitles() {
   string inputHtmlFile = getInputHtmlFilePath();
   ifstream inHtmlFile(inputHtmlFile);
   if (!inHtmlFile) {

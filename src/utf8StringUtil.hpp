@@ -15,6 +15,8 @@ const int LOG_INFO = 2;
 #define TurnToInt(x) stoi(x, nullptr, 10)
 #define TurnToString(x) to_string(x)
 
+using LinkStringSet = set<string>;
+
 static const string leadingChar = R"(P)";
 static const string middleChar = R"(L)";
 static const string invalidLineNumber = R"(P0L0)";
@@ -31,8 +33,8 @@ static const string bottomParagraphIndicator = R"(bottom)";
   cout << typeid(*this).name() << "::" << __func__ << "              "
 #define FUNCTION_OUTPUT cout << __func__ << "              "
 
-static const std::string BODY_TEXT_SUFFIX = R"(.txt)";
-static const std::string HTML_SUFFIX = R"(.htm)";
+static const string BODY_TEXT_SUFFIX = R"(.txt)";
+static const string HTML_SUFFIX = R"(.htm)";
 
 // start of each paragraph and line number
 static const string lineNumberIdBeginChars = R"(id="P)";

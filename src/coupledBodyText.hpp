@@ -160,7 +160,7 @@ protected:
     string cap{emptyString};
   };
   // line No. -> number of display lines, line type
-  using LineAttrTable = std::map<size_t, LineInfo>;
+  using LineAttrTable = map<size_t, LineInfo>;
   LineAttrTable m_lineAttrTable;
   size_t m_lastSeqNumberOfLine{0};
 
@@ -169,7 +169,7 @@ protected:
       m_lineAttrTable.at(seqOfLines);
       return true;
     } catch (exception &) {
-      // std::out_of_range if not existed
+      // out_of_range if not existed
       return false;
     }
   }
@@ -212,7 +212,7 @@ protected:
   }
 
   // line No.of image group -> line No. before following para header to add
-  using ImgGroupFollowingParaTable = std::map<size_t, size_t>;
+  using ImgGroupFollowingParaTable = map<size_t, size_t>;
   ImgGroupFollowingParaTable m_imgGroupFollowingParaTable;
 
   bool isInImgGroupFollowingParaTable(size_t seqOfLines) {
@@ -220,7 +220,7 @@ protected:
       m_imgGroupFollowingParaTable.at(seqOfLines);
       return true;
     } catch (exception &) {
-      // std::out_of_range if not existed
+      // out_of_range if not existed
       return false;
     }
   }

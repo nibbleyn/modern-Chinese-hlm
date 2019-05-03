@@ -9,8 +9,14 @@ int debug = LOG_INFO;
 // int debug = LOG_EXCEPTION;
 
 int main(int argc, char **argv) {
+	set<int> a{1,2}, b;
+	b = a;
+	for (const auto &element : b) {
+		FUNCTION_OUTPUT << element<< endl;
+	    }
+
   // change this number to run different functions
-  int num = 16;
+  int num = 26;
   switch (num) {
   case 1:
     numberJPMHtmls(false);

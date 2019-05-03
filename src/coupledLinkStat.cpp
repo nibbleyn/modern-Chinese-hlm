@@ -83,7 +83,7 @@ void LinkFromMain::logLink() {
                        asString()};
     try {
       auto &entry =
-          linksTable.at(std::make_pair(getChapterName(), m_referPara));
+          linksTable.at(make_pair(getChapterName(), m_referPara));
       entry.push_back(detail);
       if (debug >= LOG_INFO)
         METHOD_OUTPUT << "entry.size: " << entry.size()
@@ -96,7 +96,7 @@ void LinkFromMain::logLink() {
                       << displaySpace << m_referPara << endl;
       vector<LinkDetails> list;
       list.push_back(detail);
-      linksTable[std::make_pair(getChapterName(), m_referPara)] = list;
+      linksTable[make_pair(getChapterName(), m_referPara)] = list;
     }
   }
   if (isTargetToOtherAttachmentHtm()) {
@@ -152,7 +152,7 @@ void LinkFromAttachment::logLink() {
                        asString()};
     try {
       auto &entry = linksTable.at(
-          std::make_pair(getChapterName() + attachmentFileMiddleChar +
+          make_pair(getChapterName() + attachmentFileMiddleChar +
                              TurnToString(m_attachmentNumber),
                          m_referPara));
       entry.push_back(detail);
@@ -165,7 +165,7 @@ void LinkFromAttachment::logLink() {
                       << m_usedKey << endl;
       vector<LinkDetails> list;
       list.push_back(detail);
-      linksTable[std::make_pair(getChapterName() + attachmentFileMiddleChar +
+      linksTable[make_pair(getChapterName() + attachmentFileMiddleChar +
                                     TurnToString(m_attachmentNumber),
                                 m_referPara)] = list;
     }

@@ -175,7 +175,7 @@ void CoupledLink::readKey(const string &linkString) {
 string scanForSubComments(const string &original, const string &fromFile) {
   string result;
   using SubStringOffsetTable =
-      std::map<size_t, size_t>; // start offset -> end offset
+      map<size_t, size_t>; // start offset -> end offset
   SubStringOffsetTable subStrings;
   string startTag = commentBeginChars;
   string endTag = commentEndChars;
@@ -191,7 +191,7 @@ string scanForSubComments(const string &original, const string &fromFile) {
   for (const auto &comment : subStrings) {
     result += original.substr(endOfSubStringOffset,
                               comment.first - endOfSubStringOffset);
-    auto current = std::make_unique<Comment>(fromFile);
+    auto current = make_unique<Comment>(fromFile);
     current->loadFirstFromContainedLine(original, endOfSubStringOffset);
     result += current->getDisplayString();
     endOfSubStringOffset = comment.second + endTag.length();

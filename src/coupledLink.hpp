@@ -19,7 +19,7 @@ public:
   // statistics about links
   // chapter number (added with attachment number if over fromAttachmentLinks),
   // referPara -> vector<key, fromFile, fromLine, Link string>
-  using LinksTable = map<std::pair<string, string>, vector<LinkDetails>>;
+  using LinksTable = map<pair<string, string>, vector<LinkDetails>>;
   static string referFilePrefix;
   static string linkDetailFilePath;
   static string keyDetailFilePath;
@@ -87,7 +87,7 @@ protected:
   string m_referSection{"0.0"};
   string m_usedKey{emptyString};
   bool m_needChange{false};
-  using LinkPtr = std::unique_ptr<CoupledLink>;
+  using LinkPtr = unique_ptr<CoupledLink>;
   LinkPtr m_linkPtrToOrigin{nullptr};
   string m_imageReferFilename{emptyString};
 };

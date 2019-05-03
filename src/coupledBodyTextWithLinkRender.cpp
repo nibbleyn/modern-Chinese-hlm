@@ -169,24 +169,24 @@ void CoupledBodyTextWithLink::scanForTypes(const string &containedLine) {
   searchForEmbededLinks();
 }
 
-using ObjectPtr = std::unique_ptr<Object>;
+using ObjectPtr = unique_ptr<Object>;
 
 ObjectPtr createObjectFromType(Object::OBJECT_TYPE type,
                                const string &fromFile) {
   if (type == Object::OBJECT_TYPE::LINENUMBER)
-    return std::make_unique<LineNumber>();
+    return make_unique<LineNumber>();
   else if (type == Object::OBJECT_TYPE::SPACE)
-    return std::make_unique<Space>();
+    return make_unique<Space>();
   else if (type == Object::OBJECT_TYPE::POEM)
-    return std::make_unique<Poem>();
+    return make_unique<Poem>();
   else if (type == Object::OBJECT_TYPE::LINKFROMMAIN)
-    return std::make_unique<LinkFromMain>(fromFile);
+    return make_unique<LinkFromMain>(fromFile);
   else if (type == Object::OBJECT_TYPE::PERSONALCOMMENT)
-    return std::make_unique<PersonalComment>(fromFile);
+    return make_unique<PersonalComment>(fromFile);
   else if (type == Object::OBJECT_TYPE::POEMTRANSLATION)
-    return std::make_unique<PoemTranslation>(fromFile);
+    return make_unique<PoemTranslation>(fromFile);
   else if (type == Object::OBJECT_TYPE::COMMENT)
-    return std::make_unique<Comment>(fromFile);
+    return make_unique<Comment>(fromFile);
   return nullptr;
 }
 

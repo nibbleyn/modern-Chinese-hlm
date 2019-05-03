@@ -1,4 +1,4 @@
-#include "genericContainer.hpp"
+#include "linkSetContainer.hpp"
 
 extern int debug;
 /**
@@ -23,7 +23,7 @@ void ListContainer::appendParagraphInBodyText(const string &text) {
     METHOD_OUTPUT << "append Paragraph In BodyText: " << outputBodyTextFile
                   << endl;
   ofstream outfile;
-  outfile.open(outputBodyTextFile, std::ios_base::app);
+  outfile.open(outputBodyTextFile, ios_base::app);
   outfile << "<br>" << text << "</br>" << endl;
 }
 
@@ -33,7 +33,7 @@ void ListContainer::appendParagrapHeader(const string &header) {
     METHOD_OUTPUT << "append Paragraph In BodyText: " << outputBodyTextFile
                   << endl;
   ofstream outfile;
-  outfile.open(outputBodyTextFile, std::ios_base::app);
+  outfile.open(outputBodyTextFile, ios_base::app);
   outfile << header << endl;
 }
 
@@ -44,7 +44,7 @@ void TableContainer::addExistingFrontParagraphs() {
   string outputBodyTextFile = getOutputBodyTextFilePath();
   if (debug >= LOG_INFO)
     METHOD_OUTPUT << "init content in: " << outputBodyTextFile << endl;
-  ofstream outfile(outputBodyTextFile, std::ios_base::app);
+  ofstream outfile(outputBodyTextFile, ios_base::app);
   // copy content from BODY_TEXT_STARTER
   string starterFile = m_bodyTextInputFilePath + BODY_TEXT_STARTER;
 
@@ -67,7 +67,7 @@ void TableContainer::finishBodyTextFile() {
   if (debug >= LOG_INFO)
     METHOD_OUTPUT << "append content in: " << outputBodyTextFile << endl;
   ofstream outfile;
-  outfile.open(outputBodyTextFile, std::ios_base::app);
+  outfile.open(outputBodyTextFile, ios_base::app);
   // copy content from BODY_TEXT_DESSERT
   string dessertFile = m_bodyTextInputFilePath + BODY_TEXT_DESSERT;
 
@@ -112,7 +112,7 @@ void TableContainer::insertMiddleParagrapHeader(bool enterLastPara,
   if (debug >= LOG_INFO)
     METHOD_OUTPUT << "append content in: " << outputBodyTextFile << endl;
   ofstream outfile;
-  outfile.open(outputBodyTextFile, std::ios_base::app);
+  outfile.open(outputBodyTextFile, ios_base::app);
   GenericParaHeader paraHeader;
   paraHeader.setTotalParaNumber(totalPara);
   paraHeader.setpreTotalParaNumber(preTotalPara);
@@ -135,7 +135,7 @@ void TableContainer::insertBackParagrapHeader(int seqOfPara, int totalPara,
   if (debug >= LOG_INFO)
     METHOD_OUTPUT << "append content in: " << outputBodyTextFile << endl;
   ofstream outfile;
-  outfile.open(outputBodyTextFile, std::ios_base::app);
+  outfile.open(outputBodyTextFile, ios_base::app);
   GenericParaHeader paraHeader;
   paraHeader.setTotalParaNumber(totalPara);
   paraHeader.setSeqOfPara(seqOfPara);
@@ -154,7 +154,7 @@ void TableContainer::appendLeftParagraphInBodyText(const string &text) {
     METHOD_OUTPUT << "append Paragraph In BodyText: " << outputBodyTextFile
                   << endl;
   ofstream outfile;
-  outfile.open(outputBodyTextFile, std::ios_base::app);
+  outfile.open(outputBodyTextFile, ios_base::app);
   outfile << R"(<tr><td width="50%">)" << text << "</td>" << endl;
 }
 
@@ -164,11 +164,20 @@ void TableContainer::appendRightParagraphInBodyText(const string &text) {
     METHOD_OUTPUT << "append Paragraph In BodyText: " << outputBodyTextFile
                   << endl;
   ofstream outfile;
-  outfile.open(outputBodyTextFile, std::ios_base::app);
+  outfile.open(outputBodyTextFile, ios_base::app);
   outfile << R"(<td width="50%">)" << text << R"(</td></tr>)" << endl;
 }
 
-void GenericContainer::assembleBackToHTM(const string &title,
+void LinkSetContainer::createParaListFrom(int first, int incremental, int max) {
+	m_paraHeaderPositionSet.clear();
+  m_paraHeaderPositionSet.insert(first);
+  int i = first;
+  while ((i += incremental) < max) {
+	  m_paraHeaderPositionSet.insert(i);
+  }
+}
+
+void LinkSetContainer::assembleBackToHTM(const string &title,
                                          const string &displayTitle) {
 
   string inputHtmlFile = getInputHtmlFilePath();

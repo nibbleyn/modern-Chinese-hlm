@@ -25,7 +25,7 @@ void CoupledBodyTextWithLink::appendNumberingStatistics() {
   if (linesTable.empty())
     return;
   FUNCTION_OUTPUT << lineDetailFilePath << " is created." << endl;
-  ofstream lineDetailOutfile(lineDetailFilePath, std::ios_base::app);
+  ofstream lineDetailOutfile(lineDetailFilePath, ios_base::app);
   for (const auto &para : linesTable) {
     auto paraPos = para.first;
     auto lineList = para.second;
@@ -83,7 +83,7 @@ void CoupledBodyTextWithLink::doStatisticsByScanningLines(
       LineDetails detail{0, true, Object::SET_OF_OBJECT_TYPES()};
       try {
         auto &entry = linesTable.at(
-            std::make_pair(m_filePrefix + m_file, currentPara.asString()));
+            make_pair(m_filePrefix + m_file, currentPara.asString()));
         entry.push_back(detail);
         if (debug >= LOG_INFO)
           METHOD_OUTPUT << "entry.size: " << entry.size()
@@ -95,7 +95,7 @@ void CoupledBodyTextWithLink::doStatisticsByScanningLines(
                         << displaySpace << currentPara.asString() << endl;
         vector<LineDetails> list;
         list.push_back(detail);
-        linesTable[std::make_pair(m_filePrefix + m_file,
+        linesTable[make_pair(m_filePrefix + m_file,
                                   currentPara.asString())] = list;
       }
     } else if (hasEndingBr(m_inLine)) {
@@ -103,7 +103,7 @@ void CoupledBodyTextWithLink::doStatisticsByScanningLines(
       LineDetails detail{0, false, getContainedObjectTypes(m_inLine)};
       try {
         auto &entry = linesTable.at(
-            std::make_pair(m_filePrefix + m_file, currentPara.asString()));
+            make_pair(m_filePrefix + m_file, currentPara.asString()));
         entry.push_back(detail);
         if (debug >= LOG_INFO)
           METHOD_OUTPUT << "entry.size: " << entry.size()
@@ -115,7 +115,7 @@ void CoupledBodyTextWithLink::doStatisticsByScanningLines(
                         << displaySpace << currentPara.asString() << endl;
         vector<LineDetails> list;
         list.push_back(detail);
-        linesTable[std::make_pair(m_filePrefix + m_file,
+        linesTable[make_pair(m_filePrefix + m_file,
                                   currentPara.asString())] = list;
       }
     }

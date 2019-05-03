@@ -11,7 +11,7 @@ const string sampTitleEndChars = R"(</samp>)";
  * used for features like removePersonalViewpoints, numbering and linkfixing
  * etc.
  */
-class CoupledContainer : public Container {
+class CoupledBodyTextContainer : public Container {
 public:
   // imported attachment list
   static AttachmentList refAttachmentTable;
@@ -19,7 +19,7 @@ public:
   static void backupAndOverwriteAllInputHtmlFiles();
 
 public:
-  CoupledContainer() = default;
+  CoupledBodyTextContainer() = default;
 
   void setFileAndAttachmentNumber(const string &file, int attachNo = 0) {
     m_file = file;

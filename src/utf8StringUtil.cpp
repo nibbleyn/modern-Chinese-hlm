@@ -11,12 +11,12 @@
  * @param digits the length of the chapter string
  * @return a digits length of string of chapter number
  */
-std::string formatIntoZeroPatchedChapterNumber(int chapterNumber, int digits) {
-  std::stringstream formatedNumber;
+string formatIntoZeroPatchedChapterNumber(int chapterNumber, int digits) {
+  stringstream formatedNumber;
   formatedNumber.fill('0');
   formatedNumber.width(digits);
   formatedNumber.clear();
-  formatedNumber << std::internal << chapterNumber;
+  formatedNumber << internal << chapterNumber;
   return formatedNumber.str();
 }
 

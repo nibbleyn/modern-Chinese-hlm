@@ -21,9 +21,9 @@ void CoupledBodyTextWithLink::fixLinksWithinOneLine(FileSet referMainFiles,
     auto link =
         getWholeStringBetweenTags(toProcess, linkStartChars, linkEndChars);
     if (m_attachNumber == 0) {
-      m_linkPtr = std::make_unique<LinkFromMain>(m_file, link);
+      m_linkPtr = make_unique<LinkFromMain>(m_file, link);
     } else {
-      m_linkPtr = std::make_unique<LinkFromAttachment>(
+      m_linkPtr = make_unique<LinkFromAttachment>(
           m_file + attachmentFileMiddleChar + TurnToString(m_attachNumber),
           link);
     }
@@ -65,9 +65,9 @@ void CoupledBodyTextWithLink::fixLinksWithinOneLine(FileSet referMainFiles,
                 toProcess, linkStartChars, linkEndChars, linkEnd);
             if (m_attachNumber == 0) {
               m_followingLinkPtr =
-                  std::make_unique<LinkFromMain>(m_file, followingLink);
+                  make_unique<LinkFromMain>(m_file, followingLink);
             } else {
-              m_followingLinkPtr = std::make_unique<LinkFromAttachment>(
+              m_followingLinkPtr = make_unique<LinkFromAttachment>(
                   m_file + attachmentFileMiddleChar +
                       TurnToString(m_attachNumber),
                   followingLink);
@@ -184,7 +184,7 @@ size_t CoupledBodyTextWithLink::getAverageLineLengthFromReferenceFile() {
   while (!referLinesFile.eof()) {
     string line{""};
     getline(referLinesFile, line);
-    line = std::regex_replace(line, std::regex("(?:\\r\\n|\\n|\\r)"), "");
+    line = regex_replace(line, regex("(?:\\r\\n|\\n|\\r)"), "");
     if (debug >= LOG_INFO) {
       METHOD_OUTPUT << line << endl;
       METHOD_OUTPUT << utf8length(line) << endl;
@@ -366,7 +366,7 @@ void CoupledBodyTextWithLink::scanByRenderingLines() {
     seqOfLines++;
   }
 
-  using ToDeleteLines = std::set<size_t>;
+  using ToDeleteLines = set<size_t>;
   ToDeleteLines lineSet;
 
   bool deleteBR = false;

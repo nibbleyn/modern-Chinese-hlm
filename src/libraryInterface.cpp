@@ -16,7 +16,7 @@ FileSet buildFileSet(int minValue, int maxValue, int digits) {
   auto numberOfDigits = static_cast<int>(log10(maxValue)) + 1;
   for (int i = minValue; i <= maxValue; i++) {
     fs.insert(formatIntoZeroPatchedChapterNumber(
-        i, std::max(digits, numberOfDigits)));
+        i, max(digits, numberOfDigits)));
   }
   return fs;
 }

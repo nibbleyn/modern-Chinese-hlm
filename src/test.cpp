@@ -2,7 +2,7 @@
 #include <array>
 
 void testAttachmentOperations() {
-  CoupledContainer container;
+  CoupledBodyTextContainer container;
   container.setFileType(FILE_TYPE::ATTACHMENT);
   container.setFileAndAttachmentNumber("28");
   FUNCTION_OUTPUT << "attachments for 28:" << endl;
@@ -21,7 +21,7 @@ void testAttachmentOperations() {
 void testSpace() {
   string line =
       R"(<a unhidden id="P11L1">11.1</a>&nbsp;&nbsp; <strong unhidden>杜鹃无语正黄昏，荷锄归去掩重门。青灯照壁人初睡，冷雨敲窗被未温。</strong>&nbsp;&nbsp;&nbsp;&nbsp;<samp unhidden font style="font-size: 13.5pt; font-family:楷体; color:#ff00ff">（像杜鹃啼血一样）我泣尽了血泪默默无语，只发现愁惨的黄昏正在降临，只好扛着花锄忍痛归去，一层层带上身后的门。闺中点起青冷的灯光，摇摇曳曳照射着四壁，我才要躺下，拉上尚是冰凉的被裘，却又听见轻寒的春雨敲打着窗棂，更增加了一层寒意。</samp><br>)";
-  std::unique_ptr<Space> sp = std::make_unique<Space>();
+  unique_ptr<Space> sp = make_unique<Space>();
   auto offset = sp->loadFirstFromContainedLine(line);
   FUNCTION_OUTPUT << "first appearance offset: " << endl;
   FUNCTION_OUTPUT << offset << endl;
@@ -37,7 +37,7 @@ void testPoem() {
       R"(<strong unhidden>杜鹃无语正黄昏，荷锄归去掩重门。青灯照壁人初睡，冷雨敲窗被未温。</strong>)";
   string line =
       R"(<a unhidden id="P11L1">11.1</a>&nbsp;&nbsp; <strong unhidden>杜鹃无语正黄昏，荷锄归去掩重门。青灯照壁人初睡，冷雨敲窗被未温。</strong>&nbsp;&nbsp;&nbsp;&nbsp;<samp unhidden font style="font-size: 13.5pt; font-family:楷体; color:#ff00ff">（像杜鹃啼血一样）我泣尽了血泪默默无语，只发现愁惨的黄昏正在降临，只好扛着花锄忍痛归去，一层层带上身后的门。闺中点起青冷的灯光，摇摇曳曳照射着四壁，我才要躺下，拉上尚是冰凉的被裘，却又听见轻寒的春雨敲打着窗棂，更增加了一层寒意。</samp><br>)";
-  std::unique_ptr<Poem> poem1 = std::make_unique<Poem>();
+  unique_ptr<Poem> poem1 = make_unique<Poem>();
   poem1->loadFirstFromContainedLine(poemStr);
   FUNCTION_OUTPUT << "length: " << poem1->length()
                   << " display size: " << poem1->displaySize() << endl;
@@ -45,7 +45,7 @@ void testPoem() {
   FUNCTION_OUTPUT << poem1->getWholeString() << endl;
   FUNCTION_OUTPUT << "display as:" << endl;
   FUNCTION_OUTPUT << poem1->getDisplayString() << "||" << endl;
-  std::unique_ptr<Poem> poem2 = std::make_unique<Poem>();
+  unique_ptr<Poem> poem2 = make_unique<Poem>();
   auto offset = poem2->loadFirstFromContainedLine(line);
   FUNCTION_OUTPUT << "first appearance offset: " << endl;
   FUNCTION_OUTPUT << offset << endl;
@@ -495,9 +495,9 @@ void testMixedObjects() {
 
   CoupledBodyTextWithLink bodyText;
   bodyText.setFilePrefixFromFileType(FILE_TYPE::MAIN);
-  std::array<string, 8> lineSet = {line2, line3, line4, line5,
+  array<string, 8> lineSet = {line2, line3, line4, line5,
                                    line6, line7, line8, line9};
-  std::array<string, 8> compareToSet = {compareTo2, compareTo3, compareTo4,
+  array<string, 8> compareToSet = {compareTo2, compareTo3, compareTo4,
                                         compareTo5, compareTo6, compareTo7,
                                         compareTo8, compareTo9};
   for (size_t i = 0; i < lineSet.size(); i++) {
@@ -515,7 +515,7 @@ void testMixedObjects() {
       R"(<a unhidden id="P1L2">1.2</a>&nbsp;&nbsp; <u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">玉皇庙，两番描写，俱是热闹时候。即后文荐亡，亦是热闹之时，特特与永福寺对照也，看他平空撰出两付对联，一个疏头，却使玉皇庙是真庙，吴道官、西门庆等俱是活人。妙绝之笔。</u><br>)";
   string line13 =
       R"(<a unhidden id="P9L3">9.3</a>&nbsp;&nbsp; <strong unhidden>惯养娇生笑你痴，菱花空对雪澌澌。好防佳节元宵后，便是烟消火灭时。</strong>&nbsp;&nbsp;&nbsp;&nbsp;<samp unhidden font style="font-size: 12pt; font-family: 宋体; color:#ff00ff">你这么痴心 娇生惯养她，实在是可笑。你知道她有多么生不逢时吗？<a unhidden title="菱角菱花" href="a080.htm#P1L1"><sub hidden>第80回1.1节:</sub>菱角菱花皆盛于秋</a>（<a unhidden title="菱角菱花" href="original\c080.htm#P1L3"><sub hidden>第80回1.3节:</sub>原文</a>），可却毫无办法要面对茫茫大雪。要小心元宵佳节一过，一切都会烟消云散（<cite unhidden> <a unhidden title="清净孤独" href="a022.htm#P13L4"><sub hidden>第22回13.4节:</sub>不详灯谜</a>（<a unhidden title="清净孤独" href="original\c022.htm#P12L1"><sub hidden>第22回12.1节:</sub>原文</a>）、<a unhidden title="进贡" href="a054.htm#P13L1"><sub hidden>第54回13.1节:</sub>聋子放炮仗</a>（<a unhidden title="进贡" href="original\c054.htm#P8L2"><sub hidden>第54回8.2节:</sub>原文</a>）、<a unhidden title="按爵" href="a058.htm#P1L2"><sub hidden>第58回1.2节:</sub>老太妃薨毙</a>（<a unhidden title="按爵" href="original\c058.htm#P1L2"><sub hidden>第58回1.2节:</sub>原文</a>）。</cite>）</samp><br>)";
-  std::array<string, 4> lineSet2 = {line10, line11, line12, line13};
+  array<string, 4> lineSet2 = {line10, line11, line12, line13};
   for (size_t i = 0; i < lineSet2.size(); i++) {
     string line = lineSet[i];
     auto typeSet = bodyText.getContainedObjectTypes(line);

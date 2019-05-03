@@ -2,25 +2,25 @@
 
 extern int debug;
 
-static const std::string attachmentNotExisted = R"(file doesn't exist.)";
-static const std::string titleNotExisted = R"(title doesn't exist.)";
+static const string attachmentNotExisted = R"(file doesn't exist.)";
+static const string titleNotExisted = R"(title doesn't exist.)";
 
 string AttachmentList::getAttachmentTitleFromFile(AttachmentNumber num) {
-  std::string inputFile =
+  string inputFile =
       HTML_SRC_ATTACHMENT + ATTACHMENT_TYPE_HTML_TARGET +
       num.first +
       attachmentFileMiddleChar + num.second + HTML_SUFFIX;
-  std::ifstream infile(inputFile);
+  ifstream infile(inputFile);
   if (!infile) {
     return attachmentNotExisted;
   }
-  std::string inLine{""};
+  string inLine{""};
   while (!infile.eof()) {
     getline(infile, inLine);
-    if (inLine.find(htmlTitleStart) != std::string::npos) {
+    if (inLine.find(htmlTitleStart) != string::npos) {
       return getIncludedStringBetweenTags(inLine, htmlTitleStart, htmlTitleEnd);
     }
-    if (inLine.find(endOfHtmlHead) != std::string::npos)
+    if (inLine.find(endOfHtmlHead) != string::npos)
       return titleNotExisted;
   }
   return titleNotExisted;
@@ -122,8 +122,8 @@ void AttachmentList::loadReferenceAttachmentList() {
                     << typeOfReferenceAttachment << type << endl;
     type.erase(remove(type.begin(), type.end(), ' '), type.end());
     // remove only leading and trailing blank for title
-    title = std::regex_replace(title, std::regex("^ +"), emptyString);
-    title = std::regex_replace(title, std::regex(" +$"), emptyString);
+    title = regex_replace(title, regex("^ +"), emptyString);
+    title = regex_replace(title, regex(" +$"), emptyString);
     AttachmentDetails detail{targetFile, fromLine, title,
                              attachmentTypeFromString(type)};
     auto num = getAttachmentNumber(targetFile);
@@ -229,9 +229,9 @@ void AttachmentList::displayNewlyAddedAttachments() {
   }
 }
 
-std::set<string>
+LinkStringSet
 AttachmentList::allAttachmentsAsLinksByType(ATTACHMENT_TYPE type) {
-  std::set<string> result;
+  set<string> result;
   for (const auto &attachment : m_table) {
     auto attachmentName = attachment.first;
     auto entry = attachment.second;

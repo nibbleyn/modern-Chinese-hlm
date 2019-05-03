@@ -1,5 +1,5 @@
 #include "coupledBodyText.hpp"
-#include <functional> // std::greater
+#include <functional> // greater
 
 /**
  * load files under BODY_TEXT_OUTPUT directory with files under BODY_TEXT_FIX
@@ -529,7 +529,7 @@ void CoupledBodyText::setOutputBodyTextFilePath(const string &absolutePath) {
 
 void CoupledBodyText::appendLinesIntoBodyTextFile() {
   ofstream outfile;
-  outfile.open(m_outputFile, std::ios_base::app);
+  outfile.open(m_outputFile, ios_base::app);
   for (const auto &line : m_resultLines) {
     outfile << brTab << endl;
     outfile << line.second << endl;

@@ -15,7 +15,7 @@ public:
   // statistics about paras
   // chapter number (added with attachment number if over fromAttachmentLinks),
   // Para -> vector of LineDetails
-  using LinesTable = map<std::pair<string, string>, vector<LineDetails>>;
+  using LinesTable = map<pair<string, string>, vector<LineDetails>>;
   static string referFilePrefix;
   static string lineDetailFilePath;
   static LinesTable linesTable;
@@ -72,7 +72,7 @@ private:
     size_t totalLinesAbove{0};
   };
   // line No. -> para No. and above info
-  using ParaHeaderTable = std::map<size_t, ParaHeaderInfo>;
+  using ParaHeaderTable = map<size_t, ParaHeaderInfo>;
   ParaHeaderTable m_paraHeaderTable;
 
   bool isInParaHeaderTable(size_t seqOfLines) {
@@ -80,7 +80,7 @@ private:
       m_paraHeaderTable.at(seqOfLines);
       return true;
     } catch (exception &) {
-      // std::out_of_range if not existed
+      // out_of_range if not existed
       return false;
     }
   }
@@ -115,8 +115,8 @@ private:
   void paraGeneratedNumbering();
 
   // used for rendering
-  using OffsetToObjectType = std::map<size_t, Object::OBJECT_TYPE>;
-  using ObjectTypeToOffset = std::map<Object::OBJECT_TYPE, size_t>;
+  using OffsetToObjectType = map<size_t, Object::OBJECT_TYPE>;
+  using ObjectTypeToOffset = map<Object::OBJECT_TYPE, size_t>;
   OffsetToObjectType m_offsetOfTypes;
   ObjectTypeToOffset m_foundTypes;
 
@@ -125,17 +125,17 @@ private:
     size_t endOffset{0};
     bool embedded{false};
   };
-  using LinkStringTable = std::map<size_t, LinkStringInfo>;
+  using LinkStringTable = map<size_t, LinkStringInfo>;
 
   struct CommentStringInfo {
     size_t startOffset{0};
     size_t endOffset{0};
     bool embedded{false};
   };
-  using CommentStringTable = std::map<size_t, CommentStringInfo>;
+  using CommentStringTable = map<size_t, CommentStringInfo>;
 
-  using PersonalCommentStringTable = std::map<size_t, size_t>;
-  using PoemTranslationStringTable = std::map<size_t, size_t>;
+  using PersonalCommentStringTable = map<size_t, size_t>;
+  using PoemTranslationStringTable = map<size_t, size_t>;
 
   LinkStringTable m_linkStringTable;
   CommentStringTable m_commentStringTable;
@@ -210,7 +210,7 @@ private:
   bool isEmbeddedObject(Object::OBJECT_TYPE type, size_t offset);
 
   // used for link-fixing
-  using LinkPtr = std::unique_ptr<CoupledLink>;
+  using LinkPtr = unique_ptr<CoupledLink>;
   LinkPtr m_linkPtr{nullptr};
   LinkPtr m_followingLinkPtr{nullptr};
   bool m_forceUpdateLink{false};

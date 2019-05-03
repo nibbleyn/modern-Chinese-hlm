@@ -13,19 +13,18 @@ static const string JPM_INDEX = R"(dindex)";
 static const string JPM_TITLE = R"(张竹坡批注金瓶梅)";
 static const string JPM_DISPLAY_TITLE = R"(张竹坡批注金瓶梅 目录)";
 
-static const string ATTACHMENT_PREFIX = R"(附件)";
 static const string REFERENCE_ATTACHMENT_INDEX = R"(bindex1)";
-static const string REFERENCE_ATTACHMENT_TITLE = R"(reference attachments)";
+static const string REFERENCE_ATTACHMENT_TITLE = R"(引经据典 附件目录)";
 static const string REFERENCE_ATTACHMENT_DISPLAY_TITLE =
-    R"(reference attachments)";
+    R"(引经据典 附件目录)";
 
 static const string PERSONAL_ATTACHMENT_INDEX = R"(bindex2)";
-static const string PERSONAL_ATTACHMENT_TITLE = R"(personal attachments)";
+static const string PERSONAL_ATTACHMENT_TITLE = R"(个人感悟 附件目录)";
 static const string PERSONAL_ATTACHMENT_DISPLAY_TITLE =
-    R"(personal attachments)";
+    R"(个人感悟 附件目录)";
 
-std::vector<int> createParaList(int first, int incremental, int max) {
-  std::vector<int> result;
+vector<int> createParaList(int first, int incremental, int max) {
+  vector<int> result;
   result.push_back(first);
   int i = first;
   while ((i += incremental) < max) {
@@ -36,14 +35,16 @@ std::vector<int> createParaList(int first, int incremental, int max) {
 
 void generateContentTableForMainHtmls() {
   int minTarget = MAIN_MIN_CHAPTER_NUMBER, maxTarget = MAIN_MAX_CHAPTER_NUMBER;
-  CoupledContainer container;
+  CoupledBodyTextContainer container;
   container.setFileType(FILE_TYPE::MAIN);
 
   TableContainer outputContainer(MAIN_INDEX);
   outputContainer.setInputFileName(TABLE_CONTAINER_FILENAME_SMALLER_FONT);
+  outputContainer.createParaListFrom(6, 10, 70);
+  outputContainer.addOneParaHeaderPosition(72);
   auto paraList = createParaList(6, 10, 70);
   paraList.push_back(72);
-  std::sort(paraList.begin(), paraList.end());
+  sort(paraList.begin(), paraList.end());
   for (const auto &no : paraList)
     FUNCTION_OUTPUT << no << endl;
   auto start = paraList.begin();
@@ -87,11 +88,12 @@ void generateContentTableForMainHtmls() {
 
 void generateContentTableForOriginalHtmls() {
   int minTarget = MAIN_MIN_CHAPTER_NUMBER, maxTarget = MAIN_MAX_CHAPTER_NUMBER;
-  CoupledContainer container;
+  CoupledBodyTextContainer container;
   container.setFileType(FILE_TYPE::ORIGINAL);
   TableContainer outputContainer(ORG_INDEX);
+  outputContainer.createParaListFrom(18, 22, 70);
   auto paraList = createParaList(18, 22, 70);
-  std::sort(paraList.begin(), paraList.end());
+  sort(paraList.begin(), paraList.end());
   for (const auto &no : paraList)
     FUNCTION_OUTPUT << no << endl;
   auto start = paraList.begin();
@@ -133,11 +135,12 @@ void generateContentTableForOriginalHtmls() {
 
 void generateContentTableForJPMHtmls() {
   int minTarget = JPM_MIN_CHAPTER_NUMBER, maxTarget = JPM_MAX_CHAPTER_NUMBER;
-  CoupledContainer container;
+  CoupledBodyTextContainer container;
   container.setFileType(FILE_TYPE::JPM);
   TableContainer outputContainer(JPM_INDEX);
+  outputContainer.createParaListFrom(18, 22, 90);
   auto paraList = createParaList(18, 22, 90);
-  std::sort(paraList.begin(), paraList.end());
+  sort(paraList.begin(), paraList.end());
   for (const auto &no : paraList)
     FUNCTION_OUTPUT << no << endl;
   auto start = paraList.begin();
@@ -179,10 +182,12 @@ void generateContentTableForJPMHtmls() {
 void generateContentTableForReferenceAttachments(
     bool needToReloadAttachmentList) {
   if (needToReloadAttachmentList)
-    CoupledContainer::refAttachmentTable.loadReferenceAttachmentList();
+    CoupledBodyTextContainer::refAttachmentTable.loadReferenceAttachmentList();
   ListContainer container(REFERENCE_ATTACHMENT_INDEX);
+  container.assignLinkStringSet(CoupledBodyTextContainer::refAttachmentTable.allAttachmentsAsLinksByType(
+           ATTACHMENT_TYPE::REFERENCE));
   for (const auto &link :
-       CoupledContainer::refAttachmentTable.allAttachmentsAsLinksByType(
+       CoupledBodyTextContainer::refAttachmentTable.allAttachmentsAsLinksByType(
            ATTACHMENT_TYPE::REFERENCE)) {
     container.appendParagraphInBodyText(link);
   }
@@ -195,11 +200,11 @@ void generateContentTableForReferenceAttachments(
 void generateContentTableForPersonalAttachments(
     bool needToReloadAttachmentList) {
   if (needToReloadAttachmentList)
-    CoupledContainer::refAttachmentTable.loadReferenceAttachmentList();
+    CoupledBodyTextContainer::refAttachmentTable.loadReferenceAttachmentList();
   ListContainer container(PERSONAL_ATTACHMENT_INDEX);
-  auto table = CoupledContainer::refAttachmentTable;
+  auto table = CoupledBodyTextContainer::refAttachmentTable;
   for (const auto &link :
-       CoupledContainer::refAttachmentTable.allAttachmentsAsLinksByType(
+       CoupledBodyTextContainer::refAttachmentTable.allAttachmentsAsLinksByType(
            ATTACHMENT_TYPE::PERSONAL)) {
     container.appendParagraphInBodyText(link);
   }

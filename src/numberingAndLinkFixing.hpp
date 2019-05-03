@@ -48,7 +48,7 @@ protected:
   FileSet m_referenceToMainfileSet;
   FileSet m_referenceToOriginalfileSet;
   FileSet m_referenceToJPMfileSet;
-  CoupledContainer m_container;
+  CoupledBodyTextContainer m_container;
   CoupledBodyTextWithLink m_bodyText;
   virtual void dissembleHtmls() = 0;
   virtual void assembleHtmls() = 0;

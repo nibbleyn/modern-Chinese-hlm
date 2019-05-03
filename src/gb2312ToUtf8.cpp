@@ -126,7 +126,7 @@ void gb2312FixJPM(int minTarget, int maxTarget) {
 
 void gb2312FixAttachment(int minTarget, int maxTarget) {
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
-    CoupledContainer container;
+    CoupledBodyTextContainer container;
     container.setFileType(FILE_TYPE::ATTACHMENT);
     container.setFileAndAttachmentNumber(file);
     auto attList = container.getAttachmentFileListForChapter(GB2312_HTML_SRC);

@@ -3,7 +3,7 @@
 string scanForSubLinks(const string &original, const string &fromFile) {
   string result;
   // start offset -> end offset
-  using SubStringOffsetTable = std::map<size_t, size_t>;
+  using SubStringOffsetTable = map<size_t, size_t>;
   SubStringOffsetTable subStrings;
   string startTag = linkStartChars;
   string endTag = linkEndChars;
@@ -18,7 +18,7 @@ string scanForSubLinks(const string &original, const string &fromFile) {
   for (const auto &link : subStrings) {
     result += original.substr(endOfSubStringOffset,
                               link.first - endOfSubStringOffset);
-    auto current = std::make_unique<LinkFromMain>(fromFile);
+    auto current = make_unique<LinkFromMain>(fromFile);
 
     current->loadFirstFromContainedLine(original, endOfSubStringOffset);
     result += current->getDisplayString();
