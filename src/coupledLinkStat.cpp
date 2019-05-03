@@ -82,8 +82,7 @@ void LinkFromMain::logLink() {
     LinkDetails detail{m_usedKey, m_fromFile, m_fromLine.asString(),
                        asString()};
     try {
-      auto &entry =
-          linksTable.at(make_pair(getChapterName(), m_referPara));
+      auto &entry = linksTable.at(make_pair(getChapterName(), m_referPara));
       entry.push_back(detail);
       if (debug >= LOG_INFO)
         METHOD_OUTPUT << "entry.size: " << entry.size()
@@ -151,10 +150,10 @@ void LinkFromAttachment::logLink() {
     LinkDetails detail{m_usedKey, m_fromFile, m_fromLine.asString(),
                        asString()};
     try {
-      auto &entry = linksTable.at(
-          make_pair(getChapterName() + attachmentFileMiddleChar +
-                             TurnToString(m_attachmentNumber),
-                         m_referPara));
+      auto &entry =
+          linksTable.at(make_pair(getChapterName() + attachmentFileMiddleChar +
+                                      TurnToString(m_attachmentNumber),
+                                  m_referPara));
       entry.push_back(detail);
     } catch (exception &) {
       if (debug >= LOG_EXCEPTION)
@@ -166,8 +165,8 @@ void LinkFromAttachment::logLink() {
       vector<LinkDetails> list;
       list.push_back(detail);
       linksTable[make_pair(getChapterName() + attachmentFileMiddleChar +
-                                    TurnToString(m_attachmentNumber),
-                                m_referPara)] = list;
+                               TurnToString(m_attachmentNumber),
+                           m_referPara)] = list;
     }
   }
 }

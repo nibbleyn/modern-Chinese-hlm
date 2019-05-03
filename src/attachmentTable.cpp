@@ -6,10 +6,9 @@ static const string attachmentNotExisted = R"(file doesn't exist.)";
 static const string titleNotExisted = R"(title doesn't exist.)";
 
 string AttachmentList::getAttachmentTitleFromFile(AttachmentNumber num) {
-  string inputFile =
-      HTML_SRC_ATTACHMENT + ATTACHMENT_TYPE_HTML_TARGET +
-      num.first +
-      attachmentFileMiddleChar + num.second + HTML_SUFFIX;
+  string inputFile = HTML_SRC_ATTACHMENT + ATTACHMENT_TYPE_HTML_TARGET +
+                     num.first + attachmentFileMiddleChar + num.second +
+                     HTML_SUFFIX;
   ifstream infile(inputFile);
   if (!infile) {
     return attachmentNotExisted;
@@ -69,9 +68,8 @@ AttachmentNumber getAttachmentNumber(const string &filename) {
   if (filename.find(attachmentFileMiddleChar) == string::npos) {
     return num;
   }
-  num.second =
-      filename.substr(filename.find(attachmentFileMiddleChar) +
-                                attachmentFileMiddleChar.length());
+  num.second = filename.substr(filename.find(attachmentFileMiddleChar) +
+                               attachmentFileMiddleChar.length());
   return num;
 }
 
@@ -238,12 +236,11 @@ AttachmentList::allAttachmentsAsLinksByType(ATTACHMENT_TYPE type) {
     ATTACHMENT_TYPE attachmentType = entry.type;
 
     if (attachmentType == type) {
-      string name = citationChapterNo + attachmentName.first +
-                    attachmentUnit + ATTACHMENT_TYPE_HTML_TARGET +
-                    attachmentName.second + R"(: )";
+      string name = citationChapterNo + attachmentName.first + attachmentUnit +
+                    ATTACHMENT_TYPE_HTML_TARGET + attachmentName.second +
+                    R"(: )";
       result.insert(fixLinkFromAttachmentTemplate(
-          attachmentDirForLinkFromMain,
-          attachmentName.first,
+          attachmentDirForLinkFromMain, attachmentName.first,
           attachmentName.second, name + entry.fromLine));
     }
   }

@@ -77,7 +77,7 @@ string CoupledBodyTextContainer::getBodyTextFilePath() {
 }
 
 void CoupledBodyTextContainer::assembleBackToHTM(const string &title,
-                                         const string &displayTitle) {
+                                                 const string &displayTitle) {
 
   string inputHtmlFile = getInputHtmlFilePath();
   string inputBodyTextFile = getBodyTextFilePath();
@@ -330,7 +330,8 @@ void CoupledBodyTextContainer::fixReturnLinkForAttachmentFile() {
 }
 
 CoupledBodyTextContainer::AttachmentNumberList
-CoupledBodyTextContainer::getAttachmentFileList(int minAttachNo, int maxAttachNo) {
+CoupledBodyTextContainer::getAttachmentFileList(int minAttachNo,
+                                                int maxAttachNo) {
   auto listOfNumbersFromFiles =
       getAttachmentFileListForChapter(m_htmlInputFilePath);
   if ((minAttachNo == 0 and maxAttachNo == 0) or maxAttachNo < minAttachNo) {
@@ -353,7 +354,8 @@ CoupledBodyTextContainer::getAttachmentFileList(int minAttachNo, int maxAttachNo
  * @return the vector of attachment numbers
  */
 CoupledBodyTextContainer::AttachmentNumberList
-CoupledBodyTextContainer::getAttachmentFileListForChapter(const string &fromDir) {
+CoupledBodyTextContainer::getAttachmentFileListForChapter(
+    const string &fromDir) {
   vector<string> filenameList;
   AttachmentNumberList attList;
   Poco::File(fromDir).list(filenameList);

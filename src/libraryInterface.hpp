@@ -1,7 +1,7 @@
 #pragma once
 
-#include "coupledBodyTextWithLink.hpp"
 #include "coupledBodyTextContainer.hpp"
+#include "coupledBodyTextWithLink.hpp"
 #include "linkSetContainer.hpp"
 
 // operations to construct a group of file names

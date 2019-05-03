@@ -496,10 +496,10 @@ void testMixedObjects() {
   CoupledBodyTextWithLink bodyText;
   bodyText.setFilePrefixFromFileType(FILE_TYPE::MAIN);
   array<string, 8> lineSet = {line2, line3, line4, line5,
-                                   line6, line7, line8, line9};
+                              line6, line7, line8, line9};
   array<string, 8> compareToSet = {compareTo2, compareTo3, compareTo4,
-                                        compareTo5, compareTo6, compareTo7,
-                                        compareTo8, compareTo9};
+                                   compareTo5, compareTo6, compareTo7,
+                                   compareTo8, compareTo9};
   for (size_t i = 0; i < lineSet.size(); i++) {
     string line = lineSet[i];
     string compareTo = compareToSet[i];

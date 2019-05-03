@@ -95,8 +95,8 @@ void CoupledBodyTextWithLink::doStatisticsByScanningLines(
                         << displaySpace << currentPara.asString() << endl;
         vector<LineDetails> list;
         list.push_back(detail);
-        linesTable[make_pair(m_filePrefix + m_file,
-                                  currentPara.asString())] = list;
+        linesTable[make_pair(m_filePrefix + m_file, currentPara.asString())] =
+            list;
       }
     } else if (hasEndingBr(m_inLine)) {
       // record the para it belongs to into linesTable
@@ -115,8 +115,8 @@ void CoupledBodyTextWithLink::doStatisticsByScanningLines(
                         << displaySpace << currentPara.asString() << endl;
         vector<LineDetails> list;
         list.push_back(detail);
-        linesTable[make_pair(m_filePrefix + m_file,
-                                  currentPara.asString())] = list;
+        linesTable[make_pair(m_filePrefix + m_file, currentPara.asString())] =
+            list;
       }
     }
   }

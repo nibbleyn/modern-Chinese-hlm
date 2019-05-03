@@ -15,8 +15,8 @@ FileSet buildFileSet(int minValue, int maxValue, int digits) {
   FileSet fs;
   auto numberOfDigits = static_cast<int>(log10(maxValue)) + 1;
   for (int i = minValue; i <= maxValue; i++) {
-    fs.insert(formatIntoZeroPatchedChapterNumber(
-        i, max(digits, numberOfDigits)));
+    fs.insert(
+        formatIntoZeroPatchedChapterNumber(i, max(digits, numberOfDigits)));
   }
   return fs;
 }

@@ -5,7 +5,7 @@
 static const string HTML_CONTAINER = R"(container/container)";
 static const string BODY_TEXT_CONTAINER = R"(container/)";
 
-using ParaHeaderPositionSet = set<int>;
+using ParaHeaderPositionSet = vector<int>;
 
 class LinkSetContainer : public Container {
 public:
@@ -27,10 +27,18 @@ public:
     return m_bodyTextOutputFilePath + getInputFileName() + BODY_TEXT_SUFFIX;
   }
   void createParaListFrom(int first, int incremental, int max);
-  void addOneParaHeaderPosition(int pos){m_paraHeaderPositionSet.insert(pos);}
-  void hideParaHeaders(){m_hideParaHeaders = true;}
-
-  void assignLinkStringSet(LinkStringSet stringSet){m_linkStringSet = stringSet;}
+  void addOneParaHeaderPosition(int pos) {
+    m_paraHeaderPositionSet.push_back(pos);
+  }
+  void hideParaHeaders() { m_hideParaHeaders = true; }
+  void setMaxTarget(int num) { m_maxTarget = num; }
+  void assignLinkStringSet(LinkStringSet stringSet) {
+    m_linkStringSet = stringSet;
+  }
+  void clearLinkStringSet() { m_linkStringSet.clear(); }
+  void addLinkToLinkStringSet(const string &link) {
+    m_linkStringSet.insert(link);
+  }
   virtual void outputToBodyTextFromLinkList() = 0;
 
 protected:
@@ -44,6 +52,7 @@ protected:
   bool m_hideParaHeaders{false};
   ParaHeaderPositionSet m_paraHeaderPositionSet;
   LinkStringSet m_linkStringSet;
+  int m_maxTarget{0};
 };
 
 static const string LIST_CONTAINER_FILENAME = R"(1)";
@@ -59,7 +68,7 @@ public:
   void clearExistingBodyText();
   void appendParagraphInBodyText(const string &text);
   void appendParagrapHeader(const string &header);
-  void outputToBodyTextFromLinkList(){}
+  void outputToBodyTextFromLinkList();
 
 private:
   string getInputFileName() const override { return LIST_CONTAINER_FILENAME; }
@@ -94,7 +103,7 @@ public:
   void appendRightParagraphInBodyText(const string &text);
   void finishBodyTextFile();
   void setInputFileName(const string &name) { m_filename = name; }
-  void outputToBodyTextFromLinkList(){}
+  void outputToBodyTextFromLinkList();
 
 private:
   string getInputFileName() const override { return m_filename; }

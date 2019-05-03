@@ -37,6 +37,12 @@ void ListContainer::appendParagrapHeader(const string &header) {
   outfile << header << endl;
 }
 
+void ListContainer::outputToBodyTextFromLinkList() {
+  for (const auto &link : m_linkStringSet) {
+    appendParagraphInBodyText(link);
+  }
+}
+
 const string TableContainer::BODY_TEXT_STARTER = R"(3front.txt)";
 const string TableContainer::BODY_TEXT_DESSERT = R"(3back.txt)";
 
@@ -168,12 +174,44 @@ void TableContainer::appendRightParagraphInBodyText(const string &text) {
   outfile << R"(<td width="50%">)" << text << R"(</td></tr>)" << endl;
 }
 
+void TableContainer::outputToBodyTextFromLinkList() {
+  sort(m_paraHeaderPositionSet.begin(), m_paraHeaderPositionSet.end());
+  auto start = m_paraHeaderPositionSet.begin();
+  if (not m_hideParaHeaders)
+    insertFrontParagrapHeader(*start);
+  addExistingFrontParagraphs();
+  int i = 1;
+  int seqOfPara = 1;
+  int totalPara = 0;
+  for (const auto &link : m_linkStringSet) {
+    if (i % 2 == 0)
+      appendRightParagraphInBodyText(link);
+    else
+      appendLeftParagraphInBodyText(link);
+    if (start != m_paraHeaderPositionSet.end() and i == *start) {
+      auto enterLastPara = (start + 1 == m_paraHeaderPositionSet.end());
+      auto startParaNo = i + 1;
+      int endParaNo = (enterLastPara) ? m_maxTarget : *(start + 1);
+      totalPara = endParaNo - startParaNo + 1;
+      int preTotalPara = i - *(start - 1);
+      if (not m_hideParaHeaders)
+        insertMiddleParagrapHeader(enterLastPara, seqOfPara, startParaNo,
+                                   endParaNo, totalPara, preTotalPara);
+      seqOfPara++;
+      start++;
+    }
+    i++;
+  }
+  if (not m_hideParaHeaders)
+    insertBackParagrapHeader(seqOfPara, totalPara);
+}
+
 void LinkSetContainer::createParaListFrom(int first, int incremental, int max) {
-	m_paraHeaderPositionSet.clear();
-  m_paraHeaderPositionSet.insert(first);
+  m_paraHeaderPositionSet.clear();
+  m_paraHeaderPositionSet.push_back(first);
   int i = first;
   while ((i += incremental) < max) {
-	  m_paraHeaderPositionSet.insert(i);
+    m_paraHeaderPositionSet.push_back(i);
   }
 }
 
