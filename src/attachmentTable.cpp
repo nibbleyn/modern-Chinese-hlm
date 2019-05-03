@@ -6,9 +6,10 @@ static const string attachmentNotExisted = R"(file doesn't exist.)";
 static const string titleNotExisted = R"(title doesn't exist.)";
 
 string AttachmentList::getAttachmentTitleFromFile(AttachmentNumber num) {
-  string inputFile = HTML_SRC_ATTACHMENT + ATTACHMENT_TYPE_HTML_TARGET +
-                     num.first + attachmentFileMiddleChar + num.second +
-                     HTML_SUFFIX;
+  string inputFile =
+      HTML_SRC_ATTACHMENT + ATTACHMENT_TYPE_HTML_TARGET +
+      formatIntoZeroPatchedChapterNumber(num.first, TWO_DIGIT_FILENAME) +
+      attachmentFileMiddleChar + TurnToString(num.second) + HTML_SUFFIX;
   ifstream infile(inputFile);
   if (!infile) {
     return attachmentNotExisted;
@@ -58,18 +59,19 @@ ATTACHMENT_TYPE attachmentTypeFromString(const string &str) {
  * @return pair of chapter number and attachment number
  */
 AttachmentNumber getAttachmentNumber(const string &filename) {
-  AttachmentNumber num(emptyString, emptyString);
+  AttachmentNumber num(0, 0);
   // referred file not found
   if (filename.find(ATTACHMENT_TYPE_HTML_TARGET) == string::npos) {
     return num;
   }
-  num.first = getIncludedStringBetweenTags(
-      filename, ATTACHMENT_TYPE_HTML_TARGET, attachmentFileMiddleChar);
+  num.first = TurnToInt(getIncludedStringBetweenTags(
+      filename, ATTACHMENT_TYPE_HTML_TARGET, attachmentFileMiddleChar));
   if (filename.find(attachmentFileMiddleChar) == string::npos) {
     return num;
   }
-  num.second = filename.substr(filename.find(attachmentFileMiddleChar) +
-                               attachmentFileMiddleChar.length());
+  num.second =
+      TurnToInt(filename.substr(filename.find(attachmentFileMiddleChar) +
+                                attachmentFileMiddleChar.length()));
   return num;
 }
 
@@ -236,12 +238,14 @@ AttachmentList::allAttachmentsAsLinksByType(ATTACHMENT_TYPE type) {
     ATTACHMENT_TYPE attachmentType = entry.type;
 
     if (attachmentType == type) {
-      string name = citationChapterNo + attachmentName.first + attachmentUnit +
-                    ATTACHMENT_TYPE_HTML_TARGET + attachmentName.second +
-                    R"(: )";
+      string name = citationChapterNo + TurnToString(attachmentName.first) +
+                    defaultUnit + citationChapterNo +
+                    TurnToString(attachmentName.second) + attachmentUnit;
       result.insert(fixLinkFromAttachmentTemplate(
-          attachmentDirForLinkFromMain, attachmentName.first,
-          attachmentName.second, name + entry.fromLine));
+          attachmentDirForLinkFromMain, TurnToString(attachmentName.first),
+          TurnToString(attachmentName.second),
+          name + bracketStartChars + fromParaOfReferenceAttachment +
+              entry.fromLine + bracketEndChars));
     }
   }
   return result;

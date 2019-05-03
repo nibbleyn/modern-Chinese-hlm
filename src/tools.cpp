@@ -590,8 +590,8 @@ void CoupledBodyTextWithLink::removePersonalCommentsOverNumberedFiles() {
           getIncludedStringBetweenTags(removeSpecialLinkLine, linkStartChars,
                                        linkEndChars, specialLinkBegin);
       LinkFromAttachment m_linkPtr(m_file, specialLink);
-      auto num = make_pair(m_linkPtr.getChapterName(),
-                           TurnToString(m_linkPtr.getattachmentNumber()));
+      auto num = make_pair(m_linkPtr.getchapterNumer(),
+                           m_linkPtr.getattachmentNumber());
       if (m_linkPtr.isTargetToOtherAttachmentHtm() and
           CoupledBodyTextContainer::refAttachmentTable.getAttachmentType(num) ==
               ATTACHMENT_TYPE::PERSONAL) {

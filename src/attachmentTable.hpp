@@ -10,8 +10,7 @@ static const string htmlTitleEnd = R"(</title>)";
 static const string endOfHtmlHead = R"(/head)";
 
 enum class ATTACHMENT_TYPE { PERSONAL, REFERENCE, NON_EXISTED };
-using AttachmentNumber =
-    pair<string, string>; // chapter number, attachment number
+using AttachmentNumber = pair<int, int>; // chapter number, attachment number
 
 // statistics about links to attachments
 struct AttachmentDetails {
