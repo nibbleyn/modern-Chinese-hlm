@@ -4,7 +4,7 @@
 					</tr>
 					
 					<tr>
-					<td width="50%"><a unhidden href=" bindex0.htm">红楼梦感悟</a></td>
+					<td width="50%"><a unhidden href=" bindex2.htm">红楼梦感悟</a></td>
 					<td width="50%"><a unhidden href=" bindex1.htm">红楼梦典故</a></td>
 					</tr>
 					

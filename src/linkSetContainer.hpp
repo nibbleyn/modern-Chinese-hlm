@@ -28,12 +28,13 @@ public:
   string getOutputBodyTextFilePath() {
     return m_bodyTextOutputFilePath + getInputFileName() + BODY_TEXT_SUFFIX;
   }
-  void createParaListFrom(int first, int incremental, int max);
+  void createParaListFrom(int first, int incremental, int max = 0);
   void addOneParaHeaderPosition(int pos) {
     m_paraHeaderPositionSet.push_back(pos);
   }
   void hideParaHeaders() { m_hideParaHeaders = true; }
   void setMaxTarget(int num) { m_maxTarget = num; }
+  void setMaxTargetAsSetSize() { m_maxTarget = m_linkStringSet.size(); }
   void assignLinkStringSet(LinkStringSet stringSet) {
     m_linkStringSet = stringSet;
   }
@@ -41,7 +42,8 @@ public:
   void addLinkToLinkStringSet(const string &link) {
     m_linkStringSet.insert(link);
   }
-  virtual void outputToBodyTextFromLinkList() = 0;
+  virtual void
+  outputToBodyTextFromLinkList(const string &units = defaultUnit) = 0;
 
 protected:
   string m_outputFilename{"output"};
@@ -69,7 +71,7 @@ public:
   // process bodyText change directly, instead of thru CoupledBodyText
   void appendParagraphInBodyText(const string &text);
   void appendParagrapHeader(const string &header);
-  void outputToBodyTextFromLinkList();
+  void outputToBodyTextFromLinkList(const string &units = defaultUnit);
 
 private:
   string getInputFileName() const override { return LIST_CONTAINER_FILENAME; }
@@ -105,7 +107,7 @@ public:
   void appendRightParagraphInBodyText(const string &text);
   void finishBodyTextFile();
   void setInputFileName(const string &name) { m_filename = name; }
-  void outputToBodyTextFromLinkList();
+  void outputToBodyTextFromLinkList(const string &units = defaultUnit);
 
 private:
   string getInputFileName() const override { return m_filename; }

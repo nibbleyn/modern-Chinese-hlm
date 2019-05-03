@@ -37,7 +37,7 @@ void ListContainer::appendParagrapHeader(const string &header) {
   outfile << header << endl;
 }
 
-void ListContainer::outputToBodyTextFromLinkList() {
+void ListContainer::outputToBodyTextFromLinkList(const string &units) {
   clearExistingBodyText();
   for (const auto &link : m_linkStringSet) {
     appendParagraphInBodyText(link);
@@ -175,12 +175,12 @@ void TableContainer::appendRightParagraphInBodyText(const string &text) {
   outfile << R"(<td width="50%">)" << text << R"(</td></tr>)" << endl;
 }
 
-void TableContainer::outputToBodyTextFromLinkList() {
+void TableContainer::outputToBodyTextFromLinkList(const string &units) {
   clearExistingBodyText();
   sort(m_paraHeaderPositionSet.begin(), m_paraHeaderPositionSet.end());
   auto start = m_paraHeaderPositionSet.begin();
   if (not m_hideParaHeaders)
-    insertFrontParagrapHeader(*start);
+    insertFrontParagrapHeader(*start, units);
   if (m_enableAddExistingFrontLinks)
     addExistingFrontLinks();
   int i = 1;
@@ -199,17 +199,20 @@ void TableContainer::outputToBodyTextFromLinkList() {
       int preTotalPara = i - *(start - 1);
       if (not m_hideParaHeaders)
         insertMiddleParagrapHeader(enterLastPara, seqOfPara, startParaNo,
-                                   endParaNo, totalPara, preTotalPara);
+                                   endParaNo, totalPara, preTotalPara, units);
       seqOfPara++;
       start++;
     }
     i++;
   }
   if (not m_hideParaHeaders)
-    insertBackParagrapHeader(seqOfPara, totalPara);
+    insertBackParagrapHeader(seqOfPara, totalPara, units);
 }
 
+// if max is 0, must call setMaxTarget or setMaxTargetAsSetSize before
 void LinkSetContainer::createParaListFrom(int first, int incremental, int max) {
+  if (max == 0)
+    max = m_maxTarget;
   m_paraHeaderPositionSet.clear();
   m_paraHeaderPositionSet.push_back(first);
   int i = first;
