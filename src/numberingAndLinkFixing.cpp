@@ -165,7 +165,7 @@ void Commander::outputLinkFixingStatistics() {
     // statistics of links fixing
     LinkFromMain::outPutStatisticsToFiles();
     LinkFromMain::displayMainFilesOfMissingKey();
-    LinkFromMain::displayNewlyAddedAttachments();
+    LinkFromMain::attachmentTable.displayNewlyAddedAttachments();
   }
   if (m_command == COMMAND::fixLinksFromAttachmentFile)
     // statistics of links fixing

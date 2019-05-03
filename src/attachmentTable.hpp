@@ -1,5 +1,5 @@
 #pragma once
-#include "utf8StringUtil.hpp"
+#include "link.hpp"
 #include <fstream>
 
 enum class ATTACHMENT_TYPE { PERSONAL, REFERENCE, NON_EXISTED };
@@ -38,9 +38,14 @@ public:
   void saveAttachmentList();
   string getFromLineOfAttachment(AttachmentNumber num);
   ATTACHMENT_TYPE getAttachmentType(AttachmentNumber num);
+  void displayNewlyAddedAttachments();
+  std::set<string> allAttachmentsAsLinksByType(ATTACHMENT_TYPE type);
 
 private:
   AttachmentSet m_table;
+  using AttachmentNumberSet = std::set<AttachmentNumber>;
+  AttachmentNumberSet m_newlyAddedAttachmentSet;
+  AttachmentNumberSet m_notUpdatedAttachmentSet;
   string m_sourceFile{HTML_SRC_REF_ATTACHMENT_LIST};
   string m_outputFile{HTML_SRC_REF_ATTACHMENT_LIST};
 };

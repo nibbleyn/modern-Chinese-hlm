@@ -7,6 +7,16 @@ static const std::string ORIGINAL_TYPE_HTML_TARGET = R"(c0)";
 static const std::string ATTACHMENT_TYPE_HTML_TARGET = R"(b0)";
 static const std::string JPM_TYPE_HTML_TARGET = R"(d)";
 
+static const std::string attachmentDirForLinkFromMain = R"(attachment\)";
+static const std::string originalDirForLinkFromMain = R"(original\)";
+static const std::string jpmDirForLinkFromMain = R"(JPM\)";
+static const std::string pictureDirForLinkFromMain = R"(pictures\)";
+
+static const std::string mainDirForLinkFromAttachment = R"(..\)";
+static const std::string originalDirForLinkFromAttachment = R"(..\original\)";
+static const std::string jpmDirForLinkFromAttachment = R"(..\JPM\)";
+static const std::string pictureDirForLinkFromAttachment = R"(..\pictures\)";
+
 enum class LINK_TYPE { MAIN, ATTACHMENT, ORIGINAL, SAMEPAGE, JPM, IMAGE };
 enum class LINK_DISPLAY_TYPE { DIRECT, HIDDEN, UNHIDDEN };
 

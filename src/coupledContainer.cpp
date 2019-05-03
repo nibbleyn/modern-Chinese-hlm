@@ -372,7 +372,7 @@ void CoupledContainer::fetchOriginalAndTranslatedTitles() {
   string inputHtmlFile = getInputHtmlFilePath();
   ifstream inHtmlFile(inputHtmlFile);
   if (!inHtmlFile) {
-    FUNCTION_OUTPUT << "file doesn't exist:" << inputHtmlFile << endl;
+    METHOD_OUTPUT << "file doesn't exist:" << inputHtmlFile << endl;
     return;
   }
   string line{""};

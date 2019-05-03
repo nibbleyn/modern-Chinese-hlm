@@ -1,7 +1,6 @@
 #pragma once
 #include "attachmentTable.hpp"
 #include "container.hpp"
-#include "link.hpp"
 
 const string strongTitleBeginChars = R"(<strong unhidden>)";
 const string strongTitleEndChars = R"(</strong>)";

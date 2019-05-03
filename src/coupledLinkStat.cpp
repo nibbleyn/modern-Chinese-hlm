@@ -125,9 +125,6 @@ void LinkFromMain::logLink() {
     auto title = getAttachmentTitle(targetFile);
     auto type = attachmentTable.getAttachmentType(num);
     if (getSourceChapterName() == getChapterName()) {
-      if (type == ATTACHMENT_TYPE::NON_EXISTED)
-        newAttachmentList.insert(targetFile);
-
       AttachmentDetails detail{targetFile, m_fromLine.asString(), title,
                                (type == ATTACHMENT_TYPE::PERSONAL)
                                    ? ATTACHMENT_TYPE::PERSONAL

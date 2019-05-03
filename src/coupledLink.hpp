@@ -1,7 +1,6 @@
 #pragma once
 #include "attachmentTable.hpp"
 #include "coupledBodyText.hpp"
-#include "link.hpp"
 
 using FileSet = set<string>;
 
@@ -98,10 +97,8 @@ public:
   static AttachmentList attachmentTable;
 
   static FileSet keyMissingChapters;
-  static FileSet newAttachmentList;
   static void clearReport();
   static void displayMainFilesOfMissingKey();
-  static void displayNewlyAddedAttachments();
 
   static void outPutStatisticsToFiles();
 

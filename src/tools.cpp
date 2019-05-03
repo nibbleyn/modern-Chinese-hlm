@@ -544,6 +544,8 @@ void reformatTxtFilesForReader() {
                   << " finished. " << endl;
 }
 
+// must be called after called
+// CoupledContainer::refAttachmentTable.loadReferenceAttachmentList();
 void CoupledBodyTextWithLink::removePersonalCommentsOverNumberedFiles() {
   setInputOutputFiles();
   ifstream infile(m_inputFile);
@@ -580,32 +582,30 @@ void CoupledBodyTextWithLink::removePersonalCommentsOverNumberedFiles() {
     }
     // the second loop to remove all expected attachment link from result
     // orgLine
-    //    auto removeSpecialLinkLine = orgLine;
-    //    string linkStart = linkStartChars;
-    //    string linkEnd = linkEndChars;
-    //    auto specialLinkBegin = removeSpecialLinkLine.find(linkStart);
-    //    while (specialLinkBegin != string::npos) {
-    //      auto specialLinkEnd = removeSpecialLinkLine.find(linkEnd);
-    //      string specialLink = removeSpecialLinkLine.substr(
-    //          specialLinkBegin,
-    //          specialLinkEnd + linkEnd.length() - specialLinkBegin);
-    //      LinkFromAttachment m_linkPtr(m_file, specialLink);
-    //      auto num = make_pair(m_linkPtr.getchapterNumer(),
-    //                           m_linkPtr.getattachmentNumber());
-    //      if (m_linkPtr.isTargetToOtherAttachmentHtm() and
-    //          LinkFromMain::getAttachmentType(num) ==
-    //          ATTACHMENT_TYPE::PERSONAL) {
-    //        if (debug >= LOG_INFO)
-    //          METHOD_OUTPUT << specialLink << endl;
-    //        to_replace = specialLink;
-    //        auto replaceBegin = orgLine.find(to_replace);
-    //        orgLine.replace(replaceBegin, to_replace.length(), "");
-    //      }
-    //      removeSpecialLinkLine =
-    //          removeSpecialLinkLine.substr(specialLinkEnd + linkEnd.length());
-    //      // find next specialLink in the removeSpecialLinkLine
-    //      specialLinkBegin = removeSpecialLinkLine.find(linkStart);
-    //    }
+    auto removeSpecialLinkLine = orgLine;
+    auto specialLinkBegin = removeSpecialLinkLine.find(linkStartChars);
+    while (specialLinkBegin != string::npos) {
+      auto specialLinkEnd = removeSpecialLinkLine.find(linkEndChars);
+      string specialLink =
+          getIncludedStringBetweenTags(removeSpecialLinkLine, linkStartChars,
+                                       linkEndChars, specialLinkBegin);
+      LinkFromAttachment m_linkPtr(m_file, specialLink);
+      auto num = make_pair(m_linkPtr.getchapterNumer(),
+                           m_linkPtr.getattachmentNumber());
+      if (m_linkPtr.isTargetToOtherAttachmentHtm() and
+          CoupledContainer::refAttachmentTable.getAttachmentType(num) ==
+              ATTACHMENT_TYPE::PERSONAL) {
+        if (debug >= LOG_INFO)
+          METHOD_OUTPUT << specialLink << endl;
+        to_replace = specialLink;
+        auto replaceBegin = orgLine.find(to_replace);
+        orgLine.replace(replaceBegin, to_replace.length(), "");
+      }
+      removeSpecialLinkLine =
+          removeSpecialLinkLine.substr(specialLinkEnd + linkEndChars.length());
+      // find next specialLink in the removeSpecialLinkLine
+      specialLinkBegin = removeSpecialLinkLine.find(linkStartChars);
+    }
 
     outfile << orgLine << endl;
   }

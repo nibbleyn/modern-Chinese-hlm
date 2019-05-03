@@ -1,12 +1,8 @@
 #include "coupledLink.hpp"
 
 FileSet LinkFromMain::keyMissingChapters;
-FileSet LinkFromMain::newAttachmentList;
 
-void LinkFromMain::clearReport() {
-  keyMissingChapters.clear();
-  newAttachmentList.clear();
-}
+void LinkFromMain::clearReport() { keyMissingChapters.clear(); }
 
 void LinkFromMain::displayMainFilesOfMissingKey() {
   if (keyMissingChapters.empty())
@@ -14,15 +10,6 @@ void LinkFromMain::displayMainFilesOfMissingKey() {
   FUNCTION_OUTPUT << "files which has missing key links:" << endl;
   for (const auto &file : keyMissingChapters) {
     FUNCTION_OUTPUT << MAIN_HTML_PREFIX + file + HTML_SUFFIX << endl;
-  }
-}
-
-void LinkFromMain::displayNewlyAddedAttachments() {
-  if (newAttachmentList.empty())
-    return;
-  FUNCTION_OUTPUT << "Newly Added Attachments:" << endl;
-  for (const auto &file : newAttachmentList) {
-    FUNCTION_OUTPUT << file + HTML_SUFFIX << endl;
   }
 }
 

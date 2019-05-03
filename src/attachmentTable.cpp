@@ -22,8 +22,6 @@ ATTACHMENT_TYPE attachmentTypeFromString(const string &str) {
                                          : ATTACHMENT_TYPE::REFERENCE;
 }
 
-static const string ATTACHMENT_TYPE_HTML_TARGET = R"(b0)";
-
 /**
  * get chapter number and attachment number from an attachment file name
  * for example with input b001_15 would return pair <1,15>
@@ -65,7 +63,7 @@ static const string typeOfReferenceAttachment = R"( type:)";
 void AttachmentList::loadReferenceAttachmentList() {
   ifstream infile(m_sourceFile);
   if (!infile) {
-    FUNCTION_OUTPUT << "file doesn't exist:" << m_sourceFile << endl;
+    METHOD_OUTPUT << "file doesn't exist:" << m_sourceFile << endl;
     return;
   }
   m_table.clear();
@@ -88,22 +86,29 @@ void AttachmentList::loadReferenceAttachmentList() {
     string fromLine = getIncludedStringBetweenTags(
         line, fromParaOfReferenceAttachment, fromFileOfReferenceAttachment);
     if (debug >= LOG_INFO)
-      FUNCTION_OUTPUT << fromParaOfReferenceAttachment << fromLine
-                      << fromFileOfReferenceAttachment << targetFile
-                      << titleOfReferenceAttachment << title
-                      << typeOfReferenceAttachment << type << endl;
+      METHOD_OUTPUT << fromParaOfReferenceAttachment << fromLine
+                    << fromFileOfReferenceAttachment << targetFile
+                    << titleOfReferenceAttachment << title
+                    << typeOfReferenceAttachment << type << endl;
     type.erase(remove(type.begin(), type.end(), ' '), type.end());
     // remove only leading and trailing blank for title
     title = std::regex_replace(title, std::regex("^ +"), emptyString);
     title = std::regex_replace(title, std::regex(" +$"), emptyString);
     AttachmentDetails detail{targetFile, fromLine, title,
                              attachmentTypeFromString(type)};
-    addOrUpdateOneItem(getAttachmentNumber(targetFile), detail);
+    auto num = getAttachmentNumber(targetFile);
+    m_table[num] = detail;
+    m_notUpdatedAttachmentSet.insert(num);
   }
+  m_newlyAddedAttachmentSet.clear();
 }
 
 void AttachmentList::addOrUpdateOneItem(AttachmentNumber num,
                                         AttachmentDetails &detail) {
+  if (getAttachmentType(num) == ATTACHMENT_TYPE::NON_EXISTED)
+    m_newlyAddedAttachmentSet.insert(num);
+  else
+    m_notUpdatedAttachmentSet.erase(num);
   m_table[num] = detail;
 }
 
@@ -113,6 +118,10 @@ void AttachmentList::addOrUpdateOneItem(AttachmentNumber num,
 void AttachmentList::saveAttachmentList() {
   if (m_table.empty())
     return;
+  // remove not used attachments
+  for (const auto &element : m_notUpdatedAttachmentSet) {
+    m_table.erase(element);
+  }
   ofstream outfile(m_outputFile);
   for (const auto &attachment : m_table) {
     auto entry = attachment.second;
@@ -123,8 +132,8 @@ void AttachmentList::saveAttachmentList() {
             << typeOfReferenceAttachment << attachmentTypeAsString(entry.type)
             << endl;
   }
-  FUNCTION_OUTPUT << "attachment information are written into: " << m_outputFile
-                  << endl;
+  METHOD_OUTPUT << "attachment information are written into: " << m_outputFile
+                << endl;
 }
 
 /**
@@ -139,12 +148,13 @@ string AttachmentList::getFromLineOfAttachment(AttachmentNumber num) {
     result = m_table.at(num).fromLine;
   } catch (exception &) {
     if (debug >= LOG_INFO)
-      FUNCTION_OUTPUT << "fromLine not found in attachmentTable about: "
-                      << num.first << attachmentFileMiddleChar << num.second
-                      << endl;
+      METHOD_OUTPUT << "fromLine not found in attachmentTable about: "
+                    << num.first << attachmentFileMiddleChar << num.second
+                    << endl;
   }
   return result;
 }
+
 ATTACHMENT_TYPE AttachmentList::getAttachmentType(AttachmentNumber num) {
   ATTACHMENT_TYPE attachmentType = ATTACHMENT_TYPE::NON_EXISTED;
   try {
@@ -152,9 +162,41 @@ ATTACHMENT_TYPE AttachmentList::getAttachmentType(AttachmentNumber num) {
     attachmentType = entry.type;
   } catch (exception &) {
     if (debug >= LOG_EXCEPTION)
-      FUNCTION_OUTPUT << "not found info in refAttachmentTable about: "
-                      << num.first << attachmentFileMiddleChar << num.second
-                      << endl;
+      METHOD_OUTPUT << "not found info in refAttachmentTable about: "
+                    << num.first << attachmentFileMiddleChar << num.second
+                    << endl;
   }
   return attachmentType;
+}
+
+void AttachmentList::displayNewlyAddedAttachments() {
+  if (m_newlyAddedAttachmentSet.empty())
+    return;
+  METHOD_OUTPUT << "Newly Added Attachments:" << endl;
+  for (const auto &num : m_newlyAddedAttachmentSet) {
+    METHOD_OUTPUT << num.first << attachmentFileMiddleChar << num.second
+                  << ".htm" << endl;
+  }
+}
+
+std::set<string>
+AttachmentList::allAttachmentsAsLinksByType(ATTACHMENT_TYPE type) {
+  std::set<string> result;
+  for (const auto &attachment : m_table) {
+    auto attachmentName = attachment.first;
+    auto entry = attachment.second;
+    ATTACHMENT_TYPE attachmentType = entry.type;
+
+    if (attachmentType == type) {
+      string name = citationChapterNo + TurnToString(attachmentName.first) +
+                    attachmentUnit + ATTACHMENT_TYPE_HTML_TARGET +
+                    TurnToString(attachmentName.second) + R"(: )";
+      result.insert(fixLinkFromAttachmentTemplate(
+          attachmentDirForLinkFromMain,
+          formatIntoZeroPatchedChapterNumber(attachmentName.first,
+                                             TWO_DIGIT_FILENAME),
+          TurnToString(attachmentName.second), name + entry.fromLine));
+    }
+  }
+  return result;
 }

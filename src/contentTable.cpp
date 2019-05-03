@@ -179,22 +179,11 @@ void generateContentTableForJPMHtmls() {
 void generateContentTableForReferenceAttachments() {
   CoupledContainer::refAttachmentTable.loadReferenceAttachmentList();
   ListContainer container(REFERENCE_ATTACHMENT_INDEX);
-  auto table = CoupledContainer::refAttachmentTable;
-  //  for (const auto &attachment : table) {
-  //    auto attachmentName = attachment.first;
-  //    auto entry = attachment.second;
-  //    ATTACHMENT_TYPE attachmentType = entry.type;
-  //
-  //    if (attachmentType == ATTACHMENT_TYPE::REFERENCE) {
-  //      string name = citationChapterNo + TurnToString(attachmentName.first) +
-  //                    citationChapter + ATTACHMENT_PREFIX +
-  //                    TurnToString(attachmentName.second) + R"(: )";
-  //      container.appendParagraphInBodyText(fixLinkFromAttachmentTemplate(
-  //          attachmentDirForLinkFromMain,
-  //          formatIntoZeroPatchedChapterNumber(attachmentName.first, 2),
-  //          TurnToString(attachmentName.second), name + entry.fromLine));
-  //    }
-  //  }
+  for (const auto &link :
+       CoupledContainer::refAttachmentTable.allAttachmentsAsLinksByType(
+           ATTACHMENT_TYPE::REFERENCE)) {
+    container.appendParagraphInBodyText(link);
+  }
   container.assembleBackToHTM(REFERENCE_ATTACHMENT_TITLE,
                               REFERENCE_ATTACHMENT_DISPLAY_TITLE);
   FUNCTION_OUTPUT << "result is in file " << container.getOutputFilePath()
@@ -205,21 +194,11 @@ void generateContentTableForPersonalAttachments() {
   CoupledContainer::refAttachmentTable.loadReferenceAttachmentList();
   ListContainer container(PERSONAL_ATTACHMENT_INDEX);
   auto table = CoupledContainer::refAttachmentTable;
-  //  for (const auto &attachment : table) {
-  //    auto attachmentName = attachment.first;
-  //    auto entry = attachment.second;
-  //    ATTACHMENT_TYPE attachmentType = entry.type;
-  //
-  //    if (attachmentType == ATTACHMENT_TYPE::PERSONAL) {
-  //      string name = citationChapterNo + TurnToString(attachmentName.first) +
-  //                    citationChapter + ATTACHMENT_PREFIX +
-  //                    TurnToString(attachmentName.second) + R"(: )";
-  //      container.appendParagraphInBodyText(fixLinkFromAttachmentTemplate(
-  //          attachmentDirForLinkFromMain,
-  //          formatIntoZeroPatchedChapterNumber(attachmentName.first, 2),
-  //          TurnToString(attachmentName.second), name + entry.fromLine));
-  //    }
-  //  }
+  for (const auto &link :
+       CoupledContainer::refAttachmentTable.allAttachmentsAsLinksByType(
+           ATTACHMENT_TYPE::PERSONAL)) {
+    container.appendParagraphInBodyText(link);
+  }
   container.assembleBackToHTM(PERSONAL_ATTACHMENT_TITLE,
                               PERSONAL_ATTACHMENT_DISPLAY_TITLE);
   FUNCTION_OUTPUT << "result is in file " << container.getOutputFilePath()

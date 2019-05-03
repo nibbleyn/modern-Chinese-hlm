@@ -59,16 +59,6 @@ static const std::string JPM = R"(jpm)";
 static const std::string MAIN_SEPERATOR_COLOR = R"(F0BEC0)";
 static const std::string ORIGINAL_SEPERATOR_COLOR = R"(004040)";
 
-static const std::string attachmentDirForLinkFromMain = R"(attachment\)";
-static const std::string originalDirForLinkFromMain = R"(original\)";
-static const std::string jpmDirForLinkFromMain = R"(JPM\)";
-static const std::string pictureDirForLinkFromMain = R"(pictures\)";
-
-static const std::string mainDirForLinkFromAttachment = R"(..\)";
-static const std::string originalDirForLinkFromAttachment = R"(..\original\)";
-static const std::string jpmDirForLinkFromAttachment = R"(..\JPM\)";
-static const std::string pictureDirForLinkFromAttachment = R"(..\pictures\)";
-
 static const std::string HTML_OUTPUT_LINES_OF_MAIN =
     R"(utf8HTML/output/LinesOfMain.txt)";
 static const std::string HTML_OUTPUT_LINES_OF_JPM =
