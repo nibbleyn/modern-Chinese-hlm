@@ -128,6 +128,8 @@ void AttachmentCommander::runCommandOverEachFile() {
 }
 void Commander::updateAttachmentContentTableAndfixReturnLink() {
   if (m_command == COMMAND::fixLinksFromMainFile) {
+    CoupledBodyTextContainer::refAttachmentTable.setSourceFile(
+        HTML_OUTPUT_REF_ATTACHMENT_LIST);
     CoupledBodyTextContainer::refAttachmentTable.loadReferenceAttachmentList();
 
     generateContentTableForReferenceAttachments(false);

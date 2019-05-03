@@ -100,8 +100,11 @@ void generateContentTableForJPMHtmls() {
 
 void generateContentTableForReferenceAttachments(
     bool needToReloadAttachmentList) {
-  if (needToReloadAttachmentList)
+  if (needToReloadAttachmentList) {
+    CoupledBodyTextContainer::refAttachmentTable.setSourceFile(
+        HTML_OUTPUT_REF_ATTACHMENT_LIST);
     CoupledBodyTextContainer::refAttachmentTable.loadReferenceAttachmentList();
+  }
   TableContainer outputContainer(REFERENCE_ATTACHMENT_INDEX);
   outputContainer.assignLinkStringSet(
       CoupledBodyTextContainer::refAttachmentTable.allAttachmentsAsLinksByType(
@@ -117,8 +120,11 @@ void generateContentTableForReferenceAttachments(
 
 void generateContentTableForPersonalAttachments(
     bool needToReloadAttachmentList) {
-  if (needToReloadAttachmentList)
+  if (needToReloadAttachmentList) {
+    CoupledBodyTextContainer::refAttachmentTable.setSourceFile(
+        HTML_OUTPUT_REF_ATTACHMENT_LIST);
     CoupledBodyTextContainer::refAttachmentTable.loadReferenceAttachmentList();
+  }
   TableContainer outputContainer(PERSONAL_ATTACHMENT_INDEX);
   outputContainer.assignLinkStringSet(
       CoupledBodyTextContainer::refAttachmentTable.allAttachmentsAsLinksByType(
