@@ -35,12 +35,12 @@ public:
   void hideParaHeaders() { m_hideParaHeaders = true; }
   void setMaxTarget(int num) { m_maxTarget = num; }
   void setMaxTargetAsSetSize() { m_maxTarget = m_linkStringSet.size(); }
-  void assignLinkStringSet(LinkStringSet stringSet) {
+  void assignLinkStringSet(LinkToAttachmentStringSet stringSet) {
     m_linkStringSet = stringSet;
   }
   void clearLinkStringSet() { m_linkStringSet.clear(); }
-  void addLinkToLinkStringSet(const string &link) {
-    m_linkStringSet.insert(link);
+  void addLinkToLinkStringSet(AttachmentNumber num, const string &link) {
+    m_linkStringSet[num] = link;
   }
   virtual void
   outputToBodyTextFromLinkList(const string &units = defaultUnit) = 0;
@@ -55,7 +55,7 @@ protected:
   }
   bool m_hideParaHeaders{false};
   ParaHeaderPositionSet m_paraHeaderPositionSet;
-  LinkStringSet m_linkStringSet;
+  LinkToAttachmentStringSet m_linkStringSet;
   int m_maxTarget{0};
 };
 

@@ -12,7 +12,6 @@ static const string htmlTitleEnd = R"(</title>)";
 static const string endOfHtmlHead = R"(/head)";
 
 enum class ATTACHMENT_TYPE { PERSONAL, REFERENCE, NON_EXISTED };
-using AttachmentNumber = pair<int, int>; // chapter number, attachment number
 
 // statistics about links to attachments
 struct AttachmentDetails {
@@ -48,7 +47,7 @@ public:
   string getFromLineOfAttachment(AttachmentNumber num);
   ATTACHMENT_TYPE getAttachmentType(AttachmentNumber num);
   void displayNewlyAddedAttachments();
-  LinkStringSet allAttachmentsAsLinksByType(ATTACHMENT_TYPE type);
+  LinkToAttachmentStringSet allAttachmentsAsLinksByType(ATTACHMENT_TYPE type);
 
 private:
   string getAttachmentTitle(AttachmentNumber num);

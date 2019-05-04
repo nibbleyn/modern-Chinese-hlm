@@ -229,9 +229,9 @@ void AttachmentList::displayNewlyAddedAttachments() {
   }
 }
 
-LinkStringSet
+LinkToAttachmentStringSet
 AttachmentList::allAttachmentsAsLinksByType(ATTACHMENT_TYPE type) {
-  set<string> result;
+  LinkToAttachmentStringSet result;
   for (const auto &attachment : m_table) {
     auto attachmentName = attachment.first;
     auto entry = attachment.second;
@@ -241,12 +241,12 @@ AttachmentList::allAttachmentsAsLinksByType(ATTACHMENT_TYPE type) {
       string name = citationChapterNo + TurnToString(attachmentName.first) +
                     defaultUnit + citationChapterNo +
                     TurnToString(attachmentName.second) + attachmentUnit;
-      result.insert(fixLinkFromAttachmentTemplate(
+      result[attachmentName] = fixLinkFromAttachmentTemplate(
           attachmentDirForLinkFromMain,
           formatIntoZeroPatchedChapterNumber(attachmentName.first,
                                              TWO_DIGIT_FILENAME),
           TurnToString(attachmentName.second),
-          name + displaySpace + entry.title));
+          name + displaySpace + entry.title);
     }
   }
   return result;

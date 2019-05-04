@@ -39,7 +39,9 @@ void generateContentTableForMainHtmls() {
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     container.setFileAndAttachmentNumber(file);
     container.fetchOriginalAndTranslatedTitles();
+    AttachmentNumber num(TurnToInt(file), 0);
     outputContainer.addLinkToLinkStringSet(
+        num,
         fixLinkFromMainTemplate("", file, LINK_DISPLAY_TYPE::UNHIDDEN, "", "",
                                 brTab + container.getOriginalTitle() + brTab +
                                     container.getTranslatedTitle(),
@@ -64,9 +66,10 @@ void generateContentTableForOriginalHtmls() {
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     container.setFileAndAttachmentNumber(file);
     container.fetchOriginalAndTranslatedTitles();
+    AttachmentNumber num(TurnToInt(file), 0);
     outputContainer.addLinkToLinkStringSet(
-        fixLinkFromOriginalTemplate(originalDirForLinkFromMain, file, "", "",
-                                    "", container.getOriginalTitle()));
+        num, fixLinkFromOriginalTemplate(originalDirForLinkFromMain, file, "",
+                                         "", "", container.getOriginalTitle()));
   }
   outputContainer.outputToBodyTextFromLinkList();
   outputContainer.assembleBackToHTM(ORG_TITLE, ORG_DISPLAY_TITLE);
@@ -88,8 +91,10 @@ void generateContentTableForJPMHtmls() {
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     container.setFileAndAttachmentNumber(file);
     container.fetchOriginalAndTranslatedTitles();
-    outputContainer.addLinkToLinkStringSet(fixLinkFromJPMTemplate(
-        jpmDirForLinkFromMain, file, "", "", "", container.getOriginalTitle()));
+    AttachmentNumber num(TurnToInt(file), 0);
+    outputContainer.addLinkToLinkStringSet(
+        num, fixLinkFromJPMTemplate(jpmDirForLinkFromMain, file, "", "", "",
+                                    container.getOriginalTitle()));
   }
   outputContainer.outputToBodyTextFromLinkList();
   outputContainer.assembleBackToHTM(JPM_TITLE, JPM_DISPLAY_TITLE);

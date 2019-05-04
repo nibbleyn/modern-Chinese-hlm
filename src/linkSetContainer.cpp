@@ -40,7 +40,7 @@ void ListContainer::appendParagrapHeader(const string &header) {
 void ListContainer::outputToBodyTextFromLinkList(const string &units) {
   clearExistingBodyText();
   for (const auto &link : m_linkStringSet) {
-    appendParagraphInBodyText(link);
+    appendParagraphInBodyText(link.second);
   }
 }
 
@@ -188,9 +188,9 @@ void TableContainer::outputToBodyTextFromLinkList(const string &units) {
   int totalPara = 0;
   for (const auto &link : m_linkStringSet) {
     if (i % 2 == 0)
-      appendRightParagraphInBodyText(link);
+      appendRightParagraphInBodyText(link.second);
     else
-      appendLeftParagraphInBodyText(link);
+      appendLeftParagraphInBodyText(link.second);
     if (start != m_paraHeaderPositionSet.end() and i == *start) {
       auto enterLastPara = (start + 1 == m_paraHeaderPositionSet.end());
       auto startParaNo = i + 1;

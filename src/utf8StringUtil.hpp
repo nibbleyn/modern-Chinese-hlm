@@ -15,7 +15,8 @@ const int LOG_INFO = 2;
 #define TurnToInt(x) stoi(x, nullptr, 10)
 #define TurnToString(x) to_string(x)
 
-using LinkStringSet = set<string>;
+using AttachmentNumber = pair<int, int>; // chapter number, attachment number
+using LinkToAttachmentStringSet = map<AttachmentNumber, string>;
 
 static const string leadingChar = R"(P)";
 static const string middleChar = R"(L)";
