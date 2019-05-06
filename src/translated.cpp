@@ -10,7 +10,7 @@ int debug = LOG_INFO;
 
 int main(int argc, char **argv) {
   // change this number to run different functions
-  int num = 16;
+  int num = 14;
   switch (num) {
   case 1:
     numberJPMHtmls(false);
@@ -54,7 +54,7 @@ int main(int argc, char **argv) {
     generateContentTableForPersonalAttachments();
     break;
   case 14:
-    findFirstInFiles();
+    search(1, R"(周瑞)", "xxx9");
     break;
   case 15:
     fixLinksFromAttachment(false);

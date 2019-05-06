@@ -111,6 +111,7 @@ void generateContentTableForReferenceAttachments(
     CoupledBodyTextContainer::refAttachmentTable.loadReferenceAttachmentList();
   }
   TableContainer outputContainer(REFERENCE_ATTACHMENT_INDEX);
+  outputContainer.clearLinkStringSet();
   outputContainer.assignLinkStringSet(
       CoupledBodyTextContainer::refAttachmentTable.allAttachmentsAsLinksByType(
           ATTACHMENT_TYPE::REFERENCE));
@@ -131,6 +132,7 @@ void generateContentTableForPersonalAttachments(
     CoupledBodyTextContainer::refAttachmentTable.loadReferenceAttachmentList();
   }
   TableContainer outputContainer(PERSONAL_ATTACHMENT_INDEX);
+  outputContainer.clearLinkStringSet();
   outputContainer.assignLinkStringSet(
       CoupledBodyTextContainer::refAttachmentTable.allAttachmentsAsLinksByType(
           ATTACHMENT_TYPE::PERSONAL));

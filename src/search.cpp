@@ -4,86 +4,72 @@ void findFirstInNoAttachmentFiles(const string key, const string &fileType,
                                   int minTarget, int maxTarget,
                                   const string &outputFilename) {
   FILE_TYPE targetFileType = getFileTypeFromString(fileType);
-  using LinksList = map<string, vector<CoupledLink::LinkDetails>>;
-  LinksList resultLinkList;
-  resultLinkList.clear();
-  int total = 0;
-  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
+  bool asList = false;
+  unique_ptr<LinkSetContainer> containerPtr{nullptr};
+  if (asList) {
+    containerPtr = make_unique<ListContainer>(outputFilename);
+  } else {
+    containerPtr = make_unique<TableContainer>(outputFilename);
+  }
+  containerPtr->clearLinkStringSet();
 
+  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     CoupledBodyText bodyText;
     bodyText.setFilePrefixFromFileType(targetFileType);
-
     bodyText.resetBeforeSearch();
     bodyText.searchForAll();
+    if (targetFileType == FILE_TYPE::MAIN)
+      bodyText.ignorePersonalComments();
     bodyText.setFileAndAttachmentNumber(file);
     bool found = bodyText.findKey(key);
     if (found) {
       CoupledBodyText::lineNumberSet lineSet = bodyText.getResultLineSet();
+      auto seq = 1;
       for (auto const &line : lineSet) {
         LineNumber ln(line);
         string expectedSection =
             R"(第)" + TurnToString(TurnToInt(file)) + R"(章)" +
             TurnToString(ln.getParaNumber()) + R"(.)" +
             TurnToString(ln.getlineNumber()) + R"(节:)";
-        if (targetFileType == FILE_TYPE::ORIGINAL) {
-          CoupledLink::LinkDetails detail{
-              key, file, line,
-              fixLinkFromOriginalTemplate(originalDirForLinkFromMain, file, key,
-                                          expectedSection, line)};
-          resultLinkList[file].push_back(detail);
-        } else if (targetFileType == FILE_TYPE::MAIN) {
-          CoupledLink::LinkDetails detail{
-              key, file, line,
+        // reuse attachment number as sequence of item
+        // should improve when search over attachments
+        AttachmentNumber num(TurnToInt(file), seq);
+        switch (targetFileType) {
+        case FILE_TYPE::MAIN:
+          containerPtr->addLinkToLinkStringSet(
+              num,
               fixLinkFromMainTemplate("", file, LINK_DISPLAY_TYPE::DIRECT, key,
-                                      expectedSection, expectedSection, line)};
-          resultLinkList[file].push_back(detail);
+                                      expectedSection, expectedSection, line));
+          break;
+        case FILE_TYPE::ORIGINAL:
+          containerPtr->addLinkToLinkStringSet(
+              num, fixLinkFromOriginalTemplate(originalDirForLinkFromMain, file,
+                                               key, expectedSection, line));
+          break;
+        case FILE_TYPE::JPM:
+          containerPtr->addLinkToLinkStringSet(
+              num, fixLinkFromJPMTemplate(originalDirForLinkFromMain, file, key,
+                                          expectedSection, line));
+          break;
+        case FILE_TYPE::ATTACHMENT:
+        default:
+          FUNCTION_OUTPUT << "not supported yet." << endl;
         }
-        total++;
+        seq++;
       }
     }
   }
-  bool asList = false;
-  if (asList) {
-    ListContainer container(outputFilename);
-    container.clearExistingBodyText();
-    for (const auto &chapter : resultLinkList) {
-      container.appendParagraphInBodyText("found in " + fileType + " : " +
-                                          chapter.first + HTML_SUFFIX + " :");
-      auto list = chapter.second;
-      for (const auto &detail : list) {
-        container.appendParagraphInBodyText(detail.link);
-      }
-    }
-    string verb = (total > 1) ? "s are" : " is";
-    container.appendParagraphInBodyText(TurnToString(total) + " link" + verb +
-                                        " found.");
-    container.assembleBackToHTM("search  results",
-                                "searchInFiles for key: " + key);
-    FUNCTION_OUTPUT << "result is in file " << container.getOutputFilePath()
-                    << endl;
-  } else {
-    TableContainer container(outputFilename);
-    container.insertFrontParagrapHeader(total, searchUnit);
-    int i = 1;
-    for (const auto &chapter : resultLinkList) {
-      auto list = chapter.second;
-      for (const auto &detail : list) {
-        if (i % 2 == 0)
-          container.appendRightParagraphInBodyText(detail.link);
-        else
-          container.appendLeftParagraphInBodyText(detail.link);
-        i++;
-      }
-    }
-    // patch last right part
-    if (total % 2 != 0)
-      container.appendRightParagraphInBodyText("");
-    container.insertBackParagrapHeader(0, total, searchUnit);
-    container.assembleBackToHTM("search  results",
-                                "searchInFiles for key: " + key);
-    FUNCTION_OUTPUT << "result is in file " << container.getOutputFilePath()
-                    << endl;
-  }
+  auto total = containerPtr->getLinkStringSetSize();
+  containerPtr->setMaxTargetAsSetSize();
+  containerPtr->createParaListFrom(18, 22);
+  containerPtr->outputToBodyTextFromLinkList(searchUnit);
+  string verb = (total > 1) ? "s are" : " is";
+  containerPtr->assembleBackToHTM("search  results",
+                                  "search for key: " + key + " in " + fileType +
+                                      " files. " + TurnToString(total) +
+                                      " link" + verb + " found.");
+  FUNCTION_OUTPUT << "result is in file " << containerPtr->getOutputFilePath()
+                  << endl;
 }
 
 void searchKeywordInNoAttachmentFiles(const string &key, const string &fileType,
@@ -95,7 +81,6 @@ void searchKeywordInNoAttachmentFiles(const string &key, const string &fileType,
 }
 
 using KeyList = vector<string>;
-
 void searchKeywordInNoAttachmentFiles(KeyList &keyList, const string &fileType,
                                       const string &outputFilename,
                                       bool searchForAll = true) {}
@@ -106,9 +91,19 @@ void searchByTagInNoAttachmentFiles(const string &tag, const string &fileType,
 
 void searchForImages() {}
 
-void findFirstInFiles() {
-  searchKeywordInNoAttachmentFiles(R"(司棋)", "main", "xxx1");
-
-  //  searchKeywordInNoAttachmentFiles(R"(聚赌嫖娼)", "main", "xxx3");
-  //  searchKeywordInNoAttachmentFiles(R"(头一社)", "original", "xxx4");
+void search(int num, const string &key, const string &outputFilename) {
+  SEPERATE("HLM search", " started ");
+  switch (num) {
+  case 1:
+    searchKeywordInNoAttachmentFiles(key, MAIN, outputFilename);
+    break;
+  case 2:
+    searchKeywordInNoAttachmentFiles(key, ORIGINAL, outputFilename);
+    break;
+  case 3:
+    searchKeywordInNoAttachmentFiles(key, JPM, outputFilename);
+    break;
+  default:
+    FUNCTION_OUTPUT << "invalid search." << endl;
+  }
 }

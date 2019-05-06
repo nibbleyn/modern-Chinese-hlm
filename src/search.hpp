@@ -1,4 +1,4 @@
 #pragma once
 #include "libraryInterface.hpp"
 
-void findFirstInFiles();
+void search(int num, const string &key, const string &outputFilename);
