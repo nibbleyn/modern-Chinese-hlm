@@ -47,7 +47,7 @@ public:
   string getFromLineOfAttachment(AttachmentNumber num);
   ATTACHMENT_TYPE getAttachmentType(AttachmentNumber num);
   void displayNewlyAddedAttachments();
-  LinkToAttachmentStringSet allAttachmentsAsLinksByType(ATTACHMENT_TYPE type);
+  LinkStringSet allAttachmentsAsLinksByType(ATTACHMENT_TYPE type);
 
 private:
   string getAttachmentTitle(AttachmentNumber num);

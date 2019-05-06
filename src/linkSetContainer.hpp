@@ -36,15 +36,31 @@ public:
   void setMaxTarget(int num) { m_maxTarget = num; }
   void setMaxTargetAsSetSize() { m_maxTarget = m_linkStringSet.size(); }
   size_t getLinkStringSetSize() { return m_linkStringSet.size(); }
-  void assignLinkStringSet(LinkToAttachmentStringSet stringSet) {
+  void assignLinkStringSet(LinkStringSet stringSet) {
     m_linkStringSet = stringSet;
   }
   void clearLinkStringSet() { m_linkStringSet.clear(); }
-  void addLinkToLinkStringSet(AttachmentNumber num, const string &link) {
-    m_linkStringSet[num] = link;
+  void addLinkToLinkStringSet(AttachmentNumber num, const string &link,
+                              ParaLineNumber pl = make_pair(0, 0)) {
+    auto fullPos = make_pair(num, pl);
+    m_linkStringSet[fullPos] = link;
   }
   virtual void
   outputToBodyTextFromLinkList(const string &units = defaultUnit) = 0;
+
+  void printParaHeaderTable() {
+    if (not m_linkStringSet.empty()) {
+      METHOD_OUTPUT << "m_linkStringSet:" << endl;
+    } else
+      METHOD_OUTPUT << "no entry in m_linkStringSet." << endl;
+    for (const auto &element : m_linkStringSet) {
+      METHOD_OUTPUT << element.first.first.first << "        "
+                    << element.first.first.second << "        "
+                    << element.first.second.first << "        "
+                    << element.first.second.second << "        "
+                    << element.second << endl;
+    }
+  }
 
 protected:
   string m_outputFilename{"output"};
@@ -56,7 +72,7 @@ protected:
   }
   bool m_hideParaHeaders{false};
   ParaHeaderPositionSet m_paraHeaderPositionSet;
-  LinkToAttachmentStringSet m_linkStringSet;
+  LinkStringSet m_linkStringSet;
   int m_maxTarget{0};
 };
 

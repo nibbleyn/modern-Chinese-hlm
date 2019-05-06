@@ -24,41 +24,43 @@ void findFirstInNoAttachmentFiles(const string key, const string &fileType,
     bool found = bodyText.findKey(key);
     if (found) {
       CoupledBodyText::lineNumberSet lineSet = bodyText.getResultLineSet();
-      auto seq = 1;
       for (auto const &line : lineSet) {
         LineNumber ln(line);
         string expectedSection =
             R"(第)" + TurnToString(TurnToInt(file)) + R"(章)" +
             TurnToString(ln.getParaNumber()) + R"(.)" +
             TurnToString(ln.getlineNumber()) + R"(节:)";
-        // reuse attachment number as sequence of item
-        // should improve when search over attachments
-        AttachmentNumber num(TurnToInt(file), seq);
+        AttachmentNumber num(TurnToInt(file), 0);
         switch (targetFileType) {
         case FILE_TYPE::MAIN:
           containerPtr->addLinkToLinkStringSet(
               num,
               fixLinkFromMainTemplate("", file, LINK_DISPLAY_TYPE::DIRECT, key,
-                                      expectedSection, expectedSection, line));
+                                      expectedSection, expectedSection, line),
+              make_pair(ln.getParaNumber(), ln.getlineNumber()));
           break;
         case FILE_TYPE::ORIGINAL:
           containerPtr->addLinkToLinkStringSet(
-              num, fixLinkFromOriginalTemplate(originalDirForLinkFromMain, file,
-                                               key, expectedSection, line));
+              num,
+              fixLinkFromOriginalTemplate(originalDirForLinkFromMain, file, key,
+                                          expectedSection, line),
+              make_pair(ln.getParaNumber(), ln.getlineNumber()));
           break;
         case FILE_TYPE::JPM:
           containerPtr->addLinkToLinkStringSet(
-              num, fixLinkFromJPMTemplate(originalDirForLinkFromMain, file, key,
-                                          expectedSection, line));
+              num,
+              fixLinkFromJPMTemplate(originalDirForLinkFromMain, file, key,
+                                     expectedSection, line),
+              make_pair(ln.getParaNumber(), ln.getlineNumber()));
           break;
         case FILE_TYPE::ATTACHMENT:
         default:
           FUNCTION_OUTPUT << "not supported yet." << endl;
         }
-        seq++;
       }
     }
   }
+  containerPtr->printParaHeaderTable();
   auto total = containerPtr->getLinkStringSetSize();
   containerPtr->setMaxTargetAsSetSize();
   containerPtr->createParaListFrom(18, 22);
