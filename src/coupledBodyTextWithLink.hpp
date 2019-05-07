@@ -8,14 +8,14 @@ static const string TO_CHECK_FILE = R"(container/toCheck.txt)";
 class CoupledBodyTextWithLink : public CoupledBodyText {
 public:
   struct LineDetails {
-    size_t numberOfLines{0};
+    size_t numberOfDisplayedLines{0};
     bool isImgGroup{false};
     Object::SET_OF_OBJECT_TYPES objectContains;
   };
   // statistics about paras
   // chapter number (added with attachment number if over fromAttachmentLinks),
-  // Para -> vector of LineDetails
-  using LinesTable = map<pair<string, string>, vector<LineDetails>>;
+  // Para, line -> LineDetails
+  using LinesTable = map<pair<AttachmentNumber, ParaLineNumber>, LineDetails>;
   static string referFilePrefix;
   static string lineDetailFilePath;
   static LinesTable linesTable;
@@ -218,12 +218,18 @@ private:
   void printLinesTable() {
     if (not linesTable.empty()) {
       METHOD_OUTPUT << "linesTable:" << endl;
-      METHOD_OUTPUT << "chapter/ParaNumber/" << endl;
+      METHOD_OUTPUT << "chapter/attachment/ParaNumber/LineNumber" << endl;
     } else
       METHOD_OUTPUT << "no entry in linesTable." << endl;
     for (const auto &element : linesTable) {
-      METHOD_OUTPUT << element.first.first << "        " << element.first.second
-                    << "        " << endl;
+      auto num = element.first.first;
+      auto paraLine = element.first.second;
+      auto detail = element.second;
+      METHOD_OUTPUT << num.first << "  " << num.second << "  " << paraLine.first
+                    << "  " << paraLine.second << "  " << std::boolalpha
+                    << detail.isImgGroup << "  "
+                    << detail.numberOfDisplayedLines << "  "
+                    << Object::typeSetAsString(detail.objectContains) << endl;
     }
   }
 };

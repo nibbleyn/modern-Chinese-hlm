@@ -15,11 +15,6 @@ const int LOG_INFO = 2;
 #define TurnToInt(x) stoi(x, nullptr, 10)
 #define TurnToString(x) to_string(x)
 
-using AttachmentNumber = pair<int, int>; // chapter number, attachment number
-using ParaLineNumber = pair<int, int>;   // para number, line number
-
-using LinkStringSet = map<pair<AttachmentNumber, ParaLineNumber>, string>;
-
 static const string leadingChar = R"(P)";
 static const string middleChar = R"(L)";
 static const string invalidLineNumber = R"(P0L0)";
@@ -121,3 +116,10 @@ string getIncludedStringBetweenTags(const string &originalString,
 string getWholeStringBetweenTags(const string &originalString,
                                  const string &begin, const string &end,
                                  size_t after = 0);
+
+using AttachmentNumber = pair<int, int>; // chapter number, attachment number
+using ParaLineNumber = pair<int, int>;   // para number, line number
+
+using LinkStringSet = map<pair<AttachmentNumber, ParaLineNumber>, string>;
+
+string getFileNameFromAttachmentNumber(AttachmentNumber num);

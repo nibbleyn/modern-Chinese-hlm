@@ -26,23 +26,28 @@ void CoupledBodyTextWithLink::appendNumberingStatistics() {
     return;
   FUNCTION_OUTPUT << lineDetailFilePath << " is created." << endl;
   ofstream lineDetailOutfile(lineDetailFilePath, ios_base::app);
-  for (const auto &para : linesTable) {
-    auto paraPos = para.first;
-    auto lineList = para.second;
-    // para itself
-    lineDetailOutfile << paraPos.first << "," << paraPos.second << endl;
-    // lines included
+  int para = 1;
+  auto totalNumberOfLines = 0;
+  for (const auto &element : linesTable) {
+    auto num = element.first.first;
+    auto paraLine = element.first.second;
+    LineNumber ln(paraLine.first, paraLine.second);
     // summing up total lines and report over-sized para
-    auto totalNumberOfLines = 0;
-    for (const auto &line : lineList) {
-      auto typeStr = line.isImgGroup ? "Image" : "Text";
-      lineDetailOutfile << typeStr << " : " << line.numberOfLines
-                        << " lines, type: "
-                        << Object::typeSetAsString(line.objectContains) << endl;
-      totalNumberOfLines += line.numberOfLines;
-    }
-    lineDetailOutfile << "total number of lines: " << totalNumberOfLines
-                      << endl;
+    auto detail = element.second;
+    string typeStr = (detail.isImgGroup) ? DISPLY_LINE_IMAGE : DISPLY_LINE_TEXT;
+    // para itself
+    lineDetailOutfile << getFileNameFromAttachmentNumber(num)
+                      << referParaMiddleChar << ln.asString() << displaySpace
+                      << typeStr << displaySpace
+                      << detail.numberOfDisplayedLines << displaySpace
+                      << Object::typeSetAsString(detail.objectContains) << endl;
+    if (paraLine.first != para) {
+      FUNCTION_OUTPUT << "para " << para
+                      << "has totalLines: " << totalNumberOfLines << endl;
+      totalNumberOfLines = 0;
+      para++;
+    } else
+      totalNumberOfLines += 1;
   }
 }
 
@@ -59,8 +64,11 @@ void CoupledBodyTextWithLink::doStatisticsByScanningLines(
     infile.open(m_outputFile);
   else
     infile.open(m_inputFile);
-  LineNumber currentPara;
 
+  auto num = make_pair(TurnToInt(m_file), m_attachNumber);
+
+  m_para = 0;
+  m_lineNo = 1;
   while (!infile.eof()) {
     getline(infile, m_inLine);
     if (debug >= LOG_INFO) {
@@ -71,65 +79,30 @@ void CoupledBodyTextWithLink::doStatisticsByScanningLines(
     if (ln.isParagraphHeader()) {
       m_paraHeader.loadFrom(m_inLine);
       if (m_paraHeader.isFirstParaHeader()) {
-        m_numberOfFirstParaHeader++;
+        m_para = 1;
+        m_lineNo = 1;
       } else if (m_paraHeader.isLastParaHeader()) {
-        m_numberOfLastParaHeader++;
         break;
-      } else if (m_paraHeader.isMiddleParaHeader())
-        m_numberOfMiddleParaHeader++;
-      currentPara = ln;
+      } else if (m_paraHeader.isMiddleParaHeader()) {
+        m_para++;
+        m_lineNo = 1;
+      }
     } else if (isImageGroupLine(m_inLine)) {
       // record the para it belongs to into linesTable
       LineDetails detail{0, true, Object::SET_OF_OBJECT_TYPES()};
-      try {
-        auto &entry = linesTable.at(
-            make_pair(m_filePrefix + m_file, currentPara.asString()));
-        entry.push_back(detail);
-        if (debug >= LOG_INFO)
-          METHOD_OUTPUT << "entry.size: " << entry.size()
-                        << " more reference to para: " << m_filePrefix + m_file
-                        << displaySpace << currentPara.asString() << endl;
-      } catch (exception &) {
-        if (debug >= LOG_INFO)
-          METHOD_OUTPUT << "create vector for : " << m_filePrefix + m_file
-                        << displaySpace << currentPara.asString() << endl;
-        vector<LineDetails> list;
-        list.push_back(detail);
-        linesTable[make_pair(m_filePrefix + m_file, currentPara.asString())] =
-            list;
-      }
+      auto paraLine = make_pair(m_para, m_lineNo);
+      linesTable[make_pair(num, paraLine)] = detail;
+      m_lineNo++;
     } else if (hasEndingBr(m_inLine)) {
       // record the para it belongs to into linesTable
       LineDetails detail{0, false, getContainedObjectTypes(m_inLine)};
-      try {
-        auto &entry = linesTable.at(
-            make_pair(m_filePrefix + m_file, currentPara.asString()));
-        entry.push_back(detail);
-        if (debug >= LOG_INFO)
-          METHOD_OUTPUT << "entry.size: " << entry.size()
-                        << " more reference to para: " << m_filePrefix + m_file
-                        << displaySpace << currentPara.asString() << endl;
-      } catch (exception &) {
-        if (debug >= LOG_INFO)
-          METHOD_OUTPUT << "create vector for : " << m_filePrefix + m_file
-                        << displaySpace << currentPara.asString() << endl;
-        vector<LineDetails> list;
-        list.push_back(detail);
-        linesTable[make_pair(m_filePrefix + m_file, currentPara.asString())] =
-            list;
-      }
+      auto paraLine = make_pair(m_para, m_lineNo);
+      linesTable[make_pair(num, paraLine)] = detail;
+      m_lineNo++;
     }
   }
 
   if (debug >= LOG_INFO) {
-    METHOD_OUTPUT << endl;
-    METHOD_OUTPUT << "Result of doStatisticsByScanningLines:" << endl;
-    METHOD_OUTPUT << "m_numberOfFirstParaHeader: " << m_numberOfFirstParaHeader
-                  << endl;
-    METHOD_OUTPUT << "m_numberOfMiddleParaHeader: "
-                  << m_numberOfMiddleParaHeader << endl;
-    METHOD_OUTPUT << "m_numberOfLastParaHeader: " << m_numberOfLastParaHeader
-                  << endl;
     printLinesTable();
   }
   appendNumberingStatistics();

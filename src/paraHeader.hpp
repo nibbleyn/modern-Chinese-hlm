@@ -17,6 +17,7 @@ public:
 
   void setStartNumber(int num) { m_startNumber = num; }
   void setCurrentParaNo(int num) { m_currentParaNo = num; }
+  int getCurrentParaNo() { return m_currentParaNo; }
   void setColor(const string &color) { m_color = color; }
 
   // if not load from string

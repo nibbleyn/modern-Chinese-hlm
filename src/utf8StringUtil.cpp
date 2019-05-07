@@ -114,3 +114,10 @@ string getWholeStringBetweenTags(const string &originalString,
     return "";
   return originalString.substr(beginPos, endPos + end.length() - beginPos);
 }
+
+string getFileNameFromAttachmentNumber(AttachmentNumber num) {
+  string result = TurnToString(num.first);
+  if (num.second != 0)
+    result += attachmentFileMiddleChar + TurnToString(num.second);
+  return result;
+}
