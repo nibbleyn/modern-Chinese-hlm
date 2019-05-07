@@ -43,12 +43,14 @@ void CoupledBodyTextWithLink::appendNumberingStatistics() {
                       << Object::typeSetAsString(detail.objectContains) << endl;
     if (paraLine.first != para) {
       FUNCTION_OUTPUT << "para " << para
-                      << "has totalLines: " << totalNumberOfLines << endl;
-      totalNumberOfLines = 0;
+                      << " has totalLines: " << totalNumberOfLines << endl;
+      totalNumberOfLines = detail.numberOfDisplayedLines;
       para++;
     } else
-      totalNumberOfLines += 1;
+      totalNumberOfLines += detail.numberOfDisplayedLines;
   }
+  FUNCTION_OUTPUT << "para " << para
+                  << " has totalLines: " << totalNumberOfLines << endl;
 }
 
 void CoupledBodyTextWithLink::doStatisticsByScanningLines(

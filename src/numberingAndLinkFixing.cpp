@@ -154,6 +154,7 @@ void Commander::setupNumberingStatistics() {
         getFilePrefixFromFileType(m_fileType));
     CoupledBodyTextWithLink::setStatisticsOutputFilePath(
         getStatisticsOutputFilePathFromString(m_kind));
+    CoupledBodyTextWithLink::clearExistingNumberingStatistics();
   }
 }
 
