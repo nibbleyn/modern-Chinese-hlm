@@ -41,6 +41,10 @@ public:
     m_attachNumber = attachNo;
   }
 
+  AttachmentNumber getFileAndAttachmentNumber() {
+    return AttachmentNumber(TurnToInt(m_file), m_attachNumber);
+  }
+
   // used for numbering
   void validateFormatForNumbering();
 

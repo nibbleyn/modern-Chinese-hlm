@@ -179,7 +179,8 @@ void TableContainer::outputToBodyTextFromLinkList(const string &units) {
   clearExistingBodyText();
   sort(m_paraHeaderPositionSet.begin(), m_paraHeaderPositionSet.end());
   auto start = m_paraHeaderPositionSet.begin();
-  if (not m_hideParaHeaders)
+  auto lessThanOnePara = (m_maxTarget < *start);
+  if (not m_hideParaHeaders and not lessThanOnePara)
     insertFrontParagrapHeader(*start, units);
   if (m_enableAddExistingFrontLinks)
     addExistingFrontLinks();
@@ -205,7 +206,7 @@ void TableContainer::outputToBodyTextFromLinkList(const string &units) {
     }
     i++;
   }
-  if (not m_hideParaHeaders)
+  if (not m_hideParaHeaders and not lessThanOnePara)
     insertBackParagrapHeader(seqOfPara, totalPara, units);
 }
 

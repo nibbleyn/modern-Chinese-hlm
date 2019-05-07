@@ -29,16 +29,17 @@ static const string TARGET_FILE_EXT = R"(.htm)";
 // operations over link string template initialization
 string fixLinkFromSameFileTemplate(LINK_DISPLAY_TYPE type, const string &key,
                                    const string &citation,
-                                   const string &annotation,
-                                   const string &referPara);
+                                   const string &referPara,
+                                   const string &annotation);
+
 string fixLinkFromMainTemplate(const string &path, const string &filename,
                                LINK_DISPLAY_TYPE type, const string &key,
-                               const string &citation, const string &annotation,
-                               const string &referPara);
+                               const string &citation, const string &referPara,
+                               const string &annotation);
 string fixLinkFromReverseLinkTemplate(const string &filename,
                                       LINK_DISPLAY_TYPE type,
-                                      const string &referPara,
                                       const string &citation,
+                                      const string &referPara,
                                       const string &annotation);
 string
 fixLinkFromOriginalTemplate(const string &path, const string &filename,
@@ -52,6 +53,7 @@ string fixLinkFromJPMTemplate(const string &path, const string &filename,
 string fixLinkFromAttachmentTemplate(const string &path, const string &filename,
                                      const string &attachNo,
                                      const string &annotation);
+
 string fixLinkFromImageTemplate(
     const string &fullReferFilenameWithPathExt, const string &picFilename,
     const string &annotation,

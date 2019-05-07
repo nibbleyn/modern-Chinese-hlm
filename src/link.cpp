@@ -38,8 +38,8 @@ static const string linkToSameFile =
  */
 string fixLinkFromSameFileTemplate(LINK_DISPLAY_TYPE type, const string &key,
                                    const string &citation,
-                                   const string &annotation,
-                                   const string &referPara) {
+                                   const string &referPara,
+                                   const string &annotation) {
   string link = linkToSameFile;
   replaceDisplayLink(link, type);
   if (referPara.empty()) {
@@ -80,8 +80,8 @@ static const string linkToMainFile =
  */
 string fixLinkFromMainTemplate(const string &path, const string &filename,
                                LINK_DISPLAY_TYPE type, const string &key,
-                               const string &citation, const string &annotation,
-                               const string &referPara) {
+                               const string &citation, const string &referPara,
+                               const string &annotation) {
   string link = linkToMainFile;
   replaceDisplayLink(link, type);
   replacePart(link, "PP", path);
@@ -110,8 +110,8 @@ static const string reverseLinkToMainFile =
 
 string fixLinkFromReverseLinkTemplate(const string &filename,
                                       LINK_DISPLAY_TYPE type,
-                                      const string &referPara,
                                       const string &citation,
+                                      const string &referPara,
                                       const string &annotation) {
   string link = reverseLinkToMainFile;
   replaceDisplayLink(link, type);
