@@ -21,6 +21,7 @@ void Commander::execute() {
     m_bodyText.addLineNumber();
     break;
   case COMMAND::fixLinksFromMainFile:
+  case COMMAND::fixLinksFromJPMFile:
   case COMMAND::fixLinksFromAttachmentFile:
     if (m_forceUpdateLink)
       m_bodyText.forceUpdateLink();
@@ -28,7 +29,6 @@ void Commander::execute() {
                                 m_referenceToOriginalfileSet,
                                 m_referenceToJPMfileSet);
     break;
-
   default:
     METHOD_OUTPUT << "no command executed." << endl;
   }
@@ -47,15 +47,7 @@ void Commander::runCommandOverFiles() {
 
   m_fileSet = buildFileSet(m_minTarget, m_maxTarget, m_filenameDigit);
 
-  if (m_command == COMMAND::fixLinksFromMainFile or
-      m_command == COMMAND::fixLinksFromAttachmentFile) {
-    m_referenceToMainfileSet = buildFileSet(
-        m_minReferenceToMain, m_maxReferenceToMain, TWO_DIGIT_FILENAME);
-    m_referenceToOriginalfileSet = buildFileSet(
-        m_minReferenceToOriginal, m_maxReferenceToOriginal, TWO_DIGIT_FILENAME);
-    m_referenceToJPMfileSet = buildFileSet(
-        m_minReferenceToJPM, m_maxReferenceToJPM, THREE_DIGIT_FILENAME);
-  }
+  setupReferenceFileSet();
 
   dissembleHtmls();
 
@@ -168,6 +160,23 @@ void Commander::setupLinkFixingStatistics() {
   if (m_command == COMMAND::fixLinksFromAttachmentFile) {
     // load known reference attachment list
     LinkFromAttachment::clearLinkTable();
+  }
+}
+
+void Commander::setupReferenceFileSet() {
+  if (m_command == COMMAND::fixLinksFromMainFile or
+      m_command == COMMAND::fixLinksFromAttachmentFile) {
+    m_referenceToMainfileSet = buildFileSet(
+        m_minReferenceToMain, m_maxReferenceToMain, TWO_DIGIT_FILENAME);
+    m_referenceToOriginalfileSet = buildFileSet(
+        m_minReferenceToOriginal, m_maxReferenceToOriginal, TWO_DIGIT_FILENAME);
+    m_referenceToJPMfileSet = buildFileSet(
+        m_minReferenceToJPM, m_maxReferenceToJPM, THREE_DIGIT_FILENAME);
+  }
+
+  if (m_command == COMMAND::fixLinksFromJPMFile) {
+    m_referenceToJPMfileSet = buildFileSet(
+        m_minReferenceToJPM, m_maxReferenceToJPM, THREE_DIGIT_FILENAME);
   }
 }
 
@@ -317,6 +326,15 @@ void fixLinksFromMain(bool forceUpdateLink) {
   commander.m_kind = MAIN;
   commander.m_minTarget = MAIN_MIN_CHAPTER_NUMBER;
   commander.m_maxTarget = MAIN_MAX_CHAPTER_NUMBER;
+  commander.runCommandOverFiles();
+}
+
+void fixLinksFromJPM(bool forceUpdateLink) {
+  NonAttachmentCommander commander;
+  commander.m_command = Commander::COMMAND::fixLinksFromJPMFile;
+  commander.m_kind = JPM;
+  commander.m_minTarget = JPM_MIN_CHAPTER_NUMBER;
+  commander.m_maxTarget = JPM_MAX_CHAPTER_NUMBER;
   commander.runCommandOverFiles();
 }
 

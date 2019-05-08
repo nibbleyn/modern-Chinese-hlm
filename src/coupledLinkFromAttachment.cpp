@@ -35,66 +35,8 @@ string LinkFromAttachment::getHtmlFileNamePrefix() {
   return prefix;
 }
 
-/**
- * get the chapter number of target file of the link
- * and its attachment number,
- * if this is a link to an attachment or a link to its embedded file.
- * and assign chapterNumber and attachmentNumber member field correspondingly.
- * if this is a LINK_TYPE::SAMEPAGE link to its embedded file,
- * get chapter and attachment number as its embedded file's.
- * for example, chapter number would be 18
- * and attachment number would be 7 for below link from b003_6.htm,
- * <a unhidden href="b018_7.htm">happy</a>
- * or a link below from within b018_7.htm
- * <a hidden href="#top">happy</a>
- * @param linkString the link to check
- * @return true only if a right chapter number and attachment number are gotten
- */
-bool LinkFromAttachment::readReferFileName(const string &linkString) {
-  if (m_type == LINK_TYPE::IMAGE) {
-    m_imageReferFilename = getIncludedStringBetweenTags(
-        linkString, referFileMiddleChar, referParaMiddleChar);
-    if (debug >= LOG_INFO) {
-      METHOD_OUTPUT << "m_imageReferFilename: " << m_imageReferFilename << endl;
-    }
-    return true;
-  }
-
-  string refereFileName = m_fromFile;
-  if (m_type != LINK_TYPE::SAMEPAGE) {
-    refereFileName = getIncludedStringBetweenTags(
-        linkString, referFileMiddleChar, HTML_SUFFIX);
-    // in case there is a ..\ before file name
-    auto fileBegin = refereFileName.find(getHtmlFileNamePrefix());
-    // not find a right file type to refer
-    if (fileBegin == string::npos) {
-      METHOD_OUTPUT << "unsupported type in refer file name in link: "
-                    << refereFileName << endl;
-      return false;
-    }
-    refereFileName = refereFileName.substr(fileBegin);
-    refereFileName = refereFileName.substr(getHtmlFileNamePrefix().length());
-  }
-
-  // get chapter number and attachment number if type is LINK_TYPE::ATTACHMENT
-  // or LINK_TYPE::SAMEPAGE
-  if (m_type == LINK_TYPE::SAMEPAGE or m_type == LINK_TYPE::ATTACHMENT) {
-    auto attachmentNumberStart = refereFileName.find(attachmentFileMiddleChar);
-    if (attachmentNumberStart == string::npos) {
-      METHOD_OUTPUT << "no attachment number in link: " << linkString << endl;
-      return false;
-    }
-    m_attachmentNumber =
-        TurnToInt(refereFileName.substr(attachmentNumberStart + 1));
-    m_chapterNumber =
-        TurnToInt(refereFileName.substr(0, attachmentNumberStart));
-  } else {
-    m_chapterNumber = TurnToInt(refereFileName);
-  }
-  if (debug >= LOG_INFO)
-    METHOD_OUTPUT << "chapterNumber: " << m_chapterNumber
-                  << ", attachmentNumber: " << m_attachmentNumber << endl;
-  return true;
+bool LinkFromAttachment::isTargetToAttachmentFile() {
+  return m_type == LINK_TYPE::SAMEPAGE or m_type == LINK_TYPE::ATTACHMENT;
 }
 
 string LinkFromAttachment::getPathOfReferenceFile() const {

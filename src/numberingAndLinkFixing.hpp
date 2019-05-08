@@ -9,6 +9,7 @@ public:
     validateParaSizeForAutoNumbering,
     addLineNumber,
     fixLinksFromMainFile,
+    fixLinksFromJPMFile,
     fixLinksFromAttachmentFile
   };
 
@@ -55,6 +56,7 @@ protected:
   virtual void runCommandOverEachFile() = 0;
   void execute();
   void updateAttachmentContentTableAndfixReturnLink();
+  void setupReferenceFileSet();
   void setupNumberingStatistics();
   void setupLinkFixingStatistics();
   void outputLinkFixingStatistics();
@@ -101,6 +103,9 @@ void validateParaSizeForAutoNumberingJPMHtmls();
 
 // link fixing for main files
 void fixLinksFromMain(bool forceUpdateLink = true);
+
+// link fixing for JPM files
+void fixLinksFromJPM(bool forceUpdateLink = true);
 
 // link fixing for attachment files
 void fixLinksFromAttachment(bool forceUpdateLink = true);

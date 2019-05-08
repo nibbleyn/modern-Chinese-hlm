@@ -20,9 +20,11 @@ void CoupledBodyTextWithLink::fixLinksWithinOneLine(FileSet referMainFiles,
     auto linkEnd = toProcess.find(linkEndChars, toProcess.find(linkStartChars));
     auto link =
         getWholeStringBetweenTags(toProcess, linkStartChars, linkEndChars);
-    if (m_attachNumber == 0) {
+    if (m_filePrefix == MAIN_BODYTEXT_PREFIX) {
       m_linkPtr = make_unique<LinkFromMain>(m_file, link);
-    } else {
+    } else if (m_filePrefix == JPM_BODYTEXT_PREFIX) {
+      m_linkPtr = make_unique<LinkFromJPM>(m_file, link);
+    } else if (m_filePrefix == ATTACHMENT_BODYTEXT_PREFIX) {
       m_linkPtr = make_unique<LinkFromAttachment>(
           m_file + attachmentFileMiddleChar + TurnToString(m_attachNumber),
           link);

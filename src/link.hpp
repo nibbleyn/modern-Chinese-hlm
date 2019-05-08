@@ -17,6 +17,11 @@ static const string originalDirForLinkFromAttachment = R"(..\original\)";
 static const string jpmDirForLinkFromAttachment = R"(..\JPM\)";
 static const string pictureDirForLinkFromAttachment = R"(..\pictures\)";
 
+static const string mainDirForLinkFromJPM = R"(..\)";
+static const string originalDirForLinkFromJPM = R"(..\original\)";
+static const string jpmDirForLinkFromJPM = R"(..\JPM\)";
+static const string pictureDirForLinkFromJPM = R"(..\pictures\)";
+
 enum class LINK_TYPE { MAIN, ATTACHMENT, ORIGINAL, SAMEPAGE, JPM, IMAGE };
 enum class LINK_DISPLAY_TYPE { DIRECT, HIDDEN, UNHIDDEN };
 

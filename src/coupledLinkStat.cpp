@@ -170,3 +170,5 @@ void LinkFromAttachment::logLink() {
     }
   }
 }
+
+void LinkFromJPM::logLink() {}

@@ -36,7 +36,7 @@ public:
   CoupledLink(const string &fromFile, const string &linkString)
       : Link(fromFile, linkString) {}
   // the second step to read target file name
-  virtual bool readReferFileName(const string &link) = 0;
+  bool readReferFileName(const string &link);
   // the last step also including fixing
   void fixFromString(const string &linkString);
 
@@ -78,6 +78,7 @@ protected:
   // samepage link would refer to different file prefix
   virtual string getHtmlFileNamePrefix() = 0;
   virtual string getBodyTextFilePrefix() = 0;
+  virtual bool isTargetToAttachmentFile() = 0;
 
   // main and attachment html files are in different directories
   virtual string getPathOfReferenceFile() const = 0;
@@ -109,7 +110,6 @@ public:
       : CoupledLink(fromFile, linkString) {}
   ~LinkFromMain(){};
   void generateLinkToOrigin();
-  bool readReferFileName(const string &linkString);
 
 private:
   string getPathOfReferenceFile() const override;
@@ -119,6 +119,7 @@ private:
   // utility to convert link type with filename
   string getHtmlFileNamePrefix();
   string getBodyTextFilePrefix();
+  bool isTargetToAttachmentFile();
 };
 
 class LinkFromAttachment : public CoupledLink {
@@ -132,7 +133,6 @@ public:
       : CoupledLink(fromFile, linkString) {}
   ~LinkFromAttachment(){};
   void generateLinkToOrigin();
-  bool readReferFileName(const string &linkString);
 
 private:
   string getPathOfReferenceFile() const override;
@@ -141,6 +141,29 @@ private:
   // utility to convert link type with filename
   string getHtmlFileNamePrefix();
   string getBodyTextFilePrefix();
+  bool isTargetToAttachmentFile();
+};
+
+class LinkFromJPM : public CoupledLink {
+public:
+  static void resetStatisticsAndLoadReferenceAttachmentList();
+  static void outPutStatisticsToFiles();
+
+public:
+  LinkFromJPM(const string &fromFile) : CoupledLink(fromFile) {}
+  LinkFromJPM(const string &fromFile, const string &linkString)
+      : CoupledLink(fromFile, linkString) {}
+  ~LinkFromJPM(){};
+  void generateLinkToOrigin();
+
+private:
+  string getPathOfReferenceFile() const override;
+  void logLink();
+  void recordMissingKeyLink(){};
+  // utility to convert link type with filename
+  string getHtmlFileNamePrefix();
+  string getBodyTextFilePrefix();
+  bool isTargetToAttachmentFile();
 };
 
 class Comment : public Object {

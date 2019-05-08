@@ -54,7 +54,7 @@ int main(int argc, char **argv) {
     generateContentTableForPersonalAttachments();
     break;
   case 14:
-    search(2, R"(王仁)");
+    search(1, R"(邢夫人)");
     break;
   case 15:
     fixLinksFromAttachment(false);
@@ -73,6 +73,9 @@ int main(int argc, char **argv) {
     break;
   case 20:
     validateParaSizeForAutoNumberingJPMHtmls();
+    break;
+  case 21:
+    fixLinksFromJPM(false);
     break;
   default:
     FUNCTION_OUTPUT << "nothing gets executed." << endl;
