@@ -142,16 +142,6 @@ protected:
     return (toChange == emptyString);
   };
 
-  bool isMixedOfSpaceBracketsBr(const string &inLine) {
-    string toChange = inLine;
-    while (true) {
-      if (toChange.find(brTab) == string::npos)
-        break;
-      toChange.replace(toChange.find(brTab), brTab.length(), emptyString);
-    }
-    return isMixedOfSpaceBrackets(toChange);
-  };
-
   // used for numbering
   string m_inLine{};
   size_t m_para{0};

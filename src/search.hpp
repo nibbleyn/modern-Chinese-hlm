@@ -1,7 +1,12 @@
 #pragma once
 #include "libraryInterface.hpp"
 
-void search(int num, const string &key, const string &outputFilename = "");
+static constexpr int SEARCH_IN_MAIN = 1;
+static constexpr int SEARCH_IN_ORIGINAL = 2;
+static constexpr int SEARCH_IN_JPM = 3;
+
+void search(const string &key, int num = SEARCH_IN_MAIN,
+            const string &outputFilename = "");
 
 class Searcher {
 public:

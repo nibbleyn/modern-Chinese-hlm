@@ -100,10 +100,13 @@ void CoupledBodyTextWithLink::doStatisticsByScanningLines(
     } else if (hasEndingBr(m_inLine)) {
       // record the para it belongs to into linesTable
       size_t dispLines = 0;
-      if (not m_disableNumberingStatisticsCalculateLines)
-        dispLines = getLinesOfDisplayText(
-            getDisplayString(m_inLine.substr(0, m_inLine.find(brTab))));
-      LineDetails detail{dispLines, false, getContainedObjectTypes(m_inLine)};
+      auto types = Object::SET_OF_OBJECT_TYPES();
+      if (not m_disableNumberingStatisticsCalculateLines) {
+        auto removeEndingBrStr = m_inLine.substr(0, m_inLine.find(brTab));
+        dispLines = getLinesOfDisplayText(getDisplayString(removeEndingBrStr));
+        types = getContainedObjectTypes(removeEndingBrStr);
+      }
+      LineDetails detail{dispLines, false, types};
       auto paraLine = make_pair(m_para, m_lineNo);
       linesTable[make_pair(num, paraLine)] = detail;
       m_lineNo++;

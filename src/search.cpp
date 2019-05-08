@@ -113,7 +113,7 @@ void AttachmentSearcher::runSearchingOverEachFile() {
 
 void searchForImages() {}
 
-void search(int num, const string &key, const string &outputFilename) {
+void search(const string &key, int num, const string &outputFilename) {
   SEPERATE("HLM search", " started ");
   NonAttachmentSearcher searcher;
   switch (num) {

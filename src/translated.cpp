@@ -54,7 +54,9 @@ int main(int argc, char **argv) {
     generateContentTableForPersonalAttachments();
     break;
   case 14:
-    search(1, R"(邢夫人)");
+//    search(R"(邢夫人)");
+//    search(R"(邢夫人)", SEARCH_IN_ORIGINAL);
+    search(R"(闲)", SEARCH_IN_JPM);
     break;
   case 15:
     fixLinksFromAttachment(false);

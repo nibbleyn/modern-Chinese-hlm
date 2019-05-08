@@ -325,7 +325,7 @@ CoupledBodyTextWithLink::getContainedObjectTypes(const string &originalString) {
   string lastPart = originalString.substr(endOfSubStringOffset);
   if (debug >= LOG_INFO)
     METHOD_OUTPUT << lastPart << endl;
-  if (lastPart != emptyString and not isMixedOfSpaceBracketsBr(lastPart))
+  if (lastPart != emptyString and not isMixedOfSpaceBrackets(lastPart))
     pureTextFound = true;
   if (pureTextFound)
     resultSet.insert(Object::OBJECT_TYPE::TEXT);
