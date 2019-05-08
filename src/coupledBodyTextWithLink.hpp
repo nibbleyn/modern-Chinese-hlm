@@ -34,6 +34,9 @@ public:
   void validateParaSize();
   void disableAutoNumbering() { m_autoNumbering = false; }
   void disableNumberingStatistics() { m_numberingStatistics = false; }
+  void disableNumberingStatisticsCalculateLines() {
+    m_disableNumberingStatisticsCalculateLines = true;
+  }
   void hideParaHeader() { m_hideParaHeader = true; }
   void forceUpdateLineNumber() { m_forceUpdateLineNumber = true; }
   void forceUpdateLink() { m_forceUpdateLink = true; }

@@ -17,6 +17,7 @@ void Commander::execute() {
       m_bodyText.forceUpdateLineNumber();
     if (m_hideParaHeader)
       m_bodyText.hideParaHeader();
+    //    m_bodyText.disableNumberingStatisticsCalculateLines();
     m_bodyText.addLineNumber();
     break;
   case COMMAND::fixLinksFromMainFile:
@@ -259,6 +260,8 @@ void validateMainHtmls() {
   NonAttachmentCommander commander;
   commander.m_command = Commander::COMMAND::validateFormatForNumbering;
   commander.m_kind = MAIN;
+  commander.m_minTarget = MAIN_MIN_CHAPTER_NUMBER;
+  commander.m_maxTarget = MAIN_MAX_CHAPTER_NUMBER;
   commander.runCommandOverFiles();
 }
 

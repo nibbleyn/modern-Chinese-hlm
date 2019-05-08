@@ -44,10 +44,10 @@ void CoupledBodyTextWithLink::appendNumberingStatistics() {
     if (paraLine.first != para) {
       FUNCTION_OUTPUT << "para " << para
                       << " has totalLines: " << totalNumberOfLines << endl;
-      totalNumberOfLines = detail.numberOfDisplayedLines;
+      totalNumberOfLines = detail.numberOfDisplayedLines + 1;
       para++;
     } else
-      totalNumberOfLines += detail.numberOfDisplayedLines;
+      totalNumberOfLines += detail.numberOfDisplayedLines + 1;
   }
   FUNCTION_OUTPUT << "para " << para
                   << " has totalLines: " << totalNumberOfLines << endl;
@@ -68,6 +68,8 @@ void CoupledBodyTextWithLink::doStatisticsByScanningLines(
     infile.open(m_inputFile);
 
   auto num = make_pair(TurnToInt(m_file), m_attachNumber);
+  if (not m_disableNumberingStatisticsCalculateLines)
+    getLinesofReferencePage();
 
   m_para = 0;
   m_lineNo = 1;
@@ -97,7 +99,11 @@ void CoupledBodyTextWithLink::doStatisticsByScanningLines(
       m_lineNo++;
     } else if (hasEndingBr(m_inLine)) {
       // record the para it belongs to into linesTable
-      LineDetails detail{0, false, getContainedObjectTypes(m_inLine)};
+      size_t dispLines = 0;
+      if (not m_disableNumberingStatisticsCalculateLines)
+        dispLines = getLinesOfDisplayText(
+            getDisplayString(m_inLine.substr(0, m_inLine.find(brTab))));
+      LineDetails detail{dispLines, false, getContainedObjectTypes(m_inLine)};
       auto paraLine = make_pair(m_para, m_lineNo);
       linesTable[make_pair(num, paraLine)] = detail;
       m_lineNo++;
