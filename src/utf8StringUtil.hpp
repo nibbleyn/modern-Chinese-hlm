@@ -15,6 +15,8 @@ const int LOG_INFO = 2;
 #define TurnToInt(x) stoi(x, nullptr, 10)
 #define TurnToString(x) to_string(x)
 
+static const std::string ERROR_FILE_NOT_EXIST = R"(file doesn't exist: )";
+
 static const string leadingChar = R"(P)";
 static const string middleChar = R"(L)";
 static const string invalidLineNumber = R"(P0L0)";

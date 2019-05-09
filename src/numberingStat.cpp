@@ -59,6 +59,8 @@ void CoupledBodyTextWithLink::addEntriesInRangeTable(AttachmentNumber startNum,
                                                      ParaLineNumber startPara,
                                                      ParaLineNumber endPara) {
   lineNumberSetByRange range = make_pair(startPara, endPara);
+  // needs to add multiple entries when start and end chapers are different
+  // or attachments all included in-between
   rangeTable[make_pair(startNum, startPara)] = range;
 }
 
@@ -66,7 +68,7 @@ void CoupledBodyTextWithLink::loadRangeTableFromFile(
     const string &indexFilePath) {
   ifstream infile(indexFilePath);
   if (!infile) {
-    FUNCTION_OUTPUT << "file doesn't exist:" << indexFilePath << endl;
+    FUNCTION_OUTPUT << ERROR_FILE_NOT_EXIST << indexFilePath << endl;
     return;
   }
   while (!infile.eof()) {
@@ -75,7 +77,7 @@ void CoupledBodyTextWithLink::loadRangeTableFromFile(
     getline(infile, startParaLine, ' ');
     string endChapter, endParaLine;
     getline(infile, endChapter, '#');
-    getline(infile, endParaLine, '\n');
+    getline(infile, endParaLine);
     if (debug >= LOG_INFO) {
       FUNCTION_OUTPUT << startChapter << displaySpace << startParaLine << endl;
       FUNCTION_OUTPUT << endChapter << displaySpace << endParaLine << endl;

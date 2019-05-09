@@ -22,7 +22,7 @@ void CoupledBodyText::validateFormatForNumbering() {
   setInputOutputFiles();
   ifstream infile(m_inputFile);
   if (!infile) {
-    METHOD_OUTPUT << "file doesn't exist:" << m_inputFile << endl;
+    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << m_inputFile << endl;
     return;
   }
 
@@ -435,7 +435,7 @@ bool CoupledBodyText::findKey(const string &key) {
   setInputOutputFiles();
   ifstream infile(m_inputFile);
   if (!infile) {
-    m_searchError = "file doesn't exist:" + m_inputFile;
+    m_searchError = ERROR_FILE_NOT_EXIST + m_inputFile;
     METHOD_OUTPUT << m_searchError << endl;
     return false;
   }

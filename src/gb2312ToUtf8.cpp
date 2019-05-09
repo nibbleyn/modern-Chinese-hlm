@@ -42,7 +42,7 @@ void convertFromGB2312ToUtf8(string referFile, string format, FILE_TYPE type,
       FUNCTION_OUTPUT << inputFile << endl;
     ifstream infile(inputFile);
     if (!infile) {
-      FUNCTION_OUTPUT << "file doesn't exist:" << inputFile << endl;
+      FUNCTION_OUTPUT << ERROR_FILE_NOT_EXIST << inputFile << endl;
       return;
     }
     outputFile = HTML_OUTPUT_MAIN;

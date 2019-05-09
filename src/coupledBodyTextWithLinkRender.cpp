@@ -342,7 +342,7 @@ void CoupledBodyTextWithLink::render() {
   setInputOutputFiles();
   ifstream infile(m_inputFile);
   if (!infile) {
-    METHOD_OUTPUT << "file doesn't exist:" << m_inputFile << endl;
+    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << m_inputFile << endl;
     return;
   }
   ofstream outfile(m_outputFile);

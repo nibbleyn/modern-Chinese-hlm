@@ -91,7 +91,6 @@ private:
       m_paraHeaderTable.at(seqOfLines);
       return true;
     } catch (exception &) {
-      // out_of_range if not existed
       return false;
     }
   }

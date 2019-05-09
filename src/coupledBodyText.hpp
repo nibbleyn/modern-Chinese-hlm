@@ -181,7 +181,6 @@ protected:
       m_lineAttrTable.at(seqOfLines);
       return true;
     } catch (exception &) {
-      // out_of_range if not existed
       return false;
     }
   }
@@ -232,7 +231,6 @@ protected:
       m_imgGroupFollowingParaTable.at(seqOfLines);
       return true;
     } catch (exception &) {
-      // out_of_range if not existed
       return false;
     }
   }

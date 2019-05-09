@@ -84,15 +84,15 @@ void CoupledBodyTextContainer::assembleBackToHTM(const string &title,
   string outputFile = getoutputHtmlFilepath();
 
   ifstream inHtmlFile(inputHtmlFile);
-  // if file doesn't exist
+
   if (!inHtmlFile) {
-    METHOD_OUTPUT << "HTM file doesn't exist:" << inputHtmlFile << endl;
+    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << inputHtmlFile << endl;
     return;
   }
   ifstream inBodyTextFile(inputBodyTextFile);
-  // if file doesn't exist
+
   if (!inBodyTextFile) {
-    METHOD_OUTPUT << "Body text file doesn't exist:" << inputBodyTextFile
+    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << inputBodyTextFile
                   << endl;
     return;
   }
@@ -219,9 +219,9 @@ void CoupledBodyTextContainer::dissembleFromHTM() {
   string outputBodyTextFile = getBodyTextFilePath();
 
   ifstream infile(inputHtmlFile);
-  // if file doesn't exist
+
   if (!infile) {
-    METHOD_OUTPUT << "file doesn't exist:" << inputHtmlFile << endl;
+    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << inputHtmlFile << endl;
     return;
   }
   ofstream outfile(outputBodyTextFile);
@@ -276,9 +276,9 @@ void CoupledBodyTextContainer::fixReturnLinkForAttachmentFile() {
   string outputFile = getoutputHtmlFilepath();
 
   ifstream inHtmlFile(inputHtmlFile);
-  // if file doesn't exist
+
   if (!inHtmlFile) {
-    METHOD_OUTPUT << "HTM file doesn't exist:" << inputHtmlFile << endl;
+    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << inputHtmlFile << endl;
     return;
   }
 
@@ -374,7 +374,7 @@ void CoupledBodyTextContainer::fetchOriginalAndTranslatedTitles() {
   string inputHtmlFile = getInputHtmlFilePath();
   ifstream inHtmlFile(inputHtmlFile);
   if (!inHtmlFile) {
-    METHOD_OUTPUT << "file doesn't exist:" << inputHtmlFile << endl;
+    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << inputHtmlFile << endl;
     return;
   }
   string line{""};

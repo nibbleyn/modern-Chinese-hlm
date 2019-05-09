@@ -116,7 +116,7 @@ void CoupledBodyText::fixTagPairBegin(const string &signOfTagAfterReplaceTag,
   setInputOutputFiles();
   ifstream infile(m_inputFile);
   if (!infile) {
-    FUNCTION_OUTPUT << "file doesn't exist:" << m_inputFile << endl;
+    FUNCTION_OUTPUT << ERROR_FILE_NOT_EXIST << m_inputFile << endl;
     return;
   }
   ofstream outfile(m_outputFile);
@@ -152,7 +152,7 @@ void CoupledBodyText::fixTagPairEnd(const string &signOfTagBeforeReplaceTag,
   setInputOutputFiles();
   ifstream infile(m_inputFile);
   if (!infile) {
-    FUNCTION_OUTPUT << "file doesn't exist:" << m_inputFile << endl;
+    FUNCTION_OUTPUT << ERROR_FILE_NOT_EXIST << m_inputFile << endl;
     return;
   }
   ofstream outfile(m_outputFile);
@@ -240,7 +240,7 @@ void CoupledBodyTextContainer::makeSingleLineHeaderAndFooter() {
 
   ifstream inHtmlFile(inputHtmlFile);
   if (!inHtmlFile) {
-    FUNCTION_OUTPUT << "file doesn't exist:" << inputHtmlFile << endl;
+    FUNCTION_OUTPUT << ERROR_FILE_NOT_EXIST << inputHtmlFile << endl;
     return;
   }
   ofstream outHtmlFile(outputHtmlFile);
@@ -302,7 +302,7 @@ void CoupledBodyTextContainer::fixHeaderAndFooter() {
 
   ifstream inHtmlFile(inputHtmlFile);
   if (!inHtmlFile) {
-    FUNCTION_OUTPUT << "file doesn't exist:" << inputHtmlFile << endl;
+    FUNCTION_OUTPUT << ERROR_FILE_NOT_EXIST << inputHtmlFile << endl;
     return;
   }
   ofstream outHtmlFile(outputHtmlFile);
@@ -375,7 +375,7 @@ void CoupledBodyText::reformatParagraphToSmallerSize(
   setInputOutputFiles();
   ifstream infile(m_inputFile);
   if (!infile) {
-    METHOD_OUTPUT << "file doesn't exist:" << m_inputFile << endl;
+    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << m_inputFile << endl;
     return;
   }
   ofstream outfile(m_outputFile);
@@ -408,7 +408,7 @@ void CoupledBodyText::fixPersonalView() {
   setInputOutputFiles();
   ifstream infile(m_inputFile);
   if (!infile) {
-    FUNCTION_OUTPUT << "file doesn't exist:" << m_inputFile << endl;
+    FUNCTION_OUTPUT << ERROR_FILE_NOT_EXIST << m_inputFile << endl;
     return;
   }
   ofstream outfile(m_outputFile);
@@ -540,7 +540,7 @@ void CoupledBodyTextWithLink::removePersonalCommentsOverNumberedFiles() {
   setInputOutputFiles();
   ifstream infile(m_inputFile);
   if (!infile) {
-    METHOD_OUTPUT << "file doesn't exist:" << m_inputFile << endl;
+    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << m_inputFile << endl;
     return;
   }
   ofstream outfile(m_outputFile);

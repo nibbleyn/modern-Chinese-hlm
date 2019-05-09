@@ -57,7 +57,7 @@ void TableContainer::addExistingFrontLinks() {
 
   ifstream inStarterFile(starterFile);
   if (!inStarterFile) {
-    METHOD_OUTPUT << "Starter file doesn't exist:" << starterFile << endl;
+    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << starterFile << endl;
     return;
   }
 
@@ -80,7 +80,7 @@ void TableContainer::finishBodyTextFile() {
 
   ifstream inDessertFile(dessertFile);
   if (!inDessertFile) {
-    METHOD_OUTPUT << "Dessert file doesn't exist:" << dessertFile << endl;
+    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << dessertFile << endl;
     return;
   }
 
@@ -231,12 +231,12 @@ void LinkSetContainer::assembleBackToHTM(const string &title,
 
   ifstream inHtmlFile(inputHtmlFile);
   if (!inHtmlFile) {
-    METHOD_OUTPUT << "file doesn't exist:" << inputHtmlFile << endl;
+    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << inputHtmlFile << endl;
     return;
   }
   ifstream inBodyTextFile(inputBodyTextFile);
   if (!inBodyTextFile) {
-    METHOD_OUTPUT << "file doesn't exist:" << inputBodyTextFile << endl;
+    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << inputBodyTextFile << endl;
     return;
   }
   ofstream outfile(outputFile);

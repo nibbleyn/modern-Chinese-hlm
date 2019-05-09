@@ -172,9 +172,9 @@ CoupledBodyTextWithLink::getLinesOfDisplayText(const string &dispString) {
 
 size_t CoupledBodyTextWithLink::getAverageLineLengthFromReferenceFile() {
   ifstream referLinesFile(REFERENCE_LINES);
-  // if file doesn't exist
+
   if (!referLinesFile) {
-    METHOD_OUTPUT << "referLines file doesn't exist:" << REFERENCE_LINES
+    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << REFERENCE_LINES
                   << endl;
     return 0;
   }
@@ -202,7 +202,7 @@ void CoupledBodyTextWithLink::getLinesofReferencePage() {
   m_averageSizeOfOneLine = getAverageLineLengthFromReferenceFile();
   ifstream referPageFile(REFERENCE_PAGE);
   if (!referPageFile) {
-    METHOD_OUTPUT << "file doesn't exist:" << REFERENCE_PAGE << endl;
+    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << REFERENCE_PAGE << endl;
     m_SizeOfReferPage = 0;
   }
   auto totalLines = 0;
@@ -421,12 +421,12 @@ void CoupledBodyTextWithLink::addLineNumber() {
   setInputOutputFiles();
   ifstream infile(m_inputFile);
   if (!infile) {
-    METHOD_OUTPUT << "file doesn't exist:" << m_inputFile << endl;
+    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << m_inputFile << endl;
     return;
   }
   ofstream outfile(m_outputFile);
   if (!outfile) {
-    METHOD_OUTPUT << "file doesn't exist:" << m_outputFile << endl;
+    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << m_outputFile << endl;
     return;
   }
 
@@ -462,7 +462,7 @@ void CoupledBodyTextWithLink::fixLinksFromFile(FileSet referMainFiles,
 
   ifstream infile(m_inputFile);
   if (!infile) {
-    METHOD_OUTPUT << "file doesn't exist:" << m_inputFile << endl;
+    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << m_inputFile << endl;
     return;
   }
   ofstream outfile(m_outputFile);

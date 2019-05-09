@@ -442,7 +442,7 @@ void CoupledBodyTextWithLink::printStringInLines() {
   //  ifstream infile(m_inputFile);
   ifstream checkFile(TO_CHECK_FILE);
   if (!checkFile) {
-    METHOD_OUTPUT << "file doesn't exist:" << m_inputFile << endl;
+    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << m_inputFile << endl;
     return;
   }
 
