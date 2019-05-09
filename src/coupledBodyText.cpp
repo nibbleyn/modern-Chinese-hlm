@@ -494,8 +494,8 @@ void CoupledBodyText::fetchLineTexts() {
   m_resultLines.clear();
   ifstream infile(m_inputFile);
   if (infile) {
-    LineNumber begin = m_range.first;
-    LineNumber end = m_range.second;
+    LineNumber begin(m_range.first.first, m_range.first.second);
+    LineNumber end(m_range.second.first, m_range.second.second);
     if (end.equal(END_OF_WHOLE_BODYTEXT) or not(begin > end)) {
       while (!infile.eof()) {
         getline(infile, m_inLine);

@@ -45,7 +45,7 @@ void Commander::runCommandOverFiles() {
   setupNumberingStatistics();
   setupLinkFixingStatistics();
 
-  m_fileSet = buildFileSet(m_minTarget, m_maxTarget, m_filenameDigit);
+  m_fileSet = buildFileSet(m_minTarget, m_maxTarget, m_kind);
 
   setupReferenceFileSet();
 
@@ -166,17 +166,17 @@ void Commander::setupLinkFixingStatistics() {
 void Commander::setupReferenceFileSet() {
   if (m_command == COMMAND::fixLinksFromMainFile or
       m_command == COMMAND::fixLinksFromAttachmentFile) {
-    m_referenceToMainfileSet = buildFileSet(
-        m_minReferenceToMain, m_maxReferenceToMain, TWO_DIGIT_FILENAME);
+    m_referenceToMainfileSet =
+        buildFileSet(m_minReferenceToMain, m_maxReferenceToMain, MAIN);
     m_referenceToOriginalfileSet = buildFileSet(
-        m_minReferenceToOriginal, m_maxReferenceToOriginal, TWO_DIGIT_FILENAME);
-    m_referenceToJPMfileSet = buildFileSet(
-        m_minReferenceToJPM, m_maxReferenceToJPM, THREE_DIGIT_FILENAME);
+        m_minReferenceToOriginal, m_maxReferenceToOriginal, ORIGINAL);
+    m_referenceToJPMfileSet =
+        buildFileSet(m_minReferenceToJPM, m_maxReferenceToJPM, JPM);
   }
 
   if (m_command == COMMAND::fixLinksFromJPMFile) {
-    m_referenceToJPMfileSet = buildFileSet(
-        m_minReferenceToJPM, m_maxReferenceToJPM, THREE_DIGIT_FILENAME);
+    m_referenceToJPMfileSet =
+        buildFileSet(m_minReferenceToJPM, m_maxReferenceToJPM, JPM);
   }
 }
 
@@ -243,7 +243,6 @@ void numberJPMHtmls(bool forceUpdateLineNumber, bool hideParaHeader,
   commander.m_forceUpdateLineNumber = forceUpdateLineNumber;
   commander.m_hideParaHeader = hideParaHeader;
   commander.m_kind = JPM;
-  commander.m_filenameDigit = THREE_DIGIT_FILENAME;
   commander.m_minTarget = JPM_MIN_CHAPTER_NUMBER;
   commander.m_maxTarget = JPM_MAX_CHAPTER_NUMBER;
   commander.runCommandOverFiles();
@@ -291,8 +290,7 @@ void validateParaSizeForAutoNumberingJPMHtmls() {
 void refreshBodyTexts(const string &kind, int minTarget, int maxTarget) {
   if (kind == MAIN)
     CoupledBodyTextContainer::backupAndOverwriteAllInputHtmlFiles();
-  auto digits = (kind == JPM) ? THREE_DIGIT_FILENAME : TWO_DIGIT_FILENAME;
-  for (const auto &file : buildFileSet(minTarget, maxTarget, digits)) {
+  for (const auto &file : buildFileSet(minTarget, maxTarget, kind)) {
     CoupledBodyTextContainer container;
     container.setFileType(getFileTypeFromString(kind));
     container.setFileAndAttachmentNumber(file);

@@ -63,7 +63,7 @@ void generateContentTableForOriginalHtmls() {
   outputContainer.createParaListFrom(18, 22, 70);
 
   outputContainer.clearLinkStringSet();
-  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
+  for (const auto &file : buildFileSet(minTarget, maxTarget, ORIGINAL)) {
     container.setFileAndAttachmentNumber(file);
     container.fetchOriginalAndTranslatedTitles();
     AttachmentNumber num(TurnToInt(file), 0);
@@ -88,7 +88,7 @@ void generateContentTableForJPMHtmls() {
   outputContainer.createParaListFrom(18, 22, 90);
 
   outputContainer.clearLinkStringSet();
-  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
+  for (const auto &file : buildFileSet(minTarget, maxTarget, JPM)) {
     container.setFileAndAttachmentNumber(file);
     container.fetchOriginalAndTranslatedTitles();
     AttachmentNumber num(TurnToInt(file), 0);

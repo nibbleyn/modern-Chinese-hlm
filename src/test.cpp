@@ -527,7 +527,7 @@ void testMixedObjects() {
 void testAddLineNumber() {
   CoupledBodyTextWithLink bodyText;
   bodyText.setFilePrefixFromFileType(FILE_TYPE::MAIN);
-  bodyText.setFileAndAttachmentNumber("05");
+  bodyText.setFileAndAttachmentNumber(5);
   bodyText.addLineNumber();
 }
 
@@ -536,7 +536,7 @@ void renderingBodyText(const string &fileType = MAIN) {
   const string sampleFirstLine = R"()";
   const string sampleWholeLine = R"()";
   int minTarget = 49, maxTarget = 49;
-  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
+  for (const auto &file : buildFileSet(minTarget, maxTarget, fileType)) {
     CoupledBodyTextWithLink bodyText;
     bodyText.setFilePrefixFromFileType(getFileTypeFromString(fileType));
     bodyText.setFileAndAttachmentNumber(file);
@@ -549,7 +549,7 @@ void testRender() { renderingBodyText(); }
 void testNumberingStatistics() {
   CoupledBodyTextWithLink bodyText;
   bodyText.setFilePrefixFromFileType(FILE_TYPE::MAIN);
-  bodyText.setFileAndAttachmentNumber("72");
+  bodyText.setFileAndAttachmentNumber(72);
   bodyText.doStatisticsByScanningLines();
 }
 

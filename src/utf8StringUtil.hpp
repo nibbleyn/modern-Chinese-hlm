@@ -33,6 +33,7 @@ static const string bottomParagraphIndicator = R"(bottom)";
 
 static const string BODY_TEXT_SUFFIX = R"(.txt)";
 static const string HTML_SUFFIX = R"(.htm)";
+static const string ATTACHMENT_TYPE_HTML_TARGET = R"(b0)";
 
 // start of each paragraph and line number
 static const string lineNumberIdBeginChars = R"(id="P)";
@@ -118,8 +119,18 @@ string getWholeStringBetweenTags(const string &originalString,
                                  size_t after = 0);
 
 using AttachmentNumber = pair<int, int>; // chapter number, attachment number
-using ParaLineNumber = pair<int, int>;   // para number, line number
+
+using ParaLineNumber = pair<int, int>; // para number, line number
 
 using LinkStringSet = map<pair<AttachmentNumber, ParaLineNumber>, string>;
 
 string getFileNameFromAttachmentNumber(AttachmentNumber num);
+AttachmentNumber getAttachmentNumber(const string &filename,
+                                     bool prefixIncluded = true);
+
+// same value with those defined in fileUtil.hpp
+static const string MAIN_TYPE_HTML_TARGET = R"(a0)";
+static const string ORIGINAL_TYPE_HTML_TARGET = R"(c0)";
+static const string JPM_TYPE_HTML_TARGET = R"(d)";
+
+string getChapterNameByTargetKind(const string &targetKind, int chapterNumber);

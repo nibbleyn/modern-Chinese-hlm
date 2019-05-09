@@ -21,7 +21,7 @@ void Searcher::execute() {
             num,
             fixLinkFromMainTemplate(
                 "",
-                formatIntoZeroPatchedChapterNumber(num.first, m_filenameDigit),
+                getChapterNameByTargetKind(MAIN_TYPE_HTML_TARGET, num.first),
                 LINK_DISPLAY_TYPE::DIRECT, m_key, expectedSection, line,
                 expectedSection),
             make_pair(ln.getParaNumber(), ln.getlineNumber()));
@@ -31,7 +31,8 @@ void Searcher::execute() {
             num,
             fixLinkFromOriginalTemplate(
                 originalDirForLinkFromMain,
-                formatIntoZeroPatchedChapterNumber(num.first, m_filenameDigit),
+                getChapterNameByTargetKind(ORIGINAL_TYPE_HTML_TARGET,
+                                           num.first),
                 m_key, expectedSection, line, expectedSection),
             make_pair(ln.getParaNumber(), ln.getlineNumber()));
         break;
@@ -40,7 +41,7 @@ void Searcher::execute() {
             num,
             fixLinkFromJPMTemplate(
                 jpmDirForLinkFromMain,
-                formatIntoZeroPatchedChapterNumber(num.first, m_filenameDigit),
+                getChapterNameByTargetKind(JPM_TYPE_HTML_TARGET, num.first),
                 m_key, expectedSection, line, expectedSection),
             make_pair(ln.getParaNumber(), ln.getlineNumber()));
         break;
@@ -85,7 +86,7 @@ void Searcher::runSearchingOverFiles() {
     m_containerPtr = make_unique<TableContainer>(m_outputFilename);
   }
   m_containerPtr->clearLinkStringSet();
-  m_fileSet = buildFileSet(m_minTarget, m_maxTarget, m_filenameDigit);
+  m_fileSet = buildFileSet(m_minTarget, m_maxTarget, m_kind);
 
   m_bodyText.setFilePrefixFromFileType(m_fileType);
   runSearchingOverEachFile();
@@ -117,7 +118,7 @@ void search(const string &key, int num, const string &outputFilename) {
   SEPERATE("HLM search", " started ");
   NonAttachmentSearcher searcher;
   switch (num) {
-  case 1:
+  case SEARCH_IN_MAIN:
     searcher.m_kind = MAIN;
     searcher.m_key = key;
     searcher.m_outputFilename = outputFilename;
@@ -125,7 +126,7 @@ void search(const string &key, int num, const string &outputFilename) {
     searcher.m_maxTarget = MAIN_MAX_CHAPTER_NUMBER;
     searcher.runSearchingOverFiles();
     break;
-  case 2:
+  case SEARCH_IN_ORIGINAL:
     searcher.m_kind = ORIGINAL;
     searcher.m_key = key;
     searcher.m_outputFilename = outputFilename;
@@ -133,11 +134,10 @@ void search(const string &key, int num, const string &outputFilename) {
     searcher.m_maxTarget = MAIN_MAX_CHAPTER_NUMBER;
     searcher.runSearchingOverFiles();
     break;
-  case 3:
+  case SEARCH_IN_JPM:
     searcher.m_kind = JPM;
     searcher.m_key = key;
     searcher.m_outputFilename = outputFilename;
-    searcher.m_filenameDigit = THREE_DIGIT_FILENAME;
     searcher.m_minTarget = JPM_MIN_CHAPTER_NUMBER;
     searcher.m_maxTarget = JPM_MAX_CHAPTER_NUMBER;
     searcher.runSearchingOverFiles();

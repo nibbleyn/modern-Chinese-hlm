@@ -20,7 +20,6 @@ public:
   COMMAND m_command{COMMAND::addLineNumber};
 
   string m_kind{MAIN};
-  int m_filenameDigit{TWO_DIGIT_FILENAME};
   int m_minTarget{MAIN_MIN_CHAPTER_NUMBER};
   int m_maxTarget{MAIN_MAX_CHAPTER_NUMBER};
   int m_minAttachNo{0};

@@ -19,10 +19,14 @@ public:
   static string referFilePrefix;
   static string lineDetailFilePath;
   static LinesTable linesTable;
+  using RangeTable =
+      map<pair<AttachmentNumber, ParaLineNumber>, lineNumberSetByRange>;
+  static RangeTable rangeTable;
   static void setReferFilePrefix(const string &prefix);
   static void setStatisticsOutputFilePath(const string &path);
   static void clearExistingNumberingStatistics();
   static void appendNumberingStatistics();
+  static void loadRangeTableFromFile(const string &indexFilePath);
 
 public:
   CoupledBodyTextWithLink() = default;
@@ -63,6 +67,10 @@ public:
   void removePersonalCommentsOverNumberedFiles();
 
 private:
+  static void addEntriesInRangeTable(AttachmentNumber startNum,
+                                     AttachmentNumber endNum,
+                                     ParaLineNumber startPara,
+                                     ParaLineNumber endPara);
   // used for Auto-numbering
   size_t m_averageSizeOfOneLine{0};
   size_t m_SizeOfReferPage{0};
@@ -233,6 +241,28 @@ private:
                     << detail.isImgGroup << "  "
                     << detail.numberOfDisplayedLines << "  "
                     << Object::typeSetAsString(detail.objectContains) << endl;
+    }
+  }
+
+  static void printRangeTable() {
+    if (not rangeTable.empty()) {
+      FUNCTION_OUTPUT << "rangeTable:" << endl;
+      FUNCTION_OUTPUT << "chapter/attachment/startParaNumber/startLineNumber/"
+                         "endParaNumber/endLineNumber"
+                      << endl;
+    } else
+      FUNCTION_OUTPUT << "no entry in rangeTable." << endl;
+    for (const auto &element : rangeTable) {
+      auto num = element.first.first;
+      auto paraLine = element.first.second;
+      auto startPara = element.second.first;
+      auto endPara = element.second.first;
+      FUNCTION_OUTPUT << num.first << "  " << num.second << "  "
+                      << paraLine.first << "  " << paraLine.second << "  "
+                      << startPara.first << "  " << startPara.second << "  "
+                      << endPara.first << "  " << endPara.second << "  "
+
+                      << endl;
     }
   }
 };

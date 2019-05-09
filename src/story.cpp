@@ -3,17 +3,15 @@
 /**
  * give a set of start, end para pairs, create a sub-story by get them out of
  * original files
- * @param indexFilename mapping file
+ * @param indexFilePath mapping file
  * @param outputFilename result html file
  */
-void reConstructStory(const string &indexFilename,
-                      const string &outputFilename) {
-  ListContainer container(outputFilename);
-  ifstream infile(indexFilename);
-  if (!infile) {
-    FUNCTION_OUTPUT << "file doesn't exist:" << indexFilename << endl;
-    return;
-  }
+void reConstructStory(const string &title, const string &outputFilename,
+                      const string &kind) {
+  string indexFilePath = HTML_OUTPUT_MAIN + title + BODY_TEXT_SUFFIX;
+  CoupledBodyTextWithLink::loadRangeTableFromFile(indexFilePath);
+  ListContainer container((outputFilename == emptyString) ? title + "_generated"
+                                                          : outputFilename);
   container.clearExistingBodyText();
 
   // cannot change to hold quite many lines yet.
@@ -23,37 +21,27 @@ void reConstructStory(const string &indexFilename,
   paraHeader.fixFromTemplate();
   container.appendParagrapHeader(paraHeader.getFixedResult());
 
-  string title{""};
-  if (!infile.eof())
-    getline(infile, title);
-  else
-    // empty file
-    return;
-  FUNCTION_OUTPUT << title << endl;
-  FILE_TYPE targetFileType = getFileTypeFromString("main");
-  while (!infile.eof()) {
-    string startChapter, startPara, startLine;
-    getline(infile, startChapter, '#');
-    getline(infile, startPara, '.');
-    getline(infile, startLine, ' ');
-    string endChapter, endPara, endLine;
-    getline(infile, endChapter, '#');
-    getline(infile, endPara, '.');
-    getline(infile, endLine, '\n');
-    FUNCTION_OUTPUT << startChapter << startPara << startLine << endl;
-    FUNCTION_OUTPUT << endChapter << endPara << endLine << endl;
-    // fetch lines from specified chapter
-    CoupledBodyText bodyText;
-    bodyText.setFilePrefixFromFileType(targetFileType);
-    // assume startChapter is same as endChapter
-    bodyText.setFileAndAttachmentNumber(startChapter);
-    bodyText.setStartOfRange(
-        LineNumber(TurnToInt(startPara), TurnToInt(startLine)));
-    bodyText.setEndOfRange(LineNumber(TurnToInt(endPara), TurnToInt(endLine)));
+  CoupledBodyText bodyText;
+  bodyText.setFilePrefixFromFileType(getFileTypeFromString(kind));
+  for (const auto &element : CoupledBodyTextWithLink::rangeTable) {
+    auto num = element.first.first;
+    auto paraLine = element.first.second;
+    auto startPara = element.second.first;
+    auto endPara = element.second.first;
+    FUNCTION_OUTPUT << num.first << "  " << num.second << "  " << paraLine.first
+                    << "  " << paraLine.second << "  " << startPara.first
+                    << "  " << startPara.second << "  " << endPara.first << "  "
+                    << endPara.second << "  "
+
+                    << endl;
+    bodyText.setFileAndAttachmentNumber(num.first, num.second);
+    bodyText.setStartOfRange(startPara);
+    bodyText.setEndOfRange(endPara);
     bodyText.fetchLineTexts();
     bodyText.setOutputBodyTextFilePath(container.getOutputBodyTextFilePath());
     bodyText.appendLinesIntoBodyTextFile();
   }
+
   paraHeader.setCurrentParaNo(1);
   paraHeader.markAsLastParaHeader();
   paraHeader.fixFromTemplate();

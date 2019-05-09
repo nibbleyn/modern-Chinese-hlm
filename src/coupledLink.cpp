@@ -142,7 +142,7 @@ void CoupledLink::readKey(const string &linkString) {
   if (isTargetToSelfHtm()) {
     bodyText.addIgnoreLines(m_fromLine.asString());
   }
-  bodyText.setFileAndAttachmentNumber(getChapterName(), m_attachmentNumber);
+  bodyText.setFileAndAttachmentNumber(m_chapterNumber, m_attachmentNumber);
   if (bodyText.isMainBodyText())
     bodyText.ignorePersonalComments();
   bool found = bodyText.findKey(stringForSearch);

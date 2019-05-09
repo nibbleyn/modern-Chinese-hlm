@@ -48,8 +48,8 @@ void CoupledBodyTextWithLink::fixLinksWithinOneLine(FileSet referMainFiles,
       }
     }
     if (m_linkPtr->isTargetToOtherMainHtm()) {
-      targetFile = m_linkPtr->getChapterName();
-      auto e = find(referMainFiles.begin(), referMainFiles.end(), targetFile);
+      auto e = find(referMainFiles.begin(), referMainFiles.end(),
+                    getChapterNumberString(m_linkPtr->getchapterNumer()));
       // need to check and fix
       if (e != referMainFiles.end()) {
         // third step of construction
@@ -90,8 +90,8 @@ void CoupledBodyTextWithLink::fixLinksWithinOneLine(FileSet referMainFiles,
       }
     }
     if (m_linkPtr->isTargetToJPMHtm()) {
-      targetFile = m_linkPtr->getChapterName();
-      auto e = find(referJPMFiles.begin(), referJPMFiles.end(), targetFile);
+      auto e = find(referJPMFiles.begin(), referJPMFiles.end(),
+                    getChapterNumberString(m_linkPtr->getchapterNumer()));
       // need to check and fix
       if (e != referJPMFiles.end()) {
         // third step of construction
@@ -106,9 +106,8 @@ void CoupledBodyTextWithLink::fixLinksWithinOneLine(FileSet referMainFiles,
       }
     }
     if (m_linkPtr->isTargetToOriginalHtm()) {
-      targetFile = m_linkPtr->getChapterName();
       auto e = find(referOriginalFiles.begin(), referOriginalFiles.end(),
-                    targetFile);
+                    getChapterNumberString(m_linkPtr->getchapterNumer()));
       // need to check and fix
       if (e != referOriginalFiles.end()) {
         // third step of construction

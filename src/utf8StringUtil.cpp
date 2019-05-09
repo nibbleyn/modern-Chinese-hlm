@@ -97,10 +97,12 @@ void printCompareResult(const string &firstString, const string &secondString,
 string getIncludedStringBetweenTags(const string &originalString,
                                     const string &begin, const string &end,
                                     size_t after) {
-  auto beginPos = originalString.find(begin, after);
-  auto endPos = originalString.find(end, beginPos + begin.length());
+  auto beginPos = (begin.empty()) ? after : originalString.find(begin, after);
+  auto endPos = originalString.length();
+  if (not end.empty())
+    endPos = originalString.find(end, beginPos + begin.length());
   if (beginPos == string::npos or endPos == string::npos)
-    return "";
+    return emptyString;
   return originalString.substr(beginPos + begin.length(),
                                endPos - begin.length() - beginPos);
 }
@@ -108,10 +110,12 @@ string getIncludedStringBetweenTags(const string &originalString,
 string getWholeStringBetweenTags(const string &originalString,
                                  const string &begin, const string &end,
                                  size_t after) {
-  auto beginPos = originalString.find(begin, after);
-  auto endPos = originalString.find(end, beginPos + begin.length());
+  auto beginPos = (begin.empty()) ? after : originalString.find(begin, after);
+  auto endPos = originalString.length();
+  if (not end.empty())
+    endPos = originalString.find(end, beginPos + begin.length());
   if (beginPos == string::npos or endPos == string::npos)
-    return "";
+    return emptyString;
   return originalString.substr(beginPos, endPos + end.length() - beginPos);
 }
 
@@ -120,4 +124,37 @@ string getFileNameFromAttachmentNumber(AttachmentNumber num) {
   if (num.second != 0)
     result += attachmentFileMiddleChar + TurnToString(num.second);
   return result;
+}
+
+/**
+ * get chapter number and attachment number from an attachment file name
+ * for example with input b001_15 would return pair <1,15>
+ * @param filename the attachment file without .htm, e.g. b003_7
+ * @return pair of chapter number and attachment number
+ */
+AttachmentNumber getAttachmentNumber(const string &filename,
+                                     bool prefixIncluded) {
+  AttachmentNumber num(0, 0);
+  // referred file not found
+  if (prefixIncluded and
+      filename.find(ATTACHMENT_TYPE_HTML_TARGET) == string::npos) {
+    return num;
+  }
+
+  string start = prefixIncluded ? ATTACHMENT_TYPE_HTML_TARGET : emptyString;
+  string middle = (filename.find(attachmentFileMiddleChar) == string::npos)
+                      ? emptyString
+                      : attachmentFileMiddleChar;
+  num.first = TurnToInt(getIncludedStringBetweenTags(filename, start, middle));
+  if (not middle.empty())
+    num.second = TurnToInt(getIncludedStringBetweenTags(
+        filename, attachmentFileMiddleChar, emptyString));
+  return num;
+}
+
+string getChapterNameByTargetKind(const string &targetKind, int chapterNumber) {
+  if (targetKind == JPM_TYPE_HTML_TARGET)
+    return formatIntoZeroPatchedChapterNumber(chapterNumber,
+                                              THREE_DIGIT_FILENAME);
+  return formatIntoZeroPatchedChapterNumber(chapterNumber, TWO_DIGIT_FILENAME);
 }

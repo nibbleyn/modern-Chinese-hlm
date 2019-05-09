@@ -8,7 +8,7 @@ static const string titleNotExisted = R"(title doesn't exist.)";
 string AttachmentList::getAttachmentTitleFromFile(AttachmentNumber num) {
   string inputFile =
       HTML_SRC_ATTACHMENT + ATTACHMENT_TYPE_HTML_TARGET +
-      formatIntoZeroPatchedChapterNumber(num.first, TWO_DIGIT_FILENAME) +
+      getChapterNameByTargetKind(MAIN_TYPE_HTML_TARGET, num.first) +
       attachmentFileMiddleChar + TurnToString(num.second) + HTML_SUFFIX;
   ifstream infile(inputFile);
   if (!infile) {
@@ -50,29 +50,6 @@ string attachmentTypeAsString(ATTACHMENT_TYPE type) {
 ATTACHMENT_TYPE attachmentTypeFromString(const string &str) {
   return (str == personalAttachmentType) ? ATTACHMENT_TYPE::PERSONAL
                                          : ATTACHMENT_TYPE::REFERENCE;
-}
-
-/**
- * get chapter number and attachment number from an attachment file name
- * for example with input b001_15 would return pair <1,15>
- * @param filename the attachment file without .htm, e.g. b003_7
- * @return pair of chapter number and attachment number
- */
-AttachmentNumber getAttachmentNumber(const string &filename) {
-  AttachmentNumber num(0, 0);
-  // referred file not found
-  if (filename.find(ATTACHMENT_TYPE_HTML_TARGET) == string::npos) {
-    return num;
-  }
-  num.first = TurnToInt(getIncludedStringBetweenTags(
-      filename, ATTACHMENT_TYPE_HTML_TARGET, attachmentFileMiddleChar));
-  if (filename.find(attachmentFileMiddleChar) == string::npos) {
-    return num;
-  }
-  num.second =
-      TurnToInt(filename.substr(filename.find(attachmentFileMiddleChar) +
-                                attachmentFileMiddleChar.length()));
-  return num;
 }
 
 static const string fromParaOfReferenceAttachment = R"(from:)";
@@ -233,21 +210,19 @@ LinkStringSet
 AttachmentList::allAttachmentsAsLinksByType(ATTACHMENT_TYPE type) {
   LinkStringSet result;
   for (const auto &attachment : m_table) {
-    auto attachmentName = attachment.first;
-    auto fullPos = make_pair(attachmentName, make_pair(0, 0));
+    auto num = attachment.first;
+    auto fullPos = make_pair(num, make_pair(0, 0));
     auto entry = attachment.second;
     ATTACHMENT_TYPE attachmentType = entry.type;
 
     if (attachmentType == type) {
-      string name = citationChapterNo + TurnToString(attachmentName.first) +
-                    defaultUnit + citationChapterNo +
-                    TurnToString(attachmentName.second) + attachmentUnit;
+      string name = citationChapterNo + TurnToString(num.first) + defaultUnit +
+                    citationChapterNo + TurnToString(num.second) +
+                    attachmentUnit;
       result[fullPos] = fixLinkFromAttachmentTemplate(
           attachmentDirForLinkFromMain,
-          formatIntoZeroPatchedChapterNumber(attachmentName.first,
-                                             TWO_DIGIT_FILENAME),
-          TurnToString(attachmentName.second),
-          name + displaySpace + entry.title);
+          getChapterNameByTargetKind(MAIN_TYPE_HTML_TARGET, num.first),
+          TurnToString(num.second), name + displaySpace + entry.title);
     }
   }
   return result;

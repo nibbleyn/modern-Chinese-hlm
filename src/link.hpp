@@ -1,12 +1,6 @@
 #pragma once
 #include "lineNumber.hpp"
 
-// same value with those defined in fileUtil.hpp
-static const string MAIN_TYPE_HTML_TARGET = R"(a0)";
-static const string ORIGINAL_TYPE_HTML_TARGET = R"(c0)";
-static const string ATTACHMENT_TYPE_HTML_TARGET = R"(b0)";
-static const string JPM_TYPE_HTML_TARGET = R"(d)";
-
 static const string attachmentDirForLinkFromMain = R"(attachment\)";
 static const string originalDirForLinkFromMain = R"(original\)";
 static const string jpmDirForLinkFromMain = R"(JPM\)";
@@ -103,13 +97,6 @@ public:
   bool needUpdate() { return m_needChange; }
   string getSourceChapterName() { return m_fromFile; }
   void setSourcePara(LineNumber fp) { m_fromLine = fp; }
-  string getChapterName() {
-    if ((m_type == LINK_TYPE::JPM))
-      return formatIntoZeroPatchedChapterNumber(m_chapterNumber,
-                                                THREE_DIGIT_FILENAME);
-    return formatIntoZeroPatchedChapterNumber(m_chapterNumber,
-                                              TWO_DIGIT_FILENAME);
-  }
 
   void fixReferFile(int chapter, int attachNo = 0) {
     if (m_chapterNumber != chapter) {
@@ -154,6 +141,17 @@ protected:
     if (m_displayType == LINK_DISPLAY_TYPE::HIDDEN)
       result = hiddenDisplayProperty;
     return result;
+  }
+
+  string getChapterName() {
+    if (m_type == LINK_TYPE::JPM)
+      return getChapterNameByTargetKind(JPM_TYPE_HTML_TARGET, m_chapterNumber);
+    else if (m_type == LINK_TYPE::MAIN)
+      return getChapterNameByTargetKind(MAIN_TYPE_HTML_TARGET, m_chapterNumber);
+    else if (m_type == LINK_TYPE::ORIGINAL)
+      return getChapterNameByTargetKind(ORIGINAL_TYPE_HTML_TARGET,
+                                        m_chapterNumber);
+    return emptyString;
   }
 
 protected:

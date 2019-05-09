@@ -1,6 +1,7 @@
 #include "coupledBodyTextWithLink.hpp"
 
 CoupledBodyTextWithLink::LinesTable CoupledBodyTextWithLink::linesTable;
+CoupledBodyTextWithLink::RangeTable CoupledBodyTextWithLink::rangeTable;
 string CoupledBodyTextWithLink::referFilePrefix{emptyString};
 string CoupledBodyTextWithLink::lineDetailFilePath{emptyString};
 
@@ -51,6 +52,43 @@ void CoupledBodyTextWithLink::appendNumberingStatistics() {
   }
   FUNCTION_OUTPUT << "para " << para
                   << " has totalLines: " << totalNumberOfLines << endl;
+}
+
+void CoupledBodyTextWithLink::addEntriesInRangeTable(AttachmentNumber startNum,
+                                                     AttachmentNumber endNum,
+                                                     ParaLineNumber startPara,
+                                                     ParaLineNumber endPara) {
+  lineNumberSetByRange range = make_pair(startPara, endPara);
+  rangeTable[make_pair(startNum, startPara)] = range;
+}
+
+void CoupledBodyTextWithLink::loadRangeTableFromFile(
+    const string &indexFilePath) {
+  ifstream infile(indexFilePath);
+  if (!infile) {
+    FUNCTION_OUTPUT << "file doesn't exist:" << indexFilePath << endl;
+    return;
+  }
+  while (!infile.eof()) {
+    string startChapter, startParaLine;
+    getline(infile, startChapter, '#');
+    getline(infile, startParaLine, ' ');
+    string endChapter, endParaLine;
+    getline(infile, endChapter, '#');
+    getline(infile, endParaLine, '\n');
+    if (debug >= LOG_INFO) {
+      FUNCTION_OUTPUT << startChapter << displaySpace << startParaLine << endl;
+      FUNCTION_OUTPUT << endChapter << displaySpace << endParaLine << endl;
+    }
+    AttachmentNumber startNum = getAttachmentNumber(startChapter, false),
+                     endNum = getAttachmentNumber(endChapter, false);
+    LineNumber startPara(startParaLine), endPara(endParaLine);
+    ParaLineNumber start(startPara.getParaNumber(), startPara.getlineNumber());
+    ParaLineNumber end(endPara.getParaNumber(), endPara.getlineNumber());
+    addEntriesInRangeTable(startNum, endNum, start, end);
+  }
+  if (debug >= LOG_INFO)
+    printRangeTable();
 }
 
 void CoupledBodyTextWithLink::doStatisticsByScanningLines(

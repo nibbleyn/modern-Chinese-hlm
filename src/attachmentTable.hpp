@@ -32,7 +32,6 @@ static const string referenceAttachmentType = R"(0)";
 
 string attachmentTypeAsString(ATTACHMENT_TYPE type);
 ATTACHMENT_TYPE attachmentTypeFromString(const string &str);
-AttachmentNumber getAttachmentNumber(const string &filename);
 
 class AttachmentList {
 public:

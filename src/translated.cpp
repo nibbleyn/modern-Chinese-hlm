@@ -10,7 +10,7 @@ int debug = LOG_INFO;
 
 int main(int argc, char **argv) {
   // change this number to run different functions
-  int num = 14;
+  int num = 6;
   switch (num) {
   case 1:
     numberJPMHtmls(false);
@@ -28,7 +28,7 @@ int main(int argc, char **argv) {
     fixLinksFromMain(false);
     break;
   case 6:
-    reConstructStory("mapping.txt", "story");
+    reConstructStory(R"(小红遗帕)", "story");
     break;
   case 7:
     refreshBodyTexts(MAIN);
@@ -54,8 +54,8 @@ int main(int argc, char **argv) {
     generateContentTableForPersonalAttachments();
     break;
   case 14:
-//    search(R"(邢夫人)");
-//    search(R"(邢夫人)", SEARCH_IN_ORIGINAL);
+    //    search(R"(邢夫人)");
+    //    search(R"(邢夫人)", SEARCH_IN_ORIGINAL);
     search(R"(闲)", SEARCH_IN_JPM);
     break;
   case 15:

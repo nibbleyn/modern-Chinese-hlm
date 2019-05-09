@@ -1,5 +1,4 @@
 #include "libraryInterface.hpp"
-#include <cmath>
 
 /**
  * generate a set of strings
@@ -8,15 +7,14 @@
  * and ending in max
  * @param min the smallest chapter
  * @param max the largest chapter
- * @param digits the length of the chapter string
+ * @kind to determine digits the length of the chapter string
  * @return a set of strings in fileSet
  */
-FileSet buildFileSet(int minValue, int maxValue, int digits) {
+FileSet buildFileSet(int minValue, int maxValue, const string &kind) {
   FileSet fs;
-  auto numberOfDigits = static_cast<int>(log10(maxValue)) + 1;
   for (int i = minValue; i <= maxValue; i++) {
-    fs.insert(
-        formatIntoZeroPatchedChapterNumber(i, max(digits, numberOfDigits)));
+    fs.insert(formatIntoZeroPatchedChapterNumber(
+        i, (kind == JPM) ? THREE_DIGIT_FILENAME : TWO_DIGIT_FILENAME));
   }
   return fs;
 }

@@ -41,6 +41,23 @@ public:
     m_attachNumber = attachNo;
   }
 
+  string getChapterNumberString(int chapterNumber) {
+    if (m_filePrefix == JPM_BODYTEXT_PREFIX)
+      return getChapterNameByTargetKind(JPM_TYPE_HTML_TARGET, chapterNumber);
+    else if (m_filePrefix == MAIN_BODYTEXT_PREFIX or
+             m_filePrefix == ATTACHMENT_BODYTEXT_PREFIX)
+      return getChapterNameByTargetKind(MAIN_TYPE_HTML_TARGET, chapterNumber);
+    else if (m_filePrefix == ORIGINAL_BODYTEXT_PREFIX)
+      return getChapterNameByTargetKind(ORIGINAL_TYPE_HTML_TARGET,
+                                        chapterNumber);
+    return emptyString;
+  }
+
+  void setFileAndAttachmentNumber(int chapterNumber, int attachNo = 0) {
+    m_file = getChapterNumberString(chapterNumber);
+    m_attachNumber = attachNo;
+  }
+
   AttachmentNumber getFileAndAttachmentNumber() {
     return AttachmentNumber(TurnToInt(m_file), m_attachNumber);
   }
@@ -72,10 +89,10 @@ public:
   lineNumberSet getResultLineSet() { return m_result; };
 
   // fetch lines by range
-  using lineNumberSetByRange = pair<LineNumber, LineNumber>;
+  using lineNumberSetByRange = pair<ParaLineNumber, ParaLineNumber>;
 
-  void setStartOfRange(const LineNumber &ln) { m_range.first = ln; }
-  void setEndOfRange(const LineNumber &ln) { m_range.second = ln; }
+  void setStartOfRange(const ParaLineNumber &ln) { m_range.first = ln; }
+  void setEndOfRange(const ParaLineNumber &ln) { m_range.second = ln; }
 
   // lineNumber -> text of that line
   using lineSet = map<string, string>;

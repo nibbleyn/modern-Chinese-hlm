@@ -111,7 +111,7 @@ void gb2312FixMain(int minTarget, int maxTarget) {
 }
 
 void gb2312FixOriginal(int minTarget, int maxTarget) {
-  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
+  for (const auto &file : buildFileSet(minTarget, maxTarget, ORIGINAL)) {
     convertFromGB2312ToUtf8(file, "htm", FILE_TYPE::ORIGINAL);
   }
 }
