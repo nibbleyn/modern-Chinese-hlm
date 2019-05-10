@@ -136,3 +136,10 @@ static const string ORIGINAL_TYPE_HTML_TARGET = R"(c0)";
 static const string JPM_TYPE_HTML_TARGET = R"(d)";
 
 string getChapterNameByTargetKind(const string &targetKind, int chapterNumber);
+
+// get attachment numbers for a chapter
+using AttachmentNumberList = set<int>;
+AttachmentNumberList getAttachmentFileListForChapter(const string &fromDir,
+                                                     int chapterNumber,
+                                                     int minAttachNo = 0,
+                                                     int maxAttachNo = 0);

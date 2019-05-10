@@ -174,8 +174,7 @@ size_t CoupledBodyTextWithLink::getAverageLineLengthFromReferenceFile() {
   ifstream referLinesFile(REFERENCE_LINES);
 
   if (!referLinesFile) {
-    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << REFERENCE_LINES
-                  << endl;
+    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << REFERENCE_LINES << endl;
     return 0;
   }
 

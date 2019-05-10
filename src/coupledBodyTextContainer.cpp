@@ -92,8 +92,7 @@ void CoupledBodyTextContainer::assembleBackToHTM(const string &title,
   ifstream inBodyTextFile(inputBodyTextFile);
 
   if (!inBodyTextFile) {
-    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << inputBodyTextFile
-                  << endl;
+    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << inputBodyTextFile << endl;
     return;
   }
 
@@ -329,45 +328,11 @@ void CoupledBodyTextContainer::fixReturnLinkForAttachmentFile() {
   }
 }
 
-CoupledBodyTextContainer::AttachmentNumberList
+AttachmentNumberList
 CoupledBodyTextContainer::getAttachmentFileList(int minAttachNo,
                                                 int maxAttachNo) {
-  auto listOfNumbersFromFiles =
-      getAttachmentFileListForChapter(m_htmlInputFilePath);
-  if ((minAttachNo == 0 and maxAttachNo == 0) or maxAttachNo < minAttachNo) {
-    return listOfNumbersFromFiles;
-  }
-  AttachmentNumberList result;
-  for (int i = maxAttachNo; i >= minAttachNo; i--) {
-    if (listOfNumbersFromFiles.count(i))
-      result.insert(i);
-  }
-  return result;
-}
-
-/**
- * get all attachment files for referFile under fromDir
- * for example, if there are b003_1.html b003_5.html and b003_15.html
- * this function would return {1,5,15} for referFile "03"
- * @param referFile the 2-digit string part of refer file
- * @param fromDir where its attachment files are under
- * @return the vector of attachment numbers
- */
-CoupledBodyTextContainer::AttachmentNumberList
-CoupledBodyTextContainer::getAttachmentFileListForChapter(
-    const string &fromDir) {
-  vector<string> filenameList;
-  AttachmentNumberList attList;
-  Poco::File(fromDir).list(filenameList);
-  for (const auto &file : filenameList) {
-    if (file.find(getHtmlFileNamePrefix(FILE_TYPE::ATTACHMENT) + m_file) !=
-        string::npos) {
-      string attNo = getIncludedStringBetweenTags(
-          file, attachmentFileMiddleChar, HTML_SUFFIX);
-      attList.insert(TurnToInt(attNo));
-    }
-  }
-  return attList;
+  return getAttachmentFileListForChapter(m_htmlInputFilePath, TurnToInt(m_file),
+                                         minAttachNo, maxAttachNo);
 }
 
 void CoupledBodyTextContainer::fetchOriginalAndTranslatedTitles() {

@@ -129,7 +129,8 @@ void gb2312FixAttachment(int minTarget, int maxTarget) {
     CoupledBodyTextContainer container;
     container.setFileType(FILE_TYPE::ATTACHMENT);
     container.setFileAndAttachmentNumber(file);
-    auto attList = container.getAttachmentFileListForChapter(GB2312_HTML_SRC);
+    auto attList =
+        getAttachmentFileListForChapter(GB2312_HTML_SRC, TurnToInt(file));
     for (const auto &attNo : attList)
       convertFromGB2312ToUtf8(file, "htm", FILE_TYPE::ATTACHMENT, attNo);
   }

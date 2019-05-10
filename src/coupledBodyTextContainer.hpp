@@ -24,7 +24,12 @@ public:
   void setFileAndAttachmentNumber(const string &file, int attachNo = 0) {
     m_file = file;
     m_attachmentNumber = attachNo;
-  };
+  }
+
+  void setFileAndAttachmentNumber(int file, int attachNo = 0) {
+    m_file = getChapterNameByTargetKind(ATTACHMENT_TYPE_HTML_TARGET, file);
+    m_attachmentNumber = attachNo;
+  }
 
   void setFileType(FILE_TYPE fileType) {
     m_fileType = fileType;
@@ -44,11 +49,8 @@ public:
   void dissembleFromHTM();
   void assembleBackToHTM(const string &title = emptyString,
                          const string &displayTitle = emptyString);
-  // get attachment numbers for a chapter
-  using AttachmentNumberList = set<int>;
   AttachmentNumberList getAttachmentFileList(int minAttachNo = 0,
                                              int maxAttachNo = 0);
-  AttachmentNumberList getAttachmentFileListForChapter(const string &fromDir);
 
   // fix return link after fix links in main files
   void fixReturnLinkForAttachmentFile();

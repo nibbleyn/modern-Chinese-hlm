@@ -1,4 +1,5 @@
 #include "utf8StringUtil.hpp"
+#include "Poco/File.h"
 #include <sstream>
 
 /**
@@ -157,4 +158,31 @@ string getChapterNameByTargetKind(const string &targetKind, int chapterNumber) {
     return formatIntoZeroPatchedChapterNumber(chapterNumber,
                                               THREE_DIGIT_FILENAME);
   return formatIntoZeroPatchedChapterNumber(chapterNumber, TWO_DIGIT_FILENAME);
+}
+
+AttachmentNumberList getAttachmentFileListForChapter(const string &fromDir,
+                                                     int chapterNumber,
+                                                     int minAttachNo,
+                                                     int maxAttachNo) {
+  vector<string> filenameList;
+  AttachmentNumberList listOfNumbersFromFiles;
+  Poco::File(fromDir).list(filenameList);
+  for (const auto &file : filenameList) {
+    if (file.find(ATTACHMENT_TYPE_HTML_TARGET +
+                  getChapterNameByTargetKind(ATTACHMENT_TYPE_HTML_TARGET,
+                                             chapterNumber)) != string::npos) {
+      string attNo = getIncludedStringBetweenTags(
+          file, attachmentFileMiddleChar, HTML_SUFFIX);
+      listOfNumbersFromFiles.insert(TurnToInt(attNo));
+    }
+  }
+  if ((minAttachNo == 0 and maxAttachNo == 0) or maxAttachNo < minAttachNo) {
+    return listOfNumbersFromFiles;
+  }
+  AttachmentNumberList result;
+  for (int i = maxAttachNo; i >= minAttachNo; i--) {
+    if (listOfNumbersFromFiles.count(i))
+      result.insert(i);
+  }
+  return result;
 }
