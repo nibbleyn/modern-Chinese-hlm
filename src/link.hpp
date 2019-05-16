@@ -146,12 +146,7 @@ protected:
   string getChapterName() {
     if (m_type == LINK_TYPE::JPM)
       return getChapterNameByTargetKind(JPM_TYPE_HTML_TARGET, m_chapterNumber);
-    else if (m_type == LINK_TYPE::MAIN)
-      return getChapterNameByTargetKind(MAIN_TYPE_HTML_TARGET, m_chapterNumber);
-    else if (m_type == LINK_TYPE::ORIGINAL)
-      return getChapterNameByTargetKind(ORIGINAL_TYPE_HTML_TARGET,
-                                        m_chapterNumber);
-    return emptyString;
+    return getChapterNameByTargetKind(MAIN_TYPE_HTML_TARGET, m_chapterNumber);
   }
 
 protected:

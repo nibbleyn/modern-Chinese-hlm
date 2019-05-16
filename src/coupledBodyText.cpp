@@ -421,7 +421,8 @@ bool isFoundOutsidePersonalComments(const string &line, const string &key) {
       string testStr = line.substr(
           testBeginPos + personalCommentStartChars.length(),
           keyBegin - testBeginPos - personalCommentStartChars.length());
-      FUNCTION_OUTPUT << testStr << endl;
+      if (debug >= LOG_INFO)
+        FUNCTION_OUTPUT << testStr << endl;
       if (testStr.find(personalCommentEndChars) != string::npos)
         return true;
     } else

@@ -128,6 +128,8 @@ void AttachmentList::saveAttachmentList() {
     return;
   // remove not used attachments
   for (const auto &element : m_notUpdatedAttachmentSet) {
+    if (debug >= LOG_INFO)
+      FUNCTION_OUTPUT << element.first << displaySpace << element.first << endl;
     m_table.erase(element);
   }
   ofstream outfile(m_outputFile);

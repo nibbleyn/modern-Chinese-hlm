@@ -345,9 +345,6 @@ void Link::readType(const string &linkString) {
 
   m_type = LINK_TYPE::SAMEPAGE;
   if (linkString.find(TARGET_FILE_EXT) == string::npos) {
-    if (debug >= LOG_EXCEPTION)
-      METHOD_OUTPUT << "no .htm file extension found for " << linkString
-                    << endl;
     return;
   }
 
