@@ -91,6 +91,12 @@ public:
              (getChapterName() + attachmentFileMiddleChar +
               TurnToString(m_attachmentNumber)) == m_fromFile));
   };
+  string getChapterName() {
+    if (m_type == LINK_TYPE::JPM)
+      return getChapterNameByTargetKind(JPM_TYPE_HTML_TARGET, m_chapterNumber);
+    return getChapterNameByTargetKind(MAIN_TYPE_HTML_TARGET, m_chapterNumber);
+  }
+
   int getchapterNumer() { return m_chapterNumber; }
   int getattachmentNumber() { return m_attachmentNumber; }
   string getAnnotation() { return m_annotation; }
@@ -141,12 +147,6 @@ protected:
     if (m_displayType == LINK_DISPLAY_TYPE::HIDDEN)
       result = hiddenDisplayProperty;
     return result;
-  }
-
-  string getChapterName() {
-    if (m_type == LINK_TYPE::JPM)
-      return getChapterNameByTargetKind(JPM_TYPE_HTML_TARGET, m_chapterNumber);
-    return getChapterNameByTargetKind(MAIN_TYPE_HTML_TARGET, m_chapterNumber);
   }
 
 protected:

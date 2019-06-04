@@ -104,9 +104,9 @@ string fixLinkFromMainTemplate(const string &path, const string &filename,
   return link;
 }
 
-// now only support reverse link from main back to main
+// now only support reverse link from main back to main, no key required
 static const string reverseLinkToMainFile =
-    R"(<a unhidden href="a0XX.htm#YY"><sub hidden>WW</sub>被引用</a>)";
+    R"(<a unhidden href="a0XX.htm#YY"><sub unhidden>WW</sub>被引用</a>)";
 
 string fixLinkFromReverseLinkTemplate(const string &filename,
                                       LINK_DISPLAY_TYPE type,

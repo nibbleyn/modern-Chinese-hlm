@@ -41,20 +41,16 @@ public:
     m_attachNumber = attachNo;
   }
 
-  string getChapterNumberString(int chapterNumber) {
+  void setFileAndAttachmentNumber(int chapterNumber, int attachNo = 0) {
+
     if (m_filePrefix == JPM_BODYTEXT_PREFIX)
-      return getChapterNameByTargetKind(JPM_TYPE_HTML_TARGET, chapterNumber);
+      m_file = getChapterNameByTargetKind(JPM_TYPE_HTML_TARGET, chapterNumber);
     else if (m_filePrefix == MAIN_BODYTEXT_PREFIX or
              m_filePrefix == ATTACHMENT_BODYTEXT_PREFIX)
-      return getChapterNameByTargetKind(MAIN_TYPE_HTML_TARGET, chapterNumber);
+      m_file = getChapterNameByTargetKind(MAIN_TYPE_HTML_TARGET, chapterNumber);
     else if (m_filePrefix == ORIGINAL_BODYTEXT_PREFIX)
-      return getChapterNameByTargetKind(ORIGINAL_TYPE_HTML_TARGET,
-                                        chapterNumber);
-    return emptyString;
-  }
-
-  void setFileAndAttachmentNumber(int chapterNumber, int attachNo = 0) {
-    m_file = getChapterNumberString(chapterNumber);
+      m_file =
+          getChapterNameByTargetKind(ORIGINAL_TYPE_HTML_TARGET, chapterNumber);
     m_attachNumber = attachNo;
   }
 

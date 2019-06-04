@@ -13,6 +13,7 @@ void CoupledBodyTextWithLink::fixLinksWithinOneLine(FileSet referMainFiles,
   if (debug >= LOG_INFO)
     METHOD_OUTPUT << toProcess << endl;
   string targetFile{""};
+  unsigned int endOfProcessedSubString = 0;
   do {
     // no link any more, continue with next line
     if (toProcess.find(linkStartChars) == string::npos)
@@ -43,13 +44,15 @@ void CoupledBodyTextWithLink::fixLinksWithinOneLine(FileSet referMainFiles,
       m_linkPtr->fixFromString(link);
       // replace old value
       if (m_forceUpdateLink or m_linkPtr->needUpdate()) {
-        auto orglinkBegin = m_inLine.find(link);
+        auto orglinkBegin = m_inLine.find(link, endOfProcessedSubString);
         m_inLine.replace(orglinkBegin, link.length(), m_linkPtr->asString());
+        endOfProcessedSubString =
+            orglinkBegin + m_linkPtr->getWholeString().length();
       }
     }
     if (m_linkPtr->isTargetToOtherMainHtm()) {
       auto e = find(referMainFiles.begin(), referMainFiles.end(),
-                    getChapterNumberString(m_linkPtr->getchapterNumer()));
+                    m_linkPtr->getChapterName());
       // need to check and fix
       if (e != referMainFiles.end()) {
         // third step of construction
@@ -84,45 +87,52 @@ void CoupledBodyTextWithLink::fixLinksWithinOneLine(FileSet referMainFiles,
         m_linkPtr->doStatistics();
         // replace old value
         if (m_forceUpdateLink or m_linkPtr->needUpdate()) {
-          auto orglinkBegin = m_inLine.find(link);
+          auto orglinkBegin = m_inLine.find(link, endOfProcessedSubString);
           m_inLine.replace(orglinkBegin, link.length(), m_linkPtr->asString());
+          endOfProcessedSubString =
+              orglinkBegin + m_linkPtr->getWholeString().length();
         }
       }
     }
     if (m_linkPtr->isTargetToJPMHtm()) {
       auto e = find(referJPMFiles.begin(), referJPMFiles.end(),
-                    getChapterNumberString(m_linkPtr->getchapterNumer()));
+                    m_linkPtr->getChapterName());
       // need to check and fix
       if (e != referJPMFiles.end()) {
         // third step of construction
         m_linkPtr->fixFromString(link);
         // replace old value
         if (m_forceUpdateLink or m_linkPtr->needUpdate()) {
-          auto orglinkBegin = m_inLine.find(link);
+          auto orglinkBegin = m_inLine.find(link, endOfProcessedSubString);
           if (debug >= LOG_INFO)
             SEPERATE("isTargetToJPMHtm", m_inLine + "\n" + link);
           m_inLine.replace(orglinkBegin, link.length(), m_linkPtr->asString());
+          endOfProcessedSubString =
+              orglinkBegin + m_linkPtr->getWholeString().length();
         }
       }
     }
     if (m_linkPtr->isTargetToOriginalHtm()) {
       auto e = find(referOriginalFiles.begin(), referOriginalFiles.end(),
-                    getChapterNumberString(m_linkPtr->getchapterNumer()));
+                    m_linkPtr->getChapterName());
       // need to check and fix
       if (e != referOriginalFiles.end()) {
         // third step of construction
         m_linkPtr->fixFromString(link);
         // replace old value
         if (m_forceUpdateLink or m_linkPtr->needUpdate()) {
-          auto orglinkBegin = m_inLine.find(link);
+          auto orglinkBegin = m_inLine.find(link, endOfProcessedSubString);
           if (debug >= LOG_INFO)
             SEPERATE("isTargetToOriginalHtm", m_inLine + "\n" + link);
           m_inLine.replace(orglinkBegin, link.length(), m_linkPtr->asString());
+          endOfProcessedSubString =
+              orglinkBegin + m_linkPtr->getWholeString().length();
         }
       }
     }
     // continue to find next link in the m_inLine
     toProcess = toProcess.substr(linkEnd + linkEndChars.length());
+
   } while (true);
 }
 

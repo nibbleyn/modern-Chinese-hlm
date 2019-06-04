@@ -10,7 +10,7 @@ int debug = LOG_INFO;
 
 int main(int argc, char **argv) {
   // change this number to run different functions
-  int num = 6;
+  int num = 5;
   switch (num) {
   case 1:
     numberJPMHtmls(false);
