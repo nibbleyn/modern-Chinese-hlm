@@ -10,9 +10,9 @@ void LinkFromAttachment::generateLinkToOrigin() {
   auto reservedType = m_type;
   // temporarily change type to get right path
   m_type = LINK_TYPE::ORIGINAL;
-  string to =
-      fixLinkFromOriginalTemplate(getPathOfReferenceFile(), getChapterName(),
-                                  m_usedKey, emptyString, m_referPara);
+  string to = fixLinkFromOriginalTemplate(
+      getPathOfReferenceFile(), getChapterName(), m_usedKey, emptyString,
+      annotationToOriginal, m_referPara);
   m_linkPtrToOrigin = make_unique<LinkFromAttachment>(m_fromFile, to);
   m_linkPtrToOrigin->readReferFileName(to);
   m_linkPtrToOrigin->fixFromString(to);

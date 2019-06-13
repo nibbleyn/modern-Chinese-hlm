@@ -6,6 +6,7 @@ static constexpr const char *HTML_SRC_REF_ATTACHMENT_LIST =
     "utf8HTML/src/RefAttachments.txt";
 static constexpr const char *HTML_OUTPUT_REF_ATTACHMENT_LIST =
     "utf8HTML/output/RefAttachments.txt";
+
 static const string HTML_SRC_ATTACHMENT = R"(utf8HTML/src/attachment/)";
 static const string htmlTitleStart = R"(<title>)";
 static const string htmlTitleEnd = R"(</title>)";
@@ -22,9 +23,11 @@ struct AttachmentDetails {
 };
 
 using AttachmentSet = map<AttachmentNumber, AttachmentDetails>;
+
 /**
- * personalAttachmentType means a personal review could be removed thru
- * removePersonalViewpoints() referenceAttachmentType means reference to other
+ * personalAttachmentType means a personal review
+ * which could be removed thru removePersonalViewpoints();
+ * referenceAttachmentType means reference to other
  * stories or about a person
  */
 static const string personalAttachmentType = R"(1)";

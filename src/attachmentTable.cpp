@@ -59,7 +59,7 @@ static const string typeOfReferenceAttachment = R"( type:)";
 
 /**
  * load refAttachmentTable from HTML_SRC_REF_ATTACHMENT
- * read file and add entry of attachment found before into target list.
+ * read file and add entry of attachment (found before) into target list.
  * by using refAttachmentTable and attachmentList and doing below iteratively
  * we can keep old changes of type and only need to change added links
  * 1. loading from refAttachmentTable,

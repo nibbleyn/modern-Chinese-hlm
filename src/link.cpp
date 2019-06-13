@@ -22,8 +22,34 @@ void replaceDisplayLink(string &linkString, LINK_DISPLAY_TYPE type) {
                                hiddenDisplayProperty);
 }
 
-static const string linkToSameFile =
+static constexpr const char *linkToSameFile =
     R"(<a unhidden title="QQ" href="#YY"><sub hidden>WW</sub>ZZ</a>)";
+static constexpr const char *linkToMainFile =
+    R"(<a unhidden title="QQ" href="PPa0XX.htm#YY"><sub hidden>WW</sub>ZZ</a>)";
+// now only support reverse link from main back to main, no key required
+static constexpr const char *reverseLinkToMainFile =
+    R"(<a unhidden href="a0XX.htm#YY"><sub unhidden>WW</sub>被引用</a>)";
+static constexpr const char *linkToOriginalFile =
+    R"(<a unhidden title="QQ" href="PPc0XX.htm#YY"><sub hidden>WW</sub>ZZ</a>)";
+static constexpr const char *linkToJPMFile =
+    R"(<a unhidden title="QQ" href="PPdXXX.htm#YY"><sub hidden>WW</sub>ZZ</a>)";
+static constexpr const char *linkToAttachmentFile =
+    R"(<a unhidden href="PPb0XX_SS.htm#YY">ZZ</a>)";
+static constexpr const char *linkToImageFile =
+    R"(<a unhidden title="IMAGE" href="XX#YY">（图示：ZZ）</a>)";
+
+static constexpr const char *defaultPath = R"(PP)";
+static constexpr const char *defaultMainFilename = R"(XX)";
+static constexpr const char *defaultAttachmentNumber = R"(SS)";
+static constexpr const char *defaultJpmFilename = R"(XXX)";
+static constexpr const char *defaultKey = R"(QQ)";
+static constexpr const char *defaultWholeKey = R"( title="QQ")";
+static constexpr const char *defaultReferPara = R"(YY)";
+static constexpr const char *defaultWholeReferPara = R"(#YY)";
+static constexpr const char *defaultCitation = R"(WW)";
+static constexpr const char *defaultWholeCitation = R"(<sub hidden>WW</sub>)";
+static constexpr const char *defaultAnnotation = R"(ZZ)";
+static constexpr const char *defaultImageAnnotation = R"(（图示：ZZ）)";
 
 /**
  * generate real correct link within same file
@@ -38,30 +64,27 @@ static const string linkToSameFile =
  */
 string fixLinkFromSameFileTemplate(LINK_DISPLAY_TYPE type, const string &key,
                                    const string &citation,
-                                   const string &referPara,
-                                   const string &annotation) {
+                                   const string &annotation,
+                                   const string &referPara) {
   string link = linkToSameFile;
   replaceDisplayLink(link, type);
   if (referPara.empty()) {
-    replacePart(link, R"(#YY)", emptyString);
+    replacePart(link, defaultWholeReferPara, emptyString);
   } else
-    replacePart(link, "YY", referPara);
+    replacePart(link, defaultReferPara, referPara);
   // in case use top/bottom as reference name
   if (key.empty()) {
-    replacePart(link, R"(<sub hidden>WW</sub>)", emptyString);
-    replacePart(link, R"( title="QQ")", emptyString);
+    replacePart(link, defaultWholeCitation, emptyString);
+    replacePart(link, defaultWholeKey, emptyString);
   } else {
-    replacePart(link, "QQ", key);
+    replacePart(link, defaultKey, key);
   }
-  replacePart(link, "WW", citation);
-  replacePart(link, "ZZ", annotation);
+  replacePart(link, defaultCitation, citation);
+  replacePart(link, defaultAnnotation, annotation);
   if (debug >= LOG_INFO)
     FUNCTION_OUTPUT << link << endl;
   return link;
 }
-
-static const string linkToMainFile =
-    R"(<a unhidden title="QQ" href="PPa0XX.htm#YY"><sub hidden>WW</sub>ZZ</a>)";
 
 /**
  * generate real correct link to other main file
@@ -80,54 +103,47 @@ static const string linkToMainFile =
  */
 string fixLinkFromMainTemplate(const string &path, const string &filename,
                                LINK_DISPLAY_TYPE type, const string &key,
-                               const string &citation, const string &referPara,
-                               const string &annotation) {
+                               const string &citation, const string &annotation,
+                               const string &referPara) {
   string link = linkToMainFile;
   replaceDisplayLink(link, type);
-  replacePart(link, "PP", path);
-  replacePart(link, "XX", filename);
+  replacePart(link, defaultPath, path);
+  replacePart(link, defaultMainFilename, filename);
   if (referPara.empty()) {
-    replacePart(link, R"(#YY)", emptyString);
+    replacePart(link, defaultWholeReferPara, emptyString);
   } else
-    replacePart(link, "YY", referPara);
+    replacePart(link, defaultReferPara, referPara);
   // in case use top/bottom as reference name
   if (key.empty()) {
-    replacePart(link, R"(<sub hidden>WW</sub>)", emptyString);
-    replacePart(link, R"( title="QQ")", emptyString);
+    replacePart(link, defaultWholeCitation, emptyString);
+    replacePart(link, defaultWholeKey, emptyString);
   } else {
-    replacePart(link, "QQ", key);
+    replacePart(link, defaultKey, key);
   }
-  replacePart(link, "WW", citation);
-  replacePart(link, "ZZ", annotation);
+  replacePart(link, defaultCitation, citation);
+  replacePart(link, defaultAnnotation, annotation);
   if (debug >= LOG_INFO)
     FUNCTION_OUTPUT << link << endl;
   return link;
 }
-
-// now only support reverse link from main back to main, no key required
-static const string reverseLinkToMainFile =
-    R"(<a unhidden href="a0XX.htm#YY"><sub unhidden>WW</sub>被引用</a>)";
 
 string fixLinkFromReverseLinkTemplate(const string &filename,
                                       LINK_DISPLAY_TYPE type,
                                       const string &citation,
-                                      const string &referPara,
-                                      const string &annotation) {
+                                      const string &annotation,
+                                      const string &referPara) {
   string link = reverseLinkToMainFile;
   replaceDisplayLink(link, type);
-  replacePart(link, "XX", filename);
+  replacePart(link, defaultMainFilename, filename);
   if (referPara.empty()) {
-    replacePart(link, R"(#YY)", emptyString);
+    replacePart(link, defaultWholeReferPara, emptyString);
   } else
-    replacePart(link, "YY", referPara);
-  replacePart(link, "WW", citation);
+    replacePart(link, defaultReferPara, referPara);
+  replacePart(link, defaultCitation, citation);
   if (debug >= LOG_INFO)
     FUNCTION_OUTPUT << link << endl;
   return link;
 }
-
-static const string linkToOriginalFile =
-    R"(<a unhidden title="QQ" href="PPc0XX.htm#YY"><sub hidden>WW</sub>ZZ</a>)";
 
 /**
  * generate real correct link to original file
@@ -145,31 +161,28 @@ static const string linkToOriginalFile =
  */
 string fixLinkFromOriginalTemplate(const string &path, const string &filename,
                                    const string &key, const string &citation,
-                                   const string &referPara,
-                                   const string &annotation) {
-  auto link = linkToOriginalFile;
-  replacePart(link, "PP", path);
-  replacePart(link, "XX", filename);
+                                   const string &annotation,
+                                   const string &referPara) {
+  string link = linkToOriginalFile;
+  replacePart(link, defaultPath, path);
+  replacePart(link, defaultMainFilename, filename);
   if (referPara.empty()) {
-    replacePart(link, R"(#YY)", emptyString);
+    replacePart(link, defaultWholeReferPara, emptyString);
   } else
-    replacePart(link, "YY", referPara);
+    replacePart(link, defaultReferPara, referPara);
   // in case use top/bottom as reference name
   if (key.empty()) {
-    replacePart(link, R"(<sub hidden>WW</sub>)", emptyString);
-    replacePart(link, R"( title="QQ")", emptyString);
+    replacePart(link, defaultWholeCitation, emptyString);
+    replacePart(link, defaultWholeKey, emptyString);
   } else {
-    replacePart(link, "QQ", key);
+    replacePart(link, defaultKey, key);
   }
-  replacePart(link, "WW", citation);
-  replacePart(link, "ZZ", annotation);
+  replacePart(link, defaultCitation, citation);
+  replacePart(link, defaultAnnotation, annotation);
   if (debug >= LOG_INFO)
     FUNCTION_OUTPUT << link << endl;
   return link;
 }
-
-static const string linkToJPMFile =
-    R"(<a unhidden title="QQ" href="PPdXXX.htm#YY"><sub hidden>WW</sub>ZZ</a>)";
 
 /**
  * generate real correct link to jpm file
@@ -187,31 +200,28 @@ static const string linkToJPMFile =
  */
 string fixLinkFromJPMTemplate(const string &path, const string &filename,
                               const string &key, const string &citation,
-                              const string &referPara,
-                              const string &annotation) {
-  auto link = linkToJPMFile;
-  replacePart(link, "PP", path);
-  replacePart(link, "XXX", filename);
+                              const string &annotation,
+                              const string &referPara) {
+  string link = linkToJPMFile;
+  replacePart(link, defaultPath, path);
+  replacePart(link, defaultJpmFilename, filename);
   if (referPara.empty()) {
-    replacePart(link, R"(#YY)", emptyString);
+    replacePart(link, defaultWholeReferPara, emptyString);
   } else
-    replacePart(link, "YY", referPara);
+    replacePart(link, defaultReferPara, referPara);
   // in case use top/bottom as reference name
   if (key.empty()) {
-    replacePart(link, R"(<sub hidden>WW</sub>)", emptyString);
-    replacePart(link, R"( title="QQ")", emptyString);
+    replacePart(link, defaultWholeCitation, emptyString);
+    replacePart(link, defaultWholeKey, emptyString);
   } else {
-    replacePart(link, "QQ", key);
+    replacePart(link, defaultKey, key);
   }
-  replacePart(link, "WW", citation);
-  replacePart(link, "ZZ", annotation);
+  replacePart(link, defaultCitation, citation);
+  replacePart(link, defaultAnnotation, annotation);
   if (debug >= LOG_INFO)
     FUNCTION_OUTPUT << link << endl;
   return link;
 }
-
-static const string linkToAttachmentFile =
-    R"(<a unhidden href="PPb0XX_YY.htm">ZZ</a>)";
 
 /**
  * generate real correct link to attachment file
@@ -228,19 +238,21 @@ static const string linkToAttachmentFile =
  */
 string fixLinkFromAttachmentTemplate(const string &path, const string &filename,
                                      const string &attachNo,
-                                     const string &annotation) {
-  auto link = linkToAttachmentFile;
-  replacePart(link, "PP", path);
-  replacePart(link, "XX", filename);
-  replacePart(link, "YY", attachNo);
-  replacePart(link, "ZZ", annotation);
+                                     const string &annotation,
+                                     const string &referPara) {
+  string link = linkToAttachmentFile;
+  replacePart(link, defaultPath, path);
+  replacePart(link, defaultMainFilename, filename);
+  replacePart(link, defaultAttachmentNumber, attachNo);
+  if (referPara.empty()) {
+    replacePart(link, defaultWholeReferPara, emptyString);
+  } else
+    replacePart(link, defaultReferPara, referPara);
+  replacePart(link, defaultAnnotation, annotation);
   if (debug >= LOG_INFO)
     FUNCTION_OUTPUT << link << endl;
   return link;
 }
-
-static const string linkToImageFile =
-    R"(<a unhidden title="IMAGE" href="XX#YY">（图示：ZZ）</a>)";
 
 /**
  * Note: do not fix path now
@@ -249,7 +261,7 @@ string fixLinkFromImageTemplate(const string &fullReferFilenameWithPathExt,
                                 const string &picFilename,
                                 const string &fullAnnotation,
                                 const string &displayProperty) {
-  auto link = linkToImageFile;
+  string link = linkToImageFile;
   if (displayProperty != unhiddenDisplayProperty) {
     if (displayProperty == hiddenDisplayProperty)
       replacePart(link, unhiddenDisplayProperty, hiddenDisplayProperty);
@@ -257,9 +269,9 @@ string fixLinkFromImageTemplate(const string &fullReferFilenameWithPathExt,
       // direct
       replacePart(link, unhiddenDisplayProperty + displaySpace, emptyString);
   }
-  replacePart(link, "XX", fullReferFilenameWithPathExt);
-  replacePart(link, "YY", picFilename);
-  replacePart(link, "（图示：ZZ）", fullAnnotation);
+  replacePart(link, defaultMainFilename, fullReferFilenameWithPathExt);
+  replacePart(link, defaultReferPara, picFilename);
+  replacePart(link, defaultImageAnnotation, fullAnnotation);
   return link;
 }
 

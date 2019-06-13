@@ -20,10 +20,10 @@ void Searcher::execute() {
         m_containerPtr->addLinkToLinkStringSet(
             num,
             fixLinkFromMainTemplate(
-                "",
+                emptyString,
                 getChapterNameByTargetKind(MAIN_TYPE_HTML_TARGET, num.first),
-                LINK_DISPLAY_TYPE::DIRECT, m_key, expectedSection, line,
-                expectedSection),
+                LINK_DISPLAY_TYPE::DIRECT, m_key, expectedSection,
+                expectedSection, line),
             make_pair(ln.getParaNumber(), ln.getlineNumber()));
         break;
       case FILE_TYPE::ORIGINAL:
@@ -33,7 +33,7 @@ void Searcher::execute() {
                 originalDirForLinkFromMain,
                 getChapterNameByTargetKind(ORIGINAL_TYPE_HTML_TARGET,
                                            num.first),
-                m_key, expectedSection, line, expectedSection),
+                m_key, expectedSection, expectedSection, line),
             make_pair(ln.getParaNumber(), ln.getlineNumber()));
         break;
       case FILE_TYPE::JPM:
@@ -42,7 +42,7 @@ void Searcher::execute() {
             fixLinkFromJPMTemplate(
                 jpmDirForLinkFromMain,
                 getChapterNameByTargetKind(JPM_TYPE_HTML_TARGET, num.first),
-                m_key, expectedSection, line, expectedSection),
+                m_key, expectedSection, expectedSection, line),
             make_pair(ln.getParaNumber(), ln.getlineNumber()));
         break;
       case FILE_TYPE::ATTACHMENT:

@@ -1,5 +1,5 @@
-*************************line 617: HLM test started *************************
-*************************line 278: testLinkOperation starts *************************
+*************************line 625: HLM test started *************************
+*************************line 277: testLinkOperation starts *************************
 testLinkOperation              <111>22>
 testLinkFromAttachment              original link: 
 testLinkFromAttachment              <a title="IMAGE" href="#nwbt.jpg">（图示：女娲补天）</a>
@@ -13,7 +13,7 @@ testLinkFromAttachment              need Update: 0
 testLinkFromAttachment              after fixed: 
 testLinkFromAttachment              <a title="IMAGE" href="#nwbt.jpg">（图示：女娲补天）</a>
 testLinkFromAttachment              display as:（图示：女娲补天）||
-*************************line 287: direct image link finished *************************
+*************************line 286: direct image link finished *************************
 testLinkFromAttachment              original link: 
 testLinkFromAttachment              <a hidden title="IMAGE" href="a019.htm#tcf.jpg">（图示：探春房）</a>
 4Link::readAnnotation              annotation: （图示：探春房）
@@ -26,7 +26,7 @@ testLinkFromAttachment              need Update: 0
 testLinkFromAttachment              after fixed: 
 testLinkFromAttachment              <a hidden title="IMAGE" href="a019.htm#tcf.jpg">（图示：探春房）</a>
 testLinkFromAttachment              display as:||
-*************************line 293: hidden image link finished *************************
+*************************line 292: hidden image link finished *************************
 testLinkOperation              original link: 
 testLinkOperation              <a unhidden href="a080.htm#top">原是（<cite unhidden>薛姨妈1</cite>）老奶奶（<cite unhidden>薛姨妈1</cite>）使唤的</a>
 4Link::readType              type seen from prefix: a080
@@ -45,7 +45,7 @@ testLinkOperation              need Update: 1
 testLinkOperation              after fixed: 
 testLinkOperation              <a unhidden href="a057.htm#top">原是（<cite unhidden>薛姨妈1</cite>）老奶奶（<cite unhidden>薛姨妈1</cite>）使唤的</a>
 testLinkOperation              display as:原是（薛姨妈1）老奶奶（薛姨妈1）使唤的||
-*************************line 315: fixReferFile finished *************************
+*************************line 314: fixReferFile finished *************************
 fixLinkFromJPMTemplate              <a unhidden title="床帐" href="JPM\d017.htm#P1L1"><sub hidden></sub>雪梅相妒，无复桂月争辉</a>
 testLinkOperation              <a unhidden title="床帐" href="JPM\d017.htm#P1L1"><sub hidden></sub>雪梅相妒，无复桂月争辉</a>
 4Link::readType              type seen from prefix: JPM\d017
@@ -124,7 +124,6 @@ testLinkFromMain              display as:||
 fixLinkFromSameFileTemplate              <a unhidden title="菱角菱花" href="#94"><sub hidden>第80章1.1节:</sub>原是老奶奶（薛姨妈）使唤的</a>
 testLinkFromMain              original link: 
 testLinkFromMain              <a unhidden title="菱角菱花" href="#94"><sub hidden>第80章1.1节:</sub>原是老奶奶（薛姨妈）使唤的</a>
-4Link::readType              no .htm file extension found for <a unhidden title="菱角菱花" href="#94"><sub hidden>第80章1.1节:</sub>原是老奶奶（薛姨妈）使唤的</a>
 4Link::readAnnotation              annotation: 原是老奶奶（薛姨妈）使唤的
 12LinkFromMain::readReferFileName              chapterNumber: 80, attachmentNumber: 0
 readDisplayType               unhidden title="菱角菱花" 
@@ -133,13 +132,13 @@ readDisplayType               unhidden title="菱角菱花"
 15CoupledBodyText::setInputOutputFiles              input file is: bodyTexts/output/Main80.txt
 15CoupledBodyText::setInputOutputFiles              output file is: bodyTexts/afterFix/Main80.txt
 10LineNumber::loadFirstFromContainedLine              m_fullString: 
-10LineNumber::loadFirstFromContainedLine              <a unhidden id="P1L1">1.1</a>
-10LineNumber::loadFirstFromContainedLine              P1L1
-12LinkFromMain::readKey              line number found: P1L1
+10LineNumber::loadFirstFromContainedLine              <a unhidden id="P1L4">1.4</a>
+10LineNumber::loadFirstFromContainedLine              P1L4
+12LinkFromMain::readKey              line number found: P1L4
 12LinkFromMain::readKey              key: 菱角菱花
 testLinkFromMain              need Update: 1
 testLinkFromMain              after fixed: 
-testLinkFromMain              <a unhidden title="菱角菱花" href="#P1L1"><sub hidden>第80回1.1节:</sub>原是老奶奶（薛姨妈）使唤的</a>
+testLinkFromMain              <a unhidden title="菱角菱花" href="#P1L4"><sub hidden>第80回1.4节:</sub>原是老奶奶（薛姨妈）使唤的</a>
 testLinkFromMain              display as:原是老奶奶（薛姨妈）使唤的||
 *************************line 357: fixLinkFromSameFileTemplate finished *************************
 fixLinkFromMainTemplate              <a unhidden title="菱角菱花" href="a080.htm#94"><sub hidden>第80章1.1节:</sub>原是老奶奶（薛姨妈）使唤的</a>
@@ -154,13 +153,13 @@ readDisplayType               unhidden title="菱角菱花"
 15CoupledBodyText::setInputOutputFiles              input file is: bodyTexts/output/Main80.txt
 15CoupledBodyText::setInputOutputFiles              output file is: bodyTexts/afterFix/Main80.txt
 10LineNumber::loadFirstFromContainedLine              m_fullString: 
-10LineNumber::loadFirstFromContainedLine              <a unhidden id="P1L1">1.1</a>
-10LineNumber::loadFirstFromContainedLine              P1L1
-12LinkFromMain::readKey              line number found: P1L1
+10LineNumber::loadFirstFromContainedLine              <a unhidden id="P1L4">1.4</a>
+10LineNumber::loadFirstFromContainedLine              P1L4
+12LinkFromMain::readKey              line number found: P1L4
 12LinkFromMain::readKey              key: 菱角菱花
 testLink              need Update: 1
 testLink              after fixed: 
-testLink              <a unhidden title="菱角菱花" href="a080.htm#P1L1"><sub hidden>第80回1.1节:</sub>原是老奶奶（薛姨妈）使唤的</a>
+testLink              <a unhidden title="菱角菱花" href="a080.htm#P1L4"><sub hidden>第80回1.4节:</sub>原是老奶奶（薛姨妈）使唤的</a>
 testLink              display as:原是老奶奶（薛姨妈）使唤的||
 *************************line 365: fixLinkFromMainTemplate finished *************************
 fixLinkFromMainTemplate              <a unhidden title="菱角菱花" href="a080.htm#94"><sub hidden>第80章1.1节:</sub>原是老奶奶（薛姨妈）使唤的</a>
@@ -175,18 +174,18 @@ readDisplayType               unhidden title="菱角菱花"
 15CoupledBodyText::setInputOutputFiles              input file is: bodyTexts/output/Main80.txt
 15CoupledBodyText::setInputOutputFiles              output file is: bodyTexts/afterFix/Main80.txt
 10LineNumber::loadFirstFromContainedLine              m_fullString: 
-10LineNumber::loadFirstFromContainedLine              <a unhidden id="P1L1">1.1</a>
-10LineNumber::loadFirstFromContainedLine              P1L1
-12LinkFromMain::readKey              line number found: P1L1
+10LineNumber::loadFirstFromContainedLine              <a unhidden id="P1L4">1.4</a>
+10LineNumber::loadFirstFromContainedLine              P1L4
+12LinkFromMain::readKey              line number found: P1L4
 12LinkFromMain::readKey              key: 菱角菱花
 12LinkFromMain::generateLinkToOrigin              create link to original main html thru key: 菱角菱花
-fixLinkFromOriginalTemplate              <a unhidden title="菱角菱花" href="original\c080.htm#P1L1"><sub hidden></sub>原文</a>
+fixLinkFromOriginalTemplate              <a unhidden title="菱角菱花" href="original\c080.htm#P1L4"><sub hidden></sub>原文</a>
 4Link::readType              type seen from prefix: original\c080
 4Link::readAnnotation              annotation: 原文
 12LinkFromMain::readReferFileName              chapterNumber: 80, attachmentNumber: 0
 readDisplayType               unhidden title="菱角菱花" 
 12LinkFromMain::readDisplayType              display Type: unhidden
-12LinkFromMain::readReferPara              referPara: P1L1
+12LinkFromMain::readReferPara              referPara: P1L4
 15CoupledBodyText::setInputOutputFiles              input file is: bodyTexts/output/Org80.txt
 15CoupledBodyText::setInputOutputFiles              output file is: bodyTexts/afterFix/Org80.txt
 10LineNumber::loadFirstFromContainedLine              m_fullString: 
@@ -196,9 +195,9 @@ readDisplayType               unhidden title="菱角菱花"
 12LinkFromMain::readKey              key: 菱角菱花
 testLinkFromMain              need Update: 1
 testLinkFromMain              after fixed: 
-testLinkFromMain              <a unhidden title="菱角菱花" href="a080.htm#P1L1"><sub hidden>第80回1.1节:</sub>原是老奶奶（薛姨妈）使唤的</a>（<a unhidden title="菱角菱花" href="original\c080.htm#P1L3"><sub hidden>第80回1.3节:</sub>原文</a>）
+testLinkFromMain              <a unhidden title="菱角菱花" href="a080.htm#P1L4"><sub hidden>第80回1.4节:</sub>原是老奶奶（薛姨妈）使唤的</a>（<a unhidden title="菱角菱花" href="original\c080.htm#P1L3"><sub hidden>第80回1.3节:</sub>原文</a>）
 testLinkFromMain              display as:原是老奶奶（薛姨妈）使唤的（原文）||
-*************************line 372: generate original link afterwards finished *************************
+*************************line 373: generate original link afterwards finished *************************
 fixLinkFromOriginalTemplate              <a unhidden title="happy" href="original\c018.htm#90101"><sub hidden>第80章1.1节:</sub>原文</a>
 testLinkFromMain              original link: 
 testLinkFromMain              <a unhidden title="happy" href="original\c018.htm#90101"><sub hidden>第80章1.1节:</sub>原文</a>
@@ -215,7 +214,7 @@ testLinkFromMain              need Update: 1
 testLinkFromMain              after fixed: 
 testLinkFromMain              <a unhidden title="KeyNotFoundhappy" href="original\c018.htm#changeKey"><sub hidden>0.0</sub>原文</a>
 testLinkFromMain              display as:原文||
-*************************line 379: fixLinkFromOriginalTemplate finished *************************
+*************************line 380: fixLinkFromOriginalTemplate finished *************************
 fixLinkFromAttachmentTemplate              <a unhidden href="attachment\b018_7.htm">happy</a>
 testLinkFromMain              original link: 
 testLinkFromMain              <a unhidden href="attachment\b018_7.htm">happy</a>
@@ -228,8 +227,8 @@ testLinkFromMain              need Update: 0
 testLinkFromMain              after fixed: 
 testLinkFromMain              <a unhidden href="attachment\b018_7.htm">happy</a>
 testLinkFromMain              display as:happy||
-*************************line 385: fixLinkFromOriginalTemplate finished *************************
-*************************line 387: testLinkFromMain finished *************************
+*************************line 386: fixLinkFromOriginalTemplate finished *************************
+*************************line 388: testLinkFromMain finished *************************
 fixLinkFromAttachmentTemplate              <a unhidden href="b018_7.htm">happy</a>
 testLinkOperation              original link: 
 testLinkOperation              <a unhidden href="b018_7.htm">happy</a>
@@ -243,7 +242,7 @@ testLinkOperation              need Update: 1
 testLinkOperation              after fixed: 
 testLinkOperation              <a unhidden href="b055_3.htm">happy</a>
 testLinkOperation              display as:happy||
-*************************line 403: fixReferFile finished *************************
+*************************line 405: fixReferFile finished *************************
 testLinkFromAttachment              original link: 
 testLinkFromAttachment              <a unhidden href="..\aindex.htm">回目录</a>
 4Link::readType              type seen from prefix: ..\aindex
@@ -257,11 +256,10 @@ testLinkFromAttachment              need Update: 0
 testLinkFromAttachment              after fixed: 
 testLinkFromAttachment              <a unhidden href="..\aindex.htm">回目录</a>
 testLinkFromAttachment              display as:回目录||
-*************************line 408: 回目录 finished *************************
+*************************line 410: 回目录 finished *************************
 fixLinkFromSameFileTemplate              <a unhidden title="西北" href="#94"><sub hidden>第80章1.1节:</sub>原是老奶奶（薛姨妈）使唤的</a>
 testLinkFromAttachment              original link: 
 testLinkFromAttachment              <a unhidden title="西北" href="#94"><sub hidden>第80章1.1节:</sub>原是老奶奶（薛姨妈）使唤的</a>
-4Link::readType              no .htm file extension found for <a unhidden title="西北" href="#94"><sub hidden>第80章1.1节:</sub>原是老奶奶（薛姨妈）使唤的</a>
 4Link::readAnnotation              annotation: 原是老奶奶（薛姨妈）使唤的
 18LinkFromAttachment::readReferFileName              chapterNumber: 3, attachmentNumber: 9
 readDisplayType               unhidden title="西北" 
@@ -279,7 +277,7 @@ testLinkFromAttachment              need Update: 1
 testLinkFromAttachment              after fixed: 
 testLinkFromAttachment              <a unhidden title="西北" href="#P1L2"><sub hidden>第3_9篇1.2节:</sub>原是老奶奶（薛姨妈）使唤的</a>
 testLinkFromAttachment              display as:原是老奶奶（薛姨妈）使唤的||
-*************************line 416: fixLinkFromSameFileTemplate finished *************************
+*************************line 418: fixLinkFromSameFileTemplate finished *************************
 fixLinkFromMainTemplate              <a unhidden title="菱角菱花" href="..\a080.htm#94"><sub hidden>第80章1.1节:</sub>原是老奶奶（薛姨妈）使唤的</a>
 testLinkFromAttachment              original link: 
 testLinkFromAttachment              <a unhidden title="菱角菱花" href="..\a080.htm#94"><sub hidden>第80章1.1节:</sub>原是老奶奶（薛姨妈）使唤的</a>
@@ -292,19 +290,19 @@ readDisplayType               unhidden title="菱角菱花"
 15CoupledBodyText::setInputOutputFiles              input file is: bodyTexts/output/Main80.txt
 15CoupledBodyText::setInputOutputFiles              output file is: bodyTexts/afterFix/Main80.txt
 10LineNumber::loadFirstFromContainedLine              m_fullString: 
-10LineNumber::loadFirstFromContainedLine              <a unhidden id="P1L1">1.1</a>
-10LineNumber::loadFirstFromContainedLine              P1L1
-18LinkFromAttachment::readKey              line number found: P1L1
+10LineNumber::loadFirstFromContainedLine              <a unhidden id="P1L4">1.4</a>
+10LineNumber::loadFirstFromContainedLine              P1L4
+18LinkFromAttachment::readKey              line number found: P1L4
 18LinkFromAttachment::readKey              key: 菱角菱花
 testLinkFromAttachment              原是老奶奶（薛姨妈）使唤的
 18LinkFromAttachment::generateLinkToOrigin              create link to original main html thru key: 菱角菱花
-fixLinkFromOriginalTemplate              <a unhidden title="菱角菱花" href="..\original\c080.htm#P1L1"><sub hidden></sub>原文</a>
+fixLinkFromOriginalTemplate              <a unhidden title="菱角菱花" href="..\original\c080.htm#P1L4"><sub hidden></sub>原文</a>
 4Link::readType              type seen from prefix: ..\original\c080
 4Link::readAnnotation              annotation: 原文
 18LinkFromAttachment::readReferFileName              chapterNumber: 80, attachmentNumber: 0
 readDisplayType               unhidden title="菱角菱花" 
 18LinkFromAttachment::readDisplayType              display Type: unhidden
-18LinkFromAttachment::readReferPara              referPara: P1L1
+18LinkFromAttachment::readReferPara              referPara: P1L4
 15CoupledBodyText::setInputOutputFiles              input file is: bodyTexts/output/Org80.txt
 15CoupledBodyText::setInputOutputFiles              output file is: bodyTexts/afterFix/Org80.txt
 10LineNumber::loadFirstFromContainedLine              m_fullString: 
@@ -314,9 +312,9 @@ readDisplayType               unhidden title="菱角菱花"
 18LinkFromAttachment::readKey              key: 菱角菱花
 testLinkFromAttachment              need Update: 1
 testLinkFromAttachment              after fixed: 
-testLinkFromAttachment              <a unhidden title="菱角菱花" href="..\a080.htm#P1L1"><sub hidden>第80回1.1节:</sub>原是老奶奶（薛姨妈）使唤的</a>（<a unhidden title="菱角菱花" href="..\original\c080.htm#P1L3"><sub hidden>第80回1.3节:</sub>原文</a>）
+testLinkFromAttachment              <a unhidden title="菱角菱花" href="..\a080.htm#P1L4"><sub hidden>第80回1.4节:</sub>原是老奶奶（薛姨妈）使唤的</a>（<a unhidden title="菱角菱花" href="..\original\c080.htm#P1L3"><sub hidden>第80回1.3节:</sub>原文</a>）
 testLinkFromAttachment              display as:原是老奶奶（薛姨妈）使唤的（原文）||
-*************************line 424: fixLinkFromMainTemplate finished *************************
+*************************line 426: fixLinkFromMainTemplate finished *************************
 fixLinkFromOriginalTemplate              <a unhidden title="菱角菱花" href="..\original\c080.htm#94"><sub hidden>第80章1.1节:</sub>原文</a>
 testLinkFromAttachment              original link: 
 testLinkFromAttachment              <a unhidden title="菱角菱花" href="..\original\c080.htm#94"><sub hidden>第80章1.1节:</sub>原文</a>
@@ -338,7 +336,7 @@ testLinkFromAttachment              need Update: 1
 testLinkFromAttachment              after fixed: 
 testLinkFromAttachment              <a unhidden title="菱角菱花" href="..\original\c080.htm#P1L3"><sub hidden>第80回1.3节:</sub>原文</a>
 testLinkFromAttachment              display as:原文||
-*************************line 431: fixLinkFromOriginalTemplate finished *************************
+*************************line 433: fixLinkFromOriginalTemplate finished *************************
 fixLinkFromAttachmentTemplate              <a unhidden href="b018_7.htm">happy</a>
 testLinkFromAttachment              original link: 
 testLinkFromAttachment              <a unhidden href="b018_7.htm">happy</a>
@@ -352,6 +350,6 @@ testLinkFromAttachment              need Update: 0
 testLinkFromAttachment              after fixed: 
 testLinkFromAttachment              <a unhidden href="b018_7.htm">happy</a>
 testLinkFromAttachment              display as:happy||
-*************************line 435: fixLinkFromAttachmentTemplate finished *************************
-*************************line 437: testLinkFromAttachment finished *************************
+*************************line 438: fixLinkFromAttachmentTemplate finished *************************
+*************************line 440: testLinkFromAttachment finished *************************
 

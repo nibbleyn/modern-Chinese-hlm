@@ -313,8 +313,9 @@ void testLinkOperation() {
   FUNCTION_OUTPUT << "display as:" << lfm.getDisplayString() << "||" << endl;
   SEPERATE("fixReferFile", " finished ");
 
-  linkString = fixLinkFromJPMTemplate(jpmDirForLinkFromMain, "017", R"(床帐)",
-                                      "", "P1L1", R"(雪梅相妒，无复桂月争辉)");
+  linkString =
+      fixLinkFromJPMTemplate(jpmDirForLinkFromMain, "017", R"(床帐)",
+                             emptyString, R"(雪梅相妒，无复桂月争辉)", "P1L1");
   FUNCTION_OUTPUT << linkString << endl;
   LinkFromMain link1("05", linkString);
   testLink(link1, linkString, false);
@@ -356,7 +357,7 @@ void testLinkOperation() {
   SEPERATE("fixLinkFromSameFileTemplate", " finished ");
 
   linkString = fixLinkFromMainTemplate(
-      "", "80", LINK_DISPLAY_TYPE::UNHIDDEN, "菱角菱花",
+      emptyString, "80", LINK_DISPLAY_TYPE::UNHIDDEN, "菱角菱花",
       "第80章1.1节:", "原是老奶奶（薛姨妈）使唤的", "94");
   LinkFromMain link("07", linkString);
   testLink(link, linkString, false);
@@ -365,15 +366,16 @@ void testLinkOperation() {
 
   testLinkFromMain("03",
                    fixLinkFromMainTemplate(
-                       "", "80", LINK_DISPLAY_TYPE::UNHIDDEN, "菱角菱花",
-                       "第80章1.1节:", "原是老奶奶（薛姨妈）使唤的", "94"),
+                       emptyString, "80", LINK_DISPLAY_TYPE::UNHIDDEN,
+                       "菱角菱花", "第80章1.1节:", "原是老奶奶（薛姨妈）使唤的",
+                       "94"),
                    true);
   SEPERATE("generate original link afterwards", " finished ");
 
   testLinkFromMain("07",
-                   fixLinkFromOriginalTemplate(originalDirForLinkFromMain, "18",
-                                               "happy",
-                                               "第80章1.1节:", "90101"),
+                   fixLinkFromOriginalTemplate(
+                       originalDirForLinkFromMain, "18", "happy",
+                       "第80章1.1节:", annotationToOriginal, "90101"),
                    false);
   SEPERATE("fixLinkFromOriginalTemplate", " finished ");
 
@@ -385,7 +387,8 @@ void testLinkOperation() {
 
   SEPERATE("testLinkFromMain", " finished ");
 
-  string linkString2 = fixLinkFromAttachmentTemplate("", "18", "7", "happy");
+  string linkString2 =
+      fixLinkFromAttachmentTemplate(emptyString, "18", "7", "happy");
   FUNCTION_OUTPUT << "original link: " << endl;
   FUNCTION_OUTPUT << linkString2 << endl;
   LinkFromAttachment lfm1("03_9", linkString2);
@@ -422,15 +425,16 @@ void testLinkOperation() {
       true);
   SEPERATE("fixLinkFromMainTemplate", " finished ");
 
-  testLinkFromAttachment("03_9",
-                         fixLinkFromOriginalTemplate(R"(..\original\)", "80",
-                                                     "菱角菱花",
-                                                     "第80章1.1节:", "94"),
-                         false);
+  testLinkFromAttachment(
+      "03_9",
+      fixLinkFromOriginalTemplate(R"(..\original\)", "80", "菱角菱花",
+                                  "第80章1.1节:", annotationToOriginal, "94"),
+      false);
   SEPERATE("fixLinkFromOriginalTemplate", " finished ");
 
   testLinkFromAttachment(
-      "03_9", fixLinkFromAttachmentTemplate("", "18", "7", "happy"), false);
+      "03_9", fixLinkFromAttachmentTemplate(emptyString, "18", "7", "happy"),
+      false);
   SEPERATE("fixLinkFromAttachmentTemplate", " finished ");
   //clang-format on
   SEPERATE("testLinkFromAttachment", " finished ");
@@ -556,14 +560,15 @@ void testNumberingStatistics() {
 void testListContainer() {
   ListContainer container("1_gen");
   auto link = fixLinkFromMainTemplate(
-      "", "80", LINK_DISPLAY_TYPE::UNHIDDEN, "菱角菱花",
+      emptyString, "80", LINK_DISPLAY_TYPE::UNHIDDEN, "菱角菱花",
       "第80章1.1节:", "原是老奶奶（薛姨妈）使唤的", "94");
 
   // to test link to original file
-  link = fixLinkFromOriginalTemplate(originalDirForLinkFromMain, "80",
-                                     "菱角菱花", "第80章1.1节:", "94");
+  link =
+      fixLinkFromOriginalTemplate(originalDirForLinkFromMain, "80", "菱角菱花",
+                                  "第80章1.1节:", annotationToOriginal, "94");
 
-  LinkFromMain lfm("", link);
+  LinkFromMain lfm(emptyString, link);
   // second step of construction
   lfm.readReferFileName(link);
   lfm.fixFromString(link);

@@ -42,10 +42,10 @@ void generateContentTableForMainHtmls() {
     AttachmentNumber num(TurnToInt(file), 0);
     outputContainer.addLinkToLinkStringSet(
         num,
-        fixLinkFromMainTemplate("", file, LINK_DISPLAY_TYPE::UNHIDDEN, "", "",
+        fixLinkFromMainTemplate(emptyString, file, LINK_DISPLAY_TYPE::UNHIDDEN,
+                                emptyString, emptyString,
                                 brTab + container.getOriginalTitle() + brTab +
-                                    container.getTranslatedTitle(),
-                                ""));
+                                    container.getTranslatedTitle()));
   }
   outputContainer.outputToBodyTextFromLinkList();
   outputContainer.assembleBackToHTM(MAIN_TITLE, MAIN_DISPLAY_TITLE);
@@ -68,8 +68,9 @@ void generateContentTableForOriginalHtmls() {
     container.fetchOriginalAndTranslatedTitles();
     AttachmentNumber num(TurnToInt(file), 0);
     outputContainer.addLinkToLinkStringSet(
-        num, fixLinkFromOriginalTemplate(originalDirForLinkFromMain, file, "",
-                                         "", "", container.getOriginalTitle()));
+        num, fixLinkFromOriginalTemplate(originalDirForLinkFromMain, file,
+                                         emptyString, emptyString,
+                                         container.getOriginalTitle()));
   }
   outputContainer.outputToBodyTextFromLinkList();
   outputContainer.assembleBackToHTM(ORG_TITLE, ORG_DISPLAY_TITLE);
@@ -93,8 +94,8 @@ void generateContentTableForJPMHtmls() {
     container.fetchOriginalAndTranslatedTitles();
     AttachmentNumber num(TurnToInt(file), 0);
     outputContainer.addLinkToLinkStringSet(
-        num, fixLinkFromJPMTemplate(jpmDirForLinkFromMain, file, "", "", "",
-                                    container.getOriginalTitle()));
+        num, fixLinkFromJPMTemplate(jpmDirForLinkFromMain, file, emptyString,
+                                    emptyString, container.getOriginalTitle()));
   }
   outputContainer.outputToBodyTextFromLinkList();
   outputContainer.assembleBackToHTM(JPM_TITLE, JPM_DISPLAY_TITLE);

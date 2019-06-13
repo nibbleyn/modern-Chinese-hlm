@@ -28,30 +28,31 @@ static const string TARGET_FILE_EXT = R"(.htm)";
 // operations over link string template initialization
 string fixLinkFromSameFileTemplate(LINK_DISPLAY_TYPE type, const string &key,
                                    const string &citation,
-                                   const string &referPara,
-                                   const string &annotation);
+                                   const string &annotation,
+                                   const string &referPara);
 
 string fixLinkFromMainTemplate(const string &path, const string &filename,
                                LINK_DISPLAY_TYPE type, const string &key,
-                               const string &citation, const string &referPara,
-                               const string &annotation);
+                               const string &citation, const string &annotation,
+                               const string &referPara = emptyString);
 string fixLinkFromReverseLinkTemplate(const string &filename,
                                       LINK_DISPLAY_TYPE type,
                                       const string &citation,
-                                      const string &referPara,
-                                      const string &annotation);
+                                      const string &annotation,
+                                      const string &referPara);
 string
 fixLinkFromOriginalTemplate(const string &path, const string &filename,
                             const string &key, const string &citation,
-                            const string &referPara,
-                            const string &annotation = annotationToOriginal);
+                            const string &annotation = annotationToOriginal,
+                            const string &referPara = emptyString);
 string fixLinkFromJPMTemplate(const string &path, const string &filename,
                               const string &key, const string &citation,
-                              const string &referPara,
-                              const string &annotation = annotationToOriginal);
+                              const string &annotation = annotationToOriginal,
+                              const string &referPara = emptyString);
 string fixLinkFromAttachmentTemplate(const string &path, const string &filename,
                                      const string &attachNo,
-                                     const string &annotation);
+                                     const string &annotation,
+                                     const string &referPara = emptyString);
 
 string fixLinkFromImageTemplate(
     const string &fullReferFilenameWithPathExt, const string &picFilename,
