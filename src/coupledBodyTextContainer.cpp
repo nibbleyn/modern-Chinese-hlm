@@ -265,6 +265,18 @@ void CoupledBodyTextContainer::dissembleFromHTM() {
     METHOD_OUTPUT << "dissemble finished for " << inputHtmlFile << endl;
 }
 
+string replaceReferPara(const string &linkString, const string &referFile,
+                        const string &newReferpara) {
+  auto orgString = linkString;
+  auto oldReferPara = getIncludedStringBetweenTags(
+      linkString, referFile + referParaMiddleChar, referParaEndChar);
+  if (oldReferPara != newReferpara) {
+    orgString.replace(orgString.find(oldReferPara), oldReferPara.length(),
+                      newReferpara);
+  }
+  return orgString;
+}
+
 /**
  * check lineNumber from refAttachmentList about a link to attachment
  * and put that lineNumber in that attachment file header
@@ -310,18 +322,11 @@ void CoupledBodyTextContainer::fixReturnLinkForAttachmentFile() {
           line = line.substr(linkBegin + link.length());
       }
       if (not link.empty()) {
-        Link lfm(referFile, link);
-        // special hack to make sure using a0... as return file name
-        // must return to main html
-        lfm.setTypeThruFileNamePrefix(MAIN_TYPE_HTML_TARGET);
-        lfm.fixReferFile(TurnToInt(m_file));
         AttachmentNumber num(TurnToInt(m_file), m_attachmentNumber);
-        lfm.fixReferPara(refAttachmentTable.getFromLineOfAttachment(num));
-        // replace old value
-        if (lfm.needUpdate()) {
-          auto orglinkBegin = orgLine.find(link);
-          orgLine.replace(orglinkBegin, link.length(), link);
-        }
+        orgLine.replace(
+            orgLine.find(link), link.length(),
+            replaceReferPara(link, m_file + HTML_SUFFIX,
+                             refAttachmentTable.getFromLineOfAttachment(num)));
       }
       outfile << orgLine << endl;
     }
