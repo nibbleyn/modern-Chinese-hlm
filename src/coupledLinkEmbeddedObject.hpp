@@ -8,11 +8,11 @@ static const string endOfPersonalCommentBeginTag = R"(">)";
 class PersonalComment : public Object {
 public:
   PersonalComment(const string &fromFile) : m_fromFile(fromFile) {}
-  string getWholeString();
-  string getDisplayString();
-  size_t displaySize();
+  string getWholeString() override;
+  string getDisplayString() override;
+  size_t displaySize() override;
   size_t loadFirstFromContainedLine(const string &containedLine,
-                                    size_t after = 0);
+                                    size_t after = 0) override;
 
 private:
   string m_displayText{emptyString};
@@ -22,11 +22,11 @@ private:
 class PoemTranslation : public Object {
 public:
   PoemTranslation(const string &fromFile) : m_fromFile(fromFile) {}
-  string getWholeString();
-  string getDisplayString();
-  size_t displaySize();
+  string getWholeString() override;
+  string getDisplayString() override;
+  size_t displaySize() override;
   size_t loadFirstFromContainedLine(const string &containedLine,
-                                    size_t after = 0);
+                                    size_t after = 0) override;
 
 private:
   string m_displayText{emptyString};

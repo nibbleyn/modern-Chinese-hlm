@@ -98,17 +98,18 @@ public:
 public:
   Object() = default;
   virtual ~Object(){};
+
   virtual string getWholeString() = 0;
   virtual string getDisplayString() = 0;
+  virtual size_t displaySize() = 0;
+  virtual size_t loadFirstFromContainedLine(const string &containedLine,
+                                            size_t after = 0) = 0;
   size_t length() {
     if (m_fullString.length() != getWholeString().length())
       METHOD_OUTPUT << " size not match: " << m_fullString.length() << " vs "
                     << getWholeString().length() << endl;
     return m_fullString.length();
   }
-  virtual size_t displaySize() = 0;
-  virtual size_t loadFirstFromContainedLine(const string &containedLine,
-                                            size_t after = 0) = 0;
 
 protected:
   string m_bodyText{emptyString};
@@ -118,19 +119,19 @@ protected:
 class Space : public Object {
 public:
   Space() = default;
-  string getWholeString() { return space; };
-  string getDisplayString() { return displaySpace; };
+  string getWholeString() override { return space; };
+  string getDisplayString() override { return displaySpace; };
   size_t loadFirstFromContainedLine(const string &containedLine,
-                                    size_t after = 0);
-  size_t displaySize() { return displaySpace.length(); };
+                                    size_t after = 0) override;
+  size_t displaySize() override { return displaySpace.length(); };
 };
 
 class Poem : public Object {
 public:
   Poem() = default;
-  string getWholeString();
-  string getDisplayString();
+  string getWholeString() override;
+  string getDisplayString() override;
   size_t loadFirstFromContainedLine(const string &containedLine,
-                                    size_t after = 0);
-  size_t displaySize();
+                                    size_t after = 0) override;
+  size_t displaySize() override;
 };

@@ -38,11 +38,11 @@ public:
 
   LineNumber(const LineNumber &) = default;
   LineNumber &operator=(const LineNumber &) = default;
-  string getWholeString();
-  string getDisplayString();
-  size_t displaySize();
+  string getWholeString() override;
+  string getDisplayString() override;
+  size_t displaySize() override;
   size_t loadFirstFromContainedLine(const string &containedLine,
-                                    size_t after = 0);
+                                    size_t after = 0) override;
   bool valid() { return (m_paraNumber != 0 and m_lineNumber != 0); }
   bool isParagraphHeader() {
     return (m_paraNumber != 0 and m_paraNumber < Limit and m_lineNumber == 0);

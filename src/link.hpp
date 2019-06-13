@@ -123,11 +123,11 @@ public:
   }
   void setTypeThruFileNamePrefix(const string &link);
 
-  string getWholeString();
-  string getDisplayString();
-  size_t displaySize();
+  string getWholeString() override;
+  string getDisplayString() override;
+  size_t displaySize() override;
   size_t loadFirstFromContainedLine(const string &containedLine,
-                                    size_t after = 0);
+                                    size_t after = 0) override;
 
 protected:
   LINK_DISPLAY_TYPE getDisplayType() { return m_displayType; }

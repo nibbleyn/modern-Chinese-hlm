@@ -169,11 +169,11 @@ private:
 class Comment : public Object {
 public:
   Comment(const string &fromFile) : m_fromFile(fromFile) {}
-  string getWholeString();
-  string getDisplayString();
-  size_t displaySize();
+  string getWholeString() override;
+  string getDisplayString() override;
+  size_t displaySize() override;
   size_t loadFirstFromContainedLine(const string &containedLine,
-                                    size_t after = 0);
+                                    size_t after = 0) override;
 
 private:
   string m_displayText{emptyString};
