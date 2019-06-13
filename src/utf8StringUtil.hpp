@@ -19,7 +19,7 @@ static const std::string ERROR_FILE_NOT_EXIST = R"(file doesn't exist: )";
 
 static const string leadingChar = R"(P)";
 static const string middleChar = R"(L)";
-static const string invalidLineNumber = R"(P0L0)";
+static constexpr const char *invalidLineNumber = R"(P0L0)";
 // top of the body Text file
 static const string topParagraphIndicator = R"(top)";
 // bottom of the body Text file
@@ -44,14 +44,14 @@ static const string imageGroupBeginChars = R"(<div)";
 static const string citationChapterNo = R"(第)";
 static const string numberingUnit = R"(段)";
 
-static const string defaultUnit = R"(回)";
-static const string attachmentUnit = R"(篇)";
-static const string searchUnit = R"(条)";
+static constexpr const char *defaultUnit = R"(回)";
+static constexpr const char *attachmentUnit = R"(篇)";
+static constexpr const char *searchUnit = R"(条)";
 
 // start and end of each LINE
 static const string brTab = "<br>";
 static const string displaySpace = R"( )";
-static const string emptyString = "";
+static constexpr const char *emptyString = "";
 static const string CR{0x0D};
 static const string LF{0x0A};
 static const string CRLF{0x0D, 0x0A};

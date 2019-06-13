@@ -12,21 +12,22 @@
 
 extern int debug;
 
-static const std::string HTML_SRC_MAIN = R"(utf8HTML/src/)";
-static const std::string HTML_SRC_ORIGINAL = R"(utf8HTML/src/original/)";
-static const std::string HTML_SRC_JPM = R"(utf8HTML/src/JPM/)";
+static constexpr const char *HTML_SRC_MAIN = R"(utf8HTML/src/)";
+static constexpr const char *HTML_SRC_ORIGINAL = R"(utf8HTML/src/original/)";
+static constexpr const char *HTML_SRC_JPM = R"(utf8HTML/src/JPM/)";
 
-static const std::string HTML_OUTPUT_MAIN = R"(utf8HTML/output/)";
-static const std::string HTML_OUTPUT_ATTACHMENT =
+static constexpr const char *HTML_OUTPUT_MAIN = R"(utf8HTML/output/)";
+static constexpr const char *HTML_OUTPUT_ATTACHMENT =
     R"(utf8HTML/output/attachment/)";
-static const std::string HTML_OUTPUT_ORIGINAL = R"(utf8HTML/output/original/)";
-static const std::string HTML_OUTPUT_JPM = R"(utf8HTML/output/JPM/)";
+static constexpr const char *HTML_OUTPUT_ORIGINAL =
+    R"(utf8HTML/output/original/)";
+static constexpr const char *HTML_OUTPUT_JPM = R"(utf8HTML/output/JPM/)";
 
-static const std::string BODY_TEXT_OUTPUT = R"(bodyTexts/output/)";
-static const std::string BODY_TEXT_FIX = R"(bodyTexts/afterFix/)";
+static constexpr const char *BODY_TEXT_OUTPUT = R"(bodyTexts/output/)";
+static constexpr const char *BODY_TEXT_FIX = R"(bodyTexts/afterFix/)";
 
 // last line of the html file
-static const std::string htmlFileFinalLine = R"(</html>)";
+static constexpr const char *htmlFileFinalLine = R"(</html>)";
 
 static const int MAIN_MIN_CHAPTER_NUMBER = 1;
 static const int MAIN_MAX_CHAPTER_NUMBER = 80;
@@ -40,18 +41,18 @@ static const std::string ORIGINAL_HTML_PREFIX = R"(c0)";
 static const std::string ATTACHMENT_HTML_PREFIX = R"(b0)";
 static const std::string JPM_HTML_PREFIX = R"(d)";
 
-static const std::string MAIN_BODYTEXT_PREFIX = R"(Main)";
-static const std::string ORIGINAL_BODYTEXT_PREFIX = R"(Org)";
-static const std::string ATTACHMENT_BODYTEXT_PREFIX = R"(Attach)";
-static const std::string JPM_BODYTEXT_PREFIX = R"(Jpm)";
+static constexpr const char *MAIN_BODYTEXT_PREFIX = R"(Main)";
+static constexpr const char *ORIGINAL_BODYTEXT_PREFIX = R"(Org)";
+static constexpr const char *ATTACHMENT_BODYTEXT_PREFIX = R"(Attach)";
+static constexpr const char *JPM_BODYTEXT_PREFIX = R"(Jpm)";
 
-static const std::string MAIN = R"(main)";
-static const std::string ORIGINAL = R"(original)";
-static const std::string ATTACHMENT = R"(attachment)";
-static const std::string JPM = R"(jpm)";
+static constexpr const char *MAIN = R"(main)";
+static constexpr const char *ORIGINAL = R"(original)";
+static constexpr const char *ATTACHMENT = R"(attachment)";
+static constexpr const char *JPM = R"(jpm)";
 
-static const std::string MAIN_SEPERATOR_COLOR = R"(F0BEC0)";
-static const std::string ORIGINAL_SEPERATOR_COLOR = R"(004040)";
+static constexpr const char *MAIN_SEPERATOR_COLOR = R"(F0BEC0)";
+static constexpr const char *ORIGINAL_SEPERATOR_COLOR = R"(004040)";
 
 static const std::string HTML_OUTPUT_LINES_OF_MAIN =
     R"(utf8HTML/output/LinesOfMain.txt)";

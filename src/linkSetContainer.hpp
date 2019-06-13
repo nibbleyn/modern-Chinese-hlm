@@ -94,8 +94,8 @@ private:
   string getInputFileName() const override { return LIST_CONTAINER_FILENAME; }
 };
 
-static const string TABLE_CONTAINER_FILENAME = R"(2)";
-static const string TABLE_CONTAINER_FILENAME_SMALLER_FONT = R"(3)";
+static constexpr const char *TABLE_CONTAINER_FILENAME = R"(2)";
+static constexpr const char *TABLE_CONTAINER_FILENAME_SMALLER_FONT = R"(3)";
 
 /**
  * used for features like updateIndexTable etc.

@@ -2,9 +2,9 @@
 #include "link.hpp"
 #include <fstream>
 
-static const string HTML_SRC_REF_ATTACHMENT_LIST =
+static constexpr const char *HTML_SRC_REF_ATTACHMENT_LIST =
     "utf8HTML/src/RefAttachments.txt";
-static const string HTML_OUTPUT_REF_ATTACHMENT_LIST =
+static constexpr const char *HTML_OUTPUT_REF_ATTACHMENT_LIST =
     "utf8HTML/output/RefAttachments.txt";
 static const string HTML_SRC_ATTACHMENT = R"(utf8HTML/src/attachment/)";
 static const string htmlTitleStart = R"(<title>)";
