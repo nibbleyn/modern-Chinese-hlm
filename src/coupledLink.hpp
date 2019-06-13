@@ -99,9 +99,9 @@ public:
 
   static FileSet keyMissingChapters;
   static void resetStatisticsAndLoadReferenceAttachmentList();
-  static void displayMainFilesOfMissingKey();
-
+  static void updateReferenceAttachmentListIntoFile();
   static void outPutStatisticsToFiles();
+  static void displayMainFilesOfMissingKey();
 
 public:
   LinkFromMain() = default;

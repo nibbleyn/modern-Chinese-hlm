@@ -73,7 +73,6 @@ void LinkFromMain::outPutStatisticsToFiles() {
   linkDetailFilePath = HTML_OUTPUT_LINKS_FROM_MAIN_LIST;
   keyDetailFilePath = HTML_OUTPUT_KEY_OF_LINKS_FROM_MAIN_LIST;
   CoupledLink::outPutStatisticsToFiles();
-  attachmentTable.saveAttachmentList();
 }
 
 void LinkFromMain::logLink() {

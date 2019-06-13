@@ -7,6 +7,10 @@ void LinkFromMain::resetStatisticsAndLoadReferenceAttachmentList() {
   attachmentTable.loadReferenceAttachmentList();
 }
 
+void LinkFromMain::updateReferenceAttachmentListIntoFile() {
+  attachmentTable.saveAttachmentList();
+}
+
 void LinkFromMain::displayMainFilesOfMissingKey() {
   if (keyMissingChapters.empty())
     return;

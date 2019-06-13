@@ -58,9 +58,10 @@ void Commander::runCommandOverFiles() {
 
   assembleHtmls();
 
-  outputLinkFixingStatistics();
+  updateAttachmentListIntoFile();
   updateAttachmentContentTableAndfixReturnLink();
   restoreDebugLevel();
+  outputLinkFixingStatistics();
   METHOD_OUTPUT << "Done processing. " << endl;
 }
 
@@ -177,6 +178,11 @@ void Commander::setupReferenceFileSet() {
   if (m_command == COMMAND::fixLinksFromJPMFile) {
     m_referenceToJPMfileSet =
         buildFileSet(m_minReferenceToJPM, m_maxReferenceToJPM, JPM);
+  }
+}
+void Commander::updateAttachmentListIntoFile() {
+  if (m_command == COMMAND::fixLinksFromMainFile) {
+    LinkFromMain::updateReferenceAttachmentListIntoFile();
   }
 }
 

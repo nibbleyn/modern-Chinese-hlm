@@ -11,10 +11,10 @@ void Searcher::execute() {
     CoupledBodyText::lineNumberSet lineSet = m_bodyText.getResultLineSet();
     for (auto const &line : lineSet) {
       LineNumber ln(line);
-      string expectedSection =
-          R"(第)" + TurnToString(num.first) + R"(章)" +
-          TurnToString(ln.getParaNumber()) + R"(.)" +
-          TurnToString(ln.getlineNumber()) + R"(节:)";
+      string expectedSection = citationChapterNo + TurnToString(num.first) +
+                               defaultUnit + TurnToString(ln.getParaNumber()) +
+                               citationChapterParaSeparator +
+                               TurnToString(ln.getlineNumber()) + citationPara;
       switch (m_fileType) {
       case FILE_TYPE::MAIN:
         m_containerPtr->addLinkToLinkStringSet(

@@ -65,7 +65,7 @@ string CoupledLink::asString() {
     part3 = HTML_SUFFIX;
   }
   // refer para, not generated for attachment type of link now
-  string part4{emptyString}, part5{referParaEndChar};
+  string part4, part5 = referParaEndChar;
   if (m_type != LINK_TYPE::ATTACHMENT or m_referPara != invalidLineNumber) {
     if (m_annotation != returnToContentTable)
       part4 = referParaMiddleChar + m_referPara;

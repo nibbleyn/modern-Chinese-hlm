@@ -58,6 +58,7 @@ protected:
   void setupReferenceFileSet();
   void setupNumberingStatistics();
   void setupLinkFixingStatistics();
+  void updateAttachmentListIntoFile();
   void outputLinkFixingStatistics();
 
   int m_storedDebugLevel{0};
