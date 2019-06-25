@@ -67,15 +67,15 @@ protected:
 };
 
 class NonAttachmentCommander : public Commander {
-  void dissembleHtmls();
-  void assembleHtmls();
-  void runCommandOverEachFile();
+  void dissembleHtmls() override;
+  void assembleHtmls() override;
+  void runCommandOverEachFile() override;
 };
 
 class AttachmentCommander : public Commander {
-  void dissembleHtmls();
-  void assembleHtmls();
-  void runCommandOverEachFile();
+  void dissembleHtmls() override;
+  void assembleHtmls() override;
+  void runCommandOverEachFile() override;
 };
 
 void numberJPMHtmls(bool forceUpdateLineNumber = true,

@@ -113,13 +113,13 @@ public:
 
 private:
   string getPathOfReferenceFile() const override;
-  void logLink();
-  void recordMissingKeyLink();
+  void logLink() override;
+  void recordMissingKeyLink() override;
 
   // utility to convert link type with filename
-  string getHtmlFileNamePrefix();
-  string getBodyTextFilePrefix();
-  bool isTargetToAttachmentFile();
+  string getHtmlFileNamePrefix() override;
+  string getBodyTextFilePrefix() override;
+  bool isTargetToAttachmentFile() override;
 };
 
 class LinkFromAttachment : public CoupledLink {
@@ -136,12 +136,12 @@ public:
 
 private:
   string getPathOfReferenceFile() const override;
-  void logLink();
-  void recordMissingKeyLink(){};
+  void logLink() override;
+  void recordMissingKeyLink() override{};
   // utility to convert link type with filename
-  string getHtmlFileNamePrefix();
-  string getBodyTextFilePrefix();
-  bool isTargetToAttachmentFile();
+  string getHtmlFileNamePrefix() override;
+  string getBodyTextFilePrefix() override;
+  bool isTargetToAttachmentFile() override;
 };
 
 class LinkFromJPM : public CoupledLink {
@@ -158,12 +158,12 @@ public:
 
 private:
   string getPathOfReferenceFile() const override;
-  void logLink();
-  void recordMissingKeyLink(){};
+  void logLink() override;
+  void recordMissingKeyLink() override{};
   // utility to convert link type with filename
-  string getHtmlFileNamePrefix();
-  string getBodyTextFilePrefix();
-  bool isTargetToAttachmentFile();
+  string getHtmlFileNamePrefix() override;
+  string getBodyTextFilePrefix() override;
+  bool isTargetToAttachmentFile() override;
 };
 
 class Comment : public Object {

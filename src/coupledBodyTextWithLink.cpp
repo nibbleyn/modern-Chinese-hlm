@@ -3,7 +3,6 @@
 void CoupledBodyTextWithLink::fixLinksWithinOneLine(FileSet referMainFiles,
                                                     FileSet referOriginalFiles,
                                                     FileSet referJPMFiles) {
-
   LineNumber ln;
   ln.loadFirstFromContainedLine(m_inLine);
   string toProcess = m_inLine;
@@ -132,7 +131,6 @@ void CoupledBodyTextWithLink::fixLinksWithinOneLine(FileSet referMainFiles,
     }
     // continue to find next link in the m_inLine
     toProcess = toProcess.substr(linkEnd + linkEndChars.length());
-
   } while (true);
 }
 
@@ -182,7 +180,6 @@ CoupledBodyTextWithLink::getLinesOfDisplayText(const string &dispString) {
 
 size_t CoupledBodyTextWithLink::getAverageLineLengthFromReferenceFile() {
   ifstream referLinesFile(REFERENCE_LINES);
-
   if (!referLinesFile) {
     METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << REFERENCE_LINES << endl;
     return 0;
@@ -190,7 +187,6 @@ size_t CoupledBodyTextWithLink::getAverageLineLengthFromReferenceFile() {
 
   auto totalSizes = 0;
   auto totalLines = 0;
-
   while (!referLinesFile.eof()) {
     string line{""};
     getline(referLinesFile, line);
@@ -229,7 +225,6 @@ void CoupledBodyTextWithLink::getLinesofReferencePage() {
 }
 
 void CoupledBodyTextWithLink::calculateParaHeaderPositions() {
-
   m_numberOfMiddleParaHeader = 0;
 
   size_t totalLines = 0;
@@ -263,6 +258,10 @@ void CoupledBodyTextWithLink::calculateParaHeaderPositions() {
 
 void CoupledBodyTextWithLink::paraGeneratedNumbering() {
   ifstream infile(m_inputFile);
+  if (!infile) {
+    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << m_inputFile << endl;
+    return;
+  }
   ofstream outfile(m_outputFile);
 
   size_t seqOfLines = 0;
@@ -315,6 +314,10 @@ void CoupledBodyTextWithLink::scanByRenderingLines() {
   m_paraHeaderTable.clear();
 
   ifstream infile(m_inputFile);
+  if (!infile) {
+    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << m_inputFile << endl;
+    return;
+  }
 
   size_t seqOfLines = 0;
   while (!infile.eof()) {
@@ -427,7 +430,6 @@ void CoupledBodyTextWithLink::validateParaSize() {
 }
 
 void CoupledBodyTextWithLink::addLineNumber() {
-  setInputOutputFiles();
   ifstream infile(m_inputFile);
   if (!infile) {
     METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << m_inputFile << endl;
@@ -459,16 +461,12 @@ void CoupledBodyTextWithLink::addLineNumber() {
 
 /**
  * fix links of certain type in file which refer to one of file in referFiles
- * @param file
- * @param referFiles
  */
 void CoupledBodyTextWithLink::fixLinksFromFile(FileSet referMainFiles,
                                                FileSet referOriginalFiles,
                                                FileSet referJPMFiles,
                                                int minPara, int maxPara,
                                                int minLine, int maxLine) {
-  setInputOutputFiles();
-
   ifstream infile(m_inputFile);
   if (!infile) {
     METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << m_inputFile << endl;

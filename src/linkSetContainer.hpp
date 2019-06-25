@@ -64,7 +64,7 @@ public:
 
 protected:
   string m_outputFilename{"output"};
-  string getInputHtmlFilePath() {
+  string getInputHtmlFilePath() override {
     return m_htmlInputFilePath + getInputFileName() + HTML_SUFFIX;
   }
   string getoutputHtmlFilepath() {

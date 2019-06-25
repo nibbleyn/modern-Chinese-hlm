@@ -19,7 +19,6 @@ void CoupledBodyText::loadBodyTextsFromFixBackToOutput() {
 }
 
 void CoupledBodyText::validateFormatForNumbering() {
-  setInputOutputFiles();
   ifstream infile(m_inputFile);
   if (!infile) {
     METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << m_inputFile << endl;
@@ -131,24 +130,12 @@ void CoupledBodyText::setInputOutputFiles() {
                 BODY_TEXT_SUFFIX;
   m_outputFile =
       BODY_TEXT_FIX + m_filePrefix + m_file + attachmentPart + BODY_TEXT_SUFFIX;
-
   if (debug >= LOG_INFO) {
     METHOD_OUTPUT << "input file is: " << m_inputFile << endl;
     METHOD_OUTPUT << "output file is: " << m_outputFile << endl;
   }
 }
 
-/**
- * find a keyword in a numbered bodytext file
- * whose name is specified as fullPath
- * @param key the keyword used to search
- * @param fullPath the fullpath of the bodytext file
- * @param lineNumber the return value of the line's number like P8L2
- * @param needChange return value indicating a valid line is found
- * and thus need to change original link
- * @return changed key (to KeyNotFound + key + reason) if it is not found,
- * otherwise the original key
- */
 void CoupledBodyText::removeNbspsAndSpaces() {
   // remove existing nbsps and spaces
   auto iterBegin = m_inLine.begin();
@@ -244,7 +231,6 @@ void CoupledBodyText::addParaHeader(ofstream &outfile) {
 }
 
 void CoupledBodyText::scanByLines() {
-
   m_numberOfFirstParaHeader = 0;
   m_numberOfMiddleParaHeader = 0;
   m_numberOfLastParaHeader = 0;
@@ -252,6 +238,10 @@ void CoupledBodyText::scanByLines() {
   m_imgGroupFollowingParaTable.clear();
 
   ifstream infile(m_inputFile);
+  if (!infile) {
+    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << m_inputFile << endl;
+    return;
+  }
 
   bool processImgGroup = false;
   size_t lastImgGroupBegin = 0;
@@ -333,8 +323,11 @@ void CoupledBodyText::scanByLines() {
 }
 
 void CoupledBodyText::paraGuidedNumbering() {
-
   ifstream infile(m_inputFile);
+  if (!infile) {
+    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << m_inputFile << endl;
+    return;
+  }
   ofstream outfile(m_outputFile);
 
   m_para = 0;
@@ -381,8 +374,7 @@ bool isFoundAsNonKeys(const string &line, const string &key) {
       break;
     auto testBeginPos = line.rfind(keyStartChars, keyBegin);
     auto endOfTag = 0;
-    // if keyStartChars exists, deprecated in the future
-    // when keyStartChars is gone
+    // deprecated, to test keyStartChars exists
     if (testBeginPos != string::npos and testBeginPos > searchStart) {
       string testStr =
           line.substr(testBeginPos + keyStartChars.length(),
@@ -432,8 +424,10 @@ bool isFoundOutsidePersonalComments(const string &line, const string &key) {
   return false;
 }
 
+/**
+ * find a keyword in a numbered bodytext file
+ */
 bool CoupledBodyText::findKey(const string &key) {
-  setInputOutputFiles();
   ifstream infile(m_inputFile);
   if (!infile) {
     m_searchError = ERROR_FILE_NOT_EXIST + m_inputFile;
@@ -491,9 +485,13 @@ bool CoupledBodyText::findKey(const string &key) {
 }
 
 void CoupledBodyText::fetchLineTexts() {
-  setInputOutputFiles();
   m_resultLines.clear();
   ifstream infile(m_inputFile);
+  if (!infile) {
+    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << m_inputFile << endl;
+    return;
+  }
+
   if (infile) {
     LineNumber begin(m_range.first.first, m_range.first.second);
     LineNumber end(m_range.second.first, m_range.second.second);
@@ -518,14 +516,6 @@ void CoupledBodyText::fetchLineTexts() {
     }
   }
   printResultLines();
-}
-
-void CoupledBodyText::setOutputBodyTextFilePath(const string &absolutePath) {
-  m_outputFile = absolutePath;
-
-  if (debug >= LOG_INFO) {
-    METHOD_OUTPUT << "output file is: " << m_outputFile << endl;
-  }
 }
 
 void CoupledBodyText::appendLinesIntoBodyTextFile() {

@@ -14,14 +14,13 @@ static const LineNumber BEGIN_OF_WHOLE_BODYTEXT = LineNumber(1, 1);
 static const LineNumber END_OF_WHOLE_BODYTEXT = LineNumber();
 
 class CoupledBodyText {
+public:
+  static void loadBodyTextsFromFixBackToOutput();
 
 public:
   CoupledBodyText() = default;
   CoupledBodyText(const string &filePrefix) : m_filePrefix(filePrefix) {}
   virtual ~CoupledBodyText(){};
-
-  // used for configuring
-  static void loadBodyTextsFromFixBackToOutput();
 
   void setFilePrefixFromFileType(FILE_TYPE type) {
     if (type == FILE_TYPE::MAIN)
@@ -36,9 +35,23 @@ public:
 
   bool isMainBodyText() { return m_filePrefix == MAIN_BODYTEXT_PREFIX; }
 
+  void setInputBodyTextFilePath(const string &absolutePath) {
+    m_inputFile = absolutePath;
+    if (debug >= LOG_INFO) {
+      METHOD_OUTPUT << "input file is: " << m_inputFile << endl;
+    }
+  }
+  void setOutputBodyTextFilePath(const string &absolutePath) {
+    m_outputFile = absolutePath;
+    if (debug >= LOG_INFO) {
+      METHOD_OUTPUT << "output file is: " << m_outputFile << endl;
+    }
+  }
+
   void setFileAndAttachmentNumber(const string &file, int attachNo = 0) {
     m_file = file;
     m_attachNumber = attachNo;
+    setInputOutputFiles();
   }
 
   void setFileAndAttachmentNumber(int chapterNumber, int attachNo = 0) {
@@ -52,6 +65,7 @@ public:
       m_file =
           getChapterNameByTargetKind(ORIGINAL_TYPE_HTML_TARGET, chapterNumber);
     m_attachNumber = attachNo;
+    setInputOutputFiles();
   }
 
   AttachmentNumber getFileAndAttachmentNumber() {
@@ -93,7 +107,6 @@ public:
   // lineNumber -> text of that line
   using lineSet = map<string, string>;
   void fetchLineTexts();
-  void setOutputBodyTextFilePath(const string &absolutePath);
   void appendLinesIntoBodyTextFile();
 
   // used by tools
@@ -110,10 +123,11 @@ public:
 protected:
   // used for configuring
   string m_filePrefix{MAIN_BODYTEXT_PREFIX};
-  string m_file{emptyString};
-  int m_attachNumber{0};
   string m_inputFile{emptyString};
   string m_outputFile{emptyString};
+
+  string m_file{emptyString};
+  int m_attachNumber{0};
   void setInputOutputFiles();
 
   bool isAutoNumbering() { return m_autoNumbering; }

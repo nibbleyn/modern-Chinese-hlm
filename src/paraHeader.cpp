@@ -55,6 +55,13 @@ void ParaHeader::fixFromTemplate() {
     fixMiddleParaHeaderFromTemplate();
 }
 
+static constexpr const char *defaultIdTowardsEnd = R"(XX)";
+static constexpr const char *defaultWholeDownId = R"(PYY)";
+static constexpr const char *defaultDownId = R"(YY)";
+static constexpr const char *defaultIdTowardsFront = R"(WW)";
+static constexpr const char *defaultUpId = R"(UU)";
+static constexpr const char *defaultParaNo = R"(ZZ)";
+
 const string CoupledParaHeader::firstParaHeader =
     R"(<b unhidden> 第1段 </b><a unhidden id="PXX" href="#PYY">v向下</a>&nbsp;&nbsp;&nbsp;&nbsp;<a unhidden id="top" href="#bottom">页面底部->||</a><hr color="#COLOR">)";
 const string CoupledParaHeader::MiddleParaHeader =
@@ -82,8 +89,8 @@ void CoupledParaHeader::fixFirstParaHeaderFromTemplate() {
     replacePart(m_result, colorInTemplate, brTab);
   } else
     replacePart(m_result, colorValueInTemplate, m_color);
-  replacePart(m_result, "XX", TurnToString(m_startNumber));
-  replacePart(m_result, "YY", TurnToString(m_startNumber + 1));
+  replacePart(m_result, defaultIdTowardsEnd, TurnToString(m_startNumber));
+  replacePart(m_result, defaultDownId, TurnToString(m_startNumber + 1));
 }
 
 /**
@@ -107,21 +114,23 @@ void CoupledParaHeader::fixMiddleParaHeaderFromTemplate() {
     replacePart(m_result, colorInTemplate, brTab);
   } else
     replacePart(m_result, colorValueInTemplate, m_color);
-  replacePart(m_result, "XX", TurnToString(m_startNumber + m_currentParaNo));
+  replacePart(m_result, defaultIdTowardsEnd,
+              TurnToString(m_startNumber + m_currentParaNo));
   if (m_lastPara == true) {
-    replacePart(m_result, "PYY", bottomParagraphIndicator);
+    replacePart(m_result, defaultWholeDownId, bottomParagraphIndicator);
   } else
-    replacePart(m_result, "YY",
+    replacePart(m_result, defaultDownId,
                 TurnToString(m_startNumber + m_currentParaNo + 1));
-  replacePart(m_result, "ZZ", TurnToString(m_currentParaNo + 1));
-  replacePart(m_result, "WW", TurnToString(m_startNumber - m_currentParaNo));
-  replacePart(m_result, "UU",
+  replacePart(m_result, defaultParaNo, TurnToString(m_currentParaNo + 1));
+  replacePart(m_result, defaultIdTowardsFront,
+              TurnToString(m_startNumber - m_currentParaNo));
+  replacePart(m_result, defaultUpId,
               TurnToString(m_startNumber - m_currentParaNo + 1));
 }
 
 void CoupledParaHeader::fixUnhiddenMiddleParaHeaderDispTextFromTemplate() {
   m_displayText = MiddleParaHeaderDispText;
-  replacePart(m_displayText, "ZZ", TurnToString(m_currentParaNo + 1));
+  replacePart(m_displayText, defaultParaNo, TurnToString(m_currentParaNo + 1));
 }
 
 /**
@@ -140,15 +149,16 @@ void CoupledParaHeader::fixLastParaHeaderFromTemplate() {
     replacePart(m_result, colorInTemplate, brTab);
   } else
     replacePart(m_result, colorValueInTemplate, m_color);
-  replacePart(m_result, "XX", TurnToString(m_startNumber - m_currentParaNo));
-  replacePart(m_result, "YY",
+  replacePart(m_result, defaultIdTowardsEnd,
+              TurnToString(m_startNumber - m_currentParaNo));
+  replacePart(m_result, defaultDownId,
               TurnToString(m_startNumber - m_currentParaNo + 1));
 }
 
 string CoupledParaHeader::getDisplayString() {
 
   if (m_hidden)
-    m_displayText = "";
+    m_displayText = emptyString;
   else {
     if (isFirstParaHeader())
       m_displayText = firstParaHeaderDispText;
@@ -159,6 +169,11 @@ string CoupledParaHeader::getDisplayString() {
   }
   return m_displayText;
 }
+
+static constexpr const char *startParaNo = R"(PP)";
+static constexpr const char *endParaNo = R"(QQ)";
+static constexpr const char *parasDown = R"(ZD)";
+static constexpr const char *parasUp = R"(ZU)";
 
 const string GenericParaHeader::firstParaHeader =
     R"(<tr><td width="50%"><b unhidden> 第1回 - 第QQ回 </b><a unhidden id="PXX" href="#PYY">v向下QQ回</a></td><td width="50%"><a unhidden id="top" href="#bottom">页面底部->||</a></td></tr>)";
@@ -176,9 +191,9 @@ void GenericParaHeader::fixFirstParaHeaderFromTemplate() {
     replacePart(m_result, colorValueInTemplate, m_color);
   else
     replacePart(m_result, colorValueInTemplate, MAIN_SEPERATOR_COLOR);
-  replacePart(m_result, "XX", TurnToString(m_startNumber));
-  replacePart(m_result, "YY", TurnToString(m_startNumber + 1));
-  replacePart(m_result, "QQ", TurnToString(m_totalPara));
+  replacePart(m_result, defaultIdTowardsEnd, TurnToString(m_startNumber));
+  replacePart(m_result, defaultDownId, TurnToString(m_startNumber + 1));
+  replacePart(m_result, endParaNo, TurnToString(m_totalPara));
   if (m_units != defaultUnit)
     replacePart(m_result, defaultUnit, m_units);
 }
@@ -192,17 +207,21 @@ void GenericParaHeader::fixMiddleParaHeaderFromTemplate() {
     replacePart(m_result, colorValueInTemplate, m_color);
   else
     replacePart(m_result, colorValueInTemplate, MAIN_SEPERATOR_COLOR);
-  replacePart(m_result, "XX", TurnToString(m_startNumber + m_seqOfPara));
+  replacePart(m_result, defaultIdTowardsEnd,
+              TurnToString(m_startNumber + m_seqOfPara));
   if (m_lastPara == true) {
-    replacePart(m_result, "PYY", bottomParagraphIndicator);
+    replacePart(m_result, defaultWholeDownId, bottomParagraphIndicator);
   } else
-    replacePart(m_result, "YY", TurnToString(m_startNumber + m_seqOfPara + 1));
-  replacePart(m_result, "ZD", TurnToString(m_totalPara));
-  replacePart(m_result, "ZU", TurnToString(m_preTotalPara));
-  replacePart(m_result, "WW", TurnToString(m_startNumber - m_seqOfPara));
-  replacePart(m_result, "UU", TurnToString(m_startNumber - m_seqOfPara + 1));
-  replacePart(m_result, "PP", TurnToString(m_startParaNo));
-  replacePart(m_result, "QQ", TurnToString(m_endParaNo));
+    replacePart(m_result, defaultDownId,
+                TurnToString(m_startNumber + m_seqOfPara + 1));
+  replacePart(m_result, parasDown, TurnToString(m_totalPara));
+  replacePart(m_result, parasUp, TurnToString(m_preTotalPara));
+  replacePart(m_result, defaultIdTowardsFront,
+              TurnToString(m_startNumber - m_seqOfPara));
+  replacePart(m_result, defaultUpId,
+              TurnToString(m_startNumber - m_seqOfPara + 1));
+  replacePart(m_result, startParaNo, TurnToString(m_startParaNo));
+  replacePart(m_result, endParaNo, TurnToString(m_endParaNo));
   if (m_units != defaultUnit)
     replacePart(m_result, defaultUnit, m_units);
 }
@@ -216,9 +235,11 @@ void GenericParaHeader::fixLastParaHeaderFromTemplate() {
     replacePart(m_result, colorValueInTemplate, m_color);
   else
     replacePart(m_result, colorValueInTemplate, MAIN_SEPERATOR_COLOR);
-  replacePart(m_result, "ZZ", TurnToString(m_totalPara));
-  replacePart(m_result, "XX", TurnToString(m_startNumber - m_seqOfPara));
-  replacePart(m_result, "YY", TurnToString(m_startNumber - m_seqOfPara + 1));
+  replacePart(m_result, defaultParaNo, TurnToString(m_totalPara));
+  replacePart(m_result, defaultIdTowardsEnd,
+              TurnToString(m_startNumber - m_seqOfPara));
+  replacePart(m_result, defaultDownId,
+              TurnToString(m_startNumber - m_seqOfPara + 1));
   if (m_units != defaultUnit)
     replacePart(m_result, defaultUnit, m_units);
 }

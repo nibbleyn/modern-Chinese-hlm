@@ -10,7 +10,7 @@ int debug = LOG_INFO;
 
 int main(int argc, char **argv) {
   // change this number to run different functions
-  int num = 5;
+  int num = 6;
   switch (num) {
   case 1:
     numberJPMHtmls(false);
@@ -28,7 +28,8 @@ int main(int argc, char **argv) {
     fixLinksFromMain(false);
     break;
   case 6:
-    reConstructStory(R"(小红遗帕)", "story");
+//    reConstructStory(R"(小红遗帕)", "story");
+    reConstructStory(R"(尤二姐)", "story2");
     break;
   case 7:
     refreshBodyTexts(MAIN);

@@ -58,10 +58,20 @@ void CoupledBodyTextWithLink::addEntriesInRangeTable(AttachmentNumber startNum,
                                                      AttachmentNumber endNum,
                                                      ParaLineNumber startPara,
                                                      ParaLineNumber endPara) {
-  lineNumberSetByRange range = make_pair(startPara, endPara);
-  // needs to add multiple entries when start and end chapers are different
-  // or attachments all included in-between
-  rangeTable[make_pair(startNum, startPara)] = range;
+  // only support non-attachment files now
+  if (startNum.first == endNum.first)
+    rangeTable[make_pair(startNum, startPara)] = make_pair(startPara, endPara);
+  else {
+    rangeTable[make_pair(startNum, startPara)] =
+        make_pair(startPara, ParaLineNumber(0, 0));
+    rangeTable[make_pair(endNum, ParaLineNumber(1, 1))] =
+        make_pair(ParaLineNumber(1, 1), endPara);
+    for (int i = startNum.first + 1; i < endNum.first; i++) {
+      AttachmentNumber num(i, 0);
+      rangeTable[make_pair(num, ParaLineNumber(1, 1))] =
+          make_pair(ParaLineNumber(1, 1), ParaLineNumber(0, 0));
+    }
+  }
 }
 
 void CoupledBodyTextWithLink::loadRangeTableFromFile(
@@ -74,6 +84,8 @@ void CoupledBodyTextWithLink::loadRangeTableFromFile(
   while (!infile.eof()) {
     string startChapter, startParaLine;
     getline(infile, startChapter, '#');
+    if (startChapter.empty())
+      break;
     getline(infile, startParaLine, ' ');
     string endChapter, endParaLine;
     getline(infile, endChapter, '#');

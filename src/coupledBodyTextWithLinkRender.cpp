@@ -339,7 +339,6 @@ CoupledBodyTextWithLink::getContainedObjectTypes(const string &originalString) {
 }
 
 void CoupledBodyTextWithLink::render() {
-  setInputOutputFiles();
   ifstream infile(m_inputFile);
   if (!infile) {
     METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << m_inputFile << endl;

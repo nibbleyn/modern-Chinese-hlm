@@ -65,13 +65,13 @@ class CoupledParaHeader : public ParaHeader {
   static const string lastParaHeaderDispText;
 
 public:
-  string getDisplayString();
+  string getDisplayString() override;
 
 private:
-  void fixFirstParaHeaderFromTemplate();
-  void fixMiddleParaHeaderFromTemplate();
+  void fixFirstParaHeaderFromTemplate() override;
+  void fixMiddleParaHeaderFromTemplate() override;
+  void fixLastParaHeaderFromTemplate() override;
   void fixUnhiddenMiddleParaHeaderDispTextFromTemplate();
-  void fixLastParaHeaderFromTemplate();
 };
 
 class GenericParaHeader : public ParaHeader {
@@ -87,7 +87,7 @@ public:
   void setStartParaNo(int num) { m_startParaNo = num; }
   void setEndParaNo(int num) { m_endParaNo = num; }
 
-  string getDisplayString() { return emptyString; }
+  string getDisplayString() override { return emptyString; }
 
 private:
   string m_units{defaultUnit};
@@ -96,7 +96,7 @@ private:
   int m_seqOfPara{0};
   int m_startParaNo{0};
   int m_endParaNo{0};
-  void fixFirstParaHeaderFromTemplate();
-  void fixMiddleParaHeaderFromTemplate();
-  void fixLastParaHeaderFromTemplate();
+  void fixFirstParaHeaderFromTemplate() override;
+  void fixMiddleParaHeaderFromTemplate() override;
+  void fixLastParaHeaderFromTemplate() override;
 };

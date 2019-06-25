@@ -57,7 +57,7 @@ string CoupledLink::asString() {
   if (m_annotation == returnToContentTable) // should be LinkFromAttachment
   {
     part1 = getPathOfReferenceFile() + contentTableFilename + HTML_SUFFIX;
-  } else if (m_type != LINK_TYPE::SAMEPAGE) {
+  } else {
     part1 =
         getPathOfReferenceFile() + getHtmlFileNamePrefix() + getChapterName();
     if (m_attachmentNumber != 0)

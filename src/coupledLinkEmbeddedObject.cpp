@@ -28,12 +28,13 @@ string scanForSubLinks(const string &original, const string &fromFile) {
   return result;
 }
 
+static constexpr const char *defaultTranslation = R"(XX)";
 static const string personalCommentTemplate =
     R"(<u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">XX</u>)";
 
 string fixPersonalCommentFromTemplate(const string &comment) {
   string result = personalCommentTemplate;
-  replacePart(result, "XX", comment);
+  replacePart(result, defaultTranslation, comment);
   return result;
 }
 
@@ -58,12 +59,13 @@ size_t PersonalComment::loadFirstFromContainedLine(const string &containedLine,
   return containedLine.find(personalCommentStartChars, after);
 }
 
+static constexpr const char *defaultComment = R"(XX)";
 static const string poemTranslationTemplate =
     R"(<samp unhidden font style="font-size: 13.5pt; font-family:楷体; color:#ff00ff">XX</samp>)";
 
 string fixPoemTranslationFromTemplate(const string &translation) {
   string result = poemTranslationTemplate;
-  replacePart(result, "XX", translation);
+  replacePart(result, defaultComment, translation);
   return result;
 }
 
@@ -93,7 +95,7 @@ static const string commentTemplate =
 
 string fixCommentFromTemplate(const string &comment) {
   string result = commentTemplate;
-  replacePart(result, "XX", comment);
+  replacePart(result, defaultComment, comment);
   return result;
 }
 

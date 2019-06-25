@@ -75,7 +75,7 @@ private:
   string m_translatedTitle{emptyString};
 
   string getBodyTextFilePrefix();
-  string getInputHtmlFilePath();
+  string getInputHtmlFilePath() override;
   string getoutputHtmlFilepath();
   string getBodyTextFilePath();
 };

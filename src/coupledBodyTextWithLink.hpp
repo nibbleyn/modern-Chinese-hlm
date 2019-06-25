@@ -246,7 +246,8 @@ private:
   static void printRangeTable() {
     if (not rangeTable.empty()) {
       FUNCTION_OUTPUT << "rangeTable:" << endl;
-      FUNCTION_OUTPUT << "chapter/attachment/startParaNumber/startLineNumber/"
+      FUNCTION_OUTPUT << "chapter_attachment:startParaNumber/startLineNumber:  "
+                         "  startParaNumber/startLineNumber ->"
                          "endParaNumber/endLineNumber"
                       << endl;
     } else
@@ -255,13 +256,12 @@ private:
       auto num = element.first.first;
       auto paraLine = element.first.second;
       auto startPara = element.second.first;
-      auto endPara = element.second.first;
-      FUNCTION_OUTPUT << num.first << "  " << num.second << "  "
-                      << paraLine.first << "  " << paraLine.second << "  "
-                      << startPara.first << "  " << startPara.second << "  "
-                      << endPara.first << "  " << endPara.second << "  "
-
-                      << endl;
+      auto endPara = element.second.second;
+      FUNCTION_OUTPUT << num.first << "_" << num.second << ":P"
+                      << paraLine.first << "L" << paraLine.second
+                      << ":                                         P"
+                      << startPara.first << "L" << startPara.second << "  ->  P"
+                      << endPara.first << "L" << endPara.second << endl;
     }
   }
 };

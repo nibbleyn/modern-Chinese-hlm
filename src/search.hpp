@@ -40,9 +40,9 @@ protected:
 };
 
 class NonAttachmentSearcher : public Searcher {
-  void runSearchingOverEachFile();
+  void runSearchingOverEachFile() override;
 };
 
 class AttachmentSearcher : public Searcher {
-  void runSearchingOverEachFile();
+  void runSearchingOverEachFile() override;
 };
