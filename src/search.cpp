@@ -60,10 +60,12 @@ void Searcher::outputSearchResult() {
   m_containerPtr->createParaListFrom(18, 22);
   m_containerPtr->outputToBodyTextFromLinkList(searchUnit);
   string verb = (total > 1) ? "s are" : " is";
-  m_containerPtr->assembleBackToHTM(
-      "search  results", "search for key: " + m_key + " in " + m_kind +
-                             " files. " + TurnToString(total) + " link" + verb +
-                             " found.");
+
+  m_containerPtr->setTitle("search  results");
+  m_containerPtr->setDisplayTitle("search for key: " + m_key + " in " + m_kind +
+          " files. " + TurnToString(total) + " link" + verb +
+          " found.");
+  m_containerPtr->assembleBackToHTM();
   FUNCTION_OUTPUT << "result is in file " << m_containerPtr->getOutputFilePath()
                   << endl;
 }

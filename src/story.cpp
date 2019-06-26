@@ -10,7 +10,7 @@ void reConstructStory(const string &title, const string &outputFilename,
                       const string &kind) {
   string indexFilePath = HTML_OUTPUT_MAIN + title + BODY_TEXT_SUFFIX;
   CoupledBodyTextWithLink::loadRangeTableFromFile(indexFilePath);
-  ListContainer container((outputFilename == emptyString) ? title + "_generated"
+  ListContainer container((outputFilename == emptyString) ? title + TMP_POSTFIX
                                                           : outputFilename);
   container.clearExistingBodyText();
 
@@ -37,7 +37,7 @@ void reConstructStory(const string &title, const string &outputFilename,
     bodyText.setStartOfRange(startPara);
     bodyText.setEndOfRange(endPara);
     bodyText.fetchLineTexts();
-    bodyText.setOutputBodyTextFilePath(container.getOutputBodyTextFilePath());
+    bodyText.setOutputBodyTextFilePath(container.getBodyTextFilePath());
     bodyText.appendLinesIntoBodyTextFile();
   }
 
@@ -45,8 +45,9 @@ void reConstructStory(const string &title, const string &outputFilename,
   paraHeader.markAsLastParaHeader();
   paraHeader.fixFromTemplate();
   container.appendParagrapHeader(paraHeader.getFixedResult());
-
-  container.assembleBackToHTM(title, title);
+  container.setTitle(title);
+  container.setDisplayTitle(title);
+  container.assembleBackToHTM();
   FUNCTION_OUTPUT << "result is in file " << container.getOutputFilePath()
                   << endl;
 }

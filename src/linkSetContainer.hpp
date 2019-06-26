@@ -1,6 +1,7 @@
 #pragma once
 
 #include "container.hpp"
+#include "coupledBodyTextWithLink.hpp"
 
 static const string HTML_CONTAINER = R"(container/container)";
 static const string BODY_TEXT_CONTAINER = R"(container/)";
@@ -18,14 +19,12 @@ public:
   }
   virtual ~LinkSetContainer(){};
   virtual string getInputFileName() const = 0;
-  void assembleBackToHTM(const string &title = emptyString,
-                         const string &displayTitle = emptyString);
   string getOutputFilePath() {
     return m_htmlOutputFilePath + m_outputFilename + HTML_SUFFIX;
   }
   void clearExistingBodyText();
 
-  string getOutputBodyTextFilePath() {
+  string getBodyTextFilePath() override {
     return m_bodyTextOutputFilePath + getInputFileName() + BODY_TEXT_SUFFIX;
   }
   void createParaListFrom(int first, int incremental, int max = 0);
@@ -67,9 +66,14 @@ protected:
   string getInputHtmlFilePath() override {
     return m_htmlInputFilePath + getInputFileName() + HTML_SUFFIX;
   }
-  string getoutputHtmlFilepath() {
+  string getoutputHtmlFilepath() override {
     return m_htmlOutputFilePath + m_outputFilename + HTML_SUFFIX;
   }
+  string getTempBodyTextFixFilePath() {
+    return m_bodyTextOutputFilePath + R"(\)" + TMP_POSTFIX + R"(\)" + getInputFileName() + BODY_TEXT_SUFFIX;
+  }
+  void loadBodyTextsFromFixed();
+
   bool m_hideParaHeaders{false};
   ParaHeaderPositionSet m_paraHeaderPositionSet;
   LinkStringSet m_linkStringSet;
@@ -89,9 +93,11 @@ public:
   void appendParagraphInBodyText(const string &text);
   void appendParagrapHeader(const string &header);
   void outputToBodyTextFromLinkList(const string &units = defaultUnit);
+  void numbering();
 
 private:
   string getInputFileName() const override { return LIST_CONTAINER_FILENAME; }
+  CoupledBodyTextWithLink m_bodyText;
 };
 
 static constexpr const char *TABLE_CONTAINER_FILENAME = R"(2)";

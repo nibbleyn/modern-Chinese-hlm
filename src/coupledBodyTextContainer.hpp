@@ -45,10 +45,6 @@ public:
     }
   }
 
-  // dissemble/assemble before/after working on bodyText
-  void dissembleFromHTM();
-  void assembleBackToHTM(const string &title = emptyString,
-                         const string &displayTitle = emptyString);
   AttachmentNumberList getAttachmentFileList(int minAttachNo = 0,
                                              int maxAttachNo = 0);
 
@@ -76,6 +72,6 @@ private:
 
   string getBodyTextFilePrefix();
   string getInputHtmlFilePath() override;
-  string getoutputHtmlFilepath();
-  string getBodyTextFilePath();
+  string getoutputHtmlFilepath() override;
+  string getBodyTextFilePath() override;
 };

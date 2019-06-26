@@ -588,7 +588,9 @@ void testListContainer() {
   paraHeader.fixFromTemplate();
   paraHeader.fixFromTemplate();
   container.appendParagrapHeader(paraHeader.getFixedResult());
-  container.assembleBackToHTM("test", "test container");
+  container.setTitle("test");
+  container.setDisplayTitle("test container");
+  container.assembleBackToHTM();
   FUNCTION_OUTPUT << "result is in file " << container.getOutputFilePath()
                   << endl;
 }
@@ -602,7 +604,9 @@ void testTableContainer() {
   // if only 3 is added, patch last right part
   container.appendRightParagraphInBodyText(emptyString);
   container.insertBackParagrapHeader(0, 4, searchUnit);
-  container.assembleBackToHTM("content index table", "content");
+  container.setTitle("content index table");
+  container.setDisplayTitle("content");
+  container.assembleBackToHTM();
   FUNCTION_OUTPUT << "result is in file: " << container.getOutputFilePath()
                   << endl;
 }

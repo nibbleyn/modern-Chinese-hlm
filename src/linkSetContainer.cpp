@@ -1,12 +1,18 @@
 #include "linkSetContainer.hpp"
 
 extern int debug;
+
+void LinkSetContainer::loadBodyTextsFromFixed() {
+    Poco::File fileToCopy(getTempBodyTextFixFilePath());
+    fileToCopy.copyTo(getBodyTextFilePath());
+}
+
 /**
  * to get ready to write new text in this file which would be composed into
  * container htm
  */
 void LinkSetContainer::clearExistingBodyText() {
-  string outputBodyTextFile = getOutputBodyTextFilePath();
+  string outputBodyTextFile = getBodyTextFilePath();
   if (debug >= LOG_INFO)
     METHOD_OUTPUT << "clear content in: " << outputBodyTextFile << endl;
   ofstream outfile(outputBodyTextFile);
@@ -18,7 +24,7 @@ void LinkSetContainer::clearExistingBodyText() {
  * @param containerNumber the selected container to put into
  */
 void ListContainer::appendParagraphInBodyText(const string &text) {
-  string outputBodyTextFile = getOutputBodyTextFilePath();
+  string outputBodyTextFile = getBodyTextFilePath();
   if (debug >= LOG_INFO)
     METHOD_OUTPUT << "append Paragraph In BodyText: " << outputBodyTextFile
                   << endl;
@@ -28,7 +34,7 @@ void ListContainer::appendParagraphInBodyText(const string &text) {
 }
 
 void ListContainer::appendParagrapHeader(const string &header) {
-  string outputBodyTextFile = getOutputBodyTextFilePath();
+  string outputBodyTextFile = getBodyTextFilePath();
   if (debug >= LOG_INFO)
     METHOD_OUTPUT << "append Paragraph In BodyText: " << outputBodyTextFile
                   << endl;
@@ -44,11 +50,16 @@ void ListContainer::outputToBodyTextFromLinkList(const string &units) {
   }
 }
 
+void ListContainer::numbering(){
+	dissembleFromHTM();
+	assembleBackToHTM();
+}
+
 const string TableContainer::BODY_TEXT_STARTER = R"(3front.txt)";
 const string TableContainer::BODY_TEXT_DESSERT = R"(3back.txt)";
 
 void TableContainer::addExistingFrontLinks() {
-  string outputBodyTextFile = getOutputBodyTextFilePath();
+  string outputBodyTextFile = getBodyTextFilePath();
   if (debug >= LOG_INFO)
     METHOD_OUTPUT << "init content in: " << outputBodyTextFile << endl;
   ofstream outfile(outputBodyTextFile, ios_base::app);
@@ -70,7 +81,7 @@ void TableContainer::addExistingFrontLinks() {
 }
 
 void TableContainer::finishBodyTextFile() {
-  string outputBodyTextFile = getOutputBodyTextFilePath();
+  string outputBodyTextFile = getBodyTextFilePath();
   if (debug >= LOG_INFO)
     METHOD_OUTPUT << "append content in: " << outputBodyTextFile << endl;
   ofstream outfile;
@@ -94,7 +105,7 @@ void TableContainer::finishBodyTextFile() {
 
 void TableContainer::insertFrontParagrapHeader(int totalPara,
                                                const string &units) {
-  string outputBodyTextFile = getOutputBodyTextFilePath();
+  string outputBodyTextFile = getBodyTextFilePath();
   if (debug >= LOG_INFO)
     METHOD_OUTPUT << "append content in: " << outputBodyTextFile << endl;
   ofstream outfile;
@@ -115,7 +126,7 @@ void TableContainer::insertMiddleParagrapHeader(bool enterLastPara,
                                                 int endParaNo, int totalPara,
                                                 int preTotalPara,
                                                 const string &units) {
-  string outputBodyTextFile = getOutputBodyTextFilePath();
+  string outputBodyTextFile = getBodyTextFilePath();
   if (debug >= LOG_INFO)
     METHOD_OUTPUT << "append content in: " << outputBodyTextFile << endl;
   ofstream outfile;
@@ -138,7 +149,7 @@ void TableContainer::insertMiddleParagrapHeader(bool enterLastPara,
 
 void TableContainer::insertBackParagrapHeader(int seqOfPara, int totalPara,
                                               const string &units) {
-  string outputBodyTextFile = getOutputBodyTextFilePath();
+  string outputBodyTextFile = getBodyTextFilePath();
   if (debug >= LOG_INFO)
     METHOD_OUTPUT << "append content in: " << outputBodyTextFile << endl;
   ofstream outfile;
@@ -156,7 +167,7 @@ void TableContainer::insertBackParagrapHeader(int seqOfPara, int totalPara,
 }
 
 void TableContainer::appendLeftParagraphInBodyText(const string &text) {
-  string outputBodyTextFile = getOutputBodyTextFilePath();
+  string outputBodyTextFile = getBodyTextFilePath();
   if (debug >= LOG_INFO)
     METHOD_OUTPUT << "append Paragraph In BodyText: " << outputBodyTextFile
                   << endl;
@@ -166,7 +177,7 @@ void TableContainer::appendLeftParagraphInBodyText(const string &text) {
 }
 
 void TableContainer::appendRightParagraphInBodyText(const string &text) {
-  string outputBodyTextFile = getOutputBodyTextFilePath();
+  string outputBodyTextFile = getBodyTextFilePath();
   if (debug >= LOG_INFO)
     METHOD_OUTPUT << "append Paragraph In BodyText: " << outputBodyTextFile
                   << endl;
@@ -219,83 +230,5 @@ void LinkSetContainer::createParaListFrom(int first, int incremental, int max) {
   int i = first;
   while ((i += incremental) < max) {
     m_paraHeaderPositionSet.push_back(i);
-  }
-}
-
-void LinkSetContainer::assembleBackToHTM(const string &title,
-                                         const string &displayTitle) {
-
-  string inputHtmlFile = getInputHtmlFilePath();
-  string inputBodyTextFile = getOutputBodyTextFilePath();
-  string outputFile = getoutputHtmlFilepath();
-
-  ifstream inHtmlFile(inputHtmlFile);
-  if (!inHtmlFile) {
-    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << inputHtmlFile << endl;
-    return;
-  }
-  ifstream inBodyTextFile(inputBodyTextFile);
-  if (!inBodyTextFile) {
-    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << inputBodyTextFile << endl;
-    return;
-  }
-  ofstream outfile(outputFile);
-  string line{emptyString};
-  bool started = false;
-  // first line
-  string start = topIdBeginChars;
-  // last line
-  string end = bottomIdBeginChars;
-  while (!inHtmlFile.eof()) {
-    getline(inHtmlFile, line);
-    if (not started) {
-      auto linkBegin = line.find(start);
-      if (linkBegin != string::npos) {
-        started = true;
-        break;
-      }
-      if (not title.empty()) {
-        auto titleBegin = line.find(defaultTitle);
-        if (titleBegin != string::npos)
-          line.replace(titleBegin, defaultTitle.length(), title);
-      }
-      if (not displayTitle.empty()) {
-        auto titleBegin = line.find(defaultDisplayTitle);
-        if (titleBegin != string::npos)
-          line.replace(titleBegin, defaultDisplayTitle.length(), displayTitle);
-      }
-      if (debug >= LOG_INFO)
-        METHOD_OUTPUT << line << endl;
-      // excluding start line
-      outfile << line << endl;
-    }
-  }
-  if (inHtmlFile.eof() and not started) {
-    METHOD_OUTPUT << "source htm" << inputBodyTextFile
-                  << "has no start mark:" << start << endl;
-    return;
-  }
-  bool ended = false;
-  while (!inBodyTextFile.eof()) {
-    getline(inBodyTextFile, line);
-    if (debug >= LOG_INFO)
-      METHOD_OUTPUT << line << endl;
-    // including end line
-    outfile << line << endl;
-  }
-  while (!inHtmlFile.eof()) {
-    getline(inHtmlFile, line);
-    if (not ended) {
-      auto linkEnd = line.find(end);
-      if (linkEnd != string::npos) {
-        ended = true;
-        continue;
-      }
-    } else {
-      if (debug >= LOG_INFO)
-        METHOD_OUTPUT << line << endl;
-      // including end line
-      outfile << line << endl;
-    }
   }
 }

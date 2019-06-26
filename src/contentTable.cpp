@@ -48,7 +48,9 @@ void generateContentTableForMainHtmls() {
                                     container.getTranslatedTitle()));
   }
   outputContainer.outputToBodyTextFromLinkList();
-  outputContainer.assembleBackToHTM(MAIN_TITLE, MAIN_DISPLAY_TITLE);
+  outputContainer.setTitle(MAIN_TITLE);
+  outputContainer.setDisplayTitle(MAIN_DISPLAY_TITLE);
+  outputContainer.assembleBackToHTM();
   FUNCTION_OUTPUT << "result is in file: "
                   << outputContainer.getOutputFilePath() << endl;
   FUNCTION_OUTPUT << "generateContentTable for Main Htmls finished. " << endl;
@@ -73,7 +75,9 @@ void generateContentTableForOriginalHtmls() {
                                          container.getOriginalTitle()));
   }
   outputContainer.outputToBodyTextFromLinkList();
-  outputContainer.assembleBackToHTM(ORG_TITLE, ORG_DISPLAY_TITLE);
+  outputContainer.setTitle(ORG_TITLE);
+  outputContainer.setDisplayTitle(ORG_DISPLAY_TITLE);
+  outputContainer.assembleBackToHTM();
   FUNCTION_OUTPUT << "result is in file: "
                   << outputContainer.getOutputFilePath() << endl;
   FUNCTION_OUTPUT << "generateContentTable for Original Htmls finished. "
@@ -98,7 +102,9 @@ void generateContentTableForJPMHtmls() {
                                     emptyString, container.getOriginalTitle()));
   }
   outputContainer.outputToBodyTextFromLinkList();
-  outputContainer.assembleBackToHTM(JPM_TITLE, JPM_DISPLAY_TITLE);
+  outputContainer.setTitle(JPM_TITLE);
+  outputContainer.setDisplayTitle(JPM_DISPLAY_TITLE);
+  outputContainer.assembleBackToHTM();
   FUNCTION_OUTPUT << "result is in file: "
                   << outputContainer.getOutputFilePath() << endl;
   FUNCTION_OUTPUT << "generateContentTable for JPM Htmls finished. " << endl;
@@ -119,8 +125,9 @@ void generateContentTableForReferenceAttachments(
   outputContainer.setMaxTargetAsSetSize();
   outputContainer.createParaListFrom(18, 22);
   outputContainer.outputToBodyTextFromLinkList(attachmentUnit);
-  outputContainer.assembleBackToHTM(REFERENCE_ATTACHMENT_TITLE,
-                                    REFERENCE_ATTACHMENT_DISPLAY_TITLE);
+  outputContainer.setTitle(REFERENCE_ATTACHMENT_TITLE);
+  outputContainer.setDisplayTitle(REFERENCE_ATTACHMENT_DISPLAY_TITLE);
+  outputContainer.assembleBackToHTM();
   FUNCTION_OUTPUT << "result is in file " << outputContainer.getOutputFilePath()
                   << endl;
 }
@@ -140,8 +147,9 @@ void generateContentTableForPersonalAttachments(
   outputContainer.setMaxTargetAsSetSize();
   outputContainer.createParaListFrom(18, 22);
   outputContainer.outputToBodyTextFromLinkList(attachmentUnit);
-  outputContainer.assembleBackToHTM(PERSONAL_ATTACHMENT_TITLE,
-                                    PERSONAL_ATTACHMENT_DISPLAY_TITLE);
+  outputContainer.setTitle(PERSONAL_ATTACHMENT_TITLE);
+  outputContainer.setDisplayTitle(PERSONAL_ATTACHMENT_DISPLAY_TITLE);
+  outputContainer.assembleBackToHTM();
   FUNCTION_OUTPUT << "result is in file " << outputContainer.getOutputFilePath()
                   << endl;
 }
