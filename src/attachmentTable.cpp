@@ -14,7 +14,7 @@ string AttachmentList::getAttachmentTitleFromFile(AttachmentNumber num) {
   if (!infile) {
     return attachmentNotExisted;
   }
-  string inLine{""};
+  string inLine{emptyString};
   while (!infile.eof()) {
     getline(infile, inLine);
     if (inLine.find(htmlTitleStart) != string::npos) {

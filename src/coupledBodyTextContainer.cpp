@@ -97,7 +97,7 @@ void CoupledBodyTextContainer::assembleBackToHTM(const string &title,
   }
 
   ofstream outfile(outputFile);
-  string line{""};
+  string line{emptyString};
   bool started = false;
   // first line
   string start = topIdBeginChars;
@@ -225,7 +225,7 @@ void CoupledBodyTextContainer::dissembleFromHTM() {
     return;
   }
   ofstream outfile(outputBodyTextFile);
-  string line{""};
+  string line{emptyString};
   bool started = false, ended = false;
 
   string start = topIdBeginChars;
@@ -295,7 +295,7 @@ void CoupledBodyTextContainer::fixReturnLinkForAttachmentFile() {
   }
 
   ofstream outfile(outputFile);
-  string line{""};
+  string line{emptyString};
   string referFile =
       m_file + attachmentFileMiddleChar + TurnToString(m_attachmentNumber);
   while (!inHtmlFile.eof()) {
@@ -307,7 +307,7 @@ void CoupledBodyTextContainer::fixReturnLinkForAttachmentFile() {
     } else {
       // varible line would change in loop below
       auto orgLine = line;
-      string link{""};
+      string link{emptyString};
       while (true) {
         auto linkBegin = line.find(linkStartChars);
         // no link any more, continue with next line
@@ -348,7 +348,7 @@ void CoupledBodyTextContainer::fetchOriginalAndTranslatedTitles() {
     METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << inputHtmlFile << endl;
     return;
   }
-  string line{""};
+  string line{emptyString};
   while (!inHtmlFile.eof()) {
     getline(inHtmlFile, line);
     if (debug >= LOG_INFO) {

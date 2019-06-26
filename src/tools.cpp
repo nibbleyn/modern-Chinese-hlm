@@ -122,7 +122,7 @@ void CoupledBodyText::fixTagPairBegin(const string &signOfTagAfterReplaceTag,
   ofstream outfile(m_outputFile);
 
   // continue reading till first paragraph header
-  string inLine{""};
+  string inLine{emptyString};
 
   while (!infile.eof()) {
     getline(infile, inLine);
@@ -158,7 +158,7 @@ void CoupledBodyText::fixTagPairEnd(const string &signOfTagBeforeReplaceTag,
   ofstream outfile(m_outputFile);
   set<int, greater<int>> occurences;
   // continue reading till first paragraph header
-  string inLine{""};
+  string inLine{emptyString};
   auto cutLength{0};
   while (!infile.eof()) {
     getline(infile, inLine);
@@ -244,7 +244,7 @@ void CoupledBodyTextContainer::makeSingleLineHeaderAndFooter() {
     return;
   }
   ofstream outHtmlFile(outputHtmlFile);
-  string line{""};
+  string line{emptyString};
 
   string singleLineHeader;
   while (!inHtmlFile.eof()) {
@@ -253,8 +253,8 @@ void CoupledBodyTextContainer::makeSingleLineHeaderAndFooter() {
     if (linkBegin != string::npos) {
       break;
     } else {
-      line = regex_replace(line, regex("(?:\\t)"), " ");
-      line = regex_replace(line, regex("(?:\\r\\n|\\n|\\r)"), "");
+      line = regex_replace(line, regex("(?:\\t)"), displaySpace);
+      line = regex_replace(line, regex("(?:\\r\\n|\\n|\\r)"), emptyString);
       singleLineHeader += line;
     }
   }
@@ -285,8 +285,8 @@ void CoupledBodyTextContainer::makeSingleLineHeaderAndFooter() {
   string singleLineFooter;
   while (!inHtmlFile.eof()) {
     getline(inHtmlFile, line);
-    line = regex_replace(line, regex("(?:\\t)"), " ");
-    line = regex_replace(line, regex("(?:\\r\\n|\\n|\\r)"), "");
+    line = regex_replace(line, regex("(?:\\t)"), displaySpace);
+    line = regex_replace(line, regex("(?:\\r\\n|\\n|\\r)"), emptyString);
     singleLineFooter += line;
   }
   FUNCTION_OUTPUT << singleLineFooter << endl;
@@ -306,7 +306,7 @@ void CoupledBodyTextContainer::fixHeaderAndFooter() {
     return;
   }
   ofstream outHtmlFile(outputHtmlFile);
-  string line{""};
+  string line{emptyString};
 
   string singleLineHeader;
   while (!inHtmlFile.eof()) {
@@ -553,7 +553,7 @@ void CoupledBodyTextWithLink::removePersonalCommentsOverNumberedFiles() {
     auto orgLine = inLine;
     string start = personalCommentStartChars;
     string end = personalCommentEndChars;
-    string to_replace = "";
+    string to_replace = emptyString;
     // first loop to remove all personal Comments
     auto removePersonalCommentLine = orgLine;
     auto personalCommentBegin = removePersonalCommentLine.find(start);
@@ -564,7 +564,7 @@ void CoupledBodyTextWithLink::removePersonalCommentsOverNumberedFiles() {
           personalCommentEnd + end.length() - personalCommentBegin);
       to_replace = personalComment;
       auto replaceBegin = orgLine.find(to_replace);
-      orgLine.replace(replaceBegin, to_replace.length(), "");
+      orgLine.replace(replaceBegin, to_replace.length(), emptyString);
       removePersonalCommentLine =
           removePersonalCommentLine.substr(personalCommentEnd + end.length());
       // find next personalComment in the removePersonalCommentLine
@@ -589,7 +589,7 @@ void CoupledBodyTextWithLink::removePersonalCommentsOverNumberedFiles() {
           METHOD_OUTPUT << specialLink << endl;
         to_replace = specialLink;
         auto replaceBegin = orgLine.find(to_replace);
-        orgLine.replace(replaceBegin, to_replace.length(), "");
+        orgLine.replace(replaceBegin, to_replace.length(), emptyString);
       }
       removeSpecialLinkLine =
           removeSpecialLinkLine.substr(specialLinkEnd + linkEndChars.length());

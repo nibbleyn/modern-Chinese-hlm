@@ -62,7 +62,7 @@ void TableContainer::addExistingFrontLinks() {
   }
 
   while (!inStarterFile.eof()) {
-    string line{""};
+    string line{emptyString};
     getline(inStarterFile, line);
     // excluding start line
     outfile << line << endl;
@@ -85,7 +85,7 @@ void TableContainer::finishBodyTextFile() {
   }
 
   while (!inDessertFile.eof()) {
-    string line{""};
+    string line{emptyString};
     getline(inDessertFile, line);
     // excluding start line
     outfile << line << endl;
@@ -240,7 +240,7 @@ void LinkSetContainer::assembleBackToHTM(const string &title,
     return;
   }
   ofstream outfile(outputFile);
-  string line{""};
+  string line{emptyString};
   bool started = false;
   // first line
   string start = topIdBeginChars;

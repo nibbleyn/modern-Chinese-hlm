@@ -28,7 +28,7 @@ int main(int argc, char **argv) {
     fixLinksFromMain(false);
     break;
   case 6:
-//    reConstructStory(R"(小红遗帕)", "story");
+    //    reConstructStory(R"(小红遗帕)", "story");
     reConstructStory(R"(尤二姐)", "story2");
     break;
   case 7:

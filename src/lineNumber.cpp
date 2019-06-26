@@ -82,14 +82,14 @@ size_t LineNumber::loadFirstFromContainedLine(const string &containedLine,
 
 string LineNumber::getDisplayString() {
   if (m_lineNumber == 0)
-    return "";
+    return emptyString;
   return TurnToString(m_paraNumber) + inBetweenParaAndLineNumber +
          TurnToString(m_lineNumber);
 }
 
 string LineNumber::getWholeString() {
   if (isPureTextOnly())
-    return "";
+    return emptyString;
   if (isParagraphHeader()) {
     if (m_paraNumber != Limit - 1) {
       auto nextPara = *this;
@@ -109,7 +109,7 @@ string LineNumber::getWholeString() {
  * @return the prefix to add
  */
 string LineNumber::generateLinePrefix() {
-  string result{""};
+  string result{emptyString};
   if (!isParagraphHeader())
     result = UnhiddenLineNumberStart + asString() + endOfLineNumber +
              endOfGeneratedLineNumber;

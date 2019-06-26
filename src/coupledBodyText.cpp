@@ -122,7 +122,7 @@ void CoupledBodyText::validateFormatForNumbering() {
 }
 
 void CoupledBodyText::setInputOutputFiles() {
-  string attachmentPart{""};
+  string attachmentPart{emptyString};
   if (m_attachNumber != 0)
     attachmentPart = attachmentFileMiddleChar + TurnToString(m_attachNumber);
 
@@ -436,7 +436,7 @@ bool CoupledBodyText::findKey(const string &key) {
   }
   bool found = false;
   while (!infile.eof()) {
-    string line{""};
+    string line{emptyString};
     getline(infile, line);
 
     // if not appear in this line

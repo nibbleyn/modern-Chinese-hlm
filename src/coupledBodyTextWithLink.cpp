@@ -11,7 +11,7 @@ void CoupledBodyTextWithLink::fixLinksWithinOneLine(FileSet referMainFiles,
     toProcess = toProcess.substr(ln.generateLinePrefix().length());
   if (debug >= LOG_INFO)
     METHOD_OUTPUT << toProcess << endl;
-  string targetFile{""};
+  string targetFile{emptyString};
   unsigned int endOfProcessedSubString = 0;
   do {
     // no link any more, continue with next line
@@ -188,9 +188,9 @@ size_t CoupledBodyTextWithLink::getAverageLineLengthFromReferenceFile() {
   auto totalSizes = 0;
   auto totalLines = 0;
   while (!referLinesFile.eof()) {
-    string line{""};
+    string line{emptyString};
     getline(referLinesFile, line);
-    line = regex_replace(line, regex("(?:\\r\\n|\\n|\\r)"), "");
+    line = regex_replace(line, regex("(?:\\r\\n|\\n|\\r)"), emptyString);
     if (debug >= LOG_INFO) {
       METHOD_OUTPUT << line << endl;
       METHOD_OUTPUT << utf8length(line) << endl;

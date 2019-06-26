@@ -31,9 +31,9 @@ void convertFromGB2312ToUtf8(string inputFile, string outputFile) {
  */
 void convertFromGB2312ToUtf8(string referFile, string format, FILE_TYPE type,
                              int attachNo = MIN_ATTACHMENT_NUMBER) {
-  string inputFile{""}, outputFile{""};
+  string inputFile{emptyString}, outputFile{emptyString};
   if (format == "htm") {
-    string attachmentPart{""};
+    string attachmentPart{emptyString};
     if (type == FILE_TYPE::ATTACHMENT)
       attachmentPart = attachmentFileMiddleChar + TurnToString(attachNo);
     inputFile = GB2312_HTML_SRC + getHtmlFileNamePrefix(type) + referFile +
@@ -61,14 +61,14 @@ void convertFromGB2312ToUtf8(string referFile, string format, FILE_TYPE type,
 }
 
 void convertNonPrefixedAttachmentFilesFromGB2312ToUtf8() {
-  string inputFile{""}, outputFile{""};
+  string inputFile{emptyString}, outputFile{emptyString};
   inputFile = GB2312_HTML_SRC + "b00001_1.htm";
   outputFile = string(HTML_OUTPUT_ATTACHMENT) + "b00001_1.htm";
   convertFromGB2312ToUtf8(inputFile, outputFile);
 }
 
 void convertNonPrefixedMainFilesFromGB2312ToUtf8() {
-  string inputFile{""}, outputFile{""};
+  string inputFile{emptyString}, outputFile{emptyString};
   inputFile = GB2312_HTML_SRC + "a00001.htm";
   outputFile = string(HTML_OUTPUT_MAIN) + "a00001.htm";
   convertFromGB2312ToUtf8(inputFile, outputFile);
@@ -78,7 +78,7 @@ void convertNonPrefixedMainFilesFromGB2312ToUtf8() {
 }
 
 void convertNonPrefixedOriginalFilesFromGB2312ToUtf8() {
-  string inputFile{""}, outputFile{""};
+  string inputFile{emptyString}, outputFile{emptyString};
   inputFile = GB2312_HTML_SRC + "c00001.htm";
   outputFile = string(HTML_OUTPUT_ORIGINAL) + "c00001.htm";
   convertFromGB2312ToUtf8(inputFile, outputFile);
@@ -88,14 +88,14 @@ void convertNonPrefixedOriginalFilesFromGB2312ToUtf8() {
 }
 
 void convertMainMenuFromGB2312ToUtf8() {
-  string inputFile{""}, outputFile{""};
+  string inputFile{emptyString}, outputFile{emptyString};
   inputFile = GB2312_HTML_SRC + "aindex.htm";
   outputFile = string(HTML_OUTPUT_MAIN) + "aindex.htm";
   convertFromGB2312ToUtf8(inputFile, outputFile);
 }
 
 void convertAttachmentMainMenuFromGB2312ToUtf8() {
-  string inputFile{""}, outputFile{""};
+  string inputFile{emptyString}, outputFile{emptyString};
   inputFile = GB2312_HTML_SRC + "bttindex0.htm";
   outputFile = string(HTML_OUTPUT_ATTACHMENT) + "bttindex0.htm";
   convertFromGB2312ToUtf8(inputFile, outputFile);
