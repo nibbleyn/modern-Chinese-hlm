@@ -27,13 +27,12 @@ void reConstructStory(const string &title, const string &outputFilename,
     auto num = element.first.first;
     auto paraLine = element.first.second;
     auto startPara = element.second.first;
-    auto endPara = element.second.first;
-    FUNCTION_OUTPUT << num.first << "  " << num.second << "  " << paraLine.first
-                    << "  " << paraLine.second << "  " << startPara.first
-                    << "  " << startPara.second << "  " << endPara.first << "  "
-                    << endPara.second << "  "
-
-                    << endl;
+    auto endPara = element.second.second;
+    FUNCTION_OUTPUT << num.first << "_" << num.second << ":P" << paraLine.first
+                    << "L" << paraLine.second
+                    << ":                                         P"
+                    << startPara.first << "L" << startPara.second << "  ->  P"
+                    << endPara.first << "L" << endPara.second << endl;
     bodyText.setFileAndAttachmentNumber(num.first, num.second);
     bodyText.setStartOfRange(startPara);
     bodyText.setEndOfRange(endPara);

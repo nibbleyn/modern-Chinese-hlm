@@ -511,7 +511,8 @@ void CoupledBodyText::fetchLineTexts() {
           continue;
         else if (finished)
           break;
-        m_resultLines[ln.asString()] = m_inLine;
+        m_resultLines[make_pair(ln.getParaNumber(), ln.getlineNumber())] =
+            m_inLine;
       }
     }
   }

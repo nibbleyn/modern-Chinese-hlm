@@ -105,7 +105,7 @@ public:
   void setEndOfRange(const ParaLineNumber &ln) { m_range.second = ln; }
 
   // lineNumber -> text of that line
-  using lineSet = map<string, string>;
+  using lineSet = map<ParaLineNumber, string>;
   void fetchLineTexts();
   void appendLinesIntoBodyTextFile();
 
@@ -292,7 +292,8 @@ protected:
     } else
       METHOD_OUTPUT << "no entry in m_resultLines." << endl;
     for (const auto &element : m_resultLines) {
-      METHOD_OUTPUT << element.first << "        " << element.second << endl;
+      LineNumber ln(element.first.first, element.first.second);
+      METHOD_OUTPUT << ln.asString() << "        " << element.second << endl;
     }
   }
 };
