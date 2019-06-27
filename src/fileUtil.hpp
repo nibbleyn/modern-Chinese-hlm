@@ -50,7 +50,8 @@ static constexpr const char *MAIN = R"(main)";
 static constexpr const char *ORIGINAL = R"(original)";
 static constexpr const char *ATTACHMENT = R"(attachment)";
 static constexpr const char *JPM = R"(jpm)";
-static constexpr const char *TMP_POSTFIX = R"(_generated)";
+static constexpr const char *GENERATED = R"(_generated)";
+static constexpr const char *NUMBERED = R"(_numbered)";
 
 static constexpr const char *MAIN_SEPERATOR_COLOR = R"(F0BEC0)";
 static constexpr const char *ORIGINAL_SEPERATOR_COLOR = R"(004040)";

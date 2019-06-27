@@ -235,15 +235,13 @@ void fixTagsOfMainBodyText(int minTarget, int maxTarget) {
 }
 
 void CoupledBodyTextContainer::makeSingleLineHeaderAndFooter() {
-  string inputHtmlFile = getInputHtmlFilePath();
-  string outputHtmlFile = getoutputHtmlFilepath();
 
-  ifstream inHtmlFile(inputHtmlFile);
+  ifstream inHtmlFile(getInputHtmlFilePath());
   if (!inHtmlFile) {
-    FUNCTION_OUTPUT << ERROR_FILE_NOT_EXIST << inputHtmlFile << endl;
+    FUNCTION_OUTPUT << ERROR_FILE_NOT_EXIST << getInputHtmlFilePath() << endl;
     return;
   }
-  ofstream outHtmlFile(outputHtmlFile);
+  ofstream outHtmlFile(getoutputHtmlFilepath());
   string line{emptyString};
 
   string singleLineHeader;
@@ -264,7 +262,7 @@ void CoupledBodyTextContainer::makeSingleLineHeaderAndFooter() {
   // output start line
   outHtmlFile << line << endl;
   if (inHtmlFile.eof()) {
-    FUNCTION_OUTPUT << "source " << inputHtmlFile
+    FUNCTION_OUTPUT << "source " << getInputHtmlFilePath()
                     << " has no start mark:" << topIdBeginChars << endl;
     return;
   }
@@ -278,7 +276,7 @@ void CoupledBodyTextContainer::makeSingleLineHeaderAndFooter() {
     }
   }
   if (inHtmlFile.eof()) {
-    FUNCTION_OUTPUT << "source " << inputHtmlFile
+    FUNCTION_OUTPUT << "source " << getInputHtmlFilePath()
                     << " has no end mark:" << bottomIdBeginChars << endl;
     return;
   }
@@ -293,21 +291,17 @@ void CoupledBodyTextContainer::makeSingleLineHeaderAndFooter() {
   outHtmlFile << singleLineFooter << endl;
   if (debug >= LOG_INFO)
     FUNCTION_OUTPUT << "makeSingleLineHeaderAndFooter finished for "
-                    << outputHtmlFile << endl;
+                    << getoutputHtmlFilepath() << endl;
 }
 
 void CoupledBodyTextContainer::fixHeaderAndFooter() {
-  string inputHtmlFile = getInputHtmlFilePath();
-  string outputHtmlFile = getoutputHtmlFilepath();
-
-  ifstream inHtmlFile(inputHtmlFile);
+  ifstream inHtmlFile(getInputHtmlFilePath());
   if (!inHtmlFile) {
-    FUNCTION_OUTPUT << ERROR_FILE_NOT_EXIST << inputHtmlFile << endl;
+    FUNCTION_OUTPUT << ERROR_FILE_NOT_EXIST << getInputHtmlFilePath() << endl;
     return;
   }
-  ofstream outHtmlFile(outputHtmlFile);
+  ofstream outHtmlFile(getoutputHtmlFilepath());
   string line{emptyString};
-
   string singleLineHeader;
   while (!inHtmlFile.eof()) {
     getline(inHtmlFile, line);
@@ -323,7 +317,7 @@ void CoupledBodyTextContainer::fixHeaderAndFooter() {
   // output start line
   outHtmlFile << line << endl;
   if (inHtmlFile.eof()) {
-    FUNCTION_OUTPUT << "source " << inputHtmlFile
+    FUNCTION_OUTPUT << "source " << getInputHtmlFilePath()
                     << " has no start mark:" << topIdBeginChars << endl;
     return;
   }
@@ -337,7 +331,7 @@ void CoupledBodyTextContainer::fixHeaderAndFooter() {
     }
   }
   if (inHtmlFile.eof()) {
-    FUNCTION_OUTPUT << "source " << inputHtmlFile
+    FUNCTION_OUTPUT << "source " << getInputHtmlFilePath()
                     << " has no end mark:" << bottomIdBeginChars << endl;
     return;
   }
@@ -350,8 +344,8 @@ void CoupledBodyTextContainer::fixHeaderAndFooter() {
   FUNCTION_OUTPUT << singleLineFooter << endl;
   outHtmlFile << singleLineFooter << endl;
   if (debug >= LOG_INFO)
-    FUNCTION_OUTPUT << "fixHeaderAndFooter finished for " << outputHtmlFile
-                    << endl;
+    FUNCTION_OUTPUT << "fixHeaderAndFooter finished for "
+                    << getoutputHtmlFilepath() << endl;
 }
 
 void fixHeaderAndFooterForJPMHtml(int minTarget, int maxTarget) {

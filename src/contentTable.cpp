@@ -29,7 +29,8 @@ void generateContentTableForMainHtmls() {
   container.setFileType(FILE_TYPE::MAIN);
 
   TableContainer outputContainer(MAIN_INDEX);
-  outputContainer.setInputFileName(TABLE_CONTAINER_FILENAME_SMALLER_FONT);
+  outputContainer.setInputBodyTextFilename(
+      TABLE_CONTAINER_FILENAME_SMALLER_FONT);
   outputContainer.setMaxTarget(MAIN_MAX_CHAPTER_NUMBER);
   outputContainer.createParaListFrom(6, 10, 70);
   outputContainer.addOneParaHeaderPosition(72);
@@ -52,7 +53,7 @@ void generateContentTableForMainHtmls() {
   outputContainer.setDisplayTitle(MAIN_DISPLAY_TITLE);
   outputContainer.assembleBackToHTM();
   FUNCTION_OUTPUT << "result is in file: "
-                  << outputContainer.getOutputFilePath() << endl;
+                  << outputContainer.getoutputHtmlFilepath() << endl;
   FUNCTION_OUTPUT << "generateContentTable for Main Htmls finished. " << endl;
 }
 
@@ -79,7 +80,7 @@ void generateContentTableForOriginalHtmls() {
   outputContainer.setDisplayTitle(ORG_DISPLAY_TITLE);
   outputContainer.assembleBackToHTM();
   FUNCTION_OUTPUT << "result is in file: "
-                  << outputContainer.getOutputFilePath() << endl;
+                  << outputContainer.getoutputHtmlFilepath() << endl;
   FUNCTION_OUTPUT << "generateContentTable for Original Htmls finished. "
                   << endl;
 }
@@ -106,7 +107,7 @@ void generateContentTableForJPMHtmls() {
   outputContainer.setDisplayTitle(JPM_DISPLAY_TITLE);
   outputContainer.assembleBackToHTM();
   FUNCTION_OUTPUT << "result is in file: "
-                  << outputContainer.getOutputFilePath() << endl;
+                  << outputContainer.getoutputHtmlFilepath() << endl;
   FUNCTION_OUTPUT << "generateContentTable for JPM Htmls finished. " << endl;
 }
 
@@ -128,8 +129,8 @@ void generateContentTableForReferenceAttachments(
   outputContainer.setTitle(REFERENCE_ATTACHMENT_TITLE);
   outputContainer.setDisplayTitle(REFERENCE_ATTACHMENT_DISPLAY_TITLE);
   outputContainer.assembleBackToHTM();
-  FUNCTION_OUTPUT << "result is in file " << outputContainer.getOutputFilePath()
-                  << endl;
+  FUNCTION_OUTPUT << "result is in file "
+                  << outputContainer.getoutputHtmlFilepath() << endl;
 }
 
 void generateContentTableForPersonalAttachments(
@@ -150,6 +151,6 @@ void generateContentTableForPersonalAttachments(
   outputContainer.setTitle(PERSONAL_ATTACHMENT_TITLE);
   outputContainer.setDisplayTitle(PERSONAL_ATTACHMENT_DISPLAY_TITLE);
   outputContainer.assembleBackToHTM();
-  FUNCTION_OUTPUT << "result is in file " << outputContainer.getOutputFilePath()
-                  << endl;
+  FUNCTION_OUTPUT << "result is in file "
+                  << outputContainer.getoutputHtmlFilepath() << endl;
 }

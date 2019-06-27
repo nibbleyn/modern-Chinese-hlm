@@ -591,7 +591,7 @@ void testListContainer() {
   container.setTitle("test");
   container.setDisplayTitle("test container");
   container.assembleBackToHTM();
-  FUNCTION_OUTPUT << "result is in file " << container.getOutputFilePath()
+  FUNCTION_OUTPUT << "result is in file " << container.getoutputHtmlFilepath()
                   << endl;
 }
 
@@ -607,7 +607,7 @@ void testTableContainer() {
   container.setTitle("content index table");
   container.setDisplayTitle("content");
   container.assembleBackToHTM();
-  FUNCTION_OUTPUT << "result is in file: " << container.getOutputFilePath()
+  FUNCTION_OUTPUT << "result is in file: " << container.getoutputHtmlFilepath()
                   << endl;
 }
 

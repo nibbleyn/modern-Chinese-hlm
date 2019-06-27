@@ -3,30 +3,30 @@
 #include "container.hpp"
 #include "coupledBodyTextWithLink.hpp"
 
-static const string HTML_CONTAINER = R"(container/container)";
-static const string BODY_TEXT_CONTAINER = R"(container/)";
+static const string HTML_CONTAINER_PATH = R"(container/)";
 
 using ParaHeaderPositionSet = vector<int>;
 
 class LinkSetContainer : public Container {
 public:
   LinkSetContainer() = default;
-  LinkSetContainer(const string &filename) : m_outputFilename(filename) {
-    m_htmlInputFilePath = HTML_CONTAINER;
+  LinkSetContainer(const string &outputHtmlFilename)
+      : Container(outputHtmlFilename) {
+    m_htmlInputFilePath = HTML_CONTAINER_PATH;
     m_htmlOutputFilePath = HTML_OUTPUT_MAIN;
-    m_bodyTextInputFilePath = BODY_TEXT_CONTAINER;
-    m_bodyTextOutputFilePath = BODY_TEXT_CONTAINER;
+    m_bodyTextInputFilePath = HTML_CONTAINER_PATH;
   }
   virtual ~LinkSetContainer(){};
-  virtual string getInputFileName() const = 0;
-  string getOutputFilePath() {
-    return m_htmlOutputFilePath + m_outputFilename + HTML_SUFFIX;
-  }
-  void clearExistingBodyText();
 
   string getBodyTextFilePath() override {
-    return m_bodyTextOutputFilePath + getInputFileName() + BODY_TEXT_SUFFIX;
+    return m_bodyTextInputFilePath + getInputBodyTextFileName() +
+           BODY_TEXT_SUFFIX;
   }
+
+  virtual string getInputBodyTextFileName() const = 0;
+
+  void clearExistingBodyText();
+
   void createParaListFrom(int first, int incremental, int max = 0);
   void addOneParaHeaderPosition(int pos) {
     m_paraHeaderPositionSet.push_back(pos);
@@ -62,15 +62,14 @@ public:
   }
 
 protected:
-  string m_outputFilename{"output"};
   string getInputHtmlFilePath() override {
-    return m_htmlInputFilePath + getInputFileName() + HTML_SUFFIX;
-  }
-  string getoutputHtmlFilepath() override {
-    return m_htmlOutputFilePath + m_outputFilename + HTML_SUFFIX;
+    if (not m_disableUsingDefaultInputHtmlFileName)
+      return m_htmlInputFilePath + getInputBodyTextFileName() + HTML_SUFFIX;
+    return Container::getInputHtmlFilePath();
   }
   string getTempBodyTextFixFilePath() {
-    return m_bodyTextOutputFilePath + R"(\)" + TMP_POSTFIX + R"(\)" + getInputFileName() + BODY_TEXT_SUFFIX;
+    return m_fixedBodyTextFilePath + getInputBodyTextFileName() +
+           BODY_TEXT_SUFFIX;
   }
   void loadBodyTextsFromFixed();
 
@@ -96,7 +95,9 @@ public:
   void numbering();
 
 private:
-  string getInputFileName() const override { return LIST_CONTAINER_FILENAME; }
+  string getInputBodyTextFileName() const override {
+    return LIST_CONTAINER_FILENAME;
+  }
   CoupledBodyTextWithLink m_bodyText;
 };
 
@@ -112,7 +113,9 @@ class TableContainer : public LinkSetContainer {
 
 public:
   TableContainer() = default;
-  TableContainer(const string &filename) : LinkSetContainer(filename) {}
+  TableContainer(const string &filename) : LinkSetContainer(filename) {
+    m_inputBodyTextFilename = TABLE_CONTAINER_FILENAME;
+  }
 
   // process bodyText change directly, instead of thru CoupledBodyText
   void addExistingFrontLinks();
@@ -129,11 +132,14 @@ public:
   // text could be null for last right column
   void appendRightParagraphInBodyText(const string &text);
   void finishBodyTextFile();
-  void setInputFileName(const string &name) { m_filename = name; }
+  void setInputBodyTextFilename(const string &filename) {
+    m_inputBodyTextFilename = filename;
+  }
   void outputToBodyTextFromLinkList(const string &units = defaultUnit);
 
 private:
-  string getInputFileName() const override { return m_filename; }
-  string m_filename{TABLE_CONTAINER_FILENAME};
+  string getInputBodyTextFileName() const override {
+    return m_inputBodyTextFilename;
+  }
   bool m_enableAddExistingFrontLinks{false};
 };

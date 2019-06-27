@@ -49,31 +49,21 @@ string CoupledBodyTextContainer::getBodyTextFilePrefix() {
   return MAIN_BODYTEXT_PREFIX;
 }
 
-string CoupledBodyTextContainer::getInputHtmlFilePath() {
+void CoupledBodyTextContainer::setInputHtmlFileName() {
   string attachmentPart{emptyString};
   if (m_fileType == FILE_TYPE::ATTACHMENT)
     attachmentPart =
         attachmentFileMiddleChar + TurnToString(m_attachmentNumber);
-  return m_htmlInputFilePath + getHtmlFileNamePrefix(m_fileType) + m_file +
-         attachmentPart + HTML_SUFFIX;
+  m_inputHtmlFilename =
+      getHtmlFileNamePrefix(m_fileType) + m_file + attachmentPart;
 }
 
-string CoupledBodyTextContainer::getoutputHtmlFilepath() {
+void CoupledBodyTextContainer::setBodyTextFileName() {
   string attachmentPart{emptyString};
   if (m_fileType == FILE_TYPE::ATTACHMENT)
     attachmentPart =
         attachmentFileMiddleChar + TurnToString(m_attachmentNumber);
-  return m_htmlOutputFilePath + getHtmlFileNamePrefix(m_fileType) + m_file +
-         attachmentPart + HTML_SUFFIX;
-}
-
-string CoupledBodyTextContainer::getBodyTextFilePath() {
-  string attachmentPart{emptyString};
-  if (m_fileType == FILE_TYPE::ATTACHMENT)
-    attachmentPart =
-        attachmentFileMiddleChar + TurnToString(m_attachmentNumber);
-  return m_bodyTextInputFilePath + getBodyTextFilePrefix() + m_file +
-         attachmentPart + BODY_TEXT_SUFFIX;
+  m_inputBodyTextFilename = getBodyTextFilePrefix() + m_file + attachmentPart;
 }
 
 /**
@@ -137,17 +127,12 @@ string replaceReferPara(const string &linkString, const string &referFile,
  * @param filename
  */
 void CoupledBodyTextContainer::fixReturnLinkForAttachmentFile() {
-  string inputHtmlFile = getInputHtmlFilePath();
-  string outputFile = getoutputHtmlFilepath();
-
-  ifstream inHtmlFile(inputHtmlFile);
-
+  ifstream inHtmlFile(getInputHtmlFilePath());
   if (!inHtmlFile) {
-    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << inputHtmlFile << endl;
+    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << getInputHtmlFilePath() << endl;
     return;
   }
-
-  ofstream outfile(outputFile);
+  ofstream outfile(getoutputHtmlFilepath());
   string line{emptyString};
   string referFile =
       m_file + attachmentFileMiddleChar + TurnToString(m_attachmentNumber);
@@ -195,10 +180,9 @@ CoupledBodyTextContainer::getAttachmentFileList(int minAttachNo,
 }
 
 void CoupledBodyTextContainer::fetchOriginalAndTranslatedTitles() {
-  string inputHtmlFile = getInputHtmlFilePath();
-  ifstream inHtmlFile(inputHtmlFile);
+  ifstream inHtmlFile(getInputHtmlFilePath());
   if (!inHtmlFile) {
-    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << inputHtmlFile << endl;
+    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << getInputHtmlFilePath() << endl;
     return;
   }
   string line{emptyString};

@@ -1,16 +1,17 @@
 #include "story.hpp"
 
 /**
- * give a set of start, end para pairs, create a sub-story by get them out of
- * original files
- * @param indexFilePath mapping file
- * @param outputFilename result html file
+ * give a set of start, end para pairs in index file named after title
+ * parameter, create a sub-story by get them out of original files
+ * if autoNumbering is set to false, then autoNumbering won't happen
+ * after manually change result html file, could call autoNumberingResultStory
+ * on it then
  */
 void reConstructStory(const string &title, const string &outputFilename,
-                      const string &kind) {
+                      const string &kind, bool autoNumbering) {
   string indexFilePath = HTML_OUTPUT_MAIN + title + BODY_TEXT_SUFFIX;
   CoupledBodyTextWithLink::loadRangeTableFromFile(indexFilePath);
-  ListContainer container((outputFilename == emptyString) ? title + TMP_POSTFIX
+  ListContainer container((outputFilename == emptyString) ? title + GENERATED
                                                           : outputFilename);
   container.clearExistingBodyText();
 
@@ -48,6 +49,15 @@ void reConstructStory(const string &title, const string &outputFilename,
   container.setTitle(title);
   container.setDisplayTitle(title);
   container.assembleBackToHTM();
-  FUNCTION_OUTPUT << "result is in file " << container.getOutputFilePath()
+  if (autoNumbering)
+    autoNumberingResultStory(container.getoutputHtmlFilepath());
+  FUNCTION_OUTPUT << "result is in file " << container.getoutputHtmlFilepath()
                   << endl;
+}
+
+void autoNumberingResultStory(const string &htmlFilename) {
+  FUNCTION_OUTPUT << "autoNumbering" << htmlFilename << endl;
+  ListContainer container(htmlFilename + NUMBERED);
+  container.setInputHtmlFilename(htmlFilename);
+  container.numbering();
 }

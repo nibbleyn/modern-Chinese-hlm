@@ -3,8 +3,8 @@
 extern int debug;
 
 void LinkSetContainer::loadBodyTextsFromFixed() {
-    Poco::File fileToCopy(getTempBodyTextFixFilePath());
-    fileToCopy.copyTo(getBodyTextFilePath());
+  Poco::File fileToCopy(getTempBodyTextFixFilePath());
+  fileToCopy.copyTo(getBodyTextFilePath());
 }
 
 /**
@@ -50,9 +50,13 @@ void ListContainer::outputToBodyTextFromLinkList(const string &units) {
   }
 }
 
-void ListContainer::numbering(){
-	dissembleFromHTM();
-	assembleBackToHTM();
+void ListContainer::numbering() {
+  dissembleFromHTM();
+  m_bodyText.setInputBodyTextFilePath(getBodyTextFilePath());
+  m_bodyText.setOutputBodyTextFilePath(getTempBodyTextFixFilePath());
+  m_bodyText.addLineNumber();
+  loadBodyTextsFromFixed();
+  assembleBackToHTM();
 }
 
 const string TableContainer::BODY_TEXT_STARTER = R"(3front.txt)";

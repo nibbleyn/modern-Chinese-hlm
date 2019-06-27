@@ -24,11 +24,17 @@ public:
   void setFileAndAttachmentNumber(const string &file, int attachNo = 0) {
     m_file = file;
     m_attachmentNumber = attachNo;
+    setBodyTextFileName();
+    setInputHtmlFileName();
+    m_outputHtmlFilename = m_inputHtmlFilename;
   }
 
   void setFileAndAttachmentNumber(int file, int attachNo = 0) {
     m_file = getChapterNameByTargetKind(ATTACHMENT_TYPE_HTML_TARGET, file);
     m_attachmentNumber = attachNo;
+    setBodyTextFileName();
+    setInputHtmlFileName();
+    m_outputHtmlFilename = m_inputHtmlFilename;
   }
 
   void setFileType(FILE_TYPE fileType) {
@@ -71,7 +77,6 @@ private:
   string m_translatedTitle{emptyString};
 
   string getBodyTextFilePrefix();
-  string getInputHtmlFilePath() override;
-  string getoutputHtmlFilepath() override;
-  string getBodyTextFilePath() override;
+  void setInputHtmlFileName();
+  void setBodyTextFileName();
 };

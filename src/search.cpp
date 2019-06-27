@@ -63,11 +63,11 @@ void Searcher::outputSearchResult() {
 
   m_containerPtr->setTitle("search  results");
   m_containerPtr->setDisplayTitle("search for key: " + m_key + " in " + m_kind +
-          " files. " + TurnToString(total) + " link" + verb +
-          " found.");
+                                  " files. " + TurnToString(total) + " link" +
+                                  verb + " found.");
   m_containerPtr->assembleBackToHTM();
-  FUNCTION_OUTPUT << "result is in file " << m_containerPtr->getOutputFilePath()
-                  << endl;
+  FUNCTION_OUTPUT << "result is in file "
+                  << m_containerPtr->getoutputHtmlFilepath() << endl;
 }
 
 void Searcher::runSearchingOverFiles() {

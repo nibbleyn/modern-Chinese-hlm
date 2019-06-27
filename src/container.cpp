@@ -4,15 +4,12 @@ static const string defaultTitle = R"(XXX)";
 static const string defaultDisplayTitle = R"(YYY)";
 
 void Container::dissembleFromHTM() {
-  string inputHtmlFile = getInputHtmlFilePath();
-  string outputBodyTextFile = getBodyTextFilePath();
-
-  ifstream infile(inputHtmlFile);
+  ifstream infile(getInputHtmlFilePath());
   if (!infile) {
-    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << inputHtmlFile << endl;
+    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << getInputHtmlFilePath() << endl;
     return;
   }
-  ofstream outfile(outputBodyTextFile);
+  ofstream outfile(getBodyTextFilePath());
   string line{emptyString};
   bool headerSkipped = false, bodyFinished = false;
   while (!infile.eof()) {
@@ -38,33 +35,29 @@ void Container::dissembleFromHTM() {
     }
   }
   if (not headerSkipped)
-    METHOD_OUTPUT << "no top paragraph found for " << inputHtmlFile << "as "
-                  << topIdBeginChars << endl;
+    METHOD_OUTPUT << "no top paragraph found for " << getInputHtmlFilePath()
+                  << "as " << topIdBeginChars << endl;
   else if (not bodyFinished)
-    METHOD_OUTPUT << "no end paragraph found for " << inputHtmlFile << "as "
-                  << bottomIdBeginChars << endl;
+    METHOD_OUTPUT << "no end paragraph found for " << getInputHtmlFilePath()
+                  << "as " << bottomIdBeginChars << endl;
   else if (debug >= LOG_INFO)
-    METHOD_OUTPUT << "dissemble finished for " << inputHtmlFile << endl;
+    METHOD_OUTPUT << "dissemble finished for " << getInputHtmlFilePath()
+                  << endl;
 }
 
 void Container::assembleBackToHTM() {
-
-  string inputHtmlFile = getInputHtmlFilePath();
-  string inputBodyTextFile = getBodyTextFilePath();
-  string outputFile = getoutputHtmlFilepath();
-
-  ifstream inHtmlFile(inputHtmlFile);
+  ifstream inHtmlFile(getInputHtmlFilePath());
   if (!inHtmlFile) {
-    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << inputHtmlFile << endl;
+    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << getInputHtmlFilePath() << endl;
     return;
   }
-  ifstream inBodyTextFile(inputBodyTextFile);
+  ifstream inBodyTextFile(getBodyTextFilePath());
   if (!inBodyTextFile) {
-    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << inputBodyTextFile << endl;
+    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << getBodyTextFilePath() << endl;
     return;
   }
 
-  ofstream outfile(outputFile);
+  ofstream outfile(getoutputHtmlFilepath());
   string line{emptyString};
   bool started = false;
   // merge header of input html
@@ -88,7 +81,7 @@ void Container::assembleBackToHTM() {
     outfile << line << endl;
   }
   if (inHtmlFile.eof() and not started) {
-    METHOD_OUTPUT << "source .htm: " << inputHtmlFile
+    METHOD_OUTPUT << "source .htm: " << getInputHtmlFilePath()
                   << " has no start mark:" << topIdBeginChars << endl;
     return;
   }
@@ -106,7 +99,7 @@ void Container::assembleBackToHTM() {
     }
   }
   if (m_bodyTextWithEndMark and inBodyTextFile.eof() and ended == false) {
-    METHOD_OUTPUT << "source body text file: " << inputBodyTextFile
+    METHOD_OUTPUT << "source body text file: " << getBodyTextFilePath()
                   << " has no end mark:" << bottomIdBeginChars << endl;
     return;
   }
@@ -133,11 +126,12 @@ void Container::assembleBackToHTM() {
     }
   }
   if (m_htmlWithEndMark and inHtmlFile.eof() and ended == false) {
-    METHOD_OUTPUT << "source .htm: " << inputHtmlFile
+    METHOD_OUTPUT << "source .htm: " << getInputHtmlFilePath()
                   << " has no end mark:" << htmlFileFinalLine << endl;
     return;
   }
 
   if (debug >= LOG_INFO)
-    METHOD_OUTPUT << "assemble finished for " << outputFile << endl;
+    METHOD_OUTPUT << "assemble finished for " << getoutputHtmlFilepath()
+                  << endl;
 }
