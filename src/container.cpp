@@ -165,6 +165,6 @@ void Container::loadFixedBodyTexts() {
   sort(filenameList.begin(), filenameList.end(), less<string>());
   for (const auto &file : filenameList) {
     Poco::File fileToCopy(m_fixedBodyTextDir + file);
-    fileToCopy.copyTo(m_inputBodyTextDir + file);
+    fileToCopy.copyTo(m_bodyTextDir + file);
   }
 }

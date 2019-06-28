@@ -30,25 +30,6 @@ string currentDateTime() {
   return ss_msg.str();
 }
 
-/**
- * from the type of link to get the filename prefix of bodytext file
- * all main bodytext files are MainXX.txt
- * all attachment bodytext files are AttachXX.txt
- * all original bodytext files are OrgXX.txt
- * never get called for type SAMEPAGE
- * @param type type of file
- * @return filename prefix of bodytext file
- */
-string CoupledBodyTextContainer::getBodyTextFilePrefix() {
-  if (m_fileType == FILE_TYPE::ORIGINAL)
-    return ORIGINAL_BODYTEXT_PREFIX;
-  if (m_fileType == FILE_TYPE::ATTACHMENT)
-    return ATTACHMENT_BODYTEXT_PREFIX;
-  if (m_fileType == FILE_TYPE::JPM)
-    return JPM_BODYTEXT_PREFIX;
-  return MAIN_BODYTEXT_PREFIX;
-}
-
 void CoupledBodyTextContainer::setInputHtmlFileName() {
   string attachmentPart{emptyString};
   if (m_fileType == FILE_TYPE::ATTACHMENT)
@@ -63,7 +44,7 @@ void CoupledBodyTextContainer::setBodyTextFileName() {
   if (m_fileType == FILE_TYPE::ATTACHMENT)
     attachmentPart =
         attachmentFileMiddleChar + TurnToString(m_attachmentNumber);
-  m_inputBodyTextFilename = getBodyTextFilePrefix() + m_file + attachmentPart;
+  m_bodyTextFilename = getBodyTextFilePrefix() + m_file + attachmentPart;
 }
 
 /**

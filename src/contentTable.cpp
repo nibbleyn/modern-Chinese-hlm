@@ -29,7 +29,7 @@ void generateContentTableForMainHtmls() {
   container.setFileType(FILE_TYPE::MAIN);
 
   TableContainer outputContainer(MAIN_INDEX);
-  outputContainer.setInputBodyTextFilename(
+  outputContainer.setConstantBodyTextFileName(
       TABLE_CONTAINER_FILENAME_SMALLER_FONT);
   outputContainer.setMaxTarget(MAIN_MAX_CHAPTER_NUMBER);
   outputContainer.createParaListFrom(6, 10, 70);

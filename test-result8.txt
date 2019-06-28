@@ -1,4 +1,4 @@
-*************************line 625: HLM test started *************************
+*************************line 629: HLM test started *************************
 5Space::loadFirstFromContainedLine              m_fullString: 
 5Space::loadFirstFromContainedLine              &nbsp;
 testSpace              first appearance offset: 

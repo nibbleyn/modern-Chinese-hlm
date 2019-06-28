@@ -1,4 +1,4 @@
-*************************line 617: HLM test started *************************
+*************************line 629: HLM test started *************************
 testLineHeader              original: 
 testLineHeader              P1L4
 testLineHeader              1 4 P1L4
@@ -64,7 +64,7 @@ printCompareResult              <hr color="#F0BEC0"><b unhidden> 第8段 </b><a 
 printCompareResult              same
 testLineNumber              display as:
 testLineNumber              第8段 向下    向上
-*************************line 199: ln5 finished *************************
+*************************line 198: ln5 finished *************************
 testParagraphHeaderFromContainedLine              original: 
 testParagraphHeaderFromContainedLine              <hr color="#F0BEC0"><a unhidden id="bottom" href="#top">||<-页面顶部</a>&nbsp;&nbsp;&nbsp;&nbsp;<a unhidden id="P78" href="#P79">^向上</a><hr color="#F0BEC0">
 10LineNumber::loadFirstFromContainedLine              m_fullString: 
@@ -81,7 +81,7 @@ printCompareResult              <hr color="#F0BEC0"><a unhidden id="bottom" href
 printCompareResult              same
 testLineNumber              display as:
 testLineNumber              ||<-页面顶部    ^向上
-*************************line 214: ln6 finished *************************
+*************************line 213: ln6 finished *************************
 testLineHeaderFromContainedLine              original: 
 testLineHeaderFromContainedLine              <br>
 testLineHeaderFromContainedLine              0 0 
@@ -90,7 +90,7 @@ testLineHeaderFromContainedLine              whole string:
 testLineHeaderFromContainedLine              
 testLineHeaderFromContainedLine              display as:||
 testLineHeaderFromContainedLine              pure text
-*************************line 217: ln7 finished *************************
+*************************line 216: ln7 finished *************************
 testLineHeaderFromContainedLine              original: 
 testLineHeaderFromContainedLine              anything
 testLineHeaderFromContainedLine              0 0 
@@ -99,5 +99,5 @@ testLineHeaderFromContainedLine              whole string:
 testLineHeaderFromContainedLine              
 testLineHeaderFromContainedLine              display as:||
 testLineHeaderFromContainedLine              pure text
-*************************line 219: ln8 finished *************************
+*************************line 218: ln8 finished *************************
 

@@ -14,6 +14,7 @@ public:
 
 public:
   CoupledBodyTextContainer() = default;
+  CoupledBodyTextContainer(const string &outputHtmlFilename) = delete;
 
   void setFileAndAttachmentNumber(const string &file, int attachNo = 0) {
     m_file = file;
@@ -72,7 +73,15 @@ private:
   string m_originalTitle{emptyString};
   string m_translatedTitle{emptyString};
 
-  string getBodyTextFilePrefix();
+  string getBodyTextFilePrefix() {
+    if (m_fileType == FILE_TYPE::ORIGINAL)
+      return ORIGINAL_BODYTEXT_PREFIX;
+    if (m_fileType == FILE_TYPE::ATTACHMENT)
+      return ATTACHMENT_BODYTEXT_PREFIX;
+    if (m_fileType == FILE_TYPE::JPM)
+      return JPM_BODYTEXT_PREFIX;
+    return MAIN_BODYTEXT_PREFIX;
+  }
   void setInputHtmlFileName();
   void setBodyTextFileName();
 };

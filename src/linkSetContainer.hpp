@@ -10,19 +10,15 @@ public:
       : Container(outputHtmlFilename) {
     m_inputHtmlDir = HTML_NON_COUPLED_CONTAINER_PATH;
     m_outputHtmlDir = HTML_OUTPUT_MAIN;
-    m_inputBodyTextDir = HTML_NON_COUPLED_CONTAINER_PATH;
+    m_bodyTextDir = HTML_NON_COUPLED_CONTAINER_PATH;
   }
   virtual ~LinkSetContainer(){};
 
   virtual void
   outputToBodyTextFromLinkList(const string &units = defaultUnit) = 0;
-  virtual string getInputBodyTextFileName() const = 0;
   string getInputHtmlFilePath() override {
-    m_inputHtmlFilename = HTML_PREFIX + getInputBodyTextFileName();
+    m_inputHtmlFilename = HTML_PREFIX + m_bodyTextFilename;
     return Container::getInputHtmlFilePath();
-  }
-  string getBodyTextFilePath() override {
-    return m_inputBodyTextDir + getInputBodyTextFileName() + BODY_TEXT_SUFFIX;
   }
   void clearExistingBodyText();
 
@@ -72,17 +68,14 @@ static const string LIST_CONTAINER_FILENAME = R"(1)";
 class ListContainer : public LinkSetContainer {
 public:
   ListContainer() = default;
-  ListContainer(const string &filename) : LinkSetContainer(filename) {}
+  ListContainer(const string &filename) : LinkSetContainer(filename) {
+    m_bodyTextFilename = LIST_CONTAINER_FILENAME;
+  }
 
   void appendParagraphInBodyText(const string &text);
   void appendParagrapHeader(const string &header);
 
   void outputToBodyTextFromLinkList(const string &units = defaultUnit) override;
-
-private:
-  string getInputBodyTextFileName() const override {
-    return LIST_CONTAINER_FILENAME;
-  }
 };
 
 static constexpr const char *TABLE_CONTAINER_FILENAME = R"(2)";
@@ -95,7 +88,7 @@ class TableContainer : public LinkSetContainer {
 public:
   TableContainer() = default;
   TableContainer(const string &filename) : LinkSetContainer(filename) {
-    m_inputBodyTextFilename = TABLE_CONTAINER_FILENAME;
+    m_bodyTextFilename = TABLE_CONTAINER_FILENAME;
   }
 
   // process bodyText change directly, instead of thru CoupledBodyText
@@ -113,14 +106,11 @@ public:
   // text could be null for last right column
   void appendRightParagraphInBodyText(const string &text);
   void finishBodyTextFile();
-  void setInputBodyTextFilename(const string &filename) {
-    m_inputBodyTextFilename = filename;
+  void setConstantBodyTextFileName(const string &filename) {
+    m_bodyTextFilename = filename;
   }
   void outputToBodyTextFromLinkList(const string &units = defaultUnit) override;
 
 private:
-  string getInputBodyTextFileName() const override {
-    return m_inputBodyTextFilename;
-  }
   bool m_enableAddExistingFrontLinks{false};
 };

@@ -296,8 +296,7 @@ void validateParaSizeForAutoNumberingJPMHtmls() {
 
 void refreshBodyTexts(const string &kind, int minTarget, int maxTarget) {
   CoupledBodyTextContainer container;
-  if (kind == MAIN)
-    container.backupAndOverwriteInputHtmlFiles();
+  container.backupAndOverwriteInputHtmlFiles();
   for (const auto &file : buildFileSet(minTarget, maxTarget, kind)) {
     container.setFileType(getFileTypeFromString(kind));
     container.setFileAndAttachmentNumber(file);

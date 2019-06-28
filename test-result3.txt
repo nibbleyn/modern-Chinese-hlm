@@ -1,4 +1,4 @@
-*************************line 625: HLM test started *************************
+*************************line 629: HLM test started *************************
 *************************line 277: testLinkOperation starts *************************
 testLinkOperation              <111>22>
 testLinkFromAttachment              original link: 
@@ -138,7 +138,7 @@ readDisplayType               unhidden title="菱角菱花"
 12LinkFromMain::readKey              key: 菱角菱花
 testLinkFromMain              need Update: 1
 testLinkFromMain              after fixed: 
-testLinkFromMain              <a unhidden title="菱角菱花" href="#P1L4"><sub hidden>第80回1.4节:</sub>原是老奶奶（薛姨妈）使唤的</a>
+testLinkFromMain              <a unhidden title="菱角菱花" href="a080.htm#P1L4"><sub hidden>第80回1.4节:</sub>原是老奶奶（薛姨妈）使唤的</a>
 testLinkFromMain              display as:原是老奶奶（薛姨妈）使唤的||
 *************************line 357: fixLinkFromSameFileTemplate finished *************************
 fixLinkFromMainTemplate              <a unhidden title="菱角菱花" href="a080.htm#94"><sub hidden>第80章1.1节:</sub>原是老奶奶（薛姨妈）使唤的</a>
@@ -275,7 +275,7 @@ readDisplayType               unhidden title="西北"
 testLinkFromAttachment              原是老奶奶（薛姨妈）使唤的
 testLinkFromAttachment              need Update: 1
 testLinkFromAttachment              after fixed: 
-testLinkFromAttachment              <a unhidden title="西北" href="#P1L2"><sub hidden>第3_9篇1.2节:</sub>原是老奶奶（薛姨妈）使唤的</a>
+testLinkFromAttachment              <a unhidden title="西北" href="b003_9.htm#P1L2"><sub hidden>第3_9篇1.2节:</sub>原是老奶奶（薛姨妈）使唤的</a>
 testLinkFromAttachment              display as:原是老奶奶（薛姨妈）使唤的||
 *************************line 418: fixLinkFromSameFileTemplate finished *************************
 fixLinkFromMainTemplate              <a unhidden title="菱角菱花" href="..\a080.htm#94"><sub hidden>第80章1.1节:</sub>原是老奶奶（薛姨妈）使唤的</a>
