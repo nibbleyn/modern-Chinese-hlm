@@ -47,45 +47,54 @@ void CoupledBodyTextContainer::setBodyTextFileName() {
   m_bodyTextFilename = getBodyTextFilePrefix() + m_file + attachmentPart;
 }
 
-/**
- * to numbering or linkfixing main or attachment files
- * just copy them to HTML_OUTPUT_MAIN or HTML_OUTPUT_ATTACHMENT
- * and this function would backup current files
- * (incl. sub-dirs) under HTML_SRC_MAIN
- * and load newly copied files from HTML_OUTPUT_MAIN to HTML_SRC_MAIN
- * then dissemble would happen from HTML_SRC_MAIN afterwards
- */
+void CoupledBodyTextContainer::setBackupFilenameList(FileSet files) {
+  m_backupFilenameList.clear();
+  if (m_fileType == FILE_TYPE::ATTACHMENT) {
+    // assume output folder has more files always
+    vector<string> filenameList;
+    Poco::File(m_outputHtmlDir).list(filenameList);
+    for (const auto &file : filenameList) {
+      if (find(files.begin(), files.end(),
+               getIncludedStringBetweenTags(
+                   file, getHtmlFileNamePrefix(m_fileType),
+                   attachmentFileMiddleChar)) != files.end())
+        m_backupFilenameList.insert(file);
+    }
+  } else {
+    if (m_fileType == FILE_TYPE::MAIN)
+      m_backupFilenameList.insert(REF_ATTACHMENT_LIST_FILENAME);
+    for (const auto &file : files)
+      m_backupFilenameList.insert(getHtmlFileNamePrefix(m_fileType) + file +
+                                  HTML_SUFFIX);
+  }
+}
+
+static constexpr const char *PATH_SEPARATOR = R"(/)";
+
 void CoupledBodyTextContainer::backupAndOverwriteInputHtmlFiles() {
-  string dir = string(m_inputHtmlDir)
-                   .substr(0, string(m_inputHtmlDir).find_last_of('/'));
-  string BACKUP = dir + currentTimeStamp();
+  string dir =
+      string(m_inputHtmlDir)
+          .substr(0, string(m_inputHtmlDir).find_last_of(PATH_SEPARATOR));
+  string BACKUP = dir + currentTimeStamp() + PATH_SEPARATOR;
   if (debug >= LOG_INFO)
     FUNCTION_OUTPUT << "backup of " << m_inputHtmlDir
                     << " is created under : " << BACKUP << endl;
+
+  // create a date file in this backup directory
+  ofstream outfile(BACKUP + "info.txt");
+  outfile << "backup created: " << currentDateTime();
 
   Poco::File BackupPath(BACKUP);
   if (!BackupPath.exists())
     BackupPath.createDirectories();
 
-  // backup whole src directory together with files to this directory
-  Poco::File dirToCopy(m_inputHtmlDir);
-  dirToCopy.copyTo(BACKUP);
-
-  // create a date file in this backup directory
-  ofstream outfile(BACKUP + "/info.txt");
-  outfile << "backup created: " << currentDateTime();
-
-  // save from output to src
-  // just put attachment under this directory and would be copied together
-  vector<string> filenameList;
-  Poco::File(m_outputHtmlDir).list(filenameList);
-  sort(filenameList.begin(), filenameList.end(), less<string>());
-  for (const auto &file : filenameList) {
-    Poco::File fileToClear(m_inputHtmlDir + file);
-    if (fileToClear.exists())
-      fileToClear.remove();
-    Poco::File fileToCopy(m_outputHtmlDir + file);
-    fileToCopy.copyTo(m_inputHtmlDir + file);
+  for (const auto &file : m_backupFilenameList) {
+    Poco::File fileUnderSrc(m_inputHtmlDir + file);
+    if (fileUnderSrc.exists()) {
+      fileUnderSrc.moveTo(BACKUP + file);
+      Poco::File fileToCopy(m_outputHtmlDir + file);
+      fileToCopy.copyTo(m_inputHtmlDir + file);
+    }
   }
 }
 

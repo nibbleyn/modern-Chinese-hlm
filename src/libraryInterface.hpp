@@ -1,6 +1,7 @@
 #pragma once
 
 #include "coupledBodyTextContainer.hpp"
+#include "coupledBodyTextWithLink.hpp"
 #include "formatedBodyTextContainer.hpp"
 #include "linkSetContainer.hpp"
 

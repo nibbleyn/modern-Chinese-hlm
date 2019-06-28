@@ -49,6 +49,7 @@ public:
   AttachmentNumberList getAttachmentFileList(int minAttachNo = 0,
                                              int maxAttachNo = 0);
 
+  void setBackupFilenameList(FileSet files);
   void backupAndOverwriteInputHtmlFiles();
 
   // fix return link after fix links in main files
@@ -84,4 +85,7 @@ private:
   }
   void setInputHtmlFileName();
   void setBodyTextFileName();
+
+  using BackupFilenameList = set<string>;
+  BackupFilenameList m_backupFilenameList;
 };

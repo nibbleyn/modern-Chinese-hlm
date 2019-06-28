@@ -115,7 +115,7 @@ void generateContentTableForReferenceAttachments(
     bool needToReloadAttachmentList) {
   if (needToReloadAttachmentList) {
     CoupledBodyTextContainer::refAttachmentTable.setSourceFile(
-        HTML_OUTPUT_REF_ATTACHMENT_LIST);
+        OUTPUT_REF_ATTACHMENT_LIST_PATH);
     CoupledBodyTextContainer::refAttachmentTable.loadReferenceAttachmentList();
   }
   TableContainer outputContainer(REFERENCE_ATTACHMENT_INDEX);
@@ -137,7 +137,7 @@ void generateContentTableForPersonalAttachments(
     bool needToReloadAttachmentList) {
   if (needToReloadAttachmentList) {
     CoupledBodyTextContainer::refAttachmentTable.setSourceFile(
-        HTML_OUTPUT_REF_ATTACHMENT_LIST);
+        OUTPUT_REF_ATTACHMENT_LIST_PATH);
     CoupledBodyTextContainer::refAttachmentTable.loadReferenceAttachmentList();
   }
   TableContainer outputContainer(PERSONAL_ATTACHMENT_INDEX);

@@ -39,13 +39,12 @@ void Commander::runCommandOverFiles() {
   increaseDebugLevel();
   m_fileType = getFileTypeFromString(m_kind);
   m_container.setFileType(m_fileType);
-
+  m_fileSet = buildFileSet(m_minTarget, m_maxTarget, m_kind);
+  m_container.setBackupFilenameList(m_fileSet);
   m_container.backupAndOverwriteInputHtmlFiles();
 
   setupNumberingStatistics();
   setupLinkFixingStatistics();
-
-  m_fileSet = buildFileSet(m_minTarget, m_maxTarget, m_kind);
 
   setupReferenceFileSet();
 
@@ -124,7 +123,7 @@ void AttachmentCommander::runCommandOverEachFile() {
 void Commander::updateAttachmentContentTableAndfixReturnLink() {
   if (m_command == COMMAND::fixLinksFromMainFile) {
     CoupledBodyTextContainer::refAttachmentTable.setSourceFile(
-        HTML_OUTPUT_REF_ATTACHMENT_LIST);
+        OUTPUT_REF_ATTACHMENT_LIST_PATH);
     CoupledBodyTextContainer::refAttachmentTable.loadReferenceAttachmentList();
 
     generateContentTableForReferenceAttachments(false);
@@ -296,8 +295,10 @@ void validateParaSizeForAutoNumberingJPMHtmls() {
 
 void refreshBodyTexts(const string &kind, int minTarget, int maxTarget) {
   CoupledBodyTextContainer container;
+  auto fileSet = buildFileSet(minTarget, maxTarget, kind);
+  container.setBackupFilenameList(fileSet);
   container.backupAndOverwriteInputHtmlFiles();
-  for (const auto &file : buildFileSet(minTarget, maxTarget, kind)) {
+  for (const auto &file : fileSet) {
     container.setFileType(getFileTypeFromString(kind));
     container.setFileAndAttachmentNumber(file);
     container.dissembleFromHTM();
@@ -308,8 +309,10 @@ void refreshBodyTexts(const string &kind, int minTarget, int maxTarget) {
 void refreshAttachmentBodyTexts(int minTarget, int maxTarget, int minAttachNo,
                                 int maxAttachNo) {
   CoupledBodyTextContainer container;
+  auto fileSet = buildFileSet(minTarget, maxTarget);
+  container.setBackupFilenameList(fileSet);
   container.backupAndOverwriteInputHtmlFiles();
-  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
+  for (const auto &file : fileSet) {
     container.setFileType(FILE_TYPE::ATTACHMENT);
     container.setFileAndAttachmentNumber(file);
     for (const auto &attNo :

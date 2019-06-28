@@ -1,10 +1,12 @@
 #include "formatedBodyTextContainer.hpp"
+#include "coupledBodyTextWithLink.hpp"
 
 void FormatedBodyTextContainer::numbering() {
   dissembleFromHTM();
-  m_bodyText.setInputBodyTextFilePath(getBodyTextFilePath());
-  m_bodyText.setOutputBodyTextFilePath(getTempBodyTextFixFilePath());
-  m_bodyText.addLineNumber();
+  CoupledBodyTextWithLink bodyText;
+  bodyText.setInputBodyTextFilePath(getBodyTextFilePath());
+  bodyText.setOutputBodyTextFilePath(getTempBodyTextFixFilePath());
+  bodyText.addLineNumber();
   loadFixedBodyTexts();
   assembleBackToHTM();
 }

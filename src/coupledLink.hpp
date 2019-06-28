@@ -2,8 +2,6 @@
 #include "attachmentTable.hpp"
 #include "coupledBodyText.hpp"
 
-using FileSet = set<string>;
-
 static const string returnLink = R"(被引用)";
 static const string returnToContentTable = R"(回目录)";
 static const string citationChapter = R"(章)";

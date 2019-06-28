@@ -2,10 +2,12 @@
 #include "link.hpp"
 #include <fstream>
 
-static constexpr const char *HTML_SRC_REF_ATTACHMENT_LIST =
-    "utf8HTML/src/RefAttachments.txt";
-static constexpr const char *HTML_OUTPUT_REF_ATTACHMENT_LIST =
-    "utf8HTML/output/RefAttachments.txt";
+static constexpr const char *REF_ATTACHMENT_LIST_FILENAME =
+    R"(RefAttachments.txt)";
+static constexpr const char *SRC_REF_ATTACHMENT_LIST_PATH =
+    R"(utf8HTML/src/RefAttachments.txt)";
+static constexpr const char *OUTPUT_REF_ATTACHMENT_LIST_PATH =
+    R"(utf8HTML/output/RefAttachments.txt)";
 
 static const string HTML_SRC_ATTACHMENT = R"(utf8HTML/src/attachment/)";
 static const string htmlTitleStart = R"(<title>)";
@@ -57,6 +59,6 @@ private:
   using AttachmentNumberSet = set<AttachmentNumber>;
   AttachmentNumberSet m_newlyAddedAttachmentSet;
   AttachmentNumberSet m_notUpdatedAttachmentSet;
-  string m_sourceFile{HTML_SRC_REF_ATTACHMENT_LIST};
-  string m_outputFile{HTML_OUTPUT_REF_ATTACHMENT_LIST};
+  string m_sourceFile{SRC_REF_ATTACHMENT_LIST_PATH};
+  string m_outputFile{OUTPUT_REF_ATTACHMENT_LIST_PATH};
 };

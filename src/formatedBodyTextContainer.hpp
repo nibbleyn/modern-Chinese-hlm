@@ -1,6 +1,5 @@
 #pragma once
 #include "container.hpp"
-#include "coupledBodyTextWithLink.hpp"
 
 static const string FORMATED_BODYTEXT_CONTAINER_FILENAME = R"(4)";
 
@@ -25,5 +24,4 @@ private:
            BODY_TEXT_SUFFIX;
   }
   void loadFixedBodyTexts() override;
-  CoupledBodyTextWithLink m_bodyText;
 };
