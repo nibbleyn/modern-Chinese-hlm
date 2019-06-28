@@ -50,14 +50,20 @@ void reConstructStory(const string &title, const string &outputFilename,
   container.setDisplayTitle(title);
   container.assembleBackToHTM();
   if (autoNumbering)
-    autoNumberingResultStory(container.getoutputHtmlFilepath());
-  FUNCTION_OUTPUT << "result is in file " << container.getoutputHtmlFilepath()
-                  << endl;
+    autoNumberingResultStory(container.getoutputHtmlFilepath(), title);
+  else
+    FUNCTION_OUTPUT << "result is in file " << container.getoutputHtmlFilepath()
+                    << endl;
 }
 
-void autoNumberingResultStory(const string &htmlFilename) {
+void autoNumberingResultStory(const string &htmlFilename,
+                              const string &outputHtmlFilename) {
   FUNCTION_OUTPUT << "autoNumbering" << htmlFilename << endl;
-  FormatedBodyTextContainer container(htmlFilename + NUMBERED);
+  FormatedBodyTextContainer container((outputHtmlFilename == emptyString)
+                                          ? htmlFilename + NUMBERED
+                                          : outputHtmlFilename);
   container.setInputHtmlFilename(htmlFilename);
   container.numbering();
+  FUNCTION_OUTPUT << "result is in file " << container.getoutputHtmlFilepath()
+                  << endl;
 }

@@ -75,11 +75,11 @@ void CoupledBodyTextContainer::setBodyTextFileName() {
  * then dissemble would happen from HTML_SRC_MAIN afterwards
  */
 void CoupledBodyTextContainer::backupAndOverwriteInputHtmlFiles() {
-  string dir = string(m_htmlInputFilePath)
-                   .substr(0, string(m_htmlInputFilePath).find_last_of('/'));
+  string dir = string(m_inputHtmlDir)
+                   .substr(0, string(m_inputHtmlDir).find_last_of('/'));
   string BACKUP = dir + currentTimeStamp();
   if (debug >= LOG_INFO)
-    FUNCTION_OUTPUT << "backup of " << m_htmlInputFilePath
+    FUNCTION_OUTPUT << "backup of " << m_inputHtmlDir
                     << " is created under : " << BACKUP << endl;
 
   Poco::File BackupPath(BACKUP);
@@ -87,7 +87,7 @@ void CoupledBodyTextContainer::backupAndOverwriteInputHtmlFiles() {
     BackupPath.createDirectories();
 
   // backup whole src directory together with files to this directory
-  Poco::File dirToCopy(m_htmlInputFilePath);
+  Poco::File dirToCopy(m_inputHtmlDir);
   dirToCopy.copyTo(BACKUP);
 
   // create a date file in this backup directory
@@ -97,14 +97,14 @@ void CoupledBodyTextContainer::backupAndOverwriteInputHtmlFiles() {
   // save from output to src
   // just put attachment under this directory and would be copied together
   vector<string> filenameList;
-  Poco::File(m_htmlOutputFilePath).list(filenameList);
+  Poco::File(m_outputHtmlDir).list(filenameList);
   sort(filenameList.begin(), filenameList.end(), less<string>());
   for (const auto &file : filenameList) {
-    Poco::File fileToClear(m_htmlInputFilePath + file);
+    Poco::File fileToClear(m_inputHtmlDir + file);
     if (fileToClear.exists())
       fileToClear.remove();
-    Poco::File fileToCopy(m_htmlOutputFilePath + file);
-    fileToCopy.copyTo(m_htmlInputFilePath + file);
+    Poco::File fileToCopy(m_outputHtmlDir + file);
+    fileToCopy.copyTo(m_inputHtmlDir + file);
   }
 }
 
@@ -174,7 +174,7 @@ void CoupledBodyTextContainer::fixReturnLinkForAttachmentFile() {
 AttachmentNumberList
 CoupledBodyTextContainer::getAttachmentFileList(int minAttachNo,
                                                 int maxAttachNo) {
-  return getAttachmentFileListForChapter(m_htmlInputFilePath, TurnToInt(m_file),
+  return getAttachmentFileListForChapter(m_inputHtmlDir, TurnToInt(m_file),
                                          minAttachNo, maxAttachNo);
 }
 

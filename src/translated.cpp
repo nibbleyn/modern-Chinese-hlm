@@ -43,7 +43,7 @@ int main(int argc, char **argv) {
     //    reConstructStory(R"(小红遗帕)", "story", false);
     break;
   case 10:
-    autoNumberingResultStory("story2");
+    autoNumberingResultStory("story2", R"(尤二姐)");
     break;
   case 11:
     refreshBodyTexts(MAIN);

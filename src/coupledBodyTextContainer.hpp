@@ -34,14 +34,14 @@ public:
   void setFileType(FILE_TYPE fileType) {
     m_fileType = fileType;
     if (fileType == FILE_TYPE::ATTACHMENT) {
-      m_htmlInputFilePath = HTML_SRC_ATTACHMENT;
-      m_htmlOutputFilePath = HTML_OUTPUT_ATTACHMENT;
+      m_inputHtmlDir = HTML_SRC_ATTACHMENT;
+      m_outputHtmlDir = HTML_OUTPUT_ATTACHMENT;
     } else if (fileType == FILE_TYPE::ORIGINAL) {
-      m_htmlInputFilePath = HTML_SRC_ORIGINAL;
-      m_htmlOutputFilePath = HTML_OUTPUT_ORIGINAL;
+      m_inputHtmlDir = HTML_SRC_ORIGINAL;
+      m_outputHtmlDir = HTML_OUTPUT_ORIGINAL;
     } else if (fileType == FILE_TYPE::JPM) {
-      m_htmlInputFilePath = HTML_SRC_JPM;
-      m_htmlOutputFilePath = HTML_OUTPUT_JPM;
+      m_inputHtmlDir = HTML_SRC_JPM;
+      m_outputHtmlDir = HTML_OUTPUT_JPM;
     }
   }
 

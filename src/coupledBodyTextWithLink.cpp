@@ -35,7 +35,7 @@ void CoupledBodyTextWithLink::fixLinksWithinOneLine(FileSet referMainFiles,
       // third step of construction
       m_linkPtr->fixFromString(link);
       m_linkPtr->setSourcePara(ln);
-      m_linkPtr->doStatistics();
+      m_linkPtr->doFixStatistics();
     }
     if (m_linkPtr->isTargetToSelfHtm()) {
       m_linkPtr->setSourcePara(ln);
@@ -83,7 +83,7 @@ void CoupledBodyTextWithLink::fixLinksWithinOneLine(FileSet referMainFiles,
         }
         if (needAddOrginalLink)
           m_linkPtr->generateLinkToOrigin();
-        m_linkPtr->doStatistics();
+        m_linkPtr->doFixStatistics();
         // replace old value
         if (m_forceUpdateLink or m_linkPtr->needUpdate()) {
           auto orglinkBegin = m_inLine.find(link, endOfProcessedSubString);

@@ -8,9 +8,9 @@ public:
   LinkSetContainer() = default;
   LinkSetContainer(const string &outputHtmlFilename)
       : Container(outputHtmlFilename) {
-    m_htmlInputFilePath = HTML_NON_COUPLED_CONTAINER_PATH;
-    m_htmlOutputFilePath = HTML_OUTPUT_MAIN;
-    m_bodyTextInputFilePath = HTML_NON_COUPLED_CONTAINER_PATH;
+    m_inputHtmlDir = HTML_NON_COUPLED_CONTAINER_PATH;
+    m_outputHtmlDir = HTML_OUTPUT_MAIN;
+    m_inputBodyTextDir = HTML_NON_COUPLED_CONTAINER_PATH;
   }
   virtual ~LinkSetContainer(){};
 
@@ -22,7 +22,7 @@ public:
     return Container::getInputHtmlFilePath();
   }
   string getBodyTextFilePath() override {
-    return m_bodyTextInputFilePath + getInputBodyTextFileName() +
+    return m_inputBodyTextDir + getInputBodyTextFileName() +
            BODY_TEXT_SUFFIX;
   }
   void clearExistingBodyText();

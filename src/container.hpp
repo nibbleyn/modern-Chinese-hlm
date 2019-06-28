@@ -10,7 +10,7 @@ public:
   virtual ~Container(){};
 
   string getoutputHtmlFilepath() {
-    return m_htmlOutputFilePath + m_outputHtmlFilename + HTML_SUFFIX;
+    return m_outputHtmlDir + m_outputHtmlFilename + HTML_SUFFIX;
   }
 
   // dissemble/assemble before/after working on bodyText
@@ -26,22 +26,22 @@ public:
   void assembleBackToHTM();
 
 protected:
-  string m_htmlInputFilePath{HTML_SRC_MAIN};
+  string m_inputHtmlDir{HTML_SRC_MAIN};
   string m_inputHtmlFilename{emptyString};
 
-  string m_htmlOutputFilePath{HTML_OUTPUT_MAIN};
+  string m_outputHtmlDir{HTML_OUTPUT_MAIN};
   string m_outputHtmlFilename{emptyString};
 
-  string m_bodyTextInputFilePath{BODY_TEXT_OUTPUT};
+  string m_inputBodyTextDir{BODY_TEXT_OUTPUT};
   string m_inputBodyTextFilename{emptyString};
 
-  string m_fixedBodyTextFilePath{BODY_TEXT_FIX};
+  string m_fixedBodyTextDir{BODY_TEXT_FIX};
 
   virtual string getInputHtmlFilePath() {
-    return m_htmlInputFilePath + m_inputHtmlFilename + HTML_SUFFIX;
+    return m_inputHtmlDir + m_inputHtmlFilename + HTML_SUFFIX;
   }
   virtual string getBodyTextFilePath() {
-    return m_bodyTextInputFilePath + m_inputBodyTextFilename + BODY_TEXT_SUFFIX;
+    return m_inputBodyTextDir + m_inputBodyTextFilename + BODY_TEXT_SUFFIX;
   }
 
   bool m_bodyTextWithEndMark{true};

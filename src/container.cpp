@@ -138,10 +138,10 @@ void Container::assembleBackToHTM() {
 
 void Container::clearFixedBodyTexts() {
   vector<string> filenameList;
-  Poco::File(m_fixedBodyTextFilePath).list(filenameList);
+  Poco::File(m_fixedBodyTextDir).list(filenameList);
   sort(filenameList.begin(), filenameList.end(), less<string>());
   for (const auto &file : filenameList) {
-    Poco::File fileToClear(m_fixedBodyTextFilePath + file);
+    Poco::File fileToClear(m_fixedBodyTextDir + file);
     fileToClear.remove();
   }
 }
@@ -155,10 +155,10 @@ void Container::clearFixedBodyTexts() {
  */
 void Container::loadFixedBodyTexts() {
   vector<string> filenameList;
-  Poco::File(m_fixedBodyTextFilePath).list(filenameList);
+  Poco::File(m_fixedBodyTextDir).list(filenameList);
   sort(filenameList.begin(), filenameList.end(), less<string>());
   for (const auto &file : filenameList) {
-    Poco::File fileToCopy(m_fixedBodyTextFilePath + file);
-    fileToCopy.copyTo(m_bodyTextInputFilePath + file);
+    Poco::File fileToCopy(m_fixedBodyTextDir + file);
+    fileToCopy.copyTo(m_inputBodyTextDir + file);
   }
 }

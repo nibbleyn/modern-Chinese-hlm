@@ -1,9 +1,8 @@
 #pragma once
 
 #include "coupledBodyTextContainer.hpp"
-#include "coupledBodyTextWithLink.hpp"
-#include "formatedBodyTextContainer.hpp"
 #include "linkSetContainer.hpp"
+#include "formatedBodyTextContainer.hpp"
 
 static const int MAIN_MIN_CHAPTER_NUMBER = 1;
 static const int MAIN_MAX_CHAPTER_NUMBER = 80;

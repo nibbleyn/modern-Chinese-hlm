@@ -62,7 +62,7 @@ void TableContainer::addExistingFrontLinks() {
     METHOD_OUTPUT << "init content in: " << getBodyTextFilePath() << endl;
   ofstream outfile(getBodyTextFilePath(), ios_base::app);
   // copy content from BODY_TEXT_STARTER
-  string starterFile = m_bodyTextInputFilePath + BODY_TEXT_STARTER;
+  string starterFile = m_inputBodyTextDir + BODY_TEXT_STARTER;
 
   ifstream inStarterFile(starterFile);
   if (!inStarterFile) {
@@ -84,7 +84,7 @@ void TableContainer::finishBodyTextFile() {
   ofstream outfile;
   outfile.open(getBodyTextFilePath(), ios_base::app);
   // copy content from BODY_TEXT_DESSERT
-  string dessertFile = m_bodyTextInputFilePath + BODY_TEXT_DESSERT;
+  string dessertFile = m_inputBodyTextDir + BODY_TEXT_DESSERT;
 
   ifstream inDessertFile(dessertFile);
   if (!inDessertFile) {
