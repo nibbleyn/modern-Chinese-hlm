@@ -22,8 +22,7 @@ public:
     return Container::getInputHtmlFilePath();
   }
   string getBodyTextFilePath() override {
-    return m_inputBodyTextDir + getInputBodyTextFileName() +
-           BODY_TEXT_SUFFIX;
+    return m_inputBodyTextDir + getInputBodyTextFileName() + BODY_TEXT_SUFFIX;
   }
   void clearExistingBodyText();
 

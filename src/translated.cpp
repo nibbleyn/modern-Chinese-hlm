@@ -14,8 +14,8 @@ int main(int argc, char **argv) {
   switch (num) {
   case 1:
     //    search(R"(邢夫人)");
-    //    search(R"(邢夫人)", SEARCH_IN_ORIGINAL);
-    search(R"(闲)", SEARCH_IN_JPM);
+    //    search(R"(邢夫人)", false, SEARCH_IN_ORIGINAL);
+    search(R"(闲)", false, SEARCH_IN_JPM);
     break;
   case 2:
     validateMainHtmls();

@@ -116,10 +116,11 @@ void AttachmentSearcher::runSearchingOverEachFile() {
 
 void searchForImages() {}
 
-void search(const string &key, int num, const string &outputFilename) {
+void search(const string &key, int targetKind, bool overSpecificObject,
+            const string &outputFilename) {
   SEPERATE("HLM search", " started ");
   NonAttachmentSearcher searcher;
-  switch (num) {
+  switch (targetKind) {
   case SEARCH_IN_MAIN:
     searcher.m_kind = MAIN;
     searcher.m_key = key;

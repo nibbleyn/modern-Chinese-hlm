@@ -5,8 +5,9 @@ static constexpr int SEARCH_IN_MAIN = 1;
 static constexpr int SEARCH_IN_ORIGINAL = 2;
 static constexpr int SEARCH_IN_JPM = 3;
 
-void search(const string &key, int num = SEARCH_IN_MAIN,
-            const string &outputFilename = "");
+void search(const string &key, int targetKind = SEARCH_IN_MAIN,
+            bool overSpecificObject = false,
+            const string &outputFilename = emptyString);
 
 class Searcher {
 public:
@@ -17,6 +18,7 @@ public:
   virtual ~Searcher(){};
 
   string m_kind{MAIN};
+  Object::SET_OF_OBJECT_TYPES m_overObjects{Object::OBJECT_TYPE::POEM};
   string m_key;
   KeyList m_keyList;
   string m_outputFilename;

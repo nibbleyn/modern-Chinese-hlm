@@ -1,5 +1,5 @@
-*************************line 619: HLM test started *************************
-*************************line 605: testContainer started *************************
+*************************line 629: HLM test started *************************
+*************************line 615: testContainer started *************************
 fixLinkFromMainTemplate              <a unhidden title="菱角菱花" href="a080.htm#94"><sub hidden>第80章1.1节:</sub>原是老奶奶（薛姨妈）使唤的</a>
 fixLinkFromOriginalTemplate              <a unhidden title="菱角菱花" href="original\c080.htm#94"><sub hidden>第80章1.1节:</sub>原文</a>
 4Link::readType              type seen from prefix: original\c080
@@ -43,7 +43,6 @@ readDisplayType               unhidden title="菱角菱花"
 13ListContainer::assembleBackToHTM              <br><a unhidden title="菱角菱花" href="original\c080.htm#P1L3"><sub hidden>第80回1.3节:</sub>原文</a></br>
 13ListContainer::assembleBackToHTM              <br>18 links are found.</br>
 13ListContainer::assembleBackToHTM              <hr color="#F0BEC0"><a unhidden id="bottom" href="#top">||<-页面顶部</a>&nbsp;&nbsp;&nbsp;&nbsp;<a unhidden id="P89" href="#P90">^向上</a><hr color="#F0BEC0">
-13ListContainer::assembleBackToHTM              
 13ListContainer::assembleBackToHTM              			</td>
 13ListContainer::assembleBackToHTM              			</tr>
 13ListContainer::assembleBackToHTM              			<tr>
@@ -54,6 +53,6 @@ readDisplayType               unhidden title="菱角菱花"
 13ListContainer::assembleBackToHTM              </center>
 13ListContainer::assembleBackToHTM              </body>
 13ListContainer::assembleBackToHTM              </html>
-13ListContainer::assembleBackToHTM              
+13ListContainer::assembleBackToHTM              assemble finished for utf8HTML/output/1_gen.htm
 testListContainer              result is in file utf8HTML/output/1_gen.htm
 

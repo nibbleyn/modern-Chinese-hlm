@@ -78,6 +78,8 @@ void Container::assembleBackToHTM() {
       if (titleBegin != string::npos)
         line.replace(titleBegin, defaultDisplayTitle.length(), m_displayTitle);
     }
+    if (debug >= LOG_INFO)
+      METHOD_OUTPUT << line << endl;
     outfile << line << endl;
   }
   if (inHtmlFile.eof() and not started) {
@@ -90,6 +92,8 @@ void Container::assembleBackToHTM() {
   auto ended = false;
   while (!inBodyTextFile.eof()) {
     getline(inBodyTextFile, line);
+    if (debug >= LOG_INFO)
+      METHOD_OUTPUT << line << endl;
     // including topIdBeginChars and bottomIdBeginChars contained lines
     outfile << line << endl;
     if (m_bodyTextWithEndMark and
@@ -110,6 +114,8 @@ void Container::assembleBackToHTM() {
   while (!inHtmlFile.eof()) {
     getline(inHtmlFile, line);
     if (bodySkipped) {
+      if (debug >= LOG_INFO)
+        METHOD_OUTPUT << line << endl;
       // excluding output bottomIdBeginChars contained line
       outfile << line << endl;
       // already included this final line
