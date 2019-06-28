@@ -74,7 +74,7 @@ void CoupledBodyTextContainer::setBodyTextFileName() {
  * and load newly copied files from HTML_OUTPUT_MAIN to HTML_SRC_MAIN
  * then dissemble would happen from HTML_SRC_MAIN afterwards
  */
-void CoupledBodyTextContainer::backupAndOverwriteAllInputHtmlFiles() {
+void CoupledBodyTextContainer::backupAndOverwriteInputHtmlFiles() {
   string dir = string(m_htmlInputFilePath)
                    .substr(0, string(m_htmlInputFilePath).find_last_of('/'));
   string BACKUP = dir + currentTimeStamp();
@@ -91,8 +91,7 @@ void CoupledBodyTextContainer::backupAndOverwriteAllInputHtmlFiles() {
   dirToCopy.copyTo(BACKUP);
 
   // create a date file in this backup directory
-  string outputFile = BACKUP + "/info.txt";
-  ofstream outfile(outputFile);
+  ofstream outfile(BACKUP + "/info.txt");
   outfile << "backup created: " << currentDateTime();
 
   // save from output to src

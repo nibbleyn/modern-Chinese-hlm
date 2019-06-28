@@ -40,7 +40,7 @@ void Commander::runCommandOverFiles() {
   m_fileType = getFileTypeFromString(m_kind);
   m_container.setFileType(m_fileType);
 
-  m_container.backupAndOverwriteAllInputHtmlFiles();
+  m_container.backupAndOverwriteInputHtmlFiles();
 
   setupNumberingStatistics();
   setupLinkFixingStatistics();
@@ -297,7 +297,7 @@ void validateParaSizeForAutoNumberingJPMHtmls() {
 void refreshBodyTexts(const string &kind, int minTarget, int maxTarget) {
   CoupledBodyTextContainer container;
   if (kind == MAIN)
-    container.backupAndOverwriteAllInputHtmlFiles();
+    container.backupAndOverwriteInputHtmlFiles();
   for (const auto &file : buildFileSet(minTarget, maxTarget, kind)) {
     container.setFileType(getFileTypeFromString(kind));
     container.setFileAndAttachmentNumber(file);
@@ -309,7 +309,7 @@ void refreshBodyTexts(const string &kind, int minTarget, int maxTarget) {
 void refreshAttachmentBodyTexts(int minTarget, int maxTarget, int minAttachNo,
                                 int maxAttachNo) {
   CoupledBodyTextContainer container;
-  container.backupAndOverwriteAllInputHtmlFiles();
+  container.backupAndOverwriteInputHtmlFiles();
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     container.setFileType(FILE_TYPE::ATTACHMENT);
     container.setFileAndAttachmentNumber(file);

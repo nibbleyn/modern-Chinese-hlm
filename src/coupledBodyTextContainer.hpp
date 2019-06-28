@@ -7,10 +7,6 @@ const string strongTitleEndChars = R"(</strong>)";
 const string sampTitleBeginChars = R"(<samp unhidden>)";
 const string sampTitleEndChars = R"(</samp>)";
 
-/**
- * used for features like removePersonalViewpoints, numbering and linkfixing
- * etc.
- */
 class CoupledBodyTextContainer : public Container {
 public:
   // imported attachment list
@@ -52,7 +48,7 @@ public:
   AttachmentNumberList getAttachmentFileList(int minAttachNo = 0,
                                              int maxAttachNo = 0);
 
-  void backupAndOverwriteAllInputHtmlFiles();
+  void backupAndOverwriteInputHtmlFiles();
 
   // fix return link after fix links in main files
   void fixReturnLinkForAttachmentFile();

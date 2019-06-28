@@ -5,8 +5,6 @@
 
 static const string HTML_CONTAINER_PATH = R"(container/)";
 
-using ParaHeaderPositionSet = vector<int>;
-
 class LinkSetContainer : public Container {
 public:
   LinkSetContainer() = default;
@@ -18,20 +16,17 @@ public:
   }
   virtual ~LinkSetContainer(){};
 
+  virtual void
+  outputToBodyTextFromLinkList(const string &units = defaultUnit) = 0;
+  virtual string getInputBodyTextFileName() const = 0;
   string getBodyTextFilePath() override {
     return m_bodyTextInputFilePath + getInputBodyTextFileName() +
            BODY_TEXT_SUFFIX;
   }
-
-  virtual string getInputBodyTextFileName() const = 0;
-
   void clearExistingBodyText();
-  void setInputHtmlFilename(const string &filename) {
-    m_inputHtmlFilename = filename;
-    disableUsingDefaultInputHtmlFileName();
-  }
 
   void createParaListFrom(int first, int incremental, int max = 0);
+
   void addOneParaHeaderPosition(int pos) {
     m_paraHeaderPositionSet.push_back(pos);
   }
@@ -48,8 +43,6 @@ public:
     auto fullPos = make_pair(num, pl);
     m_linkStringSet[fullPos] = link;
   }
-  virtual void
-  outputToBodyTextFromLinkList(const string &units = defaultUnit) = 0;
 
   void printParaHeaderTable() {
     if (not m_linkStringSet.empty()) {
@@ -66,11 +59,36 @@ public:
   }
 
 protected:
+  bool m_hideParaHeaders{false};
+  using ParaHeaderPositionSet = vector<int>;
+  ParaHeaderPositionSet m_paraHeaderPositionSet;
+  LinkStringSet m_linkStringSet;
+  int m_maxTarget{0};
+};
+
+static const string LIST_CONTAINER_FILENAME = R"(1)";
+
+class ListContainer : public LinkSetContainer {
+public:
+  ListContainer() = default;
+  ListContainer(const string &filename) : LinkSetContainer(filename) {}
+  // process bodyText change directly, instead of thru CoupledBodyText
+  void setInputHtmlFilename(const string &filename) {
+    m_inputHtmlFilename = filename;
+    disableUsingDefaultInputHtmlFileName();
+  }
+
+  void appendParagraphInBodyText(const string &text);
+  void appendParagrapHeader(const string &header);
+  void numbering();
+
+  void outputToBodyTextFromLinkList(const string &units = defaultUnit) override;
+
+private:
   bool m_disableUsingDefaultInputHtmlFileName{false};
   void disableUsingDefaultInputHtmlFileName() {
     m_disableUsingDefaultInputHtmlFileName = true;
   }
-
   string getInputHtmlFilePath() override {
     if (not m_disableUsingDefaultInputHtmlFileName)
       return m_htmlInputFilePath + getInputBodyTextFileName() + HTML_SUFFIX;
@@ -81,29 +99,6 @@ protected:
            BODY_TEXT_SUFFIX;
   }
   void loadFixedBodyTexts();
-
-  bool m_hideParaHeaders{false};
-  ParaHeaderPositionSet m_paraHeaderPositionSet;
-  LinkStringSet m_linkStringSet;
-  int m_maxTarget{0};
-};
-
-static const string LIST_CONTAINER_FILENAME = R"(1)";
-
-/**
- * used for features like reConstructStory findFirstInNoAttachmentFiles etc.
- */
-class ListContainer : public LinkSetContainer {
-public:
-  ListContainer() = default;
-  ListContainer(const string &filename) : LinkSetContainer(filename) {}
-  // process bodyText change directly, instead of thru CoupledBodyText
-  void appendParagraphInBodyText(const string &text);
-  void appendParagrapHeader(const string &header);
-  void outputToBodyTextFromLinkList(const string &units = defaultUnit);
-  void numbering();
-
-private:
   string getInputBodyTextFileName() const override {
     return LIST_CONTAINER_FILENAME;
   }
@@ -113,9 +108,6 @@ private:
 static constexpr const char *TABLE_CONTAINER_FILENAME = R"(2)";
 static constexpr const char *TABLE_CONTAINER_FILENAME_SMALLER_FONT = R"(3)";
 
-/**
- * used for features like updateIndexTable etc.
- */
 class TableContainer : public LinkSetContainer {
   static const string BODY_TEXT_STARTER;
   static const string BODY_TEXT_DESSERT;
@@ -144,7 +136,7 @@ public:
   void setInputBodyTextFilename(const string &filename) {
     m_inputBodyTextFilename = filename;
   }
-  void outputToBodyTextFromLinkList(const string &units = defaultUnit);
+  void outputToBodyTextFromLinkList(const string &units = defaultUnit) override;
 
 private:
   string getInputBodyTextFileName() const override {

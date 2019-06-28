@@ -2,20 +2,26 @@
 
 extern int debug;
 
-void LinkSetContainer::loadFixedBodyTexts() {
-  Poco::File fileToCopy(getTempBodyTextFixFilePath());
-  fileToCopy.copyTo(getBodyTextFilePath());
-}
-
 /**
  * to get ready to write new text in this file which would be composed into
  * container htm
  */
 void LinkSetContainer::clearExistingBodyText() {
-  string outputBodyTextFile = getBodyTextFilePath();
   if (debug >= LOG_INFO)
-    METHOD_OUTPUT << "clear content in: " << outputBodyTextFile << endl;
-  ofstream outfile(outputBodyTextFile);
+    METHOD_OUTPUT << "clear content in: " << getBodyTextFilePath() << endl;
+  ofstream outfile(getBodyTextFilePath());
+}
+
+// if max is 0, must call setMaxTarget or setMaxTargetAsSetSize before
+void LinkSetContainer::createParaListFrom(int first, int incremental, int max) {
+  if (max == 0)
+    max = m_maxTarget;
+  m_paraHeaderPositionSet.clear();
+  m_paraHeaderPositionSet.push_back(first);
+  int i = first;
+  while ((i += incremental) < max) {
+    m_paraHeaderPositionSet.push_back(i);
+  }
 }
 
 /**
@@ -24,23 +30,26 @@ void LinkSetContainer::clearExistingBodyText() {
  * @param containerNumber the selected container to put into
  */
 void ListContainer::appendParagraphInBodyText(const string &text) {
-  string outputBodyTextFile = getBodyTextFilePath();
   if (debug >= LOG_INFO)
-    METHOD_OUTPUT << "append Paragraph In BodyText: " << outputBodyTextFile
+    METHOD_OUTPUT << "append Paragraph In BodyText: " << getBodyTextFilePath()
                   << endl;
   ofstream outfile;
-  outfile.open(outputBodyTextFile, ios_base::app);
+  outfile.open(getBodyTextFilePath(), ios_base::app);
   outfile << "<br>" << text << "</br>" << endl;
 }
 
 void ListContainer::appendParagrapHeader(const string &header) {
-  string outputBodyTextFile = getBodyTextFilePath();
   if (debug >= LOG_INFO)
-    METHOD_OUTPUT << "append Paragraph In BodyText: " << outputBodyTextFile
+    METHOD_OUTPUT << "append Paragraph In BodyText: " << getBodyTextFilePath()
                   << endl;
   ofstream outfile;
-  outfile.open(outputBodyTextFile, ios_base::app);
+  outfile.open(getBodyTextFilePath(), ios_base::app);
   outfile << header << endl;
+}
+
+void ListContainer::loadFixedBodyTexts() {
+  Poco::File fileToCopy(getTempBodyTextFixFilePath());
+  fileToCopy.copyTo(getBodyTextFilePath());
 }
 
 void ListContainer::outputToBodyTextFromLinkList(const string &units) {
@@ -63,10 +72,9 @@ const string TableContainer::BODY_TEXT_STARTER = R"(3front.txt)";
 const string TableContainer::BODY_TEXT_DESSERT = R"(3back.txt)";
 
 void TableContainer::addExistingFrontLinks() {
-  string outputBodyTextFile = getBodyTextFilePath();
   if (debug >= LOG_INFO)
-    METHOD_OUTPUT << "init content in: " << outputBodyTextFile << endl;
-  ofstream outfile(outputBodyTextFile, ios_base::app);
+    METHOD_OUTPUT << "init content in: " << getBodyTextFilePath() << endl;
+  ofstream outfile(getBodyTextFilePath(), ios_base::app);
   // copy content from BODY_TEXT_STARTER
   string starterFile = m_bodyTextInputFilePath + BODY_TEXT_STARTER;
 
@@ -85,11 +93,10 @@ void TableContainer::addExistingFrontLinks() {
 }
 
 void TableContainer::finishBodyTextFile() {
-  string outputBodyTextFile = getBodyTextFilePath();
   if (debug >= LOG_INFO)
-    METHOD_OUTPUT << "append content in: " << outputBodyTextFile << endl;
+    METHOD_OUTPUT << "append content in: " << getBodyTextFilePath() << endl;
   ofstream outfile;
-  outfile.open(outputBodyTextFile, ios_base::app);
+  outfile.open(getBodyTextFilePath(), ios_base::app);
   // copy content from BODY_TEXT_DESSERT
   string dessertFile = m_bodyTextInputFilePath + BODY_TEXT_DESSERT;
 
@@ -109,11 +116,10 @@ void TableContainer::finishBodyTextFile() {
 
 void TableContainer::insertFrontParagrapHeader(int totalPara,
                                                const string &units) {
-  string outputBodyTextFile = getBodyTextFilePath();
   if (debug >= LOG_INFO)
-    METHOD_OUTPUT << "append content in: " << outputBodyTextFile << endl;
+    METHOD_OUTPUT << "append content in: " << getBodyTextFilePath() << endl;
   ofstream outfile;
-  outfile.open(outputBodyTextFile);
+  outfile.open(getBodyTextFilePath());
   GenericParaHeader paraHeader;
   paraHeader.setTotalParaNumber(totalPara);
   paraHeader.setUnits(units);
@@ -130,11 +136,10 @@ void TableContainer::insertMiddleParagrapHeader(bool enterLastPara,
                                                 int endParaNo, int totalPara,
                                                 int preTotalPara,
                                                 const string &units) {
-  string outputBodyTextFile = getBodyTextFilePath();
   if (debug >= LOG_INFO)
-    METHOD_OUTPUT << "append content in: " << outputBodyTextFile << endl;
+    METHOD_OUTPUT << "append content in: " << getBodyTextFilePath() << endl;
   ofstream outfile;
-  outfile.open(outputBodyTextFile, ios_base::app);
+  outfile.open(getBodyTextFilePath(), ios_base::app);
   GenericParaHeader paraHeader;
   paraHeader.setTotalParaNumber(totalPara);
   paraHeader.setpreTotalParaNumber(preTotalPara);
@@ -153,11 +158,10 @@ void TableContainer::insertMiddleParagrapHeader(bool enterLastPara,
 
 void TableContainer::insertBackParagrapHeader(int seqOfPara, int totalPara,
                                               const string &units) {
-  string outputBodyTextFile = getBodyTextFilePath();
   if (debug >= LOG_INFO)
-    METHOD_OUTPUT << "append content in: " << outputBodyTextFile << endl;
+    METHOD_OUTPUT << "append content in: " << getBodyTextFilePath() << endl;
   ofstream outfile;
-  outfile.open(outputBodyTextFile, ios_base::app);
+  outfile.open(getBodyTextFilePath(), ios_base::app);
   GenericParaHeader paraHeader;
   paraHeader.setTotalParaNumber(totalPara);
   paraHeader.setSeqOfPara(seqOfPara);
@@ -171,22 +175,20 @@ void TableContainer::insertBackParagrapHeader(int seqOfPara, int totalPara,
 }
 
 void TableContainer::appendLeftParagraphInBodyText(const string &text) {
-  string outputBodyTextFile = getBodyTextFilePath();
   if (debug >= LOG_INFO)
-    METHOD_OUTPUT << "append Paragraph In BodyText: " << outputBodyTextFile
+    METHOD_OUTPUT << "append Paragraph In BodyText: " << getBodyTextFilePath()
                   << endl;
   ofstream outfile;
-  outfile.open(outputBodyTextFile, ios_base::app);
+  outfile.open(getBodyTextFilePath(), ios_base::app);
   outfile << R"(<tr><td width="50%">)" << text << "</td>" << endl;
 }
 
 void TableContainer::appendRightParagraphInBodyText(const string &text) {
-  string outputBodyTextFile = getBodyTextFilePath();
   if (debug >= LOG_INFO)
-    METHOD_OUTPUT << "append Paragraph In BodyText: " << outputBodyTextFile
+    METHOD_OUTPUT << "append Paragraph In BodyText: " << getBodyTextFilePath()
                   << endl;
   ofstream outfile;
-  outfile.open(outputBodyTextFile, ios_base::app);
+  outfile.open(getBodyTextFilePath(), ios_base::app);
   outfile << R"(<td width="50%">)" << text << R"(</td></tr>)" << endl;
 }
 
@@ -223,16 +225,4 @@ void TableContainer::outputToBodyTextFromLinkList(const string &units) {
   }
   if (not m_hideParaHeaders and not lessThanOnePara)
     insertBackParagrapHeader(seqOfPara, totalPara, units);
-}
-
-// if max is 0, must call setMaxTarget or setMaxTargetAsSetSize before
-void LinkSetContainer::createParaListFrom(int first, int incremental, int max) {
-  if (max == 0)
-    max = m_maxTarget;
-  m_paraHeaderPositionSet.clear();
-  m_paraHeaderPositionSet.push_back(first);
-  int i = first;
-  while ((i += incremental) < max) {
-    m_paraHeaderPositionSet.push_back(i);
-  }
 }
