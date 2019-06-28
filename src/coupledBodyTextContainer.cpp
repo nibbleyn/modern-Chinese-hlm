@@ -75,19 +75,19 @@ void CoupledBodyTextContainer::setBodyTextFileName() {
  * then dissemble would happen from HTML_SRC_MAIN afterwards
  */
 void CoupledBodyTextContainer::backupAndOverwriteAllInputHtmlFiles() {
-  string dir =
-      string(HTML_SRC_MAIN).substr(0, string(HTML_SRC_MAIN).find_last_of('/'));
+  string dir = string(m_htmlInputFilePath)
+                   .substr(0, string(m_htmlInputFilePath).find_last_of('/'));
   string BACKUP = dir + currentTimeStamp();
   if (debug >= LOG_INFO)
-    FUNCTION_OUTPUT << "backup of current src is created under : " << BACKUP
-                    << endl;
+    FUNCTION_OUTPUT << "backup of " << m_htmlInputFilePath
+                    << " is created under : " << BACKUP << endl;
 
   Poco::File BackupPath(BACKUP);
   if (!BackupPath.exists())
     BackupPath.createDirectories();
 
   // backup whole src directory together with files to this directory
-  Poco::File dirToCopy(HTML_SRC_MAIN);
+  Poco::File dirToCopy(m_htmlInputFilePath);
   dirToCopy.copyTo(BACKUP);
 
   // create a date file in this backup directory
@@ -98,14 +98,14 @@ void CoupledBodyTextContainer::backupAndOverwriteAllInputHtmlFiles() {
   // save from output to src
   // just put attachment under this directory and would be copied together
   vector<string> filenameList;
-  Poco::File(HTML_OUTPUT_MAIN).list(filenameList);
+  Poco::File(m_htmlOutputFilePath).list(filenameList);
   sort(filenameList.begin(), filenameList.end(), less<string>());
   for (const auto &file : filenameList) {
-    Poco::File fileToClear(HTML_SRC_MAIN + file);
+    Poco::File fileToClear(m_htmlInputFilePath + file);
     if (fileToClear.exists())
-      fileToClear.remove(true);
-    Poco::File fileToCopy(HTML_OUTPUT_MAIN + file);
-    fileToCopy.copyTo(HTML_SRC_MAIN + file);
+      fileToClear.remove();
+    Poco::File fileToCopy(m_htmlOutputFilePath + file);
+    fileToCopy.copyTo(m_htmlInputFilePath + file);
   }
 }
 

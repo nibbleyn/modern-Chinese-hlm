@@ -26,6 +26,10 @@ public:
   virtual string getInputBodyTextFileName() const = 0;
 
   void clearExistingBodyText();
+  void setInputHtmlFilename(const string &filename) {
+    m_inputHtmlFilename = filename;
+    disableUsingDefaultInputHtmlFileName();
+  }
 
   void createParaListFrom(int first, int incremental, int max = 0);
   void addOneParaHeaderPosition(int pos) {
@@ -62,6 +66,11 @@ public:
   }
 
 protected:
+  bool m_disableUsingDefaultInputHtmlFileName{false};
+  void disableUsingDefaultInputHtmlFileName() {
+    m_disableUsingDefaultInputHtmlFileName = true;
+  }
+
   string getInputHtmlFilePath() override {
     if (not m_disableUsingDefaultInputHtmlFileName)
       return m_htmlInputFilePath + getInputBodyTextFileName() + HTML_SUFFIX;
@@ -71,7 +80,7 @@ protected:
     return m_fixedBodyTextFilePath + getInputBodyTextFileName() +
            BODY_TEXT_SUFFIX;
   }
-  void loadBodyTextsFromFixed();
+  void loadFixedBodyTexts();
 
   bool m_hideParaHeaders{false};
   ParaHeaderPositionSet m_paraHeaderPositionSet;

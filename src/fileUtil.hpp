@@ -29,17 +29,10 @@ static constexpr const char *BODY_TEXT_FIX = R"(bodyTexts/afterFix/)";
 // last line of the html file
 static constexpr const char *htmlFileFinalLine = R"(</html>)";
 
-static const int MAIN_MIN_CHAPTER_NUMBER = 1;
-static const int MAIN_MAX_CHAPTER_NUMBER = 80;
-static const int JPM_MIN_CHAPTER_NUMBER = 1;
-static const int JPM_MAX_CHAPTER_NUMBER = 100;
-static const int MIN_ATTACHMENT_NUMBER = 1;
-static const int MAX_ATTACHMENT_NUMBER = 50;
-
-static const std::string MAIN_HTML_PREFIX = R"(a0)";
-static const std::string ORIGINAL_HTML_PREFIX = R"(c0)";
-static const std::string ATTACHMENT_HTML_PREFIX = R"(b0)";
-static const std::string JPM_HTML_PREFIX = R"(d)";
+static constexpr const char *MAIN_HTML_PREFIX = R"(a0)";
+static constexpr const char *ORIGINAL_HTML_PREFIX = R"(c0)";
+static constexpr const char *ATTACHMENT_HTML_PREFIX = R"(b0)";
+static constexpr const char *JPM_HTML_PREFIX = R"(d)";
 
 static constexpr const char *MAIN_BODYTEXT_PREFIX = R"(Main)";
 static constexpr const char *ORIGINAL_BODYTEXT_PREFIX = R"(Org)";
@@ -56,13 +49,13 @@ static constexpr const char *NUMBERED = R"(_numbered)";
 static constexpr const char *MAIN_SEPERATOR_COLOR = R"(F0BEC0)";
 static constexpr const char *ORIGINAL_SEPERATOR_COLOR = R"(004040)";
 
-static const std::string HTML_OUTPUT_LINES_OF_MAIN =
+static constexpr const char *HTML_OUTPUT_LINES_OF_MAIN =
     R"(utf8HTML/output/LinesOfMain.txt)";
-static const std::string HTML_OUTPUT_LINES_OF_JPM =
+static constexpr const char *HTML_OUTPUT_LINES_OF_JPM =
     R"(utf8HTML/output/LinesOfJPM.txt)";
-static const std::string HTML_OUTPUT_LINES_OF_ORIGINAL =
+static constexpr const char *HTML_OUTPUT_LINES_OF_ORIGINAL =
     R"(utf8HTML/output/LinesOfOriginal.txt)";
-static const std::string HTML_OUTPUT_LINES_OF_ATTACHMENTS =
+static constexpr const char *HTML_OUTPUT_LINES_OF_ATTACHMENTS =
     R"(utf8HTML/output/LinesOfAttachments.txt)";
 
 enum class FILE_TYPE { MAIN, ATTACHMENT, ORIGINAL, JPM };

@@ -2,7 +2,7 @@
 
 extern int debug;
 
-void LinkSetContainer::loadBodyTextsFromFixed() {
+void LinkSetContainer::loadFixedBodyTexts() {
   Poco::File fileToCopy(getTempBodyTextFixFilePath());
   fileToCopy.copyTo(getBodyTextFilePath());
 }
@@ -55,7 +55,7 @@ void ListContainer::numbering() {
   m_bodyText.setInputBodyTextFilePath(getBodyTextFilePath());
   m_bodyText.setOutputBodyTextFilePath(getTempBodyTextFixFilePath());
   m_bodyText.addLineNumber();
-  loadBodyTextsFromFixed();
+  loadFixedBodyTexts();
   assembleBackToHTM();
 }
 

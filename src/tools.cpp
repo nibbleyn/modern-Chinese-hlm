@@ -459,13 +459,14 @@ void fixPersonalViewForJPMHtmls() {
     container.setFileAndAttachmentNumber(file);
     container.dissembleFromHTM();
   }
+  container.clearFixedBodyTexts();
   for (const auto &file : buildFileSet(minTarget, maxTarget, JPM)) {
     CoupledBodyText bodyText;
     bodyText.setFilePrefixFromFileType(FILE_TYPE::JPM);
     bodyText.setFileAndAttachmentNumber(file);
     bodyText.fixPersonalView();
   }
-  CoupledBodyText::loadBodyTextsFromFixBackToOutput();
+  container.loadFixedBodyTexts();
   for (const auto &file : buildFileSet(minTarget, maxTarget, JPM)) {
     container.setFileAndAttachmentNumber(file);
     container.assembleBackToHTM();

@@ -40,7 +40,7 @@ void Commander::runCommandOverFiles() {
   m_fileType = getFileTypeFromString(m_kind);
   m_container.setFileType(m_fileType);
 
-  CoupledBodyTextContainer::backupAndOverwriteAllInputHtmlFiles();
+  m_container.backupAndOverwriteAllInputHtmlFiles();
 
   setupNumberingStatistics();
   setupLinkFixingStatistics();
@@ -50,11 +50,12 @@ void Commander::runCommandOverFiles() {
   setupReferenceFileSet();
 
   dissembleHtmls();
+  m_container.clearFixedBodyTexts();
 
   m_bodyText.setFilePrefixFromFileType(m_fileType);
   runCommandOverEachFile();
 
-  CoupledBodyText::loadBodyTextsFromFixBackToOutput();
+  m_container.loadFixedBodyTexts();
 
   assembleHtmls();
 
@@ -294,10 +295,10 @@ void validateParaSizeForAutoNumberingJPMHtmls() {
 }
 
 void refreshBodyTexts(const string &kind, int minTarget, int maxTarget) {
+  CoupledBodyTextContainer container;
   if (kind == MAIN)
-    CoupledBodyTextContainer::backupAndOverwriteAllInputHtmlFiles();
+    container.backupAndOverwriteAllInputHtmlFiles();
   for (const auto &file : buildFileSet(minTarget, maxTarget, kind)) {
-    CoupledBodyTextContainer container;
     container.setFileType(getFileTypeFromString(kind));
     container.setFileAndAttachmentNumber(file);
     container.dissembleFromHTM();
@@ -307,9 +308,9 @@ void refreshBodyTexts(const string &kind, int minTarget, int maxTarget) {
 
 void refreshAttachmentBodyTexts(int minTarget, int maxTarget, int minAttachNo,
                                 int maxAttachNo) {
-  CoupledBodyTextContainer::backupAndOverwriteAllInputHtmlFiles();
+  CoupledBodyTextContainer container;
+  container.backupAndOverwriteAllInputHtmlFiles();
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
-    CoupledBodyTextContainer container;
     container.setFileType(FILE_TYPE::ATTACHMENT);
     container.setFileAndAttachmentNumber(file);
     for (const auto &attNo :

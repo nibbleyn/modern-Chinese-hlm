@@ -16,8 +16,6 @@ public:
   // imported attachment list
   static AttachmentList refAttachmentTable;
 
-  static void backupAndOverwriteAllInputHtmlFiles();
-
 public:
   CoupledBodyTextContainer() = default;
 
@@ -53,6 +51,8 @@ public:
 
   AttachmentNumberList getAttachmentFileList(int minAttachNo = 0,
                                              int maxAttachNo = 0);
+
+  void backupAndOverwriteAllInputHtmlFiles();
 
   // fix return link after fix links in main files
   void fixReturnLinkForAttachmentFile();

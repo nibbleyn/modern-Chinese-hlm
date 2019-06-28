@@ -1,23 +1,6 @@
 #include "coupledBodyText.hpp"
 #include <functional> // greater
 
-/**
- * load files under BODY_TEXT_OUTPUT directory with files under BODY_TEXT_FIX
- * i.e. from afterFix to output
- * for continue link fixing after numbering..
- * BODY_TEXT_OUTPUT currently is only to output, no backup would be done for
- * it
- */
-void CoupledBodyText::loadBodyTextsFromFixBackToOutput() {
-  vector<string> filenameList;
-  Poco::File(BODY_TEXT_FIX).list(filenameList);
-  sort(filenameList.begin(), filenameList.end(), less<string>());
-  for (const auto &file : filenameList) {
-    Poco::File fileToCopy(BODY_TEXT_FIX + file);
-    fileToCopy.copyTo(BODY_TEXT_OUTPUT + file);
-  }
-}
-
 void CoupledBodyText::validateFormatForNumbering() {
   ifstream infile(m_inputFile);
   if (!infile) {

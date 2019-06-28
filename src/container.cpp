@@ -135,3 +135,30 @@ void Container::assembleBackToHTM() {
     METHOD_OUTPUT << "assemble finished for " << getoutputHtmlFilepath()
                   << endl;
 }
+
+void Container::clearFixedBodyTexts() {
+  vector<string> filenameList;
+  Poco::File(m_fixedBodyTextFilePath).list(filenameList);
+  sort(filenameList.begin(), filenameList.end(), less<string>());
+  for (const auto &file : filenameList) {
+    Poco::File fileToClear(m_fixedBodyTextFilePath + file);
+    fileToClear.remove();
+  }
+}
+
+/**
+ * load files under BODY_TEXT_OUTPUT directory with files under BODY_TEXT_FIX
+ * i.e. from afterFix to output
+ * for continue link fixing after numbering..
+ * BODY_TEXT_OUTPUT currently is only to output, no backup would be done for
+ * it
+ */
+void Container::loadFixedBodyTexts() {
+  vector<string> filenameList;
+  Poco::File(m_fixedBodyTextFilePath).list(filenameList);
+  sort(filenameList.begin(), filenameList.end(), less<string>());
+  for (const auto &file : filenameList) {
+    Poco::File fileToCopy(m_fixedBodyTextFilePath + file);
+    fileToCopy.copyTo(m_bodyTextInputFilePath + file);
+  }
+}

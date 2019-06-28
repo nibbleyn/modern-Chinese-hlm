@@ -10,19 +10,17 @@ public:
   string getoutputHtmlFilepath() {
     return m_htmlOutputFilePath + m_outputHtmlFilename + HTML_SUFFIX;
   }
-  void setInputHtmlFilename(const string &filename) {
-    m_inputHtmlFilename = filename;
-    disableUsingDefaultInputHtmlFileName();
-  }
 
   // dissemble/assemble before/after working on bodyText
   void disableBodyTextWithEndMark() { m_bodyTextWithEndMark = false; }
   void disableHtmlWithEndMark() { m_htmlWithEndMark = false; }
   void dissembleFromHTM();
+  void clearFixedBodyTexts();
   void setTitle(const string &title) { m_title = title; }
   void setDisplayTitle(const string &displayTitle) {
     m_displayTitle = displayTitle;
   }
+  void loadFixedBodyTexts();
   void assembleBackToHTM();
 
 protected:
@@ -36,11 +34,6 @@ protected:
   string m_inputBodyTextFilename{emptyString};
 
   string m_fixedBodyTextFilePath{BODY_TEXT_FIX};
-
-  bool m_disableUsingDefaultInputHtmlFileName{false};
-  void disableUsingDefaultInputHtmlFileName() {
-    m_disableUsingDefaultInputHtmlFileName = true;
-  }
 
   virtual string getInputHtmlFilePath() {
     return m_htmlInputFilePath + m_inputHtmlFilename + HTML_SUFFIX;
