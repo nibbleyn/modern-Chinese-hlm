@@ -2,6 +2,7 @@
 
 #include "coupledBodyTextContainer.hpp"
 #include "coupledBodyTextWithLink.hpp"
+#include "formatedBodyTextContainer.hpp"
 #include "linkSetContainer.hpp"
 
 static const int MAIN_MIN_CHAPTER_NUMBER = 1;

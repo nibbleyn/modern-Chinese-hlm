@@ -47,25 +47,11 @@ void ListContainer::appendParagrapHeader(const string &header) {
   outfile << header << endl;
 }
 
-void ListContainer::loadFixedBodyTexts() {
-  Poco::File fileToCopy(getTempBodyTextFixFilePath());
-  fileToCopy.copyTo(getBodyTextFilePath());
-}
-
 void ListContainer::outputToBodyTextFromLinkList(const string &units) {
   clearExistingBodyText();
   for (const auto &link : m_linkStringSet) {
     appendParagraphInBodyText(link.second);
   }
-}
-
-void ListContainer::numbering() {
-  dissembleFromHTM();
-  m_bodyText.setInputBodyTextFilePath(getBodyTextFilePath());
-  m_bodyText.setOutputBodyTextFilePath(getTempBodyTextFixFilePath());
-  m_bodyText.addLineNumber();
-  loadFixedBodyTexts();
-  assembleBackToHTM();
 }
 
 const string TableContainer::BODY_TEXT_STARTER = R"(3front.txt)";

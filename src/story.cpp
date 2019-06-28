@@ -57,7 +57,7 @@ void reConstructStory(const string &title, const string &outputFilename,
 
 void autoNumberingResultStory(const string &htmlFilename) {
   FUNCTION_OUTPUT << "autoNumbering" << htmlFilename << endl;
-  ListContainer container(htmlFilename + NUMBERED);
+  FormatedBodyTextContainer container(htmlFilename + NUMBERED);
   container.setInputHtmlFilename(htmlFilename);
   container.numbering();
 }

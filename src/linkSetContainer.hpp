@@ -1,24 +1,26 @@
 #pragma once
-
 #include "container.hpp"
-#include "coupledBodyTextWithLink.hpp"
 
-static const string HTML_CONTAINER_PATH = R"(container/)";
+static const string HTML_PREFIX = R"(container)";
 
 class LinkSetContainer : public Container {
 public:
   LinkSetContainer() = default;
   LinkSetContainer(const string &outputHtmlFilename)
       : Container(outputHtmlFilename) {
-    m_htmlInputFilePath = HTML_CONTAINER_PATH;
+    m_htmlInputFilePath = HTML_NON_COUPLED_CONTAINER_PATH;
     m_htmlOutputFilePath = HTML_OUTPUT_MAIN;
-    m_bodyTextInputFilePath = HTML_CONTAINER_PATH;
+    m_bodyTextInputFilePath = HTML_NON_COUPLED_CONTAINER_PATH;
   }
   virtual ~LinkSetContainer(){};
 
   virtual void
   outputToBodyTextFromLinkList(const string &units = defaultUnit) = 0;
   virtual string getInputBodyTextFileName() const = 0;
+  string getInputHtmlFilePath() override {
+    m_inputHtmlFilename = HTML_PREFIX + getInputBodyTextFileName();
+    return Container::getInputHtmlFilePath();
+  }
   string getBodyTextFilePath() override {
     return m_bodyTextInputFilePath + getInputBodyTextFileName() +
            BODY_TEXT_SUFFIX;
@@ -72,37 +74,16 @@ class ListContainer : public LinkSetContainer {
 public:
   ListContainer() = default;
   ListContainer(const string &filename) : LinkSetContainer(filename) {}
-  // process bodyText change directly, instead of thru CoupledBodyText
-  void setInputHtmlFilename(const string &filename) {
-    m_inputHtmlFilename = filename;
-    disableUsingDefaultInputHtmlFileName();
-  }
 
   void appendParagraphInBodyText(const string &text);
   void appendParagrapHeader(const string &header);
-  void numbering();
 
   void outputToBodyTextFromLinkList(const string &units = defaultUnit) override;
 
 private:
-  bool m_disableUsingDefaultInputHtmlFileName{false};
-  void disableUsingDefaultInputHtmlFileName() {
-    m_disableUsingDefaultInputHtmlFileName = true;
-  }
-  string getInputHtmlFilePath() override {
-    if (not m_disableUsingDefaultInputHtmlFileName)
-      return m_htmlInputFilePath + getInputBodyTextFileName() + HTML_SUFFIX;
-    return Container::getInputHtmlFilePath();
-  }
-  string getTempBodyTextFixFilePath() {
-    return m_fixedBodyTextFilePath + getInputBodyTextFileName() +
-           BODY_TEXT_SUFFIX;
-  }
-  void loadFixedBodyTexts();
   string getInputBodyTextFileName() const override {
     return LIST_CONTAINER_FILENAME;
   }
-  CoupledBodyTextWithLink m_bodyText;
 };
 
 static constexpr const char *TABLE_CONTAINER_FILENAME = R"(2)";

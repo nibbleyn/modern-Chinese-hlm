@@ -1,6 +1,8 @@
 #pragma once
 #include "paraHeader.hpp"
 
+static const string HTML_NON_COUPLED_CONTAINER_PATH = R"(container/)";
+
 class Container {
 public:
   Container() = default;
