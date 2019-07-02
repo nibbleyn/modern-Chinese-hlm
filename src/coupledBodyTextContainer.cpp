@@ -47,34 +47,46 @@ void CoupledBodyTextContainer::setBodyTextFileName() {
   m_bodyTextFilename = getBodyTextFilePrefix() + m_file + attachmentPart;
 }
 
-void CoupledBodyTextContainer::setBackupFilenameList(FileSet files) {
+void CoupledBodyTextContainer::setBackupFilenameList(FileSet files,
+                                                     bool wholeFolder,
+                                                     bool attachmentRequired) {
   m_backupFilenameList.clear();
-  if (m_fileType == FILE_TYPE::ATTACHMENT) {
+  if (m_fileType == FILE_TYPE::MAIN)
+    m_backupFilenameList.insert(REF_ATTACHMENT_LIST_FILENAME);
+
+  // fixing main files would fix return links from attachments
+  if (m_fileType == FILE_TYPE::ATTACHMENT or
+      (attachmentRequired and m_fileType == FILE_TYPE::MAIN)) {
     // assume output folder has more files always
+    auto outputDir = (m_fileType == FILE_TYPE::ATTACHMENT)
+                         ? m_outputHtmlDir
+                         : m_outputHtmlDir + ATTACHMENT_DIR;
     vector<string> filenameList;
-    Poco::File(m_outputHtmlDir).list(filenameList);
+    Poco::File(outputDir).list(filenameList);
     for (const auto &file : filenameList) {
-      if (find(files.begin(), files.end(),
+      if (wholeFolder or
+          find(files.begin(), files.end(),
                getIncludedStringBetweenTags(
-                   file, getHtmlFileNamePrefix(m_fileType),
-                   attachmentFileMiddleChar)) != files.end())
-        m_backupFilenameList.insert(file);
+                   file, getHtmlFileNamePrefix(FILE_TYPE::ATTACHMENT),
+                   attachmentFileMiddleChar)) != files.end()) {
+        if (m_fileType == FILE_TYPE::ATTACHMENT)
+          m_backupFilenameList.insert(file);
+        else if (m_fileType == FILE_TYPE::MAIN)
+          m_backupFilenameList.insert(ATTACHMENT_DIR + file);
+      }
     }
-  } else {
-    if (m_fileType == FILE_TYPE::MAIN)
-      m_backupFilenameList.insert(REF_ATTACHMENT_LIST_FILENAME);
+  }
+  if (m_fileType != FILE_TYPE::ATTACHMENT)
     for (const auto &file : files)
       m_backupFilenameList.insert(getHtmlFileNamePrefix(m_fileType) + file +
                                   HTML_SUFFIX);
-  }
 }
 
 static constexpr const char *PATH_SEPARATOR = R"(/)";
 
 void CoupledBodyTextContainer::backupAndOverwriteInputHtmlFiles() {
   string dir =
-      string(m_inputHtmlDir)
-          .substr(0, string(m_inputHtmlDir).find_last_of(PATH_SEPARATOR));
+      m_inputHtmlDir.substr(0, m_inputHtmlDir.find_last_of(PATH_SEPARATOR));
   string BACKUP = dir + currentTimeStamp() + PATH_SEPARATOR;
   if (debug >= LOG_INFO)
     FUNCTION_OUTPUT << "backup of " << m_inputHtmlDir
@@ -89,12 +101,18 @@ void CoupledBodyTextContainer::backupAndOverwriteInputHtmlFiles() {
     BackupPath.createDirectories();
 
   for (const auto &file : m_backupFilenameList) {
+    if (file.find(PATH_SEPARATOR) != string::npos) {
+      dir = BACKUP + file.substr(0, file.find(PATH_SEPARATOR));
+      Poco::File BackupPath(dir);
+      if (!BackupPath.exists())
+        BackupPath.createDirectories();
+    }
     Poco::File fileUnderSrc(m_inputHtmlDir + file);
     if (fileUnderSrc.exists()) {
       fileUnderSrc.moveTo(BACKUP + file);
-      Poco::File fileToCopy(m_outputHtmlDir + file);
-      fileToCopy.copyTo(m_inputHtmlDir + file);
     }
+    Poco::File fileToCopy(m_outputHtmlDir + file);
+    fileToCopy.copyTo(m_inputHtmlDir + file);
   }
 }
 

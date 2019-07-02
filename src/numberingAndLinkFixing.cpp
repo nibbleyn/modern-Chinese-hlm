@@ -40,8 +40,8 @@ void Commander::runCommandOverFiles() {
   m_fileType = getFileTypeFromString(m_kind);
   m_container.setFileType(m_fileType);
   m_fileSet = buildFileSet(m_minTarget, m_maxTarget, m_kind);
-  m_container.setBackupFilenameList(m_fileSet);
-  m_container.backupAndOverwriteInputHtmlFiles();
+
+  backupAndOverwriteSrcFiles();
 
   setupNumberingStatistics();
   setupLinkFixingStatistics();
@@ -49,13 +49,12 @@ void Commander::runCommandOverFiles() {
   setupReferenceFileSet();
 
   dissembleHtmls();
-  m_container.clearFixedBodyTexts();
+  setupBodyTextFixDir();
 
   m_bodyText.setFilePrefixFromFileType(m_fileType);
   runCommandOverEachFile();
 
-  m_container.loadFixedBodyTexts();
-
+  LoadBodyTextFromFixDir();
   assembleHtmls();
 
   updateAttachmentListIntoFile();
@@ -120,6 +119,7 @@ void AttachmentCommander::runCommandOverEachFile() {
     }
   }
 }
+
 void Commander::updateAttachmentContentTableAndfixReturnLink() {
   if (m_command == COMMAND::fixLinksFromMainFile) {
     CoupledBodyTextContainer::refAttachmentTable.setSourceFile(
@@ -140,6 +140,16 @@ void Commander::updateAttachmentContentTableAndfixReturnLink() {
         }
       }
   }
+}
+
+void Commander::backupAndOverwriteSrcFiles() {
+  bool attachmentRequired =
+      (m_kind == MAIN and m_command == COMMAND::fixLinksFromMainFile);
+  bool wholeFolder = (m_kind == MAIN or m_kind == ATTACHMENT) and
+                     m_minReferenceToMain == MAIN_MIN_CHAPTER_NUMBER and
+                     m_maxReferenceToMain == MAIN_MAX_CHAPTER_NUMBER;
+  m_container.setBackupFilenameList(m_fileSet, wholeFolder, attachmentRequired);
+  m_container.backupAndOverwriteInputHtmlFiles();
 }
 
 void Commander::setupNumberingStatistics() {
@@ -164,6 +174,18 @@ void Commander::setupLinkFixingStatistics() {
   }
 }
 
+void Commander::setupBodyTextFixDir() {
+  if (m_command != COMMAND::validateFormatForNumbering and
+      m_command != COMMAND::validateParaSizeForAutoNumbering)
+    m_container.clearFixedBodyTexts();
+}
+
+void Commander::LoadBodyTextFromFixDir() {
+  if (m_command != COMMAND::validateFormatForNumbering and
+      m_command != COMMAND::validateParaSizeForAutoNumbering)
+    m_container.loadFixedBodyTexts();
+}
+
 void Commander::setupReferenceFileSet() {
   if (m_command == COMMAND::fixLinksFromMainFile or
       m_command == COMMAND::fixLinksFromAttachmentFile) {
@@ -180,6 +202,7 @@ void Commander::setupReferenceFileSet() {
         buildFileSet(m_minReferenceToJPM, m_maxReferenceToJPM, JPM);
   }
 }
+
 void Commander::updateAttachmentListIntoFile() {
   if (m_command == COMMAND::fixLinksFromMainFile) {
     LinkFromMain::updateReferenceAttachmentListIntoFile();

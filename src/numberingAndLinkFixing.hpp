@@ -55,9 +55,12 @@ protected:
   virtual void runCommandOverEachFile() = 0;
   void execute();
   void updateAttachmentContentTableAndfixReturnLink();
+  void backupAndOverwriteSrcFiles();
   void setupReferenceFileSet();
   void setupNumberingStatistics();
   void setupLinkFixingStatistics();
+  void setupBodyTextFixDir();
+  void LoadBodyTextFromFixDir();
   void updateAttachmentListIntoFile();
   void outputLinkFixingStatistics();
 

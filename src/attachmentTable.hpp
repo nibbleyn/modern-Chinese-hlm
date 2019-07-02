@@ -9,6 +9,7 @@ static constexpr const char *SRC_REF_ATTACHMENT_LIST_PATH =
 static constexpr const char *OUTPUT_REF_ATTACHMENT_LIST_PATH =
     R"(utf8HTML/output/RefAttachments.txt)";
 
+static constexpr const char *ATTACHMENT_DIR = R"(attachment/)";
 static const string HTML_SRC_ATTACHMENT = R"(utf8HTML/src/attachment/)";
 static const string htmlTitleStart = R"(<title>)";
 static const string htmlTitleEnd = R"(</title>)";

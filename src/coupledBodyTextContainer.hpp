@@ -49,7 +49,8 @@ public:
   AttachmentNumberList getAttachmentFileList(int minAttachNo = 0,
                                              int maxAttachNo = 0);
 
-  void setBackupFilenameList(FileSet files);
+  void setBackupFilenameList(FileSet files, bool wholeFolder = true,
+                             bool attachmentRequired = false);
   void backupAndOverwriteInputHtmlFiles();
 
   // fix return link after fix links in main files

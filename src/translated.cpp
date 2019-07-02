@@ -10,7 +10,7 @@ int debug = LOG_INFO;
 
 int main(int argc, char **argv) {
   // change this number to run different functions
-  int num = 2;
+  int num = 8;
   switch (num) {
   case 1:
     //    search(R"(邢夫人)");
