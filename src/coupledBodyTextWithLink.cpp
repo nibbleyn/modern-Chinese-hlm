@@ -224,6 +224,19 @@ void CoupledBodyTextWithLink::getLinesofReferencePage() {
   m_SizeOfReferPage = totalLines;
 }
 
+void CoupledBodyTextWithLink::adjustParaHeaderStartNumber() {
+  if (m_numberOfMiddleParaHeader > START_PARA_NUMBER) {
+    if (debug >= LOG_INFO) {
+      // excluding start line
+      METHOD_OUTPUT << "number of middle paras are more than default: "
+                    << START_PARA_NUMBER << endl;
+      METHOD_OUTPUT << "adjust start number to: "
+                    << (m_numberOfMiddleParaHeader / 10 + 1) * 10 << endl;
+    }
+    m_paraHeader.setStartNumber((m_numberOfMiddleParaHeader / 10 + 1) * 10);
+  }
+}
+
 void CoupledBodyTextWithLink::calculateParaHeaderPositions() {
   m_numberOfMiddleParaHeader = 0;
 
@@ -446,6 +459,7 @@ void CoupledBodyTextWithLink::addLineNumber() {
     // first scan
     scanByRenderingLines();
     calculateParaHeaderPositions();
+    adjustParaHeaderStartNumber();
     paraGeneratedNumbering();
   } else {
     // first scan

@@ -50,7 +50,9 @@ void reConstructStory(const string &title, const string &outputFilename,
   container.setDisplayTitle(title);
   container.assembleBackToHTM();
   if (autoNumbering)
-    autoNumberingResultStory(container.getoutputHtmlFilepath(), title);
+    autoNumberingResultStory((outputFilename == emptyString) ? title + GENERATED
+                                                             : outputFilename,
+                             title);
   else
     FUNCTION_OUTPUT << "result is in file " << container.getoutputHtmlFilepath()
                     << endl;
@@ -58,7 +60,7 @@ void reConstructStory(const string &title, const string &outputFilename,
 
 void autoNumberingResultStory(const string &htmlFilename,
                               const string &outputHtmlFilename) {
-  FUNCTION_OUTPUT << "autoNumbering" << htmlFilename << endl;
+  FUNCTION_OUTPUT << "autoNumbering: " << htmlFilename << endl;
   FormatedBodyTextContainer container((outputHtmlFilename == emptyString)
                                           ? htmlFilename + NUMBERED
                                           : outputHtmlFilename);

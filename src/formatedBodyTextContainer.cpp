@@ -6,6 +6,7 @@ void FormatedBodyTextContainer::numbering() {
   CoupledBodyTextWithLink bodyText;
   bodyText.setInputBodyTextFilePath(getBodyTextFilePath());
   bodyText.setOutputBodyTextFilePath(getTempBodyTextFixFilePath());
+  bodyText.disableNumberingStatistics();
   bodyText.addLineNumber();
   loadFixedBodyTexts();
   assembleBackToHTM();

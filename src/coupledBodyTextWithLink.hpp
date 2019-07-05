@@ -121,6 +121,7 @@ private:
   }
 
   void scanByRenderingLines();
+  void adjustParaHeaderStartNumber();
   void calculateParaHeaderPositions();
   void paraGeneratedNumbering();
 
