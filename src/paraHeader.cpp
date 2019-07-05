@@ -17,8 +17,9 @@ void ParaHeader::readType(const string &header) {
 void ParaHeader::loadFromFirstParaHeader(const string &header) {
   if (header.find(unhiddenDisplayProperty) == string::npos)
     m_hidden = true;
-  m_startNumber = TurnToInt(
-      getIncludedStringBetweenTags(header, groupIdBeginChars, titleEndChars));
+  if (not m_StartNumberEnforced)
+    m_startNumber = TurnToInt(
+        getIncludedStringBetweenTags(header, groupIdBeginChars, titleEndChars));
   if (not m_hidden)
     m_color = getIncludedStringBetweenTags(header, lineColorBeginChars,
                                            referParaEndChar);

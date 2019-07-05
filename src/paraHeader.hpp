@@ -15,7 +15,10 @@ public:
   void readType(const string &header);
   void loadFrom(const string &header);
 
-  void setStartNumber(int num) { m_startNumber = num; }
+  void setStartNumber(int num) {
+    m_startNumber = num;
+    m_StartNumberEnforced = true;
+  }
   void setCurrentParaNo(int num) { m_currentParaNo = num; }
   int getCurrentParaNo() { return m_currentParaNo; }
   void setColor(const string &color) { m_color = color; }
@@ -45,6 +48,7 @@ protected:
   virtual void fixLastParaHeaderFromTemplate() = 0;
 
   int m_startNumber{DEFAULT_START_PARA_NUMBER};
+  bool m_StartNumberEnforced{false};
   string m_color{MAIN_SEPERATOR_COLOR};
   int m_currentParaNo{0};
   bool m_hidden{false};
