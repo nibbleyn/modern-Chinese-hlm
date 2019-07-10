@@ -9,13 +9,14 @@ int debug = LOG_INFO;
 // int debug = LOG_EXCEPTION;
 
 int main(int argc, char **argv) {
+
   // change this number to run different functions
   int num = 1;
   switch (num) {
   case 1:
     //    search(R"(邢夫人)");
     //    search(R"(邢夫人)", SEARCH_IN_ORIGINAL);
-//    search(R"(闲)", SEARCH_IN_JPM);
+    //    search(R"(闲)", SEARCH_IN_JPM);
     search(R"(闲)", SEARCH_IN_MAIN, true);
     break;
   case 2:

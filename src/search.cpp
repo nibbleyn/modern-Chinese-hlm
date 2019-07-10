@@ -5,9 +5,15 @@ void Searcher::execute() {
   m_bodyText.searchForAll();
   if (m_fileType == FILE_TYPE::MAIN)
     m_bodyText.ignorePersonalComments();
+  auto num = m_bodyText.getFileAndAttachmentNumber();
+  if (m_overSpecificObject)
+    for (const auto &line :
+         CoupledBodyTextWithLink::getLineNumberMissingObjectType(
+             num, m_overObjects)) {
+      m_bodyText.addIgnoreLines(line);
+    }
   bool found = m_bodyText.findKey(m_key);
   if (found) {
-    auto num = m_bodyText.getFileAndAttachmentNumber();
     CoupledBodyText::lineNumberSet lineSet = m_bodyText.getResultLineSet();
     for (auto const &line : lineSet) {
       LineNumber ln(line);
@@ -60,11 +66,15 @@ void Searcher::outputSearchResult() {
   m_containerPtr->createParaListFrom(18, 22);
   m_containerPtr->outputToBodyTextFromLinkList(searchUnit);
   string verb = (total > 1) ? "s are" : " is";
-
-  m_containerPtr->setTitle("search  results");
-  m_containerPtr->setDisplayTitle("search for key: " + m_key + " in " + m_kind +
-                                  " files. " + TurnToString(total) + " link" +
+  string defaultTile = "search for key: " + m_key + ", executed at " +
+                       currentDateTime() + " in " + m_kind + " files";
+  if (m_overSpecificObject)
+    defaultTile += R"( (only among poems))";
+  defaultTile += ".  --->  ";
+  m_containerPtr->setTitle(R"(search  results)");
+  m_containerPtr->setDisplayTitle(defaultTile + TurnToString(total) + " link" +
                                   verb + " found.");
+  m_containerPtr->disableBodyTextWithEndMark();
   m_containerPtr->assembleBackToHTM();
   FUNCTION_OUTPUT << "result is in file "
                   << m_containerPtr->getoutputHtmlFilepath() << endl;
@@ -72,7 +82,7 @@ void Searcher::outputSearchResult() {
 
 void Searcher::runSearchingOverFiles() {
   if (m_key.empty() and m_keyList.empty()) {
-    METHOD_OUTPUT << "no key sepecified." << endl;
+    METHOD_OUTPUT << "no key specified." << endl;
     return;
   }
   if (m_outputFilename.empty()) {
@@ -82,6 +92,7 @@ void Searcher::runSearchingOverFiles() {
       m_outputFilename = *(m_keyList.begin());
   }
   m_fileType = getFileTypeFromString(m_kind);
+  loadObjectList();
   if (m_asList) {
     m_containerPtr = make_unique<ListContainer>(m_outputFilename);
   } else {
@@ -93,6 +104,16 @@ void Searcher::runSearchingOverFiles() {
   m_bodyText.setFilePrefixFromFileType(m_fileType);
   runSearchingOverEachFile();
   outputSearchResult();
+}
+
+void Searcher::loadObjectList() {
+  if (m_overSpecificObject) {
+    CoupledBodyTextWithLink::setReferFilePrefix(
+        getFilePrefixFromFileType(m_fileType));
+    CoupledBodyTextWithLink::setStatisticsOutputFilePath(
+        getStatisticsOutputFilePathFromString(m_kind));
+    CoupledBodyTextWithLink::loadNumberingStatistics();
+  }
 }
 
 void NonAttachmentSearcher::runSearchingOverEachFile() {
@@ -120,27 +141,24 @@ void search(const string &key, int targetKind, bool overSpecificObject,
             const string &outputFilename) {
   SEPERATE("HLM search", " started ");
   NonAttachmentSearcher searcher;
+  searcher.m_key = key;
+  searcher.m_overSpecificObject = overSpecificObject;
+  searcher.m_outputFilename = outputFilename;
   switch (targetKind) {
   case SEARCH_IN_MAIN:
     searcher.m_kind = MAIN;
-    searcher.m_key = key;
-    searcher.m_outputFilename = outputFilename;
     searcher.m_minTarget = MAIN_MIN_CHAPTER_NUMBER;
     searcher.m_maxTarget = MAIN_MAX_CHAPTER_NUMBER;
     searcher.runSearchingOverFiles();
     break;
   case SEARCH_IN_ORIGINAL:
     searcher.m_kind = ORIGINAL;
-    searcher.m_key = key;
-    searcher.m_outputFilename = outputFilename;
     searcher.m_minTarget = MAIN_MIN_CHAPTER_NUMBER;
     searcher.m_maxTarget = MAIN_MAX_CHAPTER_NUMBER;
     searcher.runSearchingOverFiles();
     break;
   case SEARCH_IN_JPM:
     searcher.m_kind = JPM;
-    searcher.m_key = key;
-    searcher.m_outputFilename = outputFilename;
     searcher.m_minTarget = JPM_MIN_CHAPTER_NUMBER;
     searcher.m_maxTarget = JPM_MAX_CHAPTER_NUMBER;
     searcher.runSearchingOverFiles();

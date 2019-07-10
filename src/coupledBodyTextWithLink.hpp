@@ -8,7 +8,7 @@ static const string TO_CHECK_FILE = R"(container/toCheck.txt)";
 class CoupledBodyTextWithLink : public CoupledBodyText {
 public:
   struct LineDetails {
-    size_t numberOfDisplayedLines{0};
+    int numberOfDisplayedLines{0};
     bool isImgGroup{false};
     Object::SET_OF_OBJECT_TYPES objectContains;
   };
@@ -26,6 +26,10 @@ public:
   static void setStatisticsOutputFilePath(const string &path);
   static void clearExistingNumberingStatistics();
   static void appendNumberingStatistics();
+  static void loadNumberingStatistics();
+  static lineNumberSet
+  getLineNumberMissingObjectType(AttachmentNumber num,
+                                 Object::SET_OF_OBJECT_TYPES typeSet);
   static void loadRangeTableFromFile(const string &indexFilePath);
 
 public:
@@ -226,21 +230,21 @@ private:
   LinkPtr m_followingLinkPtr{nullptr};
   bool m_forceUpdateLink{false};
 
-  void printLinesTable() {
+  static void printLinesTable() {
     if (not linesTable.empty()) {
-      METHOD_OUTPUT << "linesTable:" << endl;
-      METHOD_OUTPUT << "chapter/attachment/ParaNumber/LineNumber" << endl;
+      FUNCTION_OUTPUT << "linesTable:" << endl;
+      FUNCTION_OUTPUT << "chapter/attachment/ParaNumber/LineNumber" << endl;
     } else
-      METHOD_OUTPUT << "no entry in linesTable." << endl;
+      FUNCTION_OUTPUT << "no entry in linesTable." << endl;
     for (const auto &element : linesTable) {
       auto num = element.first.first;
       auto paraLine = element.first.second;
       auto detail = element.second;
-      METHOD_OUTPUT << num.first << "  " << num.second << "  " << paraLine.first
-                    << "  " << paraLine.second << "  " << std::boolalpha
-                    << detail.isImgGroup << "  "
-                    << detail.numberOfDisplayedLines << "  "
-                    << Object::typeSetAsString(detail.objectContains) << endl;
+      FUNCTION_OUTPUT << num.first << "  " << num.second << "  "
+                      << paraLine.first << "  " << paraLine.second << "  "
+                      << std::boolalpha << detail.isImgGroup << "  "
+                      << detail.numberOfDisplayedLines << "  "
+                      << Object::typeSetAsString(detail.objectContains) << endl;
     }
   }
 

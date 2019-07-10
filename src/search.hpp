@@ -18,6 +18,7 @@ public:
   virtual ~Searcher(){};
 
   string m_kind{MAIN};
+  bool m_overSpecificObject{false};
   Object::SET_OF_OBJECT_TYPES m_overObjects{Object::OBJECT_TYPE::POEM};
   string m_key;
   KeyList m_keyList;
@@ -32,6 +33,7 @@ public:
 protected:
   void execute();
   void outputSearchResult();
+  void loadObjectList();
   FILE_TYPE m_fileType{FILE_TYPE::MAIN};
   FileSet m_fileSet;
   bool m_asList{false};

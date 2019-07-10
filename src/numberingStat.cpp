@@ -19,6 +19,63 @@ void CoupledBodyTextWithLink::clearExistingNumberingStatistics() {
   ofstream outfile(lineDetailFilePath);
 }
 
+void CoupledBodyTextWithLink::loadNumberingStatistics() {
+  ifstream infile(lineDetailFilePath);
+  if (!infile) {
+    FUNCTION_OUTPUT << ERROR_FILE_NOT_EXIST << lineDetailFilePath << endl;
+    return;
+  }
+  linesTable.clear();
+  while (!infile.eof()) {
+    // 5#P6L2 text 4  SPACE LINENUMBER POEM POEMTRANSLATION COMMENT TEXT
+    string chapter, paraLineStr, typeStr, numOfLines, objectTypeSetString;
+    getline(infile, chapter, '#');
+    if (chapter.empty())
+      break;
+    getline(infile, paraLineStr, ' ');
+    getline(infile, typeStr, ' ');
+    getline(infile, numOfLines, ' ');
+    getline(infile, objectTypeSetString);
+    if (debug >= LOG_INFO) {
+      FUNCTION_OUTPUT << chapter << displaySpace << paraLineStr << endl;
+      FUNCTION_OUTPUT << typeStr << displaySpace << numOfLines << displaySpace
+                      << objectTypeSetString << endl;
+    }
+    LineDetails detail{TurnToInt(numOfLines), typeStr == DISPLY_LINE_IMAGE,
+                       Object::getTypeSetFromString(objectTypeSetString)};
+    AttachmentNumber num = getAttachmentNumber(chapter, false);
+    LineNumber ln(paraLineStr);
+    ParaLineNumber paraLine(ln.getParaNumber(), ln.getlineNumber());
+    linesTable[make_pair(num, paraLine)] = detail;
+  }
+  if (debug >= LOG_INFO) {
+    printLinesTable();
+  }
+}
+
+CoupledBodyTextWithLink::lineNumberSet
+CoupledBodyTextWithLink::getLineNumberMissingObjectType(
+    AttachmentNumber num, Object::SET_OF_OBJECT_TYPES typeSet) {
+  CoupledBodyTextWithLink::lineNumberSet result{};
+  for (const auto &element : linesTable) {
+    if (element.first.first == num) {
+      auto paraLine = element.first.second;
+      LineNumber ln(paraLine.first, paraLine.second);
+      auto detail = element.second;
+      bool notAppearing = true;
+      for (const auto &type : detail.objectContains) {
+        if (Object::isObjectTypeInSet(type, typeSet)) {
+          notAppearing = false;
+          break;
+        }
+      }
+      if (notAppearing)
+        result.insert(ln.asString());
+    }
+  }
+  return result;
+}
+
 /**
  * output linesTable to file specified in lineDetailFilePath
  */
@@ -151,7 +208,7 @@ void CoupledBodyTextWithLink::doStatisticsByScanningLines(
       m_lineNo++;
     } else if (hasEndingBr(m_inLine)) {
       // record the para it belongs to into linesTable
-      size_t dispLines = 0;
+      int dispLines = 0;
       auto types = Object::SET_OF_OBJECT_TYPES();
       if (not m_disableNumberingStatisticsCalculateLines) {
         auto removeEndingBrStr = m_inLine.substr(0, m_inLine.find(brTab));

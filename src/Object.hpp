@@ -37,6 +37,9 @@ public:
   using SET_OF_OBJECT_TYPES = set<Object::OBJECT_TYPE>;
   static SET_OF_OBJECT_TYPES setOfObjectTypes;
 
+  static bool isObjectTypeInSet(OBJECT_TYPE objType, SET_OF_OBJECT_TYPES &set) {
+    return set.count(objType) != 0;
+  }
   static string getStartTagOfObjectType(OBJECT_TYPE type) {
     if (type == OBJECT_TYPE::LINENUMBER)
       return UnhiddenLineNumberStart;
@@ -114,10 +117,13 @@ public:
   }
 
   static SET_OF_OBJECT_TYPES getTypeSetFromString(const string &str) {
-    auto typeListToCheck = {
-        nameOfPoemTranslationType,    nameOfPoemType,
-        nameOfPersonalCommentType,    nameOfCommentType,
-        nameOfLinkFromAttachmentType, nameOfLinkFromMainType};
+    auto typeListToCheck = {nameOfPoemTranslationType,
+                            nameOfPoemType,
+                            nameOfPersonalCommentType,
+                            nameOfCommentType,
+                            nameOfLinkFromAttachmentType,
+                            nameOfLinkFromMainType,
+                            nameOfTextType};
     string toCheck = str;
     SET_OF_OBJECT_TYPES result;
     for (const auto &nameOfType : typeListToCheck) {

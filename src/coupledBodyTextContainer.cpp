@@ -13,23 +13,6 @@ string currentTimeStamp() {
                           .count());
 }
 
-/**
- * current Date and Time
- * to log for backup time
- * @return current Date and Time
- */
-string currentDateTime() {
-  // get time now
-  time_t t = time(0);
-  tm *now = localtime(&t);
-
-  ostringstream ss_msg;
-  ss_msg << (now->tm_year + 1900) << '-' << (now->tm_mon + 1) << '-'
-         << now->tm_mday << " " << now->tm_hour << ":" << now->tm_min << ":"
-         << now->tm_sec << "\n";
-  return ss_msg.str();
-}
-
 void CoupledBodyTextContainer::setInputHtmlFileName() {
   string attachmentPart{emptyString};
   if (m_fileType == FILE_TYPE::ATTACHMENT)
