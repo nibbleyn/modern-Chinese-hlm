@@ -102,8 +102,8 @@ using FileSet = set<string>;
 
 string formatIntoZeroPatchedChapterNumber(int chapterNumber, int digits);
 
-void replacePart(string &linkString, const string &key,
-                 const string &toReplace);
+void replacePart(string &targetString, const string &subStrToReplace,
+                 const string &withStr);
 int utf8length(const string &originalString);
 string utf8substr(const string &originalString, size_t begin, size_t &end,
                   size_t SubStrLength);

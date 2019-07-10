@@ -22,21 +22,17 @@ string formatIntoZeroPatchedChapterNumber(int chapterNumber, int digits) {
 }
 
 /**
- * replace specific parts of a template link to actual value
- * @param linkString the link has key to replace
- * @param key the identified part to replace in the link
- * @param toReplace the actual value to replace in the link
- * @return the link after replacing all parts
+ * replace all substring embedded in targetString to another string
  */
-void replacePart(string &linkString, const string &key,
-                 const string &toReplace) {
-  if (key == toReplace)
+void replacePart(string &targetString, const string &subStrToReplace,
+                 const string &withStr) {
+  if (subStrToReplace == withStr)
     return;
   while (true) {
-    auto partBegin = linkString.find(key);
+    auto partBegin = targetString.find(subStrToReplace);
     if (partBegin == string::npos)
       break;
-    linkString.replace(partBegin, key.length(), toReplace);
+    targetString.replace(partBegin, subStrToReplace.length(), withStr);
   }
 }
 

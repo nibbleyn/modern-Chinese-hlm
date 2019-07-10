@@ -87,10 +87,44 @@ public:
     return emptyString;
   }
 
+  static OBJECT_TYPE getObjectTypeFromName(string name) {
+    if (name == nameOfLineNumberType)
+      return OBJECT_TYPE::LINENUMBER;
+    else if (name == nameOfSpaceType)
+      return OBJECT_TYPE::SPACE;
+    else if (name == nameOfPoemType)
+      return OBJECT_TYPE::POEM;
+    else if (name == nameOfLinkFromMainType)
+      return OBJECT_TYPE::LINKFROMMAIN;
+    else if (name == nameOfPersonalCommentType)
+      return OBJECT_TYPE::PERSONALCOMMENT;
+    else if (name == nameOfPoemTranslationType)
+      return OBJECT_TYPE::POEMTRANSLATION;
+    else if (name == nameOfCommentType)
+      return OBJECT_TYPE::COMMENT;
+    return OBJECT_TYPE::TEXT;
+  }
+
   static string typeSetAsString(SET_OF_OBJECT_TYPES typeSet) {
     string result;
     for (const auto &type : typeSet) {
       result += displaySpace + getNameOfObjectType(type);
+    }
+    return result;
+  }
+
+  static SET_OF_OBJECT_TYPES getTypeSetFromString(const string &str) {
+    auto typeListToCheck = {
+        nameOfPoemTranslationType,    nameOfPoemType,
+        nameOfPersonalCommentType,    nameOfCommentType,
+        nameOfLinkFromAttachmentType, nameOfLinkFromMainType};
+    string toCheck = str;
+    SET_OF_OBJECT_TYPES result;
+    for (const auto &nameOfType : typeListToCheck) {
+      if (toCheck.find(nameOfType) != string::npos) {
+        result.insert(getObjectTypeFromName(nameOfType));
+        replacePart(toCheck, nameOfType, emptyString);
+      }
     }
     return result;
   }
