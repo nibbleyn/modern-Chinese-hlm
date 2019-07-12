@@ -40,6 +40,8 @@ size_t CoupledLink::loadFirstFromContainedLine(const string &containedLine,
  */
 string CoupledLink::asString() {
   if (m_type == LINK_TYPE::IMAGE) {
+    if (m_imageReferFilename.empty())
+      m_imageReferFilename = getHtmlFileNamePrefix() + m_fromFile + HTML_SUFFIX;
     return fixLinkFromImageTemplate(m_imageReferFilename, m_referPara,
                                     m_annotation, displayPropertyAsString());
   }
@@ -212,9 +214,13 @@ void CoupledLink::fixFromString(const string &linkString) {
   // no need for key for these links
   if (m_annotation != returnLinkFromAttachmentHeader and
       m_annotation != returnLink and m_annotation != returnToContentTable)
-    readKey(linkString); // key would be searched here and replaced
+    readKey(linkString); // key would be searched here and replaced,
+                         // m_needChange updated
   m_bodyText = m_annotation;
-  m_displayText = scanForSubComments(m_bodyText, m_fromFile);
+  if (m_type != LINK_TYPE::IMAGE)
+    m_displayText = scanForSubComments(m_bodyText, m_fromFile);
+  else if (m_imageReferFilename.empty())
+    m_needChange = true;
 }
 
 /**
@@ -236,6 +242,7 @@ bool CoupledLink::readReferFileName(const string &linkString) {
     if (debug >= LOG_INFO) {
       METHOD_OUTPUT << "m_imageReferFilename: " << m_imageReferFilename << endl;
     }
+
     return true;
   }
 

@@ -37,7 +37,7 @@ void CoupledBodyTextWithLink::fixLinksWithinOneLine(FileSet referMainFiles,
       m_linkPtr->setSourcePara(ln);
       m_linkPtr->doFixStatistics();
     }
-    if (m_linkPtr->isTargetToSelfHtm()) {
+    if (m_linkPtr->isTargetToImage() or m_linkPtr->isTargetToSelfHtm()) {
       m_linkPtr->setSourcePara(ln);
       // third step of construction
       m_linkPtr->fixFromString(link);
