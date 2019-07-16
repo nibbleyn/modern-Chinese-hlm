@@ -23,7 +23,7 @@ void reConstructStory(const string &title, const string &outputFilename,
   container.appendParagrapHeader(paraHeader.getFixedResult());
 
   CoupledBodyText bodyText;
-  bodyText.setFilePrefixFromFileType(getFileTypeFromString(kind));
+  bodyText.setFilePrefixFromFileType(getFileTypeFromKind(kind));
   for (const auto &element : CoupledBodyTextWithLink::rangeTable) {
     auto num = element.first.first;
     auto paraLine = element.first.second;

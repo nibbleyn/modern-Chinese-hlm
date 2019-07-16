@@ -133,8 +133,9 @@ string getWholeStringBetweenTags(const string &originalString,
   return originalString.substr(beginPos, endPos + end.length() - beginPos);
 }
 
-string getFileNameFromAttachmentNumber(AttachmentNumber num) {
-  string result = TurnToString(num.first);
+string getFileNameFromAttachmentNumber(const string &targetKind,
+                                       AttachmentNumber num) {
+  string result = getChapterNameByTargetKind(targetKind, num.first);
   if (num.second != 0)
     result += attachmentFileMiddleChar + TurnToString(num.second);
   return result;
@@ -147,15 +148,10 @@ string getFileNameFromAttachmentNumber(AttachmentNumber num) {
  * @return pair of chapter number and attachment number
  */
 AttachmentNumber getAttachmentNumber(const string &filename,
-                                     bool prefixIncluded) {
+                                     const string &prefix) {
   AttachmentNumber num(0, 0);
-  // referred file not found
-  if (prefixIncluded and
-      filename.find(ATTACHMENT_TYPE_HTML_TARGET) == string::npos) {
-    return num;
-  }
 
-  string start = prefixIncluded ? ATTACHMENT_TYPE_HTML_TARGET : emptyString;
+  string start = prefix.empty() ? emptyString : prefix;
   string middle = (filename.find(attachmentFileMiddleChar) == string::npos)
                       ? emptyString
                       : attachmentFileMiddleChar;

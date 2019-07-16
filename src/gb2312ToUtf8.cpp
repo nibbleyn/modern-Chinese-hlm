@@ -36,8 +36,8 @@ void convertFromGB2312ToUtf8(string referFile, string format, FILE_TYPE type,
     string attachmentPart{emptyString};
     if (type == FILE_TYPE::ATTACHMENT)
       attachmentPart = attachmentFileMiddleChar + TurnToString(attachNo);
-    inputFile = GB2312_HTML_SRC + getHtmlFileNamePrefix(type) + referFile +
-                attachmentPart + HTML_SUFFIX;
+    inputFile = GB2312_HTML_SRC + getHtmlFileNamePrefixFromFileType(type) +
+                referFile + attachmentPart + HTML_SUFFIX;
     if (debug >= LOG_INFO)
       FUNCTION_OUTPUT << inputFile << endl;
     ifstream infile(inputFile);
@@ -52,8 +52,8 @@ void convertFromGB2312ToUtf8(string referFile, string format, FILE_TYPE type,
       outputFile = HTML_OUTPUT_ORIGINAL;
     if (type == FILE_TYPE::JPM)
       outputFile = HTML_OUTPUT_JPM;
-    outputFile +=
-        getHtmlFileNamePrefix(type) + referFile + attachmentPart + HTML_SUFFIX;
+    outputFile += getHtmlFileNamePrefixFromFileType(type) + referFile +
+                  attachmentPart + HTML_SUFFIX;
     if (debug >= LOG_INFO)
       FUNCTION_OUTPUT << outputFile << endl;
   }

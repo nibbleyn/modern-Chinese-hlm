@@ -19,7 +19,7 @@ void CoupledBodyTextContainer::setInputHtmlFileName() {
     attachmentPart =
         attachmentFileMiddleChar + TurnToString(m_attachmentNumber);
   m_inputHtmlFilename =
-      getHtmlFileNamePrefix(m_fileType) + m_file + attachmentPart;
+      getHtmlFileNamePrefixFromFileType(m_fileType) + m_file + attachmentPart;
 }
 
 void CoupledBodyTextContainer::setBodyTextFileName() {
@@ -50,7 +50,8 @@ void CoupledBodyTextContainer::setBackupFilenameList(FileSet files,
       if (wholeFolder or
           find(files.begin(), files.end(),
                getIncludedStringBetweenTags(
-                   file, getHtmlFileNamePrefix(FILE_TYPE::ATTACHMENT),
+                   file,
+                   getHtmlFileNamePrefixFromFileType(FILE_TYPE::ATTACHMENT),
                    attachmentFileMiddleChar)) != files.end()) {
         if (m_fileType == FILE_TYPE::ATTACHMENT)
           m_backupFilenameList.insert(file);
@@ -61,8 +62,8 @@ void CoupledBodyTextContainer::setBackupFilenameList(FileSet files,
   }
   if (m_fileType != FILE_TYPE::ATTACHMENT)
     for (const auto &file : files)
-      m_backupFilenameList.insert(getHtmlFileNamePrefix(m_fileType) + file +
-                                  HTML_SUFFIX);
+      m_backupFilenameList.insert(
+          getHtmlFileNamePrefixFromFileType(m_fileType) + file + HTML_SUFFIX);
 }
 
 static constexpr const char *PATH_SEPARATOR = R"(/)";

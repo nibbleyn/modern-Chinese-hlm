@@ -37,7 +37,7 @@ void Commander::execute() {
 void Commander::runCommandOverFiles() {
 
   increaseDebugLevel();
-  m_fileType = getFileTypeFromString(m_kind);
+  m_fileType = getFileTypeFromKind(m_kind);
   m_container.setFileType(m_fileType);
   m_fileSet = buildFileSet(m_minTarget, m_maxTarget, m_kind);
 
@@ -128,6 +128,7 @@ void Commander::updateAttachmentContentTableAndfixReturnLink() {
 
     generateContentTableForReferenceAttachments(false);
     generateContentTableForPersonalAttachments(false);
+    generateContentTableForImages(false);
     if (m_fixReturnLink)
       // fix return links of attachments to output directory
       for (const auto &file : m_fileSet) {
@@ -155,7 +156,7 @@ void Commander::backupAndOverwriteSrcFiles() {
 void Commander::setupNumberingStatistics() {
   if (m_command == COMMAND::addLineNumber) {
     CoupledBodyTextWithLink::setReferFilePrefix(
-        getFilePrefixFromFileType(m_fileType));
+        getBodyTextFilePrefixFromFileType(m_fileType));
     CoupledBodyTextWithLink::setStatisticsOutputFilePath(
         getStatisticsOutputFilePathFromString(m_kind));
     CoupledBodyTextWithLink::clearExistingNumberingStatistics();
@@ -322,7 +323,7 @@ void refreshBodyTexts(const string &kind, int minTarget, int maxTarget) {
   container.setBackupFilenameList(fileSet);
   container.backupAndOverwriteInputHtmlFiles();
   for (const auto &file : fileSet) {
-    container.setFileType(getFileTypeFromString(kind));
+    container.setFileType(getFileTypeFromKind(kind));
     container.setFileAndAttachmentNumber(file);
     container.dissembleFromHTM();
   }

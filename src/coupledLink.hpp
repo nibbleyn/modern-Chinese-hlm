@@ -17,7 +17,8 @@ public:
   // statistics about links
   // chapter number (added with attachment number if over fromAttachmentLinks),
   // referPara -> vector<key, fromFile, fromLine, Link string>
-  using LinksTable = map<pair<string, string>, vector<LinkDetails>>;
+  using LinksTable =
+      map<pair<AttachmentNumber, ParaLineNumber>, vector<LinkDetails>>;
   static string referFilePrefix;
   static string linkDetailFilePath;
   static string keyDetailFilePath;

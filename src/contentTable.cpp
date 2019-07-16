@@ -133,6 +133,8 @@ void generateContentTableForReferenceAttachments(
                   << outputContainer.getoutputHtmlFilepath() << endl;
 }
 
+void generateContentTableForImages(bool needToReloadImageLinkList) {}
+
 void generateContentTableForPersonalAttachments(
     bool needToReloadAttachmentList) {
   if (needToReloadAttachmentList) {

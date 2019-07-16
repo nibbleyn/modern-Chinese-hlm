@@ -20,13 +20,19 @@ void CoupledLink::displayFixedLinks() {
   ofstream keyDetailOutfile(keyDetailFilePath);
   linkDetailOutfile << "all links processed:" << endl;
   linkDetailOutfile << "---------------------------------" << endl;
-  for (const auto &link : linksTable) {
-    auto target = link.first;
-    auto fromList = link.second;
+  for (const auto &element : linksTable) {
+    auto num = element.first.first;
+    auto paraLine = element.first.second;
+    LineNumber ln(paraLine.first, paraLine.second);
+    auto fromList = element.second;
     // link itself
-    linkDetailOutfile << "link:" << referFilePrefix << target.first << ","
-                      << target.second << endl;
-    keyDetailOutfile << referFilePrefix << target.first << ":" << target.second
+    linkDetailOutfile << "link: " << referFilePrefix
+                      << getFileNameFromAttachmentNumber(referFilePrefix, num)
+                      << HTML_SUFFIX << referParaMiddleChar << ln.asString()
+                      << endl;
+    keyDetailOutfile << referFilePrefix
+                     << getFileNameFromAttachmentNumber(referFilePrefix, num)
+                     << HTML_SUFFIX << referParaMiddleChar << ln.asString()
                      << endl;
     using KeySet = set<string>;
     KeySet keySet;
@@ -34,9 +40,9 @@ void CoupledLink::displayFixedLinks() {
          [](LinkDetails a, LinkDetails b) { return a.key < b.key; });
     for (const auto &from : fromList) {
       linkDetailOutfile << "key: " << from.key
-                        << ",linked from:" << from.fromFile << ","
-                        << from.fromLine << ":" << endl
-                        << "    " << from.link << endl;
+                        << ", linked from: " << referFilePrefix << from.fromFile
+                        << HTML_SUFFIX << referParaMiddleChar << from.fromLine
+                        << " :" << displaySpace << from.link << endl;
       keySet.insert(from.key);
     }
     for (const auto &key : keySet)
@@ -80,8 +86,12 @@ void LinkFromMain::logLink() {
   if (isTargetToOtherMainHtm()) {
     LinkDetails detail{m_usedKey, m_fromFile, m_fromLine.asString(),
                        asString()};
+    AttachmentNumber num = make_pair(m_chapterNumber, 0);
+    LineNumber ln(m_referPara);
+    ParaLineNumber paraLine(ln.getParaNumber(), ln.getlineNumber());
     try {
-      auto &entry = linksTable.at(make_pair(getChapterName(), m_referPara));
+
+      auto &entry = linksTable.at(make_pair(num, paraLine));
       entry.push_back(detail);
       if (debug >= LOG_INFO)
         METHOD_OUTPUT << "entry.size: " << entry.size()
@@ -94,7 +104,7 @@ void LinkFromMain::logLink() {
                       << displaySpace << m_referPara << endl;
       vector<LinkDetails> list;
       list.push_back(detail);
-      linksTable[make_pair(getChapterName(), m_referPara)] = list;
+      linksTable[make_pair(num, paraLine)] = list;
     }
   }
   if (isTargetToOtherAttachmentHtm()) {
@@ -109,8 +119,8 @@ void LinkFromMain::logLink() {
                                (type == ATTACHMENT_TYPE::PERSONAL)
                                    ? ATTACHMENT_TYPE::PERSONAL
                                    : ATTACHMENT_TYPE::REFERENCE};
-      attachmentTable.addOrUpdateOneItem(getAttachmentNumber(targetFile),
-                                         detail);
+      attachmentTable.addOrUpdateOneItem(
+          getAttachmentNumber(targetFile, ATTACHMENT_HTML_PREFIX), detail);
     }
     if (not AttachmentList::isTitleMatch(getAnnotation(), title)) {
       METHOD_OUTPUT << m_fromFile << " has a link to " << targetFile
@@ -148,11 +158,11 @@ void LinkFromAttachment::logLink() {
   if (isTargetToOtherMainHtm()) {
     LinkDetails detail{m_usedKey, m_fromFile, m_fromLine.asString(),
                        asString()};
+    AttachmentNumber num = make_pair(m_chapterNumber, m_attachmentNumber);
+    LineNumber ln(m_referPara);
+    ParaLineNumber paraLine(ln.getParaNumber(), ln.getlineNumber());
     try {
-      auto &entry =
-          linksTable.at(make_pair(getChapterName() + attachmentFileMiddleChar +
-                                      TurnToString(m_attachmentNumber),
-                                  m_referPara));
+      auto &entry = linksTable.at(make_pair(num, paraLine));
       entry.push_back(detail);
     } catch (exception &) {
       if (debug >= LOG_EXCEPTION)
@@ -163,9 +173,7 @@ void LinkFromAttachment::logLink() {
                       << m_usedKey << endl;
       vector<LinkDetails> list;
       list.push_back(detail);
-      linksTable[make_pair(getChapterName() + attachmentFileMiddleChar +
-                               TurnToString(m_attachmentNumber),
-                           m_referPara)] = list;
+      linksTable[make_pair(num, paraLine)] = list;
     }
   }
 }

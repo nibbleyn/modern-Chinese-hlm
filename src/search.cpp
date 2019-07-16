@@ -91,7 +91,7 @@ void Searcher::runSearchingOverFiles() {
     else
       m_outputFilename = *(m_keyList.begin());
   }
-  m_fileType = getFileTypeFromString(m_kind);
+  m_fileType = getFileTypeFromKind(m_kind);
   loadObjectList();
   if (m_asList) {
     m_containerPtr = make_unique<ListContainer>(m_outputFilename);
@@ -109,7 +109,7 @@ void Searcher::runSearchingOverFiles() {
 void Searcher::loadObjectList() {
   if (m_overSpecificObject) {
     CoupledBodyTextWithLink::setReferFilePrefix(
-        getFilePrefixFromFileType(m_fileType));
+        getBodyTextFilePrefixFromFileType(m_fileType));
     CoupledBodyTextWithLink::setStatisticsOutputFilePath(
         getStatisticsOutputFilePathFromString(m_kind));
     CoupledBodyTextWithLink::loadNumberingStatistics();
@@ -134,8 +134,6 @@ void AttachmentSearcher::runSearchingOverEachFile() {
     }
   }
 }
-
-void searchForImages() {}
 
 void search(const string &key, int targetKind, bool overSpecificObject,
             const string &outputFilename) {

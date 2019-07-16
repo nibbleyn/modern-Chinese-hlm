@@ -12,20 +12,21 @@ void fixFooter(string &footer, const string &filename) {
     if (toReplacePreviousBegin == string::npos)
       break;
     footer.replace(toReplacePreviousBegin, toReplacePrevious.length(),
-                   getHtmlFileNamePrefix(FILE_TYPE::JPM) + previous);
+                   getHtmlFileNamePrefixFromFileType(FILE_TYPE::JPM) +
+                       previous);
   } while (true);
   do {
     auto toReplaceNextBegin = footer.find(toReplaceNext);
     if (toReplaceNextBegin == string::npos)
       break;
     footer.replace(toReplaceNextBegin, toReplaceNext.length(),
-                   getHtmlFileNamePrefix(FILE_TYPE::JPM) + next);
+                   getHtmlFileNamePrefixFromFileType(FILE_TYPE::JPM) + next);
   } while (true);
   const string toReplaceContentTable = "aindex";
   if (footer.find(toReplaceContentTable) == string::npos)
     return;
   const string newContentTable =
-      getHtmlFileNamePrefix(FILE_TYPE::JPM) + "index";
+      getHtmlFileNamePrefixFromFileType(FILE_TYPE::JPM) + "index";
   footer.replace(footer.find(toReplaceContentTable),
                  toReplaceContentTable.length(), newContentTable);
   FUNCTION_OUTPUT << footer << endl;
@@ -69,14 +70,15 @@ void fixHeader(string &header, const string &filename) {
     if (toReplacePreviousBegin == string::npos)
       break;
     header.replace(toReplacePreviousBegin, toReplacePrevious.length(),
-                   getHtmlFileNamePrefix(FILE_TYPE::JPM) + previous);
+                   getHtmlFileNamePrefixFromFileType(FILE_TYPE::JPM) +
+                       previous);
   } while (true);
   do {
     auto toReplaceNextBegin = header.find(toReplaceNext);
     if (toReplaceNextBegin == string::npos)
       break;
     header.replace(toReplaceNextBegin, toReplaceNext.length(),
-                   getHtmlFileNamePrefix(FILE_TYPE::JPM) + next);
+                   getHtmlFileNamePrefixFromFileType(FILE_TYPE::JPM) + next);
   } while (true);
 
   const string toReplaceTranslatedTitle =
@@ -88,7 +90,7 @@ void fixHeader(string &header, const string &filename) {
 
   const string toReplaceContentTable = "aindex";
   const string newContentTable =
-      getHtmlFileNamePrefix(FILE_TYPE::JPM) + "index";
+      getHtmlFileNamePrefixFromFileType(FILE_TYPE::JPM) + "index";
   header.replace(header.find(toReplaceContentTable),
                  toReplaceContentTable.length(), newContentTable);
   FUNCTION_OUTPUT << header << endl;

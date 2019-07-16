@@ -27,7 +27,7 @@ void CoupledBodyTextWithLink::loadNumberingStatistics() {
   }
   linesTable.clear();
   while (!infile.eof()) {
-    // 5#P6L2 text 4  SPACE LINENUMBER POEM POEMTRANSLATION COMMENT TEXT
+    // a005#P6L2 text 4  SPACE LINENUMBER POEM POEMTRANSLATION COMMENT TEXT
     string chapter, paraLineStr, typeStr, numOfLines, objectTypeSetString;
     getline(infile, chapter, '#');
     if (chapter.empty())
@@ -43,7 +43,8 @@ void CoupledBodyTextWithLink::loadNumberingStatistics() {
     }
     LineDetails detail{TurnToInt(numOfLines), typeStr == DISPLY_LINE_IMAGE,
                        Object::getTypeSetFromString(objectTypeSetString)};
-    AttachmentNumber num = getAttachmentNumber(chapter, false);
+    AttachmentNumber num = getAttachmentNumber(
+        chapter, getHtmlFileNameFromBodyTextFilePrefix(referFilePrefix));
     LineNumber ln(paraLineStr);
     ParaLineNumber paraLine(ln.getParaNumber(), ln.getlineNumber());
     linesTable[make_pair(num, paraLine)] = detail;
@@ -94,11 +95,13 @@ void CoupledBodyTextWithLink::appendNumberingStatistics() {
     auto detail = element.second;
     string typeStr = (detail.isImgGroup) ? DISPLY_LINE_IMAGE : DISPLY_LINE_TEXT;
     // para itself
-    lineDetailOutfile << getFileNameFromAttachmentNumber(num)
-                      << referParaMiddleChar << ln.asString() << displaySpace
-                      << typeStr << displaySpace
-                      << detail.numberOfDisplayedLines << displaySpace
-                      << Object::typeSetAsString(detail.objectContains) << endl;
+    lineDetailOutfile
+        << getHtmlFileNameFromBodyTextFilePrefix(referFilePrefix)
+        << getFileNameFromAttachmentNumber(
+               getHtmlFileNameFromBodyTextFilePrefix(referFilePrefix), num)
+        << referParaMiddleChar << ln.asString() << displaySpace << typeStr
+        << displaySpace << detail.numberOfDisplayedLines << displaySpace
+        << Object::typeSetAsString(detail.objectContains) << endl;
     if (paraLine.first != para) {
       FUNCTION_OUTPUT << "para " << para
                       << " has totalLines: " << totalNumberOfLines << endl;
@@ -151,8 +154,8 @@ void CoupledBodyTextWithLink::loadRangeTableFromFile(
       FUNCTION_OUTPUT << startChapter << displaySpace << startParaLine << endl;
       FUNCTION_OUTPUT << endChapter << displaySpace << endParaLine << endl;
     }
-    AttachmentNumber startNum = getAttachmentNumber(startChapter, false),
-                     endNum = getAttachmentNumber(endChapter, false);
+    AttachmentNumber startNum = getAttachmentNumber(startChapter),
+                     endNum = getAttachmentNumber(endChapter);
     LineNumber startPara(startParaLine), endPara(endParaLine);
     ParaLineNumber start(startPara.getParaNumber(), startPara.getlineNumber());
     ParaLineNumber end(endPara.getParaNumber(), endPara.getlineNumber());

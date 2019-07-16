@@ -103,7 +103,7 @@ void AttachmentList::loadReferenceAttachmentList() {
     title = regex_replace(title, regex(" +$"), emptyString);
     AttachmentDetails detail{targetFile, fromLine, title,
                              attachmentTypeFromString(type)};
-    auto num = getAttachmentNumber(targetFile);
+    auto num = getAttachmentNumber(targetFile, ATTACHMENT_TYPE_HTML_TARGET);
     m_table[num] = detail;
     m_notUpdatedAttachmentSet.insert(num);
   }
