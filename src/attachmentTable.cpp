@@ -33,7 +33,7 @@ bool AttachmentList::isTitleMatch(string annotation, string title) {
 }
 
 /**
- * the string to write into file of a type
+ * the string to write into file of attachment type
  * @param type ATTACHMENT_TYPE to convert
  * @return corresponding string
  */
@@ -43,7 +43,7 @@ string attachmentTypeAsString(ATTACHMENT_TYPE type) {
 }
 
 /**
- * convert string read from file back to type
+ * convert attachment type string read from file back to type
  * @param str referenceAttachmentType or personalAttachmentType from file
  * @return REFERENCE or PERSONAL
  */

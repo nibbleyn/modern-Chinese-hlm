@@ -6,11 +6,23 @@ void CoupledBodyTextWithLink::fixLinksWithinOneLine(FileSet referMainFiles,
   LineNumber ln;
   ln.loadFirstFromContainedLine(m_inLine);
   string toProcess = m_inLine;
+  auto processBegin = 0;
   // skip link of line number
-  if (ln.valid())
+  if (ln.valid()) {
     toProcess = toProcess.substr(ln.generateLinePrefix().length());
+    processBegin = ln.generateLinePrefix().length();
+  }
   if (debug >= LOG_INFO)
     METHOD_OUTPUT << toProcess << endl;
+  if (m_filePrefix == MAIN_BODYTEXT_PREFIX) {
+    m_linkPtr = make_unique<LinkFromMain>(m_file);
+  } else if (m_filePrefix == JPM_BODYTEXT_PREFIX) {
+    m_linkPtr = make_unique<LinkFromJPM>(m_file);
+  } else if (m_filePrefix == ATTACHMENT_BODYTEXT_PREFIX) {
+    m_linkPtr = make_unique<LinkFromAttachment>(
+        m_file + attachmentFileMiddleChar + TurnToString(m_attachNumber));
+  }
+
   string targetFile{emptyString};
   unsigned int endOfProcessedSubString = 0;
   do {
@@ -20,15 +32,7 @@ void CoupledBodyTextWithLink::fixLinksWithinOneLine(FileSet referMainFiles,
     auto linkEnd = toProcess.find(linkEndChars, toProcess.find(linkStartChars));
     auto link =
         getWholeStringBetweenTags(toProcess, linkStartChars, linkEndChars);
-    if (m_filePrefix == MAIN_BODYTEXT_PREFIX) {
-      m_linkPtr = make_unique<LinkFromMain>(m_file, link);
-    } else if (m_filePrefix == JPM_BODYTEXT_PREFIX) {
-      m_linkPtr = make_unique<LinkFromJPM>(m_file, link);
-    } else if (m_filePrefix == ATTACHMENT_BODYTEXT_PREFIX) {
-      m_linkPtr = make_unique<LinkFromAttachment>(
-          m_file + attachmentFileMiddleChar + TurnToString(m_attachNumber),
-          link);
-    }
+    m_linkPtr->readTypeAndAnnotation(link);
     // second step of construction, this is needed to check isTargetToSelfHtm
     m_linkPtr->readReferFileName(link);
     if (m_linkPtr->isTargetToOtherAttachmentHtm()) {
@@ -49,7 +53,8 @@ void CoupledBodyTextWithLink::fixLinksWithinOneLine(FileSet referMainFiles,
             orglinkBegin + m_linkPtr->getWholeString().length();
       }
     }
-    if (m_linkPtr->isTargetToOtherMainHtm()) {
+    if (m_linkPtr->isTargetToOtherMainHtm() and
+        not m_linkPtr->isReverseLink()) {
       auto e = find(referMainFiles.begin(), referMainFiles.end(),
                     m_linkPtr->getChapterName());
       // need to check and fix
@@ -132,6 +137,28 @@ void CoupledBodyTextWithLink::fixLinksWithinOneLine(FileSet referMainFiles,
     // continue to find next link in the m_inLine
     toProcess = toProcess.substr(linkEnd + linkEndChars.length());
   } while (true);
+  using OrgLinkSet = set<string>;
+  OrgLinkSet orgLinkSet;
+  using ToDeleteOrgLinkOffsetTable = map<size_t, size_t, std::greater<size_t>>;
+  ToDeleteOrgLinkOffsetTable toDelete;
+  auto start = processBegin;
+  while (true) {
+    auto orglinkBegin = m_linkPtr->loadFirstFromContainedLine(m_inLine, start);
+    if (orglinkBegin == string::npos)
+      break;
+    auto link = m_linkPtr->asString();
+    start = orglinkBegin + link.length();
+    if (not m_linkPtr->isTargetToOriginalHtm())
+      continue;
+    bool alreadyContainsThisLink = orgLinkSet.count(link) != 0;
+    if (alreadyContainsThisLink) {
+      toDelete[orglinkBegin] = link.length();
+    } else
+      orgLinkSet.insert(link);
+  }
+  for (const auto &offset : toDelete) {
+    m_inLine.replace(offset.first, offset.second, emptyString);
+  }
 }
 
 /**

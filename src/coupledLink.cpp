@@ -17,6 +17,8 @@ size_t CoupledLink::displaySize() { return getDisplayString().length(); }
  */
 size_t CoupledLink::loadFirstFromContainedLine(const string &containedLine,
                                                size_t after) {
+  if (containedLine.find(linkStartChars, after) == string::npos)
+    return string::npos;
   m_fullString = getWholeStringBetweenTags(containedLine, linkStartChars,
                                            linkEndChars, after);
   if (debug >= LOG_INFO) {
@@ -82,7 +84,7 @@ string CoupledLink::asString() {
   // annotation
   string part8 = getAnnotation() + linkEndChars;
   return (part0 + part1 + part2 + part3 + part4 + part5 + part7 + part8 +
-          getStringOfLinkToOrigin());
+          getEnclosedStringOfLinkToOrigin());
 }
 
 /**
@@ -236,13 +238,14 @@ void CoupledLink::fixFromString(const string &linkString) {
  * @return true only if a right chapter number and attachment number are gotten
  */
 bool CoupledLink::readReferFileName(const string &linkString) {
+  m_chapterNumber = 0;
+  m_attachmentNumber = 0;
   if (m_type == LINK_TYPE::IMAGE) {
     m_imageReferFilename = getIncludedStringBetweenTags(
         linkString, referFileMiddleChar, referParaMiddleChar);
     if (debug >= LOG_INFO) {
       METHOD_OUTPUT << "m_imageReferFilename: " << m_imageReferFilename << endl;
     }
-
     return true;
   }
 

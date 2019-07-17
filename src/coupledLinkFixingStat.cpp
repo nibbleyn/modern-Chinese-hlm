@@ -66,14 +66,7 @@ void CoupledLink::outPutStatisticsToFiles() {
                   << linkDetailFilePath << " and " << keyDetailFilePath << endl;
 }
 
-/**
- * link: a001.htm#P3L1
- * key: 口吐人言, linked from: a012.htm#P9L2 : <a unhidden title="口吐人言"
- * href="a001.htm#P3L1"><sub hidden>第1回3.1节:</sub>口吐人言</a>
- *
- */
 void CoupledLink::loadLinkTableFromStatisticsFile() {
-
   linksTable.clear();
   ifstream infile(linkDetailFilePath);
   if (!infile) {

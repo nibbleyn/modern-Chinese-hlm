@@ -2,7 +2,7 @@
 #include "attachmentTable.hpp"
 #include "coupledBodyText.hpp"
 
-static const string returnLink = R"(被引用)";
+static const string returnLinkSetIndicator = R"(被引用：)";
 static const string returnToContentTable = R"(回目录)";
 static const string citationChapter = R"(章)";
 
@@ -59,14 +59,19 @@ public:
     }
   }
   virtual void generateLinkToOrigin() = 0;
+  string getStringOfLinkToOrigin() {
+    if (m_linkPtrToOrigin != nullptr)
+      return m_linkPtrToOrigin->asString();
+    return emptyString;
+  }
 
 protected:
   string getKey() { return m_usedKey; }
   string getReferSection() { return m_referSection; }
   void readKey(const string &linkString);
-  string getStringOfLinkToOrigin() {
+  string getEnclosedStringOfLinkToOrigin() {
     if (m_linkPtrToOrigin != nullptr)
-      return originalLinkStartChars + m_linkPtrToOrigin->asString() +
+      return originalLinkStartChars + getStringOfLinkToOrigin() +
              originalLinkEndChars;
     return emptyString;
   }

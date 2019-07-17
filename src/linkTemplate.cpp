@@ -27,7 +27,7 @@ static constexpr const char *linkToMainFile =
     R"(<a unhidden title="QQ" href="PPa0XX.htm#YY"><sub hidden>WW</sub>ZZ</a>)";
 // now only support reverse link from main back to main, no key required
 static constexpr const char *reverseLinkToMainFile =
-    R"(<a unhidden href="a0XX.htm#YY"><sub unhidden>WW</sub>被引用</a>)";
+    R"(<a unhidden href="a0XX.htm#YY">被<sub>WW</sub>引用</a>)";
 static constexpr const char *linkToOriginalFile =
     R"(<a unhidden title="QQ" href="PPc0XX.htm#YY"><sub hidden>WW</sub>ZZ</a>)";
 static constexpr const char *linkToJPMFile =

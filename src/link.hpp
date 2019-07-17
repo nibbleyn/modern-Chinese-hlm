@@ -10,6 +10,7 @@ enum class LINK_TYPE { MAIN, ATTACHMENT, ORIGINAL, SAMEPAGE, JPM, IMAGE };
 enum class LINK_DISPLAY_TYPE { DIRECT, HIDDEN, UNHIDDEN };
 
 static const string returnLinkFromAttachmentHeader = R"(返回本章原文)";
+static const string returnLink = R"(引用)";
 static const string annotationToOriginal = R"(原文)";
 static const string contentTableFilename = R"(aindex)";
 
@@ -63,7 +64,12 @@ public:
   virtual ~Link(){};
   Link(const Link &) = delete;
   Link &operator=(const Link &) = delete;
+  void readTypeAndAnnotation(const string &linkString) {
+    readType(linkString);
+    readAnnotation(linkString);
+  }
   LINK_TYPE getType() { return m_type; }
+  bool isReverseLink() { return (m_annotation == returnLink); };
   bool isTargetToImage() { return (m_type == LINK_TYPE::IMAGE); };
   bool isTargetToJPMHtm() { return (m_type == LINK_TYPE::JPM); };
   bool isTargetToOriginalHtm() { return (m_type == LINK_TYPE::ORIGINAL); };
@@ -126,10 +132,6 @@ protected:
   void readType(const string &linkString);
   void readReferPara(const string &linkString);
   bool readAnnotation(const string &linkString);
-  void readTypeAndAnnotation(const string &linkString) {
-    readType(linkString);
-    readAnnotation(linkString);
-  }
 
   string displayPropertyAsString() {
     string result{emptyString};
