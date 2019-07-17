@@ -10,22 +10,21 @@ class CoupledLink : public Link {
 public:
   struct LinkDetails {
     string key{emptyString};
-    string fromFile{emptyString};
-    string fromLine{emptyString};
     string link{emptyString};
   };
+  // (fromFile, fromLine) -> LinkDetails
+  using LinkDetailSet =
+      map<pair<AttachmentNumber, ParaLineNumber>, LinkDetails>;
   // statistics about links
-  // chapter number (added with attachment number if over fromAttachmentLinks),
-  // referPara -> vector<key, fromFile, fromLine, Link string>
-  using LinksTable =
-      map<pair<AttachmentNumber, ParaLineNumber>, vector<LinkDetails>>;
+  // (chapter number, referPara) -> LinkDetailSet
+  using LinksTable = map<pair<AttachmentNumber, ParaLineNumber>, LinkDetailSet>;
   static string referFilePrefix;
   static string linkDetailFilePath;
   static string keyDetailFilePath;
   static LinksTable linksTable;
-  static void displayFixedLinks();
 
   static void clearLinkTable();
+  static void loadLinkTableFromStatisticsFile();
   static void outPutStatisticsToFiles();
 
 public:
@@ -99,6 +98,7 @@ public:
   static FileSet keyMissingChapters;
   static void resetStatisticsAndLoadReferenceAttachmentList();
   static void updateReferenceAttachmentListIntoFile();
+  static void setupStatisticsParameters();
   static void outPutStatisticsToFiles();
   static void displayMainFilesOfMissingKey();
 
@@ -124,6 +124,7 @@ private:
 class LinkFromAttachment : public CoupledLink {
 public:
   static void resetStatisticsAndLoadReferenceAttachmentList();
+  static void setupStatisticsParameters();
   static void outPutStatisticsToFiles();
 
 public:

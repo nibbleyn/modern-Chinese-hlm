@@ -1,5 +1,10 @@
 #include "coupledLink.hpp"
 
+static const string mainDirForLinkFromAttachment = R"(..\)";
+static const string originalDirForLinkFromAttachment = R"(..\original\)";
+static const string jpmDirForLinkFromAttachment = R"(..\JPM\)";
+static const string pictureDirForLinkFromAttachment = R"(..\pictures\)";
+
 /**
  * generate the link to original file after a link to main file from attachment
  */
