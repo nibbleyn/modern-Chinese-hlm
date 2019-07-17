@@ -138,7 +138,13 @@ string getFileNameFromAttachmentNumber(const string &targetKind,
                                        AttachmentNumber num);
 AttachmentNumber getAttachmentNumber(const string &filename,
                                      const string &prefix = emptyString);
-
+string getExpectedAttachment(AttachmentNumber num,
+                             string chapterString = defaultUnit,
+                             string attachmentString = attachmentUnit);
+string getExpectedSection(AttachmentNumber num, ParaLineNumber paraLine,
+                          string chapterString = defaultUnit,
+                          string attachmentString = attachmentUnit,
+                          string sectionString = citationPara);
 // get attachment numbers for a chapter
 using AttachmentNumberList = set<int>;
 AttachmentNumberList getAttachmentFileListForChapter(const string &fromDir,

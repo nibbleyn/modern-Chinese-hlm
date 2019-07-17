@@ -218,13 +218,11 @@ AttachmentList::allAttachmentsAsLinksByType(ATTACHMENT_TYPE type) {
     ATTACHMENT_TYPE attachmentType = entry.type;
 
     if (attachmentType == type) {
-      string name = citationChapterNo + TurnToString(num.first) + defaultUnit +
-                    citationChapterNo + TurnToString(num.second) +
-                    attachmentUnit;
       result[fullPos] = fixLinkFromAttachmentTemplate(
           attachmentDirForLinkFromMain,
           getChapterNameByTargetKind(MAIN_TYPE_HTML_TARGET, num.first),
-          TurnToString(num.second), name + displaySpace + entry.title);
+          TurnToString(num.second),
+          getExpectedAttachment(num) + displaySpace + entry.title);
     }
   }
   return result;

@@ -141,6 +141,23 @@ string getFileNameFromAttachmentNumber(const string &targetKind,
   return result;
 }
 
+string getExpectedAttachment(AttachmentNumber num, string chapterString,
+                             string attachmentString) {
+  return citationChapterNo + TurnToString(num.first) + chapterString +
+         citationChapterNo + TurnToString(num.second) + attachmentString;
+}
+
+string getExpectedSection(AttachmentNumber num, ParaLineNumber paraLine,
+                          string chapterString, string attachmentString,
+                          string sectionString) {
+  string unitString = chapterString;
+  if (num.second != 0)
+    unitString +=
+        citationChapterNo + TurnToString(num.second) + attachmentString;
+  return citationChapterNo + TurnToString(num.first) + unitString +
+         TurnToString(paraLine.first) + citationChapterParaSeparator +
+         TurnToString(paraLine.second) + sectionString;
+}
 /**
  * get chapter number and attachment number from an attachment file name
  * for example with input b001_15 would return pair <1,15>

@@ -17,10 +17,9 @@ void Searcher::execute() {
     CoupledBodyText::lineNumberSet lineSet = m_bodyText.getResultLineSet();
     for (auto const &line : lineSet) {
       LineNumber ln(line);
-      string expectedSection = citationChapterNo + TurnToString(num.first) +
-                               defaultUnit + TurnToString(ln.getParaNumber()) +
-                               citationChapterParaSeparator +
-                               TurnToString(ln.getlineNumber()) + citationPara;
+      ParaLineNumber paraLine =
+          make_pair(ln.getParaNumber(), ln.getlineNumber());
+      string expectedSection = getExpectedSection(num, paraLine);
       switch (m_fileType) {
       case FILE_TYPE::MAIN:
         m_containerPtr->addLinkToLinkStringSet(

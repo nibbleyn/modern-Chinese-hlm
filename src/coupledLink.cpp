@@ -160,17 +160,11 @@ void CoupledLink::readKey(const string &linkString) {
     if (debug >= LOG_INFO)
       METHOD_OUTPUT << "line number found: " << lineNumber << endl;
     LineNumber ln(lineNumber);
-    string unitString = defaultUnit;
-    if (m_attachmentNumber != 0)
-      unitString = attachmentFileMiddleChar + TurnToString(m_attachmentNumber) +
-                   attachmentUnit;
-    string expectedSection = citationChapterNo + TurnToString(m_chapterNumber) +
-                             unitString + TurnToString(ln.getParaNumber()) +
-                             citationChapterParaSeparator +
-                             TurnToString(ln.getlineNumber()) + citationPara;
+    AttachmentNumber num = make_pair(m_chapterNumber, m_attachmentNumber);
+    ParaLineNumber paraLine = make_pair(ln.getParaNumber(), ln.getlineNumber());
     // will set needChange if found line is different
     fixReferPara(ln.asString());
-    fixReferSection(expectedSection);
+    fixReferSection(getExpectedSection(num, paraLine));
   }
   if (debug >= LOG_INFO)
     METHOD_OUTPUT << "key: " << m_usedKey << endl;
