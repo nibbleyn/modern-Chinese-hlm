@@ -137,6 +137,12 @@ void CoupledBodyTextWithLink::fixLinksWithinOneLine(FileSet referMainFiles,
     // continue to find next link in the m_inLine
     toProcess = toProcess.substr(linkEnd + linkEndChars.length());
   } while (true);
+  if (m_forceRemoveDuplicatedOriginalLinks)
+    removeDuplicatedOriginalLinks(processBegin);
+}
+
+void CoupledBodyTextWithLink::removeDuplicatedOriginalLinks(
+    size_t processBegin) {
   using OrgLinkSet = set<string>;
   OrgLinkSet orgLinkSet;
   using ToDeleteOrgLinkOffsetTable = map<size_t, size_t, std::greater<size_t>>;

@@ -536,9 +536,6 @@ void testAddLineNumber() {
 }
 
 void renderingBodyText(const string &kind = MAIN) {
-  const string sampleBlock = R"()";
-  const string sampleFirstLine = R"()";
-  const string sampleWholeLine = R"()";
   int minTarget = 49, maxTarget = 49;
   for (const auto &file : buildFileSet(minTarget, maxTarget, kind)) {
     CoupledBodyTextWithLink bodyText;

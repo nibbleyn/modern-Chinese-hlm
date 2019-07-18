@@ -40,7 +40,7 @@ size_t CoupledLink::loadFirstFromContainedLine(const string &containedLine,
  * NOTE: should be consistent with template
  * @return the string of the link
  */
-string CoupledLink::asString() {
+string CoupledLink::asString(bool ignoreOriginalPart) {
   if (m_type == LINK_TYPE::IMAGE) {
     if (m_imageReferFilename.empty())
       m_imageReferFilename = getHtmlFileNamePrefix() + m_fromFile + HTML_SUFFIX;
@@ -83,8 +83,9 @@ string CoupledLink::asString() {
   }
   // annotation
   string part8 = getAnnotation() + linkEndChars;
-  return (part0 + part1 + part2 + part3 + part4 + part5 + part7 + part8 +
-          getEnclosedStringOfLinkToOrigin());
+  if (not ignoreOriginalPart)
+    part8 += getEnclosedStringOfLinkToOrigin();
+  return (part0 + part1 + part2 + part3 + part4 + part5 + part7 + part8);
 }
 
 /**

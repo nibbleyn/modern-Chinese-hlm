@@ -25,6 +25,7 @@ void Commander::execute() {
   case COMMAND::fixLinksFromAttachmentFile:
     if (m_forceUpdateLink)
       m_bodyText.forceUpdateLink();
+    //    m_bodyText.forceRemoveDuplicatedOriginalLinks();
     m_bodyText.fixLinksFromFile(m_referenceToMainfileSet,
                                 m_referenceToOriginalfileSet,
                                 m_referenceToJPMfileSet);

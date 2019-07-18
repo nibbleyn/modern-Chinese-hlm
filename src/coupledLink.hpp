@@ -45,7 +45,7 @@ public:
   size_t displaySize() override;
   size_t loadFirstFromContainedLine(const string &containedLine,
                                     size_t after = 0) override;
-  string asString();
+  string asString(bool ignoreOriginalPart = false);
   void doFixStatistics() {
     if (m_usedKey.find(keyNotFound) != string::npos) {
       recordMissingKeyLink();

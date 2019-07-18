@@ -48,6 +48,9 @@ public:
   void hideParaHeader() { m_hideParaHeader = true; }
   void forceUpdateLineNumber() { m_forceUpdateLineNumber = true; }
   void forceUpdateLink() { m_forceUpdateLink = true; }
+  void forceRemoveDuplicatedOriginalLinks() {
+    m_forceRemoveDuplicatedOriginalLinks = true;
+  }
   void addLineNumber();
   void doStatisticsByScanningLines(bool overFixedBodyText = false);
 
@@ -229,6 +232,8 @@ private:
   LinkPtr m_linkPtr{nullptr};
   LinkPtr m_followingLinkPtr{nullptr};
   bool m_forceUpdateLink{false};
+  bool m_forceRemoveDuplicatedOriginalLinks{false};
+  void removeDuplicatedOriginalLinks(size_t processBegin);
 
   static void printLinesTable() {
     if (not linesTable.empty()) {

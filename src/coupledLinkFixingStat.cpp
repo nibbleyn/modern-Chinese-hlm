@@ -145,7 +145,7 @@ void LinkFromMain::outPutStatisticsToFiles() {
 
 void LinkFromMain::logLink() {
   if (isTargetToOtherMainHtm()) {
-    LinkDetails detail{m_usedKey, asString()};
+    LinkDetails detail{m_usedKey, asString(true)};
     AttachmentNumber num = make_pair(m_chapterNumber, 0);
     LineNumber ln(m_referPara);
     ParaLineNumber paraLine(ln.getParaNumber(), ln.getlineNumber());
