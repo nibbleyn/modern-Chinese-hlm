@@ -2,33 +2,6 @@
 extern int debug;
 
 /**
- * get display type HIDDEN, UNHIDDEN, etc. from the link begin tag attribute.
- * and assign m_displayType member field correspondingly.
- * NOTE: key should not be these keywords
- * @param linkString the link to check
- */
-void Link::readDisplayType(const string &linkString) {
-  string containedPart = getIncludedStringBetweenTags(
-      linkString, linkStartChars, referFileMiddleChar);
-  if (debug >= LOG_INFO)
-    FUNCTION_OUTPUT << containedPart << endl;
-  if (containedPart.find(unhiddenDisplayProperty) != string::npos) {
-    m_displayType = LINK_DISPLAY_TYPE::UNHIDDEN;
-  } else if (containedPart.find(hiddenDisplayProperty) != string::npos) {
-    m_displayType = LINK_DISPLAY_TYPE::HIDDEN;
-  } else {
-    m_displayType = LINK_DISPLAY_TYPE::DIRECT;
-  }
-  if (debug >= LOG_INFO) {
-    if (m_displayType == LINK_DISPLAY_TYPE::DIRECT)
-      METHOD_OUTPUT << "display Type: "
-                    << "direct." << endl;
-    else
-      METHOD_OUTPUT << "display Type: " << displayPropertyAsString() << endl;
-  }
-}
-
-/**
  * a link type is got from the filename it's refer to
  * if no filename appears, it is a link to the same page
  * NOTE: never called for an image type link
@@ -126,11 +99,7 @@ void Link::readReferPara(const string &linkString) {
 bool Link::readAnnotation(const string &linkString) {
   string htmStart = citationEndChars;
   if (linkString.find(htmStart) == string::npos) {
-    // deprecated key end tag
-    htmStart = keyEndChars;
-    if (linkString.find(htmStart) == string::npos) {
-      htmStart = referParaEndChar;
-    }
+    htmStart = referParaEndChar;
   }
   m_annotation =
       getIncludedStringBetweenTags(linkString, htmStart, linkEndChars);

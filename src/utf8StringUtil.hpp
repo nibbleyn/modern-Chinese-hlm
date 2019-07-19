@@ -40,8 +40,12 @@ static const string HTML_SUFFIX = R"(.htm)";
 static const string lineNumberIdBeginChars = R"(id="P)";
 static const string imageGroupBeginChars = R"(<div)";
 
+static const string upArrow = R"(↑)";
+static const string downArrow = R"(↓)";
+
 static const string citationChapterNo = R"(第)";
 static const string numberingUnit = R"(段)";
+static const string citationPara = R"(节:)";
 
 static constexpr const char *defaultUnit = R"(回)";
 static constexpr const char *attachmentUnit = R"(篇)";
@@ -51,49 +55,20 @@ static constexpr const char *searchUnit = R"(条)";
 static const string brTab = "<br>";
 static const string displaySpace = R"( )";
 static constexpr const char *emptyString = "";
+static const string endOfBeginTag = R"(>)";
 static const string CR{0x0D};
 static const string LF{0x0A};
 static const string CRLF{0x0D, 0x0A};
 
 static const string keyNotFound = R"(KeyNotFound)";
 static const string attachmentFileMiddleChar = R"(_)";
+static const string citationChapterParaSeparator = R"(.)";
 
 static const string bracketStartChars = R"(（)";
 static const string bracketEndChars = R"(）)";
 
 static const string unhiddenDisplayProperty = R"(unhidden)";
 static const string hiddenDisplayProperty = R"(hidden)";
-static const string endOfBeginTag = R"(>)";
-
-// links
-static const string linkStartChars = R"(<a)";
-static const string linkEndChars = R"(</a>)";
-static const string personalCommentStartChars = R"(<u unhidden)";
-static const string personalCommentEndChars = R"(</u>)";
-static const string titleStartChars = R"(title=")";
-static const string imageTypeChars = R"(IMAGE)";
-static const string titleEndChars = R"(")"; // ! contained by titleStartChars
-static const string referFileMiddleChar = R"(href=")";
-static const string referParaMiddleChar = R"(#)";
-static const string referParaEndChar = R"(">)";
-static const string keyStartChars = R"(<i hidden>)";
-static const string keyEndChars = R"(</i>)";
-static const string changeKey = R"(changeKey)";
-static const string citationStartChars = R"(<sub hidden>)";
-static const string unhiddenCitationStartChars = R"(<sub unhidden>)";
-static const string citationChapterParaSeparator = R"(.)";
-static const string citationPara = R"(节:)";
-static const string citationEndChars = R"(</sub>)";
-static const string originalLinkStartChars = R"(（)";
-static const string originalLinkEndChars = R"(）)";
-
-// comments
-static const string commentBeginChars = R"(<cite)";
-static const string commentEndChars = R"(</cite>)";
-static const string commentStart =
-    bracketStartChars + commentBeginChars + displaySpace;
-static const string commentEnd = commentEndChars + bracketEndChars;
-static const string endOfCommentBeginTag = R"(>)";
 
 static const int THREE_DIGIT_FILENAME = 3;
 static const int TWO_DIGIT_FILENAME = 2;

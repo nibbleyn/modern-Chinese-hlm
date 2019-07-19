@@ -43,7 +43,7 @@ void generateContentTableForMainHtmls() {
     AttachmentNumber num(TurnToInt(file), 0);
     outputContainer.addLinkToLinkStringSet(
         num,
-        fixLinkFromMainTemplate(emptyString, file, LINK_DISPLAY_TYPE::UNHIDDEN,
+        fixLinkFromMainTemplate(emptyString, file, DISPLAY_TYPE::UNHIDDEN,
                                 emptyString, emptyString,
                                 brTab + container.getOriginalTitle() + brTab +
                                     container.getTranslatedTitle()));

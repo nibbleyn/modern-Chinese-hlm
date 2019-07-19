@@ -190,9 +190,9 @@ void CoupledBodyTextWithLink::doStatisticsByScanningLines(
     if (debug >= LOG_INFO) {
       METHOD_OUTPUT << m_inLine << endl;
     }
-    LineNumber ln;
+    LineNumberPlaceholderLink ln;
     ln.loadFirstFromContainedLine(m_inLine);
-    if (ln.isParagraphHeader()) {
+    if (ln.isPartOfParagraphHeader()) {
       m_paraHeader.loadFrom(m_inLine);
       if (m_paraHeader.isFirstParaHeader()) {
         m_para = 1;

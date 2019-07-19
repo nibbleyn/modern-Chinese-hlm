@@ -96,7 +96,7 @@ void CoupledLink::loadLinkTableFromStatisticsFile() {
           inLine, referParaMiddleChar, emptyString);
       num = getAttachmentNumber(targetFile);
       LineNumber ln(targetLine);
-      paraLine = make_pair(ln.getParaNumber(), ln.getlineNumber());
+      paraLine = ln.getParaLineNumber();
       // clear entry
       entry.clear();
     }
@@ -109,7 +109,7 @@ void CoupledLink::loadLinkTableFromStatisticsFile() {
                                                    FROM_LINK_STRING_SEPARATOR);
       fromNum = getAttachmentNumber(fromFile);
       LineNumber ln(fromLine);
-      fromParaLine = make_pair(ln.getParaNumber(), ln.getlineNumber());
+      fromParaLine = ln.getParaLineNumber();
       auto link = getIncludedStringBetweenTags(
           inLine, FROM_LINK_STRING_SEPARATOR, emptyString);
       LinkDetails detail{key, link};
@@ -148,11 +148,10 @@ void LinkFromMain::logLink() {
     LinkDetails detail{m_usedKey, asString(true)};
     AttachmentNumber num = make_pair(m_chapterNumber, 0);
     LineNumber ln(m_referPara);
-    ParaLineNumber paraLine(ln.getParaNumber(), ln.getlineNumber());
+    ParaLineNumber paraLine = ln.getParaLineNumber();
 
     AttachmentNumber fromNum = getAttachmentNumber(m_fromFile);
-    ParaLineNumber fromParaLine(m_fromLine.getParaNumber(),
-                                m_fromLine.getlineNumber());
+    ParaLineNumber fromParaLine = m_fromLine.getParaLineNumber();
     try {
       auto &entry = linksTable.at(make_pair(num, paraLine));
       entry[make_pair(fromNum, fromParaLine)] = detail;
@@ -225,10 +224,9 @@ void LinkFromAttachment::logLink() {
     LinkDetails detail{m_usedKey, asString()};
     AttachmentNumber num = make_pair(m_chapterNumber, m_attachmentNumber);
     LineNumber ln(m_referPara);
-    ParaLineNumber paraLine(ln.getParaNumber(), ln.getlineNumber());
+    ParaLineNumber paraLine = ln.getParaLineNumber();
     AttachmentNumber fromNum = getAttachmentNumber(m_fromFile);
-    ParaLineNumber fromParaLine(m_fromLine.getParaNumber(),
-                                m_fromLine.getlineNumber());
+    ParaLineNumber fromParaLine = m_fromLine.getParaLineNumber();
     try {
       auto &entry = linksTable.at(make_pair(num, paraLine));
       entry[make_pair(fromNum, fromParaLine)] = detail;

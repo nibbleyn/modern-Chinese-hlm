@@ -7,7 +7,17 @@ static const string jpmDirForLinkFromMain = R"(JPM\)";
 static const string pictureDirForLinkFromMain = R"(pictures\)";
 
 enum class LINK_TYPE { MAIN, ATTACHMENT, ORIGINAL, SAMEPAGE, JPM, IMAGE };
-enum class LINK_DISPLAY_TYPE { DIRECT, HIDDEN, UNHIDDEN };
+
+// links
+static const string imageTypeChars = R"(IMAGE)";
+static const string referFileMiddleChar = R"(href=")";
+static const string referParaMiddleChar = R"(#)";
+static const string referParaEndChar = R"(">)";
+static const string citationStartChars = R"(<sub)";
+static const string citationEndChars = R"(</sub>)";
+static const string changeKey = R"(changeKey)";
+static const string originalLinkStartChars = R"(（)";
+static const string originalLinkEndChars = R"(）)";
 
 static const string returnLinkFromAttachmentHeader = R"(返回本章原文)";
 static const string returnLink = R"(引用)";
@@ -17,17 +27,16 @@ static const string contentTableFilename = R"(aindex)";
 static const string TARGET_FILE_EXT = R"(.htm)";
 
 // operations over link string template initialization
-string fixLinkFromSameFileTemplate(LINK_DISPLAY_TYPE type, const string &key,
+string fixLinkFromSameFileTemplate(DISPLAY_TYPE type, const string &key,
                                    const string &citation,
                                    const string &annotation,
                                    const string &referPara);
 
 string fixLinkFromMainTemplate(const string &path, const string &filename,
-                               LINK_DISPLAY_TYPE type, const string &key,
+                               DISPLAY_TYPE type, const string &key,
                                const string &citation, const string &annotation,
                                const string &referPara = emptyString);
-string fixLinkFromReverseLinkTemplate(const string &filename,
-                                      LINK_DISPLAY_TYPE type,
+string fixLinkFromReverseLinkTemplate(const string &filename, DISPLAY_TYPE type,
                                       const string &citation,
                                       const string &annotation,
                                       const string &referPara);
@@ -126,25 +135,12 @@ public:
                                     size_t after = 0) override;
 
 protected:
-  LINK_DISPLAY_TYPE getDisplayType() { return m_displayType; }
-
-  void readDisplayType(const string &linkString);
   void readType(const string &linkString);
   void readReferPara(const string &linkString);
   bool readAnnotation(const string &linkString);
 
-  string displayPropertyAsString() {
-    string result{emptyString};
-    if (m_displayType == LINK_DISPLAY_TYPE::UNHIDDEN)
-      result = unhiddenDisplayProperty;
-    if (m_displayType == LINK_DISPLAY_TYPE::HIDDEN)
-      result = hiddenDisplayProperty;
-    return result;
-  }
-
 protected:
   LINK_TYPE m_type{LINK_TYPE::MAIN};
-  LINK_DISPLAY_TYPE m_displayType{LINK_DISPLAY_TYPE::UNHIDDEN};
   string m_fromFile{emptyString};
   LineNumber m_fromLine;
   int m_chapterNumber{0};

@@ -3,15 +3,12 @@
 #include "Object.hpp"
 
 static const int START_PARA_NUMBER = 90;
-// line number is placeholder hyperlink since a ParagraphHeader would have href
-// attribute and is a line number also
-static const string HiddenLineNumberStart = R"(<a hidden id=")";
-static const string LineNumberEnd = R"(</a>)";
-class LineNumber : public Object {
+class LineNumber {
   static int StartNumber;
-  static int Limit;
 
 public:
+  static int Limit;
+
   /**
    * the paragraph number in a body text would start from this number
    * and increase thru downlink to limit-1
@@ -35,41 +32,69 @@ public:
   LineNumber(int paraNumber, int lineNumber)
       : m_paraNumber(paraNumber), m_lineNumber(lineNumber) {}
   LineNumber(const string &name) { readFromString(name); }
+  void readFromString(const string &name);
+
+  int getParaNumber() const { return m_paraNumber; }
+  int getlineNumber() const { return m_lineNumber; }
+  void increaseParaNumberByOne() { m_paraNumber++; }
 
   LineNumber(const LineNumber &) = default;
   LineNumber &operator=(const LineNumber &) = default;
-  string getWholeString() override;
-  string getDisplayString() override;
-  size_t displaySize() override;
-  size_t loadFirstFromContainedLine(const string &containedLine,
-                                    size_t after = 0) override;
+  bool equal(const LineNumber &ln) {
+    return (m_lineNumber == ln.getlineNumber() and
+            m_paraNumber == ln.getParaNumber());
+  }
+  bool equal(const string &lnStr) { return (lnStr == asString()); }
+  friend bool operator>(LineNumber const &, LineNumber const &);
+
   bool valid() { return (m_paraNumber != 0 and m_lineNumber != 0); }
   bool isParagraphHeader() {
     return (m_paraNumber != 0 and m_paraNumber < Limit and m_lineNumber == 0);
   }
   bool isPureTextOnly() { return (m_paraNumber == 0); }
   string generateLinePrefix();
-  string asString() {
-    string result{emptyString};
-    if (m_paraNumber != 0)
-      result = leadingChar + TurnToString(m_paraNumber);
-    if (m_lineNumber != 0)
-      result += middleChar + TurnToString(m_lineNumber);
-    return result;
-  }
+  string asString();
   bool isWithinLineRange(int minPara = 0, int maxPara = 0, int minLine = 0,
                          int maxLine = 0);
-  bool equal(const LineNumber &ln) {
-    return (m_lineNumber == ln.getlineNumber() and
-            m_paraNumber == ln.getParaNumber());
+  ParaLineNumber getParaLineNumber() {
+    return make_pair(m_paraNumber, m_lineNumber);
   }
-  bool equal(const string &lnStr) { return (lnStr == asString()); }
-  int getParaNumber() const { return m_paraNumber; }
-  int getlineNumber() const { return m_lineNumber; }
-  friend bool operator>(LineNumber const &, LineNumber const &);
 
 private:
-  void readFromString(const string &name);
   int m_paraNumber{0};
   int m_lineNumber{0};
+};
+
+class LineNumberPlaceholderLink : public Object {
+public:
+  LineNumberPlaceholderLink() { m_objectType = OBJECT_TYPE::LINENUMBER; }
+  LineNumberPlaceholderLink(const LineNumber &ln)
+      : m_paraLineNumber(ln.getParaNumber(), ln.getlineNumber()) {
+    m_objectType = OBJECT_TYPE::LINENUMBER;
+    m_fullString = getWholeString();
+  }
+  LineNumberPlaceholderLink(int paraNumber, int lineNumber)
+      : m_paraLineNumber(paraNumber, lineNumber) {
+    m_objectType = OBJECT_TYPE::LINENUMBER;
+    m_fullString = getWholeString();
+  }
+  LineNumberPlaceholderLink(const string &linkString) {
+    m_objectType = OBJECT_TYPE::LINENUMBER;
+    m_paraLineNumber.readFromString(linkString);
+    m_fullString = getWholeString();
+  }
+  bool isPartOfParagraphHeader() {
+    return m_paraLineNumber.isParagraphHeader();
+  }
+  bool isPureTextOnly() { return m_paraLineNumber.isPureTextOnly(); }
+  string getParaLineString() { return m_paraLineNumber.asString(); }
+  LineNumber get() { return m_paraLineNumber; }
+  string getWholeString() override;
+  string getDisplayString() override;
+  size_t displaySize() override;
+  size_t loadFirstFromContainedLine(const string &containedLine,
+                                    size_t after = 0) override;
+
+private:
+  LineNumber m_paraLineNumber{0, 0};
 };

@@ -108,10 +108,14 @@ public:
   static void displayMainFilesOfMissingKey();
 
 public:
-  LinkFromMain() = default;
-  LinkFromMain(const string &fromFile) : CoupledLink(fromFile) {}
+  LinkFromMain() : CoupledLink() { m_objectType = OBJECT_TYPE::LINKFROMMAIN; }
+  LinkFromMain(const string &fromFile) : CoupledLink(fromFile) {
+    m_objectType = OBJECT_TYPE::LINKFROMMAIN;
+  }
   LinkFromMain(const string &fromFile, const string &linkString)
-      : CoupledLink(fromFile, linkString) {}
+      : CoupledLink(fromFile, linkString) {
+    m_objectType = OBJECT_TYPE::LINKFROMMAIN;
+  }
   ~LinkFromMain(){};
   void generateLinkToOrigin();
 
@@ -133,9 +137,16 @@ public:
   static void outPutStatisticsToFiles();
 
 public:
-  LinkFromAttachment(const string &fromFile) : CoupledLink(fromFile) {}
+  LinkFromAttachment() : CoupledLink() {
+    m_objectType = OBJECT_TYPE::LINKFROMATTACHMENT;
+  }
+  LinkFromAttachment(const string &fromFile) : CoupledLink(fromFile) {
+    m_objectType = OBJECT_TYPE::LINKFROMATTACHMENT;
+  }
   LinkFromAttachment(const string &fromFile, const string &linkString)
-      : CoupledLink(fromFile, linkString) {}
+      : CoupledLink(fromFile, linkString) {
+    m_objectType = OBJECT_TYPE::LINKFROMATTACHMENT;
+  }
   ~LinkFromAttachment(){};
   void generateLinkToOrigin();
 
@@ -173,7 +184,9 @@ private:
 
 class Comment : public Object {
 public:
-  Comment(const string &fromFile) : m_fromFile(fromFile) {}
+  Comment(const string &fromFile) : m_fromFile(fromFile) {
+    m_objectType = OBJECT_TYPE::COMMENT;
+  }
   string getWholeString() override;
   string getDisplayString() override;
   size_t displaySize() override;

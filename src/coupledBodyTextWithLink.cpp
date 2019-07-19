@@ -3,14 +3,14 @@
 void CoupledBodyTextWithLink::fixLinksWithinOneLine(FileSet referMainFiles,
                                                     FileSet referOriginalFiles,
                                                     FileSet referJPMFiles) {
-  LineNumber ln;
+  LineNumberPlaceholderLink ln;
   ln.loadFirstFromContainedLine(m_inLine);
   string toProcess = m_inLine;
   auto processBegin = 0;
   // skip link of line number
-  if (ln.valid()) {
-    toProcess = toProcess.substr(ln.generateLinePrefix().length());
-    processBegin = ln.generateLinePrefix().length();
+  if (ln.get().valid()) {
+    toProcess = toProcess.substr(ln.get().generateLinePrefix().length());
+    processBegin = ln.get().generateLinePrefix().length();
   }
   if (debug >= LOG_INFO)
     METHOD_OUTPUT << toProcess << endl;
@@ -38,11 +38,11 @@ void CoupledBodyTextWithLink::fixLinksWithinOneLine(FileSet referMainFiles,
     if (m_linkPtr->isTargetToOtherAttachmentHtm()) {
       // third step of construction
       m_linkPtr->fixFromString(link);
-      m_linkPtr->setSourcePara(ln);
+      m_linkPtr->setSourcePara(ln.get());
       m_linkPtr->doFixStatistics();
     }
     if (m_linkPtr->isTargetToImage() or m_linkPtr->isTargetToSelfHtm()) {
-      m_linkPtr->setSourcePara(ln);
+      m_linkPtr->setSourcePara(ln.get());
       // third step of construction
       m_linkPtr->fixFromString(link);
       // replace old value
@@ -61,7 +61,7 @@ void CoupledBodyTextWithLink::fixLinksWithinOneLine(FileSet referMainFiles,
       if (e != referMainFiles.end()) {
         // third step of construction
         m_linkPtr->fixFromString(link);
-        m_linkPtr->setSourcePara(ln);
+        m_linkPtr->setSourcePara(ln.get());
         string next = originalLinkStartChars + linkStartChars;
         bool needAddOrginalLink = true;
         // still have above "next" and </a>
@@ -371,9 +371,9 @@ void CoupledBodyTextWithLink::scanByRenderingLines() {
     if (debug >= LOG_INFO) {
       METHOD_OUTPUT << m_inLine << endl;
     }
-    LineNumber ln;
+    LineNumberPlaceholderLink ln;
     ln.loadFirstFromContainedLine(m_inLine);
-    if (ln.isParagraphHeader()) {
+    if (ln.isPartOfParagraphHeader()) {
       m_paraHeader.loadFrom(m_inLine);
       if (m_paraHeader.isFirstParaHeader()) {
         m_numberOfFirstParaHeader++;
@@ -522,10 +522,10 @@ void CoupledBodyTextWithLink::fixLinksFromFile(FileSet referMainFiles,
   ofstream outfile(m_outputFile);
   while (!infile.eof()) {
     getline(infile, m_inLine);
-    LineNumber ln;
+    LineNumberPlaceholderLink ln;
     ln.loadFirstFromContainedLine(m_inLine);
-    if (ln.isParagraphHeader() or not ln.valid() or
-        not ln.isWithinLineRange(minPara, maxPara, minLine, maxLine)) {
+    if (ln.isPartOfParagraphHeader() or not ln.get().valid() or
+        not ln.get().isWithinLineRange(minPara, maxPara, minLine, maxLine)) {
       outfile << m_inLine << endl;
       continue;
     }

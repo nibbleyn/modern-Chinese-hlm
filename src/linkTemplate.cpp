@@ -8,34 +8,34 @@ extern int debug;
  * @param type the display type of the link, visible or not
  * @return the replaced link accordingly
  */
-void replaceDisplayLink(string &linkString, LINK_DISPLAY_TYPE type) {
-  if (type == LINK_DISPLAY_TYPE::UNHIDDEN)
+void replaceDisplayLink(string &linkString, DISPLAY_TYPE type) {
+  if (type == DISPLAY_TYPE::UNHIDDEN)
     return;
 
   string displayTag = linkStartChars + displaySpace + unhiddenDisplayProperty;
   auto displayTagBegin = linkString.find(displayTag);
   linkString.replace(displayTagBegin, displayTag.length(),
-                     (type == LINK_DISPLAY_TYPE::DIRECT)
+                     (type == DISPLAY_TYPE::DIRECT)
                          ? linkStartChars
                          : linkStartChars + displaySpace +
                                hiddenDisplayProperty);
 }
 
+static constexpr const char *linkToImageFile =
+    R"(<a unhidden title="IMAGE" href="XX#YY">↑（图示：ZZ）</a>)";
+static constexpr const char *linkToAttachmentFile =
+    R"(<a unhidden href="PPb0XX_SS.htm#YY">ZZ</a>)";
 static constexpr const char *linkToSameFile =
     R"(<a unhidden title="QQ" href="#YY"><sub hidden>WW</sub>ZZ</a>)";
 static constexpr const char *linkToMainFile =
-    R"(<a unhidden title="QQ" href="PPa0XX.htm#YY"><sub hidden>WW</sub>ZZ</a>)";
+    R"(<a unhidden title="QQ" href="PPa0XX.htm#YY">↑<sub hidden>WW</sub>ZZ</a>)";
+static constexpr const char *linkToOriginalFile =
+    R"(<a unhidden title="QQ" href="PPc0XX.htm#YY">↑<sub hidden>WW</sub>ZZ</a>)";
+static constexpr const char *linkToJPMFile =
+    R"(<a unhidden title="QQ" href="PPdXXX.htm#YY">↑<sub hidden>WW</sub>ZZ</a>)";
 // now only support reverse link from main back to main, no key required
 static constexpr const char *reverseLinkToMainFile =
-    R"(<a unhidden href="a0XX.htm#YY">被<sub>WW</sub>引用</a>)";
-static constexpr const char *linkToOriginalFile =
-    R"(<a unhidden title="QQ" href="PPc0XX.htm#YY"><sub hidden>WW</sub>ZZ</a>)";
-static constexpr const char *linkToJPMFile =
-    R"(<a unhidden title="QQ" href="PPdXXX.htm#YY"><sub hidden>WW</sub>ZZ</a>)";
-static constexpr const char *linkToAttachmentFile =
-    R"(<a unhidden href="PPb0XX_SS.htm#YY">ZZ</a>)";
-static constexpr const char *linkToImageFile =
-    R"(<a unhidden title="IMAGE" href="XX#YY">（图示：ZZ）</a>)";
+    R"(<a unhidden href="a0XX.htm#YY">↓<sub>WW</sub>引用</a>)";
 
 static constexpr const char *defaultPath = R"(PP)";
 static constexpr const char *defaultMainFilename = R"(XX)";
@@ -61,7 +61,7 @@ static constexpr const char *defaultImageAnnotation = R"(（图示：ZZ）)";
  * @param referPara the target place identified by line number
  * @return link after fixed
  */
-string fixLinkFromSameFileTemplate(LINK_DISPLAY_TYPE type, const string &key,
+string fixLinkFromSameFileTemplate(DISPLAY_TYPE type, const string &key,
                                    const string &citation,
                                    const string &annotation,
                                    const string &referPara) {
@@ -101,7 +101,7 @@ string fixLinkFromSameFileTemplate(LINK_DISPLAY_TYPE type, const string &key,
  * @return link after fixed
  */
 string fixLinkFromMainTemplate(const string &path, const string &filename,
-                               LINK_DISPLAY_TYPE type, const string &key,
+                               DISPLAY_TYPE type, const string &key,
                                const string &citation, const string &annotation,
                                const string &referPara) {
   string link = linkToMainFile;
@@ -126,8 +126,7 @@ string fixLinkFromMainTemplate(const string &path, const string &filename,
   return link;
 }
 
-string fixLinkFromReverseLinkTemplate(const string &filename,
-                                      LINK_DISPLAY_TYPE type,
+string fixLinkFromReverseLinkTemplate(const string &filename, DISPLAY_TYPE type,
                                       const string &citation,
                                       const string &annotation,
                                       const string &referPara) {

@@ -27,8 +27,8 @@ void Searcher::execute() {
             fixLinkFromMainTemplate(
                 emptyString,
                 getChapterNameByTargetKind(MAIN_TYPE_HTML_TARGET, num.first),
-                LINK_DISPLAY_TYPE::DIRECT, m_key, expectedSection,
-                expectedSection, line),
+                DISPLAY_TYPE::DIRECT, m_key, expectedSection, expectedSection,
+                line),
             make_pair(ln.getParaNumber(), ln.getlineNumber()));
         break;
       case FILE_TYPE::ORIGINAL:

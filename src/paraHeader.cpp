@@ -1,9 +1,11 @@
 #include "paraHeader.hpp"
 
-const string colorInTemplate = R"(<hr color="#COLOR">)";
-const string colorValueInTemplate = R"(COLOR)";
-const string groupIdBeginChars = R"(id="P)";
-const string lineColorBeginChars = R"(color="#)";
+static const string colorInTemplate = R"(<hr color="#COLOR">)";
+static const string colorValueInTemplate = R"(COLOR)";
+static const string groupIdBeginChars = R"(id="P)";
+static const string groupIdEndChars = R"(")";
+static const string lineColorBeginChars = R"(color="#)";
+static const string lineColorEndChars = R"(">)";
 
 void ParaHeader::readType(const string &header) {
   if (header.find(topIdBeginChars) != string::npos)
@@ -18,23 +20,23 @@ void ParaHeader::loadFromFirstParaHeader(const string &header) {
   if (header.find(unhiddenDisplayProperty) == string::npos)
     m_hidden = true;
   if (not m_StartNumberEnforced)
-    m_startNumber = TurnToInt(
-        getIncludedStringBetweenTags(header, groupIdBeginChars, titleEndChars));
+    m_startNumber = TurnToInt(getIncludedStringBetweenTags(
+        header, groupIdBeginChars, groupIdEndChars));
   if (not m_hidden)
     m_color = getIncludedStringBetweenTags(header, lineColorBeginChars,
-                                           referParaEndChar);
+                                           lineColorEndChars);
 }
 
 void ParaHeader::loadFromMiddleParaHeader(const string &header) {
   m_currentParaNo = TurnToInt(getIncludedStringBetweenTags(
-                        header, groupIdBeginChars, titleEndChars)) -
+                        header, groupIdBeginChars, groupIdEndChars)) -
                     m_startNumber;
 }
 
 void ParaHeader::loadFromLastParaHeader(const string &header) {
   m_currentParaNo =
       m_startNumber - TurnToInt(getIncludedStringBetweenTags(
-                          header, groupIdBeginChars, titleEndChars));
+                          header, groupIdBeginChars, groupIdEndChars));
 }
 
 void ParaHeader::loadFrom(const string &header) {

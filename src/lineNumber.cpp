@@ -4,12 +4,10 @@ extern int debug;
 
 int LineNumber::StartNumber = START_PARA_NUMBER;
 int LineNumber::Limit = START_PARA_NUMBER * 2;
+
 // to try special case like "bottom"
 static const string endOfLineNumber = R"(")";
 static const string endOfGeneratedLineNumber = R"(>)";
-static const string inBetweenTwoParas = R"(" href=")";
-static const string inBetweenParaAndLineNumber = R"(.)";
-static const string lastPara = R"(<a unhidden id="bottom" href="#top">)";
 
 bool operator>(LineNumber const &ln1, LineNumber const &ln2) {
   return (ln1.getParaNumber() > ln2.getParaNumber() or
@@ -43,68 +41,6 @@ void LineNumber::readFromString(const string &name) {
 }
 
 /**
- * retrieve lineNumber from the link at the beginning of containedLine
- * and read from it the paraNumber and lineNumber
- * @param containedLine the numbered line of one body text file
- */
-size_t LineNumber::loadFirstFromContainedLine(const string &containedLine,
-                                              size_t after) {
-  string begin = UnhiddenLineNumberStart;
-  auto beginPos = containedLine.find(begin, after);
-  if (beginPos == string::npos) {
-    begin = HiddenLineNumberStart;
-    beginPos = containedLine.find(begin, after);
-  }
-  // found name in lineName
-  if (beginPos != string::npos) {
-    string end = linkEndChars;
-    auto endPos = containedLine.find(end, beginPos);
-
-    m_fullString =
-        containedLine.substr(beginPos, endPos + end.length() - beginPos);
-    if (debug >= LOG_INFO) {
-      METHOD_OUTPUT << "m_fullString: " << endl;
-      METHOD_OUTPUT << m_fullString << endl;
-    }
-
-    string lineName = containedLine.substr(beginPos + begin.length());
-    end = endOfLineNumber;
-    endPos = lineName.find(end);
-    if (debug >= LOG_INFO)
-      METHOD_OUTPUT << lineName.substr(0, endPos) << endl;
-    if (lineName.substr(0, endPos) == bottomParagraphIndicator)
-      readFromString(leadingChar + TurnToString(Limit - 1));
-    else
-      readFromString(lineName.substr(0, endPos));
-  }
-  return beginPos;
-}
-
-string LineNumber::getDisplayString() {
-  if (m_lineNumber == 0)
-    return emptyString;
-  return TurnToString(m_paraNumber) + inBetweenParaAndLineNumber +
-         TurnToString(m_lineNumber);
-}
-
-string LineNumber::getWholeString() {
-  if (isPureTextOnly())
-    return emptyString;
-  if (isParagraphHeader()) {
-    if (m_paraNumber != Limit - 1) {
-      auto nextPara = *this;
-      nextPara.m_paraNumber++;
-      return UnhiddenLineNumberStart + asString() + inBetweenTwoParas +
-             nextPara.asString() + endOfLineNumber + endOfGeneratedLineNumber;
-    } else {
-      return lastPara;
-    }
-  }
-  return generateLinePrefix() + TurnToString(m_paraNumber) +
-         inBetweenParaAndLineNumber + TurnToString(m_lineNumber) +
-         LineNumberEnd;
-}
-/**
  * generate the line prefix for numbering a line
  * @return the prefix to add
  */
@@ -113,6 +49,15 @@ string LineNumber::generateLinePrefix() {
   if (!isParagraphHeader())
     result = UnhiddenLineNumberStart + asString() + endOfLineNumber +
              endOfGeneratedLineNumber;
+  return result;
+}
+
+string LineNumber::asString() {
+  string result{emptyString};
+  if (m_paraNumber != 0)
+    result = leadingChar + TurnToString(m_paraNumber);
+  if (m_lineNumber != 0)
+    result += middleChar + TurnToString(m_lineNumber);
   return result;
 }
 
@@ -130,4 +75,73 @@ bool LineNumber::isWithinLineRange(int minPara, int maxPara, int minLine,
   return (biggerThanMin and lessThanMax);
 }
 
-size_t LineNumber::displaySize() { return getDisplayString().length(); }
+/**
+ * retrieve lineNumber from the link at the beginning of containedLine
+ * and read from it the paraNumber and lineNumber
+ * @param containedLine the numbered line of one body text file
+ */
+size_t LineNumberPlaceholderLink::loadFirstFromContainedLine(
+    const string &containedLine, size_t after) {
+  string subStrAfterId;
+  auto beginPos = string::npos;
+  string begin;
+  for (const auto &start : {UnhiddenLineNumberStart, HiddenLineNumberStart,
+                            DirectLineNumberStart}) {
+    begin = start;
+    beginPos = containedLine.find(begin, after);
+    if (beginPos != string::npos)
+      break;
+  }
+  if (beginPos == string::npos)
+    return string::npos;
+  // found name in subStrAfterId
+  m_fullString =
+      getWholeStringBetweenTags(containedLine, begin, linkEndChars, after);
+  subStrAfterId = containedLine.substr(beginPos + begin.length());
+  auto substr = subStrAfterId.substr(0, subStrAfterId.find(endOfLineNumber));
+  if (debug >= LOG_INFO)
+    METHOD_OUTPUT << substr << endl;
+  if (substr == bottomParagraphIndicator)
+    m_paraLineNumber.readFromString(leadingChar +
+                                    TurnToString(LineNumber::Limit - 1));
+  else
+    m_paraLineNumber.readFromString(substr);
+  return beginPos;
+}
+
+static const string inBetweenParaAndLineNumber = R"(.)";
+
+string LineNumberPlaceholderLink::getDisplayString() {
+  if (m_paraLineNumber.getlineNumber() == 0)
+    return emptyString;
+  return TurnToString(m_paraLineNumber.getParaNumber()) +
+         inBetweenParaAndLineNumber +
+         TurnToString(m_paraLineNumber.getlineNumber());
+}
+
+static const string inBetweenTwoParas = R"(" href=")";
+static const string lastPara = R"(<a unhidden id="bottom" href="#top">)";
+
+string LineNumberPlaceholderLink::getWholeString() {
+  if (m_paraLineNumber.isPureTextOnly())
+    return emptyString;
+  if (m_paraLineNumber.isParagraphHeader()) {
+    if (m_paraLineNumber.getParaNumber() != LineNumber::Limit - 1) {
+      auto nextPara = m_paraLineNumber;
+      nextPara.increaseParaNumberByOne();
+      return UnhiddenLineNumberStart + m_paraLineNumber.asString() +
+             inBetweenTwoParas + nextPara.asString() + endOfLineNumber +
+             endOfGeneratedLineNumber;
+    } else {
+      return lastPara;
+    }
+  }
+  return m_paraLineNumber.generateLinePrefix() +
+         TurnToString(m_paraLineNumber.getParaNumber()) +
+         inBetweenParaAndLineNumber +
+         TurnToString(m_paraLineNumber.getlineNumber()) + LineNumberEnd;
+}
+
+size_t LineNumberPlaceholderLink::displaySize() {
+  return getDisplayString().length();
+}

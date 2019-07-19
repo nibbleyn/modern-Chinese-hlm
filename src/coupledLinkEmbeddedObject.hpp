@@ -1,13 +1,11 @@
 #pragma once
 #include "coupledLink.hpp"
 
-static const string personalCommentStartRestChars =
-    R"( style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4)";
-static const string endOfPersonalCommentBeginTag = R"(">)";
-
 class PersonalComment : public Object {
 public:
-  PersonalComment(const string &fromFile) : m_fromFile(fromFile) {}
+  PersonalComment(const string &fromFile) : m_fromFile(fromFile) {
+    m_objectType = OBJECT_TYPE::PERSONALCOMMENT;
+  }
   string getWholeString() override;
   string getDisplayString() override;
   size_t displaySize() override;
@@ -21,7 +19,9 @@ private:
 
 class PoemTranslation : public Object {
 public:
-  PoemTranslation(const string &fromFile) : m_fromFile(fromFile) {}
+  PoemTranslation(const string &fromFile) : m_fromFile(fromFile) {
+    m_objectType = OBJECT_TYPE::POEMTRANSLATION;
+  }
   string getWholeString() override;
   string getDisplayString() override;
   size_t displaySize() override;

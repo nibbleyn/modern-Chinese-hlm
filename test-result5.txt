@@ -1,18 +1,15 @@
-*************************line 629: HLM test started *************************
-*************************line 615: testContainer started *************************
-fixLinkFromMainTemplate              <a unhidden title="菱角菱花" href="a080.htm#94"><sub hidden>第80章1.1节:</sub>原是老奶奶（薛姨妈）使唤的</a>
-fixLinkFromOriginalTemplate              <a unhidden title="菱角菱花" href="original\c080.htm#94"><sub hidden>第80章1.1节:</sub>原文</a>
+*************************line 647: HLM test started *************************
+*************************line 633: testContainer started *************************
+fixLinkFromMainTemplate              <a unhidden title="菱角菱花" href="a080.htm#94">↑<sub hidden>第80章1.1节:</sub>原是老奶奶（薛姨妈）使唤的</a>
+fixLinkFromOriginalTemplate              <a unhidden title="菱角菱花" href="original\c080.htm#94">↑<sub hidden>第80章1.1节:</sub>原文</a>
 4Link::readType              type seen from prefix: original\c080
 4Link::readAnnotation              annotation: 原文
 12LinkFromMain::readReferFileName              chapterNumber: 80, attachmentNumber: 0
-readDisplayType               unhidden title="菱角菱花" 
 12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readReferPara              referPara: 94
 15CoupledBodyText::setInputOutputFiles              input file is: bodyTexts/output/Org80.txt
 15CoupledBodyText::setInputOutputFiles              output file is: bodyTexts/afterFix/Org80.txt
-10LineNumber::loadFirstFromContainedLine              m_fullString: 
-10LineNumber::loadFirstFromContainedLine              <a unhidden id="P1L3">1.3</a>
-10LineNumber::loadFirstFromContainedLine              P1L3
+25LineNumberPlaceholderLink::loadFirstFromContainedLine              P1L3
 12LinkFromMain::readKey              line number found: P1L3
 12LinkFromMain::readKey              key: 菱角菱花
 13ListContainer::clearExistingBodyText              clear content in: container/1.txt
@@ -40,7 +37,7 @@ readDisplayType               unhidden title="菱角菱花"
 13ListContainer::assembleBackToHTM              			<tr>
 13ListContainer::assembleBackToHTM              			<td>
 13ListContainer::assembleBackToHTM              <b unhidden> 第1段 </b><a unhidden id="P90" href="#P91">v向下</a>&nbsp;&nbsp;&nbsp;&nbsp;<a unhidden id="top" href="#bottom">页面底部->||</a><hr color="#F0BEC0">
-13ListContainer::assembleBackToHTM              <br><a unhidden title="菱角菱花" href="original\c080.htm#P1L3"><sub hidden>第80回1.3节:</sub>原文</a></br>
+13ListContainer::assembleBackToHTM              <br><a unhidden title="菱角菱花" href="original\c080.htm#P1L3">↑<sub hidden>第80回1.3节:</sub>原文</a></br>
 13ListContainer::assembleBackToHTM              <br>18 links are found.</br>
 13ListContainer::assembleBackToHTM              <hr color="#F0BEC0"><a unhidden id="bottom" href="#top">||<-页面顶部</a>&nbsp;&nbsp;&nbsp;&nbsp;<a unhidden id="P89" href="#P90">^向上</a><hr color="#F0BEC0">
 13ListContainer::assembleBackToHTM              			</td>

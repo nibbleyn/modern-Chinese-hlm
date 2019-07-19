@@ -19,7 +19,6 @@ string scanForSubLinks(const string &original, const string &fromFile) {
     result += original.substr(endOfSubStringOffset,
                               link.first - endOfSubStringOffset);
     auto current = make_unique<LinkFromMain>(fromFile);
-
     current->loadFirstFromContainedLine(original, endOfSubStringOffset);
     result += current->getDisplayString();
     endOfSubStringOffset = link.second + endTag.length();
@@ -41,7 +40,12 @@ string fixPersonalCommentFromTemplate(const string &comment) {
 string PersonalComment::getWholeString() {
   return fixPersonalCommentFromTemplate(m_bodyText);
 }
-string PersonalComment::getDisplayString() { return m_displayText; }
+string PersonalComment::getDisplayString() {
+  if (m_displayType == DISPLAY_TYPE::HIDDEN)
+    return emptyString;
+  else
+    return m_displayText;
+}
 
 size_t PersonalComment::displaySize() { return getDisplayString().length(); }
 
@@ -53,15 +57,15 @@ size_t PersonalComment::loadFirstFromContainedLine(const string &containedLine,
     METHOD_OUTPUT << "m_fullString: " << endl;
     METHOD_OUTPUT << m_fullString << endl;
   }
-  m_bodyText = getIncludedStringBetweenTags(
-      m_fullString, endOfPersonalCommentBeginTag, personalCommentEndChars);
+  m_bodyText = getIncludedStringBetweenTags(m_fullString, endOfBeginTag,
+                                            personalCommentEndChars);
   m_displayText = scanForSubLinks(m_bodyText, m_fromFile);
   return containedLine.find(personalCommentStartChars, after);
 }
 
 static constexpr const char *defaultComment = R"(XX)";
 static const string poemTranslationTemplate =
-    R"(<samp unhidden font style="font-size: 13.5pt; font-family:楷体; color:#ff00ff">XX</samp>)";
+    R"(<samp unhidden font style="font-size: 12pt; font-family: 宋体; color:#ff00ff">XX</samp>)";
 
 string fixPoemTranslationFromTemplate(const string &translation) {
   string result = poemTranslationTemplate;
@@ -72,7 +76,12 @@ string fixPoemTranslationFromTemplate(const string &translation) {
 string PoemTranslation::getWholeString() {
   return fixPoemTranslationFromTemplate(m_bodyText);
 }
-string PoemTranslation::getDisplayString() { return m_displayText; }
+string PoemTranslation::getDisplayString() {
+  if (m_displayType == DISPLAY_TYPE::HIDDEN)
+    return emptyString;
+  else
+    return m_displayText;
+}
 
 size_t PoemTranslation::displaySize() { return getDisplayString().length(); }
 
@@ -84,8 +93,8 @@ size_t PoemTranslation::loadFirstFromContainedLine(const string &containedLine,
     METHOD_OUTPUT << "m_fullString: " << endl;
     METHOD_OUTPUT << m_fullString << endl;
   }
-  m_bodyText = getIncludedStringBetweenTags(
-      m_fullString, endOfPoemTranslationBeginTag, poemTranslationEndChars);
+  m_bodyText = getIncludedStringBetweenTags(m_fullString, endOfBeginTag,
+                                            poemTranslationEndChars);
   m_displayText = scanForSubLinks(m_bodyText, m_fromFile);
   return containedLine.find(poemTranslationBeginChars, after);
 }
@@ -100,7 +109,12 @@ string fixCommentFromTemplate(const string &comment) {
 }
 
 string Comment::getWholeString() { return fixCommentFromTemplate(m_bodyText); }
-string Comment::getDisplayString() { return m_displayText; }
+string Comment::getDisplayString() {
+  if (m_displayType == DISPLAY_TYPE::HIDDEN)
+    return emptyString;
+  else
+    return m_displayText;
+}
 
 size_t Comment::displaySize() { return getDisplayString().length(); }
 
@@ -112,7 +126,7 @@ size_t Comment::loadFirstFromContainedLine(const string &containedLine,
     METHOD_OUTPUT << "m_fullString: " << endl;
     METHOD_OUTPUT << m_fullString << endl;
   }
-  m_bodyText = getIncludedStringBetweenTags(m_fullString, endOfCommentBeginTag,
+  m_bodyText = getIncludedStringBetweenTags(m_fullString, endOfBeginTag,
                                             commentEndChars);
   m_displayText = scanForSubLinks(m_bodyText, m_fromFile);
   return containedLine.find(commentBeginChars, after);

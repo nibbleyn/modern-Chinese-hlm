@@ -214,7 +214,6 @@ void fixTagPairEnd() {
   bodyText.fixTagPairBegin(R"(</strong>)", R"(<b unhidden>)",
                            R"(<strong>)");
   bodyText.fixTagPairEnd(R"(<samp)", R"(</font>)", R"(</samp>)");
-  bodyText.fixTagPairEnd(R"(<cite>)", keyEndChars, R"(</cite>)", keyStartChars);
   bodyText.fixTagPairEnd(R"(见左图)", R"(</font>)", R"(</var>)");
 }
 
@@ -230,8 +229,6 @@ void fixTagsOfMainBodyText(int minTarget, int maxTarget) {
                                R"(<strong>)");
       bodyText.fixTagPairEnd(R"(<samp)", R"(</font>)", R"(</samp>)");
       bodyText.fixTagPairEnd(R"(见左图)", R"(</font>)", R"(</var>)");
-      bodyText.fixTagPairEnd(R"(<cite>)", keyEndChars, R"(</cite>)",
-                             keyStartChars);
     }
   }
 }
@@ -418,20 +415,20 @@ void CoupledBodyText::fixPersonalView() {
       continue;
     }
 
-    LineNumber ln;
+    LineNumberPlaceholderLink ln;
     ln.loadFirstFromContainedLine(m_inLine);
     // assume only one unpaired personalComment
     auto personalCommentBegin = m_inLine.find(personalCommentStartChars);
     auto personalCommentEnd = m_inLine.find(personalCommentEndChars);
     if (unpairFound == true) {
       // remove old line number if invalid
-      if (ln.valid()) {
+      if (ln.get().valid()) {
         removeOldLineNumber();
       }
       removeNbspsAndSpaces();
       m_inLine = ln.getWholeString() + doubleSpace + displaySpace +
                  personalCommentStartChars + personalCommentStartRestChars +
-                 endOfPersonalCommentBeginTag + m_inLine;
+                 endOfBeginTag + m_inLine;
       if (personalCommentEnd != string::npos) {
         unpairFound = false;
       } else {

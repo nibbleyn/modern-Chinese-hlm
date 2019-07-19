@@ -3,7 +3,7 @@
 string CoupledLink::getWholeString() { return asString(); }
 
 string CoupledLink::getDisplayString() {
-  if (m_displayType == LINK_DISPLAY_TYPE::HIDDEN)
+  if (m_displayType == DISPLAY_TYPE::HIDDEN)
     return emptyString;
   else
     return m_displayText;
@@ -49,7 +49,7 @@ string CoupledLink::asString(bool ignoreOriginalPart) {
   }
   // display property
   string part0 = linkStartChars + displaySpace + displayPropertyAsString();
-  if (m_displayType != LINK_DISPLAY_TYPE::DIRECT)
+  if (m_displayType != DISPLAY_TYPE::DIRECT)
     part0 += displaySpace;
   // key
   if (m_type != LINK_TYPE::ATTACHMENT and not m_usedKey.empty())
@@ -76,10 +76,15 @@ string CoupledLink::asString(bool ignoreOriginalPart) {
   }
   // citation, not generated for attachment type of link now
   string part7{emptyString};
+  if (isReverseLink())
+    part7 = downArrow;
+  if (isTargetToOtherMainHtm() or isTargetToOriginalHtm() or isTargetToJPMHtm())
+    part7 = upArrow;
   if (m_type != LINK_TYPE::ATTACHMENT and not m_usedKey.empty()) {
     // easier to replace to <sub unhidden> if want to display this like in link
     // ir-render-able media
-    part7 = citationStartChars + getReferSection() + citationEndChars;
+    part7 += citationStartChars + displaySpace + hiddenDisplayProperty +
+             endOfBeginTag + getReferSection() + citationEndChars;
   }
   // annotation
   string part8 = getAnnotation() + linkEndChars;
@@ -162,7 +167,7 @@ void CoupledLink::readKey(const string &linkString) {
       METHOD_OUTPUT << "line number found: " << lineNumber << endl;
     LineNumber ln(lineNumber);
     AttachmentNumber num = make_pair(m_chapterNumber, m_attachmentNumber);
-    ParaLineNumber paraLine = make_pair(ln.getParaNumber(), ln.getlineNumber());
+    ParaLineNumber paraLine = ln.getParaLineNumber();
     // will set needChange if found line is different
     fixReferPara(ln.asString());
     fixReferSection(getExpectedSection(num, paraLine));
@@ -206,7 +211,8 @@ string scanForSubComments(const string &original, const string &fromFile) {
  * was called before, refer to Link class definition
  */
 void CoupledLink::fixFromString(const string &linkString) {
-  readDisplayType(linkString);
+  m_fullString = linkString;
+  readDisplayType();
   readReferPara(linkString);
   // no need for key for these links
   if (m_annotation != returnLinkFromAttachmentHeader and
@@ -214,10 +220,14 @@ void CoupledLink::fixFromString(const string &linkString) {
     readKey(linkString); // key would be searched here and replaced,
                          // m_needChange updated
   m_bodyText = m_annotation;
-  if (m_type != LINK_TYPE::IMAGE)
-    m_displayText = scanForSubComments(m_bodyText, m_fromFile);
-  else if (m_imageReferFilename.empty())
+  if (m_type == LINK_TYPE::IMAGE and m_imageReferFilename.empty())
     m_needChange = true;
+  if (isReverseLink())
+    m_displayText = downArrow;
+  if (isTargetToImage() or isTargetToOtherMainHtm() or
+      isTargetToOriginalHtm() or isTargetToJPMHtm())
+    m_displayText = upArrow;
+  m_displayText += scanForSubComments(m_bodyText, m_fromFile);
 }
 
 /**

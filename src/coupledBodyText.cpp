@@ -13,12 +13,12 @@ void CoupledBodyText::validateFormatForNumbering() {
   bool stop = false;
   while (!infile.eof() and not stop) {
     getline(infile, inLine);
-    LineNumber ln;
+    LineNumberPlaceholderLink ln;
     ln.loadFirstFromContainedLine(inLine);
-    if (ln.isParagraphHeader()) {
+    if (ln.isPartOfParagraphHeader()) {
       if (debug >= LOG_INFO) {
         METHOD_OUTPUT << "paragraph header found as:" << endl;
-        METHOD_OUTPUT << ln.asString() << endl;
+        METHOD_OUTPUT << ln.getParaLineString() << endl;
       }
       stop = true;
     }
@@ -33,12 +33,12 @@ void CoupledBodyText::validateFormatForNumbering() {
   CoupledParaHeader paraHeaderLoaded;
   while (!infile.eof()) {
     getline(infile, inLine);
-    LineNumber ln;
+    LineNumberPlaceholderLink ln;
     ln.loadFirstFromContainedLine(inLine);
-    if (ln.isParagraphHeader()) {
+    if (ln.isPartOfParagraphHeader()) {
       if (debug >= LOG_INFO) {
         METHOD_OUTPUT << "paragraph header found as:" << endl;
-        METHOD_OUTPUT << ln.asString() << endl;
+        METHOD_OUTPUT << ln.getParaLineString() << endl;
       }
       paraHeaderLoaded.readType(inLine);
       processedLastParaHeader = paraHeaderLoaded.isLastParaHeader();
@@ -141,17 +141,18 @@ void CoupledBodyText::removeOldLineNumber() {
 }
 
 void CoupledBodyText::numberingLine(ofstream &outfile) {
-  LineNumber ln;
+  LineNumberPlaceholderLink ln;
   ln.loadFirstFromContainedLine(m_inLine);
   LineNumber newLn(m_para, m_lineNo);
   // remove old line number if forced or invalid
-  if (m_forceUpdateLineNumber or not ln.equal(newLn)) {
-    if (ln.valid()) {
+  if (m_forceUpdateLineNumber or not ln.get().equal(newLn)) {
+    if (ln.get().valid()) {
       removeOldLineNumber();
     }
     removeNbspsAndSpaces();
-    outfile << newLn.getWholeString() << doubleSpace << displaySpace << m_inLine
-            << endl;
+    LineNumberPlaceholderLink newLink(newLn);
+    outfile << newLink.getWholeString() << doubleSpace << displaySpace
+            << m_inLine << endl;
   } else
     outfile << m_inLine << endl;
   m_lineNo++;
@@ -236,11 +237,11 @@ void CoupledBodyText::scanByLines() {
     if (debug >= LOG_INFO) {
       METHOD_OUTPUT << m_inLine << endl;
     }
-    LineNumber ln;
+    LineNumberPlaceholderLink ln;
     ln.loadFirstFromContainedLine(m_inLine);
-    if (ln.isParagraphHeader()) {
+    if (ln.isPartOfParagraphHeader()) {
       m_paraHeader.loadFrom(m_inLine);
-      LineInfo info{0, DISPLY_LINE_TYPE::PARA, ln.asString()};
+      LineInfo info{0, DISPLY_LINE_TYPE::PARA, ln.getParaLineString()};
       m_lineAttrTable[seqOfLines] = info;
       if (m_paraHeader.isFirstParaHeader()) {
         m_numberOfFirstParaHeader++;
@@ -355,29 +356,18 @@ bool isFoundAsNonKeys(const string &line, const string &key) {
     // no key found any more
     if (keyBegin == string::npos)
       break;
-    auto testBeginPos = line.rfind(keyStartChars, keyBegin);
-    auto endOfTag = 0;
-    // deprecated, to test keyStartChars exists
+    auto testBeginPos = line.rfind(titleStartChars, keyBegin);
+    auto endOfTag = testBeginPos;
+    // if titleStartChars exists
     if (testBeginPos != string::npos and testBeginPos > searchStart) {
       string testStr =
-          line.substr(testBeginPos + keyStartChars.length(),
-                      keyBegin - testBeginPos - keyStartChars.length());
-      if (testStr.find(keyEndChars) != string::npos)
+          line.substr(testBeginPos + titleStartChars.length(),
+                      keyBegin - testBeginPos - titleStartChars.length());
+      if (testStr.find(titleEndChars) != string::npos)
         return true;
-      endOfTag = line.find(keyEndChars, keyBegin);
-    } else {
-      testBeginPos = line.rfind(titleStartChars, keyBegin);
-      // if titleStartChars exists
-      if (testBeginPos != string::npos and testBeginPos > searchStart) {
-        string testStr =
-            line.substr(testBeginPos + titleStartChars.length(),
-                        keyBegin - testBeginPos - titleStartChars.length());
-        if (testStr.find(titleEndChars) != string::npos)
-          return true;
-        endOfTag = line.find(titleEndChars, keyBegin);
-      } else
-        return true;
-    }
+      endOfTag = line.find(titleEndChars, keyBegin);
+    } else
+      return true;
     searchStart = endOfTag + 1;
   }
   return false;
@@ -443,9 +433,9 @@ bool CoupledBodyText::findKey(const string &key) {
       continue;
     }
 
-    LineNumber ln;
+    LineNumberPlaceholderLink ln;
     ln.loadFirstFromContainedLine(line);
-    if (not ln.valid()) {
+    if (not ln.get().valid()) {
       m_searchError =
           "file doesn't get numbered:" + m_inputFile + " at line:" + line;
       METHOD_OUTPUT << m_searchError << endl;
@@ -454,12 +444,12 @@ bool CoupledBodyText::findKey(const string &key) {
 
     // special hack for ignoring one lineNumber
     if (not m_ignoreSet.empty() and
-        m_ignoreSet.find(ln.asString()) != m_ignoreSet.end()) {
+        m_ignoreSet.find(ln.getParaLineString()) != m_ignoreSet.end()) {
       continue;
     }
 
     found = true;
-    m_result.insert(ln.asString());
+    m_result.insert(ln.getParaLineString());
     if (m_onlyFirst) {
       break;
     }
@@ -484,18 +474,18 @@ void CoupledBodyText::fetchLineTexts() {
         if (debug >= LOG_INFO) {
           METHOD_OUTPUT << m_inLine << endl;
         }
-        LineNumber ln;
+        LineNumberPlaceholderLink ln;
         ln.loadFirstFromContainedLine(m_inLine);
-        if (ln.isParagraphHeader() or not ln.valid()) {
+        if (ln.isPartOfParagraphHeader() or not ln.get().valid()) {
           continue;
         }
-        bool finished = end.equal(END_OF_WHOLE_BODYTEXT) ? false : (ln > end);
-        if (begin > ln)
+        bool finished =
+            end.equal(END_OF_WHOLE_BODYTEXT) ? false : (ln.get() > end);
+        if (begin > ln.get())
           continue;
         else if (finished)
           break;
-        m_resultLines[make_pair(ln.getParaNumber(), ln.getlineNumber())] =
-            m_inLine;
+        m_resultLines[ln.get().getParaLineNumber()] = m_inLine;
       }
     }
   }

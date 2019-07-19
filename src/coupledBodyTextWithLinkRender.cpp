@@ -63,9 +63,14 @@ void CoupledBodyTextWithLink::searchForEmbededLinks() {
 }
 
 void CoupledBodyTextWithLink::scanForTypes(const string &containedLine) {
+  LineNumberPlaceholderLink ln;
+  auto offset = ln.loadFirstFromContainedLine(containedLine);
+  if (offset != string::npos) {
+    m_foundTypes[Object::OBJECT_TYPE::LINENUMBER] = offset;
+    m_offsetOfTypes[offset] = Object::OBJECT_TYPE::LINENUMBER;
+  }
   for (const auto &type :
-       {Object::OBJECT_TYPE::LINENUMBER, Object::OBJECT_TYPE::SPACE,
-        Object::OBJECT_TYPE::POEM}) {
+       {Object::OBJECT_TYPE::SPACE, Object::OBJECT_TYPE::POEM}) {
     auto offset = containedLine.find(Object::getStartTagOfObjectType(type));
     if (offset != string::npos) {
       m_foundTypes[type] = offset;
@@ -73,7 +78,7 @@ void CoupledBodyTextWithLink::scanForTypes(const string &containedLine) {
     }
   }
   bool firstOccurence = true;
-  auto offset = string::npos;
+  offset = string::npos;
   do {
     offset = containedLine.find(
         Object::getStartTagOfObjectType(Object::OBJECT_TYPE::PERSONALCOMMENT),
@@ -174,7 +179,7 @@ using ObjectPtr = unique_ptr<Object>;
 ObjectPtr createObjectFromType(Object::OBJECT_TYPE type,
                                const string &fromFile) {
   if (type == Object::OBJECT_TYPE::LINENUMBER)
-    return make_unique<LineNumber>();
+    return make_unique<LineNumberPlaceholderLink>();
   else if (type == Object::OBJECT_TYPE::SPACE)
     return make_unique<Space>();
   else if (type == Object::OBJECT_TYPE::POEM)
@@ -238,22 +243,25 @@ string CoupledBodyTextWithLink::getDisplayString(const string &originalString) {
                       << endl;
     }
     m_offsetOfTypes.erase(first);
-    auto nextOffsetOfSameType =
-        originalString.find(Object::getStartTagOfObjectType(type), offset + 1);
-    do {
-      if (nextOffsetOfSameType != string::npos and
-          isEmbeddedObject(type, nextOffsetOfSameType))
-        nextOffsetOfSameType = originalString.find(
-            Object::getStartTagOfObjectType(type), nextOffsetOfSameType + 1);
-      else
-        break;
-    } while (true);
-    if (nextOffsetOfSameType != string::npos) {
-      m_foundTypes[type] = nextOffsetOfSameType;
-      m_offsetOfTypes[nextOffsetOfSameType] = type;
+    // never try to find another LINENUMBER
+    if (type != Object::OBJECT_TYPE::LINENUMBER) {
+      auto nextOffsetOfSameType = originalString.find(
+          Object::getStartTagOfObjectType(type), offset + 1);
+      do {
+        if (nextOffsetOfSameType != string::npos and
+            isEmbeddedObject(type, nextOffsetOfSameType))
+          nextOffsetOfSameType = originalString.find(
+              Object::getStartTagOfObjectType(type), nextOffsetOfSameType + 1);
+        else
+          break;
+      } while (true);
+      if (nextOffsetOfSameType != string::npos) {
+        m_foundTypes[type] = nextOffsetOfSameType;
+        m_offsetOfTypes[nextOffsetOfSameType] = type;
+      }
+      if (debug >= LOG_INFO)
+        printOffsetToObjectType();
     }
-    if (debug >= LOG_INFO)
-      printOffsetToObjectType();
   } while (true);
   if (endOfSubStringOffset < originalString.length())
     result += originalString.substr(endOfSubStringOffset);
@@ -305,22 +313,25 @@ CoupledBodyTextWithLink::getContainedObjectTypes(const string &originalString) {
                       << endl;
     }
     m_offsetOfTypes.erase(first);
-    auto nextOffsetOfSameType =
-        originalString.find(Object::getStartTagOfObjectType(type), offset + 1);
-    do {
-      if (nextOffsetOfSameType != string::npos and
-          isEmbeddedObject(type, nextOffsetOfSameType))
-        nextOffsetOfSameType = originalString.find(
-            Object::getStartTagOfObjectType(type), nextOffsetOfSameType + 1);
-      else
-        break;
-    } while (true);
-    if (nextOffsetOfSameType != string::npos) {
-      m_foundTypes[type] = nextOffsetOfSameType;
-      m_offsetOfTypes[nextOffsetOfSameType] = type;
+    // never try to find another LINENUMBER
+    if (type != Object::OBJECT_TYPE::LINENUMBER) {
+      auto nextOffsetOfSameType = originalString.find(
+          Object::getStartTagOfObjectType(type), offset + 1);
+      do {
+        if (nextOffsetOfSameType != string::npos and
+            isEmbeddedObject(type, nextOffsetOfSameType))
+          nextOffsetOfSameType = originalString.find(
+              Object::getStartTagOfObjectType(type), nextOffsetOfSameType + 1);
+        else
+          break;
+      } while (true);
+      if (nextOffsetOfSameType != string::npos) {
+        m_foundTypes[type] = nextOffsetOfSameType;
+        m_offsetOfTypes[nextOffsetOfSameType] = type;
+      }
+      if (debug >= LOG_INFO)
+        printOffsetToObjectType();
     }
-    if (debug >= LOG_INFO)
-      printOffsetToObjectType();
   } while (true);
   string lastPart = originalString.substr(endOfSubStringOffset);
   if (debug >= LOG_INFO)
@@ -352,9 +363,9 @@ void CoupledBodyTextWithLink::render() {
     if (debug >= LOG_INFO) {
       METHOD_OUTPUT << inLine << endl;
     }
-    LineNumber ln;
+    LineNumberPlaceholderLink ln;
     ln.loadFirstFromContainedLine(inLine);
-    if (ln.isParagraphHeader()) {
+    if (ln.isPartOfParagraphHeader()) {
       paraHeaderLoaded.loadFrom(inLine);
       paraHeaderLoaded.fixFromTemplate();
       if (debug >= LOG_INFO) {

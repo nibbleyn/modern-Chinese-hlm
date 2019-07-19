@@ -23,7 +23,8 @@ void LinkFromAttachment::generateLinkToOrigin() {
   m_linkPtrToOrigin->fixFromString(to);
   m_needChange = true;
   m_type = reservedType;
-  m_displayText += bracketStartChars + annotationToOriginal + bracketEndChars;
+  m_displayText +=
+      bracketStartChars + upArrow + annotationToOriginal + bracketEndChars;
 }
 
 /**
