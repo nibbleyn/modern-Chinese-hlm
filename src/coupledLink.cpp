@@ -25,6 +25,7 @@ size_t CoupledLink::loadFirstFromContainedLine(const string &containedLine,
     METHOD_OUTPUT << "m_fullString: " << endl;
     METHOD_OUTPUT << m_fullString << endl;
   }
+  readDisplayType();
   readTypeAndAnnotation(m_fullString);
   readReferFileName(m_fullString); // second step of construction
   fixFromString(m_fullString);
@@ -81,10 +82,7 @@ string CoupledLink::asString(bool ignoreOriginalPart) {
   if (isTargetToOtherMainHtm() or isTargetToOriginalHtm() or isTargetToJPMHtm())
     part7 = upArrow;
   if (m_type != LINK_TYPE::ATTACHMENT and not m_usedKey.empty()) {
-    // easier to replace to <sub unhidden> if want to display this like in link
-    // ir-render-able media
-    part7 += citationStartChars + displaySpace + hiddenDisplayProperty +
-             endOfBeginTag + getReferSection() + citationEndChars;
+    part7 += m_referSection.getWholeString();
   }
   // annotation
   string part8 = getAnnotation() + linkEndChars;
@@ -170,7 +168,7 @@ void CoupledLink::readKey(const string &linkString) {
     ParaLineNumber paraLine = ln.getParaLineNumber();
     // will set needChange if found line is different
     fixReferPara(ln.asString());
-    fixReferSection(getExpectedSection(num, paraLine));
+    fixReferSection(num, paraLine);
   }
   if (debug >= LOG_INFO)
     METHOD_OUTPUT << "key: " << m_usedKey << endl;
@@ -214,11 +212,12 @@ void CoupledLink::fixFromString(const string &linkString) {
   m_fullString = linkString;
   readDisplayType();
   readReferPara(linkString);
+  m_referSection.loadFirstFromContainedLine(m_fullString);
   // no need for key for these links
   if (m_annotation != returnLinkFromAttachmentHeader and
       m_annotation != returnLink and m_annotation != returnToContentTable)
     readKey(linkString); // key would be searched here and replaced,
-                         // m_needChange updated
+                         // m_needChange updatedm_fullString
   m_bodyText = m_annotation;
   if (m_type == LINK_TYPE::IMAGE and m_imageReferFilename.empty())
     m_needChange = true;
@@ -227,6 +226,7 @@ void CoupledLink::fixFromString(const string &linkString) {
   if (isTargetToImage() or isTargetToOtherMainHtm() or
       isTargetToOriginalHtm() or isTargetToJPMHtm())
     m_displayText = upArrow;
+  m_displayText += m_referSection.getDisplayString();
   m_displayText += scanForSubComments(m_bodyText, m_fromFile);
 }
 

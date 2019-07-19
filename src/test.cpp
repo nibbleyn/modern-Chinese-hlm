@@ -387,13 +387,13 @@ void testLinkOperation() {
   testLinkFromMain("80",
                    fixLinkFromSameFileTemplate(
                        DISPLAY_TYPE::UNHIDDEN, "菱角菱花",
-                       "第80章1.1节:", "原是老奶奶（薛姨妈）使唤的", "94"),
+                       "第80回1.1节:", "原是老奶奶（薛姨妈）使唤的", "94"),
                    false);
   SEPERATE("fixLinkFromSameFileTemplate", " finished ");
 
   linkString = fixLinkFromMainTemplate(
       emptyString, "80", DISPLAY_TYPE::UNHIDDEN, "菱角菱花",
-      "第80章1.1节:", "原是老奶奶（薛姨妈）使唤的", "94");
+      "第80回1.1节:", "原是老奶奶（薛姨妈）使唤的", "94");
   LinkFromMain link("07", linkString);
   testLink(link, linkString, false);
 
@@ -402,14 +402,14 @@ void testLinkOperation() {
   testLinkFromMain("03",
                    fixLinkFromMainTemplate(
                        emptyString, "80", DISPLAY_TYPE::UNHIDDEN, "菱角菱花",
-                       "第80章1.1节:", "原是老奶奶（薛姨妈）使唤的", "94"),
+                       "第80回1.1节:", "原是老奶奶（薛姨妈）使唤的", "94"),
                    true);
   SEPERATE("generate original link afterwards", " finished ");
 
   testLinkFromMain("07",
                    fixLinkFromOriginalTemplate(
                        originalDirForLinkFromMain, "18", "happy",
-                       "第80章1.1节:", annotationToOriginal, "90101"),
+                       "第80回1.1节:", annotationToOriginal, "90101"),
                    false);
   SEPERATE("fixLinkFromOriginalTemplate", " finished ");
 
@@ -446,7 +446,7 @@ void testLinkOperation() {
   testLinkFromAttachment(
       "03_9",
       fixLinkFromSameFileTemplate(DISPLAY_TYPE::UNHIDDEN, "西北",
-                                  "第80章1.1节:", "原是老奶奶（薛姨妈）使唤的",
+                                  "第80回1.1节:", "原是老奶奶（薛姨妈）使唤的",
                                   "94"),
       false);
   SEPERATE("fixLinkFromSameFileTemplate", " finished ");
@@ -454,7 +454,7 @@ void testLinkOperation() {
   testLinkFromAttachment("03_9",
                          fixLinkFromMainTemplate(
                              R"(..\)", "80", DISPLAY_TYPE::UNHIDDEN, "菱角菱花",
-                             "第80章1.1节:", "原是老奶奶（薛姨妈）使唤的",
+                             "第80回1.1节:", "原是老奶奶（薛姨妈）使唤的",
                              "94"),
                          true);
   SEPERATE("fixLinkFromMainTemplate", " finished ");
@@ -462,7 +462,7 @@ void testLinkOperation() {
   testLinkFromAttachment(
       "03_9",
       fixLinkFromOriginalTemplate(R"(..\original\)", "80", "菱角菱花",
-                                  "第80章1.1节:", annotationToOriginal, "94"),
+                                  "第80回1.1节:", annotationToOriginal, "94"),
       false);
   SEPERATE("fixLinkFromOriginalTemplate", " finished ");
 
@@ -586,12 +586,12 @@ void testListContainer() {
   ListContainer container("1_gen");
   auto link = fixLinkFromMainTemplate(
       emptyString, "80", DISPLAY_TYPE::UNHIDDEN, "菱角菱花",
-      "第80章1.1节:", "原是老奶奶（薛姨妈）使唤的", "94");
+      "第80回1.1节:", "原是老奶奶（薛姨妈）使唤的", "94");
 
   // to test link to original file
   link =
       fixLinkFromOriginalTemplate(originalDirForLinkFromMain, "80", "菱角菱花",
-                                  "第80章1.1节:", annotationToOriginal, "94");
+                                  "第80回1.1节:", annotationToOriginal, "94");
 
   LinkFromMain lfm(emptyString, link);
   // second step of construction

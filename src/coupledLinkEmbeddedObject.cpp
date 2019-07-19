@@ -57,6 +57,7 @@ size_t PersonalComment::loadFirstFromContainedLine(const string &containedLine,
     METHOD_OUTPUT << "m_fullString: " << endl;
     METHOD_OUTPUT << m_fullString << endl;
   }
+  readDisplayType();
   m_bodyText = getIncludedStringBetweenTags(m_fullString, endOfBeginTag,
                                             personalCommentEndChars);
   m_displayText = scanForSubLinks(m_bodyText, m_fromFile);
@@ -93,6 +94,7 @@ size_t PoemTranslation::loadFirstFromContainedLine(const string &containedLine,
     METHOD_OUTPUT << "m_fullString: " << endl;
     METHOD_OUTPUT << m_fullString << endl;
   }
+  readDisplayType();
   m_bodyText = getIncludedStringBetweenTags(m_fullString, endOfBeginTag,
                                             poemTranslationEndChars);
   m_displayText = scanForSubLinks(m_bodyText, m_fromFile);
@@ -126,8 +128,84 @@ size_t Comment::loadFirstFromContainedLine(const string &containedLine,
     METHOD_OUTPUT << "m_fullString: " << endl;
     METHOD_OUTPUT << m_fullString << endl;
   }
+  readDisplayType();
   m_bodyText = getIncludedStringBetweenTags(m_fullString, endOfBeginTag,
                                             commentEndChars);
   m_displayText = scanForSubLinks(m_bodyText, m_fromFile);
   return containedLine.find(commentBeginChars, after);
+}
+
+string Citation::getExpectedSection(AttachmentNumber num,
+                                    ParaLineNumber paraLine,
+                                    const string &chapterString,
+                                    const string &attachmentString,
+                                    const string &sectionString) {
+  string unitString = chapterString;
+  if (num.second != 0)
+    unitString +=
+        citationChapterNo + TurnToString(num.second) + attachmentString;
+  return citationChapterNo + TurnToString(num.first) + unitString +
+         TurnToString(paraLine.first) + citationChapterParaSeparator +
+         TurnToString(paraLine.second) + sectionString;
+}
+
+/**
+ * 第3回第9篇1.2节:
+ */
+void Citation::fromSectionString(const string &citationString,
+                                 const string &chapterString,
+                                 const string &attachmentString,
+                                 const string &sectionString) {
+  if (citationString.empty())
+    return;
+  string chapter = getIncludedStringBetweenTags(
+      citationString, citationChapterNo, chapterString);
+  if (not chapter.empty())
+    m_num.first = TurnToInt(chapter);
+  string para;
+  string attNo = getIncludedStringBetweenTags(citationString, citationChapterNo,
+                                              attachmentString);
+  if (not attNo.empty()) {
+    m_num.second = TurnToInt(attNo);
+    para = getIncludedStringBetweenTags(citationString, attachmentString,
+                                        citationChapterParaSeparator);
+  } else
+    para = getIncludedStringBetweenTags(citationString, chapterString,
+                                        citationChapterParaSeparator);
+  m_paraLine.first = TurnToInt(para);
+  string line = getIncludedStringBetweenTags(
+      citationString, citationChapterParaSeparator, sectionString);
+  if (not line.empty())
+    m_paraLine.second = TurnToInt(line);
+}
+
+string Citation::getWholeString() {
+  // display property
+  string part0 = citationStartChars;
+  if (m_displayType != DISPLAY_TYPE::DIRECT)
+    part0 += displaySpace;
+  part0 += displayPropertyAsString();
+  return part0 + endOfBeginTag + m_bodyText + citationEndChars;
+}
+
+string Citation::getDisplayString() {
+  if (m_displayType == DISPLAY_TYPE::HIDDEN or m_paraLine == make_pair(0, 0))
+    return emptyString;
+  else
+    return m_bodyText;
+}
+
+size_t Citation::loadFirstFromContainedLine(const string &containedLine,
+                                            size_t after) {
+  m_fullString = getWholeStringBetweenTags(containedLine, citationStartChars,
+                                           citationEndChars, after);
+  if (debug >= LOG_INFO) {
+    METHOD_OUTPUT << "m_fullString: " << endl;
+    METHOD_OUTPUT << m_fullString << endl;
+  }
+  m_bodyText = getIncludedStringBetweenTags(m_fullString, endOfBeginTag,
+                                            citationEndChars);
+  readDisplayType();
+  fromSectionString(m_bodyText);
+  return containedLine.find(citationStartChars, after);
 }

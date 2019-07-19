@@ -31,6 +31,9 @@ static const string poemEndChars = R"(</strong>)";
 static const string poemTranslationBeginChars = R"(<samp)";
 static const string poemTranslationEndChars = R"(</samp>)";
 
+static const string citationStartChars = R"(<sub)";
+static const string citationEndChars = R"(</sub>)";
+
 // comments
 static const string commentBeginChars = R"(<cite)";
 static const string commentEndChars = R"(</cite>)";
@@ -51,6 +54,7 @@ static const string nameOfLinkFromAttachmentType = R"(LINKFROMATTACHMENT)";
 static const string nameOfCommentType = R"(COMMENT)";
 static const string nameOfPersonalCommentType = R"(PERSONALCOMMENT)";
 static const string nameOfTextType = R"(TEXT)";
+static const string nameOfCitationType = R"(CITATION)";
 
 enum class DISPLAY_TYPE { DIRECT, HIDDEN, UNHIDDEN };
 
@@ -64,109 +68,60 @@ public:
     LINKFROMMAIN,
     LINKFROMATTACHMENT,
     COMMENT,
+    CITATION,
     PERSONALCOMMENT,
     TEXT
   };
   using SET_OF_OBJECT_TYPES = set<Object::OBJECT_TYPE>;
   static SET_OF_OBJECT_TYPES setOfObjectTypes;
+  using ObjectTypeToString = map<OBJECT_TYPE, string>;
+  static ObjectTypeToString StartTags;
+  static ObjectTypeToString EndTags;
+  static ObjectTypeToString ObjectNames;
+  using StringToObjectType = map<string, OBJECT_TYPE>;
+  static StringToObjectType ObjectTypes;
 
   static bool isObjectTypeInSet(OBJECT_TYPE objType, SET_OF_OBJECT_TYPES &set) {
     return set.count(objType) != 0;
   }
   static string getStartTagOfObjectType(OBJECT_TYPE type) {
-    if (type == OBJECT_TYPE::LINENUMBER)
-      return linkStartChars;
-    else if (type == Object::OBJECT_TYPE::SPACE)
-      return space;
-    else if (type == Object::OBJECT_TYPE::POEM)
-      return poemBeginChars;
-    else if (type == Object::OBJECT_TYPE::LINKFROMMAIN)
-      return linkStartChars;
-    else if (type == Object::OBJECT_TYPE::PERSONALCOMMENT)
-      return personalCommentStartChars;
-    else if (type == Object::OBJECT_TYPE::POEMTRANSLATION)
-      return poemTranslationBeginChars;
-    else if (type == Object::OBJECT_TYPE::COMMENT)
-      return commentBeginChars;
-    return emptyString;
+    try {
+      auto startTag = StartTags.at(type);
+      return startTag;
+    } catch (exception &) {
+      return emptyString;
+    }
   }
 
   static string getEndTagOfObjectType(OBJECT_TYPE type) {
-    if (type == OBJECT_TYPE::LINKFROMMAIN)
-      return linkEndChars;
-    else if (type == OBJECT_TYPE::PERSONALCOMMENT)
-      return personalCommentEndChars;
-    else if (type == OBJECT_TYPE::POEMTRANSLATION)
-      return poemTranslationEndChars;
-    else if (type == OBJECT_TYPE::COMMENT)
-      return commentEndChars;
-    return emptyString;
+    try {
+      auto endTag = EndTags.at(type);
+      return endTag;
+    } catch (exception &) {
+      return emptyString;
+    }
   }
 
   static string getNameOfObjectType(OBJECT_TYPE type) {
-    if (type == OBJECT_TYPE::LINENUMBER)
-      return nameOfLineNumberType;
-    else if (type == OBJECT_TYPE::SPACE)
-      return nameOfSpaceType;
-    else if (type == OBJECT_TYPE::POEM)
-      return nameOfPoemType;
-    else if (type == OBJECT_TYPE::LINKFROMMAIN)
-      return nameOfLinkFromMainType;
-    else if (type == OBJECT_TYPE::PERSONALCOMMENT)
-      return nameOfPersonalCommentType;
-    else if (type == OBJECT_TYPE::POEMTRANSLATION)
-      return nameOfPoemTranslationType;
-    else if (type == OBJECT_TYPE::COMMENT)
-      return nameOfCommentType;
-    else if (type == OBJECT_TYPE::TEXT)
-      return nameOfTextType;
-    return emptyString;
+    try {
+      auto endTag = ObjectNames.at(type);
+      return endTag;
+    } catch (exception &) {
+      return emptyString;
+    }
   }
 
   static OBJECT_TYPE getObjectTypeFromName(string name) {
-    if (name == nameOfLineNumberType)
-      return OBJECT_TYPE::LINENUMBER;
-    else if (name == nameOfSpaceType)
-      return OBJECT_TYPE::SPACE;
-    else if (name == nameOfPoemType)
-      return OBJECT_TYPE::POEM;
-    else if (name == nameOfLinkFromMainType)
-      return OBJECT_TYPE::LINKFROMMAIN;
-    else if (name == nameOfPersonalCommentType)
-      return OBJECT_TYPE::PERSONALCOMMENT;
-    else if (name == nameOfPoemTranslationType)
-      return OBJECT_TYPE::POEMTRANSLATION;
-    else if (name == nameOfCommentType)
-      return OBJECT_TYPE::COMMENT;
-    return OBJECT_TYPE::TEXT;
+    try {
+      auto type = ObjectTypes.at(name);
+      return type;
+    } catch (exception &) {
+      return OBJECT_TYPE::TEXT;
+    }
   }
 
-  static string typeSetAsString(SET_OF_OBJECT_TYPES typeSet) {
-    string result;
-    for (const auto &type : typeSet) {
-      result += displaySpace + getNameOfObjectType(type);
-    }
-    return result;
-  }
-
-  static SET_OF_OBJECT_TYPES getTypeSetFromString(const string &str) {
-    auto typeListToCheck = {nameOfPoemTranslationType,
-                            nameOfPoemType,
-                            nameOfPersonalCommentType,
-                            nameOfCommentType,
-                            nameOfLinkFromAttachmentType,
-                            nameOfLinkFromMainType,
-                            nameOfTextType};
-    string toCheck = str;
-    SET_OF_OBJECT_TYPES result;
-    for (const auto &nameOfType : typeListToCheck) {
-      if (toCheck.find(nameOfType) != string::npos) {
-        result.insert(getObjectTypeFromName(nameOfType));
-        replacePart(toCheck, nameOfType, emptyString);
-      }
-    }
-    return result;
-  }
+  static string typeSetAsString(SET_OF_OBJECT_TYPES typeSet);
+  static SET_OF_OBJECT_TYPES getTypeSetFromString(const string &str);
 
 public:
   Object() = default;

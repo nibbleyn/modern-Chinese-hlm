@@ -208,6 +208,13 @@ void AttachmentList::displayNewlyAddedAttachments() {
   }
 }
 
+string getExpectedAttachment(AttachmentNumber num,
+                             string chapterString = defaultUnit,
+                             string attachmentString = attachmentUnit) {
+  return citationChapterNo + TurnToString(num.first) + chapterString +
+         citationChapterNo + TurnToString(num.second) + attachmentString;
+}
+
 LinkStringSet
 AttachmentList::allAttachmentsAsLinksByType(ATTACHMENT_TYPE type) {
   LinkStringSet result;

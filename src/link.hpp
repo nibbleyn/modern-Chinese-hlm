@@ -13,8 +13,6 @@ static const string imageTypeChars = R"(IMAGE)";
 static const string referFileMiddleChar = R"(href=")";
 static const string referParaMiddleChar = R"(#)";
 static const string referParaEndChar = R"(">)";
-static const string citationStartChars = R"(<sub)";
-static const string citationEndChars = R"(</sub>)";
 static const string changeKey = R"(changeKey)";
 static const string originalLinkStartChars = R"(（)";
 static const string originalLinkEndChars = R"(）)";

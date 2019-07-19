@@ -46,7 +46,7 @@ static constexpr const char *defaultWholeKey = R"( title="QQ")";
 static constexpr const char *defaultReferPara = R"(YY)";
 static constexpr const char *defaultWholeReferPara = R"(#YY)";
 static constexpr const char *defaultCitation = R"(WW)";
-static constexpr const char *defaultWholeCitation = R"(<sub hidden>WW</sub>)";
+static constexpr const char *defaultWholeCitation = R"(↑<sub hidden>WW</sub>)";
 static constexpr const char *defaultAnnotation = R"(ZZ)";
 static constexpr const char *defaultImageAnnotation = R"(（图示：ZZ）)";
 
@@ -214,7 +214,10 @@ string fixLinkFromJPMTemplate(const string &path, const string &filename,
   } else {
     replacePart(link, defaultKey, key);
   }
-  replacePart(link, defaultCitation, citation);
+  if (citation.empty()) {
+    replacePart(link, defaultWholeCitation, emptyString);
+  } else
+    replacePart(link, defaultCitation, citation);
   replacePart(link, defaultAnnotation, annotation);
   if (debug >= LOG_INFO)
     FUNCTION_OUTPUT << link << endl;

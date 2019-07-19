@@ -19,7 +19,7 @@ void Searcher::execute() {
       LineNumber ln(line);
       ParaLineNumber paraLine =
           make_pair(ln.getParaNumber(), ln.getlineNumber());
-      string expectedSection = getExpectedSection(num, paraLine);
+      string expectedSection = Citation::getExpectedSection(num, paraLine);
       switch (m_fileType) {
       case FILE_TYPE::MAIN:
         m_containerPtr->addLinkToLinkStringSet(

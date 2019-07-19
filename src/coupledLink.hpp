@@ -2,6 +2,61 @@
 #include "attachmentTable.hpp"
 #include "coupledBodyText.hpp"
 
+class Comment : public Object {
+public:
+  Comment(const string &fromFile) : m_fromFile(fromFile) {
+    m_objectType = OBJECT_TYPE::COMMENT;
+  }
+  string getWholeString() override;
+  string getDisplayString() override;
+  size_t displaySize() override;
+  size_t loadFirstFromContainedLine(const string &containedLine,
+                                    size_t after = 0) override;
+
+private:
+  string m_displayText{emptyString};
+  string m_fromFile{emptyString};
+};
+
+class Citation : public Object {
+public:
+  static string
+  getExpectedSection(AttachmentNumber num, ParaLineNumber paraLine,
+                     const string &chapterString = defaultUnit,
+                     const string &attachmentString = attachmentUnit,
+                     const string &sectionString = citationPara);
+
+  void fromSectionString(const string &citationString,
+                         const string &chapterString = defaultUnit,
+                         const string &attachmentString = attachmentUnit,
+                         const string &sectionString = citationPara);
+
+  Citation() { m_objectType = OBJECT_TYPE::CITATION; }
+  Citation(AttachmentNumber num, ParaLineNumber paraLine)
+      : m_num(num), m_paraLine(paraLine) {
+    m_bodyText = getExpectedSection(m_num, m_paraLine);
+    m_objectType = OBJECT_TYPE::CITATION;
+  }
+  void setReferSection(AttachmentNumber num, ParaLineNumber paraLine) {
+    m_num = num;
+    m_paraLine = paraLine;
+    m_bodyText = getExpectedSection(m_num, m_paraLine);
+  }
+  bool equal(AttachmentNumber num, ParaLineNumber paraLine) {
+    return (m_num == num and m_paraLine == paraLine);
+  }
+  string getWholeString() override;
+  string getDisplayString() override;
+  size_t displaySize() override { return getDisplayString().length(); }
+  size_t loadFirstFromContainedLine(const string &containedLine,
+                                    size_t after = 0) override;
+
+private:
+  AttachmentNumber m_num{0, 0};
+  ParaLineNumber m_paraLine{0, 0};
+  size_t m_page{0};
+};
+
 static const string returnLinkSetIndicator = R"(被引用：)";
 static const string returnToContentTable = R"(回目录)";
 static const string citationChapter = R"(章)";
@@ -52,9 +107,10 @@ public:
     } else
       logLink();
   }
-  void fixReferSection(const string &expectedSection) {
-    if (m_referSection != expectedSection) {
-      m_referSection = expectedSection;
+  void fixReferSection(AttachmentNumber num, ParaLineNumber paraLine) {
+    if (not m_referSection.equal(num, paraLine)) {
+      m_referSection.hide();
+      m_referSection.setReferSection(num, paraLine);
       m_needChange = true;
     }
   }
@@ -67,7 +123,6 @@ public:
 
 protected:
   string getKey() { return m_usedKey; }
-  string getReferSection() { return m_referSection; }
   void readKey(const string &linkString);
   string getEnclosedStringOfLinkToOrigin() {
     if (m_linkPtrToOrigin != nullptr)
@@ -88,7 +143,7 @@ protected:
   virtual void logLink() = 0;
 
 protected:
-  string m_referSection{"0.0"};
+  Citation m_referSection;
   string m_usedKey{emptyString};
   bool m_needChange{false};
   using LinkPtr = unique_ptr<CoupledLink>;
@@ -180,20 +235,4 @@ private:
   string getHtmlFileNamePrefix() override;
   string getBodyTextFilePrefix() override;
   bool isTargetToAttachmentFile() override;
-};
-
-class Comment : public Object {
-public:
-  Comment(const string &fromFile) : m_fromFile(fromFile) {
-    m_objectType = OBJECT_TYPE::COMMENT;
-  }
-  string getWholeString() override;
-  string getDisplayString() override;
-  size_t displaySize() override;
-  size_t loadFirstFromContainedLine(const string &containedLine,
-                                    size_t after = 0) override;
-
-private:
-  string m_displayText{emptyString};
-  string m_fromFile{emptyString};
 };
