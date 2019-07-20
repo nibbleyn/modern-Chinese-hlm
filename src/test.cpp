@@ -296,13 +296,21 @@ void testLink(CoupledLink &lfm, string linkString, bool needToGenerateOrgLink) {
   FUNCTION_OUTPUT << linkString << endl;
   // second step of construction
   lfm.readReferFileName(linkString);
-  lfm.fixFromString(linkString);
-  if (needToGenerateOrgLink)
-    lfm.generateLinkToOrigin();
-  auto fixed = lfm.asString();
-  FUNCTION_OUTPUT << "need Update: " << lfm.needUpdate() << endl;
-  FUNCTION_OUTPUT << "after fixed: " << endl;
-  FUNCTION_OUTPUT << fixed << endl;
+  if (not lfm.isReverseLink()) {
+    lfm.fixFromString(linkString);
+    if (needToGenerateOrgLink)
+      lfm.generateLinkToOrigin();
+    auto fixed = lfm.asString();
+    FUNCTION_OUTPUT << "need Update: " << lfm.needUpdate() << endl;
+    FUNCTION_OUTPUT << "after fixed: " << endl;
+    FUNCTION_OUTPUT << fixed << endl;
+  } else {
+    // str would get from fixLinkFromReverseLinkTemplate when generate it
+    //	  string str = linkString;
+    // this would happen to render the link
+    string str = linkString;
+    lfm.loadFirstFromContainedLine(str);
+  }
   FUNCTION_OUTPUT << "display as:" << lfm.getDisplayString() << "||" << endl;
 }
 
@@ -313,6 +321,20 @@ void testLinkOperation() {
   FUNCTION_OUTPUT << str << endl;
 
   //clang-format off
+  string linkString =
+      R"(<a unhidden href="a025.htm#P9L1">被<sub>25回</sub>引用</a>)";
+  FUNCTION_OUTPUT << linkString << endl;
+  LinkFromMain link0("05", linkString);
+  testLink(link0, linkString, false);
+  SEPERATE("unhidden invalid reverse link", " finished ");
+
+  linkString =
+      R"(<a unhidden href="a025.htm#P9L1">↓<sub>第3回1.2节:</sub>引用</a>)";
+  FUNCTION_OUTPUT << linkString << endl;
+  LinkFromMain link_1("05", linkString);
+  testLink(link_1, linkString, false);
+  SEPERATE("unhidden valid reverse link", " finished ");
+
   testLinkFromAttachment(
       "07",
       R"(<a title="IMAGE" href="#nwbt.jpg">（图示：女娲补天）</a>)", false);
@@ -324,7 +346,7 @@ void testLinkOperation() {
       false);
   SEPERATE("hidden image link", " finished ");
 
-  string linkString =
+  linkString =
       R"(<a unhidden href="a080.htm#top">原是)" + commentStart + displaySpace +
       unhiddenDisplayProperty + endOfBeginTag +
       R"(薛姨妈1)" + commentEnd +

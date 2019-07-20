@@ -2,26 +2,26 @@
 
 #include "Object.hpp"
 
+/**
+ * the paragraph number in a body text would start from this number
+ * and increase thru downlink to limit-1
+ * to hold total paragraphs of this number
+ * for example, if this start number is 90
+ * the maximal paragraphs to hold would be 90
+ * till the last paragraph as 179
+ * during which the uplink name is decreased from 89 to 1.
+ * so for numbering and fixing, just use START_PARA_NUMBER should be good
+ * enough but for reconstruct story, a bigger number could be used to hold
+ * more paragraphs.
+ * @param num the paragraph number of first paragraph header
+ */
 static const int START_PARA_NUMBER = 90;
+
 class LineNumber {
   static int StartNumber;
 
 public:
   static int Limit;
-
-  /**
-   * the paragraph number in a body text would start from this number
-   * and increase thru downlink to limit-1
-   * to hold total paragraphs of this number
-   * for example, if this start number is 90
-   * the maximal paragraphs to hold would be 90
-   * till the last paragraph as 179
-   * during which the uplink name is decreased from 89 to 1.
-   * so for numbering and fixing, just use START_PARA_NUMBER should be good
-   * enough but for reconstruct story, a bigger number could be used to hold
-   * more paragraphs.
-   * @param num the paragraph number of first paragraph header
-   */
   static void setStartNumber(int num) {
     StartNumber = num;
     Limit = num * 2;

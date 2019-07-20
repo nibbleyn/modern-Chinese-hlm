@@ -25,7 +25,6 @@ size_t CoupledLink::loadFirstFromContainedLine(const string &containedLine,
     METHOD_OUTPUT << "m_fullString: " << endl;
     METHOD_OUTPUT << m_fullString << endl;
   }
-  readDisplayType();
   readTypeAndAnnotation(m_fullString);
   readReferFileName(m_fullString); // second step of construction
   fixFromString(m_fullString);
@@ -77,12 +76,16 @@ string CoupledLink::asString(bool ignoreOriginalPart) {
   }
   // citation, not generated for attachment type of link now
   string part7{emptyString};
-  if (isReverseLink())
+  if (isReverseLink()) {
     part7 = downArrow;
-  if (isTargetToOtherMainHtm() or isTargetToOriginalHtm() or isTargetToJPMHtm())
-    part7 = upArrow;
-  if (m_type != LINK_TYPE::ATTACHMENT and not m_usedKey.empty()) {
-    part7 += m_referSection.getWholeString();
+    if (m_referSection.isValid())
+      part7 += m_referSection.getWholeString();
+  } else {
+    if (isTargetToOtherMainHtm() or isTargetToOriginalHtm() or
+        isTargetToJPMHtm())
+      part7 = upArrow;
+    if (m_type != LINK_TYPE::ATTACHMENT and not m_usedKey.empty())
+      part7 += m_referSection.getWholeString();
   }
   // annotation
   string part8 = getAnnotation() + linkEndChars;
@@ -212,7 +215,7 @@ void CoupledLink::fixFromString(const string &linkString) {
   m_fullString = linkString;
   readDisplayType();
   readReferPara(linkString);
-  m_referSection.loadFirstFromContainedLine(m_fullString);
+  fixReferSection(linkString);
   // no need for key for these links
   if (m_annotation != returnLinkFromAttachmentHeader and
       m_annotation != returnLink and m_annotation != returnToContentTable)
@@ -223,8 +226,8 @@ void CoupledLink::fixFromString(const string &linkString) {
     m_needChange = true;
   if (isReverseLink())
     m_displayText = downArrow;
-  if (isTargetToImage() or isTargetToOtherMainHtm() or
-      isTargetToOriginalHtm() or isTargetToJPMHtm())
+  else if (isTargetToImage() or isTargetToOtherMainHtm() or
+           isTargetToOriginalHtm() or isTargetToJPMHtm())
     m_displayText = upArrow;
   m_displayText += m_referSection.getDisplayString();
   m_displayText += scanForSubComments(m_bodyText, m_fromFile);

@@ -37,11 +37,14 @@ public:
     m_bodyText = getExpectedSection(m_num, m_paraLine);
     m_objectType = OBJECT_TYPE::CITATION;
   }
+  AttachmentNumber getAttachmentNumber() { return m_num; }
+  ParaLineNumber getParaLineNumber() { return m_paraLine; }
   void setReferSection(AttachmentNumber num, ParaLineNumber paraLine) {
     m_num = num;
     m_paraLine = paraLine;
     m_bodyText = getExpectedSection(m_num, m_paraLine);
   }
+  bool isValid() { return m_paraLine != make_pair(0, 0); }
   bool equal(AttachmentNumber num, ParaLineNumber paraLine) {
     return (m_num == num and m_paraLine == paraLine);
   }
@@ -107,9 +110,17 @@ public:
     } else
       logLink();
   }
+  void fixReferSection(const string &linkString) {
+    Citation referSection;
+    referSection.loadFirstFromContainedLine(linkString);
+    if (referSection.isValid())
+      fixReferSection(referSection.getAttachmentNumber(),
+                      referSection.getParaLineNumber());
+  }
   void fixReferSection(AttachmentNumber num, ParaLineNumber paraLine) {
     if (not m_referSection.equal(num, paraLine)) {
-      m_referSection.hide();
+      if (not isReverseLink())
+        m_referSection.hide();
       m_referSection.setReferSection(num, paraLine);
       m_needChange = true;
     }

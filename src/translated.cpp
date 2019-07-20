@@ -11,7 +11,7 @@ int debug = LOG_INFO;
 int main(int argc, char **argv) {
 
   // change this number to run different functions
-  int num = 8;
+  int num = 21;
   switch (num) {
   case 1:
     //    search(R"(枕)");
@@ -80,7 +80,7 @@ int main(int argc, char **argv) {
     fixLinksFromJPM(false);
     break;
   case 21:
-    testFunctions(4);
+    testFunctions(3);
     break;
   case 22:
     tools(15);

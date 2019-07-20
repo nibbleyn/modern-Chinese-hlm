@@ -172,7 +172,8 @@ void Citation::fromSectionString(const string &citationString,
   } else
     para = getIncludedStringBetweenTags(citationString, chapterString,
                                         citationChapterParaSeparator);
-  m_paraLine.first = TurnToInt(para);
+  if (not para.empty())
+    m_paraLine.first = TurnToInt(para);
   string line = getIncludedStringBetweenTags(
       citationString, citationChapterParaSeparator, sectionString);
   if (not line.empty())
@@ -189,7 +190,7 @@ string Citation::getWholeString() {
 }
 
 string Citation::getDisplayString() {
-  if (m_displayType == DISPLAY_TYPE::HIDDEN or m_paraLine == make_pair(0, 0))
+  if (m_displayType == DISPLAY_TYPE::HIDDEN or not isValid())
     return emptyString;
   else
     return m_bodyText;
