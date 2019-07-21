@@ -72,6 +72,7 @@ public:
   Link(const Link &) = delete;
   Link &operator=(const Link &) = delete;
   void readTypeAndAnnotation(const string &linkString) {
+    readDisplayType();
     readType(linkString);
     readAnnotation(linkString);
   }

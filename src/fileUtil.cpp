@@ -89,3 +89,12 @@ std::string getStatisticsOutputFilePathFromString(const std::string &fileType) {
     return HTML_OUTPUT_LINES_OF_JPM;
   return HTML_OUTPUT_LINES_OF_MAIN;
 }
+
+bool fileExist(std::ifstream &infile, const std::string &filePath) {
+  if (!infile) {
+    std::cout << __func__ << "   " << ERROR_FILE_NOT_EXIST << filePath
+              << std::endl;
+    return false;
+  }
+  return true;
+}

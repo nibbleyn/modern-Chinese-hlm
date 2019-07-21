@@ -122,7 +122,6 @@ size_t Link::loadFirstFromContainedLine(const string &containedLine,
     METHOD_OUTPUT << "m_fullString: " << endl;
     METHOD_OUTPUT << m_fullString << endl;
   }
-  readDisplayType();
   m_displayText = m_annotation;
   readTypeAndAnnotation(m_fullString);
   return containedLine.find(linkStartChars, after);

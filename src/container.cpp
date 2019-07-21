@@ -5,10 +5,8 @@ static const string defaultDisplayTitle = R"(YYY)";
 
 void Container::dissembleFromHTM() {
   ifstream infile(getInputHtmlFilePath());
-  if (!infile) {
-    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << getInputHtmlFilePath() << endl;
+  if (not fileExist(infile, getInputHtmlFilePath()))
     return;
-  }
   ofstream outfile(getBodyTextFilePath());
   string line{emptyString};
   bool headerSkipped = false, bodyFinished = false;
@@ -47,15 +45,11 @@ void Container::dissembleFromHTM() {
 
 void Container::assembleBackToHTM() {
   ifstream inHtmlFile(getInputHtmlFilePath());
-  if (!inHtmlFile) {
-    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << getInputHtmlFilePath() << endl;
+  if (not fileExist(inHtmlFile, getInputHtmlFilePath()))
     return;
-  }
   ifstream inBodyTextFile(getBodyTextFilePath());
-  if (!inBodyTextFile) {
-    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << getBodyTextFilePath() << endl;
+  if (not fileExist(inBodyTextFile, getBodyTextFilePath()))
     return;
-  }
 
   ofstream outfile(getoutputHtmlFilepath());
   string line{emptyString};

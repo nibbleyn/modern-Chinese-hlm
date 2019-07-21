@@ -3,11 +3,8 @@
 
 void CoupledBodyText::validateFormatForNumbering() {
   ifstream infile(m_inputFile);
-  if (!infile) {
-    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << m_inputFile << endl;
+  if (not fileExist(infile, m_inputFile))
     return;
-  }
-
   // continue reading till first paragraph header
   string inLine;
   bool stop = false;
@@ -222,11 +219,8 @@ void CoupledBodyText::scanByLines() {
   m_imgGroupFollowingParaTable.clear();
 
   ifstream infile(m_inputFile);
-  if (!infile) {
-    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << m_inputFile << endl;
+  if (not fileExist(infile, m_inputFile))
     return;
-  }
-
   bool processImgGroup = false;
   size_t lastImgGroupBegin = 0;
   size_t lastImgGroupEnd = 0;
@@ -308,10 +302,8 @@ void CoupledBodyText::scanByLines() {
 
 void CoupledBodyText::paraGuidedNumbering() {
   ifstream infile(m_inputFile);
-  if (!infile) {
-    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << m_inputFile << endl;
+  if (not fileExist(infile, m_inputFile))
     return;
-  }
   ofstream outfile(m_outputFile);
 
   m_para = 0;
@@ -460,11 +452,8 @@ bool CoupledBodyText::findKey(const string &key) {
 void CoupledBodyText::fetchLineTexts() {
   m_resultLines.clear();
   ifstream infile(m_inputFile);
-  if (!infile) {
-    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << m_inputFile << endl;
+  if (not fileExist(infile, m_inputFile))
     return;
-  }
-
   if (infile) {
     LineNumber begin(m_range.first.first, m_range.first.second);
     LineNumber end(m_range.second.first, m_range.second.second);

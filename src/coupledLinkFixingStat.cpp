@@ -69,10 +69,8 @@ void CoupledLink::outPutStatisticsToFiles() {
 void CoupledLink::loadLinkTableFromStatisticsFile() {
   linksTable.clear();
   ifstream infile(linkDetailFilePath);
-  if (!infile) {
-    FUNCTION_OUTPUT << ERROR_FILE_NOT_EXIST << linkDetailFilePath << endl;
+  if (not fileExist(infile, linkDetailFilePath))
     return;
-  }
 
   string inLine;
   LinkDetailSet entry;

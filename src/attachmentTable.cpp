@@ -70,7 +70,7 @@ static const string typeOfReferenceAttachment = R"( type:)";
 void AttachmentList::loadReferenceAttachmentList() {
   ifstream infile(m_sourceFile);
   if (!infile) {
-    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << m_sourceFile << endl;
+    METHOD_OUTPUT << R"(file doesn't exist: )" << m_sourceFile << endl;
     return;
   }
   m_table.clear();

@@ -41,10 +41,8 @@ void convertFromGB2312ToUtf8(string referFile, string format, FILE_TYPE type,
     if (debug >= LOG_INFO)
       FUNCTION_OUTPUT << inputFile << endl;
     ifstream infile(inputFile);
-    if (!infile) {
-      FUNCTION_OUTPUT << ERROR_FILE_NOT_EXIST << inputFile << endl;
+    if (not fileExist(infile, inputFile))
       return;
-    }
     outputFile = HTML_OUTPUT_MAIN;
     if (type == FILE_TYPE::ATTACHMENT)
       outputFile = HTML_OUTPUT_ATTACHMENT;

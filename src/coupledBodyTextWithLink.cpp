@@ -213,10 +213,8 @@ CoupledBodyTextWithLink::getLinesOfDisplayText(const string &dispString) {
 
 size_t CoupledBodyTextWithLink::getAverageLineLengthFromReferenceFile() {
   ifstream referLinesFile(REFERENCE_LINES);
-  if (!referLinesFile) {
-    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << REFERENCE_LINES << endl;
+  if (not fileExist(referLinesFile, REFERENCE_LINES))
     return 0;
-  }
 
   auto totalSizes = 0;
   auto totalLines = 0;
@@ -238,11 +236,10 @@ size_t CoupledBodyTextWithLink::getAverageLineLengthFromReferenceFile() {
 
 void CoupledBodyTextWithLink::getLinesofReferencePage() {
   m_averageSizeOfOneLine = getAverageLineLengthFromReferenceFile();
+  m_SizeOfReferPage = 0;
   ifstream referPageFile(REFERENCE_PAGE);
-  if (!referPageFile) {
-    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << REFERENCE_PAGE << endl;
-    m_SizeOfReferPage = 0;
-  }
+  if (not fileExist(referPageFile, REFERENCE_PAGE))
+    return;
   auto totalLines = 0;
   string line;
   while (!referPageFile.eof()) {
@@ -304,10 +301,8 @@ void CoupledBodyTextWithLink::calculateParaHeaderPositions() {
 
 void CoupledBodyTextWithLink::paraGeneratedNumbering() {
   ifstream infile(m_inputFile);
-  if (!infile) {
-    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << m_inputFile << endl;
+  if (not fileExist(infile, m_inputFile))
     return;
-  }
   ofstream outfile(m_outputFile);
 
   size_t seqOfLines = 0;
@@ -360,10 +355,8 @@ void CoupledBodyTextWithLink::scanByRenderingLines() {
   m_paraHeaderTable.clear();
 
   ifstream infile(m_inputFile);
-  if (!infile) {
-    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << m_inputFile << endl;
+  if (not fileExist(infile, m_inputFile))
     return;
-  }
 
   size_t seqOfLines = 0;
   while (!infile.eof()) {
@@ -477,15 +470,9 @@ void CoupledBodyTextWithLink::validateParaSize() {
 
 void CoupledBodyTextWithLink::addLineNumber() {
   ifstream infile(m_inputFile);
-  if (!infile) {
-    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << m_inputFile << endl;
+  if (not fileExist(infile, m_inputFile))
     return;
-  }
   ofstream outfile(m_outputFile);
-  if (!outfile) {
-    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << m_outputFile << endl;
-    return;
-  }
 
   if (isAutoNumbering()) {
     getLinesofReferencePage();
@@ -515,10 +502,8 @@ void CoupledBodyTextWithLink::fixLinksFromFile(FileSet referMainFiles,
                                                int minPara, int maxPara,
                                                int minLine, int maxLine) {
   ifstream infile(m_inputFile);
-  if (!infile) {
-    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << m_inputFile << endl;
+  if (not fileExist(infile, m_inputFile))
     return;
-  }
   ofstream outfile(m_outputFile);
   while (!infile.eof()) {
     getline(infile, m_inLine);

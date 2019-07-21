@@ -57,3 +57,7 @@ std::string getBodyTextFilePrefixFromFileType(FILE_TYPE type);
 std::string getSeparateLineColor(FILE_TYPE type);
 std::string getHtmlFileNameFromBodyTextFilePrefix(const std::string &prefix);
 std::string getStatisticsOutputFilePathFromString(const std::string &fileType);
+
+static const std::string ERROR_FILE_NOT_EXIST = R"(file doesn't exist: )";
+
+bool fileExist(std::ifstream &infile, const std::string &filePath);

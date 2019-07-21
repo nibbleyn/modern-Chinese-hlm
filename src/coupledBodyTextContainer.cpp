@@ -119,10 +119,8 @@ string replaceReferPara(const string &linkString, const string &referFile,
  */
 void CoupledBodyTextContainer::fixReturnLinkForAttachmentFile() {
   ifstream inHtmlFile(getInputHtmlFilePath());
-  if (!inHtmlFile) {
-    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << getInputHtmlFilePath() << endl;
+  if (not fileExist(inHtmlFile, getInputHtmlFilePath()))
     return;
-  }
   ofstream outfile(getoutputHtmlFilepath());
   string line{emptyString};
   string referFile =
@@ -172,10 +170,8 @@ CoupledBodyTextContainer::getAttachmentFileList(int minAttachNo,
 
 void CoupledBodyTextContainer::fetchOriginalAndTranslatedTitles() {
   ifstream inHtmlFile(getInputHtmlFilePath());
-  if (!inHtmlFile) {
-    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << getInputHtmlFilePath() << endl;
+  if (not fileExist(inHtmlFile, getInputHtmlFilePath()))
     return;
-  }
   string line{emptyString};
   while (!inHtmlFile.eof()) {
     getline(inHtmlFile, line);

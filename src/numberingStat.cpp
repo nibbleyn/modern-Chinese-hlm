@@ -21,10 +21,8 @@ void CoupledBodyTextWithLink::clearExistingNumberingStatistics() {
 
 void CoupledBodyTextWithLink::loadNumberingStatistics() {
   ifstream infile(lineDetailFilePath);
-  if (!infile) {
-    FUNCTION_OUTPUT << ERROR_FILE_NOT_EXIST << lineDetailFilePath << endl;
+  if (not fileExist(infile, lineDetailFilePath))
     return;
-  }
   linesTable.clear();
   while (!infile.eof()) {
     // a005#P6L2 text 4  SPACE LINENUMBER POEM POEMTRANSLATION COMMENT TEXT
@@ -137,10 +135,8 @@ void CoupledBodyTextWithLink::addEntriesInRangeTable(AttachmentNumber startNum,
 void CoupledBodyTextWithLink::loadRangeTableFromFile(
     const string &indexFilePath) {
   ifstream infile(indexFilePath);
-  if (!infile) {
-    FUNCTION_OUTPUT << ERROR_FILE_NOT_EXIST << indexFilePath << endl;
+  if (not fileExist(infile, indexFilePath))
     return;
-  }
   while (!infile.eof()) {
     string startChapter, startParaLine;
     getline(infile, startChapter, '#');

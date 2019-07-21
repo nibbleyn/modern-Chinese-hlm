@@ -216,8 +216,8 @@ string CoupledBodyTextWithLink::getDisplayString(const string &originalString) {
     auto offset = first->first;
     if (not isEmbeddedObject(type, offset)) {
       if (debug >= LOG_INFO)
-        METHOD_OUTPUT << endOfSubStringOffset << " "
-                      << offset - endOfSubStringOffset << " "
+        METHOD_OUTPUT << endOfSubStringOffset << displaySpace
+                      << offset - endOfSubStringOffset << displaySpace
                       << originalString.substr(endOfSubStringOffset,
                                                offset - endOfSubStringOffset)
                       << endl;
@@ -239,8 +239,8 @@ string CoupledBodyTextWithLink::getDisplayString(const string &originalString) {
       // so require the string be fixed before
       endOfSubStringOffset = offset + current->length();
       if (debug >= LOG_INFO)
-        METHOD_OUTPUT << current->length() << " " << endOfSubStringOffset
-                      << endl;
+        METHOD_OUTPUT << current->length() << displaySpace
+                      << endOfSubStringOffset << endl;
     }
     m_offsetOfTypes.erase(first);
     // never try to find another LINENUMBER
@@ -309,8 +309,8 @@ CoupledBodyTextWithLink::getContainedObjectTypes(const string &originalString) {
       // so require the string be fixed before
       endOfSubStringOffset = offset + current->length();
       if (debug >= LOG_INFO)
-        METHOD_OUTPUT << current->length() << " " << endOfSubStringOffset
-                      << endl;
+        METHOD_OUTPUT << current->length() << displaySpace
+                      << endOfSubStringOffset << endl;
     }
     m_offsetOfTypes.erase(first);
     // never try to find another LINENUMBER
@@ -351,10 +351,8 @@ CoupledBodyTextWithLink::getContainedObjectTypes(const string &originalString) {
 
 void CoupledBodyTextWithLink::render() {
   ifstream infile(m_inputFile);
-  if (!infile) {
-    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << m_inputFile << endl;
+  if (not fileExist(infile, m_inputFile))
     return;
-  }
   ofstream outfile(m_outputFile);
   string inLine{"not found"};
   CoupledParaHeader paraHeaderLoaded;

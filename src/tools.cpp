@@ -117,15 +117,11 @@ void CoupledBodyText::fixTagPairBegin(const string &signOfTagAfterReplaceTag,
                                       const string &from, const string &to) {
   setInputOutputFiles();
   ifstream infile(m_inputFile);
-  if (!infile) {
-    FUNCTION_OUTPUT << ERROR_FILE_NOT_EXIST << m_inputFile << endl;
+  if (not fileExist(infile, m_inputFile))
     return;
-  }
   ofstream outfile(m_outputFile);
-
   // continue reading till first paragraph header
   string inLine{emptyString};
-
   while (!infile.eof()) {
     getline(infile, inLine);
     unsigned int before = 0, after = 0;
@@ -153,10 +149,8 @@ void CoupledBodyText::fixTagPairEnd(const string &signOfTagBeforeReplaceTag,
                                     const string &skipTagPairBegin) {
   setInputOutputFiles();
   ifstream infile(m_inputFile);
-  if (!infile) {
-    FUNCTION_OUTPUT << ERROR_FILE_NOT_EXIST << m_inputFile << endl;
+  if (not fileExist(infile, m_inputFile))
     return;
-  }
   ofstream outfile(m_outputFile);
   set<int, greater<int>> occurences;
   // continue reading till first paragraph header
@@ -236,10 +230,8 @@ void fixTagsOfMainBodyText(int minTarget, int maxTarget) {
 void CoupledBodyTextContainer::makeSingleLineHeaderAndFooter() {
 
   ifstream inHtmlFile(getInputHtmlFilePath());
-  if (!inHtmlFile) {
-    FUNCTION_OUTPUT << ERROR_FILE_NOT_EXIST << getInputHtmlFilePath() << endl;
+  if (not fileExist(inHtmlFile, getInputHtmlFilePath()))
     return;
-  }
   ofstream outHtmlFile(getoutputHtmlFilepath());
   string line{emptyString};
 
@@ -295,10 +287,8 @@ void CoupledBodyTextContainer::makeSingleLineHeaderAndFooter() {
 
 void CoupledBodyTextContainer::fixHeaderAndFooter() {
   ifstream inHtmlFile(getInputHtmlFilePath());
-  if (!inHtmlFile) {
-    FUNCTION_OUTPUT << ERROR_FILE_NOT_EXIST << getInputHtmlFilePath() << endl;
+  if (not fileExist(inHtmlFile, getInputHtmlFilePath()))
     return;
-  }
   ofstream outHtmlFile(getoutputHtmlFilepath());
   string line{emptyString};
   string singleLineHeader;
@@ -367,10 +357,8 @@ void CoupledBodyText::reformatParagraphToSmallerSize(
     const string &sampleBlock) {
   setInputOutputFiles();
   ifstream infile(m_inputFile);
-  if (!infile) {
-    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << m_inputFile << endl;
+  if (not fileExist(infile, m_inputFile))
     return;
-  }
   ofstream outfile(m_outputFile);
   if (debug >= LOG_INFO)
     METHOD_OUTPUT << utf8length(sampleBlock) << endl;
@@ -400,10 +388,8 @@ void CoupledBodyText::reformatParagraphToSmallerSize(
 void CoupledBodyText::fixPersonalView() {
   setInputOutputFiles();
   ifstream infile(m_inputFile);
-  if (!infile) {
-    FUNCTION_OUTPUT << ERROR_FILE_NOT_EXIST << m_inputFile << endl;
+  if (not fileExist(infile, m_inputFile))
     return;
-  }
   ofstream outfile(m_outputFile);
   bool unpairFound{false};
   while (!infile.eof()) {
@@ -533,10 +519,8 @@ void reformatTxtFilesForReader() {
 void CoupledBodyTextWithLink::removePersonalCommentsOverNumberedFiles() {
   setInputOutputFiles();
   ifstream infile(m_inputFile);
-  if (!infile) {
-    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << m_inputFile << endl;
+  if (not fileExist(infile, m_inputFile))
     return;
-  }
   ofstream outfile(m_outputFile);
   string inLine{"not found"};
   while (!infile.eof()) {

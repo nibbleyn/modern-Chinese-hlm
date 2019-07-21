@@ -204,7 +204,6 @@ string scanForSubComments(const string &original, const string &fromFile) {
  */
 void CoupledLink::fixFromString(const string &linkString) {
   m_fullString = linkString;
-  readDisplayType();
   readReferPara(linkString);
   fixReferSection(linkString);
   // no need for key for these links

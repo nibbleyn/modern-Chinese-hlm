@@ -65,11 +65,8 @@ void TableContainer::addExistingFrontLinks() {
   string starterFile = m_bodyTextDir + BODY_TEXT_STARTER;
 
   ifstream inStarterFile(starterFile);
-  if (!inStarterFile) {
-    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << starterFile << endl;
+  if (not fileExist(inStarterFile, starterFile))
     return;
-  }
-
   while (!inStarterFile.eof()) {
     string line{emptyString};
     getline(inStarterFile, line);

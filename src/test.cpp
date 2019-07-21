@@ -493,11 +493,8 @@ void CoupledBodyTextWithLink::printStringInLines() {
   setInputOutputFiles();
   //  ifstream infile(m_inputFile);
   ifstream checkFile(TO_CHECK_FILE);
-  if (!checkFile) {
-    METHOD_OUTPUT << ERROR_FILE_NOT_EXIST << m_inputFile << endl;
+  if (not fileExist(checkFile, m_inputFile))
     return;
-  }
-
   string line;
   while (!checkFile.eof()) {
     getline(checkFile, line);
