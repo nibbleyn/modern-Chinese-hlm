@@ -110,10 +110,6 @@ bool Link::readAnnotation(const string &linkString) {
 
 string Link::getWholeString() { return m_fullString; }
 
-string Link::getDisplayString() { return m_annotation; }
-
-size_t Link::displaySize() { return m_annotation.length(); }
-
 /**
  * must ensure this is not a lineNumber string, which is a normal link also
  * before calling this method
@@ -127,6 +123,7 @@ size_t Link::loadFirstFromContainedLine(const string &containedLine,
     METHOD_OUTPUT << m_fullString << endl;
   }
   readDisplayType();
+  m_displayText = m_annotation;
   readTypeAndAnnotation(m_fullString);
   return containedLine.find(linkStartChars, after);
 }

@@ -8,13 +8,10 @@ public:
     m_objectType = OBJECT_TYPE::COMMENT;
   }
   string getWholeString() override;
-  string getDisplayString() override;
-  size_t displaySize() override;
   size_t loadFirstFromContainedLine(const string &containedLine,
                                     size_t after = 0) override;
 
 private:
-  string m_displayText{emptyString};
   string m_fromFile{emptyString};
 };
 
@@ -26,35 +23,31 @@ public:
                      const string &attachmentString = attachmentUnit,
                      const string &sectionString = citationPara);
 
-  void fromSectionString(const string &citationString,
-                         const string &chapterString = defaultUnit,
-                         const string &attachmentString = attachmentUnit,
-                         const string &sectionString = citationPara);
-
   Citation() { m_objectType = OBJECT_TYPE::CITATION; }
-  Citation(AttachmentNumber num, ParaLineNumber paraLine)
-      : m_num(num), m_paraLine(paraLine) {
-    m_bodyText = getExpectedSection(m_num, m_paraLine);
+  void setReferSection(AttachmentNumber num, ParaLineNumber paraLine) {
+    updateWithAttachmentNumberAndParaLineNumber(num, paraLine);
+  }
+  Citation(AttachmentNumber num, ParaLineNumber paraLine) {
+    updateWithAttachmentNumberAndParaLineNumber(num, paraLine);
     m_objectType = OBJECT_TYPE::CITATION;
   }
   AttachmentNumber getAttachmentNumber() { return m_num; }
   ParaLineNumber getParaLineNumber() { return m_paraLine; }
-  void setReferSection(AttachmentNumber num, ParaLineNumber paraLine) {
-    m_num = num;
-    m_paraLine = paraLine;
-    m_bodyText = getExpectedSection(m_num, m_paraLine);
-  }
   bool isValid() { return m_paraLine != make_pair(0, 0); }
   bool equal(AttachmentNumber num, ParaLineNumber paraLine) {
     return (m_num == num and m_paraLine == paraLine);
   }
-  string getWholeString() override;
-  string getDisplayString() override;
-  size_t displaySize() override { return getDisplayString().length(); }
+  string getWholeString() override { return getStringWithTags(); }
   size_t loadFirstFromContainedLine(const string &containedLine,
                                     size_t after = 0) override;
 
 private:
+  void fromSectionString(const string &citationString,
+                         const string &chapterString = defaultUnit,
+                         const string &attachmentString = attachmentUnit,
+                         const string &sectionString = citationPara);
+  void updateWithAttachmentNumberAndParaLineNumber(AttachmentNumber num,
+                                                   ParaLineNumber paraLine);
   AttachmentNumber m_num{0, 0};
   ParaLineNumber m_paraLine{0, 0};
   size_t m_page{0};
@@ -99,8 +92,6 @@ public:
   virtual ~CoupledLink(){};
 
   string getWholeString() override;
-  string getDisplayString() override;
-  size_t displaySize() override;
   size_t loadFirstFromContainedLine(const string &containedLine,
                                     size_t after = 0) override;
   string asString(bool ignoreOriginalPart = false);

@@ -31,23 +31,9 @@ static constexpr const char *defaultTranslation = R"(XX)";
 static const string personalCommentTemplate =
     R"(<u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">XX</u>)";
 
-string fixPersonalCommentFromTemplate(const string &comment) {
-  string result = personalCommentTemplate;
-  replacePart(result, defaultTranslation, comment);
-  return result;
-}
-
 string PersonalComment::getWholeString() {
-  return fixPersonalCommentFromTemplate(m_bodyText);
+  return getStringFromTemplate(personalCommentTemplate, defaultTranslation);
 }
-string PersonalComment::getDisplayString() {
-  if (m_displayType == DISPLAY_TYPE::HIDDEN)
-    return emptyString;
-  else
-    return m_displayText;
-}
-
-size_t PersonalComment::displaySize() { return getDisplayString().length(); }
 
 size_t PersonalComment::loadFirstFromContainedLine(const string &containedLine,
                                                    size_t after) {
@@ -68,23 +54,9 @@ static constexpr const char *defaultComment = R"(XX)";
 static const string poemTranslationTemplate =
     R"(<samp unhidden font style="font-size: 12pt; font-family: 宋体; color:#ff00ff">XX</samp>)";
 
-string fixPoemTranslationFromTemplate(const string &translation) {
-  string result = poemTranslationTemplate;
-  replacePart(result, defaultComment, translation);
-  return result;
-}
-
 string PoemTranslation::getWholeString() {
-  return fixPoemTranslationFromTemplate(m_bodyText);
+  return getStringFromTemplate(poemTranslationTemplate, defaultComment);
 }
-string PoemTranslation::getDisplayString() {
-  if (m_displayType == DISPLAY_TYPE::HIDDEN)
-    return emptyString;
-  else
-    return m_displayText;
-}
-
-size_t PoemTranslation::displaySize() { return getDisplayString().length(); }
 
 size_t PoemTranslation::loadFirstFromContainedLine(const string &containedLine,
                                                    size_t after) {
@@ -104,21 +76,9 @@ size_t PoemTranslation::loadFirstFromContainedLine(const string &containedLine,
 static const string commentTemplate =
     R"(<cite unhidden>XX</cite>)";
 
-string fixCommentFromTemplate(const string &comment) {
-  string result = commentTemplate;
-  replacePart(result, defaultComment, comment);
-  return result;
+string Comment::getWholeString() {
+  return getStringFromTemplate(commentTemplate, defaultComment);
 }
-
-string Comment::getWholeString() { return fixCommentFromTemplate(m_bodyText); }
-string Comment::getDisplayString() {
-  if (m_displayType == DISPLAY_TYPE::HIDDEN)
-    return emptyString;
-  else
-    return m_displayText;
-}
-
-size_t Comment::displaySize() { return getDisplayString().length(); }
 
 size_t Comment::loadFirstFromContainedLine(const string &containedLine,
                                            size_t after) {
@@ -180,22 +140,6 @@ void Citation::fromSectionString(const string &citationString,
     m_paraLine.second = TurnToInt(line);
 }
 
-string Citation::getWholeString() {
-  // display property
-  string part0 = citationStartChars;
-  if (m_displayType != DISPLAY_TYPE::DIRECT)
-    part0 += displaySpace;
-  part0 += displayPropertyAsString();
-  return part0 + endOfBeginTag + m_bodyText + citationEndChars;
-}
-
-string Citation::getDisplayString() {
-  if (m_displayType == DISPLAY_TYPE::HIDDEN or not isValid())
-    return emptyString;
-  else
-    return m_bodyText;
-}
-
 size_t Citation::loadFirstFromContainedLine(const string &containedLine,
                                             size_t after) {
   m_fullString = getWholeStringBetweenTags(containedLine, citationStartChars,
@@ -208,5 +152,16 @@ size_t Citation::loadFirstFromContainedLine(const string &containedLine,
                                             citationEndChars);
   readDisplayType();
   fromSectionString(m_bodyText);
+  if (isValid())
+    m_displayText = m_bodyText;
   return containedLine.find(citationStartChars, after);
+}
+
+void Citation::updateWithAttachmentNumberAndParaLineNumber(
+    AttachmentNumber num, ParaLineNumber paraLine) {
+  m_num = num;
+  m_paraLine = paraLine;
+  m_bodyText = getExpectedSection(m_num, m_paraLine);
+  if (isValid())
+    m_displayText = m_bodyText;
 }

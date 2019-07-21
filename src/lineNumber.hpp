@@ -90,8 +90,6 @@ public:
   string getParaLineString() { return m_paraLineNumber.asString(); }
   LineNumber get() { return m_paraLineNumber; }
   string getWholeString() override;
-  string getDisplayString() override;
-  size_t displaySize() override;
   size_t loadFirstFromContainedLine(const string &containedLine,
                                     size_t after = 0) override;
 

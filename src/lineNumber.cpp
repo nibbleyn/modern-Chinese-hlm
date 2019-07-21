@@ -75,6 +75,8 @@ bool LineNumber::isWithinLineRange(int minPara, int maxPara, int minLine,
   return (biggerThanMin and lessThanMax);
 }
 
+static const string inBetweenParaAndLineNumber = R"(.)";
+
 /**
  * retrieve lineNumber from the link at the beginning of containedLine
  * and read from it the paraNumber and lineNumber
@@ -106,17 +108,15 @@ size_t LineNumberPlaceholderLink::loadFirstFromContainedLine(
                                     TurnToString(LineNumber::Limit - 1));
   else
     m_paraLineNumber.readFromString(substr);
-  return beginPos;
-}
 
-static const string inBetweenParaAndLineNumber = R"(.)";
-
-string LineNumberPlaceholderLink::getDisplayString() {
   if (m_paraLineNumber.getlineNumber() == 0)
-    return emptyString;
-  return TurnToString(m_paraLineNumber.getParaNumber()) +
-         inBetweenParaAndLineNumber +
-         TurnToString(m_paraLineNumber.getlineNumber());
+    m_displayText = emptyString;
+  else
+    m_displayText = TurnToString(m_paraLineNumber.getParaNumber()) +
+                    inBetweenParaAndLineNumber +
+                    TurnToString(m_paraLineNumber.getlineNumber());
+
+  return beginPos;
 }
 
 static const string inBetweenTwoParas = R"(" href=")";
@@ -140,8 +140,4 @@ string LineNumberPlaceholderLink::getWholeString() {
          TurnToString(m_paraLineNumber.getParaNumber()) +
          inBetweenParaAndLineNumber +
          TurnToString(m_paraLineNumber.getlineNumber()) + LineNumberEnd;
-}
-
-size_t LineNumberPlaceholderLink::displaySize() {
-  return getDisplayString().length();
 }

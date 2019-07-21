@@ -27,6 +27,17 @@ Object::ObjectTypeToString Object::EndTags = {
     {OBJECT_TYPE::COMMENT, commentEndChars},
     {OBJECT_TYPE::CITATION, citationEndChars}};
 
+static const string nameOfLineNumberType = R"(LINENUMBER)";
+static const string nameOfSpaceType = R"(SPACE)";
+static const string nameOfPoemType = R"(POEM)";
+static const string nameOfPoemTranslationType = R"(POEMTRANSLATION)";
+static const string nameOfLinkFromMainType = R"(LINKFROMMAIN)";
+static const string nameOfLinkFromAttachmentType = R"(LINKFROMATTACHMENT)";
+static const string nameOfCommentType = R"(COMMENT)";
+static const string nameOfPersonalCommentType = R"(PERSONALCOMMENT)";
+static const string nameOfTextType = R"(TEXT)";
+static const string nameOfCitationType = R"(CITATION)";
+
 Object::ObjectTypeToString Object::ObjectNames = {
     {OBJECT_TYPE::LINENUMBER, nameOfLineNumberType},
     {OBJECT_TYPE::SPACE, nameOfSpaceType},
@@ -95,6 +106,23 @@ void Object::readDisplayType() {
   }
 }
 
+string Object::getStringWithTags() {
+  // display property
+  string part0 = getStartTagOfObjectType(m_objectType);
+  if (m_displayType != DISPLAY_TYPE::DIRECT)
+    part0 += displaySpace;
+  part0 += displayPropertyAsString();
+  return part0 + endOfBeginTag + m_bodyText +
+         getEndTagOfObjectType(m_objectType);
+}
+
+string Object::getStringFromTemplate(const string &templateStr,
+                                     const string &defaultBodyText) {
+  string result = templateStr;
+  replacePart(result, defaultBodyText, m_bodyText);
+  return result;
+}
+
 size_t Space::loadFirstFromContainedLine(const string &containedLine,
                                          size_t after) {
   m_bodyText = displaySpace;
@@ -103,7 +131,7 @@ size_t Space::loadFirstFromContainedLine(const string &containedLine,
     METHOD_OUTPUT << "m_fullString: " << endl;
     METHOD_OUTPUT << m_fullString << endl;
   }
-  readDisplayType();
+  m_displayType = DISPLAY_TYPE::DIRECT;
   return containedLine.find(space, after);
 }
 
@@ -118,22 +146,6 @@ size_t Poem::loadFirstFromContainedLine(const string &containedLine,
   readDisplayType();
   m_bodyText =
       getIncludedStringBetweenTags(m_fullString, endOfBeginTag, poemEndChars);
+  m_displayText = m_bodyText;
   return containedLine.find(poemBeginChars, after);
 }
-
-string Poem::getWholeString() {
-  // display property
-  string part0 = poemBeginChars;
-  if (m_displayType != DISPLAY_TYPE::DIRECT)
-    part0 += displaySpace;
-  part0 += displayPropertyAsString();
-  return part0 + endOfBeginTag + m_bodyText + poemEndChars;
-}
-
-string Poem::getDisplayString() {
-  if (m_displayType == DISPLAY_TYPE::HIDDEN)
-    return emptyString;
-  else
-    return m_bodyText;
-}
-size_t Poem::displaySize() { return getDisplayString().length(); }

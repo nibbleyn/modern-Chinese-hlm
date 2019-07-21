@@ -23,7 +23,6 @@ void testSpace() {
       R"(<a unhidden id="P11L1">11.1</a>&nbsp;&nbsp; <strong unhidden>杜鹃无语正黄昏，荷锄归去掩重门。青灯照壁人初睡，冷雨敲窗被未温。</strong>&nbsp;&nbsp;&nbsp;&nbsp;<samp unhidden font style="font-size: 13.5pt; font-family:楷体; color:#ff00ff">（像杜鹃啼血一样）我泣尽了血泪默默无语，只发现愁惨的黄昏正在降临，只好扛着花锄忍痛归去，一层层带上身后的门。闺中点起青冷的灯光，摇摇曳曳照射着四壁，我才要躺下，拉上尚是冰凉的被裘，却又听见轻寒的春雨敲打着窗棂，更增加了一层寒意。</samp><br>)";
   unique_ptr<Space> sp = make_unique<Space>();
   auto offset = sp->loadFirstFromContainedLine(line);
-  sp->readDisplayType();
   FUNCTION_OUTPUT << "display Property: " << endl;
   FUNCTION_OUTPUT << sp->displayPropertyAsString() << endl;
   FUNCTION_OUTPUT << "first appearance offset: " << endl;
@@ -42,7 +41,6 @@ void testPoem() {
       R"(<a unhidden id="P11L1">11.1</a>&nbsp;&nbsp; <strong unhidden>杜鹃无语正黄昏，荷锄归去掩重门。青灯照壁人初睡，冷雨敲窗被未温。</strong>&nbsp;&nbsp;&nbsp;&nbsp;<samp unhidden font style="font-size: 13.5pt; font-family:楷体; color:#ff00ff">（像杜鹃啼血一样）我泣尽了血泪默默无语，只发现愁惨的黄昏正在降临，只好扛着花锄忍痛归去，一层层带上身后的门。闺中点起青冷的灯光，摇摇曳曳照射着四壁，我才要躺下，拉上尚是冰凉的被裘，却又听见轻寒的春雨敲打着窗棂，更增加了一层寒意。</samp><br>)";
   unique_ptr<Poem> poem1 = make_unique<Poem>();
   poem1->loadFirstFromContainedLine(poemStr);
-  poem1->readDisplayType();
   FUNCTION_OUTPUT << "display Property: " << endl;
   FUNCTION_OUTPUT << poem1->displayPropertyAsString() << endl;
   FUNCTION_OUTPUT << "length: " << poem1->length()
@@ -55,7 +53,6 @@ void testPoem() {
       R"(<strong>杜鹃无语正黄昏，荷锄归去掩重门。青灯照壁人初睡，冷雨敲窗被未温。</strong>)";
   poem1 = make_unique<Poem>();
   poem1->loadFirstFromContainedLine(poemStr);
-  poem1->readDisplayType();
   FUNCTION_OUTPUT << "display Property: " << endl;
   FUNCTION_OUTPUT << poem1->displayPropertyAsString() << endl;
   FUNCTION_OUTPUT << "length: " << poem1->length()
@@ -66,7 +63,6 @@ void testPoem() {
   FUNCTION_OUTPUT << poem1->getDisplayString() << "||" << endl;
   unique_ptr<Poem> poem2 = make_unique<Poem>();
   auto offset = poem2->loadFirstFromContainedLine(line);
-  poem2->readDisplayType();
   FUNCTION_OUTPUT << "display Property: " << endl;
   FUNCTION_OUTPUT << poem2->displayPropertyAsString() << endl;
   FUNCTION_OUTPUT << "first appearance offset: " << endl;
@@ -106,7 +102,6 @@ void testLineHeader(string lnStr) {
   FUNCTION_OUTPUT << "original: " << endl;
   FUNCTION_OUTPUT << lnStr << endl;
   LineNumberPlaceholderLink ln(lnStr);
-  ln.readDisplayType();
   FUNCTION_OUTPUT << "display Property: " << endl;
   FUNCTION_OUTPUT << ln.displayPropertyAsString() << endl;
   FUNCTION_OUTPUT << ln.getParaLineString() << endl;
@@ -129,7 +124,6 @@ void testLineHeaderFromContainedLine(string containedLine) {
   FUNCTION_OUTPUT << containedLine << endl;
   LineNumberPlaceholderLink ln;
   ln.loadFirstFromContainedLine(containedLine);
-  ln.readDisplayType();
   FUNCTION_OUTPUT << "display Property: " << endl;
   FUNCTION_OUTPUT << ln.displayPropertyAsString() << endl;
   FUNCTION_OUTPUT << ln.getParaLineString() << endl;
@@ -151,7 +145,6 @@ void testParagraphHeader(string lnStr) {
   FUNCTION_OUTPUT << "original: " << endl;
   FUNCTION_OUTPUT << lnStr << endl;
   LineNumberPlaceholderLink ln(lnStr);
-  ln.readDisplayType();
   FUNCTION_OUTPUT << "display Property: " << endl;
   FUNCTION_OUTPUT << ln.displayPropertyAsString() << endl;
   FUNCTION_OUTPUT << ln.getParaLineString() << endl;
@@ -174,7 +167,6 @@ void testParagraphHeaderFromContainedLine(string containedLine) {
   FUNCTION_OUTPUT << containedLine << endl;
   LineNumberPlaceholderLink ln;
   ln.loadFirstFromContainedLine(containedLine);
-  ln.readDisplayType();
   FUNCTION_OUTPUT << "display Property: " << endl;
   FUNCTION_OUTPUT << ln.displayPropertyAsString() << endl;
   FUNCTION_OUTPUT << ln.getParaLineString() << endl;

@@ -127,8 +127,6 @@ public:
   void setTypeThruFileNamePrefix(const string &link);
 
   string getWholeString() override;
-  string getDisplayString() override;
-  size_t displaySize() override;
   size_t loadFirstFromContainedLine(const string &containedLine,
                                     size_t after = 0) override;
 
@@ -146,5 +144,4 @@ protected:
   string m_referPara{invalidLineNumber}; // might be top bottom
   string m_annotation{emptyString};
   bool m_needChange{false};
-  string m_displayText{emptyString};
 };

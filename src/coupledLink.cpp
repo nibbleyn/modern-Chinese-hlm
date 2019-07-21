@@ -2,15 +2,6 @@
 
 string CoupledLink::getWholeString() { return asString(); }
 
-string CoupledLink::getDisplayString() {
-  if (m_displayType == DISPLAY_TYPE::HIDDEN)
-    return emptyString;
-  else
-    return m_displayText;
-}
-
-size_t CoupledLink::displaySize() { return getDisplayString().length(); }
-
 /**
  * must ensure this is not a lineNumber string, which is a normal link also
  * before calling this method

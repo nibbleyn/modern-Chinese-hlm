@@ -45,17 +45,6 @@ static const string personalCommentStartRestChars =
     R"( style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4)";
 static const string personalCommentEndChars = R"(</u>)";
 
-static const string nameOfLineNumberType = R"(LINENUMBER)";
-static const string nameOfSpaceType = R"(SPACE)";
-static const string nameOfPoemType = R"(POEM)";
-static const string nameOfPoemTranslationType = R"(POEMTRANSLATION)";
-static const string nameOfLinkFromMainType = R"(LINKFROMMAIN)";
-static const string nameOfLinkFromAttachmentType = R"(LINKFROMATTACHMENT)";
-static const string nameOfCommentType = R"(COMMENT)";
-static const string nameOfPersonalCommentType = R"(PERSONALCOMMENT)";
-static const string nameOfTextType = R"(TEXT)";
-static const string nameOfCitationType = R"(CITATION)";
-
 enum class DISPLAY_TYPE { DIRECT, HIDDEN, UNHIDDEN };
 
 class Object {
@@ -127,11 +116,16 @@ public:
   Object() = default;
   virtual ~Object(){};
 
-  virtual string getWholeString() = 0;
-  virtual string getDisplayString() = 0;
-  virtual size_t displaySize() = 0;
   virtual size_t loadFirstFromContainedLine(const string &containedLine,
                                             size_t after = 0) = 0;
+  virtual string getWholeString() = 0;
+  string getDisplayString() {
+    if (m_displayType == DISPLAY_TYPE::HIDDEN)
+      return emptyString;
+    else
+      return m_displayText;
+  };
+  size_t displaySize() { return getDisplayString().length(); };
   size_t length() {
     if (m_fullString.length() != getWholeString().length()) {
       METHOD_OUTPUT << " size not match: " << m_fullString.length() << " vs "
@@ -142,6 +136,9 @@ public:
     return m_fullString.length();
   }
   void readDisplayType();
+  string getStringWithTags();
+  string getStringFromTemplate(const string &templateStr,
+                               const string &defaultBodyText);
   void hide() { m_displayType = DISPLAY_TYPE::HIDDEN; }
   void unhide() { m_displayType = DISPLAY_TYPE::UNHIDDEN; }
   string displayPropertyAsString() {
@@ -155,29 +152,29 @@ public:
 
 protected:
   DISPLAY_TYPE getDisplayType() { return m_displayType; }
-  string m_bodyText{emptyString};
-  string m_fullString{emptyString};
-  DISPLAY_TYPE m_displayType{DISPLAY_TYPE::UNHIDDEN};
   OBJECT_TYPE m_objectType{OBJECT_TYPE::TEXT};
+  string m_fullString{emptyString};
+  string m_bodyText{emptyString};
+  string m_displayText{emptyString};
+  DISPLAY_TYPE m_displayType{DISPLAY_TYPE::UNHIDDEN};
 };
 
 class Space : public Object {
 public:
-  Space() { m_objectType = OBJECT_TYPE::SPACE; }
+  Space() {
+    m_objectType = OBJECT_TYPE::SPACE;
+    m_displayText = displaySpace;
+    m_fullString = space;
+  }
   string getWholeString() override { return space; };
-  string getDisplayString() override { return displaySpace; };
   size_t loadFirstFromContainedLine(const string &containedLine,
                                     size_t after = 0) override;
-  size_t displaySize() override { return displaySpace.length(); };
-  void readDisplayType() { m_displayType = DISPLAY_TYPE::DIRECT; }
 };
 
 class Poem : public Object {
 public:
   Poem() { m_objectType = OBJECT_TYPE::POEM; }
-  string getWholeString() override;
-  string getDisplayString() override;
+  string getWholeString() override { return getStringWithTags(); }
   size_t loadFirstFromContainedLine(const string &containedLine,
                                     size_t after = 0) override;
-  size_t displaySize() override;
 };
