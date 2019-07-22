@@ -80,7 +80,7 @@ int main(int argc, char **argv) {
     fixLinksFromJPM(false);
     break;
   case 21:
-    testFunctions(3);
+    testFunctions(9);
     break;
   case 22:
     tools(15);

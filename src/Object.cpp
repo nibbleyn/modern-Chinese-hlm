@@ -123,6 +123,22 @@ string Object::getStringFromTemplate(const string &templateStr,
   return result;
 }
 
+size_t
+Object::getFullStringAndBodyTextFromContainedLine(const string &containedLine,
+                                                  size_t after) {
+  m_fullString = getWholeStringBetweenTags(
+      containedLine, getStartTagOfObjectType(m_objectType),
+      getEndTagOfObjectType(m_objectType), after);
+  if (debug >= LOG_INFO) {
+    METHOD_OUTPUT << "m_fullString: " << endl;
+    METHOD_OUTPUT << m_fullString << endl;
+  }
+  readDisplayType();
+  m_bodyText = getIncludedStringBetweenTags(
+      m_fullString, endOfBeginTag, getEndTagOfObjectType(m_objectType));
+  return containedLine.find(getStartTagOfObjectType(m_objectType), after);
+}
+
 size_t Space::loadFirstFromContainedLine(const string &containedLine,
                                          size_t after) {
   m_bodyText = displaySpace;
@@ -137,15 +153,8 @@ size_t Space::loadFirstFromContainedLine(const string &containedLine,
 
 size_t Poem::loadFirstFromContainedLine(const string &containedLine,
                                         size_t after) {
-  m_fullString = getWholeStringBetweenTags(containedLine, poemBeginChars,
-                                           poemEndChars, after);
-  if (debug >= LOG_INFO) {
-    METHOD_OUTPUT << "m_fullString: " << endl;
-    METHOD_OUTPUT << m_fullString << endl;
-  }
-  readDisplayType();
-  m_bodyText =
-      getIncludedStringBetweenTags(m_fullString, endOfBeginTag, poemEndChars);
-  m_displayText = m_bodyText;
-  return containedLine.find(poemBeginChars, after);
+  auto pos = getFullStringAndBodyTextFromContainedLine(containedLine, after);
+  if (pos != string::npos)
+    m_displayText = m_bodyText;
+  return pos;
 }

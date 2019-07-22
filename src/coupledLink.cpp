@@ -8,22 +8,20 @@ string CoupledLink::getWholeString() { return asString(); }
  */
 size_t CoupledLink::loadFirstFromContainedLine(const string &containedLine,
                                                size_t after) {
-  if (containedLine.find(linkStartChars, after) == string::npos)
-    return string::npos;
-  m_fullString = getWholeStringBetweenTags(containedLine, linkStartChars,
-                                           linkEndChars, after);
-  if (debug >= LOG_INFO) {
-    METHOD_OUTPUT << "m_fullString: " << endl;
-    METHOD_OUTPUT << m_fullString << endl;
+  auto pos = getFullStringAndBodyTextFromContainedLine(containedLine, after);
+  // skip lineNumber link
+  if (m_fullString.find(LineNumberIdentity) != string::npos)
+    pos = getFullStringAndBodyTextFromContainedLine(containedLine, pos + 1);
+  if (pos != string::npos) {
+    readTypeAndAnnotation(m_fullString);
+    readReferFileName(m_fullString); // second step of construction
+    fixFromString(m_fullString);
+    if (debug >= LOG_INFO) {
+      auto len = length();
+      METHOD_OUTPUT << "after fix length: " << len << endl;
+    }
   }
-  readTypeAndAnnotation(m_fullString);
-  readReferFileName(m_fullString); // second step of construction
-  fixFromString(m_fullString);
-  if (debug >= LOG_INFO) {
-    auto len = length();
-    METHOD_OUTPUT << "after fix length: " << len << endl;
-  }
-  return containedLine.find(linkStartChars, after);
+  return pos;
 }
 
 /**

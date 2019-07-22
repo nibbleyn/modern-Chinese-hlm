@@ -37,17 +37,10 @@ string PersonalComment::getWholeString() {
 
 size_t PersonalComment::loadFirstFromContainedLine(const string &containedLine,
                                                    size_t after) {
-  m_fullString = getWholeStringBetweenTags(
-      containedLine, personalCommentStartChars, personalCommentEndChars, after);
-  if (debug >= LOG_INFO) {
-    METHOD_OUTPUT << "m_fullString: " << endl;
-    METHOD_OUTPUT << m_fullString << endl;
-  }
-  readDisplayType();
-  m_bodyText = getIncludedStringBetweenTags(m_fullString, endOfBeginTag,
-                                            personalCommentEndChars);
-  m_displayText = scanForSubLinks(m_bodyText, m_fromFile);
-  return containedLine.find(personalCommentStartChars, after);
+  auto pos = getFullStringAndBodyTextFromContainedLine(containedLine, after);
+  if (pos != string::npos)
+    m_displayText = scanForSubLinks(m_bodyText, m_fromFile);
+  return pos;
 }
 
 static constexpr const char *defaultComment = R"(XX)";
@@ -60,17 +53,10 @@ string PoemTranslation::getWholeString() {
 
 size_t PoemTranslation::loadFirstFromContainedLine(const string &containedLine,
                                                    size_t after) {
-  m_fullString = getWholeStringBetweenTags(
-      containedLine, poemTranslationBeginChars, poemTranslationEndChars, after);
-  if (debug >= LOG_INFO) {
-    METHOD_OUTPUT << "m_fullString: " << endl;
-    METHOD_OUTPUT << m_fullString << endl;
-  }
-  readDisplayType();
-  m_bodyText = getIncludedStringBetweenTags(m_fullString, endOfBeginTag,
-                                            poemTranslationEndChars);
-  m_displayText = scanForSubLinks(m_bodyText, m_fromFile);
-  return containedLine.find(poemTranslationBeginChars, after);
+  auto pos = getFullStringAndBodyTextFromContainedLine(containedLine, after);
+  if (pos != string::npos)
+    m_displayText = scanForSubLinks(m_bodyText, m_fromFile);
+  return pos;
 }
 
 static const string commentTemplate =
@@ -82,17 +68,10 @@ string Comment::getWholeString() {
 
 size_t Comment::loadFirstFromContainedLine(const string &containedLine,
                                            size_t after) {
-  m_fullString = getWholeStringBetweenTags(containedLine, commentBeginChars,
-                                           commentEndChars, after);
-  if (debug >= LOG_INFO) {
-    METHOD_OUTPUT << "m_fullString: " << endl;
-    METHOD_OUTPUT << m_fullString << endl;
-  }
-  readDisplayType();
-  m_bodyText = getIncludedStringBetweenTags(m_fullString, endOfBeginTag,
-                                            commentEndChars);
-  m_displayText = scanForSubLinks(m_bodyText, m_fromFile);
-  return containedLine.find(commentBeginChars, after);
+  auto pos = getFullStringAndBodyTextFromContainedLine(containedLine, after);
+  if (pos != string::npos)
+    m_displayText = scanForSubLinks(m_bodyText, m_fromFile);
+  return pos;
 }
 
 string Citation::getExpectedSection(AttachmentNumber num,
@@ -142,19 +121,13 @@ void Citation::fromSectionString(const string &citationString,
 
 size_t Citation::loadFirstFromContainedLine(const string &containedLine,
                                             size_t after) {
-  m_fullString = getWholeStringBetweenTags(containedLine, citationStartChars,
-                                           citationEndChars, after);
-  if (debug >= LOG_INFO) {
-    METHOD_OUTPUT << "m_fullString: " << endl;
-    METHOD_OUTPUT << m_fullString << endl;
+  auto pos = getFullStringAndBodyTextFromContainedLine(containedLine, after);
+  if (pos != string::npos) {
+    fromSectionString(m_bodyText);
+    if (isValid())
+      m_displayText = m_bodyText;
   }
-  m_bodyText = getIncludedStringBetweenTags(m_fullString, endOfBeginTag,
-                                            citationEndChars);
-  readDisplayType();
-  fromSectionString(m_bodyText);
-  if (isValid())
-    m_displayText = m_bodyText;
-  return containedLine.find(citationStartChars, after);
+  return pos;
 }
 
 void Citation::updateWithAttachmentNumberAndParaLineNumber(

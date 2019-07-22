@@ -116,13 +116,13 @@ string Link::getWholeString() { return m_fullString; }
  */
 size_t Link::loadFirstFromContainedLine(const string &containedLine,
                                         size_t after) {
-  m_fullString = getWholeStringBetweenTags(containedLine, linkStartChars,
-                                           linkEndChars, after);
-  if (debug >= LOG_INFO) {
-    METHOD_OUTPUT << "m_fullString: " << endl;
-    METHOD_OUTPUT << m_fullString << endl;
+  auto pos = getFullStringAndBodyTextFromContainedLine(containedLine, after);
+  // skip lineNumber link
+  if (m_fullString.find(LineNumberIdentity) != string::npos)
+    pos = getFullStringAndBodyTextFromContainedLine(containedLine, pos + 1);
+  if (pos != string::npos) {
+    readTypeAndAnnotation(m_fullString);
+    m_displayText = m_annotation;
   }
-  m_displayText = m_annotation;
-  readTypeAndAnnotation(m_fullString);
-  return containedLine.find(linkStartChars, after);
+  return pos;
 }

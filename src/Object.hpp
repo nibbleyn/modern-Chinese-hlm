@@ -139,6 +139,7 @@ public:
   string getStringWithTags();
   string getStringFromTemplate(const string &templateStr,
                                const string &defaultBodyText);
+
   void hide() { m_displayType = DISPLAY_TYPE::HIDDEN; }
   void unhide() { m_displayType = DISPLAY_TYPE::UNHIDDEN; }
   string displayPropertyAsString() {
@@ -151,6 +152,8 @@ public:
   }
 
 protected:
+  size_t getFullStringAndBodyTextFromContainedLine(const string &containedLine,
+                                                   size_t after);
   DISPLAY_TYPE getDisplayType() { return m_displayType; }
   OBJECT_TYPE m_objectType{OBJECT_TYPE::TEXT};
   string m_fullString{emptyString};

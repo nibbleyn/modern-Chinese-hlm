@@ -1,4 +1,4 @@
-*************************line 676: HLM test started *************************
+*************************line 665: HLM test started *************************
 23CoupledBodyTextWithLink::getDisplayString              1436
 25LineNumberPlaceholderLink::loadFirstFromContainedLine              P9L3
 23CoupledBodyTextWithLink::printOffsetToObjectType              m_offsetOfTypes:
@@ -59,8 +59,8 @@
 23CoupledBodyTextWithLink::printOffsetToObjectType              695 PERSONALCOMMENT
 23CoupledBodyTextWithLink::getDisplayString              41 1  
 23CoupledBodyTextWithLink::getDisplayString              9.3   |8|
-4Poem::loadFirstFromContainedLine              m_fullString: 
-4Poem::loadFirstFromContainedLine              <strong unhidden>惯养娇生笑你痴，菱花空对雪澌澌。好防佳节元宵后，便是烟消火灭时。</strong>
+4Poem::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+4Poem::getFullStringAndBodyTextFromContainedLine              <strong unhidden>惯养娇生笑你痴，菱花空对雪澌澌。好防佳节元宵后，便是烟消火灭时。</strong>
 4Poem::readDisplayType              display Type: unhidden
 23CoupledBodyTextWithLink::getDisplayString              whole string: <strong unhidden>惯养娇生笑你痴，菱花空对雪澌澌。好防佳节元宵后，便是烟消火灭时。</strong>
 23CoupledBodyTextWithLink::getDisplayString              display as:惯养娇生笑你痴，菱花空对雪澌澌。好防佳节元宵后，便是烟消火灭时。||
@@ -124,18 +124,19 @@
 23CoupledBodyTextWithLink::printOffsetToObjectType              695 PERSONALCOMMENT
 23CoupledBodyTextWithLink::getDisplayString              188 0 
 23CoupledBodyTextWithLink::getDisplayString              9.3   惯养娇生笑你痴，菱花空对雪澌澌。好防佳节元宵后，便是烟消火灭时。    |8|
-15PoemTranslation::loadFirstFromContainedLine              m_fullString: 
-15PoemTranslation::loadFirstFromContainedLine              <samp unhidden font style="font-size: 12pt; font-family: 宋体; color:#ff00ff">你这么痴心 娇生惯养她，实在是可笑。你知道她有多么生不逢时吗？<a unhidden title="菱角菱花" href="a080.htm#P1L4"><sub hidden>第80回1.4节:</sub>菱角菱花皆盛于秋</a>（<a unhidden title="菱角菱花" href="original\c080.htm#P1L3"><sub hidden>第80回1.3节:</sub>原文</a>），可却毫无办法要面对茫茫大雪。要小心元宵佳节一过，一切都会烟消云散</samp>
+15PoemTranslation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+15PoemTranslation::getFullStringAndBodyTextFromContainedLine              <samp unhidden font style="font-size: 12pt; font-family: 宋体; color:#ff00ff">你这么痴心 娇生惯养她，实在是可笑。你知道她有多么生不逢时吗？<a unhidden title="菱角菱花" href="a080.htm#P1L4"><sub hidden>第80回1.4节:</sub>菱角菱花皆盛于秋</a>（<a unhidden title="菱角菱花" href="original\c080.htm#P1L3"><sub hidden>第80回1.3节:</sub>原文</a>），可却毫无办法要面对茫茫大雪。要小心元宵佳节一过，一切都会烟消云散</samp>
 15PoemTranslation::readDisplayType              display Type: unhidden
-12LinkFromMain::loadFirstFromContainedLine              m_fullString: 
-12LinkFromMain::loadFirstFromContainedLine              <a unhidden title="菱角菱花" href="a080.htm#P1L4"><sub hidden>第80回1.4节:</sub>菱角菱花皆盛于秋</a>
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              <a unhidden title="菱角菱花" href="a080.htm#P1L4"><sub hidden>第80回1.4节:</sub>菱角菱花皆盛于秋</a>
+12LinkFromMain::readDisplayType              display Type: unhidden
+12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readType              type seen from prefix: a080
 12LinkFromMain::readAnnotation              annotation: 菱角菱花皆盛于秋
 12LinkFromMain::readReferFileName              chapterNumber: 80, attachmentNumber: 0
-12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readReferPara              referPara: P1L4
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              <sub hidden>第80回1.4节:</sub>
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              <sub hidden>第80回1.4节:</sub>
 8Citation::readDisplayType              display Type: hidden
 15CoupledBodyText::setInputOutputFiles              input file is: bodyTexts/output/Main80.txt
 15CoupledBodyText::setInputOutputFiles              output file is: bodyTexts/afterFix/Main80.txt
@@ -146,15 +147,16 @@
 12LinkFromMain::length              <a unhidden title="菱角菱花" href="a080.htm#P1L4"><sub hidden>第80回1.4节:</sub>菱角菱花皆盛于秋</a>
 12LinkFromMain::length              <a unhidden title="菱角菱花" href="a080.htm#P1L4">↑<sub hidden>第80回1.4节:</sub>菱角菱花皆盛于秋</a>
 12LinkFromMain::loadFirstFromContainedLine              after fix length: 115
-12LinkFromMain::loadFirstFromContainedLine              m_fullString: 
-12LinkFromMain::loadFirstFromContainedLine              <a unhidden title="菱角菱花" href="original\c080.htm#P1L3"><sub hidden>第80回1.3节:</sub>原文</a>
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              <a unhidden title="菱角菱花" href="original\c080.htm#P1L3"><sub hidden>第80回1.3节:</sub>原文</a>
+12LinkFromMain::readDisplayType              display Type: unhidden
+12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readType              type seen from prefix: original\c080
 12LinkFromMain::readAnnotation              annotation: 原文
 12LinkFromMain::readReferFileName              chapterNumber: 80, attachmentNumber: 0
-12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readReferPara              referPara: P1L3
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              <sub hidden>第80回1.3节:</sub>
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              <sub hidden>第80回1.3节:</sub>
 8Citation::readDisplayType              display Type: hidden
 15CoupledBodyText::setInputOutputFiles              input file is: bodyTexts/output/Org80.txt
 15CoupledBodyText::setInputOutputFiles              output file is: bodyTexts/afterFix/Org80.txt
@@ -176,18 +178,19 @@
 23CoupledBodyTextWithLink::printOffsetToObjectType              695 PERSONALCOMMENT
 23CoupledBodyTextWithLink::getDisplayString              692 3 （
 23CoupledBodyTextWithLink::getDisplayString              9.3   惯养娇生笑你痴，菱花空对雪澌澌。好防佳节元宵后，便是烟消火灭时。    你这么痴心 娇生惯养她，实在是可笑。你知道她有多么生不逢时吗？↑菱角菱花皆盛于秋（↑原文），可却毫无办法要面对茫茫大雪。要小心元宵佳节一过，一切都会烟消云散（|8|
-15PersonalComment::loadFirstFromContainedLine              m_fullString: 
-15PersonalComment::loadFirstFromContainedLine              <u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4"><a unhidden title="清净孤独" href="a022.htm#P13L4"><sub hidden>第22回13.4节:</sub>不详灯谜</a>（<a unhidden title="清净孤独" href="original\c022.htm#P12L1"><sub hidden>第22回12.1节:</sub>原文</a>）、<a unhidden title="进贡" href="a054.htm#P13L1"><sub hidden>第54回13.1节:</sub>聋子放炮仗</a>（<a unhidden title="进贡" href="original\c054.htm#P8L2"><sub hidden>第54回8.2节:</sub>原文</a>）、<a unhidden title="按爵" href="a058.htm#P1L2"><sub hidden>第58回1.2节:</sub>老太妃薨毙</a>（<a unhidden title="按爵" href="original\c058.htm#P1L2"><sub hidden>第58回1.2节:</sub>原文</a>）。</u>
+15PersonalComment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+15PersonalComment::getFullStringAndBodyTextFromContainedLine              <u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4"><a unhidden title="清净孤独" href="a022.htm#P13L4"><sub hidden>第22回13.4节:</sub>不详灯谜</a>（<a unhidden title="清净孤独" href="original\c022.htm#P12L1"><sub hidden>第22回12.1节:</sub>原文</a>）、<a unhidden title="进贡" href="a054.htm#P13L1"><sub hidden>第54回13.1节:</sub>聋子放炮仗</a>（<a unhidden title="进贡" href="original\c054.htm#P8L2"><sub hidden>第54回8.2节:</sub>原文</a>）、<a unhidden title="按爵" href="a058.htm#P1L2"><sub hidden>第58回1.2节:</sub>老太妃薨毙</a>（<a unhidden title="按爵" href="original\c058.htm#P1L2"><sub hidden>第58回1.2节:</sub>原文</a>）。</u>
 15PersonalComment::readDisplayType              display Type: unhidden
-12LinkFromMain::loadFirstFromContainedLine              m_fullString: 
-12LinkFromMain::loadFirstFromContainedLine              <a unhidden title="清净孤独" href="a022.htm#P13L4"><sub hidden>第22回13.4节:</sub>不详灯谜</a>
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              <a unhidden title="清净孤独" href="a022.htm#P13L4"><sub hidden>第22回13.4节:</sub>不详灯谜</a>
+12LinkFromMain::readDisplayType              display Type: unhidden
+12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readType              type seen from prefix: a022
 12LinkFromMain::readAnnotation              annotation: 不详灯谜
 12LinkFromMain::readReferFileName              chapterNumber: 22, attachmentNumber: 0
-12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readReferPara              referPara: P13L4
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              <sub hidden>第22回13.4节:</sub>
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              <sub hidden>第22回13.4节:</sub>
 8Citation::readDisplayType              display Type: hidden
 15CoupledBodyText::setInputOutputFiles              input file is: bodyTexts/output/Main22.txt
 15CoupledBodyText::setInputOutputFiles              output file is: bodyTexts/afterFix/Main22.txt
@@ -198,15 +201,16 @@
 12LinkFromMain::length              <a unhidden title="清净孤独" href="a022.htm#P13L4"><sub hidden>第22回13.4节:</sub>不详灯谜</a>
 12LinkFromMain::length              <a unhidden title="清净孤独" href="a022.htm#P13L4">↑<sub hidden>第22回13.4节:</sub>不详灯谜</a>
 12LinkFromMain::loadFirstFromContainedLine              after fix length: 105
-12LinkFromMain::loadFirstFromContainedLine              m_fullString: 
-12LinkFromMain::loadFirstFromContainedLine              <a unhidden title="清净孤独" href="original\c022.htm#P12L1"><sub hidden>第22回12.1节:</sub>原文</a>
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              <a unhidden title="清净孤独" href="original\c022.htm#P12L1"><sub hidden>第22回12.1节:</sub>原文</a>
+12LinkFromMain::readDisplayType              display Type: unhidden
+12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readType              type seen from prefix: original\c022
 12LinkFromMain::readAnnotation              annotation: 原文
 12LinkFromMain::readReferFileName              chapterNumber: 22, attachmentNumber: 0
-12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readReferPara              referPara: P12L1
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              <sub hidden>第22回12.1节:</sub>
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              <sub hidden>第22回12.1节:</sub>
 8Citation::readDisplayType              display Type: hidden
 15CoupledBodyText::setInputOutputFiles              input file is: bodyTexts/output/Org22.txt
 15CoupledBodyText::setInputOutputFiles              output file is: bodyTexts/afterFix/Org22.txt
@@ -217,15 +221,16 @@
 12LinkFromMain::length              <a unhidden title="清净孤独" href="original\c022.htm#P12L1"><sub hidden>第22回12.1节:</sub>原文</a>
 12LinkFromMain::length              <a unhidden title="清净孤独" href="original\c022.htm#P12L1">↑<sub hidden>第22回12.1节:</sub>原文</a>
 12LinkFromMain::loadFirstFromContainedLine              after fix length: 108
-12LinkFromMain::loadFirstFromContainedLine              m_fullString: 
-12LinkFromMain::loadFirstFromContainedLine              <a unhidden title="进贡" href="a054.htm#P13L1"><sub hidden>第54回13.1节:</sub>聋子放炮仗</a>
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              <a unhidden title="进贡" href="a054.htm#P13L1"><sub hidden>第54回13.1节:</sub>聋子放炮仗</a>
+12LinkFromMain::readDisplayType              display Type: unhidden
+12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readType              type seen from prefix: a054
 12LinkFromMain::readAnnotation              annotation: 聋子放炮仗
 12LinkFromMain::readReferFileName              chapterNumber: 54, attachmentNumber: 0
-12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readReferPara              referPara: P13L1
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              <sub hidden>第54回13.1节:</sub>
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              <sub hidden>第54回13.1节:</sub>
 8Citation::readDisplayType              display Type: hidden
 15CoupledBodyText::setInputOutputFiles              input file is: bodyTexts/output/Main54.txt
 15CoupledBodyText::setInputOutputFiles              output file is: bodyTexts/afterFix/Main54.txt
@@ -237,15 +242,16 @@ isFoundOutsidePersonalComments               unhidden style="text-decoration-col
 12LinkFromMain::length              <a unhidden title="进贡" href="a054.htm#P13L1"><sub hidden>第54回13.1节:</sub>聋子放炮仗</a>
 12LinkFromMain::length              <a unhidden title="进贡" href="a054.htm#P13L1">↑<sub hidden>第54回13.1节:</sub>聋子放炮仗</a>
 12LinkFromMain::loadFirstFromContainedLine              after fix length: 102
-12LinkFromMain::loadFirstFromContainedLine              m_fullString: 
-12LinkFromMain::loadFirstFromContainedLine              <a unhidden title="进贡" href="original\c054.htm#P8L2"><sub hidden>第54回8.2节:</sub>原文</a>
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              <a unhidden title="进贡" href="original\c054.htm#P8L2"><sub hidden>第54回8.2节:</sub>原文</a>
+12LinkFromMain::readDisplayType              display Type: unhidden
+12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readType              type seen from prefix: original\c054
 12LinkFromMain::readAnnotation              annotation: 原文
 12LinkFromMain::readReferFileName              chapterNumber: 54, attachmentNumber: 0
-12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readReferPara              referPara: P8L2
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              <sub hidden>第54回8.2节:</sub>
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              <sub hidden>第54回8.2节:</sub>
 8Citation::readDisplayType              display Type: hidden
 15CoupledBodyText::setInputOutputFiles              input file is: bodyTexts/output/Org54.txt
 15CoupledBodyText::setInputOutputFiles              output file is: bodyTexts/afterFix/Org54.txt
@@ -256,15 +262,16 @@ isFoundOutsidePersonalComments               unhidden style="text-decoration-col
 12LinkFromMain::length              <a unhidden title="进贡" href="original\c054.htm#P8L2"><sub hidden>第54回8.2节:</sub>原文</a>
 12LinkFromMain::length              <a unhidden title="进贡" href="original\c054.htm#P8L2">↑<sub hidden>第54回8.2节:</sub>原文</a>
 12LinkFromMain::loadFirstFromContainedLine              after fix length: 100
-12LinkFromMain::loadFirstFromContainedLine              m_fullString: 
-12LinkFromMain::loadFirstFromContainedLine              <a unhidden title="按爵" href="a058.htm#P1L2"><sub hidden>第58回1.2节:</sub>老太妃薨毙</a>
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              <a unhidden title="按爵" href="a058.htm#P1L2"><sub hidden>第58回1.2节:</sub>老太妃薨毙</a>
+12LinkFromMain::readDisplayType              display Type: unhidden
+12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readType              type seen from prefix: a058
 12LinkFromMain::readAnnotation              annotation: 老太妃薨毙
 12LinkFromMain::readReferFileName              chapterNumber: 58, attachmentNumber: 0
-12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readReferPara              referPara: P1L2
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              <sub hidden>第58回1.2节:</sub>
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              <sub hidden>第58回1.2节:</sub>
 8Citation::readDisplayType              display Type: hidden
 15CoupledBodyText::setInputOutputFiles              input file is: bodyTexts/output/Main58.txt
 15CoupledBodyText::setInputOutputFiles              output file is: bodyTexts/afterFix/Main58.txt
@@ -275,15 +282,16 @@ isFoundOutsidePersonalComments               unhidden style="text-decoration-col
 12LinkFromMain::length              <a unhidden title="按爵" href="a058.htm#P1L2"><sub hidden>第58回1.2节:</sub>老太妃薨毙</a>
 12LinkFromMain::length              <a unhidden title="按爵" href="a058.htm#P1L2">↑<sub hidden>第58回1.2节:</sub>老太妃薨毙</a>
 12LinkFromMain::loadFirstFromContainedLine              after fix length: 100
-12LinkFromMain::loadFirstFromContainedLine              m_fullString: 
-12LinkFromMain::loadFirstFromContainedLine              <a unhidden title="按爵" href="original\c058.htm#P1L2"><sub hidden>第58回1.2节:</sub>原文</a>
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              <a unhidden title="按爵" href="original\c058.htm#P1L2"><sub hidden>第58回1.2节:</sub>原文</a>
+12LinkFromMain::readDisplayType              display Type: unhidden
+12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readType              type seen from prefix: original\c058
 12LinkFromMain::readAnnotation              annotation: 原文
 12LinkFromMain::readReferFileName              chapterNumber: 58, attachmentNumber: 0
-12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readReferPara              referPara: P1L2
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              <sub hidden>第58回1.2节:</sub>
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              <sub hidden>第58回1.2节:</sub>
 8Citation::readDisplayType              display Type: hidden
 15CoupledBodyText::setInputOutputFiles              input file is: bodyTexts/output/Org58.txt
 15CoupledBodyText::setInputOutputFiles              output file is: bodyTexts/afterFix/Org58.txt
@@ -302,7 +310,7 @@ isFoundOutsidePersonalComments               unhidden style="text-decoration-col
 printCompareResult              9.3   惯养娇生笑你痴，菱花空对雪澌澌。好防佳节元宵后，便是烟消火灭时。    你这么痴心 娇生惯养她，实在是可笑。你知道她有多么生不逢时吗？↑菱角菱花皆盛于秋（↑原文），可却毫无办法要面对茫茫大雪。要小心元宵佳节一过，一切都会烟消云散（↑不详灯谜（↑原文）、↑聋子放炮仗（↑原文）、↑老太妃薨毙（↑原文）。）||
 printCompareResult              9.3   惯养娇生笑你痴，菱花空对雪澌澌。好防佳节元宵后，便是烟消火灭时。    你这么痴心 娇生惯养她，实在是可笑。你知道她有多么生不逢时吗？↑菱角菱花皆盛于秋（↑原文），可却毫无办法要面对茫茫大雪。要小心元宵佳节一过，一切都会烟消云散（↑不详灯谜（↑原文）、↑聋子放炮仗（↑原文）、↑老太妃薨毙（↑原文）。）||
 printCompareResult              same
-*************************line 562: compare test 0 finished *************************
+*************************line 551: compare test 0 finished *************************
 23CoupledBodyTextWithLink::getDisplayString              1714
 23CoupledBodyTextWithLink::printOffsetToObjectType              m_offsetOfTypes:
 23CoupledBodyTextWithLink::printOffsetToObjectType              12 COMMENT
@@ -330,8 +338,8 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printPoemTranslationStringTable              no entry in m_poemTranslationStringTable.
 23CoupledBodyTextWithLink::getDisplayString              0 12 我哥哥（
 23CoupledBodyTextWithLink::getDisplayString              我哥哥（|8|
-7Comment::loadFirstFromContainedLine              m_fullString: 
-7Comment::loadFirstFromContainedLine              <cite unhidden>其实</cite>
+7Comment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+7Comment::getFullStringAndBodyTextFromContainedLine              <cite unhidden>其实</cite>
 7Comment::readDisplayType              display Type: unhidden
 23CoupledBodyTextWithLink::getDisplayString              whole string: <cite unhidden>其实</cite>
 23CoupledBodyTextWithLink::getDisplayString              display as:其实||
@@ -343,8 +351,8 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printOffsetToObjectType              508 LINKFROMMAIN
 23CoupledBodyTextWithLink::getDisplayString              40 21 ）已经相准了（
 23CoupledBodyTextWithLink::getDisplayString              我哥哥（其实）已经相准了（|8|
-7Comment::loadFirstFromContainedLine              m_fullString: 
-7Comment::loadFirstFromContainedLine              <cite unhidden>媳妇</cite>
+7Comment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+7Comment::getFullStringAndBodyTextFromContainedLine              <cite unhidden>媳妇</cite>
 7Comment::readDisplayType              display Type: unhidden
 23CoupledBodyTextWithLink::getDisplayString              whole string: <cite unhidden>媳妇</cite>
 23CoupledBodyTextWithLink::getDisplayString              display as:媳妇||
@@ -356,8 +364,8 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printOffsetToObjectType              508 LINKFROMMAIN
 23CoupledBodyTextWithLink::getDisplayString              89 21 ），只等来家（
 23CoupledBodyTextWithLink::getDisplayString              我哥哥（其实）已经相准了（媳妇），只等来家（|8|
-7Comment::loadFirstFromContainedLine              m_fullString: 
-7Comment::loadFirstFromContainedLine              <cite unhidden>就派人往这边</cite>
+7Comment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+7Comment::getFullStringAndBodyTextFromContainedLine              <cite unhidden>就派人往这边</cite>
 7Comment::readDisplayType              display Type: unhidden
 23CoupledBodyTextWithLink::getDisplayString              whole string: <cite unhidden>就派人往这边</cite>
 23CoupledBodyTextWithLink::getDisplayString              display as:就派人往这边||
@@ -369,8 +377,8 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printOffsetToObjectType              508 LINKFROMMAIN
 23CoupledBodyTextWithLink::getDisplayString              150 21 ）就下定了，（
 23CoupledBodyTextWithLink::getDisplayString              我哥哥（其实）已经相准了（媳妇），只等来家（就派人往这边）就下定了，（|8|
-7Comment::loadFirstFromContainedLine              m_fullString: 
-7Comment::loadFirstFromContainedLine              <cite unhidden>我</cite>
+7Comment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+7Comment::getFullStringAndBodyTextFromContainedLine              <cite unhidden>我</cite>
 7Comment::readDisplayType              display Type: unhidden
 23CoupledBodyTextWithLink::getDisplayString              whole string: <cite unhidden>我</cite>
 23CoupledBodyTextWithLink::getDisplayString              display as:我||
@@ -382,8 +390,8 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printOffsetToObjectType              508 LINKFROMMAIN
 23CoupledBodyTextWithLink::getDisplayString              196 27 ）也不必提出人来（
 23CoupledBodyTextWithLink::getDisplayString              我哥哥（其实）已经相准了（媳妇），只等来家（就派人往这边）就下定了，（我）也不必提出人来（|8|
-7Comment::loadFirstFromContainedLine              m_fullString: 
-7Comment::loadFirstFromContainedLine              <cite unhidden>明说相准了谁</cite>
+7Comment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+7Comment::getFullStringAndBodyTextFromContainedLine              <cite unhidden>明说相准了谁</cite>
 7Comment::readDisplayType              display Type: unhidden
 23CoupledBodyTextWithLink::getDisplayString              whole string: <cite unhidden>明说相准了谁</cite>
 23CoupledBodyTextWithLink::getDisplayString              display as:明说相准了谁||
@@ -395,18 +403,19 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printOffsetToObjectType              1008 COMMENT
 23CoupledBodyTextWithLink::getDisplayString              263 57 ），我方才说你认不得娘，你细想去。”（
 23CoupledBodyTextWithLink::getDisplayString              我哥哥（其实）已经相准了（媳妇），只等来家（就派人往这边）就下定了，（我）也不必提出人来（明说相准了谁），我方才说你认不得娘，你细想去。”（|8|
-15PersonalComment::loadFirstFromContainedLine              m_fullString: 
-15PersonalComment::loadFirstFromContainedLine              <u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">亲兄妹不能做亲，所以相准了黛玉就变成亲妹妹就不能下定了。玩笑必是<a unhidden title="编派" href="a054.htm#P12L1"><sub hidden>第54回12.1节:</sub>编派现场一个人</a>（<a unhidden title="编派" href="original\c054.htm#P8L1"><sub hidden>第54回8.1节:</sub>原文</a>）。想当初，宝玉就借<a unhidden title="真正的" href="a019.htm#P13L3"><sub hidden>第19回13.3节:</sub>林子洞编派过黛玉</a>（<a unhidden title="真正的" href="original\c019.htm#P14L1"><sub hidden>第19回14.1节:</sub>原文</a>）</u>
+15PersonalComment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+15PersonalComment::getFullStringAndBodyTextFromContainedLine              <u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">亲兄妹不能做亲，所以相准了黛玉就变成亲妹妹就不能下定了。玩笑必是<a unhidden title="编派" href="a054.htm#P12L1"><sub hidden>第54回12.1节:</sub>编派现场一个人</a>（<a unhidden title="编派" href="original\c054.htm#P8L1"><sub hidden>第54回8.1节:</sub>原文</a>）。想当初，宝玉就借<a unhidden title="真正的" href="a019.htm#P13L3"><sub hidden>第19回13.3节:</sub>林子洞编派过黛玉</a>（<a unhidden title="真正的" href="original\c019.htm#P14L1"><sub hidden>第19回14.1节:</sub>原文</a>）</u>
 15PersonalComment::readDisplayType              display Type: unhidden
-12LinkFromMain::loadFirstFromContainedLine              m_fullString: 
-12LinkFromMain::loadFirstFromContainedLine              <a unhidden title="编派" href="a054.htm#P12L1"><sub hidden>第54回12.1节:</sub>编派现场一个人</a>
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              <a unhidden title="编派" href="a054.htm#P12L1"><sub hidden>第54回12.1节:</sub>编派现场一个人</a>
+12LinkFromMain::readDisplayType              display Type: unhidden
+12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readType              type seen from prefix: a054
 12LinkFromMain::readAnnotation              annotation: 编派现场一个人
 12LinkFromMain::readReferFileName              chapterNumber: 54, attachmentNumber: 0
-12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readReferPara              referPara: P12L1
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              <sub hidden>第54回12.1节:</sub>
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              <sub hidden>第54回12.1节:</sub>
 8Citation::readDisplayType              display Type: hidden
 15CoupledBodyText::setInputOutputFiles              input file is: bodyTexts/output/Main54.txt
 15CoupledBodyText::setInputOutputFiles              output file is: bodyTexts/afterFix/Main54.txt
@@ -417,15 +426,16 @@ printCompareResult              same
 12LinkFromMain::length              <a unhidden title="编派" href="a054.htm#P12L1"><sub hidden>第54回12.1节:</sub>编派现场一个人</a>
 12LinkFromMain::length              <a unhidden title="编派" href="a054.htm#P12L1">↑<sub hidden>第54回12.1节:</sub>编派现场一个人</a>
 12LinkFromMain::loadFirstFromContainedLine              after fix length: 108
-12LinkFromMain::loadFirstFromContainedLine              m_fullString: 
-12LinkFromMain::loadFirstFromContainedLine              <a unhidden title="编派" href="original\c054.htm#P8L1"><sub hidden>第54回8.1节:</sub>原文</a>
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              <a unhidden title="编派" href="original\c054.htm#P8L1"><sub hidden>第54回8.1节:</sub>原文</a>
+12LinkFromMain::readDisplayType              display Type: unhidden
+12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readType              type seen from prefix: original\c054
 12LinkFromMain::readAnnotation              annotation: 原文
 12LinkFromMain::readReferFileName              chapterNumber: 54, attachmentNumber: 0
-12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readReferPara              referPara: P8L1
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              <sub hidden>第54回8.1节:</sub>
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              <sub hidden>第54回8.1节:</sub>
 8Citation::readDisplayType              display Type: hidden
 15CoupledBodyText::setInputOutputFiles              input file is: bodyTexts/output/Org54.txt
 15CoupledBodyText::setInputOutputFiles              output file is: bodyTexts/afterFix/Org54.txt
@@ -436,15 +446,16 @@ printCompareResult              same
 12LinkFromMain::length              <a unhidden title="编派" href="original\c054.htm#P8L1"><sub hidden>第54回8.1节:</sub>原文</a>
 12LinkFromMain::length              <a unhidden title="编派" href="original\c054.htm#P8L1">↑<sub hidden>第54回8.1节:</sub>原文</a>
 12LinkFromMain::loadFirstFromContainedLine              after fix length: 100
-12LinkFromMain::loadFirstFromContainedLine              m_fullString: 
-12LinkFromMain::loadFirstFromContainedLine              <a unhidden title="真正的" href="a019.htm#P13L3"><sub hidden>第19回13.3节:</sub>林子洞编派过黛玉</a>
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              <a unhidden title="真正的" href="a019.htm#P13L3"><sub hidden>第19回13.3节:</sub>林子洞编派过黛玉</a>
+12LinkFromMain::readDisplayType              display Type: unhidden
+12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readType              type seen from prefix: a019
 12LinkFromMain::readAnnotation              annotation: 林子洞编派过黛玉
 12LinkFromMain::readReferFileName              chapterNumber: 19, attachmentNumber: 0
-12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readReferPara              referPara: P13L3
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              <sub hidden>第19回13.3节:</sub>
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              <sub hidden>第19回13.3节:</sub>
 8Citation::readDisplayType              display Type: hidden
 15CoupledBodyText::setInputOutputFiles              input file is: bodyTexts/output/Main19.txt
 15CoupledBodyText::setInputOutputFiles              output file is: bodyTexts/afterFix/Main19.txt
@@ -455,15 +466,16 @@ printCompareResult              same
 12LinkFromMain::length              <a unhidden title="真正的" href="a019.htm#P13L3"><sub hidden>第19回13.3节:</sub>林子洞编派过黛玉</a>
 12LinkFromMain::length              <a unhidden title="真正的" href="a019.htm#P13L3">↑<sub hidden>第19回13.3节:</sub>林子洞编派过黛玉</a>
 12LinkFromMain::loadFirstFromContainedLine              after fix length: 114
-12LinkFromMain::loadFirstFromContainedLine              m_fullString: 
-12LinkFromMain::loadFirstFromContainedLine              <a unhidden title="真正的" href="original\c019.htm#P14L1"><sub hidden>第19回14.1节:</sub>原文</a>
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              <a unhidden title="真正的" href="original\c019.htm#P14L1"><sub hidden>第19回14.1节:</sub>原文</a>
+12LinkFromMain::readDisplayType              display Type: unhidden
+12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readType              type seen from prefix: original\c019
 12LinkFromMain::readAnnotation              annotation: 原文
 12LinkFromMain::readReferFileName              chapterNumber: 19, attachmentNumber: 0
-12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readReferPara              referPara: P14L1
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              <sub hidden>第19回14.1节:</sub>
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              <sub hidden>第19回14.1节:</sub>
 8Citation::readDisplayType              display Type: hidden
 15CoupledBodyText::setInputOutputFiles              input file is: bodyTexts/output/Org19.txt
 15CoupledBodyText::setInputOutputFiles              output file is: bodyTexts/afterFix/Org19.txt
@@ -487,8 +499,8 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printOffsetToObjectType              1242 PERSONALCOMMENT
 23CoupledBodyTextWithLink::getDisplayString              978 30 ）说着，便和她母亲（
 23CoupledBodyTextWithLink::getDisplayString              我哥哥（其实）已经相准了（媳妇），只等来家（就派人往这边）就下定了，（我）也不必提出人来（明说相准了谁），我方才说你认不得娘，你细想去。”（亲兄妹不能做亲，所以相准了黛玉就变成亲妹妹就不能下定了。玩笑必是↑编派现场一个人（↑原文）。想当初，宝玉就借↑林子洞编派过黛玉（↑原文））说着，便和她母亲（|8|
-7Comment::loadFirstFromContainedLine              m_fullString: 
-7Comment::loadFirstFromContainedLine              <cite unhidden>薛姨妈</cite>
+7Comment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+7Comment::getFullStringAndBodyTextFromContainedLine              <cite unhidden>薛姨妈</cite>
 7Comment::readDisplayType              display Type: unhidden
 23CoupledBodyTextWithLink::getDisplayString              whole string: <cite unhidden>薛姨妈</cite>
 23CoupledBodyTextWithLink::getDisplayString              display as:薛姨妈||
@@ -499,8 +511,8 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printOffsetToObjectType              1242 PERSONALCOMMENT
 23CoupledBodyTextWithLink::getDisplayString              1039 33 ）挤眼儿发笑。黛玉听（
 23CoupledBodyTextWithLink::getDisplayString              我哥哥（其实）已经相准了（媳妇），只等来家（就派人往这边）就下定了，（我）也不必提出人来（明说相准了谁），我方才说你认不得娘，你细想去。”（亲兄妹不能做亲，所以相准了黛玉就变成亲妹妹就不能下定了。玩笑必是↑编派现场一个人（↑原文）。想当初，宝玉就借↑林子洞编派过黛玉（↑原文））说着，便和她母亲（薛姨妈）挤眼儿发笑。黛玉听（|8|
-7Comment::loadFirstFromContainedLine              m_fullString: 
-7Comment::loadFirstFromContainedLine              <cite unhidden>明白了宝钗的玩笑</cite>
+7Comment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+7Comment::getFullStringAndBodyTextFromContainedLine              <cite unhidden>明白了宝钗的玩笑</cite>
 7Comment::readDisplayType              display Type: unhidden
 23CoupledBodyTextWithLink::getDisplayString              whole string: <cite unhidden>明白了宝钗的玩笑</cite>
 23CoupledBodyTextWithLink::getDisplayString              display as:明白了宝钗的玩笑||
@@ -511,8 +523,8 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printOffsetToObjectType              1242 PERSONALCOMMENT
 23CoupledBodyTextWithLink::getDisplayString              1118 72 ）了，便也一头伏在薛姨妈身上，说道：“姨妈不打（
 23CoupledBodyTextWithLink::getDisplayString              我哥哥（其实）已经相准了（媳妇），只等来家（就派人往这边）就下定了，（我）也不必提出人来（明说相准了谁），我方才说你认不得娘，你细想去。”（亲兄妹不能做亲，所以相准了黛玉就变成亲妹妹就不能下定了。玩笑必是↑编派现场一个人（↑原文）。想当初，宝玉就借↑林子洞编派过黛玉（↑原文））说着，便和她母亲（薛姨妈）挤眼儿发笑。黛玉听（明白了宝钗的玩笑）了，便也一头伏在薛姨妈身上，说道：“姨妈不打（|8|
-7Comment::loadFirstFromContainedLine              m_fullString: 
-7Comment::loadFirstFromContainedLine              <cite unhidden>宝钗</cite>
+7Comment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+7Comment::getFullStringAndBodyTextFromContainedLine              <cite unhidden>宝钗</cite>
 7Comment::readDisplayType              display Type: unhidden
 23CoupledBodyTextWithLink::getDisplayString              whole string: <cite unhidden>宝钗</cite>
 23CoupledBodyTextWithLink::getDisplayString              display as:宝钗||
@@ -522,18 +534,19 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printOffsetToObjectType              1242 PERSONALCOMMENT
 23CoupledBodyTextWithLink::getDisplayString              1218 24 ）她我不依。”（
 23CoupledBodyTextWithLink::getDisplayString              我哥哥（其实）已经相准了（媳妇），只等来家（就派人往这边）就下定了，（我）也不必提出人来（明说相准了谁），我方才说你认不得娘，你细想去。”（亲兄妹不能做亲，所以相准了黛玉就变成亲妹妹就不能下定了。玩笑必是↑编派现场一个人（↑原文）。想当初，宝玉就借↑林子洞编派过黛玉（↑原文））说着，便和她母亲（薛姨妈）挤眼儿发笑。黛玉听（明白了宝钗的玩笑）了，便也一头伏在薛姨妈身上，说道：“姨妈不打（宝钗）她我不依。”（|8|
-15PersonalComment::loadFirstFromContainedLine              m_fullString: 
-15PersonalComment::loadFirstFromContainedLine              <u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">这句又接到宝玉生日探春让李纨打黛玉，李纨说黛玉<a unhidden title="挨打" href="a063.htm#P14L3"><sub hidden>第63回14.3节:</sub>人家不得贵婿反挨打</a>（<a unhidden title="挨打" href="original\c063.htm#P6L3"><sub hidden>第63回6.3节:</sub>原文</a>），黛玉的婚姻是镜中花，他们二人的一个不能完成的愿望而已。</u>
+15PersonalComment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+15PersonalComment::getFullStringAndBodyTextFromContainedLine              <u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">这句又接到宝玉生日探春让李纨打黛玉，李纨说黛玉<a unhidden title="挨打" href="a063.htm#P14L3"><sub hidden>第63回14.3节:</sub>人家不得贵婿反挨打</a>（<a unhidden title="挨打" href="original\c063.htm#P6L3"><sub hidden>第63回6.3节:</sub>原文</a>），黛玉的婚姻是镜中花，他们二人的一个不能完成的愿望而已。</u>
 15PersonalComment::readDisplayType              display Type: unhidden
-12LinkFromMain::loadFirstFromContainedLine              m_fullString: 
-12LinkFromMain::loadFirstFromContainedLine              <a unhidden title="挨打" href="a063.htm#P14L3"><sub hidden>第63回14.3节:</sub>人家不得贵婿反挨打</a>
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              <a unhidden title="挨打" href="a063.htm#P14L3"><sub hidden>第63回14.3节:</sub>人家不得贵婿反挨打</a>
+12LinkFromMain::readDisplayType              display Type: unhidden
+12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readType              type seen from prefix: a063
 12LinkFromMain::readAnnotation              annotation: 人家不得贵婿反挨打
 12LinkFromMain::readReferFileName              chapterNumber: 63, attachmentNumber: 0
-12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readReferPara              referPara: P14L3
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              <sub hidden>第63回14.3节:</sub>
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              <sub hidden>第63回14.3节:</sub>
 8Citation::readDisplayType              display Type: hidden
 15CoupledBodyText::setInputOutputFiles              input file is: bodyTexts/output/Main63.txt
 15CoupledBodyText::setInputOutputFiles              output file is: bodyTexts/afterFix/Main63.txt
@@ -544,15 +557,16 @@ printCompareResult              same
 12LinkFromMain::length              <a unhidden title="挨打" href="a063.htm#P14L3"><sub hidden>第63回14.3节:</sub>人家不得贵婿反挨打</a>
 12LinkFromMain::length              <a unhidden title="挨打" href="a063.htm#P14L3">↑<sub hidden>第63回14.3节:</sub>人家不得贵婿反挨打</a>
 12LinkFromMain::loadFirstFromContainedLine              after fix length: 114
-12LinkFromMain::loadFirstFromContainedLine              m_fullString: 
-12LinkFromMain::loadFirstFromContainedLine              <a unhidden title="挨打" href="original\c063.htm#P6L3"><sub hidden>第63回6.3节:</sub>原文</a>
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              <a unhidden title="挨打" href="original\c063.htm#P6L3"><sub hidden>第63回6.3节:</sub>原文</a>
+12LinkFromMain::readDisplayType              display Type: unhidden
+12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readType              type seen from prefix: original\c063
 12LinkFromMain::readAnnotation              annotation: 原文
 12LinkFromMain::readReferFileName              chapterNumber: 63, attachmentNumber: 0
-12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readReferPara              referPara: P6L3
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              <sub hidden>第63回6.3节:</sub>
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              <sub hidden>第63回6.3节:</sub>
 8Citation::readDisplayType              display Type: hidden
 15CoupledBodyText::setInputOutputFiles              input file is: bodyTexts/output/Org63.txt
 15CoupledBodyText::setInputOutputFiles              output file is: bodyTexts/afterFix/Org63.txt
@@ -571,7 +585,7 @@ printCompareResult              same
 printCompareResult              我哥哥（其实）已经相准了（媳妇），只等来家（就派人往这边）就下定了，（我）也不必提出人来（明说相准了谁），我方才说你认不得娘，你细想去。”（亲兄妹不能做亲，所以相准了黛玉就变成亲妹妹就不能下定了。玩笑必是↑编派现场一个人（↑原文）。想当初，宝玉就借↑林子洞编派过黛玉（↑原文））说着，便和她母亲（薛姨妈）挤眼儿发笑。黛玉听（明白了宝钗的玩笑）了，便也一头伏在薛姨妈身上，说道：“姨妈不打（宝钗）她我不依。”（这句又接到宝玉生日探春让李纨打黛玉，李纨说黛玉↑人家不得贵婿反挨打（↑原文），黛玉的婚姻是镜中花，他们二人的一个不能完成的愿望而已。）||
 printCompareResult              我哥哥（其实）已经相准了（媳妇），只等来家（就派人往这边）就下定了，（我）也不必提出人来（明说相准了谁），我方才说你认不得娘，你细想去。”（亲兄妹不能做亲，所以相准了黛玉就变成亲妹妹就不能下定了。玩笑必是↑编派现场一个人（↑原文）。想当初，宝玉就借↑林子洞编派过黛玉（↑原文））说着，便和她母亲（薛姨妈）挤眼儿发笑。黛玉听（明白了宝钗的玩笑）了，便也一头伏在薛姨妈身上，说道：“姨妈不打（宝钗）她我不依。”（这句又接到宝玉生日探春让李纨打黛玉，李纨说黛玉↑人家不得贵婿反挨打（↑原文），黛玉的婚姻是镜中花，他们二人的一个不能完成的愿望而已。）||
 printCompareResult              same
-*************************line 562: compare test 1 finished *************************
+*************************line 551: compare test 1 finished *************************
 23CoupledBodyTextWithLink::getDisplayString              1168
 25LineNumberPlaceholderLink::loadFirstFromContainedLine              P1L5
 23CoupledBodyTextWithLink::printOffsetToObjectType              m_offsetOfTypes:
@@ -620,18 +634,19 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printOffsetToObjectType              273 LINKFROMMAIN
 23CoupledBodyTextWithLink::getDisplayString              41 139  一天，神石正在独自嗟呀怀悼，突然看见一个僧人和一个道士远远走来。他们生得骨格不凡，丰神迥别（
 23CoupledBodyTextWithLink::getDisplayString              1.5   一天，神石正在独自嗟呀怀悼，突然看见一个僧人和一个道士远远走来。他们生得骨格不凡，丰神迥别（|8|
-7Comment::loadFirstFromContainedLine              m_fullString: 
-7Comment::loadFirstFromContainedLine              <cite unhidden>神石是神仙，所以看他们才骨骼不凡，否则也跟贾政眼里的<a unhidden title="见那和尚" href="a025.htm#P11L3"><sub hidden>第25回11.3节:</sub>模样</a>（<a unhidden title="见那和尚" href="original\c025.htm#P9L4"><sub hidden>第25回9.4节:</sub>原文</a>）一样了</cite>
+7Comment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+7Comment::getFullStringAndBodyTextFromContainedLine              <cite unhidden>神石是神仙，所以看他们才骨骼不凡，否则也跟贾政眼里的<a unhidden title="见那和尚" href="a025.htm#P11L3"><sub hidden>第25回11.3节:</sub>模样</a>（<a unhidden title="见那和尚" href="original\c025.htm#P9L4"><sub hidden>第25回9.4节:</sub>原文</a>）一样了</cite>
 7Comment::readDisplayType              display Type: unhidden
-12LinkFromMain::loadFirstFromContainedLine              m_fullString: 
-12LinkFromMain::loadFirstFromContainedLine              <a unhidden title="见那和尚" href="a025.htm#P11L3"><sub hidden>第25回11.3节:</sub>模样</a>
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              <a unhidden title="见那和尚" href="a025.htm#P11L3"><sub hidden>第25回11.3节:</sub>模样</a>
+12LinkFromMain::readDisplayType              display Type: unhidden
+12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readType              type seen from prefix: a025
 12LinkFromMain::readAnnotation              annotation: 模样
 12LinkFromMain::readReferFileName              chapterNumber: 25, attachmentNumber: 0
-12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readReferPara              referPara: P11L3
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              <sub hidden>第25回11.3节:</sub>
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              <sub hidden>第25回11.3节:</sub>
 8Citation::readDisplayType              display Type: hidden
 15CoupledBodyText::setInputOutputFiles              input file is: bodyTexts/output/Main25.txt
 15CoupledBodyText::setInputOutputFiles              output file is: bodyTexts/afterFix/Main25.txt
@@ -642,15 +657,16 @@ printCompareResult              same
 12LinkFromMain::length              <a unhidden title="见那和尚" href="a025.htm#P11L3"><sub hidden>第25回11.3节:</sub>模样</a>
 12LinkFromMain::length              <a unhidden title="见那和尚" href="a025.htm#P11L3">↑<sub hidden>第25回11.3节:</sub>模样</a>
 12LinkFromMain::loadFirstFromContainedLine              after fix length: 99
-12LinkFromMain::loadFirstFromContainedLine              m_fullString: 
-12LinkFromMain::loadFirstFromContainedLine              <a unhidden title="见那和尚" href="original\c025.htm#P9L4"><sub hidden>第25回9.4节:</sub>原文</a>
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              <a unhidden title="见那和尚" href="original\c025.htm#P9L4"><sub hidden>第25回9.4节:</sub>原文</a>
+12LinkFromMain::readDisplayType              display Type: unhidden
+12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readType              type seen from prefix: original\c025
 12LinkFromMain::readAnnotation              annotation: 原文
 12LinkFromMain::readReferFileName              chapterNumber: 25, attachmentNumber: 0
-12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readReferPara              referPara: P9L4
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              <sub hidden>第25回9.4节:</sub>
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              <sub hidden>第25回9.4节:</sub>
 8Citation::readDisplayType              display Type: hidden
 15CoupledBodyText::setInputOutputFiles              input file is: bodyTexts/output/Org25.txt
 15CoupledBodyText::setInputOutputFiles              output file is: bodyTexts/afterFix/Org25.txt
@@ -672,8 +688,8 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printOffsetToObjectType              689 COMMENT
 23CoupledBodyTextWithLink::getDisplayString              500 189 ），说说笑笑走到青埂峰下，坐在神石边高谈快论。先说一些云山雾海神仙玄幻之事，又说到红尘中如何荣华富贵。神石听了，不觉动了凡心（
 23CoupledBodyTextWithLink::getDisplayString              1.5   一天，神石正在独自嗟呀怀悼，突然看见一个僧人和一个道士远远走来。他们生得骨格不凡，丰神迥别（神石是神仙，所以看他们才骨骼不凡，否则也跟贾政眼里的↑模样（↑原文）一样了），说说笑笑走到青埂峰下，坐在神石边高谈快论。先说一些云山雾海神仙玄幻之事，又说到红尘中如何荣华富贵。神石听了，不觉动了凡心（|8|
-7Comment::loadFirstFromContainedLine              m_fullString: 
-7Comment::loadFirstFromContainedLine              <cite unhidden>对比甄士隐所悟之“真”空，“世人都晓神仙好”，这里就很荒唐了，没想到神仙居然也想做世人，也是因为“空”生万物的缘故，只羡鸳鸯不羡仙，非羡慕酒色财气也。</cite>
+7Comment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+7Comment::getFullStringAndBodyTextFromContainedLine              <cite unhidden>对比甄士隐所悟之“真”空，“世人都晓神仙好”，这里就很荒唐了，没想到神仙居然也想做世人，也是因为“空”生万物的缘故，只羡鸳鸯不羡仙，非羡慕酒色财气也。</cite>
 7Comment::readDisplayType              display Type: unhidden
 23CoupledBodyTextWithLink::getDisplayString              whole string: <cite unhidden>对比甄士隐所悟之“真”空，“世人都晓神仙好”，这里就很荒唐了，没想到神仙居然也想做世人，也是因为“空”生万物的缘故，只羡鸳鸯不羡仙，非羡慕酒色财气也。</cite>
 23CoupledBodyTextWithLink::getDisplayString              display as:对比甄士隐所悟之“真”空，“世人都晓神仙好”，这里就很荒唐了，没想到神仙居然也想做世人，也是因为“空”生万物的缘故，只羡鸳鸯不羡仙，非羡慕酒色财气也。||
@@ -683,8 +699,8 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printOffsetToObjectType              1017 COMMENT
 23CoupledBodyTextWithLink::getDisplayString              936 81 ），也想要到人间去享受享受，但只恨自己粗蠢而不得其道（
 23CoupledBodyTextWithLink::getDisplayString              1.5   一天，神石正在独自嗟呀怀悼，突然看见一个僧人和一个道士远远走来。他们生得骨格不凡，丰神迥别（神石是神仙，所以看他们才骨骼不凡，否则也跟贾政眼里的↑模样（↑原文）一样了），说说笑笑走到青埂峰下，坐在神石边高谈快论。先说一些云山雾海神仙玄幻之事，又说到红尘中如何荣华富贵。神石听了，不觉动了凡心（对比甄士隐所悟之“真”空，“世人都晓神仙好”，这里就很荒唐了，没想到神仙居然也想做世人，也是因为“空”生万物的缘故，只羡鸳鸯不羡仙，非羡慕酒色财气也。），也想要到人间去享受享受，但只恨自己粗蠢而不得其道（|8|
-7Comment::loadFirstFromContainedLine              m_fullString: 
-7Comment::loadFirstFromContainedLine              <cite unhidden>不像神瑛，就住在三生石边上，自然该着投胎，连投胎都不得其道，自然也就不懂人情世故了</cite>
+7Comment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+7Comment::getFullStringAndBodyTextFromContainedLine              <cite unhidden>不像神瑛，就住在三生石边上，自然该着投胎，连投胎都不得其道，自然也就不懂人情世故了</cite>
 7Comment::readDisplayType              display Type: unhidden
 23CoupledBodyTextWithLink::getDisplayString              whole string: <cite unhidden>不像神瑛，就住在三生石边上，自然该着投胎，连投胎都不得其道，自然也就不懂人情世故了</cite>
 23CoupledBodyTextWithLink::getDisplayString              display as:不像神瑛，就住在三生石边上，自然该着投胎，连投胎都不得其道，自然也就不懂人情世故了||
@@ -694,7 +710,7 @@ printCompareResult              same
 printCompareResult              1.5   一天，神石正在独自嗟呀怀悼，突然看见一个僧人和一个道士远远走来。他们生得骨格不凡，丰神迥别（神石是神仙，所以看他们才骨骼不凡，否则也跟贾政眼里的↑模样（↑原文）一样了），说说笑笑走到青埂峰下，坐在神石边高谈快论。先说一些云山雾海神仙玄幻之事，又说到红尘中如何荣华富贵。神石听了，不觉动了凡心（对比甄士隐所悟之“真”空，“世人都晓神仙好”，这里就很荒唐了，没想到神仙居然也想做世人，也是因为“空”生万物的缘故，只羡鸳鸯不羡仙，非羡慕酒色财气也。），也想要到人间去享受享受，但只恨自己粗蠢而不得其道（不像神瑛，就住在三生石边上，自然该着投胎，连投胎都不得其道，自然也就不懂人情世故了）。||
 printCompareResult              1.5   一天，神石正在独自嗟呀怀悼，突然看见一个僧人和一个道士远远走来。他们生得骨格不凡，丰神迥别（神石是神仙，所以看他们才骨骼不凡，否则也跟贾政眼里的↑模样（↑原文）一样了），说说笑笑走到青埂峰下，坐在神石边高谈快论。先说一些云山雾海神仙玄幻之事，又说到红尘中如何荣华富贵。神石听了，不觉动了凡心（对比甄士隐所悟之“真”空，“世人都晓神仙好”，这里就很荒唐了，没想到神仙居然也想做世人，也是因为“空”生万物的缘故，只羡鸳鸯不羡仙，非羡慕酒色财气也。），也想要到人间去享受享受，但只恨自己粗蠢而不得其道（不像神瑛，就住在三生石边上，自然该着投胎，连投胎都不得其道，自然也就不懂人情世故了）。||
 printCompareResult              same
-*************************line 562: compare test 2 finished *************************
+*************************line 551: compare test 2 finished *************************
 23CoupledBodyTextWithLink::getDisplayString              1715
 25LineNumberPlaceholderLink::loadFirstFromContainedLine              P14L4
 23CoupledBodyTextWithLink::printOffsetToObjectType              m_offsetOfTypes:
@@ -759,8 +775,8 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printOffsetToObjectType              347 LINKFROMMAIN
 23CoupledBodyTextWithLink::getDisplayString              43 4  （
 23CoupledBodyTextWithLink::getDisplayString              14.4   （|8|
-7Comment::loadFirstFromContainedLine              m_fullString: 
-7Comment::loadFirstFromContainedLine              <cite unhidden>贾琏</cite>
+7Comment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+7Comment::getFullStringAndBodyTextFromContainedLine              <cite unhidden>贾琏</cite>
 7Comment::readDisplayType              display Type: unhidden
 23CoupledBodyTextWithLink::getDisplayString              whole string: <cite unhidden>贾琏</cite>
 23CoupledBodyTextWithLink::getDisplayString              display as:贾琏||
@@ -772,18 +788,19 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printOffsetToObjectType              611 COMMENT
 23CoupledBodyTextWithLink::getDisplayString              75 165 ）揭起衾单一看，只见这尤二姐面色如生，比活着还美貌。贾琏又搂着大哭，只叫“奶奶，你死的不明，都是我坑了你！”（
 23CoupledBodyTextWithLink::getDisplayString              14.4   （贾琏）揭起衾单一看，只见这尤二姐面色如生，比活着还美貌。贾琏又搂着大哭，只叫“奶奶，你死的不明，都是我坑了你！”（|8|
-15PersonalComment::loadFirstFromContainedLine              m_fullString: 
-15PersonalComment::loadFirstFromContainedLine              <u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">还是像当初<a unhidden title="提三说二" href="a065.htm#P1L2"><sub hidden>第65回1.2节:</sub>按大房</a>（<a unhidden title="提三说二" href="original\c065.htm#P1L4"><sub hidden>第65回1.4节:</sub>原文</a>）叫尤二姐“奶奶”</u>
+15PersonalComment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+15PersonalComment::getFullStringAndBodyTextFromContainedLine              <u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">还是像当初<a unhidden title="提三说二" href="a065.htm#P1L2"><sub hidden>第65回1.2节:</sub>按大房</a>（<a unhidden title="提三说二" href="original\c065.htm#P1L4"><sub hidden>第65回1.4节:</sub>原文</a>）叫尤二姐“奶奶”</u>
 15PersonalComment::readDisplayType              display Type: unhidden
-12LinkFromMain::loadFirstFromContainedLine              m_fullString: 
-12LinkFromMain::loadFirstFromContainedLine              <a unhidden title="提三说二" href="a065.htm#P1L2"><sub hidden>第65回1.2节:</sub>按大房</a>
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              <a unhidden title="提三说二" href="a065.htm#P1L2"><sub hidden>第65回1.2节:</sub>按大房</a>
+12LinkFromMain::readDisplayType              display Type: unhidden
+12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readType              type seen from prefix: a065
 12LinkFromMain::readAnnotation              annotation: 按大房
 12LinkFromMain::readReferFileName              chapterNumber: 65, attachmentNumber: 0
-12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readReferPara              referPara: P1L2
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              <sub hidden>第65回1.2节:</sub>
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              <sub hidden>第65回1.2节:</sub>
 8Citation::readDisplayType              display Type: hidden
 15CoupledBodyText::setInputOutputFiles              input file is: bodyTexts/output/Main65.txt
 15CoupledBodyText::setInputOutputFiles              output file is: bodyTexts/afterFix/Main65.txt
@@ -795,15 +812,16 @@ isFoundOutsidePersonalComments               unhidden style="text-decoration-col
 12LinkFromMain::length              <a unhidden title="提三说二" href="a065.htm#P1L2"><sub hidden>第65回1.2节:</sub>按大房</a>
 12LinkFromMain::length              <a unhidden title="提三说二" href="a065.htm#P1L2">↑<sub hidden>第65回1.2节:</sub>按大房</a>
 12LinkFromMain::loadFirstFromContainedLine              after fix length: 100
-12LinkFromMain::loadFirstFromContainedLine              m_fullString: 
-12LinkFromMain::loadFirstFromContainedLine              <a unhidden title="提三说二" href="original\c065.htm#P1L4"><sub hidden>第65回1.4节:</sub>原文</a>
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              <a unhidden title="提三说二" href="original\c065.htm#P1L4"><sub hidden>第65回1.4节:</sub>原文</a>
+12LinkFromMain::readDisplayType              display Type: unhidden
+12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readType              type seen from prefix: original\c065
 12LinkFromMain::readAnnotation              annotation: 原文
 12LinkFromMain::readReferFileName              chapterNumber: 65, attachmentNumber: 0
-12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readReferPara              referPara: P1L4
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              <sub hidden>第65回1.4节:</sub>
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              <sub hidden>第65回1.4节:</sub>
 8Citation::readDisplayType              display Type: hidden
 15CoupledBodyText::setInputOutputFiles              input file is: bodyTexts/output/Org65.txt
 15CoupledBodyText::setInputOutputFiles              output file is: bodyTexts/afterFix/Org65.txt
@@ -828,8 +846,8 @@ isFoundOutsidePersonalComments               unhidden style="text-decoration-col
 23CoupledBodyTextWithLink::printOffsetToObjectType              988 PERSONALCOMMENT
 23CoupledBodyTextWithLink::getDisplayString              587 24 ）贾蓉忙上来劝（
 23CoupledBodyTextWithLink::getDisplayString              14.4   （贾琏）揭起衾单一看，只见这尤二姐面色如生，比活着还美貌。贾琏又搂着大哭，只叫“奶奶，你死的不明，都是我坑了你！”（还是像当初↑按大房（↑原文）叫尤二姐“奶奶”）贾蓉忙上来劝（|8|
-7Comment::loadFirstFromContainedLine              m_fullString: 
-7Comment::loadFirstFromContainedLine              <cite unhidden>贾琏</cite>
+7Comment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+7Comment::getFullStringAndBodyTextFromContainedLine              <cite unhidden>贾琏</cite>
 7Comment::readDisplayType              display Type: unhidden
 23CoupledBodyTextWithLink::getDisplayString              whole string: <cite unhidden>贾琏</cite>
 23CoupledBodyTextWithLink::getDisplayString              display as:贾琏||
@@ -841,8 +859,8 @@ isFoundOutsidePersonalComments               unhidden style="text-decoration-col
 23CoupledBodyTextWithLink::printOffsetToObjectType              988 PERSONALCOMMENT
 23CoupledBodyTextWithLink::getDisplayString              639 30 ）：“叔叔解着些儿（
 23CoupledBodyTextWithLink::getDisplayString              14.4   （贾琏）揭起衾单一看，只见这尤二姐面色如生，比活着还美貌。贾琏又搂着大哭，只叫“奶奶，你死的不明，都是我坑了你！”（还是像当初↑按大房（↑原文）叫尤二姐“奶奶”）贾蓉忙上来劝（贾琏）：“叔叔解着些儿（|8|
-7Comment::loadFirstFromContainedLine              m_fullString: 
-7Comment::loadFirstFromContainedLine              <cite unhidden>伤悲</cite>
+7Comment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+7Comment::getFullStringAndBodyTextFromContainedLine              <cite unhidden>伤悲</cite>
 7Comment::readDisplayType              display Type: unhidden
 23CoupledBodyTextWithLink::getDisplayString              whole string: <cite unhidden>伤悲</cite>
 23CoupledBodyTextWithLink::getDisplayString              display as:伤悲||
@@ -854,8 +872,8 @@ isFoundOutsidePersonalComments               unhidden style="text-decoration-col
 23CoupledBodyTextWithLink::printOffsetToObjectType              988 PERSONALCOMMENT
 23CoupledBodyTextWithLink::getDisplayString              697 9 ），（
 23CoupledBodyTextWithLink::getDisplayString              14.4   （贾琏）揭起衾单一看，只见这尤二姐面色如生，比活着还美貌。贾琏又搂着大哭，只叫“奶奶，你死的不明，都是我坑了你！”（还是像当初↑按大房（↑原文）叫尤二姐“奶奶”）贾蓉忙上来劝（贾琏）：“叔叔解着些儿（伤悲），（|8|
-7Comment::loadFirstFromContainedLine              m_fullString: 
-7Comment::loadFirstFromContainedLine              <cite unhidden>都是</cite>
+7Comment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+7Comment::getFullStringAndBodyTextFromContainedLine              <cite unhidden>都是</cite>
 7Comment::readDisplayType              display Type: unhidden
 23CoupledBodyTextWithLink::getDisplayString              whole string: <cite unhidden>都是</cite>
 23CoupledBodyTextWithLink::getDisplayString              display as:都是||
@@ -867,8 +885,8 @@ isFoundOutsidePersonalComments               unhidden style="text-decoration-col
 23CoupledBodyTextWithLink::printOffsetToObjectType              988 PERSONALCOMMENT
 23CoupledBodyTextWithLink::getDisplayString              734 21 ）我这个姨娘（
 23CoupledBodyTextWithLink::getDisplayString              14.4   （贾琏）揭起衾单一看，只见这尤二姐面色如生，比活着还美貌。贾琏又搂着大哭，只叫“奶奶，你死的不明，都是我坑了你！”（还是像当初↑按大房（↑原文）叫尤二姐“奶奶”）贾蓉忙上来劝（贾琏）：“叔叔解着些儿（伤悲），（都是）我这个姨娘（|8|
-7Comment::loadFirstFromContainedLine              m_fullString: 
-7Comment::loadFirstFromContainedLine              <cite unhidden>尤二姐她</cite>
+7Comment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+7Comment::getFullStringAndBodyTextFromContainedLine              <cite unhidden>尤二姐她</cite>
 7Comment::readDisplayType              display Type: unhidden
 23CoupledBodyTextWithLink::getDisplayString              whole string: <cite unhidden>尤二姐她</cite>
 23CoupledBodyTextWithLink::getDisplayString              display as:尤二姐她||
@@ -880,8 +898,8 @@ isFoundOutsidePersonalComments               unhidden style="text-decoration-col
 23CoupledBodyTextWithLink::printOffsetToObjectType              988 PERSONALCOMMENT
 23CoupledBodyTextWithLink::getDisplayString              789 45 ）自己没福。”说着，又向南指（
 23CoupledBodyTextWithLink::getDisplayString              14.4   （贾琏）揭起衾单一看，只见这尤二姐面色如生，比活着还美貌。贾琏又搂着大哭，只叫“奶奶，你死的不明，都是我坑了你！”（还是像当初↑按大房（↑原文）叫尤二姐“奶奶”）贾蓉忙上来劝（贾琏）：“叔叔解着些儿（伤悲），（都是）我这个姨娘（尤二姐她）自己没福。”说着，又向南指（|8|
-7Comment::loadFirstFromContainedLine              m_fullString: 
-7Comment::loadFirstFromContainedLine              <cite unhidden>着梨香院和</cite>
+7Comment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+7Comment::getFullStringAndBodyTextFromContainedLine              <cite unhidden>着梨香院和</cite>
 7Comment::readDisplayType              display Type: unhidden
 23CoupledBodyTextWithLink::getDisplayString              whole string: <cite unhidden>着梨香院和</cite>
 23CoupledBodyTextWithLink::getDisplayString              display as:着梨香院和||
@@ -893,15 +911,16 @@ isFoundOutsidePersonalComments               unhidden style="text-decoration-col
 23CoupledBodyTextWithLink::printOffsetToObjectType              1153 COMMENT
 23CoupledBodyTextWithLink::getDisplayString              871 3 ）
 23CoupledBodyTextWithLink::getDisplayString              14.4   （贾琏）揭起衾单一看，只见这尤二姐面色如生，比活着还美貌。贾琏又搂着大哭，只叫“奶奶，你死的不明，都是我坑了你！”（还是像当初↑按大房（↑原文）叫尤二姐“奶奶”）贾蓉忙上来劝（贾琏）：“叔叔解着些儿（伤悲），（都是）我这个姨娘（尤二姐她）自己没福。”说着，又向南指（着梨香院和）|8|
-12LinkFromMain::loadFirstFromContainedLine              m_fullString: 
-12LinkFromMain::loadFirstFromContainedLine              <a title="群山" href="a069.htm#P15L3"><sub hidden>第69回15.3节:</sub>大观园的界墙</a>
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              <a title="群山" href="a069.htm#P15L3"><sub hidden>第69回15.3节:</sub>大观园的界墙</a>
+12LinkFromMain::readDisplayType              display Type: direct.
+12LinkFromMain::readDisplayType              display Type: direct.
 12LinkFromMain::readType              type seen from prefix: a069
 12LinkFromMain::readAnnotation              annotation: 大观园的界墙
 12LinkFromMain::readReferFileName              chapterNumber: 69, attachmentNumber: 0
-12LinkFromMain::readDisplayType              display Type: direct.
 12LinkFromMain::readReferPara              referPara: P15L3
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              <sub hidden>第69回15.3节:</sub>
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              <sub hidden>第69回15.3节:</sub>
 8Citation::readDisplayType              display Type: hidden
 15CoupledBodyText::setInputOutputFiles              input file is: bodyTexts/output/Main69.txt
 15CoupledBodyText::setInputOutputFiles              output file is: bodyTexts/afterFix/Main69.txt
@@ -928,8 +947,8 @@ isFoundOutsidePersonalComments               unhidden style="text-decoration-col
 23CoupledBodyTextWithLink::printOffsetToObjectType              1153 COMMENT
 23CoupledBodyTextWithLink::getDisplayString              970 18 ，贾琏会意（
 23CoupledBodyTextWithLink::getDisplayString              14.4   （贾琏）揭起衾单一看，只见这尤二姐面色如生，比活着还美貌。贾琏又搂着大哭，只叫“奶奶，你死的不明，都是我坑了你！”（还是像当初↑按大房（↑原文）叫尤二姐“奶奶”）贾蓉忙上来劝（贾琏）：“叔叔解着些儿（伤悲），（都是）我这个姨娘（尤二姐她）自己没福。”说着，又向南指（着梨香院和）↑大观园的界墙，贾琏会意（|8|
-15PersonalComment::loadFirstFromContainedLine              m_fullString: 
-15PersonalComment::loadFirstFromContainedLine              <u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">凤姐此时仍在偷听</u>
+15PersonalComment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+15PersonalComment::getFullStringAndBodyTextFromContainedLine              <u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">凤姐此时仍在偷听</u>
 15PersonalComment::readDisplayType              display Type: unhidden
 23CoupledBodyTextWithLink::getDisplayString              whole string: <u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">凤姐此时仍在偷听</u>
 23CoupledBodyTextWithLink::getDisplayString              display as:凤姐此时仍在偷听||
@@ -940,8 +959,8 @@ isFoundOutsidePersonalComments               unhidden style="text-decoration-col
 23CoupledBodyTextWithLink::printOffsetToObjectType              1391 PERSONALCOMMENT
 23CoupledBodyTextWithLink::getDisplayString              1108 45 ），只悄悄跌脚说：“我忽略了（
 23CoupledBodyTextWithLink::getDisplayString              14.4   （贾琏）揭起衾单一看，只见这尤二姐面色如生，比活着还美貌。贾琏又搂着大哭，只叫“奶奶，你死的不明，都是我坑了你！”（还是像当初↑按大房（↑原文）叫尤二姐“奶奶”）贾蓉忙上来劝（贾琏）：“叔叔解着些儿（伤悲），（都是）我这个姨娘（尤二姐她）自己没福。”说着，又向南指（着梨香院和）↑大观园的界墙，贾琏会意（凤姐此时仍在偷听），只悄悄跌脚说：“我忽略了（|8|
-7Comment::loadFirstFromContainedLine              m_fullString: 
-7Comment::loadFirstFromContainedLine              <cite unhidden>，只当凤姐她是好意对尤二姐</cite>
+7Comment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+7Comment::getFullStringAndBodyTextFromContainedLine              <cite unhidden>，只当凤姐她是好意对尤二姐</cite>
 7Comment::readDisplayType              display Type: unhidden
 23CoupledBodyTextWithLink::getDisplayString              whole string: <cite unhidden>，只当凤姐她是好意对尤二姐</cite>
 23CoupledBodyTextWithLink::getDisplayString              display as:，只当凤姐她是好意对尤二姐||
@@ -952,8 +971,8 @@ isFoundOutsidePersonalComments               unhidden style="text-decoration-col
 23CoupledBodyTextWithLink::printOffsetToObjectType              1391 PERSONALCOMMENT
 23CoupledBodyTextWithLink::getDisplayString              1214 15 ），终久（
 23CoupledBodyTextWithLink::getDisplayString              14.4   （贾琏）揭起衾单一看，只见这尤二姐面色如生，比活着还美貌。贾琏又搂着大哭，只叫“奶奶，你死的不明，都是我坑了你！”（还是像当初↑按大房（↑原文）叫尤二姐“奶奶”）贾蓉忙上来劝（贾琏）：“叔叔解着些儿（伤悲），（都是）我这个姨娘（尤二姐她）自己没福。”说着，又向南指（着梨香院和）↑大观园的界墙，贾琏会意（凤姐此时仍在偷听），只悄悄跌脚说：“我忽略了（，只当凤姐她是好意对尤二姐），终久（|8|
-7Comment::loadFirstFromContainedLine              m_fullString: 
-7Comment::loadFirstFromContainedLine              <cite unhidden>把凤姐她的所作所为我都</cite>
+7Comment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+7Comment::getFullStringAndBodyTextFromContainedLine              <cite unhidden>把凤姐她的所作所为我都</cite>
 7Comment::readDisplayType              display Type: unhidden
 23CoupledBodyTextWithLink::getDisplayString              whole string: <cite unhidden>把凤姐她的所作所为我都</cite>
 23CoupledBodyTextWithLink::getDisplayString              display as:把凤姐她的所作所为我都||
@@ -964,8 +983,8 @@ isFoundOutsidePersonalComments               unhidden style="text-decoration-col
 23CoupledBodyTextWithLink::printOffsetToObjectType              1391 PERSONALCOMMENT
 23CoupledBodyTextWithLink::getDisplayString              1284 12 ）对出（
 23CoupledBodyTextWithLink::getDisplayString              14.4   （贾琏）揭起衾单一看，只见这尤二姐面色如生，比活着还美貌。贾琏又搂着大哭，只叫“奶奶，你死的不明，都是我坑了你！”（还是像当初↑按大房（↑原文）叫尤二姐“奶奶”）贾蓉忙上来劝（贾琏）：“叔叔解着些儿（伤悲），（都是）我这个姨娘（尤二姐她）自己没福。”说着，又向南指（着梨香院和）↑大观园的界墙，贾琏会意（凤姐此时仍在偷听），只悄悄跌脚说：“我忽略了（，只当凤姐她是好意对尤二姐），终久（把凤姐她的所作所为我都）对出（|8|
-7Comment::loadFirstFromContainedLine              m_fullString: 
-7Comment::loadFirstFromContainedLine              <cite unhidden>词</cite>
+7Comment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+7Comment::getFullStringAndBodyTextFromContainedLine              <cite unhidden>词</cite>
 7Comment::readDisplayType              display Type: unhidden
 23CoupledBodyTextWithLink::getDisplayString              whole string: <cite unhidden>词</cite>
 23CoupledBodyTextWithLink::getDisplayString              display as:词||
@@ -976,8 +995,8 @@ isFoundOutsidePersonalComments               unhidden style="text-decoration-col
 23CoupledBodyTextWithLink::printOffsetToObjectType              1391 PERSONALCOMMENT
 23CoupledBodyTextWithLink::getDisplayString              1321 18 ）来，我替（
 23CoupledBodyTextWithLink::getDisplayString              14.4   （贾琏）揭起衾单一看，只见这尤二姐面色如生，比活着还美貌。贾琏又搂着大哭，只叫“奶奶，你死的不明，都是我坑了你！”（还是像当初↑按大房（↑原文）叫尤二姐“奶奶”）贾蓉忙上来劝（贾琏）：“叔叔解着些儿（伤悲），（都是）我这个姨娘（尤二姐她）自己没福。”说着，又向南指（着梨香院和）↑大观园的界墙，贾琏会意（凤姐此时仍在偷听），只悄悄跌脚说：“我忽略了（，只当凤姐她是好意对尤二姐），终久（把凤姐她的所作所为我都）对出（词）来，我替（|8|
-7Comment::loadFirstFromContainedLine              m_fullString: 
-7Comment::loadFirstFromContainedLine              <cite unhidden>尤二姐</cite>
+7Comment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+7Comment::getFullStringAndBodyTextFromContainedLine              <cite unhidden>尤二姐</cite>
 7Comment::readDisplayType              display Type: unhidden
 23CoupledBodyTextWithLink::getDisplayString              whole string: <cite unhidden>尤二姐</cite>
 23CoupledBodyTextWithLink::getDisplayString              display as:尤二姐||
@@ -987,18 +1006,19 @@ isFoundOutsidePersonalComments               unhidden style="text-decoration-col
 23CoupledBodyTextWithLink::printOffsetToObjectType              1391 PERSONALCOMMENT
 23CoupledBodyTextWithLink::getDisplayString              1370 21 ）你报仇。”（
 23CoupledBodyTextWithLink::getDisplayString              14.4   （贾琏）揭起衾单一看，只见这尤二姐面色如生，比活着还美貌。贾琏又搂着大哭，只叫“奶奶，你死的不明，都是我坑了你！”（还是像当初↑按大房（↑原文）叫尤二姐“奶奶”）贾蓉忙上来劝（贾琏）：“叔叔解着些儿（伤悲），（都是）我这个姨娘（尤二姐她）自己没福。”说着，又向南指（着梨香院和）↑大观园的界墙，贾琏会意（凤姐此时仍在偷听），只悄悄跌脚说：“我忽略了（，只当凤姐她是好意对尤二姐），终久（把凤姐她的所作所为我都）对出（词）来，我替（尤二姐）你报仇。”（|8|
-15PersonalComment::loadFirstFromContainedLine              m_fullString: 
-15PersonalComment::loadFirstFromContainedLine              <u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">贾琏、凤姐彻底<a unhidden title="连理" href="a064.htm#P19L3"><sub hidden>第64回19.3节:</sub>决裂</a>（<a unhidden title="连理" href="original\c064.htm#P11L3"><sub hidden>第64回11.3节:</sub>原文</a>）。</u>
+15PersonalComment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+15PersonalComment::getFullStringAndBodyTextFromContainedLine              <u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">贾琏、凤姐彻底<a unhidden title="连理" href="a064.htm#P19L3"><sub hidden>第64回19.3节:</sub>决裂</a>（<a unhidden title="连理" href="original\c064.htm#P11L3"><sub hidden>第64回11.3节:</sub>原文</a>）。</u>
 15PersonalComment::readDisplayType              display Type: unhidden
-12LinkFromMain::loadFirstFromContainedLine              m_fullString: 
-12LinkFromMain::loadFirstFromContainedLine              <a unhidden title="连理" href="a064.htm#P19L3"><sub hidden>第64回19.3节:</sub>决裂</a>
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              <a unhidden title="连理" href="a064.htm#P19L3"><sub hidden>第64回19.3节:</sub>决裂</a>
+12LinkFromMain::readDisplayType              display Type: unhidden
+12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readType              type seen from prefix: a064
 12LinkFromMain::readAnnotation              annotation: 决裂
 12LinkFromMain::readReferFileName              chapterNumber: 64, attachmentNumber: 0
-12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readReferPara              referPara: P19L3
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              <sub hidden>第64回19.3节:</sub>
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              <sub hidden>第64回19.3节:</sub>
 8Citation::readDisplayType              display Type: hidden
 15CoupledBodyText::setInputOutputFiles              input file is: bodyTexts/output/Main64.txt
 15CoupledBodyText::setInputOutputFiles              output file is: bodyTexts/afterFix/Main64.txt
@@ -1009,15 +1029,16 @@ isFoundOutsidePersonalComments               unhidden style="text-decoration-col
 12LinkFromMain::length              <a unhidden title="连理" href="a064.htm#P19L3"><sub hidden>第64回19.3节:</sub>决裂</a>
 12LinkFromMain::length              <a unhidden title="连理" href="a064.htm#P19L3">↑<sub hidden>第64回19.3节:</sub>决裂</a>
 12LinkFromMain::loadFirstFromContainedLine              after fix length: 93
-12LinkFromMain::loadFirstFromContainedLine              m_fullString: 
-12LinkFromMain::loadFirstFromContainedLine              <a unhidden title="连理" href="original\c064.htm#P11L3"><sub hidden>第64回11.3节:</sub>原文</a>
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              <a unhidden title="连理" href="original\c064.htm#P11L3"><sub hidden>第64回11.3节:</sub>原文</a>
+12LinkFromMain::readDisplayType              display Type: unhidden
+12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readType              type seen from prefix: original\c064
 12LinkFromMain::readAnnotation              annotation: 原文
 12LinkFromMain::readReferFileName              chapterNumber: 64, attachmentNumber: 0
-12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readReferPara              referPara: P11L3
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              <sub hidden>第64回11.3节:</sub>
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              <sub hidden>第64回11.3节:</sub>
 8Citation::readDisplayType              display Type: hidden
 15CoupledBodyText::setInputOutputFiles              input file is: bodyTexts/output/Org64.txt
 15CoupledBodyText::setInputOutputFiles              output file is: bodyTexts/afterFix/Org64.txt
@@ -1036,7 +1057,7 @@ isFoundOutsidePersonalComments               unhidden style="text-decoration-col
 printCompareResult              14.4   （贾琏）揭起衾单一看，只见这尤二姐面色如生，比活着还美貌。贾琏又搂着大哭，只叫“奶奶，你死的不明，都是我坑了你！”（还是像当初↑按大房（↑原文）叫尤二姐“奶奶”）贾蓉忙上来劝（贾琏）：“叔叔解着些儿（伤悲），（都是）我这个姨娘（尤二姐她）自己没福。”说着，又向南指（着梨香院和）↑大观园的界墙，贾琏会意（凤姐此时仍在偷听），只悄悄跌脚说：“我忽略了（，只当凤姐她是好意对尤二姐），终久（把凤姐她的所作所为我都）对出（词）来，我替（尤二姐）你报仇。”（贾琏、凤姐彻底↑决裂（↑原文）。）||
 printCompareResult              14.4   （贾琏）揭起衾单一看，只见这尤二姐面色如生，比活着还美貌。贾琏又搂着大哭，只叫“奶奶，你死的不明，都是我坑了你！”（还是像当初↑按大房（↑原文）叫尤二姐“奶奶”）贾蓉忙上来劝（贾琏）：“叔叔解着些儿（伤悲），（都是）我这个姨娘（尤二姐她）自己没福。”说着，又向南指（着梨香院和）↑大观园的界墙，贾琏会意（凤姐此时仍在偷听），只悄悄跌脚说：“我忽略了（，只当凤姐她是好意对尤二姐），终久（把凤姐她的所作所为我都）对出（词）来，我替（尤二姐）你报仇。”（贾琏、凤姐彻底↑决裂（↑原文）。）||
 printCompareResult              same
-*************************line 562: compare test 3 finished *************************
+*************************line 551: compare test 3 finished *************************
 23CoupledBodyTextWithLink::getDisplayString              1050
 25LineNumberPlaceholderLink::loadFirstFromContainedLine              P7L2
 23CoupledBodyTextWithLink::printOffsetToObjectType              m_offsetOfTypes:
@@ -1091,8 +1112,8 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printOffsetToObjectType              608 LINKFROMMAIN
 23CoupledBodyTextWithLink::getDisplayString              41 1  
 23CoupledBodyTextWithLink::getDisplayString              7.2   |8|
-4Poem::loadFirstFromContainedLine              m_fullString: 
-4Poem::loadFirstFromContainedLine              <strong unhidden>西施一代倾城逐浪花，吴宫空自忆儿家。效颦莫笑东村女，头白溪边尚浣纱。</strong>
+4Poem::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+4Poem::getFullStringAndBodyTextFromContainedLine              <strong unhidden>西施一代倾城逐浪花，吴宫空自忆儿家。效颦莫笑东村女，头白溪边尚浣纱。</strong>
 4Poem::readDisplayType              display Type: unhidden
 23CoupledBodyTextWithLink::getDisplayString              whole string: <strong unhidden>西施一代倾城逐浪花，吴宫空自忆儿家。效颦莫笑东村女，头白溪边尚浣纱。</strong>
 23CoupledBodyTextWithLink::getDisplayString              display as:西施一代倾城逐浪花，吴宫空自忆儿家。效颦莫笑东村女，头白溪边尚浣纱。||
@@ -1151,8 +1172,8 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printOffsetToObjectType              608 LINKFROMMAIN
 23CoupledBodyTextWithLink::getDisplayString              194 0 
 23CoupledBodyTextWithLink::getDisplayString              7.2   西施一代倾城逐浪花，吴宫空自忆儿家。效颦莫笑东村女，头白溪边尚浣纱。    |8|
-15PoemTranslation::loadFirstFromContainedLine              m_fullString: 
-15PoemTranslation::loadFirstFromContainedLine              <samp unhidden font style="font-size: 12pt; font-family: 宋体; color:#ff00ff">日日在吴王夫差的宫殿里思念儿时的家园又如何，倾国倾城的一代佳人西施却再也没有回到当年浣纱的耶溪边，相反，如溪里那浪花互相追逐着奔向远方，她也消失不归。所以，也不必嘲笑效颦的东施，毕竟她相安无事地在溪边一直浣纱到白头。</samp>
+15PoemTranslation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+15PoemTranslation::getFullStringAndBodyTextFromContainedLine              <samp unhidden font style="font-size: 12pt; font-family: 宋体; color:#ff00ff">日日在吴王夫差的宫殿里思念儿时的家园又如何，倾国倾城的一代佳人西施却再也没有回到当年浣纱的耶溪边，相反，如溪里那浪花互相追逐着奔向远方，她也消失不归。所以，也不必嘲笑效颦的东施，毕竟她相安无事地在溪边一直浣纱到白头。</samp>
 15PoemTranslation::readDisplayType              display Type: unhidden
 23CoupledBodyTextWithLink::getDisplayString              whole string: <samp unhidden font style="font-size: 12pt; font-family: 宋体; color:#ff00ff">日日在吴王夫差的宫殿里思念儿时的家园又如何，倾国倾城的一代佳人西施却再也没有回到当年浣纱的耶溪边，相反，如溪里那浪花互相追逐着奔向远方，她也消失不归。所以，也不必嘲笑效颦的东施，毕竟她相安无事地在溪边一直浣纱到白头。</samp>
 23CoupledBodyTextWithLink::getDisplayString              display as:日日在吴王夫差的宫殿里思念儿时的家园又如何，倾国倾城的一代佳人西施却再也没有回到当年浣纱的耶溪边，相反，如溪里那浪花互相追逐着奔向远方，她也消失不归。所以，也不必嘲笑效颦的东施，毕竟她相安无事地在溪边一直浣纱到白头。||
@@ -1162,14 +1183,15 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printOffsetToObjectType              608 LINKFROMMAIN
 23CoupledBodyTextWithLink::getDisplayString              605 3 （
 23CoupledBodyTextWithLink::getDisplayString              7.2   西施一代倾城逐浪花，吴宫空自忆儿家。效颦莫笑东村女，头白溪边尚浣纱。    日日在吴王夫差的宫殿里思念儿时的家园又如何，倾国倾城的一代佳人西施却再也没有回到当年浣纱的耶溪边，相反，如溪里那浪花互相追逐着奔向远方，她也消失不归。所以，也不必嘲笑效颦的东施，毕竟她相安无事地在溪边一直浣纱到白头。（|8|
-12LinkFromMain::loadFirstFromContainedLine              m_fullString: 
-12LinkFromMain::loadFirstFromContainedLine              <a unhidden href="attachment\b003_2.htm">西施</a>
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              <a unhidden href="attachment\b003_2.htm">西施</a>
+12LinkFromMain::readDisplayType              display Type: unhidden
+12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readType              type seen from prefix: attachment\b003_2
 12LinkFromMain::readAnnotation              annotation: 西施
 12LinkFromMain::readReferFileName              chapterNumber: 3, attachmentNumber: 2
-12LinkFromMain::readDisplayType              display Type: unhidden
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              
 8Citation::readDisplayType              display Type: direct.
 12LinkFromMain::loadFirstFromContainedLine              after fix length: 51
 23CoupledBodyTextWithLink::getDisplayString              whole string: <a unhidden href="attachment\b003_2.htm">西施</a>
@@ -1180,14 +1202,15 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printOffsetToObjectType              665 LINKFROMMAIN
 23CoupledBodyTextWithLink::getDisplayString              659 6 ）（
 23CoupledBodyTextWithLink::getDisplayString              7.2   西施一代倾城逐浪花，吴宫空自忆儿家。效颦莫笑东村女，头白溪边尚浣纱。    日日在吴王夫差的宫殿里思念儿时的家园又如何，倾国倾城的一代佳人西施却再也没有回到当年浣纱的耶溪边，相反，如溪里那浪花互相追逐着奔向远方，她也消失不归。所以，也不必嘲笑效颦的东施，毕竟她相安无事地在溪边一直浣纱到白头。（西施）（|8|
-12LinkFromMain::loadFirstFromContainedLine              m_fullString: 
-12LinkFromMain::loadFirstFromContainedLine              <a unhidden href="attachment\b064_7.htm">临江仙·滚滚长江东逝水</a>
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              <a unhidden href="attachment\b064_7.htm">临江仙·滚滚长江东逝水</a>
+12LinkFromMain::readDisplayType              display Type: unhidden
+12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readType              type seen from prefix: attachment\b064_7
 12LinkFromMain::readAnnotation              annotation: 临江仙·滚滚长江东逝水
 12LinkFromMain::readReferFileName              chapterNumber: 64, attachmentNumber: 7
-12LinkFromMain::readDisplayType              display Type: unhidden
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              
 8Citation::readDisplayType              display Type: direct.
 12LinkFromMain::loadFirstFromContainedLine              after fix length: 77
 23CoupledBodyTextWithLink::getDisplayString              whole string: <a unhidden href="attachment\b064_7.htm">临江仙·滚滚长江东逝水</a>
@@ -1198,14 +1221,15 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printOffsetToObjectType              748 LINKFROMMAIN
 23CoupledBodyTextWithLink::getDisplayString              742 6 ）（
 23CoupledBodyTextWithLink::getDisplayString              7.2   西施一代倾城逐浪花，吴宫空自忆儿家。效颦莫笑东村女，头白溪边尚浣纱。    日日在吴王夫差的宫殿里思念儿时的家园又如何，倾国倾城的一代佳人西施却再也没有回到当年浣纱的耶溪边，相反，如溪里那浪花互相追逐着奔向远方，她也消失不归。所以，也不必嘲笑效颦的东施，毕竟她相安无事地在溪边一直浣纱到白头。（西施）（临江仙·滚滚长江东逝水）（|8|
-12LinkFromMain::loadFirstFromContainedLine              m_fullString: 
-12LinkFromMain::loadFirstFromContainedLine              <a unhidden href="attachment\b064_8.htm">念奴娇·赤壁怀古</a>
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              <a unhidden href="attachment\b064_8.htm">念奴娇·赤壁怀古</a>
+12LinkFromMain::readDisplayType              display Type: unhidden
+12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readType              type seen from prefix: attachment\b064_8
 12LinkFromMain::readAnnotation              annotation: 念奴娇·赤壁怀古
 12LinkFromMain::readReferFileName              chapterNumber: 64, attachmentNumber: 8
-12LinkFromMain::readDisplayType              display Type: unhidden
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              
 8Citation::readDisplayType              display Type: direct.
 12LinkFromMain::loadFirstFromContainedLine              after fix length: 68
 23CoupledBodyTextWithLink::getDisplayString              whole string: <a unhidden href="attachment\b064_8.htm">念奴娇·赤壁怀古</a>
@@ -1216,14 +1240,15 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printOffsetToObjectType              822 LINKFROMMAIN
 23CoupledBodyTextWithLink::getDisplayString              816 6 ）（
 23CoupledBodyTextWithLink::getDisplayString              7.2   西施一代倾城逐浪花，吴宫空自忆儿家。效颦莫笑东村女，头白溪边尚浣纱。    日日在吴王夫差的宫殿里思念儿时的家园又如何，倾国倾城的一代佳人西施却再也没有回到当年浣纱的耶溪边，相反，如溪里那浪花互相追逐着奔向远方，她也消失不归。所以，也不必嘲笑效颦的东施，毕竟她相安无事地在溪边一直浣纱到白头。（西施）（临江仙·滚滚长江东逝水）（念奴娇·赤壁怀古）（|8|
-12LinkFromMain::loadFirstFromContainedLine              m_fullString: 
-12LinkFromMain::loadFirstFromContainedLine              <a unhidden href="attachment\b064_9.htm">杜甫《登高》</a>
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              <a unhidden href="attachment\b064_9.htm">杜甫《登高》</a>
+12LinkFromMain::readDisplayType              display Type: unhidden
+12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readType              type seen from prefix: attachment\b064_9
 12LinkFromMain::readAnnotation              annotation: 杜甫《登高》
 12LinkFromMain::readReferFileName              chapterNumber: 64, attachmentNumber: 9
-12LinkFromMain::readDisplayType              display Type: unhidden
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              
 8Citation::readDisplayType              display Type: direct.
 12LinkFromMain::loadFirstFromContainedLine              after fix length: 63
 23CoupledBodyTextWithLink::getDisplayString              whole string: <a unhidden href="attachment\b064_9.htm">杜甫《登高》</a>
@@ -1234,14 +1259,15 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printOffsetToObjectType              891 LINKFROMMAIN
 23CoupledBodyTextWithLink::getDisplayString              885 6 ）（
 23CoupledBodyTextWithLink::getDisplayString              7.2   西施一代倾城逐浪花，吴宫空自忆儿家。效颦莫笑东村女，头白溪边尚浣纱。    日日在吴王夫差的宫殿里思念儿时的家园又如何，倾国倾城的一代佳人西施却再也没有回到当年浣纱的耶溪边，相反，如溪里那浪花互相追逐着奔向远方，她也消失不归。所以，也不必嘲笑效颦的东施，毕竟她相安无事地在溪边一直浣纱到白头。（西施）（临江仙·滚滚长江东逝水）（念奴娇·赤壁怀古）（杜甫《登高》）（|8|
-12LinkFromMain::loadFirstFromContainedLine              m_fullString: 
-12LinkFromMain::loadFirstFromContainedLine              <a unhidden href="attachment\b064_10.htm">王维《西施咏》</a>
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              <a unhidden href="attachment\b064_10.htm">王维《西施咏》</a>
+12LinkFromMain::readDisplayType              display Type: unhidden
+12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readType              type seen from prefix: attachment\b064_10
 12LinkFromMain::readAnnotation              annotation: 王维《西施咏》
 12LinkFromMain::readReferFileName              chapterNumber: 64, attachmentNumber: 10
-12LinkFromMain::readDisplayType              display Type: unhidden
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              
 8Citation::readDisplayType              display Type: direct.
 12LinkFromMain::loadFirstFromContainedLine              after fix length: 67
 23CoupledBodyTextWithLink::getDisplayString              whole string: <a unhidden href="attachment\b064_10.htm">王维《西施咏》</a>
@@ -1252,14 +1278,15 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printOffsetToObjectType              964 LINKFROMMAIN
 23CoupledBodyTextWithLink::getDisplayString              958 6 ）（
 23CoupledBodyTextWithLink::getDisplayString              7.2   西施一代倾城逐浪花，吴宫空自忆儿家。效颦莫笑东村女，头白溪边尚浣纱。    日日在吴王夫差的宫殿里思念儿时的家园又如何，倾国倾城的一代佳人西施却再也没有回到当年浣纱的耶溪边，相反，如溪里那浪花互相追逐着奔向远方，她也消失不归。所以，也不必嘲笑效颦的东施，毕竟她相安无事地在溪边一直浣纱到白头。（西施）（临江仙·滚滚长江东逝水）（念奴娇·赤壁怀古）（杜甫《登高》）（王维《西施咏》）（|8|
-12LinkFromMain::loadFirstFromContainedLine              m_fullString: 
-12LinkFromMain::loadFirstFromContainedLine              <a unhidden href="attachment\b064_11.htm">《庄子·天运》 东施效颦</a>
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              <a unhidden href="attachment\b064_11.htm">《庄子·天运》 东施效颦</a>
+12LinkFromMain::readDisplayType              display Type: unhidden
+12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readType              type seen from prefix: attachment\b064_11
 12LinkFromMain::readAnnotation              annotation: 《庄子·天运》 东施效颦
 12LinkFromMain::readReferFileName              chapterNumber: 64, attachmentNumber: 11
-12LinkFromMain::readDisplayType              display Type: unhidden
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              
 8Citation::readDisplayType              display Type: direct.
 12LinkFromMain::loadFirstFromContainedLine              after fix length: 79
 23CoupledBodyTextWithLink::getDisplayString              whole string: <a unhidden href="attachment\b064_11.htm">《庄子·天运》 东施效颦</a>
@@ -1270,7 +1297,7 @@ printCompareResult              same
 printCompareResult              7.2   西施一代倾城逐浪花，吴宫空自忆儿家。效颦莫笑东村女，头白溪边尚浣纱。    日日在吴王夫差的宫殿里思念儿时的家园又如何，倾国倾城的一代佳人西施却再也没有回到当年浣纱的耶溪边，相反，如溪里那浪花互相追逐着奔向远方，她也消失不归。所以，也不必嘲笑效颦的东施，毕竟她相安无事地在溪边一直浣纱到白头。（西施）（临江仙·滚滚长江东逝水）（念奴娇·赤壁怀古）（杜甫《登高》）（王维《西施咏》）（《庄子·天运》 东施效颦）<br>||
 printCompareResult              7.2   西施一代倾城逐浪花，吴宫空自忆儿家。效颦莫笑东村女，头白溪边尚浣纱。    日日在吴王夫差的宫殿里思念儿时的家园又如何，倾国倾城的一代佳人西施却再也没有回到当年浣纱的耶溪边，相反，如溪里那浪花互相追逐着奔向远方，她也消失不归。所以，也不必嘲笑效颦的东施，毕竟她相安无事地在溪边一直浣纱到白头。（西施）（临江仙·滚滚长江东逝水）（念奴娇·赤壁怀古）（杜甫《登高》）（王维《西施咏》）（《庄子·天运》 东施效颦）<br>||
 printCompareResult              same
-*************************line 562: compare test 4 finished *************************
+*************************line 551: compare test 4 finished *************************
 23CoupledBodyTextWithLink::getDisplayString              675
 25LineNumberPlaceholderLink::loadFirstFromContainedLine              P4L1
 23CoupledBodyTextWithLink::printOffsetToObjectType              m_offsetOfTypes:
@@ -1320,8 +1347,8 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printOffsetToObjectType              542 PERSONALCOMMENT
 23CoupledBodyTextWithLink::getDisplayString              41 1  
 23CoupledBodyTextWithLink::getDisplayString              4.1   |8|
-4Poem::loadFirstFromContainedLine              m_fullString: 
-4Poem::loadFirstFromContainedLine              <strong unhidden>桃花帘外东风软，桃花帘内晨妆懒。帘外桃花帘内人，人与桃花隔不远。</strong>
+4Poem::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+4Poem::getFullStringAndBodyTextFromContainedLine              <strong unhidden>桃花帘外东风软，桃花帘内晨妆懒。帘外桃花帘内人，人与桃花隔不远。</strong>
 4Poem::readDisplayType              display Type: unhidden
 23CoupledBodyTextWithLink::getDisplayString              whole string: <strong unhidden>桃花帘外东风软，桃花帘内晨妆懒。帘外桃花帘内人，人与桃花隔不远。</strong>
 23CoupledBodyTextWithLink::getDisplayString              display as:桃花帘外东风软，桃花帘内晨妆懒。帘外桃花帘内人，人与桃花隔不远。||
@@ -1380,8 +1407,8 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printOffsetToObjectType              542 PERSONALCOMMENT
 23CoupledBodyTextWithLink::getDisplayString              188 0 
 23CoupledBodyTextWithLink::getDisplayString              4.1   桃花帘外东风软，桃花帘内晨妆懒。帘外桃花帘内人，人与桃花隔不远。    |8|
-15PoemTranslation::loadFirstFromContainedLine              m_fullString: 
-15PoemTranslation::loadFirstFromContainedLine              <samp unhidden font style="font-size: 12pt; font-family: 宋体; color:#ff00ff">轻柔的春风又一次吹开了帘外的桃花，不禁让我回想起帘内的美人曾经情绪慵懒、无心梳妆。看似仅仅一帘之隔，帘外的桃花和帘内人隔得并不远。岂知隔花人远天涯近，这桃花和美人已经天各一方。</samp>
+15PoemTranslation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+15PoemTranslation::getFullStringAndBodyTextFromContainedLine              <samp unhidden font style="font-size: 12pt; font-family: 宋体; color:#ff00ff">轻柔的春风又一次吹开了帘外的桃花，不禁让我回想起帘内的美人曾经情绪慵懒、无心梳妆。看似仅仅一帘之隔，帘外的桃花和帘内人隔得并不远。岂知隔花人远天涯近，这桃花和美人已经天各一方。</samp>
 15PoemTranslation::readDisplayType              display Type: unhidden
 23CoupledBodyTextWithLink::getDisplayString              whole string: <samp unhidden font style="font-size: 12pt; font-family: 宋体; color:#ff00ff">轻柔的春风又一次吹开了帘外的桃花，不禁让我回想起帘内的美人曾经情绪慵懒、无心梳妆。看似仅仅一帘之隔，帘外的桃花和帘内人隔得并不远。岂知隔花人远天涯近，这桃花和美人已经天各一方。</samp>
 23CoupledBodyTextWithLink::getDisplayString              display as:轻柔的春风又一次吹开了帘外的桃花，不禁让我回想起帘内的美人曾经情绪慵懒、无心梳妆。看似仅仅一帘之隔，帘外的桃花和帘内人隔得并不远。岂知隔花人远天涯近，这桃花和美人已经天各一方。||
@@ -1391,8 +1418,8 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printOffsetToObjectType              542 PERSONALCOMMENT
 23CoupledBodyTextWithLink::getDisplayString              539 3 （
 23CoupledBodyTextWithLink::getDisplayString              4.1   桃花帘外东风软，桃花帘内晨妆懒。帘外桃花帘内人，人与桃花隔不远。    轻柔的春风又一次吹开了帘外的桃花，不禁让我回想起帘内的美人曾经情绪慵懒、无心梳妆。看似仅仅一帘之隔，帘外的桃花和帘内人隔得并不远。岂知隔花人远天涯近，这桃花和美人已经天各一方。（|8|
-15PersonalComment::loadFirstFromContainedLine              m_fullString: 
-15PersonalComment::loadFirstFromContainedLine              <u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">“不远”对应“月痕”</u>
+15PersonalComment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+15PersonalComment::getFullStringAndBodyTextFromContainedLine              <u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">“不远”对应“月痕”</u>
 15PersonalComment::readDisplayType              display Type: unhidden
 23CoupledBodyTextWithLink::getDisplayString              whole string: <u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">“不远”对应“月痕”</u>
 23CoupledBodyTextWithLink::getDisplayString              display as:“不远”对应“月痕”||
@@ -1402,7 +1429,7 @@ printCompareResult              same
 printCompareResult              4.1   桃花帘外东风软，桃花帘内晨妆懒。帘外桃花帘内人，人与桃花隔不远。    轻柔的春风又一次吹开了帘外的桃花，不禁让我回想起帘内的美人曾经情绪慵懒、无心梳妆。看似仅仅一帘之隔，帘外的桃花和帘内人隔得并不远。岂知隔花人远天涯近，这桃花和美人已经天各一方。（“不远”对应“月痕”）<br>||
 printCompareResult              4.1   桃花帘外东风软，桃花帘内晨妆懒。帘外桃花帘内人，人与桃花隔不远。    轻柔的春风又一次吹开了帘外的桃花，不禁让我回想起帘内的美人曾经情绪慵懒、无心梳妆。看似仅仅一帘之隔，帘外的桃花和帘内人隔得并不远。岂知隔花人远天涯近，这桃花和美人已经天各一方。（“不远”对应“月痕”）<br>||
 printCompareResult              same
-*************************line 562: compare test 5 finished *************************
+*************************line 551: compare test 5 finished *************************
 23CoupledBodyTextWithLink::getDisplayString              3181
 25LineNumberPlaceholderLink::loadFirstFromContainedLine              P7L1
 23CoupledBodyTextWithLink::printOffsetToObjectType              m_offsetOfTypes:
@@ -1486,8 +1513,8 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printOffsetToObjectType              285 LINKFROMMAIN
 23CoupledBodyTextWithLink::getDisplayString              41 25  此时宝玉正坐着（
 23CoupledBodyTextWithLink::getDisplayString              7.1   此时宝玉正坐着（|8|
-7Comment::loadFirstFromContainedLine              m_fullString: 
-7Comment::loadFirstFromContainedLine              <cite unhidden>发呆</cite>
+7Comment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+7Comment::getFullStringAndBodyTextFromContainedLine              <cite unhidden>发呆</cite>
 7Comment::readDisplayType              display Type: unhidden
 23CoupledBodyTextWithLink::getDisplayString              whole string: <cite unhidden>发呆</cite>
 23CoupledBodyTextWithLink::getDisplayString              display as:发呆||
@@ -1499,18 +1526,19 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printOffsetToObjectType              615 COMMENT
 23CoupledBodyTextWithLink::getDisplayString              94 48 ）纳闷，想袭人之母不知是死是活（
 23CoupledBodyTextWithLink::getDisplayString              7.1   此时宝玉正坐着（发呆）纳闷，想袭人之母不知是死是活（|8|
-15PersonalComment::loadFirstFromContainedLine              m_fullString: 
-15PersonalComment::loadFirstFromContainedLine              <u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">独宝玉一人记挂袭人因母伤悲，黛玉则<a unhidden title="落后" href="a052.htm#P7L4"><sub hidden>第52回7.4节:</sub>担心袭人不在无人照顾宝玉</a>（<a unhidden title="落后" href="original\c052.htm#P5L2"><sub hidden>第52回5.2节:</sub>原文</a>）</u>
+15PersonalComment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+15PersonalComment::getFullStringAndBodyTextFromContainedLine              <u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">独宝玉一人记挂袭人因母伤悲，黛玉则<a unhidden title="落后" href="a052.htm#P7L4"><sub hidden>第52回7.4节:</sub>担心袭人不在无人照顾宝玉</a>（<a unhidden title="落后" href="original\c052.htm#P5L2"><sub hidden>第52回5.2节:</sub>原文</a>）</u>
 15PersonalComment::readDisplayType              display Type: unhidden
-12LinkFromMain::loadFirstFromContainedLine              m_fullString: 
-12LinkFromMain::loadFirstFromContainedLine              <a unhidden title="落后" href="a052.htm#P7L4"><sub hidden>第52回7.4节:</sub>担心袭人不在无人照顾宝玉</a>
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              <a unhidden title="落后" href="a052.htm#P7L4"><sub hidden>第52回7.4节:</sub>担心袭人不在无人照顾宝玉</a>
+12LinkFromMain::readDisplayType              display Type: unhidden
+12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readType              type seen from prefix: a052
 12LinkFromMain::readAnnotation              annotation: 担心袭人不在无人照顾宝玉
 12LinkFromMain::readReferFileName              chapterNumber: 52, attachmentNumber: 0
-12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readReferPara              referPara: P7L4
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              <sub hidden>第52回7.4节:</sub>
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              <sub hidden>第52回7.4节:</sub>
 8Citation::readDisplayType              display Type: hidden
 15CoupledBodyText::setInputOutputFiles              input file is: bodyTexts/output/Main52.txt
 15CoupledBodyText::setInputOutputFiles              output file is: bodyTexts/afterFix/Main52.txt
@@ -1521,15 +1549,16 @@ printCompareResult              same
 12LinkFromMain::length              <a unhidden title="落后" href="a052.htm#P7L4"><sub hidden>第52回7.4节:</sub>担心袭人不在无人照顾宝玉</a>
 12LinkFromMain::length              <a unhidden title="落后" href="a052.htm#P7L4">↑<sub hidden>第52回7.4节:</sub>担心袭人不在无人照顾宝玉</a>
 12LinkFromMain::loadFirstFromContainedLine              after fix length: 121
-12LinkFromMain::loadFirstFromContainedLine              m_fullString: 
-12LinkFromMain::loadFirstFromContainedLine              <a unhidden title="落后" href="original\c052.htm#P5L2"><sub hidden>第52回5.2节:</sub>原文</a>
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              <a unhidden title="落后" href="original\c052.htm#P5L2"><sub hidden>第52回5.2节:</sub>原文</a>
+12LinkFromMain::readDisplayType              display Type: unhidden
+12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readType              type seen from prefix: original\c052
 12LinkFromMain::readAnnotation              annotation: 原文
 12LinkFromMain::readReferFileName              chapterNumber: 52, attachmentNumber: 0
-12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readReferPara              referPara: P5L2
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              <sub hidden>第52回5.2节:</sub>
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              <sub hidden>第52回5.2节:</sub>
 8Citation::readDisplayType              display Type: hidden
 15CoupledBodyText::setInputOutputFiles              input file is: bodyTexts/output/Org52.txt
 15CoupledBodyText::setInputOutputFiles              output file is: bodyTexts/afterFix/Org52.txt
@@ -1554,8 +1583,8 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printOffsetToObjectType              1575 PERSONALCOMMENT
 23CoupledBodyTextWithLink::getDisplayString              516 99 ），忽听见晴雯如此说，便自己起身出去，放下镜套，划上消息，进来笑（
 23CoupledBodyTextWithLink::getDisplayString              7.1   此时宝玉正坐着（发呆）纳闷，想袭人之母不知是死是活（独宝玉一人记挂袭人因母伤悲，黛玉则↑担心袭人不在无人照顾宝玉（↑原文）），忽听见晴雯如此说，便自己起身出去，放下镜套，划上消息，进来笑（|8|
-7Comment::loadFirstFromContainedLine              m_fullString: 
-7Comment::loadFirstFromContainedLine              <cite unhidden>向晴雯</cite>
+7Comment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+7Comment::getFullStringAndBodyTextFromContainedLine              <cite unhidden>向晴雯</cite>
 7Comment::readDisplayType              display Type: unhidden
 23CoupledBodyTextWithLink::getDisplayString              whole string: <cite unhidden>向晴雯</cite>
 23CoupledBodyTextWithLink::getDisplayString              display as:向晴雯||
@@ -1567,8 +1596,8 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printOffsetToObjectType              1575 PERSONALCOMMENT
 23CoupledBodyTextWithLink::getDisplayString              646 33 ）道：“你们暖和罢，（
 23CoupledBodyTextWithLink::getDisplayString              7.1   此时宝玉正坐着（发呆）纳闷，想袭人之母不知是死是活（独宝玉一人记挂袭人因母伤悲，黛玉则↑担心袭人不在无人照顾宝玉（↑原文）），忽听见晴雯如此说，便自己起身出去，放下镜套，划上消息，进来笑（向晴雯）道：“你们暖和罢，（|8|
-7Comment::loadFirstFromContainedLine              m_fullString: 
-7Comment::loadFirstFromContainedLine              <cite unhidden>我</cite>
+7Comment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+7Comment::getFullStringAndBodyTextFromContainedLine              <cite unhidden>我</cite>
 7Comment::readDisplayType              display Type: unhidden
 23CoupledBodyTextWithLink::getDisplayString              whole string: <cite unhidden>我</cite>
 23CoupledBodyTextWithLink::getDisplayString              display as:我||
@@ -1580,8 +1609,8 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printOffsetToObjectType              1575 PERSONALCOMMENT
 23CoupledBodyTextWithLink::getDisplayString              704 9 ）都（
 23CoupledBodyTextWithLink::getDisplayString              7.1   此时宝玉正坐着（发呆）纳闷，想袭人之母不知是死是活（独宝玉一人记挂袭人因母伤悲，黛玉则↑担心袭人不在无人照顾宝玉（↑原文）），忽听见晴雯如此说，便自己起身出去，放下镜套，划上消息，进来笑（向晴雯）道：“你们暖和罢，（我）都（|8|
-7Comment::loadFirstFromContainedLine              m_fullString: 
-7Comment::loadFirstFromContainedLine              <cite unhidden>放</cite>
+7Comment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+7Comment::getFullStringAndBodyTextFromContainedLine              <cite unhidden>放</cite>
 7Comment::readDisplayType              display Type: unhidden
 23CoupledBodyTextWithLink::getDisplayString              whole string: <cite unhidden>放</cite>
 23CoupledBodyTextWithLink::getDisplayString              display as:放||
@@ -1593,8 +1622,8 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printOffsetToObjectType              1575 PERSONALCOMMENT
 23CoupledBodyTextWithLink::getDisplayString              738 36 ）完了。”晴雯笑道：“（
 23CoupledBodyTextWithLink::getDisplayString              7.1   此时宝玉正坐着（发呆）纳闷，想袭人之母不知是死是活（独宝玉一人记挂袭人因母伤悲，黛玉则↑担心袭人不在无人照顾宝玉（↑原文）），忽听见晴雯如此说，便自己起身出去，放下镜套，划上消息，进来笑（向晴雯）道：“你们暖和罢，（我）都（放）完了。”晴雯笑道：“（|8|
-7Comment::loadFirstFromContainedLine              m_fullString: 
-7Comment::loadFirstFromContainedLine              <cite unhidden>我这</cite>
+7Comment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+7Comment::getFullStringAndBodyTextFromContainedLine              <cite unhidden>我这</cite>
 7Comment::readDisplayType              display Type: unhidden
 23CoupledBodyTextWithLink::getDisplayString              whole string: <cite unhidden>我这</cite>
 23CoupledBodyTextWithLink::getDisplayString              display as:我这||
@@ -1606,14 +1635,15 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printOffsetToObjectType              1575 PERSONALCOMMENT
 23CoupledBodyTextWithLink::getDisplayString              802 51 ）终久暖和不成的，我又想起来汤婆子
 23CoupledBodyTextWithLink::getDisplayString              7.1   此时宝玉正坐着（发呆）纳闷，想袭人之母不知是死是活（独宝玉一人记挂袭人因母伤悲，黛玉则↑担心袭人不在无人照顾宝玉（↑原文）），忽听见晴雯如此说，便自己起身出去，放下镜套，划上消息，进来笑（向晴雯）道：“你们暖和罢，（我）都（放）完了。”晴雯笑道：“（我这）终久暖和不成的，我又想起来汤婆子|8|
-12LinkFromMain::loadFirstFromContainedLine              m_fullString: 
-12LinkFromMain::loadFirstFromContainedLine              <a unhidden title="IMAGE" href="a013.htm#xlong.jpg">（图示：汤婆子）</a>
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              <a unhidden title="IMAGE" href="a013.htm#xlong.jpg">（图示：汤婆子）</a>
+12LinkFromMain::readDisplayType              display Type: unhidden
+12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readAnnotation              annotation: （图示：汤婆子）
 12LinkFromMain::readReferFileName              m_imageReferFilename: a013.htm
-12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readReferPara              m_referPara: xlong.jpg
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              
 8Citation::readDisplayType              display Type: direct.
 12LinkFromMain::length               size not match: 80 vs 83
 12LinkFromMain::length              <a unhidden title="IMAGE" href="a013.htm#xlong.jpg">（图示：汤婆子）</a>
@@ -1634,8 +1664,8 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printOffsetToObjectType              1575 PERSONALCOMMENT
 23CoupledBodyTextWithLink::getDisplayString              933 4  （
 23CoupledBodyTextWithLink::getDisplayString              7.1   此时宝玉正坐着（发呆）纳闷，想袭人之母不知是死是活（独宝玉一人记挂袭人因母伤悲，黛玉则↑担心袭人不在无人照顾宝玉（↑原文）），忽听见晴雯如此说，便自己起身出去，放下镜套，划上消息，进来笑（向晴雯）道：“你们暖和罢，（我）都（放）完了。”晴雯笑道：“（我这）终久暖和不成的，我又想起来汤婆子↑（图示：汤婆子） （|8|
-7Comment::loadFirstFromContainedLine              m_fullString: 
-7Comment::loadFirstFromContainedLine              <cite unhidden>放在被窝里面的热水壶</cite>
+7Comment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+7Comment::getFullStringAndBodyTextFromContainedLine              <cite unhidden>放在被窝里面的热水壶</cite>
 7Comment::readDisplayType              display Type: unhidden
 23CoupledBodyTextWithLink::getDisplayString              whole string: <cite unhidden>放在被窝里面的热水壶</cite>
 23CoupledBodyTextWithLink::getDisplayString              display as:放在被窝里面的热水壶||
@@ -1646,8 +1676,8 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printOffsetToObjectType              1575 PERSONALCOMMENT
 23CoupledBodyTextWithLink::getDisplayString              989 45 ）还没拿来呢。”麝月道：“这（
 23CoupledBodyTextWithLink::getDisplayString              7.1   此时宝玉正坐着（发呆）纳闷，想袭人之母不知是死是活（独宝玉一人记挂袭人因母伤悲，黛玉则↑担心袭人不在无人照顾宝玉（↑原文）），忽听见晴雯如此说，便自己起身出去，放下镜套，划上消息，进来笑（向晴雯）道：“你们暖和罢，（我）都（放）完了。”晴雯笑道：“（我这）终久暖和不成的，我又想起来汤婆子↑（图示：汤婆子） （放在被窝里面的热水壶）还没拿来呢。”麝月道：“这（|8|
-7Comment::loadFirstFromContainedLine              m_fullString: 
-7Comment::loadFirstFromContainedLine              <cite unhidden>也</cite>
+7Comment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+7Comment::getFullStringAndBodyTextFromContainedLine              <cite unhidden>也</cite>
 7Comment::readDisplayType              display Type: unhidden
 23CoupledBodyTextWithLink::getDisplayString              whole string: <cite unhidden>也</cite>
 23CoupledBodyTextWithLink::getDisplayString              display as:也||
@@ -1658,8 +1688,8 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printOffsetToObjectType              1575 PERSONALCOMMENT
 23CoupledBodyTextWithLink::getDisplayString              1059 15 ）难为你（
 23CoupledBodyTextWithLink::getDisplayString              7.1   此时宝玉正坐着（发呆）纳闷，想袭人之母不知是死是活（独宝玉一人记挂袭人因母伤悲，黛玉则↑担心袭人不在无人照顾宝玉（↑原文）），忽听见晴雯如此说，便自己起身出去，放下镜套，划上消息，进来笑（向晴雯）道：“你们暖和罢，（我）都（放）完了。”晴雯笑道：“（我这）终久暖和不成的，我又想起来汤婆子↑（图示：汤婆子） （放在被窝里面的热水壶）还没拿来呢。”麝月道：“这（也）难为你（|8|
-7Comment::loadFirstFromContainedLine              m_fullString: 
-7Comment::loadFirstFromContainedLine              <cite unhidden>这么暖和还</cite>
+7Comment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+7Comment::getFullStringAndBodyTextFromContainedLine              <cite unhidden>这么暖和还</cite>
 7Comment::readDisplayType              display Type: unhidden
 23CoupledBodyTextWithLink::getDisplayString              whole string: <cite unhidden>这么暖和还</cite>
 23CoupledBodyTextWithLink::getDisplayString              display as:这么暖和还||
@@ -1670,8 +1700,8 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printOffsetToObjectType              1575 PERSONALCOMMENT
 23CoupledBodyTextWithLink::getDisplayString              1111 12 ）想着（
 23CoupledBodyTextWithLink::getDisplayString              7.1   此时宝玉正坐着（发呆）纳闷，想袭人之母不知是死是活（独宝玉一人记挂袭人因母伤悲，黛玉则↑担心袭人不在无人照顾宝玉（↑原文）），忽听见晴雯如此说，便自己起身出去，放下镜套，划上消息，进来笑（向晴雯）道：“你们暖和罢，（我）都（放）完了。”晴雯笑道：“（我这）终久暖和不成的，我又想起来汤婆子↑（图示：汤婆子） （放在被窝里面的热水壶）还没拿来呢。”麝月道：“这（也）难为你（这么暖和还）想着（|8|
-7Comment::loadFirstFromContainedLine              m_fullString: 
-7Comment::loadFirstFromContainedLine              <cite unhidden>汤婆子也</cite>
+7Comment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+7Comment::getFullStringAndBodyTextFromContainedLine              <cite unhidden>汤婆子也</cite>
 7Comment::readDisplayType              display Type: unhidden
 23CoupledBodyTextWithLink::getDisplayString              whole string: <cite unhidden>汤婆子也</cite>
 23CoupledBodyTextWithLink::getDisplayString              display as:汤婆子也||
@@ -1682,8 +1712,8 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printOffsetToObjectType              1575 PERSONALCOMMENT
 23CoupledBodyTextWithLink::getDisplayString              1157 9 ）！（
 23CoupledBodyTextWithLink::getDisplayString              7.1   此时宝玉正坐着（发呆）纳闷，想袭人之母不知是死是活（独宝玉一人记挂袭人因母伤悲，黛玉则↑担心袭人不在无人照顾宝玉（↑原文）），忽听见晴雯如此说，便自己起身出去，放下镜套，划上消息，进来笑（向晴雯）道：“你们暖和罢，（我）都（放）完了。”晴雯笑道：“（我这）终久暖和不成的，我又想起来汤婆子↑（图示：汤婆子） （放在被窝里面的热水壶）还没拿来呢。”麝月道：“这（也）难为你（这么暖和还）想着（汤婆子也）！（|8|
-7Comment::loadFirstFromContainedLine              m_fullString: 
-7Comment::loadFirstFromContainedLine              <cite unhidden>宝玉</cite>
+7Comment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+7Comment::getFullStringAndBodyTextFromContainedLine              <cite unhidden>宝玉</cite>
 7Comment::readDisplayType              display Type: unhidden
 23CoupledBodyTextWithLink::getDisplayString              whole string: <cite unhidden>宝玉</cite>
 23CoupledBodyTextWithLink::getDisplayString              display as:宝玉||
@@ -1694,8 +1724,8 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printOffsetToObjectType              1575 PERSONALCOMMENT
 23CoupledBodyTextWithLink::getDisplayString              1194 15 ）他素日（
 23CoupledBodyTextWithLink::getDisplayString              7.1   此时宝玉正坐着（发呆）纳闷，想袭人之母不知是死是活（独宝玉一人记挂袭人因母伤悲，黛玉则↑担心袭人不在无人照顾宝玉（↑原文）），忽听见晴雯如此说，便自己起身出去，放下镜套，划上消息，进来笑（向晴雯）道：“你们暖和罢，（我）都（放）完了。”晴雯笑道：“（我这）终久暖和不成的，我又想起来汤婆子↑（图示：汤婆子） （放在被窝里面的热水壶）还没拿来呢。”麝月道：“这（也）难为你（这么暖和还）想着（汤婆子也）！（宝玉）他素日（|8|
-7Comment::loadFirstFromContainedLine              m_fullString: 
-7Comment::loadFirstFromContainedLine              <cite unhidden>睡在暖阁</cite>
+7Comment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+7Comment::getFullStringAndBodyTextFromContainedLine              <cite unhidden>睡在暖阁</cite>
 7Comment::readDisplayType              display Type: unhidden
 23CoupledBodyTextWithLink::getDisplayString              whole string: <cite unhidden>睡在暖阁</cite>
 23CoupledBodyTextWithLink::getDisplayString              display as:睡在暖阁||
@@ -1706,8 +1736,8 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printOffsetToObjectType              1575 PERSONALCOMMENT
 23CoupledBodyTextWithLink::getDisplayString              1243 27 ）又不要汤婆子，（
 23CoupledBodyTextWithLink::getDisplayString              7.1   此时宝玉正坐着（发呆）纳闷，想袭人之母不知是死是活（独宝玉一人记挂袭人因母伤悲，黛玉则↑担心袭人不在无人照顾宝玉（↑原文）），忽听见晴雯如此说，便自己起身出去，放下镜套，划上消息，进来笑（向晴雯）道：“你们暖和罢，（我）都（放）完了。”晴雯笑道：“（我这）终久暖和不成的，我又想起来汤婆子↑（图示：汤婆子） （放在被窝里面的热水壶）还没拿来呢。”麝月道：“这（也）难为你（这么暖和还）想着（汤婆子也）！（宝玉）他素日（睡在暖阁）又不要汤婆子，（|8|
-7Comment::loadFirstFromContainedLine              m_fullString: 
-7Comment::loadFirstFromContainedLine              <cite unhidden>就咱们俩要汤婆子，</cite>
+7Comment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+7Comment::getFullStringAndBodyTextFromContainedLine              <cite unhidden>就咱们俩要汤婆子，</cite>
 7Comment::readDisplayType              display Type: unhidden
 23CoupledBodyTextWithLink::getDisplayString              whole string: <cite unhidden>就咱们俩要汤婆子，</cite>
 23CoupledBodyTextWithLink::getDisplayString              display as:就咱们俩要汤婆子，||
@@ -1718,8 +1748,8 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printOffsetToObjectType              1575 PERSONALCOMMENT
 23CoupledBodyTextWithLink::getDisplayString              1319 30 ）咱们那熏笼上暖和（
 23CoupledBodyTextWithLink::getDisplayString              7.1   此时宝玉正坐着（发呆）纳闷，想袭人之母不知是死是活（独宝玉一人记挂袭人因母伤悲，黛玉则↑担心袭人不在无人照顾宝玉（↑原文）），忽听见晴雯如此说，便自己起身出去，放下镜套，划上消息，进来笑（向晴雯）道：“你们暖和罢，（我）都（放）完了。”晴雯笑道：“（我这）终久暖和不成的，我又想起来汤婆子↑（图示：汤婆子） （放在被窝里面的热水壶）还没拿来呢。”麝月道：“这（也）难为你（这么暖和还）想着（汤婆子也）！（宝玉）他素日（睡在暖阁）又不要汤婆子，（就咱们俩要汤婆子，）咱们那熏笼上暖和（|8|
-7Comment::loadFirstFromContainedLine              m_fullString: 
-7Comment::loadFirstFromContainedLine              <cite unhidden>咱们俩今天都睡熏笼上</cite>
+7Comment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+7Comment::getFullStringAndBodyTextFromContainedLine              <cite unhidden>咱们俩今天都睡熏笼上</cite>
 7Comment::readDisplayType              display Type: unhidden
 23CoupledBodyTextWithLink::getDisplayString              whole string: <cite unhidden>咱们俩今天都睡熏笼上</cite>
 23CoupledBodyTextWithLink::getDisplayString              display as:咱们俩今天都睡熏笼上||
@@ -1730,8 +1760,8 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printOffsetToObjectType              1575 PERSONALCOMMENT
 23CoupledBodyTextWithLink::getDisplayString              1401 21 ），比不得那（
 23CoupledBodyTextWithLink::getDisplayString              7.1   此时宝玉正坐着（发呆）纳闷，想袭人之母不知是死是活（独宝玉一人记挂袭人因母伤悲，黛玉则↑担心袭人不在无人照顾宝玉（↑原文）），忽听见晴雯如此说，便自己起身出去，放下镜套，划上消息，进来笑（向晴雯）道：“你们暖和罢，（我）都（放）完了。”晴雯笑道：“（我这）终久暖和不成的，我又想起来汤婆子↑（图示：汤婆子） （放在被窝里面的热水壶）还没拿来呢。”麝月道：“这（也）难为你（这么暖和还）想着（汤婆子也）！（宝玉）他素日（睡在暖阁）又不要汤婆子，（就咱们俩要汤婆子，）咱们那熏笼上暖和（咱们俩今天都睡熏笼上），比不得那（|8|
-7Comment::loadFirstFromContainedLine              m_fullString: 
-7Comment::loadFirstFromContainedLine              <cite unhidden>外屋</cite>
+7Comment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+7Comment::getFullStringAndBodyTextFromContainedLine              <cite unhidden>外屋</cite>
 7Comment::readDisplayType              display Type: unhidden
 23CoupledBodyTextWithLink::getDisplayString              whole string: <cite unhidden>外屋</cite>
 23CoupledBodyTextWithLink::getDisplayString              display as:外屋||
@@ -1742,8 +1772,8 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printOffsetToObjectType              1575 PERSONALCOMMENT
 23CoupledBodyTextWithLink::getDisplayString              1450 12 ）屋里（
 23CoupledBodyTextWithLink::getDisplayString              7.1   此时宝玉正坐着（发呆）纳闷，想袭人之母不知是死是活（独宝玉一人记挂袭人因母伤悲，黛玉则↑担心袭人不在无人照顾宝玉（↑原文）），忽听见晴雯如此说，便自己起身出去，放下镜套，划上消息，进来笑（向晴雯）道：“你们暖和罢，（我）都（放）完了。”晴雯笑道：“（我这）终久暖和不成的，我又想起来汤婆子↑（图示：汤婆子） （放在被窝里面的热水壶）还没拿来呢。”麝月道：“这（也）难为你（这么暖和还）想着（汤婆子也）！（宝玉）他素日（睡在暖阁）又不要汤婆子，（就咱们俩要汤婆子，）咱们那熏笼上暖和（咱们俩今天都睡熏笼上），比不得那（外屋）屋里（|8|
-7Comment::loadFirstFromContainedLine              m_fullString: 
-7Comment::loadFirstFromContainedLine              <cite unhidden>咱们常睡的</cite>
+7Comment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+7Comment::getFullStringAndBodyTextFromContainedLine              <cite unhidden>咱们常睡的</cite>
 7Comment::readDisplayType              display Type: unhidden
 23CoupledBodyTextWithLink::getDisplayString              whole string: <cite unhidden>咱们常睡的</cite>
 23CoupledBodyTextWithLink::getDisplayString              display as:咱们常睡的||
@@ -1754,8 +1784,8 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printOffsetToObjectType              1575 PERSONALCOMMENT
 23CoupledBodyTextWithLink::getDisplayString              1499 33 ）炕冷，今儿可以不用（
 23CoupledBodyTextWithLink::getDisplayString              7.1   此时宝玉正坐着（发呆）纳闷，想袭人之母不知是死是活（独宝玉一人记挂袭人因母伤悲，黛玉则↑担心袭人不在无人照顾宝玉（↑原文）），忽听见晴雯如此说，便自己起身出去，放下镜套，划上消息，进来笑（向晴雯）道：“你们暖和罢，（我）都（放）完了。”晴雯笑道：“（我这）终久暖和不成的，我又想起来汤婆子↑（图示：汤婆子） （放在被窝里面的热水壶）还没拿来呢。”麝月道：“这（也）难为你（这么暖和还）想着（汤婆子也）！（宝玉）他素日（睡在暖阁）又不要汤婆子，（就咱们俩要汤婆子，）咱们那熏笼上暖和（咱们俩今天都睡熏笼上），比不得那（外屋）屋里（咱们常睡的）炕冷，今儿可以不用（|8|
-7Comment::loadFirstFromContainedLine              m_fullString: 
-7Comment::loadFirstFromContainedLine              <cite unhidden>汤婆子</cite>
+7Comment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+7Comment::getFullStringAndBodyTextFromContainedLine              <cite unhidden>汤婆子</cite>
 7Comment::readDisplayType              display Type: unhidden
 23CoupledBodyTextWithLink::getDisplayString              whole string: <cite unhidden>汤婆子</cite>
 23CoupledBodyTextWithLink::getDisplayString              display as:汤婆子||
@@ -1766,8 +1796,8 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printOffsetToObjectType              1752 COMMENT
 23CoupledBodyTextWithLink::getDisplayString              1563 12 ）。”（
 23CoupledBodyTextWithLink::getDisplayString              7.1   此时宝玉正坐着（发呆）纳闷，想袭人之母不知是死是活（独宝玉一人记挂袭人因母伤悲，黛玉则↑担心袭人不在无人照顾宝玉（↑原文）），忽听见晴雯如此说，便自己起身出去，放下镜套，划上消息，进来笑（向晴雯）道：“你们暖和罢，（我）都（放）完了。”晴雯笑道：“（我这）终久暖和不成的，我又想起来汤婆子↑（图示：汤婆子） （放在被窝里面的热水壶）还没拿来呢。”麝月道：“这（也）难为你（这么暖和还）想着（汤婆子也）！（宝玉）他素日（睡在暖阁）又不要汤婆子，（就咱们俩要汤婆子，）咱们那熏笼上暖和（咱们俩今天都睡熏笼上），比不得那（外屋）屋里（咱们常睡的）炕冷，今儿可以不用（汤婆子）。”（|8|
-15PersonalComment::loadFirstFromContainedLine              m_fullString: 
-15PersonalComment::loadFirstFromContainedLine              <u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">平时看样子都是袭人在暖阁里外面床上陪睡</u>
+15PersonalComment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+15PersonalComment::getFullStringAndBodyTextFromContainedLine              <u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">平时看样子都是袭人在暖阁里外面床上陪睡</u>
 15PersonalComment::readDisplayType              display Type: unhidden
 23CoupledBodyTextWithLink::getDisplayString              whole string: <u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">平时看样子都是袭人在暖阁里外面床上陪睡</u>
 23CoupledBodyTextWithLink::getDisplayString              display as:平时看样子都是袭人在暖阁里外面床上陪睡||
@@ -1778,8 +1808,8 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printOffsetToObjectType              2097 PERSONALCOMMENT
 23CoupledBodyTextWithLink::getDisplayString              1728 24 ）宝玉笑道：“（
 23CoupledBodyTextWithLink::getDisplayString              7.1   此时宝玉正坐着（发呆）纳闷，想袭人之母不知是死是活（独宝玉一人记挂袭人因母伤悲，黛玉则↑担心袭人不在无人照顾宝玉（↑原文）），忽听见晴雯如此说，便自己起身出去，放下镜套，划上消息，进来笑（向晴雯）道：“你们暖和罢，（我）都（放）完了。”晴雯笑道：“（我这）终久暖和不成的，我又想起来汤婆子↑（图示：汤婆子） （放在被窝里面的热水壶）还没拿来呢。”麝月道：“这（也）难为你（这么暖和还）想着（汤婆子也）！（宝玉）他素日（睡在暖阁）又不要汤婆子，（就咱们俩要汤婆子，）咱们那熏笼上暖和（咱们俩今天都睡熏笼上），比不得那（外屋）屋里（咱们常睡的）炕冷，今儿可以不用（汤婆子）。”（平时看样子都是袭人在暖阁里外面床上陪睡）宝玉笑道：“（|8|
-7Comment::loadFirstFromContainedLine              m_fullString: 
-7Comment::loadFirstFromContainedLine              <cite unhidden>按照你们说的</cite>
+7Comment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+7Comment::getFullStringAndBodyTextFromContainedLine              <cite unhidden>按照你们说的</cite>
 7Comment::readDisplayType              display Type: unhidden
 23CoupledBodyTextWithLink::getDisplayString              whole string: <cite unhidden>按照你们说的</cite>
 23CoupledBodyTextWithLink::getDisplayString              display as:按照你们说的||
@@ -1790,8 +1820,8 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printOffsetToObjectType              2097 PERSONALCOMMENT
 23CoupledBodyTextWithLink::getDisplayString              1792 39 ）这个话，你们两个都在那（
 23CoupledBodyTextWithLink::getDisplayString              7.1   此时宝玉正坐着（发呆）纳闷，想袭人之母不知是死是活（独宝玉一人记挂袭人因母伤悲，黛玉则↑担心袭人不在无人照顾宝玉（↑原文）），忽听见晴雯如此说，便自己起身出去，放下镜套，划上消息，进来笑（向晴雯）道：“你们暖和罢，（我）都（放）完了。”晴雯笑道：“（我这）终久暖和不成的，我又想起来汤婆子↑（图示：汤婆子） （放在被窝里面的热水壶）还没拿来呢。”麝月道：“这（也）难为你（这么暖和还）想着（汤婆子也）！（宝玉）他素日（睡在暖阁）又不要汤婆子，（就咱们俩要汤婆子，）咱们那熏笼上暖和（咱们俩今天都睡熏笼上），比不得那（外屋）屋里（咱们常睡的）炕冷，今儿可以不用（汤婆子）。”（平时看样子都是袭人在暖阁里外面床上陪睡）宝玉笑道：“（按照你们说的）这个话，你们两个都在那（|8|
-7Comment::loadFirstFromContainedLine              m_fullString: 
-7Comment::loadFirstFromContainedLine              <cite unhidden>熏笼</cite>
+7Comment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+7Comment::getFullStringAndBodyTextFromContainedLine              <cite unhidden>熏笼</cite>
 7Comment::readDisplayType              display Type: unhidden
 23CoupledBodyTextWithLink::getDisplayString              whole string: <cite unhidden>熏笼</cite>
 23CoupledBodyTextWithLink::getDisplayString              display as:熏笼||
@@ -1802,8 +1832,8 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printOffsetToObjectType              2097 PERSONALCOMMENT
 23CoupledBodyTextWithLink::getDisplayString              1859 27 ）上头睡了，我这（
 23CoupledBodyTextWithLink::getDisplayString              7.1   此时宝玉正坐着（发呆）纳闷，想袭人之母不知是死是活（独宝玉一人记挂袭人因母伤悲，黛玉则↑担心袭人不在无人照顾宝玉（↑原文）），忽听见晴雯如此说，便自己起身出去，放下镜套，划上消息，进来笑（向晴雯）道：“你们暖和罢，（我）都（放）完了。”晴雯笑道：“（我这）终久暖和不成的，我又想起来汤婆子↑（图示：汤婆子） （放在被窝里面的热水壶）还没拿来呢。”麝月道：“这（也）难为你（这么暖和还）想着（汤婆子也）！（宝玉）他素日（睡在暖阁）又不要汤婆子，（就咱们俩要汤婆子，）咱们那熏笼上暖和（咱们俩今天都睡熏笼上），比不得那（外屋）屋里（咱们常睡的）炕冷，今儿可以不用（汤婆子）。”（平时看样子都是袭人在暖阁里外面床上陪睡）宝玉笑道：“（按照你们说的）这个话，你们两个都在那（熏笼）上头睡了，我这（|8|
-7Comment::loadFirstFromContainedLine              m_fullString: 
-7Comment::loadFirstFromContainedLine              <cite unhidden>暖阁里面的</cite>
+7Comment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+7Comment::getFullStringAndBodyTextFromContainedLine              <cite unhidden>暖阁里面的</cite>
 7Comment::readDisplayType              display Type: unhidden
 23CoupledBodyTextWithLink::getDisplayString              whole string: <cite unhidden>暖阁里面的</cite>
 23CoupledBodyTextWithLink::getDisplayString              display as:暖阁里面的||
@@ -1814,8 +1844,8 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printOffsetToObjectType              2097 PERSONALCOMMENT
 23CoupledBodyTextWithLink::getDisplayString              1923 12 ）外边（
 23CoupledBodyTextWithLink::getDisplayString              7.1   此时宝玉正坐着（发呆）纳闷，想袭人之母不知是死是活（独宝玉一人记挂袭人因母伤悲，黛玉则↑担心袭人不在无人照顾宝玉（↑原文）），忽听见晴雯如此说，便自己起身出去，放下镜套，划上消息，进来笑（向晴雯）道：“你们暖和罢，（我）都（放）完了。”晴雯笑道：“（我这）终久暖和不成的，我又想起来汤婆子↑（图示：汤婆子） （放在被窝里面的热水壶）还没拿来呢。”麝月道：“这（也）难为你（这么暖和还）想着（汤婆子也）！（宝玉）他素日（睡在暖阁）又不要汤婆子，（就咱们俩要汤婆子，）咱们那熏笼上暖和（咱们俩今天都睡熏笼上），比不得那（外屋）屋里（咱们常睡的）炕冷，今儿可以不用（汤婆子）。”（平时看样子都是袭人在暖阁里外面床上陪睡）宝玉笑道：“（按照你们说的）这个话，你们两个都在那（熏笼）上头睡了，我这（暖阁里面的）外边（|8|
-7Comment::loadFirstFromContainedLine              m_fullString: 
-7Comment::loadFirstFromContainedLine              <cite unhidden>那张床上</cite>
+7Comment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+7Comment::getFullStringAndBodyTextFromContainedLine              <cite unhidden>那张床上</cite>
 7Comment::readDisplayType              display Type: unhidden
 23CoupledBodyTextWithLink::getDisplayString              whole string: <cite unhidden>那张床上</cite>
 23CoupledBodyTextWithLink::getDisplayString              display as:那张床上||
@@ -1826,8 +1856,8 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printOffsetToObjectType              2097 PERSONALCOMMENT
 23CoupledBodyTextWithLink::getDisplayString              1969 15 ）没个人（
 23CoupledBodyTextWithLink::getDisplayString              7.1   此时宝玉正坐着（发呆）纳闷，想袭人之母不知是死是活（独宝玉一人记挂袭人因母伤悲，黛玉则↑担心袭人不在无人照顾宝玉（↑原文）），忽听见晴雯如此说，便自己起身出去，放下镜套，划上消息，进来笑（向晴雯）道：“你们暖和罢，（我）都（放）完了。”晴雯笑道：“（我这）终久暖和不成的，我又想起来汤婆子↑（图示：汤婆子） （放在被窝里面的热水壶）还没拿来呢。”麝月道：“这（也）难为你（这么暖和还）想着（汤婆子也）！（宝玉）他素日（睡在暖阁）又不要汤婆子，（就咱们俩要汤婆子，）咱们那熏笼上暖和（咱们俩今天都睡熏笼上），比不得那（外屋）屋里（咱们常睡的）炕冷，今儿可以不用（汤婆子）。”（平时看样子都是袭人在暖阁里外面床上陪睡）宝玉笑道：“（按照你们说的）这个话，你们两个都在那（熏笼）上头睡了，我这（暖阁里面的）外边（那张床上）没个人（|8|
-7Comment::loadFirstFromContainedLine              m_fullString: 
-7Comment::loadFirstFromContainedLine              <cite unhidden>陪睡</cite>
+7Comment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+7Comment::getFullStringAndBodyTextFromContainedLine              <cite unhidden>陪睡</cite>
 7Comment::readDisplayType              display Type: unhidden
 23CoupledBodyTextWithLink::getDisplayString              whole string: <cite unhidden>陪睡</cite>
 23CoupledBodyTextWithLink::getDisplayString              display as:陪睡||
@@ -1838,8 +1868,8 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printOffsetToObjectType              2097 PERSONALCOMMENT
 23CoupledBodyTextWithLink::getDisplayString              2012 12 ），我（
 23CoupledBodyTextWithLink::getDisplayString              7.1   此时宝玉正坐着（发呆）纳闷，想袭人之母不知是死是活（独宝玉一人记挂袭人因母伤悲，黛玉则↑担心袭人不在无人照顾宝玉（↑原文）），忽听见晴雯如此说，便自己起身出去，放下镜套，划上消息，进来笑（向晴雯）道：“你们暖和罢，（我）都（放）完了。”晴雯笑道：“（我这）终久暖和不成的，我又想起来汤婆子↑（图示：汤婆子） （放在被窝里面的热水壶）还没拿来呢。”麝月道：“这（也）难为你（这么暖和还）想着（汤婆子也）！（宝玉）他素日（睡在暖阁）又不要汤婆子，（就咱们俩要汤婆子，）咱们那熏笼上暖和（咱们俩今天都睡熏笼上），比不得那（外屋）屋里（咱们常睡的）炕冷，今儿可以不用（汤婆子）。”（平时看样子都是袭人在暖阁里外面床上陪睡）宝玉笑道：“（按照你们说的）这个话，你们两个都在那（熏笼）上头睡了，我这（暖阁里面的）外边（那张床上）没个人（陪睡），我（|8|
-7Comment::loadFirstFromContainedLine              m_fullString: 
-7Comment::loadFirstFromContainedLine              <cite unhidden>一个人</cite>
+7Comment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+7Comment::getFullStringAndBodyTextFromContainedLine              <cite unhidden>一个人</cite>
 7Comment::readDisplayType              display Type: unhidden
 23CoupledBodyTextWithLink::getDisplayString              whole string: <cite unhidden>一个人</cite>
 23CoupledBodyTextWithLink::getDisplayString              display as:一个人||
@@ -1850,8 +1880,8 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printOffsetToObjectType              2304 COMMENT
 23CoupledBodyTextWithLink::getDisplayString              2055 42 ）怪怕的，一夜也睡不着。”（
 23CoupledBodyTextWithLink::getDisplayString              7.1   此时宝玉正坐着（发呆）纳闷，想袭人之母不知是死是活（独宝玉一人记挂袭人因母伤悲，黛玉则↑担心袭人不在无人照顾宝玉（↑原文）），忽听见晴雯如此说，便自己起身出去，放下镜套，划上消息，进来笑（向晴雯）道：“你们暖和罢，（我）都（放）完了。”晴雯笑道：“（我这）终久暖和不成的，我又想起来汤婆子↑（图示：汤婆子） （放在被窝里面的热水壶）还没拿来呢。”麝月道：“这（也）难为你（这么暖和还）想着（汤婆子也）！（宝玉）他素日（睡在暖阁）又不要汤婆子，（就咱们俩要汤婆子，）咱们那熏笼上暖和（咱们俩今天都睡熏笼上），比不得那（外屋）屋里（咱们常睡的）炕冷，今儿可以不用（汤婆子）。”（平时看样子都是袭人在暖阁里外面床上陪睡）宝玉笑道：“（按照你们说的）这个话，你们两个都在那（熏笼）上头睡了，我这（暖阁里面的）外边（那张床上）没个人（陪睡），我（一个人）怪怕的，一夜也睡不着。”（|8|
-15PersonalComment::loadFirstFromContainedLine              m_fullString: 
-15PersonalComment::loadFirstFromContainedLine              <u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">暖阁里面除了宝玉自己睡的主床，还有一张“外面”的陪睡的床。</u>
+15PersonalComment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+15PersonalComment::getFullStringAndBodyTextFromContainedLine              <u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">暖阁里面除了宝玉自己睡的主床，还有一张“外面”的陪睡的床。</u>
 15PersonalComment::readDisplayType              display Type: unhidden
 23CoupledBodyTextWithLink::getDisplayString              whole string: <u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">暖阁里面除了宝玉自己睡的主床，还有一张“外面”的陪睡的床。</u>
 23CoupledBodyTextWithLink::getDisplayString              display as:暖阁里面除了宝玉自己睡的主床，还有一张“外面”的陪睡的床。||
@@ -1862,8 +1892,8 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printOffsetToObjectType              2679 PERSONALCOMMENT
 23CoupledBodyTextWithLink::getDisplayString              2280 24 ）晴雯道：“我（
 23CoupledBodyTextWithLink::getDisplayString              7.1   此时宝玉正坐着（发呆）纳闷，想袭人之母不知是死是活（独宝玉一人记挂袭人因母伤悲，黛玉则↑担心袭人不在无人照顾宝玉（↑原文）），忽听见晴雯如此说，便自己起身出去，放下镜套，划上消息，进来笑（向晴雯）道：“你们暖和罢，（我）都（放）完了。”晴雯笑道：“（我这）终久暖和不成的，我又想起来汤婆子↑（图示：汤婆子） （放在被窝里面的热水壶）还没拿来呢。”麝月道：“这（也）难为你（这么暖和还）想着（汤婆子也）！（宝玉）他素日（睡在暖阁）又不要汤婆子，（就咱们俩要汤婆子，）咱们那熏笼上暖和（咱们俩今天都睡熏笼上），比不得那（外屋）屋里（咱们常睡的）炕冷，今儿可以不用（汤婆子）。”（平时看样子都是袭人在暖阁里外面床上陪睡）宝玉笑道：“（按照你们说的）这个话，你们两个都在那（熏笼）上头睡了，我这（暖阁里面的）外边（那张床上）没个人（陪睡），我（一个人）怪怕的，一夜也睡不着。”（暖阁里面除了宝玉自己睡的主床，还有一张“外面”的陪睡的床。）晴雯道：“我（|8|
-7Comment::loadFirstFromContainedLine              m_fullString: 
-7Comment::loadFirstFromContainedLine              <cite unhidden>反正</cite>
+7Comment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+7Comment::getFullStringAndBodyTextFromContainedLine              <cite unhidden>反正</cite>
 7Comment::readDisplayType              display Type: unhidden
 23CoupledBodyTextWithLink::getDisplayString              whole string: <cite unhidden>反正</cite>
 23CoupledBodyTextWithLink::getDisplayString              display as:反正||
@@ -1874,8 +1904,8 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printOffsetToObjectType              2679 PERSONALCOMMENT
 23CoupledBodyTextWithLink::getDisplayString              2332 12 ）是在（
 23CoupledBodyTextWithLink::getDisplayString              7.1   此时宝玉正坐着（发呆）纳闷，想袭人之母不知是死是活（独宝玉一人记挂袭人因母伤悲，黛玉则↑担心袭人不在无人照顾宝玉（↑原文）），忽听见晴雯如此说，便自己起身出去，放下镜套，划上消息，进来笑（向晴雯）道：“你们暖和罢，（我）都（放）完了。”晴雯笑道：“（我这）终久暖和不成的，我又想起来汤婆子↑（图示：汤婆子） （放在被窝里面的热水壶）还没拿来呢。”麝月道：“这（也）难为你（这么暖和还）想着（汤婆子也）！（宝玉）他素日（睡在暖阁）又不要汤婆子，（就咱们俩要汤婆子，）咱们那熏笼上暖和（咱们俩今天都睡熏笼上），比不得那（外屋）屋里（咱们常睡的）炕冷，今儿可以不用（汤婆子）。”（平时看样子都是袭人在暖阁里外面床上陪睡）宝玉笑道：“（按照你们说的）这个话，你们两个都在那（熏笼）上头睡了，我这（暖阁里面的）外边（那张床上）没个人（陪睡），我（一个人）怪怕的，一夜也睡不着。”（暖阁里面除了宝玉自己睡的主床，还有一张“外面”的陪睡的床。）晴雯道：“我（反正）是在（|8|
-7Comment::loadFirstFromContainedLine              m_fullString: 
-7Comment::loadFirstFromContainedLine              <cite unhidden>熏笼</cite>
+7Comment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+7Comment::getFullStringAndBodyTextFromContainedLine              <cite unhidden>熏笼</cite>
 7Comment::readDisplayType              display Type: unhidden
 23CoupledBodyTextWithLink::getDisplayString              whole string: <cite unhidden>熏笼</cite>
 23CoupledBodyTextWithLink::getDisplayString              display as:熏笼||
@@ -1886,8 +1916,8 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printOffsetToObjectType              2679 PERSONALCOMMENT
 23CoupledBodyTextWithLink::getDisplayString              2372 21 ）这里。麝月（
 23CoupledBodyTextWithLink::getDisplayString              7.1   此时宝玉正坐着（发呆）纳闷，想袭人之母不知是死是活（独宝玉一人记挂袭人因母伤悲，黛玉则↑担心袭人不在无人照顾宝玉（↑原文）），忽听见晴雯如此说，便自己起身出去，放下镜套，划上消息，进来笑（向晴雯）道：“你们暖和罢，（我）都（放）完了。”晴雯笑道：“（我这）终久暖和不成的，我又想起来汤婆子↑（图示：汤婆子） （放在被窝里面的热水壶）还没拿来呢。”麝月道：“这（也）难为你（这么暖和还）想着（汤婆子也）！（宝玉）他素日（睡在暖阁）又不要汤婆子，（就咱们俩要汤婆子，）咱们那熏笼上暖和（咱们俩今天都睡熏笼上），比不得那（外屋）屋里（咱们常睡的）炕冷，今儿可以不用（汤婆子）。”（平时看样子都是袭人在暖阁里外面床上陪睡）宝玉笑道：“（按照你们说的）这个话，你们两个都在那（熏笼）上头睡了，我这（暖阁里面的）外边（那张床上）没个人（陪睡），我（一个人）怪怕的，一夜也睡不着。”（暖阁里面除了宝玉自己睡的主床，还有一张“外面”的陪睡的床。）晴雯道：“我（反正）是在（熏笼）这里。麝月（|8|
-7Comment::loadFirstFromContainedLine              m_fullString: 
-7Comment::loadFirstFromContainedLine              <cite unhidden>你</cite>
+7Comment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+7Comment::getFullStringAndBodyTextFromContainedLine              <cite unhidden>你</cite>
 7Comment::readDisplayType              display Type: unhidden
 23CoupledBodyTextWithLink::getDisplayString              whole string: <cite unhidden>你</cite>
 23CoupledBodyTextWithLink::getDisplayString              display as:你||
@@ -1898,8 +1928,8 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printOffsetToObjectType              2679 PERSONALCOMMENT
 23CoupledBodyTextWithLink::getDisplayString              2418 9 ）往（
 23CoupledBodyTextWithLink::getDisplayString              7.1   此时宝玉正坐着（发呆）纳闷，想袭人之母不知是死是活（独宝玉一人记挂袭人因母伤悲，黛玉则↑担心袭人不在无人照顾宝玉（↑原文）），忽听见晴雯如此说，便自己起身出去，放下镜套，划上消息，进来笑（向晴雯）道：“你们暖和罢，（我）都（放）完了。”晴雯笑道：“（我这）终久暖和不成的，我又想起来汤婆子↑（图示：汤婆子） （放在被窝里面的热水壶）还没拿来呢。”麝月道：“这（也）难为你（这么暖和还）想着（汤婆子也）！（宝玉）他素日（睡在暖阁）又不要汤婆子，（就咱们俩要汤婆子，）咱们那熏笼上暖和（咱们俩今天都睡熏笼上），比不得那（外屋）屋里（咱们常睡的）炕冷，今儿可以不用（汤婆子）。”（平时看样子都是袭人在暖阁里外面床上陪睡）宝玉笑道：“（按照你们说的）这个话，你们两个都在那（熏笼）上头睡了，我这（暖阁里面的）外边（那张床上）没个人（陪睡），我（一个人）怪怕的，一夜也睡不着。”（暖阁里面除了宝玉自己睡的主床，还有一张“外面”的陪睡的床。）晴雯道：“我（反正）是在（熏笼）这里。麝月（你）往（|8|
-7Comment::loadFirstFromContainedLine              m_fullString: 
-7Comment::loadFirstFromContainedLine              <cite unhidden>暖阁里宝玉</cite>
+7Comment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+7Comment::getFullStringAndBodyTextFromContainedLine              <cite unhidden>暖阁里宝玉</cite>
 7Comment::readDisplayType              display Type: unhidden
 23CoupledBodyTextWithLink::getDisplayString              whole string: <cite unhidden>暖阁里宝玉</cite>
 23CoupledBodyTextWithLink::getDisplayString              display as:暖阁里宝玉||
@@ -1910,8 +1940,8 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printOffsetToObjectType              2679 PERSONALCOMMENT
 23CoupledBodyTextWithLink::getDisplayString              2464 15 ）他外边（
 23CoupledBodyTextWithLink::getDisplayString              7.1   此时宝玉正坐着（发呆）纳闷，想袭人之母不知是死是活（独宝玉一人记挂袭人因母伤悲，黛玉则↑担心袭人不在无人照顾宝玉（↑原文）），忽听见晴雯如此说，便自己起身出去，放下镜套，划上消息，进来笑（向晴雯）道：“你们暖和罢，（我）都（放）完了。”晴雯笑道：“（我这）终久暖和不成的，我又想起来汤婆子↑（图示：汤婆子） （放在被窝里面的热水壶）还没拿来呢。”麝月道：“这（也）难为你（这么暖和还）想着（汤婆子也）！（宝玉）他素日（睡在暖阁）又不要汤婆子，（就咱们俩要汤婆子，）咱们那熏笼上暖和（咱们俩今天都睡熏笼上），比不得那（外屋）屋里（咱们常睡的）炕冷，今儿可以不用（汤婆子）。”（平时看样子都是袭人在暖阁里外面床上陪睡）宝玉笑道：“（按照你们说的）这个话，你们两个都在那（熏笼）上头睡了，我这（暖阁里面的）外边（那张床上）没个人（陪睡），我（一个人）怪怕的，一夜也睡不着。”（暖阁里面除了宝玉自己睡的主床，还有一张“外面”的陪睡的床。）晴雯道：“我（反正）是在（熏笼）这里。麝月（你）往（暖阁里宝玉）他外边（|8|
-7Comment::loadFirstFromContainedLine              m_fullString: 
-7Comment::loadFirstFromContainedLine              <cite unhidden>那张床上</cite>
+7Comment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+7Comment::getFullStringAndBodyTextFromContainedLine              <cite unhidden>那张床上</cite>
 7Comment::readDisplayType              display Type: unhidden
 23CoupledBodyTextWithLink::getDisplayString              whole string: <cite unhidden>那张床上</cite>
 23CoupledBodyTextWithLink::getDisplayString              display as:那张床上||
@@ -1922,8 +1952,8 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printOffsetToObjectType              2679 PERSONALCOMMENT
 23CoupledBodyTextWithLink::getDisplayString              2513 66 ）睡去。”说话之间，天已二更，麝月早已放下（
 23CoupledBodyTextWithLink::getDisplayString              7.1   此时宝玉正坐着（发呆）纳闷，想袭人之母不知是死是活（独宝玉一人记挂袭人因母伤悲，黛玉则↑担心袭人不在无人照顾宝玉（↑原文）），忽听见晴雯如此说，便自己起身出去，放下镜套，划上消息，进来笑（向晴雯）道：“你们暖和罢，（我）都（放）完了。”晴雯笑道：“（我这）终久暖和不成的，我又想起来汤婆子↑（图示：汤婆子） （放在被窝里面的热水壶）还没拿来呢。”麝月道：“这（也）难为你（这么暖和还）想着（汤婆子也）！（宝玉）他素日（睡在暖阁）又不要汤婆子，（就咱们俩要汤婆子，）咱们那熏笼上暖和（咱们俩今天都睡熏笼上），比不得那（外屋）屋里（咱们常睡的）炕冷，今儿可以不用（汤婆子）。”（平时看样子都是袭人在暖阁里外面床上陪睡）宝玉笑道：“（按照你们说的）这个话，你们两个都在那（熏笼）上头睡了，我这（暖阁里面的）外边（那张床上）没个人（陪睡），我（一个人）怪怕的，一夜也睡不着。”（暖阁里面除了宝玉自己睡的主床，还有一张“外面”的陪睡的床。）晴雯道：“我（反正）是在（熏笼）这里。麝月（你）往（暖阁里宝玉）他外边（那张床上）睡去。”说话之间，天已二更，麝月早已放下（|8|
-7Comment::loadFirstFromContainedLine              m_fullString: 
-7Comment::loadFirstFromContainedLine              <cite unhidden>宝玉床的</cite>
+7Comment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+7Comment::getFullStringAndBodyTextFromContainedLine              <cite unhidden>宝玉床的</cite>
 7Comment::readDisplayType              display Type: unhidden
 23CoupledBodyTextWithLink::getDisplayString              whole string: <cite unhidden>宝玉床的</cite>
 23CoupledBodyTextWithLink::getDisplayString              display as:宝玉床的||
@@ -1933,18 +1963,19 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printOffsetToObjectType              2679 PERSONALCOMMENT
 23CoupledBodyTextWithLink::getDisplayString              2613 66 ）帘幔，移灯炷香，伏侍宝玉卧下，二人方睡。（
 23CoupledBodyTextWithLink::getDisplayString              7.1   此时宝玉正坐着（发呆）纳闷，想袭人之母不知是死是活（独宝玉一人记挂袭人因母伤悲，黛玉则↑担心袭人不在无人照顾宝玉（↑原文）），忽听见晴雯如此说，便自己起身出去，放下镜套，划上消息，进来笑（向晴雯）道：“你们暖和罢，（我）都（放）完了。”晴雯笑道：“（我这）终久暖和不成的，我又想起来汤婆子↑（图示：汤婆子） （放在被窝里面的热水壶）还没拿来呢。”麝月道：“这（也）难为你（这么暖和还）想着（汤婆子也）！（宝玉）他素日（睡在暖阁）又不要汤婆子，（就咱们俩要汤婆子，）咱们那熏笼上暖和（咱们俩今天都睡熏笼上），比不得那（外屋）屋里（咱们常睡的）炕冷，今儿可以不用（汤婆子）。”（平时看样子都是袭人在暖阁里外面床上陪睡）宝玉笑道：“（按照你们说的）这个话，你们两个都在那（熏笼）上头睡了，我这（暖阁里面的）外边（那张床上）没个人（陪睡），我（一个人）怪怕的，一夜也睡不着。”（暖阁里面除了宝玉自己睡的主床，还有一张“外面”的陪睡的床。）晴雯道：“我（反正）是在（熏笼）这里。麝月（你）往（暖阁里宝玉）他外边（那张床上）睡去。”说话之间，天已二更，麝月早已放下（宝玉床的）帘幔，移灯炷香，伏侍宝玉卧下，二人方睡。（|8|
-15PersonalComment::loadFirstFromContainedLine              m_fullString: 
-15PersonalComment::loadFirstFromContainedLine              <u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">晴雯一点争着靠近宝玉的心都没有，宝玉却慢慢靠近晴雯，看下面邀她进自己被窝。袭人回去这次是转折点，虽然自从王夫人收了的时候<a unhidden title="同房" href="a077.htm#P16L3"><sub hidden>第77回16.3节:</sub>她就离宝玉渐渐远了</a>（<a unhidden title="同房" href="original\c077.htm#P9L2"><sub hidden>第77回9.2节:</sub>原文</a>）。</u>
+15PersonalComment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+15PersonalComment::getFullStringAndBodyTextFromContainedLine              <u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">晴雯一点争着靠近宝玉的心都没有，宝玉却慢慢靠近晴雯，看下面邀她进自己被窝。袭人回去这次是转折点，虽然自从王夫人收了的时候<a unhidden title="同房" href="a077.htm#P16L3"><sub hidden>第77回16.3节:</sub>她就离宝玉渐渐远了</a>（<a unhidden title="同房" href="original\c077.htm#P9L2"><sub hidden>第77回9.2节:</sub>原文</a>）。</u>
 15PersonalComment::readDisplayType              display Type: unhidden
-12LinkFromMain::loadFirstFromContainedLine              m_fullString: 
-12LinkFromMain::loadFirstFromContainedLine              <a unhidden title="同房" href="a077.htm#P16L3"><sub hidden>第77回16.3节:</sub>她就离宝玉渐渐远了</a>
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              <a unhidden title="同房" href="a077.htm#P16L3"><sub hidden>第77回16.3节:</sub>她就离宝玉渐渐远了</a>
+12LinkFromMain::readDisplayType              display Type: unhidden
+12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readType              type seen from prefix: a077
 12LinkFromMain::readAnnotation              annotation: 她就离宝玉渐渐远了
 12LinkFromMain::readReferFileName              chapterNumber: 77, attachmentNumber: 0
-12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readReferPara              referPara: P16L3
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              <sub hidden>第77回16.3节:</sub>
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              <sub hidden>第77回16.3节:</sub>
 8Citation::readDisplayType              display Type: hidden
 15CoupledBodyText::setInputOutputFiles              input file is: bodyTexts/output/Main77.txt
 15CoupledBodyText::setInputOutputFiles              output file is: bodyTexts/afterFix/Main77.txt
@@ -1956,15 +1987,16 @@ isFoundOutsidePersonalComments               unhidden style="text-decoration-col
 12LinkFromMain::length              <a unhidden title="同房" href="a077.htm#P16L3"><sub hidden>第77回16.3节:</sub>她就离宝玉渐渐远了</a>
 12LinkFromMain::length              <a unhidden title="同房" href="a077.htm#P16L3">↑<sub hidden>第77回16.3节:</sub>她就离宝玉渐渐远了</a>
 12LinkFromMain::loadFirstFromContainedLine              after fix length: 114
-12LinkFromMain::loadFirstFromContainedLine              m_fullString: 
-12LinkFromMain::loadFirstFromContainedLine              <a unhidden title="同房" href="original\c077.htm#P9L2"><sub hidden>第77回9.2节:</sub>原文</a>
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              <a unhidden title="同房" href="original\c077.htm#P9L2"><sub hidden>第77回9.2节:</sub>原文</a>
+12LinkFromMain::readDisplayType              display Type: unhidden
+12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readType              type seen from prefix: original\c077
 12LinkFromMain::readAnnotation              annotation: 原文
 12LinkFromMain::readReferFileName              chapterNumber: 77, attachmentNumber: 0
-12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readReferPara              referPara: P9L2
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              <sub hidden>第77回9.2节:</sub>
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              <sub hidden>第77回9.2节:</sub>
 8Citation::readDisplayType              display Type: hidden
 15CoupledBodyText::setInputOutputFiles              input file is: bodyTexts/output/Org77.txt
 15CoupledBodyText::setInputOutputFiles              output file is: bodyTexts/afterFix/Org77.txt
@@ -1983,7 +2015,7 @@ isFoundOutsidePersonalComments               unhidden style="text-decoration-col
 printCompareResult              7.1   此时宝玉正坐着（发呆）纳闷，想袭人之母不知是死是活（独宝玉一人记挂袭人因母伤悲，黛玉则↑担心袭人不在无人照顾宝玉（↑原文）），忽听见晴雯如此说，便自己起身出去，放下镜套，划上消息，进来笑（向晴雯）道：“你们暖和罢，（我）都（放）完了。”晴雯笑道：“（我这）终久暖和不成的，我又想起来汤婆子↑（图示：汤婆子） （放在被窝里面的热水壶）还没拿来呢。”麝月道：“这（也）难为你（这么暖和还）想着（汤婆子也）！（宝玉）他素日（睡在暖阁）又不要汤婆子，（就咱们俩要汤婆子，）咱们那熏笼上暖和（咱们俩今天都睡熏笼上），比不得那（外屋）屋里（咱们常睡的）炕冷，今儿可以不用（汤婆子）。”（平时看样子都是袭人在暖阁里外面床上陪睡）宝玉笑道：“（按照你们说的）这个话，你们两个都在那（熏笼）上头睡了，我这（暖阁里面的）外边（那张床上）没个人（陪睡），我（一个人）怪怕的，一夜也睡不着。”（暖阁里面除了宝玉自己睡的主床，还有一张“外面”的陪睡的床。）晴雯道：“我（反正）是在（熏笼）这里。麝月（你）往（暖阁里宝玉）他外边（那张床上）睡去。”说话之间，天已二更，麝月早已放下（宝玉床的）帘幔，移灯炷香，伏侍宝玉卧下，二人方睡。（晴雯一点争着靠近宝玉的心都没有，宝玉却慢慢靠近晴雯，看下面邀她进自己被窝。袭人回去这次是转折点，虽然自从王夫人收了的时候↑她就离宝玉渐渐远了（↑原文）。）||
 printCompareResult              7.1   此时宝玉正坐着（发呆）纳闷，想袭人之母不知是死是活（独宝玉一人记挂袭人因母伤悲，黛玉则↑担心袭人不在无人照顾宝玉（↑原文）），忽听见晴雯如此说，便自己起身出去，放下镜套，划上消息，进来笑（向晴雯）道：“你们暖和罢，（我）都（放）完了。”晴雯笑道：“（我这）终久暖和不成的，我又想起来汤婆子↑（图示：汤婆子） （放在被窝里面的热水壶）还没拿来呢。”麝月道：“这（也）难为你（这么暖和还）想着（汤婆子也）！（宝玉）他素日（睡在暖阁）又不要汤婆子，（就咱们俩要汤婆子，）咱们那熏笼上暖和（咱们俩今天都睡熏笼上），比不得那（外屋）屋里（咱们常睡的）炕冷，今儿可以不用（汤婆子）。”（平时看样子都是袭人在暖阁里外面床上陪睡）宝玉笑道：“（按照你们说的）这个话，你们两个都在那（熏笼）上头睡了，我这（暖阁里面的）外边（那张床上）没个人（陪睡），我（一个人）怪怕的，一夜也睡不着。”（暖阁里面除了宝玉自己睡的主床，还有一张“外面”的陪睡的床。）晴雯道：“我（反正）是在（熏笼）这里。麝月（你）往（暖阁里宝玉）他外边（那张床上）睡去。”说话之间，天已二更，麝月早已放下（宝玉床的）帘幔，移灯炷香，伏侍宝玉卧下，二人方睡。（晴雯一点争着靠近宝玉的心都没有，宝玉却慢慢靠近晴雯，看下面邀她进自己被窝。袭人回去这次是转折点，虽然自从王夫人收了的时候↑她就离宝玉渐渐远了（↑原文）。）||
 printCompareResult              same
-*************************line 562: compare test 6 finished *************************
+*************************line 551: compare test 6 finished *************************
 23CoupledBodyTextWithLink::getContainedObjectTypes              256
 23CoupledBodyTextWithLink::printOffsetToObjectType              m_offsetOfTypes:
 23CoupledBodyTextWithLink::printOffsetToObjectType              3 PERSONALCOMMENT
@@ -1995,17 +2027,18 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printPersonalCommentStringTable              3 249
 23CoupledBodyTextWithLink::printPoemTranslationStringTable              no entry in m_poemTranslationStringTable.
 23CoupledBodyTextWithLink::getContainedObjectTypes              （
-15PersonalComment::loadFirstFromContainedLine              m_fullString: 
-15PersonalComment::loadFirstFromContainedLine              <u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">不问不成人的事情，反而问谁说的，全都是王家的体面更重要。<a unhidden href="attachment\b062_2.htm">旧诗 哭刘司户二首</a></u>
+15PersonalComment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+15PersonalComment::getFullStringAndBodyTextFromContainedLine              <u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">不问不成人的事情，反而问谁说的，全都是王家的体面更重要。<a unhidden href="attachment\b062_2.htm">旧诗 哭刘司户二首</a></u>
 15PersonalComment::readDisplayType              display Type: unhidden
-12LinkFromMain::loadFirstFromContainedLine              m_fullString: 
-12LinkFromMain::loadFirstFromContainedLine              <a unhidden href="attachment\b062_2.htm">旧诗 哭刘司户二首</a>
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              <a unhidden href="attachment\b062_2.htm">旧诗 哭刘司户二首</a>
+12LinkFromMain::readDisplayType              display Type: unhidden
+12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readType              type seen from prefix: attachment\b062_2
 12LinkFromMain::readAnnotation              annotation: 旧诗 哭刘司户二首
 12LinkFromMain::readReferFileName              chapterNumber: 62, attachmentNumber: 2
-12LinkFromMain::readDisplayType              display Type: unhidden
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              
 8Citation::readDisplayType              display Type: direct.
 12LinkFromMain::loadFirstFromContainedLine              after fix length: 70
 23CoupledBodyTextWithLink::getContainedObjectTypes              250 253
@@ -2014,7 +2047,7 @@ printCompareResult              same
 23CoupledBodyTextWithLink::printOffsetToObjectType              no entry in m_offsetOfTypes.
 23CoupledBodyTextWithLink::getContainedObjectTypes              ）
 testMixedObjects               PERSONALCOMMENT
-*************************line 577: type test 0 finished *************************
+*************************line 566: type test 0 finished *************************
 23CoupledBodyTextWithLink::getContainedObjectTypes              193
 25LineNumberPlaceholderLink::loadFirstFromContainedLine              P1L1
 23CoupledBodyTextWithLink::printOffsetToObjectType              m_offsetOfTypes:
@@ -2043,14 +2076,14 @@ testMixedObjects               PERSONALCOMMENT
 23CoupledBodyTextWithLink::printOffsetToObjectType              m_offsetOfTypes:
 23CoupledBodyTextWithLink::printOffsetToObjectType              42 PERSONALCOMMENT
 23CoupledBodyTextWithLink::getContainedObjectTypes               
-15PersonalComment::loadFirstFromContainedLine              m_fullString: 
-15PersonalComment::loadFirstFromContainedLine              <u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">总批：此回专为佞佛邀福者下一针砭。</u>
+15PersonalComment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+15PersonalComment::getFullStringAndBodyTextFromContainedLine              <u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">总批：此回专为佞佛邀福者下一针砭。</u>
 15PersonalComment::readDisplayType              display Type: unhidden
 23CoupledBodyTextWithLink::getContainedObjectTypes              147 189
 23CoupledBodyTextWithLink::printOffsetToObjectType              no entry in m_offsetOfTypes.
 23CoupledBodyTextWithLink::getContainedObjectTypes              <br>
 testMixedObjects               SPACE LINENUMBER PERSONALCOMMENT TEXT
-*************************line 577: type test 1 finished *************************
+*************************line 566: type test 1 finished *************************
 23CoupledBodyTextWithLink::getContainedObjectTypes              388
 25LineNumberPlaceholderLink::loadFirstFromContainedLine              P1L2
 23CoupledBodyTextWithLink::printOffsetToObjectType              m_offsetOfTypes:
@@ -2079,14 +2112,14 @@ testMixedObjects               SPACE LINENUMBER PERSONALCOMMENT TEXT
 23CoupledBodyTextWithLink::printOffsetToObjectType              m_offsetOfTypes:
 23CoupledBodyTextWithLink::printOffsetToObjectType              42 PERSONALCOMMENT
 23CoupledBodyTextWithLink::getContainedObjectTypes               
-15PersonalComment::loadFirstFromContainedLine              m_fullString: 
-15PersonalComment::loadFirstFromContainedLine              <u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">玉皇庙，两番描写，俱是热闹时候。即后文荐亡，亦是热闹之时，特特与永福寺对照也，看他平空撰出两付对联，一个疏头，却使玉皇庙是真庙，吴道官、西门庆等俱是活人。妙绝之笔。</u>
+15PersonalComment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+15PersonalComment::getFullStringAndBodyTextFromContainedLine              <u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">玉皇庙，两番描写，俱是热闹时候。即后文荐亡，亦是热闹之时，特特与永福寺对照也，看他平空撰出两付对联，一个疏头，却使玉皇庙是真庙，吴道官、西门庆等俱是活人。妙绝之笔。</u>
 15PersonalComment::readDisplayType              display Type: unhidden
 23CoupledBodyTextWithLink::getContainedObjectTypes              342 384
 23CoupledBodyTextWithLink::printOffsetToObjectType              no entry in m_offsetOfTypes.
 23CoupledBodyTextWithLink::getContainedObjectTypes              <br>
 testMixedObjects               SPACE LINENUMBER PERSONALCOMMENT TEXT
-*************************line 577: type test 2 finished *************************
+*************************line 566: type test 2 finished *************************
 23CoupledBodyTextWithLink::getContainedObjectTypes              1436
 25LineNumberPlaceholderLink::loadFirstFromContainedLine              P9L3
 23CoupledBodyTextWithLink::printOffsetToObjectType              m_offsetOfTypes:
@@ -2134,8 +2167,8 @@ testMixedObjects               SPACE LINENUMBER PERSONALCOMMENT TEXT
 23CoupledBodyTextWithLink::printOffsetToObjectType              359 LINKFROMMAIN
 23CoupledBodyTextWithLink::printOffsetToObjectType              695 PERSONALCOMMENT
 23CoupledBodyTextWithLink::getContainedObjectTypes               
-4Poem::loadFirstFromContainedLine              m_fullString: 
-4Poem::loadFirstFromContainedLine              <strong unhidden>惯养娇生笑你痴，菱花空对雪澌澌。好防佳节元宵后，便是烟消火灭时。</strong>
+4Poem::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+4Poem::getFullStringAndBodyTextFromContainedLine              <strong unhidden>惯养娇生笑你痴，菱花空对雪澌澌。好防佳节元宵后，便是烟消火灭时。</strong>
 4Poem::readDisplayType              display Type: unhidden
 23CoupledBodyTextWithLink::getContainedObjectTypes              122 164
 23CoupledBodyTextWithLink::printOffsetToObjectType              m_offsetOfTypes:
@@ -2179,18 +2212,19 @@ testMixedObjects               SPACE LINENUMBER PERSONALCOMMENT TEXT
 23CoupledBodyTextWithLink::printOffsetToObjectType              359 LINKFROMMAIN
 23CoupledBodyTextWithLink::printOffsetToObjectType              695 PERSONALCOMMENT
 23CoupledBodyTextWithLink::getContainedObjectTypes              
-15PoemTranslation::loadFirstFromContainedLine              m_fullString: 
-15PoemTranslation::loadFirstFromContainedLine              <samp unhidden font style="font-size: 12pt; font-family: 宋体; color:#ff00ff">你这么痴心 娇生惯养她，实在是可笑。你知道她有多么生不逢时吗？<a unhidden title="菱角菱花" href="a080.htm#P1L4"><sub hidden>第80回1.4节:</sub>菱角菱花皆盛于秋</a>（<a unhidden title="菱角菱花" href="original\c080.htm#P1L3"><sub hidden>第80回1.3节:</sub>原文</a>），可却毫无办法要面对茫茫大雪。要小心元宵佳节一过，一切都会烟消云散</samp>
+15PoemTranslation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+15PoemTranslation::getFullStringAndBodyTextFromContainedLine              <samp unhidden font style="font-size: 12pt; font-family: 宋体; color:#ff00ff">你这么痴心 娇生惯养她，实在是可笑。你知道她有多么生不逢时吗？<a unhidden title="菱角菱花" href="a080.htm#P1L4"><sub hidden>第80回1.4节:</sub>菱角菱花皆盛于秋</a>（<a unhidden title="菱角菱花" href="original\c080.htm#P1L3"><sub hidden>第80回1.3节:</sub>原文</a>），可却毫无办法要面对茫茫大雪。要小心元宵佳节一过，一切都会烟消云散</samp>
 15PoemTranslation::readDisplayType              display Type: unhidden
-12LinkFromMain::loadFirstFromContainedLine              m_fullString: 
-12LinkFromMain::loadFirstFromContainedLine              <a unhidden title="菱角菱花" href="a080.htm#P1L4"><sub hidden>第80回1.4节:</sub>菱角菱花皆盛于秋</a>
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              <a unhidden title="菱角菱花" href="a080.htm#P1L4"><sub hidden>第80回1.4节:</sub>菱角菱花皆盛于秋</a>
+12LinkFromMain::readDisplayType              display Type: unhidden
+12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readType              type seen from prefix: a080
 12LinkFromMain::readAnnotation              annotation: 菱角菱花皆盛于秋
 12LinkFromMain::readReferFileName              chapterNumber: 80, attachmentNumber: 0
-12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readReferPara              referPara: P1L4
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              <sub hidden>第80回1.4节:</sub>
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              <sub hidden>第80回1.4节:</sub>
 8Citation::readDisplayType              display Type: hidden
 15CoupledBodyText::setInputOutputFiles              input file is: bodyTexts/output/Main80.txt
 15CoupledBodyText::setInputOutputFiles              output file is: bodyTexts/afterFix/Main80.txt
@@ -2201,15 +2235,16 @@ testMixedObjects               SPACE LINENUMBER PERSONALCOMMENT TEXT
 12LinkFromMain::length              <a unhidden title="菱角菱花" href="a080.htm#P1L4"><sub hidden>第80回1.4节:</sub>菱角菱花皆盛于秋</a>
 12LinkFromMain::length              <a unhidden title="菱角菱花" href="a080.htm#P1L4">↑<sub hidden>第80回1.4节:</sub>菱角菱花皆盛于秋</a>
 12LinkFromMain::loadFirstFromContainedLine              after fix length: 115
-12LinkFromMain::loadFirstFromContainedLine              m_fullString: 
-12LinkFromMain::loadFirstFromContainedLine              <a unhidden title="菱角菱花" href="original\c080.htm#P1L3"><sub hidden>第80回1.3节:</sub>原文</a>
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              <a unhidden title="菱角菱花" href="original\c080.htm#P1L3"><sub hidden>第80回1.3节:</sub>原文</a>
+12LinkFromMain::readDisplayType              display Type: unhidden
+12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readType              type seen from prefix: original\c080
 12LinkFromMain::readAnnotation              annotation: 原文
 12LinkFromMain::readReferFileName              chapterNumber: 80, attachmentNumber: 0
-12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readReferPara              referPara: P1L3
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              <sub hidden>第80回1.3节:</sub>
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              <sub hidden>第80回1.3节:</sub>
 8Citation::readDisplayType              display Type: hidden
 15CoupledBodyText::setInputOutputFiles              input file is: bodyTexts/output/Org80.txt
 15CoupledBodyText::setInputOutputFiles              output file is: bodyTexts/afterFix/Org80.txt
@@ -2227,18 +2262,19 @@ testMixedObjects               SPACE LINENUMBER PERSONALCOMMENT TEXT
 23CoupledBodyTextWithLink::printOffsetToObjectType              m_offsetOfTypes:
 23CoupledBodyTextWithLink::printOffsetToObjectType              695 PERSONALCOMMENT
 23CoupledBodyTextWithLink::getContainedObjectTypes              （
-15PersonalComment::loadFirstFromContainedLine              m_fullString: 
-15PersonalComment::loadFirstFromContainedLine              <u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4"><a unhidden title="清净孤独" href="a022.htm#P13L4"><sub hidden>第22回13.4节:</sub>不详灯谜</a>（<a unhidden title="清净孤独" href="original\c022.htm#P12L1"><sub hidden>第22回12.1节:</sub>原文</a>）、<a unhidden title="进贡" href="a054.htm#P13L1"><sub hidden>第54回13.1节:</sub>聋子放炮仗</a>（<a unhidden title="进贡" href="original\c054.htm#P8L2"><sub hidden>第54回8.2节:</sub>原文</a>）、<a unhidden title="按爵" href="a058.htm#P1L2"><sub hidden>第58回1.2节:</sub>老太妃薨毙</a>（<a unhidden title="按爵" href="original\c058.htm#P1L2"><sub hidden>第58回1.2节:</sub>原文</a>）。</u>
+15PersonalComment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+15PersonalComment::getFullStringAndBodyTextFromContainedLine              <u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4"><a unhidden title="清净孤独" href="a022.htm#P13L4"><sub hidden>第22回13.4节:</sub>不详灯谜</a>（<a unhidden title="清净孤独" href="original\c022.htm#P12L1"><sub hidden>第22回12.1节:</sub>原文</a>）、<a unhidden title="进贡" href="a054.htm#P13L1"><sub hidden>第54回13.1节:</sub>聋子放炮仗</a>（<a unhidden title="进贡" href="original\c054.htm#P8L2"><sub hidden>第54回8.2节:</sub>原文</a>）、<a unhidden title="按爵" href="a058.htm#P1L2"><sub hidden>第58回1.2节:</sub>老太妃薨毙</a>（<a unhidden title="按爵" href="original\c058.htm#P1L2"><sub hidden>第58回1.2节:</sub>原文</a>）。</u>
 15PersonalComment::readDisplayType              display Type: unhidden
-12LinkFromMain::loadFirstFromContainedLine              m_fullString: 
-12LinkFromMain::loadFirstFromContainedLine              <a unhidden title="清净孤独" href="a022.htm#P13L4"><sub hidden>第22回13.4节:</sub>不详灯谜</a>
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              <a unhidden title="清净孤独" href="a022.htm#P13L4"><sub hidden>第22回13.4节:</sub>不详灯谜</a>
+12LinkFromMain::readDisplayType              display Type: unhidden
+12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readType              type seen from prefix: a022
 12LinkFromMain::readAnnotation              annotation: 不详灯谜
 12LinkFromMain::readReferFileName              chapterNumber: 22, attachmentNumber: 0
-12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readReferPara              referPara: P13L4
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              <sub hidden>第22回13.4节:</sub>
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              <sub hidden>第22回13.4节:</sub>
 8Citation::readDisplayType              display Type: hidden
 15CoupledBodyText::setInputOutputFiles              input file is: bodyTexts/output/Main22.txt
 15CoupledBodyText::setInputOutputFiles              output file is: bodyTexts/afterFix/Main22.txt
@@ -2249,15 +2285,16 @@ testMixedObjects               SPACE LINENUMBER PERSONALCOMMENT TEXT
 12LinkFromMain::length              <a unhidden title="清净孤独" href="a022.htm#P13L4"><sub hidden>第22回13.4节:</sub>不详灯谜</a>
 12LinkFromMain::length              <a unhidden title="清净孤独" href="a022.htm#P13L4">↑<sub hidden>第22回13.4节:</sub>不详灯谜</a>
 12LinkFromMain::loadFirstFromContainedLine              after fix length: 105
-12LinkFromMain::loadFirstFromContainedLine              m_fullString: 
-12LinkFromMain::loadFirstFromContainedLine              <a unhidden title="清净孤独" href="original\c022.htm#P12L1"><sub hidden>第22回12.1节:</sub>原文</a>
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              <a unhidden title="清净孤独" href="original\c022.htm#P12L1"><sub hidden>第22回12.1节:</sub>原文</a>
+12LinkFromMain::readDisplayType              display Type: unhidden
+12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readType              type seen from prefix: original\c022
 12LinkFromMain::readAnnotation              annotation: 原文
 12LinkFromMain::readReferFileName              chapterNumber: 22, attachmentNumber: 0
-12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readReferPara              referPara: P12L1
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              <sub hidden>第22回12.1节:</sub>
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              <sub hidden>第22回12.1节:</sub>
 8Citation::readDisplayType              display Type: hidden
 15CoupledBodyText::setInputOutputFiles              input file is: bodyTexts/output/Org22.txt
 15CoupledBodyText::setInputOutputFiles              output file is: bodyTexts/afterFix/Org22.txt
@@ -2268,15 +2305,16 @@ testMixedObjects               SPACE LINENUMBER PERSONALCOMMENT TEXT
 12LinkFromMain::length              <a unhidden title="清净孤独" href="original\c022.htm#P12L1"><sub hidden>第22回12.1节:</sub>原文</a>
 12LinkFromMain::length              <a unhidden title="清净孤独" href="original\c022.htm#P12L1">↑<sub hidden>第22回12.1节:</sub>原文</a>
 12LinkFromMain::loadFirstFromContainedLine              after fix length: 108
-12LinkFromMain::loadFirstFromContainedLine              m_fullString: 
-12LinkFromMain::loadFirstFromContainedLine              <a unhidden title="进贡" href="a054.htm#P13L1"><sub hidden>第54回13.1节:</sub>聋子放炮仗</a>
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              <a unhidden title="进贡" href="a054.htm#P13L1"><sub hidden>第54回13.1节:</sub>聋子放炮仗</a>
+12LinkFromMain::readDisplayType              display Type: unhidden
+12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readType              type seen from prefix: a054
 12LinkFromMain::readAnnotation              annotation: 聋子放炮仗
 12LinkFromMain::readReferFileName              chapterNumber: 54, attachmentNumber: 0
-12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readReferPara              referPara: P13L1
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              <sub hidden>第54回13.1节:</sub>
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              <sub hidden>第54回13.1节:</sub>
 8Citation::readDisplayType              display Type: hidden
 15CoupledBodyText::setInputOutputFiles              input file is: bodyTexts/output/Main54.txt
 15CoupledBodyText::setInputOutputFiles              output file is: bodyTexts/afterFix/Main54.txt
@@ -2288,15 +2326,16 @@ isFoundOutsidePersonalComments               unhidden style="text-decoration-col
 12LinkFromMain::length              <a unhidden title="进贡" href="a054.htm#P13L1"><sub hidden>第54回13.1节:</sub>聋子放炮仗</a>
 12LinkFromMain::length              <a unhidden title="进贡" href="a054.htm#P13L1">↑<sub hidden>第54回13.1节:</sub>聋子放炮仗</a>
 12LinkFromMain::loadFirstFromContainedLine              after fix length: 102
-12LinkFromMain::loadFirstFromContainedLine              m_fullString: 
-12LinkFromMain::loadFirstFromContainedLine              <a unhidden title="进贡" href="original\c054.htm#P8L2"><sub hidden>第54回8.2节:</sub>原文</a>
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              <a unhidden title="进贡" href="original\c054.htm#P8L2"><sub hidden>第54回8.2节:</sub>原文</a>
+12LinkFromMain::readDisplayType              display Type: unhidden
+12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readType              type seen from prefix: original\c054
 12LinkFromMain::readAnnotation              annotation: 原文
 12LinkFromMain::readReferFileName              chapterNumber: 54, attachmentNumber: 0
-12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readReferPara              referPara: P8L2
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              <sub hidden>第54回8.2节:</sub>
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              <sub hidden>第54回8.2节:</sub>
 8Citation::readDisplayType              display Type: hidden
 15CoupledBodyText::setInputOutputFiles              input file is: bodyTexts/output/Org54.txt
 15CoupledBodyText::setInputOutputFiles              output file is: bodyTexts/afterFix/Org54.txt
@@ -2307,15 +2346,16 @@ isFoundOutsidePersonalComments               unhidden style="text-decoration-col
 12LinkFromMain::length              <a unhidden title="进贡" href="original\c054.htm#P8L2"><sub hidden>第54回8.2节:</sub>原文</a>
 12LinkFromMain::length              <a unhidden title="进贡" href="original\c054.htm#P8L2">↑<sub hidden>第54回8.2节:</sub>原文</a>
 12LinkFromMain::loadFirstFromContainedLine              after fix length: 100
-12LinkFromMain::loadFirstFromContainedLine              m_fullString: 
-12LinkFromMain::loadFirstFromContainedLine              <a unhidden title="按爵" href="a058.htm#P1L2"><sub hidden>第58回1.2节:</sub>老太妃薨毙</a>
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              <a unhidden title="按爵" href="a058.htm#P1L2"><sub hidden>第58回1.2节:</sub>老太妃薨毙</a>
+12LinkFromMain::readDisplayType              display Type: unhidden
+12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readType              type seen from prefix: a058
 12LinkFromMain::readAnnotation              annotation: 老太妃薨毙
 12LinkFromMain::readReferFileName              chapterNumber: 58, attachmentNumber: 0
-12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readReferPara              referPara: P1L2
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              <sub hidden>第58回1.2节:</sub>
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              <sub hidden>第58回1.2节:</sub>
 8Citation::readDisplayType              display Type: hidden
 15CoupledBodyText::setInputOutputFiles              input file is: bodyTexts/output/Main58.txt
 15CoupledBodyText::setInputOutputFiles              output file is: bodyTexts/afterFix/Main58.txt
@@ -2326,15 +2366,16 @@ isFoundOutsidePersonalComments               unhidden style="text-decoration-col
 12LinkFromMain::length              <a unhidden title="按爵" href="a058.htm#P1L2"><sub hidden>第58回1.2节:</sub>老太妃薨毙</a>
 12LinkFromMain::length              <a unhidden title="按爵" href="a058.htm#P1L2">↑<sub hidden>第58回1.2节:</sub>老太妃薨毙</a>
 12LinkFromMain::loadFirstFromContainedLine              after fix length: 100
-12LinkFromMain::loadFirstFromContainedLine              m_fullString: 
-12LinkFromMain::loadFirstFromContainedLine              <a unhidden title="按爵" href="original\c058.htm#P1L2"><sub hidden>第58回1.2节:</sub>原文</a>
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              <a unhidden title="按爵" href="original\c058.htm#P1L2"><sub hidden>第58回1.2节:</sub>原文</a>
+12LinkFromMain::readDisplayType              display Type: unhidden
+12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readType              type seen from prefix: original\c058
 12LinkFromMain::readAnnotation              annotation: 原文
 12LinkFromMain::readReferFileName              chapterNumber: 58, attachmentNumber: 0
-12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readReferPara              referPara: P1L2
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              <sub hidden>第58回1.2节:</sub>
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              <sub hidden>第58回1.2节:</sub>
 8Citation::readDisplayType              display Type: hidden
 15CoupledBodyText::setInputOutputFiles              input file is: bodyTexts/output/Org58.txt
 15CoupledBodyText::setInputOutputFiles              output file is: bodyTexts/afterFix/Org58.txt
@@ -2349,5 +2390,5 @@ isFoundOutsidePersonalComments               unhidden style="text-decoration-col
 23CoupledBodyTextWithLink::printOffsetToObjectType              no entry in m_offsetOfTypes.
 23CoupledBodyTextWithLink::getContainedObjectTypes              ）
 testMixedObjects               SPACE LINENUMBER POEM POEMTRANSLATION PERSONALCOMMENT
-*************************line 577: type test 3 finished *************************
+*************************line 566: type test 3 finished *************************
 
