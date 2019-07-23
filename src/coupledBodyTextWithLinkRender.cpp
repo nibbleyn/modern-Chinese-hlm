@@ -172,6 +172,13 @@ void CoupledBodyTextWithLink::scanForTypes(const string &containedLine) {
     } while (true);
   }
   searchForEmbededLinks();
+  if (debug >= LOG_INFO) {
+    printOffsetToObjectType();
+    printLinkStringTable();
+    printCommentStringTable();
+    printPersonalCommentStringTable();
+    printPoemTranslationStringTable();
+  }
 }
 
 using ObjectPtr = unique_ptr<Object>;
@@ -195,19 +202,20 @@ ObjectPtr createObjectFromType(Object::OBJECT_TYPE type,
   return nullptr;
 }
 
-string CoupledBodyTextWithLink::getDisplayString(const string &originalString) {
+void CoupledBodyTextWithLink::getDisplayString(const string &originalString,
+                                               bool onlyTypes) {
   if (debug >= LOG_INFO)
     METHOD_OUTPUT << originalString.length() << endl;
+
+  if (onlyTypes)
+    m_resultSet.clear();
+  else
+    m_resultDisplayString.clear();
+
   scanForTypes(originalString);
-  if (debug >= LOG_INFO) {
-    printOffsetToObjectType();
-    printLinkStringTable();
-    printCommentStringTable();
-    printPersonalCommentStringTable();
-    printPoemTranslationStringTable();
-  }
-  string result;
+
   unsigned int endOfSubStringOffset = 0;
+  bool pureTextFound = false;
   do {
     if (m_offsetOfTypes.empty())
       break;
@@ -221,26 +229,37 @@ string CoupledBodyTextWithLink::getDisplayString(const string &originalString) {
                       << originalString.substr(endOfSubStringOffset,
                                                offset - endOfSubStringOffset)
                       << endl;
-      result += originalString.substr(endOfSubStringOffset,
-                                      offset - endOfSubStringOffset);
-      if (debug >= LOG_INFO)
-        METHOD_OUTPUT << result << "|8|" << endl;
       auto current = createObjectFromType(type, m_file);
-      current->loadFirstFromContainedLine(originalString, offset);
+      if (onlyTypes) {
+        string text = originalString.substr(endOfSubStringOffset,
+                                            offset - endOfSubStringOffset);
+        if (debug >= LOG_INFO)
+          METHOD_OUTPUT << text << endl;
+        if (offset > endOfSubStringOffset and not isMixedOfSpaceBrackets(text))
+          pureTextFound = true;
+        m_resultSet.insert(type);
+        current->loadFirstFromContainedLine(originalString, offset);
+      } else {
+        m_resultDisplayString += originalString.substr(
+            endOfSubStringOffset, offset - endOfSubStringOffset);
+        if (debug >= LOG_INFO)
+          METHOD_OUTPUT << m_resultDisplayString << "|8|" << endl;
+        current->loadFirstFromContainedLine(originalString, offset);
+        m_resultDisplayString += current->getDisplayString();
+        if (debug >= LOG_INFO)
+          METHOD_OUTPUT << m_resultDisplayString << "|0|" << endl;
+      }
+
+      // should add length of substring above loadFirstFromContainedLine gets
+      // so require the string be fixed before
+      endOfSubStringOffset = offset + current->length();
       if (debug >= LOG_INFO) {
         METHOD_OUTPUT << "whole string: " << current->getWholeString() << endl;
         METHOD_OUTPUT << "display as:" << current->getDisplayString() << "||"
                       << endl;
-      }
-      result += current->getDisplayString();
-      if (debug >= LOG_INFO)
-        METHOD_OUTPUT << result << "|0|" << endl;
-      // should add length of substring above loadFirstFromContainedLine gets
-      // so require the string be fixed before
-      endOfSubStringOffset = offset + current->length();
-      if (debug >= LOG_INFO)
         METHOD_OUTPUT << current->length() << displaySpace
                       << endOfSubStringOffset << endl;
+      }
     }
     m_offsetOfTypes.erase(first);
     // never try to find another LINENUMBER
@@ -263,90 +282,23 @@ string CoupledBodyTextWithLink::getDisplayString(const string &originalString) {
         printOffsetToObjectType();
     }
   } while (true);
-  if (endOfSubStringOffset < originalString.length())
-    result += originalString.substr(endOfSubStringOffset);
-  m_foundTypes.clear();
-  m_offsetOfTypes.clear();
-  m_linkStringTable.clear();
-  m_commentStringTable.clear();
-  m_personalCommentStringTable.clear();
-  m_poemTranslationStringTable.clear();
-  return result;
-}
+  if (onlyTypes) {
+    string lastPart = originalString.substr(endOfSubStringOffset);
+    if (debug >= LOG_INFO)
+      METHOD_OUTPUT << lastPart << endl;
+    if (lastPart != emptyString and not isMixedOfSpaceBrackets(lastPart))
+      pureTextFound = true;
+    if (pureTextFound)
+      m_resultSet.insert(Object::OBJECT_TYPE::TEXT);
+  } else if (endOfSubStringOffset < originalString.length())
+    m_resultDisplayString += originalString.substr(endOfSubStringOffset);
 
-Object::SET_OF_OBJECT_TYPES
-CoupledBodyTextWithLink::getContainedObjectTypes(const string &originalString) {
-  Object::SET_OF_OBJECT_TYPES resultSet;
-  if (debug >= LOG_INFO)
-    METHOD_OUTPUT << originalString.length() << endl;
-  scanForTypes(originalString);
-  if (debug >= LOG_INFO) {
-    printOffsetToObjectType();
-    printLinkStringTable();
-    printCommentStringTable();
-    printPersonalCommentStringTable();
-    printPoemTranslationStringTable();
-  }
-  unsigned int endOfSubStringOffset = 0;
-  bool pureTextFound = false;
-  do {
-    if (m_offsetOfTypes.empty())
-      break;
-    auto first = m_offsetOfTypes.begin();
-    auto type = first->second;
-    auto offset = first->first;
-    if (not isEmbeddedObject(type, offset)) {
-      string text = originalString.substr(endOfSubStringOffset,
-                                          offset - endOfSubStringOffset);
-      if (debug >= LOG_INFO)
-        METHOD_OUTPUT << text << endl;
-      if (offset > endOfSubStringOffset and not isMixedOfSpaceBrackets(text))
-        pureTextFound = true;
-      resultSet.insert(type);
-      auto current = createObjectFromType(type, m_file);
-      current->loadFirstFromContainedLine(originalString, offset);
-      // should add length of substring above loadFirstFromContainedLine gets
-      // so require the string be fixed before
-      endOfSubStringOffset = offset + current->length();
-      if (debug >= LOG_INFO)
-        METHOD_OUTPUT << current->length() << displaySpace
-                      << endOfSubStringOffset << endl;
-    }
-    m_offsetOfTypes.erase(first);
-    // never try to find another LINENUMBER
-    if (type != Object::OBJECT_TYPE::LINENUMBER) {
-      auto nextOffsetOfSameType = originalString.find(
-          Object::getStartTagOfObjectType(type), offset + 1);
-      do {
-        if (nextOffsetOfSameType != string::npos and
-            isEmbeddedObject(type, nextOffsetOfSameType))
-          nextOffsetOfSameType = originalString.find(
-              Object::getStartTagOfObjectType(type), nextOffsetOfSameType + 1);
-        else
-          break;
-      } while (true);
-      if (nextOffsetOfSameType != string::npos) {
-        m_foundTypes[type] = nextOffsetOfSameType;
-        m_offsetOfTypes[nextOffsetOfSameType] = type;
-      }
-      if (debug >= LOG_INFO)
-        printOffsetToObjectType();
-    }
-  } while (true);
-  string lastPart = originalString.substr(endOfSubStringOffset);
-  if (debug >= LOG_INFO)
-    METHOD_OUTPUT << lastPart << endl;
-  if (lastPart != emptyString and not isMixedOfSpaceBrackets(lastPart))
-    pureTextFound = true;
-  if (pureTextFound)
-    resultSet.insert(Object::OBJECT_TYPE::TEXT);
   m_foundTypes.clear();
   m_offsetOfTypes.clear();
   m_linkStringTable.clear();
   m_commentStringTable.clear();
   m_personalCommentStringTable.clear();
   m_poemTranslationStringTable.clear();
-  return resultSet;
 }
 
 void CoupledBodyTextWithLink::render() {
@@ -375,7 +327,8 @@ void CoupledBodyTextWithLink::render() {
       string LF{0x0A};
       outfile << LF;
     } else if (not isEmptyLine(inLine)) {
-      auto outputLine = getDisplayString(inLine);
+      getDisplayString(inLine);
+      auto outputLine = getResultDisplayString();
       auto lastBr = outputLine.find(brTab);
       if (debug >= LOG_INFO) {
         METHOD_OUTPUT << outputLine.substr(0, lastBr) << endl;

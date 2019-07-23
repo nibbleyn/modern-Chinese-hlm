@@ -257,7 +257,7 @@ void CoupledBodyText::scanByLines() {
       if (processImgGroup) {
         m_imgGroupFollowingParaTable[lastImgGroupBegin] = lastImgGroupEnd;
       }
-      LineInfo info{0, DISPLY_LINE_TYPE::IMAGE, "image"};
+      LineInfo info{0, DISPLY_LINE_TYPE::IMAGE, DISPLY_LINE_IMAGE};
       m_lineAttrTable[seqOfLines] = info;
       processImgGroup = true;
       lastImgGroupBegin = seqOfLines;

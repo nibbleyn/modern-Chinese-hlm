@@ -547,7 +547,8 @@ void testMixedObjects() {
   for (size_t i = 0; i < lineSet.size(); i++) {
     string line = lineSet[i];
     string compareTo = compareToSet[i];
-    printCompareResult(bodyText.getDisplayString(line), compareTo);
+    bodyText.getDisplayString(line);
+    printCompareResult(bodyText.getResultDisplayString(), compareTo);
     SEPERATE("compare test " + TurnToString(i), " finished ");
   }
 
@@ -561,7 +562,8 @@ void testMixedObjects() {
   array<string, 4> lineSet2 = {line10, line11, line12, line13};
   for (size_t i = 0; i < lineSet2.size(); i++) {
     string line = lineSet2[i];
-    auto typeSet = bodyText.getContainedObjectTypes(line);
+    bodyText.getDisplayString(line, true);
+    auto typeSet = bodyText.getResultSet();
     FUNCTION_OUTPUT << Object::typeSetAsString(typeSet) << endl;
     SEPERATE("type test " + TurnToString(i), " finished ");
   }

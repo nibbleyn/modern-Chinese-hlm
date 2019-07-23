@@ -392,7 +392,8 @@ void CoupledBodyTextWithLink::scanByRenderingLines() {
       if (debug >= LOG_INFO) {
         METHOD_OUTPUT << m_inLine.substr(0, lastBr) << endl;
       }
-      string dispLine = getDisplayString(m_inLine.substr(0, lastBr));
+      getDisplayString(m_inLine.substr(0, lastBr));
+      string dispLine = getResultDisplayString();
       if (debug >= LOG_INFO) {
         // excluding start line
         METHOD_OUTPUT << dispLine << endl;

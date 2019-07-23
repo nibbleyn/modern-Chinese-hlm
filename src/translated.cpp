@@ -11,7 +11,7 @@ int debug = LOG_INFO;
 int main(int argc, char **argv) {
 
   // change this number to run different functions
-  int num = 21;
+  int num = 22;
   switch (num) {
   case 1:
     //    search(R"(枕)");

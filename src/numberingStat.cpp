@@ -211,8 +211,10 @@ void CoupledBodyTextWithLink::doStatisticsByScanningLines(
       auto types = Object::SET_OF_OBJECT_TYPES();
       if (not m_disableNumberingStatisticsCalculateLines) {
         auto removeEndingBrStr = m_inLine.substr(0, m_inLine.find(brTab));
-        dispLines = getLinesOfDisplayText(getDisplayString(removeEndingBrStr));
-        types = getContainedObjectTypes(removeEndingBrStr);
+        getDisplayString(removeEndingBrStr);
+        dispLines = getLinesOfDisplayText(getResultDisplayString());
+        getDisplayString(removeEndingBrStr, true);
+        types = getResultSet();
       }
       LineDetails detail{dispLines, false, types};
       auto paraLine = make_pair(m_para, m_lineNo);

@@ -65,9 +65,9 @@ public:
   string getFixedLine() const { return m_inLine; }
 
   // used for rendering
-  string getDisplayString(const string &originalString);
-  Object::SET_OF_OBJECT_TYPES
-  getContainedObjectTypes(const string &originalString);
+  void getDisplayString(const string &originalString, bool onlyTypes = false);
+  string getResultDisplayString() { return m_resultDisplayString; }
+  Object::SET_OF_OBJECT_TYPES getResultSet() { return m_resultSet; }
 
   // used by tools
   void printStringInLines();
@@ -75,6 +75,9 @@ public:
   void removePersonalCommentsOverNumberedFiles();
 
 private:
+  Object::SET_OF_OBJECT_TYPES m_resultSet;
+  string m_resultDisplayString{emptyString};
+
   static void addEntriesInRangeTable(AttachmentNumber startNum,
                                      AttachmentNumber endNum,
                                      ParaLineNumber startPara,
