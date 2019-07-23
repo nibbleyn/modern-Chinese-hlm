@@ -8,6 +8,7 @@ public:
     validateFormatForNumbering,
     validateParaSizeForAutoNumbering,
     addLineNumber,
+    appendReverseLinks,
     fixLinksFromMainFile,
     fixLinksFromJPMFile,
     fixLinksFromAttachmentFile
@@ -106,6 +107,7 @@ void validateParaSizeForAutoNumberingJPMHtmls();
 
 // link fixing for main files
 void fixLinksFromMain(bool forceUpdateLink = true);
+void appendReverseLinksForMain();
 
 // link fixing for JPM files
 void fixLinksFromJPM(bool forceUpdateLink = true);

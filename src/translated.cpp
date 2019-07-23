@@ -80,9 +80,12 @@ int main(int argc, char **argv) {
     fixLinksFromJPM(false);
     break;
   case 21:
-    testFunctions(9);
+    appendReverseLinksForMain();
     break;
   case 22:
+    testFunctions(9);
+    break;
+  case 23:
     tools(15);
     break;
   default:

@@ -174,7 +174,7 @@ public:
       : CoupledLink(fromFile, linkString) {
     m_fullString = linkString;
     m_objectType = OBJECT_TYPE::LINKFROMMAIN;
-    readDisplayType();
+    Object::readDisplayType();
   }
   ~LinkFromMain(){};
   void generateLinkToOrigin();
@@ -207,7 +207,7 @@ public:
       : CoupledLink(fromFile, linkString) {
     m_fullString = linkString;
     m_objectType = OBJECT_TYPE::LINKFROMATTACHMENT;
-    readDisplayType();
+    Object::readDisplayType();
   }
   ~LinkFromAttachment(){};
   void generateLinkToOrigin();

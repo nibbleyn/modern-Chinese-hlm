@@ -20,6 +20,9 @@ void Commander::execute() {
     //    m_bodyText.disableNumberingStatisticsCalculateLines();
     m_bodyText.addLineNumber();
     break;
+  case COMMAND::appendReverseLinks:
+    m_bodyText.appendReverseLinks();
+    break;
   case COMMAND::fixLinksFromMainFile:
   case COMMAND::fixLinksFromJPMFile:
   case COMMAND::fixLinksFromAttachmentFile:
@@ -173,6 +176,9 @@ void Commander::setupLinkFixingStatistics() {
   if (m_command == COMMAND::fixLinksFromAttachmentFile) {
     // load known reference attachment list
     LinkFromAttachment::clearLinkTable();
+  }
+  if (m_command == COMMAND::appendReverseLinks) {
+    LinkFromMain::loadLinkTableFromStatisticsFile();
   }
 }
 
@@ -355,6 +361,15 @@ void refreshAttachmentBodyTexts(int minTarget, int maxTarget, int minAttachNo,
 void fixLinksFromMain(bool forceUpdateLink) {
   NonAttachmentCommander commander;
   commander.m_command = Commander::COMMAND::fixLinksFromMainFile;
+  commander.m_kind = MAIN;
+  commander.m_minTarget = MAIN_MIN_CHAPTER_NUMBER;
+  commander.m_maxTarget = MAIN_MAX_CHAPTER_NUMBER;
+  commander.runCommandOverFiles();
+}
+
+void appendReverseLinksForMain() {
+  NonAttachmentCommander commander;
+  commander.m_command = Commander::COMMAND::appendReverseLinks;
   commander.m_kind = MAIN;
   commander.m_minTarget = MAIN_MIN_CHAPTER_NUMBER;
   commander.m_maxTarget = MAIN_MAX_CHAPTER_NUMBER;
