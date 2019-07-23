@@ -117,7 +117,7 @@ void CoupledLink::readKey(const string &linkString) {
     // add a "KeyNotFound" key and return
     if (m_referPara != topParagraphIndicator and
         m_referPara != bottomParagraphIndicator) {
-      m_needChange = true;
+      needToChange();
       m_usedKey = keyNotFound;
     }
     if (debug >= LOG_EXCEPTION) {
@@ -131,6 +131,8 @@ void CoupledLink::readKey(const string &linkString) {
   // still need manual fix of this key, so abort
   if (stringForSearch.find(keyNotFound) != string::npos) {
     m_needChange = false;
+    if (debug >= LOG_INFO)
+      METHOD_OUTPUT << "no need to change" << endl;
     m_usedKey = stringForSearch;
     return;
   }
@@ -201,6 +203,8 @@ string scanForSubComments(const string &original, const string &fromFile) {
  * was called before, refer to Link class definition
  */
 void CoupledLink::fixFromString(const string &linkString) {
+  if (debug >= LOG_INFO)
+    METHOD_OUTPUT << linkString << endl;
   m_fullString = linkString;
   readReferPara(linkString);
   fixReferSection(linkString);
@@ -208,10 +212,10 @@ void CoupledLink::fixFromString(const string &linkString) {
   if (m_annotation != returnLinkFromAttachmentHeader and
       m_annotation != returnLink and m_annotation != returnToContentTable)
     readKey(linkString); // key would be searched here and replaced,
-                         // m_needChange updatedm_fullString
+                         // m_needChange updated
   m_bodyText = m_annotation;
   if (m_type == LINK_TYPE::IMAGE and m_imageReferFilename.empty())
-    m_needChange = true;
+    needToChange();
   if (isReverseLink())
     m_displayText = downArrow;
   else if (isTargetToImage() or isTargetToOtherMainHtm() or

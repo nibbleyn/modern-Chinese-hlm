@@ -1,194 +1,264 @@
-*************************line 677: HLM test started *************************
-*************************line 319: testLinkOperation starts *************************
+*************************line 665: HLM test started *************************
+*************************line 310: testLinkOperation starts *************************
 testLinkOperation              <111>22>
 testLinkOperation              <a unhidden href="a025.htm#P9L1">被<sub>25回</sub>引用</a>
 4Link::readType              type seen from prefix: a025
 4Link::readAnnotation              annotation: 引用
+12LinkFromMain::readDisplayType              m_fullString: <a unhidden href="a025.htm#P9L1">被<sub>25回</sub>引用</a>
+12LinkFromMain::readDisplayType              m_objectType: LINKFROMMAIN
+12LinkFromMain::readDisplayType              display Type: unhidden
 testLink              original link: 
 testLink              <a unhidden href="a025.htm#P9L1">被<sub>25回</sub>引用</a>
 12LinkFromMain::readReferFileName              chapterNumber: 25, attachmentNumber: 0
-12LinkFromMain::loadFirstFromContainedLine              m_fullString: 
-12LinkFromMain::loadFirstFromContainedLine              <a unhidden href="a025.htm#P9L1">被<sub>25回</sub>引用</a>
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              <a unhidden href="a025.htm#P9L1">被<sub>25回</sub>引用</a>
+12LinkFromMain::readDisplayType              m_fullString: <a unhidden href="a025.htm#P9L1">被<sub>25回</sub>引用</a>
+12LinkFromMain::readDisplayType              m_objectType: LINKFROMMAIN
+12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readType              type seen from prefix: a025
 12LinkFromMain::readAnnotation              annotation: 引用
 12LinkFromMain::readReferFileName              chapterNumber: 25, attachmentNumber: 0
-12LinkFromMain::readDisplayType              display Type: unhidden
+12LinkFromMain::fixFromString              <a unhidden href="a025.htm#P9L1">被<sub>25回</sub>引用</a>
 12LinkFromMain::readReferPara              referPara: P9L1
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              <sub>25回</sub>
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              <sub>25回</sub>
+8Citation::readDisplayType              m_fullString: <sub>25回</sub>
+8Citation::readDisplayType              m_objectType: CITATION
 8Citation::readDisplayType              display Type: direct.
 12LinkFromMain::length               size not match: 62 vs 46
 12LinkFromMain::length              <a unhidden href="a025.htm#P9L1">被<sub>25回</sub>引用</a>
 12LinkFromMain::length              <a unhidden href="a025.htm#P9L1">↓引用</a>
 12LinkFromMain::loadFirstFromContainedLine              after fix length: 62
 testLink              display as:↓引用||
-*************************line 330: unhidden invalid reverse link finished *************************
+*************************line 321: unhidden invalid reverse link finished *************************
 testLinkOperation              <a unhidden href="a025.htm#P9L1">↓<sub>第3回1.2节:</sub>引用</a>
 4Link::readType              type seen from prefix: a025
 4Link::readAnnotation              annotation: 引用
+12LinkFromMain::readDisplayType              m_fullString: <a unhidden href="a025.htm#P9L1">↓<sub>第3回1.2节:</sub>引用</a>
+12LinkFromMain::readDisplayType              m_objectType: LINKFROMMAIN
+12LinkFromMain::readDisplayType              display Type: unhidden
 testLink              original link: 
 testLink              <a unhidden href="a025.htm#P9L1">↓<sub>第3回1.2节:</sub>引用</a>
 12LinkFromMain::readReferFileName              chapterNumber: 25, attachmentNumber: 0
-12LinkFromMain::loadFirstFromContainedLine              m_fullString: 
-12LinkFromMain::loadFirstFromContainedLine              <a unhidden href="a025.htm#P9L1">↓<sub>第3回1.2节:</sub>引用</a>
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+12LinkFromMain::getFullStringAndBodyTextFromContainedLine              <a unhidden href="a025.htm#P9L1">↓<sub>第3回1.2节:</sub>引用</a>
+12LinkFromMain::readDisplayType              m_fullString: <a unhidden href="a025.htm#P9L1">↓<sub>第3回1.2节:</sub>引用</a>
+12LinkFromMain::readDisplayType              m_objectType: LINKFROMMAIN
+12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readType              type seen from prefix: a025
 12LinkFromMain::readAnnotation              annotation: 引用
 12LinkFromMain::readReferFileName              chapterNumber: 25, attachmentNumber: 0
-12LinkFromMain::readDisplayType              display Type: unhidden
+12LinkFromMain::fixFromString              <a unhidden href="a025.htm#P9L1">↓<sub>第3回1.2节:</sub>引用</a>
 12LinkFromMain::readReferPara              referPara: P9L1
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              <sub>第3回1.2节:</sub>
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              <sub>第3回1.2节:</sub>
+8Citation::readDisplayType              m_fullString: <sub>第3回1.2节:</sub>
+8Citation::readDisplayType              m_objectType: CITATION
 8Citation::readDisplayType              display Type: direct.
+12LinkFromMain::needToChange              need to change
 12LinkFromMain::length               size not match: 71 vs 80
 12LinkFromMain::length              <a unhidden href="a025.htm#P9L1">↓<sub>第3回1.2节:</sub>引用</a>
 12LinkFromMain::length              <a unhidden href="a025.htm#P9L1">↓<sub unhidden>第3回1.2节:</sub>引用</a>
 12LinkFromMain::loadFirstFromContainedLine              after fix length: 71
 testLink              display as:↓第3回1.2节:引用||
-*************************line 337: unhidden valid reverse link finished *************************
+*************************line 328: unhidden valid reverse link finished *************************
 testLinkFromAttachment              original link: 
 testLinkFromAttachment              <a title="IMAGE" href="#nwbt.jpg">（图示：女娲补天）</a>
 4Link::readAnnotation              annotation: （图示：女娲补天）
-18LinkFromAttachment::readReferFileName              m_imageReferFilename: 
+18LinkFromAttachment::readDisplayType              m_fullString: <a title="IMAGE" href="#nwbt.jpg">（图示：女娲补天）</a>
+18LinkFromAttachment::readDisplayType              m_objectType: LINKFROMATTACHMENT
 18LinkFromAttachment::readDisplayType              display Type: direct.
+18LinkFromAttachment::readReferFileName              m_imageReferFilename: 
+18LinkFromAttachment::fixFromString              <a title="IMAGE" href="#nwbt.jpg">（图示：女娲补天）</a>
 18LinkFromAttachment::readReferPara              m_referPara: nwbt.jpg
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              
+8Citation::readDisplayType              m_fullString: 
+8Citation::readDisplayType              m_objectType: CITATION
 8Citation::readDisplayType              display Type: direct.
+18LinkFromAttachment::needToChange              need to change
 testLinkFromAttachment              （图示：女娲补天）
-testLinkFromAttachment              need Update: 0
+testLinkFromAttachment              need Update: 1
 testLinkFromAttachment              after fixed: 
 testLinkFromAttachment              <a title="IMAGE" href="b007.htm#nwbt.jpg">↑（图示：女娲补天）</a>
 testLinkFromAttachment              display as:↑（图示：女娲补天）||
-*************************line 342: direct image link finished *************************
+*************************line 333: direct image link finished *************************
 testLinkFromAttachment              original link: 
 testLinkFromAttachment              <a hidden title="IMAGE" href="a019.htm#tcf.jpg">（图示：探春房）</a>
 4Link::readAnnotation              annotation: （图示：探春房）
-18LinkFromAttachment::readReferFileName              m_imageReferFilename: a019.htm
+18LinkFromAttachment::readDisplayType              m_fullString: <a hidden title="IMAGE" href="a019.htm#tcf.jpg">（图示：探春房）</a>
+18LinkFromAttachment::readDisplayType              m_objectType: LINKFROMATTACHMENT
 18LinkFromAttachment::readDisplayType              display Type: hidden
+18LinkFromAttachment::readReferFileName              m_imageReferFilename: a019.htm
+18LinkFromAttachment::fixFromString              <a hidden title="IMAGE" href="a019.htm#tcf.jpg">（图示：探春房）</a>
 18LinkFromAttachment::readReferPara              m_referPara: tcf.jpg
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              
+8Citation::readDisplayType              m_fullString: 
+8Citation::readDisplayType              m_objectType: CITATION
 8Citation::readDisplayType              display Type: direct.
 testLinkFromAttachment              （图示：探春房）
 testLinkFromAttachment              need Update: 0
 testLinkFromAttachment              after fixed: 
 testLinkFromAttachment              <a hidden title="IMAGE" href="a019.htm#tcf.jpg">↑（图示：探春房）</a>
 testLinkFromAttachment              display as:||
-*************************line 348: hidden image link finished *************************
+*************************line 339: hidden image link finished *************************
 testLinkOperation              original link: 
 testLinkOperation              <a unhidden href="a080.htm#top">原是（<cite unhidden>薛姨妈1</cite>）老奶奶（<cite unhidden>薛姨妈1</cite>）使唤的</a>
 4Link::readType              type seen from prefix: a080
 4Link::readAnnotation              annotation: 原是（<cite unhidden>薛姨妈1</cite>）老奶奶（<cite unhidden>薛姨妈1</cite>）使唤的
+12LinkFromMain::readDisplayType              m_fullString: <a unhidden href="a080.htm#top">原是（<cite unhidden>薛姨妈1</cite>）老奶奶（<cite unhidden>薛姨妈1</cite>）使唤的</a>
+12LinkFromMain::readDisplayType              m_objectType: LINKFROMMAIN
+12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readReferFileName              chapterNumber: 80, attachmentNumber: 0
 testLinkOperation              change to refer to file 57. 
-12LinkFromMain::readDisplayType              display Type: unhidden
+12LinkFromMain::needToChange              need to change
+12LinkFromMain::fixFromString              <a unhidden href="a080.htm#top">原是（<cite unhidden>薛姨妈1</cite>）老奶奶（<cite unhidden>薛姨妈1</cite>）使唤的</a>
 12LinkFromMain::readReferPara              referPara: top
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              
+8Citation::readDisplayType              m_fullString: 
+8Citation::readDisplayType              m_objectType: CITATION
 8Citation::readDisplayType              display Type: direct.
 12LinkFromMain::readKey              title=" not found.
-7Comment::loadFirstFromContainedLine              m_fullString: 
-7Comment::loadFirstFromContainedLine              <cite unhidden>薛姨妈1</cite>
+7Comment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+7Comment::getFullStringAndBodyTextFromContainedLine              <cite unhidden>薛姨妈1</cite>
+7Comment::readDisplayType              m_fullString: <cite unhidden>薛姨妈1</cite>
+7Comment::readDisplayType              m_objectType: COMMENT
 7Comment::readDisplayType              display Type: unhidden
-7Comment::loadFirstFromContainedLine              m_fullString: 
-7Comment::loadFirstFromContainedLine              <cite unhidden>薛姨妈1</cite>
+7Comment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+7Comment::getFullStringAndBodyTextFromContainedLine              <cite unhidden>薛姨妈1</cite>
+7Comment::readDisplayType              m_fullString: <cite unhidden>薛姨妈1</cite>
+7Comment::readDisplayType              m_objectType: COMMENT
 7Comment::readDisplayType              display Type: unhidden
 testLinkOperation              need Update: 1
 testLinkOperation              after fixed: 
 testLinkOperation              <a unhidden href="a057.htm#top">↑原是（<cite unhidden>薛姨妈1</cite>）老奶奶（<cite unhidden>薛姨妈1</cite>）使唤的</a>
 testLinkOperation              display as:↑原是（薛姨妈1）老奶奶（薛姨妈1）使唤的||
-*************************line 371: fixReferFile finished *************************
+*************************line 362: fixReferFile finished *************************
 fixLinkFromJPMTemplate              <a unhidden title="床帐" href="JPM\d017.htm#P1L1">雪梅相妒，无复桂月争辉</a>
 testLinkOperation              <a unhidden title="床帐" href="JPM\d017.htm#P1L1">雪梅相妒，无复桂月争辉</a>
 4Link::readType              type seen from prefix: JPM\d017
 4Link::readAnnotation              annotation: 雪梅相妒，无复桂月争辉
+12LinkFromMain::readDisplayType              m_fullString: <a unhidden title="床帐" href="JPM\d017.htm#P1L1">雪梅相妒，无复桂月争辉</a>
+12LinkFromMain::readDisplayType              m_objectType: LINKFROMMAIN
+12LinkFromMain::readDisplayType              display Type: unhidden
 testLink              original link: 
 testLink              <a unhidden title="床帐" href="JPM\d017.htm#P1L1">雪梅相妒，无复桂月争辉</a>
 12LinkFromMain::readReferFileName              chapterNumber: 17, attachmentNumber: 0
-12LinkFromMain::readDisplayType              display Type: unhidden
+12LinkFromMain::fixFromString              <a unhidden title="床帐" href="JPM\d017.htm#P1L1">雪梅相妒，无复桂月争辉</a>
 12LinkFromMain::readReferPara              referPara: P1L1
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              
+8Citation::readDisplayType              m_fullString: 
+8Citation::readDisplayType              m_objectType: CITATION
 8Citation::readDisplayType              display Type: direct.
 15CoupledBodyText::setInputOutputFiles              input file is: bodyTexts/output/Jpm017.txt
 15CoupledBodyText::setInputOutputFiles              output file is: bodyTexts/afterFix/Jpm017.txt
 25LineNumberPlaceholderLink::loadFirstFromContainedLine              P3L5
 12LinkFromMain::readKey              line number found: P3L5
+12LinkFromMain::needToChange              need to change
 12LinkFromMain::readKey              key: 床帐
 testLink              need Update: 1
 testLink              after fixed: 
 testLink              <a unhidden title="床帐" href="JPM\d017.htm#P3L5">↑<sub hidden>第17回3.5节:</sub>雪梅相妒，无复桂月争辉</a>
 testLink              display as:↑雪梅相妒，无复桂月争辉||
-*************************line 380: JPM link finished *************************
+*************************line 371: JPM link finished *************************
 testLinkOperation              <a unhidden href="a005.htm#P94" title="海棠">海棠春睡</a>
 4Link::readType              type seen from prefix: a005
 4Link::readAnnotation              annotation: 海棠春睡
+12LinkFromMain::readDisplayType              m_fullString: <a unhidden href="a005.htm#P94" title="海棠">海棠春睡</a>
+12LinkFromMain::readDisplayType              m_objectType: LINKFROMMAIN
+12LinkFromMain::readDisplayType              display Type: unhidden
 testLink              original link: 
 testLink              <a unhidden href="a005.htm#P94" title="海棠">海棠春睡</a>
 12LinkFromMain::readReferFileName              chapterNumber: 5, attachmentNumber: 0
-12LinkFromMain::readDisplayType              display Type: unhidden
+12LinkFromMain::fixFromString              <a unhidden href="a005.htm#P94" title="海棠">海棠春睡</a>
 12LinkFromMain::readReferPara              referPara: P94
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              
+8Citation::readDisplayType              m_fullString: 
+8Citation::readDisplayType              m_objectType: CITATION
 8Citation::readDisplayType              display Type: direct.
 15CoupledBodyText::setInputOutputFiles              input file is: bodyTexts/output/Main05.txt
 15CoupledBodyText::setInputOutputFiles              output file is: bodyTexts/afterFix/Main05.txt
 25LineNumberPlaceholderLink::loadFirstFromContainedLine              P5L2
 12LinkFromMain::readKey              line number found: P5L2
+12LinkFromMain::needToChange              need to change
 12LinkFromMain::readKey              key: 海棠
 testLink              need Update: 1
 testLink              after fixed: 
 testLink              <a unhidden title="海棠" href="a005.htm#P5L2">↑<sub hidden>第5回5.2节:</sub>海棠春睡</a>
 testLink              display as:↑海棠春睡||
-*************************line 388: title fix finished *************************
+*************************line 379: title fix finished *************************
 testLinkFromMain              original link: 
 testLinkFromMain              <a hidden href="a080.htm#top">原是（<cite unhidden>薛姨妈1</cite>）老奶奶（<cite unhidden>薛姨妈1</cite>）使唤的</a>
 4Link::readType              type seen from prefix: a080
 4Link::readAnnotation              annotation: 原是（<cite unhidden>薛姨妈1</cite>）老奶奶（<cite unhidden>薛姨妈1</cite>）使唤的
-12LinkFromMain::readReferFileName              chapterNumber: 80, attachmentNumber: 0
+12LinkFromMain::readDisplayType              m_fullString: <a hidden href="a080.htm#top">原是（<cite unhidden>薛姨妈1</cite>）老奶奶（<cite unhidden>薛姨妈1</cite>）使唤的</a>
+12LinkFromMain::readDisplayType              m_objectType: LINKFROMMAIN
 12LinkFromMain::readDisplayType              display Type: hidden
+12LinkFromMain::readReferFileName              chapterNumber: 80, attachmentNumber: 0
+12LinkFromMain::fixFromString              <a hidden href="a080.htm#top">原是（<cite unhidden>薛姨妈1</cite>）老奶奶（<cite unhidden>薛姨妈1</cite>）使唤的</a>
 12LinkFromMain::readReferPara              referPara: top
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              
+8Citation::readDisplayType              m_fullString: 
+8Citation::readDisplayType              m_objectType: CITATION
 8Citation::readDisplayType              display Type: direct.
 12LinkFromMain::readKey              title=" not found.
-7Comment::loadFirstFromContainedLine              m_fullString: 
-7Comment::loadFirstFromContainedLine              <cite unhidden>薛姨妈1</cite>
+7Comment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+7Comment::getFullStringAndBodyTextFromContainedLine              <cite unhidden>薛姨妈1</cite>
+7Comment::readDisplayType              m_fullString: <cite unhidden>薛姨妈1</cite>
+7Comment::readDisplayType              m_objectType: COMMENT
 7Comment::readDisplayType              display Type: unhidden
-7Comment::loadFirstFromContainedLine              m_fullString: 
-7Comment::loadFirstFromContainedLine              <cite unhidden>薛姨妈1</cite>
+7Comment::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+7Comment::getFullStringAndBodyTextFromContainedLine              <cite unhidden>薛姨妈1</cite>
+7Comment::readDisplayType              m_fullString: <cite unhidden>薛姨妈1</cite>
+7Comment::readDisplayType              m_objectType: COMMENT
 7Comment::readDisplayType              display Type: unhidden
 testLinkFromMain              need Update: 0
 testLinkFromMain              after fixed: 
 testLinkFromMain              <a hidden href="a080.htm#top">↑原是（<cite unhidden>薛姨妈1</cite>）老奶奶（<cite unhidden>薛姨妈1</cite>）使唤的</a>
 testLinkFromMain              display as:||
-*************************line 400: #top finished *************************
+*************************line 391: #top finished *************************
 testLinkFromMain              original link: 
 testLinkFromMain              <a hidden href="attachment\b003_9.htm#P2L3">原是老奶奶（薛姨妈）使唤的</a>
 4Link::readType              type seen from prefix: attachment\b003_9
 4Link::readAnnotation              annotation: 原是老奶奶（薛姨妈）使唤的
-12LinkFromMain::readReferFileName              chapterNumber: 3, attachmentNumber: 9
+12LinkFromMain::readDisplayType              m_fullString: <a hidden href="attachment\b003_9.htm#P2L3">原是老奶奶（薛姨妈）使唤的</a>
+12LinkFromMain::readDisplayType              m_objectType: LINKFROMMAIN
 12LinkFromMain::readDisplayType              display Type: hidden
+12LinkFromMain::readReferFileName              chapterNumber: 3, attachmentNumber: 9
+12LinkFromMain::fixFromString              <a hidden href="attachment\b003_9.htm#P2L3">原是老奶奶（薛姨妈）使唤的</a>
 12LinkFromMain::readReferPara              referPara: P2L3
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              
+8Citation::readDisplayType              m_fullString: 
+8Citation::readDisplayType              m_objectType: CITATION
 8Citation::readDisplayType              display Type: direct.
 testLinkFromMain              need Update: 0
 testLinkFromMain              after fixed: 
 testLinkFromMain              <a hidden href="attachment\b003_9.htm#P2L3">原是老奶奶（薛姨妈）使唤的</a>
 testLinkFromMain              display as:||
-*************************line 406: WARNING: SUCH LINK'S REFERPARA WON'T BE FIXED AUTOMATICALLY.*************************
-*************************line 408: attachment with referPara finished *************************
+*************************line 397: WARNING: SUCH LINK'S REFERPARA WON'T BE FIXED AUTOMATICALLY.*************************
+*************************line 399: attachment with referPara finished *************************
 fixLinkFromSameFileTemplate              <a unhidden title="菱角菱花" href="#94"><sub hidden>第80回1.1节:</sub>原是老奶奶（薛姨妈）使唤的</a>
 testLinkFromMain              original link: 
 testLinkFromMain              <a unhidden title="菱角菱花" href="#94"><sub hidden>第80回1.1节:</sub>原是老奶奶（薛姨妈）使唤的</a>
 4Link::readAnnotation              annotation: 原是老奶奶（薛姨妈）使唤的
-12LinkFromMain::readReferFileName              chapterNumber: 80, attachmentNumber: 0
+12LinkFromMain::readDisplayType              m_fullString: <a unhidden title="菱角菱花" href="#94"><sub hidden>第80回1.1节:</sub>原是老奶奶（薛姨妈）使唤的</a>
+12LinkFromMain::readDisplayType              m_objectType: LINKFROMMAIN
 12LinkFromMain::readDisplayType              display Type: unhidden
+12LinkFromMain::readReferFileName              chapterNumber: 80, attachmentNumber: 0
+12LinkFromMain::fixFromString              <a unhidden title="菱角菱花" href="#94"><sub hidden>第80回1.1节:</sub>原是老奶奶（薛姨妈）使唤的</a>
 12LinkFromMain::readReferPara              referPara: 94
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              <sub hidden>第80回1.1节:</sub>
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              <sub hidden>第80回1.1节:</sub>
+8Citation::readDisplayType              m_fullString: <sub hidden>第80回1.1节:</sub>
+8Citation::readDisplayType              m_objectType: CITATION
 8Citation::readDisplayType              display Type: hidden
+12LinkFromMain::needToChange              need to change
 15CoupledBodyText::setInputOutputFiles              input file is: bodyTexts/output/Main80.txt
 15CoupledBodyText::setInputOutputFiles              output file is: bodyTexts/afterFix/Main80.txt
 25LineNumberPlaceholderLink::loadFirstFromContainedLine              P1L4
@@ -198,18 +268,24 @@ testLinkFromMain              need Update: 1
 testLinkFromMain              after fixed: 
 testLinkFromMain              <a unhidden title="菱角菱花" href="a080.htm#P1L4"><sub hidden>第80回1.4节:</sub>原是老奶奶（薛姨妈）使唤的</a>
 testLinkFromMain              display as:原是老奶奶（薛姨妈）使唤的||
-*************************line 415: fixLinkFromSameFileTemplate finished *************************
+*************************line 406: fixLinkFromSameFileTemplate finished *************************
 fixLinkFromMainTemplate              <a unhidden title="菱角菱花" href="a080.htm#94">↑<sub hidden>第80回1.1节:</sub>原是老奶奶（薛姨妈）使唤的</a>
 4Link::readType              type seen from prefix: a080
 4Link::readAnnotation              annotation: 原是老奶奶（薛姨妈）使唤的
+12LinkFromMain::readDisplayType              m_fullString: <a unhidden title="菱角菱花" href="a080.htm#94">↑<sub hidden>第80回1.1节:</sub>原是老奶奶（薛姨妈）使唤的</a>
+12LinkFromMain::readDisplayType              m_objectType: LINKFROMMAIN
+12LinkFromMain::readDisplayType              display Type: unhidden
 testLink              original link: 
 testLink              <a unhidden title="菱角菱花" href="a080.htm#94">↑<sub hidden>第80回1.1节:</sub>原是老奶奶（薛姨妈）使唤的</a>
 12LinkFromMain::readReferFileName              chapterNumber: 80, attachmentNumber: 0
-12LinkFromMain::readDisplayType              display Type: unhidden
+12LinkFromMain::fixFromString              <a unhidden title="菱角菱花" href="a080.htm#94">↑<sub hidden>第80回1.1节:</sub>原是老奶奶（薛姨妈）使唤的</a>
 12LinkFromMain::readReferPara              referPara: 94
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              <sub hidden>第80回1.1节:</sub>
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              <sub hidden>第80回1.1节:</sub>
+8Citation::readDisplayType              m_fullString: <sub hidden>第80回1.1节:</sub>
+8Citation::readDisplayType              m_objectType: CITATION
 8Citation::readDisplayType              display Type: hidden
+12LinkFromMain::needToChange              need to change
 15CoupledBodyText::setInputOutputFiles              input file is: bodyTexts/output/Main80.txt
 15CoupledBodyText::setInputOutputFiles              output file is: bodyTexts/afterFix/Main80.txt
 25LineNumberPlaceholderLink::loadFirstFromContainedLine              P1L4
@@ -219,18 +295,24 @@ testLink              need Update: 1
 testLink              after fixed: 
 testLink              <a unhidden title="菱角菱花" href="a080.htm#P1L4">↑<sub hidden>第80回1.4节:</sub>原是老奶奶（薛姨妈）使唤的</a>
 testLink              display as:↑原是老奶奶（薛姨妈）使唤的||
-*************************line 423: fixLinkFromMainTemplate finished *************************
+*************************line 414: fixLinkFromMainTemplate finished *************************
 fixLinkFromMainTemplate              <a unhidden title="菱角菱花" href="a080.htm#94">↑<sub hidden>第80回1.1节:</sub>原是老奶奶（薛姨妈）使唤的</a>
 testLinkFromMain              original link: 
 testLinkFromMain              <a unhidden title="菱角菱花" href="a080.htm#94">↑<sub hidden>第80回1.1节:</sub>原是老奶奶（薛姨妈）使唤的</a>
 4Link::readType              type seen from prefix: a080
 4Link::readAnnotation              annotation: 原是老奶奶（薛姨妈）使唤的
-12LinkFromMain::readReferFileName              chapterNumber: 80, attachmentNumber: 0
+12LinkFromMain::readDisplayType              m_fullString: <a unhidden title="菱角菱花" href="a080.htm#94">↑<sub hidden>第80回1.1节:</sub>原是老奶奶（薛姨妈）使唤的</a>
+12LinkFromMain::readDisplayType              m_objectType: LINKFROMMAIN
 12LinkFromMain::readDisplayType              display Type: unhidden
+12LinkFromMain::readReferFileName              chapterNumber: 80, attachmentNumber: 0
+12LinkFromMain::fixFromString              <a unhidden title="菱角菱花" href="a080.htm#94">↑<sub hidden>第80回1.1节:</sub>原是老奶奶（薛姨妈）使唤的</a>
 12LinkFromMain::readReferPara              referPara: 94
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              <sub hidden>第80回1.1节:</sub>
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              <sub hidden>第80回1.1节:</sub>
+8Citation::readDisplayType              m_fullString: <sub hidden>第80回1.1节:</sub>
+8Citation::readDisplayType              m_objectType: CITATION
 8Citation::readDisplayType              display Type: hidden
+12LinkFromMain::needToChange              need to change
 15CoupledBodyText::setInputOutputFiles              input file is: bodyTexts/output/Main80.txt
 15CoupledBodyText::setInputOutputFiles              output file is: bodyTexts/afterFix/Main80.txt
 25LineNumberPlaceholderLink::loadFirstFromContainedLine              P1L4
@@ -240,33 +322,45 @@ testLinkFromMain              <a unhidden title="菱角菱花" href="a080.htm#94
 fixLinkFromOriginalTemplate              <a unhidden title="菱角菱花" href="original\c080.htm#P1L4">↑<sub hidden></sub>原文</a>
 4Link::readType              type seen from prefix: original\c080
 4Link::readAnnotation              annotation: 原文
-12LinkFromMain::readReferFileName              chapterNumber: 80, attachmentNumber: 0
+12LinkFromMain::readDisplayType              m_fullString: <a unhidden title="菱角菱花" href="original\c080.htm#P1L4">↑<sub hidden></sub>原文</a>
+12LinkFromMain::readDisplayType              m_objectType: LINKFROMMAIN
 12LinkFromMain::readDisplayType              display Type: unhidden
+12LinkFromMain::readReferFileName              chapterNumber: 80, attachmentNumber: 0
+12LinkFromMain::fixFromString              <a unhidden title="菱角菱花" href="original\c080.htm#P1L4">↑<sub hidden></sub>原文</a>
 12LinkFromMain::readReferPara              referPara: P1L4
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              <sub hidden></sub>
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              <sub hidden></sub>
+8Citation::readDisplayType              m_fullString: <sub hidden></sub>
+8Citation::readDisplayType              m_objectType: CITATION
 8Citation::readDisplayType              display Type: hidden
 15CoupledBodyText::setInputOutputFiles              input file is: bodyTexts/output/Org80.txt
 15CoupledBodyText::setInputOutputFiles              output file is: bodyTexts/afterFix/Org80.txt
 25LineNumberPlaceholderLink::loadFirstFromContainedLine              P1L3
 12LinkFromMain::readKey              line number found: P1L3
+12LinkFromMain::needToChange              need to change
 12LinkFromMain::readKey              key: 菱角菱花
 testLinkFromMain              need Update: 1
 testLinkFromMain              after fixed: 
 testLinkFromMain              <a unhidden title="菱角菱花" href="a080.htm#P1L4">↑<sub hidden>第80回1.4节:</sub>原是老奶奶（薛姨妈）使唤的</a>（<a unhidden title="菱角菱花" href="original\c080.htm#P1L3">↑<sub hidden>第80回1.3节:</sub>原文</a>）
 testLinkFromMain              display as:↑原是老奶奶（薛姨妈）使唤的（↑原文）||
-*************************line 430: generate original link afterwards finished *************************
+*************************line 421: generate original link afterwards finished *************************
 fixLinkFromOriginalTemplate              <a unhidden title="happy" href="original\c018.htm#90101">↑<sub hidden>第80回1.1节:</sub>原文</a>
 testLinkFromMain              original link: 
 testLinkFromMain              <a unhidden title="happy" href="original\c018.htm#90101">↑<sub hidden>第80回1.1节:</sub>原文</a>
 4Link::readType              type seen from prefix: original\c018
 4Link::readAnnotation              annotation: 原文
-12LinkFromMain::readReferFileName              chapterNumber: 18, attachmentNumber: 0
+12LinkFromMain::readDisplayType              m_fullString: <a unhidden title="happy" href="original\c018.htm#90101">↑<sub hidden>第80回1.1节:</sub>原文</a>
+12LinkFromMain::readDisplayType              m_objectType: LINKFROMMAIN
 12LinkFromMain::readDisplayType              display Type: unhidden
+12LinkFromMain::readReferFileName              chapterNumber: 18, attachmentNumber: 0
+12LinkFromMain::fixFromString              <a unhidden title="happy" href="original\c018.htm#90101">↑<sub hidden>第80回1.1节:</sub>原文</a>
 12LinkFromMain::readReferPara              referPara: 90101
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              <sub hidden>第80回1.1节:</sub>
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              <sub hidden>第80回1.1节:</sub>
+8Citation::readDisplayType              m_fullString: <sub hidden>第80回1.1节:</sub>
+8Citation::readDisplayType              m_objectType: CITATION
 8Citation::readDisplayType              display Type: hidden
+12LinkFromMain::needToChange              need to change
 15CoupledBodyText::setInputOutputFiles              input file is: bodyTexts/output/Org18.txt
 15CoupledBodyText::setInputOutputFiles              output file is: bodyTexts/afterFix/Org18.txt
 12LinkFromMain::readKey              key: KeyNotFoundhappy
@@ -274,65 +368,87 @@ testLinkFromMain              need Update: 1
 testLinkFromMain              after fixed: 
 testLinkFromMain              <a unhidden title="KeyNotFoundhappy" href="original\c018.htm#changeKey">↑<sub hidden>第80回1.1节:</sub>原文</a>
 testLinkFromMain              display as:↑原文||
-*************************line 437: fixLinkFromOriginalTemplate finished *************************
+*************************line 428: fixLinkFromOriginalTemplate finished *************************
 fixLinkFromAttachmentTemplate              <a unhidden href="attachment\b018_7.htm">happy</a>
 testLinkFromMain              original link: 
 testLinkFromMain              <a unhidden href="attachment\b018_7.htm">happy</a>
 4Link::readType              type seen from prefix: attachment\b018_7
 4Link::readAnnotation              annotation: happy
-12LinkFromMain::readReferFileName              chapterNumber: 18, attachmentNumber: 7
+12LinkFromMain::readDisplayType              m_fullString: <a unhidden href="attachment\b018_7.htm">happy</a>
+12LinkFromMain::readDisplayType              m_objectType: LINKFROMMAIN
 12LinkFromMain::readDisplayType              display Type: unhidden
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              
+12LinkFromMain::readReferFileName              chapterNumber: 18, attachmentNumber: 7
+12LinkFromMain::fixFromString              <a unhidden href="attachment\b018_7.htm">happy</a>
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              
+8Citation::readDisplayType              m_fullString: 
+8Citation::readDisplayType              m_objectType: CITATION
 8Citation::readDisplayType              display Type: direct.
 testLinkFromMain              need Update: 0
 testLinkFromMain              after fixed: 
 testLinkFromMain              <a unhidden href="attachment\b018_7.htm">happy</a>
 testLinkFromMain              display as:happy||
-*************************line 443: fixLinkFromOriginalTemplate finished *************************
-*************************line 445: testLinkFromMain finished *************************
+*************************line 434: fixLinkFromOriginalTemplate finished *************************
+*************************line 436: testLinkFromMain finished *************************
 fixLinkFromAttachmentTemplate              <a unhidden href="b018_7.htm">happy</a>
 testLinkOperation              original link: 
 testLinkOperation              <a unhidden href="b018_7.htm">happy</a>
 4Link::readType              type seen from prefix: b018_7
 4Link::readAnnotation              annotation: happy
+18LinkFromAttachment::readDisplayType              m_fullString: <a unhidden href="b018_7.htm">happy</a>
+18LinkFromAttachment::readDisplayType              m_objectType: LINKFROMATTACHMENT
+18LinkFromAttachment::readDisplayType              display Type: unhidden
 18LinkFromAttachment::readReferFileName              chapterNumber: 18, attachmentNumber: 7
 testLinkOperation              change to refer to file 55_3. 
-18LinkFromAttachment::readDisplayType              display Type: unhidden
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              
+18LinkFromAttachment::needToChange              need to change
+18LinkFromAttachment::fixFromString              <a unhidden href="b018_7.htm">happy</a>
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              
+8Citation::readDisplayType              m_fullString: 
+8Citation::readDisplayType              m_objectType: CITATION
 8Citation::readDisplayType              display Type: direct.
 testLinkOperation              need Update: 1
 testLinkOperation              after fixed: 
 testLinkOperation              <a unhidden href="b055_3.htm">happy</a>
 testLinkOperation              display as:happy||
-*************************line 462: fixReferFile finished *************************
+*************************line 453: fixReferFile finished *************************
 testLinkFromAttachment              original link: 
 testLinkFromAttachment              <a unhidden href="..\aindex.htm">回目录</a>
 4Link::readType              type seen from prefix: ..\aindex
 4Link::readAnnotation              annotation: 回目录
-18LinkFromAttachment::readReferFileName              unsupported type in refer file name in link: ..\aindex
+18LinkFromAttachment::readDisplayType              m_fullString: <a unhidden href="..\aindex.htm">回目录</a>
+18LinkFromAttachment::readDisplayType              m_objectType: LINKFROMATTACHMENT
 18LinkFromAttachment::readDisplayType              display Type: unhidden
+18LinkFromAttachment::readReferFileName              unsupported type in refer file name in link: ..\aindex
+18LinkFromAttachment::fixFromString              <a unhidden href="..\aindex.htm">回目录</a>
 18LinkFromAttachment::readReferPara              no # found to read referPara from link: <a unhidden href="..\aindex.htm">回目录</a>
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              
+8Citation::readDisplayType              m_fullString: 
+8Citation::readDisplayType              m_objectType: CITATION
 8Citation::readDisplayType              display Type: direct.
 testLinkFromAttachment              回目录
 testLinkFromAttachment              need Update: 0
 testLinkFromAttachment              after fixed: 
 testLinkFromAttachment              <a unhidden href="..\aindex.htm">↑回目录</a>
 testLinkFromAttachment              display as:↑回目录||
-*************************line 467: 回目录 finished *************************
+*************************line 458: 回目录 finished *************************
 fixLinkFromSameFileTemplate              <a unhidden title="西北" href="#94"><sub hidden>第80回1.1节:</sub>原是老奶奶（薛姨妈）使唤的</a>
 testLinkFromAttachment              original link: 
 testLinkFromAttachment              <a unhidden title="西北" href="#94"><sub hidden>第80回1.1节:</sub>原是老奶奶（薛姨妈）使唤的</a>
 4Link::readAnnotation              annotation: 原是老奶奶（薛姨妈）使唤的
-18LinkFromAttachment::readReferFileName              chapterNumber: 3, attachmentNumber: 9
+18LinkFromAttachment::readDisplayType              m_fullString: <a unhidden title="西北" href="#94"><sub hidden>第80回1.1节:</sub>原是老奶奶（薛姨妈）使唤的</a>
+18LinkFromAttachment::readDisplayType              m_objectType: LINKFROMATTACHMENT
 18LinkFromAttachment::readDisplayType              display Type: unhidden
+18LinkFromAttachment::readReferFileName              chapterNumber: 3, attachmentNumber: 9
+18LinkFromAttachment::fixFromString              <a unhidden title="西北" href="#94"><sub hidden>第80回1.1节:</sub>原是老奶奶（薛姨妈）使唤的</a>
 18LinkFromAttachment::readReferPara              referPara: 94
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              <sub hidden>第80回1.1节:</sub>
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              <sub hidden>第80回1.1节:</sub>
+8Citation::readDisplayType              m_fullString: <sub hidden>第80回1.1节:</sub>
+8Citation::readDisplayType              m_objectType: CITATION
 8Citation::readDisplayType              display Type: hidden
+18LinkFromAttachment::needToChange              need to change
 15CoupledBodyText::setInputOutputFiles              input file is: bodyTexts/output/Attach03_9.txt
 15CoupledBodyText::setInputOutputFiles              output file is: bodyTexts/afterFix/Attach03_9.txt
 25LineNumberPlaceholderLink::loadFirstFromContainedLine              P1L2
@@ -343,18 +459,24 @@ testLinkFromAttachment              need Update: 1
 testLinkFromAttachment              after fixed: 
 testLinkFromAttachment              <a unhidden title="西北" href="b003_9.htm#P1L2"><sub hidden>第3回第9篇1.2节:</sub>原是老奶奶（薛姨妈）使唤的</a>
 testLinkFromAttachment              display as:原是老奶奶（薛姨妈）使唤的||
-*************************line 475: fixLinkFromSameFileTemplate finished *************************
+*************************line 466: fixLinkFromSameFileTemplate finished *************************
 fixLinkFromMainTemplate              <a unhidden title="菱角菱花" href="..\a080.htm#94">↑<sub hidden>第80回1.1节:</sub>原是老奶奶（薛姨妈）使唤的</a>
 testLinkFromAttachment              original link: 
 testLinkFromAttachment              <a unhidden title="菱角菱花" href="..\a080.htm#94">↑<sub hidden>第80回1.1节:</sub>原是老奶奶（薛姨妈）使唤的</a>
 4Link::readType              type seen from prefix: ..\a080
 4Link::readAnnotation              annotation: 原是老奶奶（薛姨妈）使唤的
-18LinkFromAttachment::readReferFileName              chapterNumber: 80, attachmentNumber: 0
+18LinkFromAttachment::readDisplayType              m_fullString: <a unhidden title="菱角菱花" href="..\a080.htm#94">↑<sub hidden>第80回1.1节:</sub>原是老奶奶（薛姨妈）使唤的</a>
+18LinkFromAttachment::readDisplayType              m_objectType: LINKFROMATTACHMENT
 18LinkFromAttachment::readDisplayType              display Type: unhidden
+18LinkFromAttachment::readReferFileName              chapterNumber: 80, attachmentNumber: 0
+18LinkFromAttachment::fixFromString              <a unhidden title="菱角菱花" href="..\a080.htm#94">↑<sub hidden>第80回1.1节:</sub>原是老奶奶（薛姨妈）使唤的</a>
 18LinkFromAttachment::readReferPara              referPara: 94
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              <sub hidden>第80回1.1节:</sub>
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              <sub hidden>第80回1.1节:</sub>
+8Citation::readDisplayType              m_fullString: <sub hidden>第80回1.1节:</sub>
+8Citation::readDisplayType              m_objectType: CITATION
 8Citation::readDisplayType              display Type: hidden
+18LinkFromAttachment::needToChange              need to change
 15CoupledBodyText::setInputOutputFiles              input file is: bodyTexts/output/Main80.txt
 15CoupledBodyText::setInputOutputFiles              output file is: bodyTexts/afterFix/Main80.txt
 25LineNumberPlaceholderLink::loadFirstFromContainedLine              P1L4
@@ -365,33 +487,45 @@ testLinkFromAttachment              原是老奶奶（薛姨妈）使唤的
 fixLinkFromOriginalTemplate              <a unhidden title="菱角菱花" href="..\original\c080.htm#P1L4">↑<sub hidden></sub>原文</a>
 4Link::readType              type seen from prefix: ..\original\c080
 4Link::readAnnotation              annotation: 原文
-18LinkFromAttachment::readReferFileName              chapterNumber: 80, attachmentNumber: 0
+18LinkFromAttachment::readDisplayType              m_fullString: <a unhidden title="菱角菱花" href="..\original\c080.htm#P1L4">↑<sub hidden></sub>原文</a>
+18LinkFromAttachment::readDisplayType              m_objectType: LINKFROMATTACHMENT
 18LinkFromAttachment::readDisplayType              display Type: unhidden
+18LinkFromAttachment::readReferFileName              chapterNumber: 80, attachmentNumber: 0
+18LinkFromAttachment::fixFromString              <a unhidden title="菱角菱花" href="..\original\c080.htm#P1L4">↑<sub hidden></sub>原文</a>
 18LinkFromAttachment::readReferPara              referPara: P1L4
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              <sub hidden></sub>
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              <sub hidden></sub>
+8Citation::readDisplayType              m_fullString: <sub hidden></sub>
+8Citation::readDisplayType              m_objectType: CITATION
 8Citation::readDisplayType              display Type: hidden
 15CoupledBodyText::setInputOutputFiles              input file is: bodyTexts/output/Org80.txt
 15CoupledBodyText::setInputOutputFiles              output file is: bodyTexts/afterFix/Org80.txt
 25LineNumberPlaceholderLink::loadFirstFromContainedLine              P1L3
 18LinkFromAttachment::readKey              line number found: P1L3
+18LinkFromAttachment::needToChange              need to change
 18LinkFromAttachment::readKey              key: 菱角菱花
 testLinkFromAttachment              need Update: 1
 testLinkFromAttachment              after fixed: 
 testLinkFromAttachment              <a unhidden title="菱角菱花" href="..\a080.htm#P1L4">↑<sub hidden>第80回1.4节:</sub>原是老奶奶（薛姨妈）使唤的</a>（<a unhidden title="菱角菱花" href="..\original\c080.htm#P1L3">↑<sub hidden>第80回1.3节:</sub>原文</a>）
 testLinkFromAttachment              display as:↑原是老奶奶（薛姨妈）使唤的（↑原文）||
-*************************line 483: fixLinkFromMainTemplate finished *************************
+*************************line 474: fixLinkFromMainTemplate finished *************************
 fixLinkFromOriginalTemplate              <a unhidden title="菱角菱花" href="..\original\c080.htm#94">↑<sub hidden>第80回1.1节:</sub>原文</a>
 testLinkFromAttachment              original link: 
 testLinkFromAttachment              <a unhidden title="菱角菱花" href="..\original\c080.htm#94">↑<sub hidden>第80回1.1节:</sub>原文</a>
 4Link::readType              type seen from prefix: ..\original\c080
 4Link::readAnnotation              annotation: 原文
-18LinkFromAttachment::readReferFileName              chapterNumber: 80, attachmentNumber: 0
+18LinkFromAttachment::readDisplayType              m_fullString: <a unhidden title="菱角菱花" href="..\original\c080.htm#94">↑<sub hidden>第80回1.1节:</sub>原文</a>
+18LinkFromAttachment::readDisplayType              m_objectType: LINKFROMATTACHMENT
 18LinkFromAttachment::readDisplayType              display Type: unhidden
+18LinkFromAttachment::readReferFileName              chapterNumber: 80, attachmentNumber: 0
+18LinkFromAttachment::fixFromString              <a unhidden title="菱角菱花" href="..\original\c080.htm#94">↑<sub hidden>第80回1.1节:</sub>原文</a>
 18LinkFromAttachment::readReferPara              referPara: 94
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              <sub hidden>第80回1.1节:</sub>
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              <sub hidden>第80回1.1节:</sub>
+8Citation::readDisplayType              m_fullString: <sub hidden>第80回1.1节:</sub>
+8Citation::readDisplayType              m_objectType: CITATION
 8Citation::readDisplayType              display Type: hidden
+18LinkFromAttachment::needToChange              need to change
 15CoupledBodyText::setInputOutputFiles              input file is: bodyTexts/output/Org80.txt
 15CoupledBodyText::setInputOutputFiles              output file is: bodyTexts/afterFix/Org80.txt
 25LineNumberPlaceholderLink::loadFirstFromContainedLine              P1L3
@@ -402,22 +536,27 @@ testLinkFromAttachment              need Update: 1
 testLinkFromAttachment              after fixed: 
 testLinkFromAttachment              <a unhidden title="菱角菱花" href="..\original\c080.htm#P1L3">↑<sub hidden>第80回1.3节:</sub>原文</a>
 testLinkFromAttachment              display as:↑原文||
-*************************line 490: fixLinkFromOriginalTemplate finished *************************
+*************************line 481: fixLinkFromOriginalTemplate finished *************************
 fixLinkFromAttachmentTemplate              <a unhidden href="b018_7.htm">happy</a>
 testLinkFromAttachment              original link: 
 testLinkFromAttachment              <a unhidden href="b018_7.htm">happy</a>
 4Link::readType              type seen from prefix: b018_7
 4Link::readAnnotation              annotation: happy
-18LinkFromAttachment::readReferFileName              chapterNumber: 18, attachmentNumber: 7
+18LinkFromAttachment::readDisplayType              m_fullString: <a unhidden href="b018_7.htm">happy</a>
+18LinkFromAttachment::readDisplayType              m_objectType: LINKFROMATTACHMENT
 18LinkFromAttachment::readDisplayType              display Type: unhidden
-8Citation::loadFirstFromContainedLine              m_fullString: 
-8Citation::loadFirstFromContainedLine              
+18LinkFromAttachment::readReferFileName              chapterNumber: 18, attachmentNumber: 7
+18LinkFromAttachment::fixFromString              <a unhidden href="b018_7.htm">happy</a>
+8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
+8Citation::getFullStringAndBodyTextFromContainedLine              
+8Citation::readDisplayType              m_fullString: 
+8Citation::readDisplayType              m_objectType: CITATION
 8Citation::readDisplayType              display Type: direct.
 testLinkFromAttachment              happy
 testLinkFromAttachment              need Update: 0
 testLinkFromAttachment              after fixed: 
 testLinkFromAttachment              <a unhidden href="b018_7.htm">happy</a>
 testLinkFromAttachment              display as:happy||
-*************************line 495: fixLinkFromAttachmentTemplate finished *************************
-*************************line 497: testLinkFromAttachment finished *************************
+*************************line 486: fixLinkFromAttachmentTemplate finished *************************
+*************************line 488: testLinkFromAttachment finished *************************
 

@@ -108,6 +108,14 @@ bool Link::readAnnotation(const string &linkString) {
   return true;
 }
 
+void Link::needToChange() {
+  if (not m_needChange) {
+    if (debug >= LOG_INFO)
+      METHOD_OUTPUT << "need to change" << endl;
+    m_needChange = true;
+  }
+}
+
 string Link::getWholeString() { return m_fullString; }
 
 /**

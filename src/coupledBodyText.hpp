@@ -10,6 +10,8 @@ static const string DISPLY_LINE_TEXT = R"(text)";
 static const string DISPLY_LINE_IMAGE = R"(image)";
 static const string DISPLY_LINE_BAD = R"(bad)";
 
+static const string imageGroupBeginChars = R"(<div)";
+
 static const LineNumber BEGIN_OF_WHOLE_BODYTEXT = LineNumber(1, 1);
 static const LineNumber END_OF_WHOLE_BODYTEXT = LineNumber();
 

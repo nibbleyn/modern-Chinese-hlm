@@ -130,8 +130,8 @@ public:
     if (m_fullString.length() != getWholeString().length()) {
       METHOD_OUTPUT << " size not match: " << m_fullString.length() << " vs "
                     << getWholeString().length() << endl;
-      METHOD_OUTPUT << m_fullString << endl;
-      METHOD_OUTPUT << getWholeString() << endl;
+      METHOD_OUTPUT << "m_fullString: " << m_fullString << endl;
+      METHOD_OUTPUT << "getWholeString(): " << getWholeString() << endl;
     }
     return m_fullString.length();
   }

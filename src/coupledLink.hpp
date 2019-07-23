@@ -55,7 +55,9 @@ private:
 
 static const string returnLinkSetIndicator = R"(被引用：)";
 static const string returnToContentTable = R"(回目录)";
-static const string citationChapter = R"(章)";
+
+static const string upArrow = R"(↑)";
+static const string downArrow = R"(↓)";
 
 class CoupledLink : public Link {
 public:
@@ -108,14 +110,6 @@ public:
       fixReferSection(referSection.getAttachmentNumber(),
                       referSection.getParaLineNumber());
   }
-  void fixReferSection(AttachmentNumber num, ParaLineNumber paraLine) {
-    if (not m_referSection.equal(num, paraLine)) {
-      if (not isReverseLink())
-        m_referSection.hide();
-      m_referSection.setReferSection(num, paraLine);
-      m_needChange = true;
-    }
-  }
   virtual void generateLinkToOrigin() = 0;
   string getStringOfLinkToOrigin() {
     if (m_linkPtrToOrigin != nullptr)
@@ -132,6 +126,14 @@ protected:
              originalLinkEndChars;
     return emptyString;
   }
+  void fixReferSection(AttachmentNumber num, ParaLineNumber paraLine) {
+    if (not m_referSection.equal(num, paraLine)) {
+      if (not isReverseLink())
+        m_referSection.hide();
+      m_referSection.setReferSection(num, paraLine);
+      needToChange();
+    }
+  }
   virtual void recordMissingKeyLink() = 0;
 
   // utility to convert link type with filename
@@ -147,7 +149,6 @@ protected:
 protected:
   Citation m_referSection;
   string m_usedKey{emptyString};
-  bool m_needChange{false};
   using LinkPtr = unique_ptr<CoupledLink>;
   LinkPtr m_linkPtrToOrigin{nullptr};
   string m_imageReferFilename{emptyString};
@@ -171,7 +172,9 @@ public:
   }
   LinkFromMain(const string &fromFile, const string &linkString)
       : CoupledLink(fromFile, linkString) {
+    m_fullString = linkString;
     m_objectType = OBJECT_TYPE::LINKFROMMAIN;
+    readDisplayType();
   }
   ~LinkFromMain(){};
   void generateLinkToOrigin();
@@ -202,7 +205,9 @@ public:
   }
   LinkFromAttachment(const string &fromFile, const string &linkString)
       : CoupledLink(fromFile, linkString) {
+    m_fullString = linkString;
     m_objectType = OBJECT_TYPE::LINKFROMATTACHMENT;
+    readDisplayType();
   }
   ~LinkFromAttachment(){};
   void generateLinkToOrigin();

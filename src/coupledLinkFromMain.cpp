@@ -44,7 +44,7 @@ void LinkFromMain::generateLinkToOrigin() {
   m_linkPtrToOrigin = make_unique<LinkFromMain>(m_fromFile, to);
   m_linkPtrToOrigin->readReferFileName(to);
   m_linkPtrToOrigin->fixFromString(to);
-  m_needChange = true;
+  needToChange();
   m_type = reservedType;
   m_displayText +=
       bracketStartChars + upArrow + annotationToOriginal + bracketEndChars;

@@ -34,16 +34,9 @@ static const string bottomParagraphIndicator = R"(bottom)";
 static const string BODY_TEXT_SUFFIX = R"(.txt)";
 static const string HTML_SUFFIX = R"(.htm)";
 
-// start of each paragraph and line number
-static const string lineNumberIdBeginChars = R"(id="P)";
-static const string imageGroupBeginChars = R"(<div)";
-
-static const string upArrow = R"(↑)";
-static const string downArrow = R"(↓)";
-
 static const string citationChapterNo = R"(第)";
-static const string numberingUnit = R"(段)";
 static const string citationPara = R"(节:)";
+static const string citationChapterParaSeparator = R"(.)";
 
 static constexpr const char *defaultUnit = R"(回)";
 static constexpr const char *attachmentUnit = R"(篇)";
@@ -60,7 +53,6 @@ static const string CRLF{0x0D, 0x0A};
 
 static const string keyNotFound = R"(KeyNotFound)";
 static const string attachmentFileMiddleChar = R"(_)";
-static const string citationChapterParaSeparator = R"(.)";
 
 static const string bracketStartChars = R"(（)";
 static const string bracketEndChars = R"(）)";

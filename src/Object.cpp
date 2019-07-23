@@ -43,6 +43,7 @@ Object::ObjectTypeToString Object::ObjectNames = {
     {OBJECT_TYPE::SPACE, nameOfSpaceType},
     {OBJECT_TYPE::POEM, nameOfPoemType},
     {OBJECT_TYPE::LINKFROMMAIN, nameOfLinkFromMainType},
+    {OBJECT_TYPE::LINKFROMATTACHMENT, nameOfLinkFromAttachmentType},
     {OBJECT_TYPE::PERSONALCOMMENT, nameOfPersonalCommentType},
     {OBJECT_TYPE::POEMTRANSLATION, nameOfPoemTranslationType},
     {OBJECT_TYPE::COMMENT, nameOfCommentType},
@@ -54,6 +55,7 @@ Object::StringToObjectType Object::ObjectTypes = {
     {nameOfSpaceType, OBJECT_TYPE::SPACE},
     {nameOfPoemType, OBJECT_TYPE::POEM},
     {nameOfLinkFromMainType, OBJECT_TYPE::LINKFROMMAIN},
+    {nameOfLinkFromAttachmentType, OBJECT_TYPE::LINKFROMATTACHMENT},
     {nameOfPersonalCommentType, OBJECT_TYPE::PERSONALCOMMENT},
     {nameOfPoemTranslationType, OBJECT_TYPE::POEMTRANSLATION},
     {nameOfCommentType, OBJECT_TYPE::COMMENT},
@@ -88,6 +90,11 @@ Object::SET_OF_OBJECT_TYPES Object::getTypeSetFromString(const string &str) {
 }
 
 void Object::readDisplayType() {
+  if (debug >= LOG_INFO) {
+    METHOD_OUTPUT << "m_fullString: " << m_fullString << endl;
+    METHOD_OUTPUT << "m_objectType: " << getNameOfObjectType(m_objectType)
+                  << endl;
+  }
   auto containedPart = getIncludedStringBetweenTags(
       m_fullString, getStartTagOfObjectType(m_objectType), endOfBeginTag);
   if (containedPart.find(unhiddenDisplayProperty) != string::npos) {

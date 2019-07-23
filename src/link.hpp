@@ -58,7 +58,6 @@ string fixLinkFromImageTemplate(
     const string &displayProperty = unhiddenDisplayProperty);
 
 class Link : public Object {
-
 public:
   Link() = default;
   Link(const string &fromFile) : m_fromFile(fromFile) {}
@@ -72,7 +71,6 @@ public:
   Link(const Link &) = delete;
   Link &operator=(const Link &) = delete;
   void readTypeAndAnnotation(const string &linkString) {
-    readDisplayType();
     readType(linkString);
     readAnnotation(linkString);
   }
@@ -112,17 +110,17 @@ public:
   void fixReferFile(int chapter, int attachNo = 0) {
     if (m_chapterNumber != chapter) {
       m_chapterNumber = chapter;
-      m_needChange = true;
+      needToChange();
     }
     if (m_attachmentNumber != 0 and m_attachmentNumber != attachNo) {
       m_attachmentNumber = attachNo;
-      m_needChange = true;
+      needToChange();
     }
   }
   void fixReferPara(const string &lineNumber) {
     if (m_referPara != lineNumber) {
       m_referPara = lineNumber;
-      m_needChange = true;
+      needToChange();
     }
   }
   void setTypeThruFileNamePrefix(const string &link);
@@ -135,6 +133,7 @@ protected:
   void readType(const string &linkString);
   void readReferPara(const string &linkString);
   bool readAnnotation(const string &linkString);
+  void needToChange();
 
 protected:
   LINK_TYPE m_type{LINK_TYPE::MAIN};
