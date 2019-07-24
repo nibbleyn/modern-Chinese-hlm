@@ -152,7 +152,6 @@ protected:
   size_t getFullStringAndBodyTextFromContainedLine(const string &containedLine,
                                                    size_t after);
   DISPLAY_TYPE getDisplayType() { return m_displayType; }
-  OBJECT_TYPE m_objectType{OBJECT_TYPE::TEXT};
   string m_fullString{emptyString};
   string m_bodyText{emptyString};
   string m_displayText{emptyString};
@@ -162,7 +161,6 @@ protected:
 class Space : public Object {
 public:
   Space() {
-    m_objectType = OBJECT_TYPE::SPACE;
     m_displayText = displaySpace;
     m_fullString = space;
   }
@@ -176,7 +174,7 @@ public:
 
 class Poem : public Object {
 public:
-  Poem() { m_objectType = OBJECT_TYPE::POEM; }
+  Poem() = default;
   string getStartTag() override { return poemBeginChars; }
   string getEndTag() override { return poemEndChars; }
   string getName() override { return nameOfPoemType; }

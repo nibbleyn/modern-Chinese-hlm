@@ -61,8 +61,7 @@ Object::SET_OF_OBJECT_TYPES Object::getTypeSetFromString(const string &str) {
 void Object::readDisplayType() {
   if (debug >= LOG_INFO) {
     METHOD_OUTPUT << "m_fullString: " << m_fullString << endl;
-    METHOD_OUTPUT << "m_objectType: " << getName()
-                  << endl;
+    METHOD_OUTPUT << "m_objectType: " << getName() << endl;
   }
   auto containedPart =
       getIncludedStringBetweenTags(m_fullString, getStartTag(), endOfBeginTag);

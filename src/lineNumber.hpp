@@ -67,19 +67,16 @@ private:
 
 class LineNumberPlaceholderLink : public Object {
 public:
-  LineNumberPlaceholderLink() { m_objectType = OBJECT_TYPE::LINENUMBER; }
+  LineNumberPlaceholderLink() = default;
   LineNumberPlaceholderLink(const LineNumber &ln)
       : m_paraLineNumber(ln.getParaNumber(), ln.getlineNumber()) {
-    m_objectType = OBJECT_TYPE::LINENUMBER;
     m_fullString = getWholeString();
   }
   LineNumberPlaceholderLink(int paraNumber, int lineNumber)
       : m_paraLineNumber(paraNumber, lineNumber) {
-    m_objectType = OBJECT_TYPE::LINENUMBER;
     m_fullString = getWholeString();
   }
   LineNumberPlaceholderLink(const string &linkString) {
-    m_objectType = OBJECT_TYPE::LINENUMBER;
     m_paraLineNumber.readFromString(linkString);
     m_fullString = getWholeString();
   }

@@ -4,9 +4,7 @@
 
 class Comment : public Object {
 public:
-  Comment(const string &fromFile) : m_fromFile(fromFile) {
-    m_objectType = OBJECT_TYPE::COMMENT;
-  }
+  Comment(const string &fromFile) : m_fromFile(fromFile) {}
   string getStartTag() override { return commentBeginChars; }
   string getEndTag() override { return commentEndChars; }
   string getName() override { return nameOfCommentType; }
@@ -26,13 +24,12 @@ public:
                      const string &attachmentString = attachmentUnit,
                      const string &sectionString = citationPara);
 
-  Citation() { m_objectType = OBJECT_TYPE::CITATION; }
+  Citation() = default;
   void setReferSection(AttachmentNumber num, ParaLineNumber paraLine) {
     updateWithAttachmentNumberAndParaLineNumber(num, paraLine);
   }
   Citation(AttachmentNumber num, ParaLineNumber paraLine) {
     updateWithAttachmentNumberAndParaLineNumber(num, paraLine);
-    m_objectType = OBJECT_TYPE::CITATION;
   }
   AttachmentNumber getAttachmentNumber() { return m_num; }
   ParaLineNumber getParaLineNumber() { return m_paraLine; }
@@ -174,14 +171,11 @@ public:
   static void displayMainFilesOfMissingKey();
 
 public:
-  LinkFromMain() : CoupledLink() { m_objectType = OBJECT_TYPE::LINKFROMMAIN; }
-  LinkFromMain(const string &fromFile) : CoupledLink(fromFile) {
-    m_objectType = OBJECT_TYPE::LINKFROMMAIN;
-  }
+  LinkFromMain() : CoupledLink() {}
+  LinkFromMain(const string &fromFile) : CoupledLink(fromFile) {}
   LinkFromMain(const string &fromFile, const string &linkString)
       : CoupledLink(fromFile, linkString) {
     m_fullString = linkString;
-    m_objectType = OBJECT_TYPE::LINKFROMMAIN;
     Object::readDisplayType();
   }
   ~LinkFromMain(){};
@@ -206,16 +200,11 @@ public:
   static void outPutStatisticsToFiles();
 
 public:
-  LinkFromAttachment() : CoupledLink() {
-    m_objectType = OBJECT_TYPE::LINKFROMATTACHMENT;
-  }
-  LinkFromAttachment(const string &fromFile) : CoupledLink(fromFile) {
-    m_objectType = OBJECT_TYPE::LINKFROMATTACHMENT;
-  }
+  LinkFromAttachment() : CoupledLink() {}
+  LinkFromAttachment(const string &fromFile) : CoupledLink(fromFile) {}
   LinkFromAttachment(const string &fromFile, const string &linkString)
       : CoupledLink(fromFile, linkString) {
     m_fullString = linkString;
-    m_objectType = OBJECT_TYPE::LINKFROMATTACHMENT;
     Object::readDisplayType();
   }
   ~LinkFromAttachment(){};
