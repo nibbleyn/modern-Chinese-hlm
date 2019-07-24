@@ -87,8 +87,8 @@ size_t LineNumberPlaceholderLink::loadFirstFromContainedLine(
   string subStrAfterId;
   auto beginPos = string::npos;
   string begin;
-  for (const auto &start : {UnhiddenLineNumberStart, HiddenLineNumberStart,
-                            DirectLineNumberStart}) {
+  for (const auto &start : {string(UnhiddenLineNumberStart),
+                            HiddenLineNumberStart, DirectLineNumberStart}) {
     begin = start;
     beginPos = containedLine.find(begin, after);
     if (beginPos != string::npos)

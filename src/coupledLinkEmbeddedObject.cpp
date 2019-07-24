@@ -1,32 +1,5 @@
 #include "coupledLinkEmbeddedObject.hpp"
 
-string scanForSubLinks(const string &original, const string &fromFile) {
-  string result;
-  // start offset -> end offset
-  using SubStringOffsetTable = map<size_t, size_t>;
-  SubStringOffsetTable subStrings;
-  string startTag = linkStartChars;
-  string endTag = linkEndChars;
-  auto offset = original.find(startTag);
-  do {
-    if (offset == string::npos)
-      break;
-    subStrings[offset] = original.find(endTag, offset);
-    offset = original.find(startTag, offset + 1);
-  } while (true);
-  auto endOfSubStringOffset = 0;
-  for (const auto &link : subStrings) {
-    result += original.substr(endOfSubStringOffset,
-                              link.first - endOfSubStringOffset);
-    auto current = make_unique<LinkFromMain>(fromFile);
-    current->loadFirstFromContainedLine(original, endOfSubStringOffset);
-    result += current->getDisplayString();
-    endOfSubStringOffset = link.second + endTag.length();
-  }
-  result += original.substr(endOfSubStringOffset);
-  return result;
-}
-
 static constexpr const char *defaultTranslation = R"(XX)";
 static const string personalCommentTemplate =
     R"(<u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">XX</u>)";
@@ -39,7 +12,7 @@ size_t PersonalComment::loadFirstFromContainedLine(const string &containedLine,
                                                    size_t after) {
   auto pos = getFullStringAndBodyTextFromContainedLine(containedLine, after);
   if (pos != string::npos)
-    m_displayText = scanForSubLinks(m_bodyText, m_fromFile);
+    m_displayText = scanForSubObjects(m_bodyText, m_fromFile);
   return pos;
 }
 
@@ -55,7 +28,7 @@ size_t PoemTranslation::loadFirstFromContainedLine(const string &containedLine,
                                                    size_t after) {
   auto pos = getFullStringAndBodyTextFromContainedLine(containedLine, after);
   if (pos != string::npos)
-    m_displayText = scanForSubLinks(m_bodyText, m_fromFile);
+    m_displayText = scanForSubObjects(m_bodyText, m_fromFile);
   return pos;
 }
 
@@ -70,7 +43,7 @@ size_t Comment::loadFirstFromContainedLine(const string &containedLine,
                                            size_t after) {
   auto pos = getFullStringAndBodyTextFromContainedLine(containedLine, after);
   if (pos != string::npos)
-    m_displayText = scanForSubLinks(m_bodyText, m_fromFile);
+    m_displayText = scanForSubObjects(m_bodyText, m_fromFile);
   return pos;
 }
 

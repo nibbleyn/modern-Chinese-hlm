@@ -11,9 +11,7 @@ static const string titleEndChars = R"(")"; // ! contained by titleStartChars
 // line number is placeholder hyperlink auto generated once for each line
 // since a ParagraphHeader would have href attribute and is a line number also
 static const string LineNumberIdentity = R"(id=")";
-static const string UnhiddenLineNumberStart = linkStartChars + displaySpace +
-                                              unhiddenDisplayProperty +
-                                              displaySpace + LineNumberIdentity;
+static constexpr const char *UnhiddenLineNumberStart = R"(<a unhidden id=")";
 static const string HiddenLineNumberStart = linkStartChars + displaySpace +
                                             hiddenDisplayProperty +
                                             displaySpace + LineNumberIdentity;
@@ -119,6 +117,8 @@ protected:
   string m_displayText{emptyString};
   DISPLAY_TYPE m_displayType{DISPLAY_TYPE::UNHIDDEN};
 };
+
+using ObjectPtr = unique_ptr<Object>;
 
 class Space : public Object {
 public:

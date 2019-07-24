@@ -243,3 +243,7 @@ private:
   string getBodyTextFilePrefix() override;
   bool isTargetToAttachmentFile() override;
 };
+
+// only support link and comment sub-object
+string scanForSubObjects(const string &original, const string &fromFile,
+                         bool forLink = true);

@@ -1,7 +1,5 @@
 #include "coupledBodyTextWithLink.hpp"
 
-using ObjectPtr = unique_ptr<Object>;
-
 ObjectPtr createObjectFromType(string type,
                                const string &fromFile = emptyString) {
   if (type == nameOfLineNumberType)
@@ -334,7 +332,6 @@ void CoupledBodyTextWithLink::render() {
       if (not m_hideParaHeader)
         outfile << paraHeaderLoaded.getDisplayString() << endl;
     } else if (isLeadingBr(inLine)) {
-      string LF{0x0A};
       outfile << LF;
     } else if (not isEmptyLine(inLine)) {
       getDisplayString(inLine);

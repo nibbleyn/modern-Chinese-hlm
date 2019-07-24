@@ -1,5 +1,37 @@
 #include "coupledLink.hpp"
 
+string scanForSubObjects(const string &original, const string &fromFile,
+                         bool forLink) {
+  string result;
+  // start offset -> end offset
+  using SubStringOffsetTable = map<size_t, size_t>;
+  SubStringOffsetTable subStrings;
+  ObjectPtr current = nullptr;
+  if (forLink)
+    current = make_unique<LinkFromMain>(fromFile);
+  else
+    current = make_unique<Comment>(fromFile);
+  string startTag = current->getStartTag();
+  string endTag = current->getEndTag();
+  auto offset = original.find(startTag);
+  do {
+    if (offset == string::npos)
+      break;
+    subStrings[offset] = original.find(endTag, offset);
+    offset = original.find(startTag, offset + 1);
+  } while (true);
+  auto endOfSubStringOffset = 0;
+  for (const auto &subString : subStrings) {
+    result += original.substr(endOfSubStringOffset,
+                              subString.first - endOfSubStringOffset);
+    current->loadFirstFromContainedLine(original, endOfSubStringOffset);
+    result += current->getDisplayString();
+    endOfSubStringOffset = subString.second + endTag.length();
+  }
+  result += original.substr(endOfSubStringOffset);
+  return result;
+}
+
 string CoupledLink::getWholeString() { return asString(); }
 
 /**
@@ -168,35 +200,6 @@ void CoupledLink::readKey(const string &linkString) {
     METHOD_OUTPUT << "key: " << m_usedKey << endl;
 }
 
-string scanForSubComments(const string &original, const string &fromFile) {
-  string result;
-  using SubStringOffsetTable =
-      map<size_t, size_t>; // start offset -> end offset
-  SubStringOffsetTable subStrings;
-  string startTag = commentBeginChars;
-  string endTag = commentEndChars;
-  auto offset = original.find(startTag);
-  do {
-    if (offset == string::npos)
-      break;
-    subStrings[offset] = original.find(endTag, offset);
-    offset = original.find(startTag, offset + 1);
-  } while (true);
-  // concatenate each comment's displayString with rest texts
-  auto endOfSubStringOffset = 0;
-  for (const auto &comment : subStrings) {
-    result += original.substr(endOfSubStringOffset,
-                              comment.first - endOfSubStringOffset);
-    auto current = make_unique<Comment>(fromFile);
-    current->loadFirstFromContainedLine(original, endOfSubStringOffset);
-    result += current->getDisplayString();
-    endOfSubStringOffset = comment.second + endTag.length();
-  }
-  result += original.substr(endOfSubStringOffset);
-
-  return result;
-}
-
 /*
  * the final step of construction
  * assuming readTypeAndAnnotation and readReferFileName()
@@ -222,7 +225,7 @@ void CoupledLink::fixFromString(const string &linkString) {
            isTargetToOriginalHtm() or isTargetToJPMHtm())
     m_displayText = upArrow;
   m_displayText += m_referSection.getDisplayString();
-  m_displayText += scanForSubComments(m_bodyText, m_fromFile);
+  m_displayText += scanForSubObjects(m_bodyText, m_fromFile, false);
 }
 
 /**
