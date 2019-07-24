@@ -6,6 +6,9 @@ public:
   PersonalComment(const string &fromFile) : m_fromFile(fromFile) {
     m_objectType = OBJECT_TYPE::PERSONALCOMMENT;
   }
+  string getStartTag() override { return personalCommentStartChars; }
+  string getEndTag() override { return personalCommentEndChars; }
+  string getName() override { return nameOfPersonalCommentType; }
   string getWholeString() override;
   size_t loadFirstFromContainedLine(const string &containedLine,
                                     size_t after = 0) override;
@@ -19,6 +22,9 @@ public:
   PoemTranslation(const string &fromFile) : m_fromFile(fromFile) {
     m_objectType = OBJECT_TYPE::POEMTRANSLATION;
   }
+  string getStartTag() override { return poemTranslationBeginChars; }
+  string getEndTag() override { return poemTranslationEndChars; }
+  string getName() override { return nameOfPoemTranslationType; }
   string getWholeString() override;
   size_t loadFirstFromContainedLine(const string &containedLine,
                                     size_t after = 0) override;

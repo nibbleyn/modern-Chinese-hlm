@@ -142,7 +142,7 @@ void CoupledBodyTextContainer::fixReturnLinkForAttachmentFile() {
           break;
         link = getWholeStringBetweenTags(line, linkStartChars, linkEndChars);
         // get only type and annotation
-        Link lfm(referFile, link);
+        LinkFromAttachment lfm(referFile, link);
         if (lfm.getAnnotation() == returnLinkFromAttachmentHeader)
           break;
         else

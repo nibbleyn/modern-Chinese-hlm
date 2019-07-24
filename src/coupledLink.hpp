@@ -7,6 +7,9 @@ public:
   Comment(const string &fromFile) : m_fromFile(fromFile) {
     m_objectType = OBJECT_TYPE::COMMENT;
   }
+  string getStartTag() override { return commentBeginChars; }
+  string getEndTag() override { return commentEndChars; }
+  string getName() override { return nameOfCommentType; }
   string getWholeString() override;
   size_t loadFirstFromContainedLine(const string &containedLine,
                                     size_t after = 0) override;
@@ -37,6 +40,9 @@ public:
   bool equal(AttachmentNumber num, ParaLineNumber paraLine) {
     return (m_num == num and m_paraLine == paraLine);
   }
+  string getStartTag() override { return citationStartChars; }
+  string getEndTag() override { return citationEndChars; }
+  string getName() override { return nameOfCitationType; }
   string getWholeString() override { return getStringWithTags(); }
   size_t loadFirstFromContainedLine(const string &containedLine,
                                     size_t after = 0) override;
@@ -93,6 +99,8 @@ public:
 
   virtual ~CoupledLink(){};
 
+  string getStartTag() override { return linkStartChars; }
+  string getEndTag() override { return linkEndChars; }
   string getWholeString() override;
   size_t loadFirstFromContainedLine(const string &containedLine,
                                     size_t after = 0) override;
@@ -178,6 +186,7 @@ public:
   }
   ~LinkFromMain(){};
   void generateLinkToOrigin();
+  string getName() override { return nameOfLinkFromMainType; }
 
 private:
   string getPathOfReferenceFile() const override;
@@ -211,6 +220,7 @@ public:
   }
   ~LinkFromAttachment(){};
   void generateLinkToOrigin();
+  string getName() override { return nameOfLinkFromAttachmentType; }
 
 private:
   string getPathOfReferenceFile() const override;
@@ -233,6 +243,7 @@ public:
       : CoupledLink(fromFile, linkString) {}
   ~LinkFromJPM(){};
   void generateLinkToOrigin();
+  string getName() override { return nameOfLinkFromJPMType; }
 
 private:
   string getPathOfReferenceFile() const override;

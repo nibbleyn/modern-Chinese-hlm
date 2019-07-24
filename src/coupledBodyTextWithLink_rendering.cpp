@@ -221,12 +221,16 @@ ObjectPtr createObjectFromType(string type, const string &fromFile) {
     return make_unique<Poem>();
   else if (type == nameOfLinkFromMainType)
     return make_unique<LinkFromMain>(fromFile);
+  else if (type == nameOfLinkFromAttachmentType)
+    return make_unique<LinkFromAttachment>(fromFile);
   else if (type == nameOfPersonalCommentType)
     return make_unique<PersonalComment>(fromFile);
   else if (type == nameOfPoemTranslationType)
     return make_unique<PoemTranslation>(fromFile);
   else if (type == nameOfCommentType)
     return make_unique<Comment>(fromFile);
+  else if (type == nameOfCitationType)
+    return make_unique<Citation>();
   return nullptr;
 }
 

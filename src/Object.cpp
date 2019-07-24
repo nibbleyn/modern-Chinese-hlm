@@ -7,26 +7,6 @@ Object::SET_OF_OBJECT_TYPES Object::setOfObjectTypes = {
     Object::OBJECT_TYPE::POEMTRANSLATION, Object::OBJECT_TYPE::LINKFROMMAIN,
     Object::OBJECT_TYPE::COMMENT,         Object::OBJECT_TYPE::PERSONALCOMMENT};
 
-Object::ObjectTypeToString Object::StartTags = {
-    {OBJECT_TYPE::LINENUMBER, linkStartChars},
-    {OBJECT_TYPE::SPACE, space},
-    {OBJECT_TYPE::POEM, poemBeginChars},
-    {OBJECT_TYPE::LINKFROMMAIN, linkStartChars},
-    {OBJECT_TYPE::PERSONALCOMMENT, personalCommentStartChars},
-    {OBJECT_TYPE::POEMTRANSLATION, poemTranslationBeginChars},
-    {OBJECT_TYPE::COMMENT, commentBeginChars},
-    {OBJECT_TYPE::CITATION, citationStartChars}};
-
-Object::ObjectTypeToString Object::EndTags = {
-    {OBJECT_TYPE::LINENUMBER, linkEndChars},
-    {OBJECT_TYPE::SPACE, emptyString},
-    {OBJECT_TYPE::POEM, poemEndChars},
-    {OBJECT_TYPE::LINKFROMMAIN, linkEndChars},
-    {OBJECT_TYPE::PERSONALCOMMENT, personalCommentEndChars},
-    {OBJECT_TYPE::POEMTRANSLATION, poemTranslationEndChars},
-    {OBJECT_TYPE::COMMENT, commentEndChars},
-    {OBJECT_TYPE::CITATION, citationEndChars}};
-
 Object::ObjectTypeToString Object::ObjectNames = {
     {OBJECT_TYPE::LINENUMBER, nameOfLineNumberType},
     {OBJECT_TYPE::SPACE, nameOfSpaceType},
@@ -81,11 +61,11 @@ Object::SET_OF_OBJECT_TYPES Object::getTypeSetFromString(const string &str) {
 void Object::readDisplayType() {
   if (debug >= LOG_INFO) {
     METHOD_OUTPUT << "m_fullString: " << m_fullString << endl;
-    METHOD_OUTPUT << "m_objectType: " << getNameOfObjectType(m_objectType)
+    METHOD_OUTPUT << "m_objectType: " << getName()
                   << endl;
   }
-  auto containedPart = getIncludedStringBetweenTags(
-      m_fullString, getStartTagOfObjectType(m_objectType), endOfBeginTag);
+  auto containedPart =
+      getIncludedStringBetweenTags(m_fullString, getStartTag(), endOfBeginTag);
   if (containedPart.find(unhiddenDisplayProperty) != string::npos) {
     m_displayType = DISPLAY_TYPE::UNHIDDEN;
   } else if (containedPart.find(hiddenDisplayProperty) != string::npos) {
@@ -104,12 +84,11 @@ void Object::readDisplayType() {
 
 string Object::getStringWithTags() {
   // display property
-  string part0 = getStartTagOfObjectType(m_objectType);
+  string part0 = getStartTag();
   if (m_displayType != DISPLAY_TYPE::DIRECT)
     part0 += displaySpace;
   part0 += displayPropertyAsString();
-  return part0 + endOfBeginTag + m_bodyText +
-         getEndTagOfObjectType(m_objectType);
+  return part0 + endOfBeginTag + m_bodyText + getEndTag();
 }
 
 string Object::getStringFromTemplate(const string &templateStr,
@@ -122,17 +101,16 @@ string Object::getStringFromTemplate(const string &templateStr,
 size_t
 Object::getFullStringAndBodyTextFromContainedLine(const string &containedLine,
                                                   size_t after) {
-  m_fullString = getWholeStringBetweenTags(
-      containedLine, getStartTagOfObjectType(m_objectType),
-      getEndTagOfObjectType(m_objectType), after);
+  m_fullString = getWholeStringBetweenTags(containedLine, getStartTag(),
+                                           getEndTag(), after);
   if (debug >= LOG_INFO) {
     METHOD_OUTPUT << "m_fullString: " << endl;
     METHOD_OUTPUT << m_fullString << endl;
   }
   readDisplayType();
-  m_bodyText = getIncludedStringBetweenTags(
-      m_fullString, endOfBeginTag, getEndTagOfObjectType(m_objectType));
-  return containedLine.find(getStartTagOfObjectType(m_objectType), after);
+  m_bodyText =
+      getIncludedStringBetweenTags(m_fullString, endOfBeginTag, getEndTag());
+  return containedLine.find(getStartTag(), after);
 }
 
 size_t Space::loadFirstFromContainedLine(const string &containedLine,

@@ -51,6 +51,7 @@ static const string nameOfPoemType = R"(POEM)";
 static const string nameOfPoemTranslationType = R"(POEMTRANSLATION)";
 static const string nameOfLinkFromMainType = R"(LINKFROMMAIN)";
 static const string nameOfLinkFromAttachmentType = R"(LINKFROMATTACHMENT)";
+static const string nameOfLinkFromJPMType = R"(LINKFROMJPM)";
 static const string nameOfCommentType = R"(COMMENT)";
 static const string nameOfPersonalCommentType = R"(PERSONALCOMMENT)";
 static const string nameOfTextType = R"(TEXT)";
@@ -84,23 +85,6 @@ public:
   static bool isObjectTypeInSet(OBJECT_TYPE objType, SET_OF_OBJECT_TYPES &set) {
     return set.count(objType) != 0;
   }
-  static string getStartTagOfObjectType(OBJECT_TYPE type) {
-    try {
-      auto startTag = StartTags.at(type);
-      return startTag;
-    } catch (exception &) {
-      return emptyString;
-    }
-  }
-
-  static string getEndTagOfObjectType(OBJECT_TYPE type) {
-    try {
-      auto endTag = EndTags.at(type);
-      return endTag;
-    } catch (exception &) {
-      return emptyString;
-    }
-  }
 
   static string getNameOfObjectType(OBJECT_TYPE type) {
     try {
@@ -126,7 +110,9 @@ public:
 public:
   Object() = default;
   virtual ~Object(){};
-
+  virtual string getStartTag() = 0;
+  virtual string getEndTag() = 0;
+  virtual string getName() = 0;
   virtual size_t loadFirstFromContainedLine(const string &containedLine,
                                             size_t after = 0) = 0;
   virtual string getWholeString() = 0;
@@ -180,6 +166,9 @@ public:
     m_displayText = displaySpace;
     m_fullString = space;
   }
+  string getStartTag() override { return space; }
+  string getEndTag() override { return emptyString; }
+  string getName() override { return nameOfSpaceType; }
   string getWholeString() override { return space; };
   size_t loadFirstFromContainedLine(const string &containedLine,
                                     size_t after = 0) override;
@@ -188,6 +177,9 @@ public:
 class Poem : public Object {
 public:
   Poem() { m_objectType = OBJECT_TYPE::POEM; }
+  string getStartTag() override { return poemBeginChars; }
+  string getEndTag() override { return poemEndChars; }
+  string getName() override { return nameOfPoemType; }
   string getWholeString() override { return getStringWithTags(); }
   size_t loadFirstFromContainedLine(const string &containedLine,
                                     size_t after = 0) override;

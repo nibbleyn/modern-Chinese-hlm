@@ -89,10 +89,14 @@ public:
   bool isPureTextOnly() { return m_paraLineNumber.isPureTextOnly(); }
   string getParaLineString() { return m_paraLineNumber.asString(); }
   LineNumber get() { return m_paraLineNumber; }
+  string getStartTag() override { return m_realStartTag; }
+  string getEndTag() override { return linkEndChars; }
+  string getName() override { return nameOfLineNumberType; }
   string getWholeString() override;
   size_t loadFirstFromContainedLine(const string &containedLine,
                                     size_t after = 0) override;
 
 private:
   LineNumber m_paraLineNumber{0, 0};
+  string m_realStartTag{UnhiddenLineNumberStart};
 };

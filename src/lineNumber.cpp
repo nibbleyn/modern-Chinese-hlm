@@ -99,6 +99,7 @@ size_t LineNumberPlaceholderLink::loadFirstFromContainedLine(
   // found name in subStrAfterId
   m_fullString =
       getWholeStringBetweenTags(containedLine, begin, linkEndChars, after);
+  m_realStartTag = begin;
   subStrAfterId = containedLine.substr(beginPos + begin.length());
   auto substr = subStrAfterId.substr(0, subStrAfterId.find(endOfLineNumber));
   if (debug >= LOG_INFO)
