@@ -1,5 +1,46 @@
 #include "coupledBodyTextWithLink.hpp"
 
+using ObjectPtr = unique_ptr<Object>;
+
+ObjectPtr createObjectFromType(string type,
+                               const string &fromFile = emptyString) {
+  if (type == nameOfLineNumberType)
+    return make_unique<LineNumberPlaceholderLink>();
+  else if (type == nameOfSpaceType)
+    return make_unique<Space>();
+  else if (type == nameOfPoemType)
+    return make_unique<Poem>();
+  else if (type == nameOfLinkFromMainType)
+    return make_unique<LinkFromMain>(fromFile);
+  else if (type == nameOfLinkFromAttachmentType)
+    return make_unique<LinkFromAttachment>(fromFile);
+  else if (type == nameOfPersonalCommentType)
+    return make_unique<PersonalComment>(fromFile);
+  else if (type == nameOfPoemTranslationType)
+    return make_unique<PoemTranslation>(fromFile);
+  else if (type == nameOfCommentType)
+    return make_unique<Comment>(fromFile);
+  else if (type == nameOfCitationType)
+    return make_unique<Citation>();
+  return nullptr;
+}
+
+string getStartTagOfObjectType(string type) {
+  auto ptr = createObjectFromType(type);
+  if (ptr != nullptr)
+    return ptr->getStartTag();
+  else
+    return emptyString;
+}
+
+string getEndTagOfObjectType(string type) {
+  auto ptr = createObjectFromType(type);
+  if (ptr != nullptr)
+    return ptr->getEndTag();
+  else
+    return emptyString;
+}
+
 bool CoupledBodyTextWithLink::isEmbeddedObject(string type, size_t offset) {
   if (type == nameOfLinkFromMainType) {
     try {
@@ -58,45 +99,6 @@ void CoupledBodyTextWithLink::searchForEmbededLinks() {
         break;
       }
     }
-  }
-}
-
-using TypeNameToString = map<string, string>;
-TypeNameToString StartTags = {
-    {nameOfLineNumberType, linkStartChars},
-    {nameOfSpaceType, space},
-    {nameOfPoemType, poemBeginChars},
-    {nameOfLinkFromMainType, linkStartChars},
-    {nameOfPersonalCommentType, personalCommentStartChars},
-    {nameOfPoemTranslationType, poemTranslationBeginChars},
-    {nameOfCommentType, commentBeginChars},
-    {nameOfCitationType, citationStartChars}};
-
-TypeNameToString EndTags = {
-    {nameOfLineNumberType, linkEndChars},
-    {nameOfSpaceType, emptyString},
-    {nameOfPoemType, poemEndChars},
-    {nameOfLinkFromMainType, linkEndChars},
-    {nameOfPersonalCommentType, personalCommentEndChars},
-    {nameOfPoemTranslationType, poemTranslationEndChars},
-    {nameOfCommentType, commentEndChars},
-    {nameOfCitationType, citationEndChars}};
-
-string getStartTagOfObjectType(string type) {
-  try {
-    auto startTag = StartTags.at(type);
-    return startTag;
-  } catch (exception &) {
-    return emptyString;
-  }
-}
-
-string getEndTagOfObjectType(string type) {
-  try {
-    auto endTag = EndTags.at(type);
-    return endTag;
-  } catch (exception &) {
-    return emptyString;
   }
 }
 
@@ -208,30 +210,6 @@ void CoupledBodyTextWithLink::scanForTypes(const string &containedLine) {
     printPersonalCommentStringTable();
     printPoemTranslationStringTable();
   }
-}
-
-using ObjectPtr = unique_ptr<Object>;
-
-ObjectPtr createObjectFromType(string type, const string &fromFile) {
-  if (type == nameOfLineNumberType)
-    return make_unique<LineNumberPlaceholderLink>();
-  else if (type == nameOfSpaceType)
-    return make_unique<Space>();
-  else if (type == nameOfPoemType)
-    return make_unique<Poem>();
-  else if (type == nameOfLinkFromMainType)
-    return make_unique<LinkFromMain>(fromFile);
-  else if (type == nameOfLinkFromAttachmentType)
-    return make_unique<LinkFromAttachment>(fromFile);
-  else if (type == nameOfPersonalCommentType)
-    return make_unique<PersonalComment>(fromFile);
-  else if (type == nameOfPoemTranslationType)
-    return make_unique<PoemTranslation>(fromFile);
-  else if (type == nameOfCommentType)
-    return make_unique<Comment>(fromFile);
-  else if (type == nameOfCitationType)
-    return make_unique<Citation>();
-  return nullptr;
 }
 
 void CoupledBodyTextWithLink::getDisplayString(const string &originalString,

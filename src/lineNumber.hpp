@@ -92,6 +92,14 @@ public:
   string getWholeString() override;
   size_t loadFirstFromContainedLine(const string &containedLine,
                                     size_t after = 0) override;
+  void hide() {
+    m_displayType = DISPLAY_TYPE::HIDDEN;
+    m_realStartTag = HiddenLineNumberStart;
+  }
+  void unhide() {
+    m_displayType = DISPLAY_TYPE::UNHIDDEN;
+    m_realStartTag = UnhiddenLineNumberStart;
+  }
 
 private:
   LineNumber m_paraLineNumber{0, 0};
