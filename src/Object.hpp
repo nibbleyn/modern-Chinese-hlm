@@ -45,6 +45,17 @@ static const string personalCommentStartRestChars =
     R"( style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4)";
 static const string personalCommentEndChars = R"(</u>)";
 
+static const string nameOfLineNumberType = R"(LINENUMBER)";
+static const string nameOfSpaceType = R"(SPACE)";
+static const string nameOfPoemType = R"(POEM)";
+static const string nameOfPoemTranslationType = R"(POEMTRANSLATION)";
+static const string nameOfLinkFromMainType = R"(LINKFROMMAIN)";
+static const string nameOfLinkFromAttachmentType = R"(LINKFROMATTACHMENT)";
+static const string nameOfCommentType = R"(COMMENT)";
+static const string nameOfPersonalCommentType = R"(PERSONALCOMMENT)";
+static const string nameOfTextType = R"(TEXT)";
+static const string nameOfCitationType = R"(CITATION)";
+
 enum class DISPLAY_TYPE { DIRECT, HIDDEN, UNHIDDEN };
 
 class Object {

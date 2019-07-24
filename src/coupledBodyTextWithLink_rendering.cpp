@@ -1,23 +1,22 @@
 #include "coupledBodyTextWithLink.hpp"
 
-bool CoupledBodyTextWithLink::isEmbeddedObject(Object::OBJECT_TYPE type,
-                                               size_t offset) {
-  if (type == Object::OBJECT_TYPE::LINKFROMMAIN) {
+bool CoupledBodyTextWithLink::isEmbeddedObject(string type, size_t offset) {
+  if (type == nameOfLinkFromMainType) {
     try {
       auto linkInfo = m_linkStringTable.at(offset);
       return linkInfo.embedded;
     } catch (exception &) {
-      METHOD_OUTPUT << "no such object " << Object::getNameOfObjectType(type)
-                    << "at " << offset;
+      METHOD_OUTPUT << "no such object " << nameOfLinkFromMainType << "at "
+                    << offset;
     }
   }
-  if (type == Object::OBJECT_TYPE::COMMENT) {
+  if (type == nameOfCommentType) {
     try {
       auto commentInfo = m_commentStringTable.at(offset);
       return commentInfo.embedded;
     } catch (exception &) {
-      METHOD_OUTPUT << "no such object " << Object::getNameOfObjectType(type)
-                    << "at " << offset;
+      METHOD_OUTPUT << "no such object " << nameOfCommentType << "at "
+                    << offset;
     }
   }
   return false;
@@ -62,16 +61,54 @@ void CoupledBodyTextWithLink::searchForEmbededLinks() {
   }
 }
 
+using TypeNameToString = map<string, string>;
+TypeNameToString StartTags = {
+    {nameOfLineNumberType, linkStartChars},
+    {nameOfSpaceType, space},
+    {nameOfPoemType, poemBeginChars},
+    {nameOfLinkFromMainType, linkStartChars},
+    {nameOfPersonalCommentType, personalCommentStartChars},
+    {nameOfPoemTranslationType, poemTranslationBeginChars},
+    {nameOfCommentType, commentBeginChars},
+    {nameOfCitationType, citationStartChars}};
+
+TypeNameToString EndTags = {
+    {nameOfLineNumberType, linkEndChars},
+    {nameOfSpaceType, emptyString},
+    {nameOfPoemType, poemEndChars},
+    {nameOfLinkFromMainType, linkEndChars},
+    {nameOfPersonalCommentType, personalCommentEndChars},
+    {nameOfPoemTranslationType, poemTranslationEndChars},
+    {nameOfCommentType, commentEndChars},
+    {nameOfCitationType, citationEndChars}};
+
+string getStartTagOfObjectType(string type) {
+  try {
+    auto startTag = StartTags.at(type);
+    return startTag;
+  } catch (exception &) {
+    return emptyString;
+  }
+}
+
+string getEndTagOfObjectType(string type) {
+  try {
+    auto endTag = EndTags.at(type);
+    return endTag;
+  } catch (exception &) {
+    return emptyString;
+  }
+}
+
 void CoupledBodyTextWithLink::scanForTypes(const string &containedLine) {
   LineNumberPlaceholderLink ln;
   auto offset = ln.loadFirstFromContainedLine(containedLine);
   if (offset != string::npos) {
-    m_foundTypes[Object::OBJECT_TYPE::LINENUMBER] = offset;
-    m_offsetOfTypes[offset] = Object::OBJECT_TYPE::LINENUMBER;
+    m_foundTypes[nameOfLineNumberType] = offset;
+    m_offsetOfTypes[offset] = nameOfLineNumberType;
   }
-  for (const auto &type :
-       {Object::OBJECT_TYPE::SPACE, Object::OBJECT_TYPE::POEM}) {
-    auto offset = containedLine.find(Object::getStartTagOfObjectType(type));
+  for (const auto &type : {nameOfSpaceType, nameOfPoemType}) {
+    auto offset = containedLine.find(getStartTagOfObjectType(type));
     if (offset != string::npos) {
       m_foundTypes[type] = offset;
       m_offsetOfTypes[offset] = type;
@@ -80,17 +117,16 @@ void CoupledBodyTextWithLink::scanForTypes(const string &containedLine) {
   bool firstOccurence = true;
   offset = string::npos;
   do {
-    offset = containedLine.find(
-        Object::getStartTagOfObjectType(Object::OBJECT_TYPE::PERSONALCOMMENT),
-        (firstOccurence) ? 0 : offset + 1);
+    offset =
+        containedLine.find(getStartTagOfObjectType(nameOfPersonalCommentType),
+                           (firstOccurence) ? 0 : offset + 1);
     if (offset == string::npos)
       break;
     m_personalCommentStringTable[offset] = containedLine.find(
-        Object::getEndTagOfObjectType(Object::OBJECT_TYPE::PERSONALCOMMENT),
-        offset);
+        getEndTagOfObjectType(nameOfPersonalCommentType), offset);
     if (firstOccurence == true) {
-      m_foundTypes[Object::OBJECT_TYPE::PERSONALCOMMENT] = offset;
-      m_offsetOfTypes[offset] = Object::OBJECT_TYPE::PERSONALCOMMENT;
+      m_foundTypes[nameOfPersonalCommentType] = offset;
+      m_offsetOfTypes[offset] = nameOfPersonalCommentType;
       firstOccurence = false;
     }
   } while (true);
@@ -98,17 +134,16 @@ void CoupledBodyTextWithLink::scanForTypes(const string &containedLine) {
   firstOccurence = true;
   offset = string::npos;
   do {
-    offset = containedLine.find(
-        Object::getStartTagOfObjectType(Object::OBJECT_TYPE::POEMTRANSLATION),
-        (firstOccurence) ? 0 : offset + 1);
+    offset =
+        containedLine.find(getStartTagOfObjectType(nameOfPoemTranslationType),
+                           (firstOccurence) ? 0 : offset + 1);
     if (offset == string::npos)
       break;
     m_poemTranslationStringTable[offset] = containedLine.find(
-        Object::getEndTagOfObjectType(Object::OBJECT_TYPE::POEMTRANSLATION),
-        offset);
+        getEndTagOfObjectType(nameOfPoemTranslationType), offset);
     if (firstOccurence == true) {
-      m_foundTypes[Object::OBJECT_TYPE::POEMTRANSLATION] = offset;
-      m_offsetOfTypes[offset] = Object::OBJECT_TYPE::POEMTRANSLATION;
+      m_foundTypes[nameOfPoemTranslationType] = offset;
+      m_offsetOfTypes[offset] = nameOfPoemTranslationType;
       firstOccurence = false;
     }
   } while (true);
@@ -116,20 +151,18 @@ void CoupledBodyTextWithLink::scanForTypes(const string &containedLine) {
   firstOccurence = true;
   offset = string::npos;
   do {
-    offset = containedLine.find(
-        Object::getStartTagOfObjectType(Object::OBJECT_TYPE::COMMENT),
-        (firstOccurence) ? 0 : offset + 1);
+    offset = containedLine.find(getStartTagOfObjectType(nameOfCommentType),
+                                (firstOccurence) ? 0 : offset + 1);
     if (offset == string::npos)
       break;
-    CommentStringInfo info{offset,
-                           containedLine.find(Object::getEndTagOfObjectType(
-                                                  Object::OBJECT_TYPE::COMMENT),
-                                              offset),
-                           false};
+    CommentStringInfo info{
+        offset,
+        containedLine.find(getEndTagOfObjectType(nameOfCommentType), offset),
+        false};
     m_commentStringTable[offset] = info;
     if (firstOccurence == true) {
-      m_foundTypes[Object::OBJECT_TYPE::COMMENT] = offset;
-      m_offsetOfTypes[offset] = Object::OBJECT_TYPE::COMMENT;
+      m_foundTypes[nameOfCommentType] = offset;
+      m_offsetOfTypes[offset] = nameOfCommentType;
       firstOccurence = false;
     }
   } while (true);
@@ -138,35 +171,31 @@ void CoupledBodyTextWithLink::scanForTypes(const string &containedLine) {
   try {
     auto type = m_offsetOfTypes.at(0);
     // skip first line number as a link actually
-    if (type == Object::OBJECT_TYPE::LINENUMBER)
+    if (type == nameOfLineNumberType)
       offset = containedLine.find(
-          Object::getStartTagOfObjectType(Object::OBJECT_TYPE::LINKFROMMAIN),
-          1);
+          getStartTagOfObjectType(nameOfLinkFromMainType), 1);
   } catch (exception &) {
-    offset = containedLine.find(
-        Object::getStartTagOfObjectType(Object::OBJECT_TYPE::LINKFROMMAIN), 0);
+    offset =
+        containedLine.find(getStartTagOfObjectType(nameOfLinkFromMainType), 0);
   }
   if (offset != string::npos) {
-    m_foundTypes[Object::OBJECT_TYPE::LINKFROMMAIN] = offset;
-    m_offsetOfTypes[offset] = Object::OBJECT_TYPE::LINKFROMMAIN;
+    m_foundTypes[nameOfLinkFromMainType] = offset;
+    m_offsetOfTypes[offset] = nameOfLinkFromMainType;
     LinkStringInfo info{
         offset,
-        containedLine.find(
-            Object::getEndTagOfObjectType(Object::OBJECT_TYPE::LINKFROMMAIN),
-            offset),
+        containedLine.find(getEndTagOfObjectType(nameOfLinkFromMainType),
+                           offset),
         false};
     m_linkStringTable[offset] = info;
     do {
       offset = containedLine.find(
-          Object::getStartTagOfObjectType(Object::OBJECT_TYPE::LINKFROMMAIN),
-          offset + 1);
+          getStartTagOfObjectType(nameOfLinkFromMainType), offset + 1);
       if (offset == string::npos)
         break;
       LinkStringInfo info{
           offset,
-          containedLine.find(
-              Object::getEndTagOfObjectType(Object::OBJECT_TYPE::LINKFROMMAIN),
-              offset),
+          containedLine.find(getEndTagOfObjectType(nameOfLinkFromMainType),
+                             offset),
           false};
       m_linkStringTable[offset] = info;
     } while (true);
@@ -183,21 +212,20 @@ void CoupledBodyTextWithLink::scanForTypes(const string &containedLine) {
 
 using ObjectPtr = unique_ptr<Object>;
 
-ObjectPtr createObjectFromType(Object::OBJECT_TYPE type,
-                               const string &fromFile) {
-  if (type == Object::OBJECT_TYPE::LINENUMBER)
+ObjectPtr createObjectFromType(string type, const string &fromFile) {
+  if (type == nameOfLineNumberType)
     return make_unique<LineNumberPlaceholderLink>();
-  else if (type == Object::OBJECT_TYPE::SPACE)
+  else if (type == nameOfSpaceType)
     return make_unique<Space>();
-  else if (type == Object::OBJECT_TYPE::POEM)
+  else if (type == nameOfPoemType)
     return make_unique<Poem>();
-  else if (type == Object::OBJECT_TYPE::LINKFROMMAIN)
+  else if (type == nameOfLinkFromMainType)
     return make_unique<LinkFromMain>(fromFile);
-  else if (type == Object::OBJECT_TYPE::PERSONALCOMMENT)
+  else if (type == nameOfPersonalCommentType)
     return make_unique<PersonalComment>(fromFile);
-  else if (type == Object::OBJECT_TYPE::POEMTRANSLATION)
+  else if (type == nameOfPoemTranslationType)
     return make_unique<PoemTranslation>(fromFile);
-  else if (type == Object::OBJECT_TYPE::COMMENT)
+  else if (type == nameOfCommentType)
     return make_unique<Comment>(fromFile);
   return nullptr;
 }
@@ -237,7 +265,7 @@ void CoupledBodyTextWithLink::getDisplayString(const string &originalString,
           METHOD_OUTPUT << text << endl;
         if (offset > endOfSubStringOffset and not isMixedOfSpaceBrackets(text))
           pureTextFound = true;
-        m_resultSet.insert(type);
+        m_resultSet.insert(Object::getObjectTypeFromName(type));
         current->loadFirstFromContainedLine(originalString, offset);
       } else {
         m_resultDisplayString += originalString.substr(
@@ -263,14 +291,14 @@ void CoupledBodyTextWithLink::getDisplayString(const string &originalString,
     }
     m_offsetOfTypes.erase(first);
     // never try to find another LINENUMBER
-    if (type != Object::OBJECT_TYPE::LINENUMBER) {
-      auto nextOffsetOfSameType = originalString.find(
-          Object::getStartTagOfObjectType(type), offset + 1);
+    if (type != nameOfLineNumberType) {
+      auto nextOffsetOfSameType =
+          originalString.find(getStartTagOfObjectType(type), offset + 1);
       do {
         if (nextOffsetOfSameType != string::npos and
             isEmbeddedObject(type, nextOffsetOfSameType))
           nextOffsetOfSameType = originalString.find(
-              Object::getStartTagOfObjectType(type), nextOffsetOfSameType + 1);
+              getStartTagOfObjectType(type), nextOffsetOfSameType + 1);
         else
           break;
       } while (true);

@@ -115,8 +115,9 @@ private:
   void paraGeneratedNumbering();
 
   // used for rendering
-  using OffsetToObjectType = map<size_t, Object::OBJECT_TYPE>;
-  using ObjectTypeToOffset = map<Object::OBJECT_TYPE, size_t>;
+  using TypeName = string;
+  using OffsetToObjectType = map<size_t, TypeName>;
+  using ObjectTypeToOffset = map<TypeName, size_t>;
   OffsetToObjectType m_offsetOfTypes;
   ObjectTypeToOffset m_foundTypes;
 
@@ -151,7 +152,7 @@ private:
 
   void searchForEmbededLinks();
   void scanForTypes(const string &containedLine);
-  bool isEmbeddedObject(Object::OBJECT_TYPE type, size_t offset);
+  bool isEmbeddedObject(string type, size_t offset);
 
   // used for link-fixing
   using LinkPtr = unique_ptr<CoupledLink>;

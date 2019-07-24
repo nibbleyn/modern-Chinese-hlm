@@ -86,8 +86,7 @@ void CoupledBodyTextWithLink::printOffsetToObjectType() {
   else
     METHOD_OUTPUT << "no entry in m_offsetOfTypes." << endl;
   for (const auto &element : m_offsetOfTypes) {
-    METHOD_OUTPUT << element.first << displaySpace
-                  << Object::getNameOfObjectType(element.second) << endl;
+    METHOD_OUTPUT << element.first << displaySpace << element.second << endl;
   }
 }
 
@@ -97,8 +96,7 @@ void CoupledBodyTextWithLink::printObjectTypeToOffset() {
   else
     METHOD_OUTPUT << "no entry in m_foundTypes." << endl;
   for (const auto &element : m_foundTypes) {
-    METHOD_OUTPUT << Object::getNameOfObjectType(element.first) << displaySpace
-                  << element.second << endl;
+    METHOD_OUTPUT << element.first << displaySpace << element.second << endl;
   }
 }
 void CoupledBodyTextWithLink::printLinkStringTable() {

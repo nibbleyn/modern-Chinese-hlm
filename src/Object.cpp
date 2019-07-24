@@ -27,17 +27,6 @@ Object::ObjectTypeToString Object::EndTags = {
     {OBJECT_TYPE::COMMENT, commentEndChars},
     {OBJECT_TYPE::CITATION, citationEndChars}};
 
-static const string nameOfLineNumberType = R"(LINENUMBER)";
-static const string nameOfSpaceType = R"(SPACE)";
-static const string nameOfPoemType = R"(POEM)";
-static const string nameOfPoemTranslationType = R"(POEMTRANSLATION)";
-static const string nameOfLinkFromMainType = R"(LINKFROMMAIN)";
-static const string nameOfLinkFromAttachmentType = R"(LINKFROMATTACHMENT)";
-static const string nameOfCommentType = R"(COMMENT)";
-static const string nameOfPersonalCommentType = R"(PERSONALCOMMENT)";
-static const string nameOfTextType = R"(TEXT)";
-static const string nameOfCitationType = R"(CITATION)";
-
 Object::ObjectTypeToString Object::ObjectNames = {
     {OBJECT_TYPE::LINENUMBER, nameOfLineNumberType},
     {OBJECT_TYPE::SPACE, nameOfSpaceType},
