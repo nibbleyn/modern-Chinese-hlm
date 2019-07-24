@@ -219,21 +219,6 @@ protected:
     return DISPLY_LINE_BAD;
   }
 
-  void printLineAttrTable() {
-    if (not m_lineAttrTable.empty()) {
-      METHOD_OUTPUT << "m_lineAttrTable:" << endl;
-      METHOD_OUTPUT << "line No/numberOfLines/type/summary" << endl;
-    } else
-      METHOD_OUTPUT << "no entry in m_lineAttrTable." << endl;
-
-    for (const auto &element : m_lineAttrTable) {
-      METHOD_OUTPUT << element.first << "        "
-                    << element.second.numberOfLines << "          "
-                    << getDisplayTypeString(element.second.type) << "  "
-                    << element.second.cap << endl;
-    }
-  }
-
   // line No.of image group -> line No. before following para header to add
   using ImgGroupFollowingParaTable = map<size_t, size_t>;
   ImgGroupFollowingParaTable m_imgGroupFollowingParaTable;
@@ -244,17 +229,6 @@ protected:
       return true;
     } catch (exception &) {
       return false;
-    }
-  }
-
-  void printImgGroupFollowingParaTable() {
-    if (not m_imgGroupFollowingParaTable.empty()) {
-      METHOD_OUTPUT << "m_imgGroupFollowingParaTable:" << endl;
-      METHOD_OUTPUT << "img Group line No/line No to add para below" << endl;
-    } else
-      METHOD_OUTPUT << "no entry in m_imgGroupFollowingParaTable." << endl;
-    for (const auto &element : m_imgGroupFollowingParaTable) {
-      METHOD_OUTPUT << element.first << "        " << element.second << endl;
     }
   }
 
@@ -287,17 +261,9 @@ protected:
   lineNumberSetByRange m_range;
   lineSet m_resultLines;
 
-  void printResultLines() {
-    if (not m_resultLines.empty()) {
-      METHOD_OUTPUT << "m_resultLines:" << endl;
-      METHOD_OUTPUT << "lineNumber/line text" << endl;
-    } else
-      METHOD_OUTPUT << "no entry in m_resultLines." << endl;
-    for (const auto &element : m_resultLines) {
-      LineNumber ln(element.first.first, element.first.second);
-      METHOD_OUTPUT << ln.asString() << "        " << element.second << endl;
-    }
-  }
+  void printLineAttrTable();
+  void printImgGroupFollowingParaTable();
+  void printResultLines();
 };
 
 bool isFoundAsNonKeys(const string &line, const string &key);

@@ -41,19 +41,7 @@ public:
     m_linkStringSet[fullPos] = link;
   }
 
-  void printParaHeaderTable() {
-    if (not m_linkStringSet.empty()) {
-      METHOD_OUTPUT << "m_linkStringSet:" << endl;
-    } else
-      METHOD_OUTPUT << "no entry in m_linkStringSet." << endl;
-    for (const auto &element : m_linkStringSet) {
-      METHOD_OUTPUT << element.first.first.first << "        "
-                    << element.first.first.second << "        "
-                    << element.first.second.first << "        "
-                    << element.first.second.second << "        "
-                    << element.second << endl;
-    }
-  }
+  void printParaHeaderTable();
 
 protected:
   bool m_hideParaHeaders{false};

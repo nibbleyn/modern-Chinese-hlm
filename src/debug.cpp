@@ -1,5 +1,42 @@
 #include "coupledBodyTextWithLink.hpp"
 
+void CoupledBodyText::printResultLines() {
+  if (not m_resultLines.empty()) {
+    METHOD_OUTPUT << "m_resultLines:" << endl;
+    METHOD_OUTPUT << "lineNumber/line text" << endl;
+  } else
+    METHOD_OUTPUT << "no entry in m_resultLines." << endl;
+  for (const auto &element : m_resultLines) {
+    LineNumber ln(element.first.first, element.first.second);
+    METHOD_OUTPUT << ln.asString() << "        " << element.second << endl;
+  }
+}
+
+void CoupledBodyText::printImgGroupFollowingParaTable() {
+  if (not m_imgGroupFollowingParaTable.empty()) {
+    METHOD_OUTPUT << "m_imgGroupFollowingParaTable:" << endl;
+    METHOD_OUTPUT << "img Group line No/line No to add para below" << endl;
+  } else
+    METHOD_OUTPUT << "no entry in m_imgGroupFollowingParaTable." << endl;
+  for (const auto &element : m_imgGroupFollowingParaTable) {
+    METHOD_OUTPUT << element.first << "        " << element.second << endl;
+  }
+}
+
+void CoupledBodyText::printLineAttrTable() {
+  if (not m_lineAttrTable.empty()) {
+    METHOD_OUTPUT << "m_lineAttrTable:" << endl;
+    METHOD_OUTPUT << "line No/numberOfLines/type/summary" << endl;
+  } else
+    METHOD_OUTPUT << "no entry in m_lineAttrTable." << endl;
+
+  for (const auto &element : m_lineAttrTable) {
+    METHOD_OUTPUT << element.first << "        " << element.second.numberOfLines
+                  << "          " << getDisplayTypeString(element.second.type)
+                  << "  " << element.second.cap << endl;
+  }
+}
+
 void CoupledBodyTextWithLink::printLinesTable() {
   if (not linesTable.empty()) {
     FUNCTION_OUTPUT << "linesTable:" << endl;
@@ -128,5 +165,21 @@ void CoupledBodyTextWithLink::printParaHeaderTable() {
     METHOD_OUTPUT << element.first << displaySpace
                   << element.second.seqOfParaHeader << "                  "
                   << element.second.totalLinesAbove << endl;
+  }
+}
+
+#include "linkSetContainer.hpp"
+
+void LinkSetContainer::printParaHeaderTable() {
+  if (not m_linkStringSet.empty()) {
+    METHOD_OUTPUT << "m_linkStringSet:" << endl;
+  } else
+    METHOD_OUTPUT << "no entry in m_linkStringSet." << endl;
+  for (const auto &element : m_linkStringSet) {
+    METHOD_OUTPUT << element.first.first.first << "        "
+                  << element.first.first.second << "        "
+                  << element.first.second.first << "        "
+                  << element.first.second.second << "        " << element.second
+                  << endl;
   }
 }
