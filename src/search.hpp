@@ -19,7 +19,7 @@ public:
 
   string m_kind{MAIN};
   bool m_overSpecificObject{false};
-  Object::SET_OF_OBJECT_TYPES m_overObjects{Object::OBJECT_TYPE::POEM};
+  TypeSet m_overObjects{{nameOfPoemType}};
   string m_key;
   KeyList m_keyList;
   string m_outputFilename;

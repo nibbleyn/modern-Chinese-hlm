@@ -10,7 +10,7 @@ public:
   struct LineDetails {
     int numberOfDisplayedLines{0};
     bool isImgGroup{false};
-    Object::SET_OF_OBJECT_TYPES objectContains;
+    set<string> objectContains;
   };
   // statistics about paras
   // chapter number (added with attachment number if over fromAttachmentLinks),
@@ -27,9 +27,8 @@ public:
   static void clearExistingNumberingStatistics();
   static void appendNumberingStatistics();
   static void loadNumberingStatistics();
-  static lineNumberSet
-  getLineNumberMissingObjectType(AttachmentNumber num,
-                                 Object::SET_OF_OBJECT_TYPES typeSet);
+  static lineNumberSet getLineNumberMissingObjectType(AttachmentNumber num,
+                                                      TypeSet typeSet);
   static void loadRangeTableFromFile(const string &indexFilePath);
 
 public:
@@ -67,7 +66,7 @@ public:
   // used for rendering
   void getDisplayString(const string &originalString, bool onlyTypes = false);
   string getResultDisplayString() { return m_resultDisplayString; }
-  Object::SET_OF_OBJECT_TYPES getResultSet() { return m_resultSet; }
+  TypeSet getResultSet() { return m_resultSet; }
 
   // used by tools
   void printStringInLines();
@@ -75,7 +74,7 @@ public:
   void removePersonalCommentsOverNumberedFiles();
 
 private:
-  Object::SET_OF_OBJECT_TYPES m_resultSet;
+  TypeSet m_resultSet;
   string m_resultDisplayString{emptyString};
 
   static void addEntriesInRangeTable(AttachmentNumber startNum,
@@ -115,7 +114,6 @@ private:
   void paraGeneratedNumbering();
 
   // used for rendering
-  using TypeName = string;
   using OffsetToObjectType = map<size_t, TypeName>;
   using ObjectTypeToOffset = map<TypeName, size_t>;
   OffsetToObjectType m_offsetOfTypes;

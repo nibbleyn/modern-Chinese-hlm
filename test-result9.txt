@@ -2390,7 +2390,7 @@ testMixedObjects               PERSONALCOMMENT
 23CoupledBodyTextWithLink::getDisplayString              147 189
 23CoupledBodyTextWithLink::printOffsetToObjectType              no entry in m_offsetOfTypes.
 23CoupledBodyTextWithLink::getDisplayString              <br>
-testMixedObjects               SPACE LINENUMBER PERSONALCOMMENT TEXT
+testMixedObjects               LINENUMBER PERSONALCOMMENT SPACE TEXT
 *************************line 568: type test 1 finished *************************
 23CoupledBodyTextWithLink::getDisplayString              388
 25LineNumberPlaceholderLink::loadFirstFromContainedLine              P1L2
@@ -2440,7 +2440,7 @@ testMixedObjects               SPACE LINENUMBER PERSONALCOMMENT TEXT
 23CoupledBodyTextWithLink::getDisplayString              342 384
 23CoupledBodyTextWithLink::printOffsetToObjectType              no entry in m_offsetOfTypes.
 23CoupledBodyTextWithLink::getDisplayString              <br>
-testMixedObjects               SPACE LINENUMBER PERSONALCOMMENT TEXT
+testMixedObjects               LINENUMBER PERSONALCOMMENT SPACE TEXT
 *************************line 568: type test 2 finished *************************
 23CoupledBodyTextWithLink::getDisplayString              1436
 25LineNumberPlaceholderLink::loadFirstFromContainedLine              P9L3
@@ -2787,6 +2787,6 @@ isFoundOutsidePersonalComments               unhidden style="text-decoration-col
 23CoupledBodyTextWithLink::getDisplayString              738 1433
 23CoupledBodyTextWithLink::printOffsetToObjectType              no entry in m_offsetOfTypes.
 23CoupledBodyTextWithLink::getDisplayString              ）
-testMixedObjects               SPACE LINENUMBER POEM POEMTRANSLATION PERSONALCOMMENT
+testMixedObjects               LINENUMBER PERSONALCOMMENT POEM POEMTRANSLATION SPACE
 *************************line 568: type test 3 finished *************************
 

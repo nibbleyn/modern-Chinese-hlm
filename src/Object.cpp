@@ -2,44 +2,15 @@
 
 extern int debug;
 
-Object::SET_OF_OBJECT_TYPES Object::setOfObjectTypes = {
-    Object::OBJECT_TYPE::LINENUMBER,      Object::OBJECT_TYPE::POEM,
-    Object::OBJECT_TYPE::POEMTRANSLATION, Object::OBJECT_TYPE::LINKFROMMAIN,
-    Object::OBJECT_TYPE::COMMENT,         Object::OBJECT_TYPE::PERSONALCOMMENT};
-
-Object::ObjectTypeToString Object::ObjectNames = {
-    {OBJECT_TYPE::LINENUMBER, nameOfLineNumberType},
-    {OBJECT_TYPE::SPACE, nameOfSpaceType},
-    {OBJECT_TYPE::POEM, nameOfPoemType},
-    {OBJECT_TYPE::LINKFROMMAIN, nameOfLinkFromMainType},
-    {OBJECT_TYPE::LINKFROMATTACHMENT, nameOfLinkFromAttachmentType},
-    {OBJECT_TYPE::PERSONALCOMMENT, nameOfPersonalCommentType},
-    {OBJECT_TYPE::POEMTRANSLATION, nameOfPoemTranslationType},
-    {OBJECT_TYPE::COMMENT, nameOfCommentType},
-    {OBJECT_TYPE::CITATION, nameOfCitationType},
-    {OBJECT_TYPE::TEXT, nameOfTextType}};
-
-Object::StringToObjectType Object::ObjectTypes = {
-    {nameOfLineNumberType, OBJECT_TYPE::LINENUMBER},
-    {nameOfSpaceType, OBJECT_TYPE::SPACE},
-    {nameOfPoemType, OBJECT_TYPE::POEM},
-    {nameOfLinkFromMainType, OBJECT_TYPE::LINKFROMMAIN},
-    {nameOfLinkFromAttachmentType, OBJECT_TYPE::LINKFROMATTACHMENT},
-    {nameOfPersonalCommentType, OBJECT_TYPE::PERSONALCOMMENT},
-    {nameOfPoemTranslationType, OBJECT_TYPE::POEMTRANSLATION},
-    {nameOfCommentType, OBJECT_TYPE::COMMENT},
-    {nameOfCitationType, OBJECT_TYPE::CITATION},
-    {nameOfTextType, OBJECT_TYPE::TEXT}};
-
-string Object::typeSetAsString(SET_OF_OBJECT_TYPES typeSet) {
+string Object::typeSetAsString(TypeSet typeSet) {
   string result;
   for (const auto &type : typeSet) {
-    result += displaySpace + getNameOfObjectType(type);
+    result += displaySpace + type;
   }
   return result;
 }
 
-Object::SET_OF_OBJECT_TYPES Object::getTypeSetFromString(const string &str) {
+TypeSet Object::getTypeSetFromString(const string &str) {
   auto typeListToCheck = {nameOfPoemTranslationType,
                           nameOfPoemType,
                           nameOfPersonalCommentType,
@@ -48,14 +19,14 @@ Object::SET_OF_OBJECT_TYPES Object::getTypeSetFromString(const string &str) {
                           nameOfLinkFromMainType,
                           nameOfTextType};
   string toCheck = str;
-  SET_OF_OBJECT_TYPES result;
+  TypeSet resultSet;
   for (const auto &nameOfType : typeListToCheck) {
     if (toCheck.find(nameOfType) != string::npos) {
-      result.insert(getObjectTypeFromName(nameOfType));
+      resultSet.insert(nameOfType);
       replacePart(toCheck, nameOfType, emptyString);
     }
   }
-  return result;
+  return resultSet;
 }
 
 void Object::readDisplayType() {

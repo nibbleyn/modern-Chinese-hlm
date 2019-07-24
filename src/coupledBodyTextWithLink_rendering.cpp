@@ -247,7 +247,7 @@ void CoupledBodyTextWithLink::getDisplayString(const string &originalString,
           METHOD_OUTPUT << text << endl;
         if (offset > endOfSubStringOffset and not isMixedOfSpaceBrackets(text))
           pureTextFound = true;
-        m_resultSet.insert(Object::getObjectTypeFromName(type));
+        m_resultSet.insert(type);
         current->loadFirstFromContainedLine(originalString, offset);
       } else {
         m_resultDisplayString += originalString.substr(
@@ -299,7 +299,7 @@ void CoupledBodyTextWithLink::getDisplayString(const string &originalString,
     if (lastPart != emptyString and not isMixedOfSpaceBrackets(lastPart))
       pureTextFound = true;
     if (pureTextFound)
-      m_resultSet.insert(Object::OBJECT_TYPE::TEXT);
+      m_resultSet.insert(nameOfTextType);
   } else if (endOfSubStringOffset < originalString.length())
     m_resultDisplayString += originalString.substr(endOfSubStringOffset);
 

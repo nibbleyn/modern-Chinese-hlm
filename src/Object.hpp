@@ -45,6 +45,9 @@ static const string personalCommentStartRestChars =
     R"( style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4)";
 static const string personalCommentEndChars = R"(</u>)";
 
+using TypeName = string;
+using TypeSet = set<TypeName>;
+
 static const string nameOfLineNumberType = R"(LINENUMBER)";
 static const string nameOfSpaceType = R"(SPACE)";
 static const string nameOfPoemType = R"(POEM)";
@@ -61,51 +64,11 @@ enum class DISPLAY_TYPE { DIRECT, HIDDEN, UNHIDDEN };
 
 class Object {
 public:
-  enum class OBJECT_TYPE {
-    SPACE,
-    LINENUMBER,
-    POEM,
-    POEMTRANSLATION,
-    LINKFROMMAIN,
-    LINKFROMATTACHMENT,
-    COMMENT,
-    CITATION,
-    PERSONALCOMMENT,
-    TEXT
-  };
-  using SET_OF_OBJECT_TYPES = set<Object::OBJECT_TYPE>;
-  static SET_OF_OBJECT_TYPES setOfObjectTypes;
-  using ObjectTypeToString = map<OBJECT_TYPE, string>;
-  static ObjectTypeToString StartTags;
-  static ObjectTypeToString EndTags;
-  static ObjectTypeToString ObjectNames;
-  using StringToObjectType = map<string, OBJECT_TYPE>;
-  static StringToObjectType ObjectTypes;
-
-  static bool isObjectTypeInSet(OBJECT_TYPE objType, SET_OF_OBJECT_TYPES &set) {
-    return set.count(objType) != 0;
+  static bool isObjectTypeInSet(TypeName type, TypeSet &typeSet) {
+    return typeSet.count(type) != 0;
   }
-
-  static string getNameOfObjectType(OBJECT_TYPE type) {
-    try {
-      auto endTag = ObjectNames.at(type);
-      return endTag;
-    } catch (exception &) {
-      return emptyString;
-    }
-  }
-
-  static OBJECT_TYPE getObjectTypeFromName(string name) {
-    try {
-      auto type = ObjectTypes.at(name);
-      return type;
-    } catch (exception &) {
-      return OBJECT_TYPE::TEXT;
-    }
-  }
-
-  static string typeSetAsString(SET_OF_OBJECT_TYPES typeSet);
-  static SET_OF_OBJECT_TYPES getTypeSetFromString(const string &str);
+  static string typeSetAsString(TypeSet typeSet);
+  static TypeSet getTypeSetFromString(const string &str);
 
 public:
   Object() = default;
@@ -133,10 +96,6 @@ public:
     return m_fullString.length();
   }
   void readDisplayType();
-  string getStringWithTags();
-  string getStringFromTemplate(const string &templateStr,
-                               const string &defaultBodyText);
-
   void hide() { m_displayType = DISPLAY_TYPE::HIDDEN; }
   void unhide() { m_displayType = DISPLAY_TYPE::UNHIDDEN; }
   string displayPropertyAsString() {
@@ -152,6 +111,9 @@ protected:
   size_t getFullStringAndBodyTextFromContainedLine(const string &containedLine,
                                                    size_t after);
   DISPLAY_TYPE getDisplayType() { return m_displayType; }
+  string getStringWithTags();
+  string getStringFromTemplate(const string &templateStr,
+                               const string &defaultBodyText);
   string m_fullString{emptyString};
   string m_bodyText{emptyString};
   string m_displayText{emptyString};

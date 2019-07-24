@@ -53,8 +53,8 @@ void CoupledBodyTextWithLink::loadNumberingStatistics() {
 }
 
 CoupledBodyTextWithLink::lineNumberSet
-CoupledBodyTextWithLink::getLineNumberMissingObjectType(
-    AttachmentNumber num, Object::SET_OF_OBJECT_TYPES typeSet) {
+CoupledBodyTextWithLink::getLineNumberMissingObjectType(AttachmentNumber num,
+                                                        TypeSet typeSet) {
   CoupledBodyTextWithLink::lineNumberSet result{};
   for (const auto &element : linesTable) {
     if (element.first.first == num) {
@@ -201,14 +201,14 @@ void CoupledBodyTextWithLink::doStatisticsByScanningLines(
       }
     } else if (isImageGroupLine(m_inLine)) {
       // record the para it belongs to into linesTable
-      LineDetails detail{0, true, Object::SET_OF_OBJECT_TYPES()};
+      LineDetails detail{0, true, {}};
       auto paraLine = make_pair(m_para, m_lineNo);
       linesTable[make_pair(num, paraLine)] = detail;
       m_lineNo++;
     } else if (hasEndingBr(m_inLine)) {
       // record the para it belongs to into linesTable
       int dispLines = 0;
-      auto types = Object::SET_OF_OBJECT_TYPES();
+      TypeSet types;
       if (not m_disableNumberingStatisticsCalculateLines) {
         auto removeEndingBrStr = m_inLine.substr(0, m_inLine.find(brTab));
         getDisplayString(removeEndingBrStr);
