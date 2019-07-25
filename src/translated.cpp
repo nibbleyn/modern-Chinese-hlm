@@ -91,6 +91,9 @@ int main(int argc, char **argv) {
   case 24:
     renderingBodyText();
     break;
+  case 25:
+    removePersonalViewpoints();
+    break;
   default:
     FUNCTION_OUTPUT << "nothing gets executed." << endl;
   }

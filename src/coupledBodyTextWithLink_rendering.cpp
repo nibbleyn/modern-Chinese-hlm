@@ -344,3 +344,68 @@ void CoupledBodyTextWithLink::render(bool removeLinkToOriginalAndAttachment) {
     }
   }
 }
+
+// must be called after called
+// CoupledBodyTextContainer::refAttachmentTable.loadReferenceAttachmentList();
+void CoupledBodyTextWithLink::removePersonalCommentsOverNumberedFiles() {
+  setInputOutputFiles();
+  ifstream infile(m_inputFile);
+  if (not fileExist(infile, m_inputFile))
+    return;
+  ofstream outfile(m_outputFile);
+  string inLine{"not found"};
+  while (!infile.eof()) {
+    getline(infile, inLine);
+    if (debug >= LOG_INFO)
+      METHOD_OUTPUT << inLine << endl;
+    // inLine would change in loop below
+    auto orgLine = inLine;
+    string start = personalCommentStartChars;
+    string end = personalCommentEndChars;
+    string to_replace = emptyString;
+    // first loop to remove all personal Comments
+    auto removePersonalCommentLine = orgLine;
+    auto personalCommentBegin = removePersonalCommentLine.find(start);
+    while (personalCommentBegin != string::npos) {
+      auto personalCommentEnd = removePersonalCommentLine.find(end);
+      string personalComment = removePersonalCommentLine.substr(
+          personalCommentBegin,
+          personalCommentEnd + end.length() - personalCommentBegin);
+      to_replace = personalComment;
+      auto replaceBegin = orgLine.find(to_replace);
+      orgLine.replace(replaceBegin, to_replace.length(), emptyString);
+      removePersonalCommentLine =
+          removePersonalCommentLine.substr(personalCommentEnd + end.length());
+      // find next personalComment in the removePersonalCommentLine
+      personalCommentBegin = removePersonalCommentLine.find(start);
+    }
+    // the second loop to remove all expected attachment link from result
+    // orgLine
+    auto removeSpecialLinkLine = orgLine;
+    auto specialLinkBegin = removeSpecialLinkLine.find(linkStartChars);
+    while (specialLinkBegin != string::npos) {
+      auto specialLinkEnd = removeSpecialLinkLine.find(linkEndChars);
+      string specialLink =
+          getIncludedStringBetweenTags(removeSpecialLinkLine, linkStartChars,
+                                       linkEndChars, specialLinkBegin);
+      LinkFromAttachment m_linkPtr(m_file, specialLink);
+      auto num = make_pair(m_linkPtr.getchapterNumer(),
+                           m_linkPtr.getattachmentNumber());
+      if (m_linkPtr.isTargetToOtherAttachmentHtm() and
+          LinkFromMain::attachmentTable.getAttachmentType(num) ==
+              ATTACHMENT_TYPE::PERSONAL) {
+        if (debug >= LOG_INFO)
+          METHOD_OUTPUT << specialLink << endl;
+        to_replace = specialLink;
+        auto replaceBegin = orgLine.find(to_replace);
+        orgLine.replace(replaceBegin, to_replace.length(), emptyString);
+      }
+      removeSpecialLinkLine =
+          removeSpecialLinkLine.substr(specialLinkEnd + linkEndChars.length());
+      // find next specialLink in the removeSpecialLinkLine
+      specialLinkBegin = removeSpecialLinkLine.find(linkStartChars);
+    }
+
+    outfile << orgLine << endl;
+  }
+}

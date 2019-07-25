@@ -95,6 +95,9 @@ void numberAttachmentHtmls(bool forceUpdateLineNumber = true,
                            bool hideParaHeader = false,
                            bool disableAutoNumbering = true);
 
+void removePersonalViewpoints(const string &kind = MAIN,
+                              int minTarget = MAIN_MIN_CHAPTER_NUMBER,
+                              int maxTarget = MAIN_MAX_CHAPTER_NUMBER);
 void renderingBodyText(const string &kind = MAIN,
                        int minTarget = MAIN_MIN_CHAPTER_NUMBER,
                        int maxTarget = MAIN_MAX_CHAPTER_NUMBER);

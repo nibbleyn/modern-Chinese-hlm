@@ -356,6 +356,28 @@ void renderingBodyText(const string &kind, int minTarget, int maxTarget) {
   }
 }
 
+void removePersonalViewpoints(const string &kind, int minTarget,
+                              int maxTarget) {
+  FUNCTION_OUTPUT << "to remove <u> pairs." << endl;
+  FUNCTION_OUTPUT << "and to remove personal attachment link." << endl;
+  LinkFromMain::attachmentTable.setSourceFile(OUTPUT_REF_ATTACHMENT_LIST_PATH);
+  LinkFromMain::attachmentTable.loadReferenceAttachmentList();
+
+  auto fileSet = buildFileSet(minTarget, maxTarget, kind);
+  CoupledBodyTextContainer container;
+  for (const auto &file : fileSet) {
+    container.setFileType(getFileTypeFromKind(kind));
+    container.setFileAndAttachmentNumber(file);
+    container.dissembleFromHTM();
+  }
+  for (const auto &file : fileSet) {
+    CoupledBodyTextWithLink bodyText;
+    bodyText.setFilePrefixFromFileType(getFileTypeFromKind(kind));
+    bodyText.setFileAndAttachmentNumber(file);
+    bodyText.removePersonalCommentsOverNumberedFiles();
+  }
+}
+
 void refreshAttachmentBodyTexts(int minTarget, int maxTarget, int minAttachNo,
                                 int maxAttachNo) {
   CoupledBodyTextContainer container;
