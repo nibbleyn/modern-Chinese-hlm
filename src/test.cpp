@@ -1,80 +1,6 @@
 #include "test.hpp"
 #include <array>
 
-void testAttachmentOperations() {
-  CoupledBodyTextContainer container;
-  container.setFileType(FILE_TYPE::ATTACHMENT);
-  container.setFileAndAttachmentNumber("28");
-  FUNCTION_OUTPUT << "attachments for 28:" << endl;
-  for (const auto &attNo : container.getAttachmentFileList(2, 5)) {
-    FUNCTION_OUTPUT << attNo << endl;
-  }
-  FUNCTION_OUTPUT << endl;
-  container.setFileAndAttachmentNumber("22");
-  FUNCTION_OUTPUT << "attachments for 22:" << endl;
-  for (const auto &attNo : container.getAttachmentFileList(5, 2)) {
-    FUNCTION_OUTPUT << attNo << endl;
-  }
-  FUNCTION_OUTPUT << endl;
-}
-
-void testSpace() {
-  string line =
-      R"(<a unhidden id="P11L1">11.1</a>&nbsp;&nbsp; <strong unhidden>杜鹃无语正黄昏，荷锄归去掩重门。青灯照壁人初睡，冷雨敲窗被未温。</strong>&nbsp;&nbsp;&nbsp;&nbsp;<samp unhidden font style="font-size: 13.5pt; font-family:楷体; color:#ff00ff">（像杜鹃啼血一样）我泣尽了血泪默默无语，只发现愁惨的黄昏正在降临，只好扛着花锄忍痛归去，一层层带上身后的门。闺中点起青冷的灯光，摇摇曳曳照射着四壁，我才要躺下，拉上尚是冰凉的被裘，却又听见轻寒的春雨敲打着窗棂，更增加了一层寒意。</samp><br>)";
-  unique_ptr<Space> sp = make_unique<Space>();
-  auto offset = sp->loadFirstFromContainedLine(line);
-  FUNCTION_OUTPUT << "display Property: " << endl;
-  FUNCTION_OUTPUT << sp->displayPropertyAsString() << endl;
-  FUNCTION_OUTPUT << "first appearance offset: " << endl;
-  FUNCTION_OUTPUT << offset << endl;
-  FUNCTION_OUTPUT << "length: " << sp->length()
-                  << " display size: " << sp->displaySize() << endl;
-  FUNCTION_OUTPUT << "whole string: " << endl;
-  FUNCTION_OUTPUT << sp->getWholeString() << endl;
-  FUNCTION_OUTPUT << "display as:" << sp->getDisplayString() << "||" << endl;
-}
-
-void testPoem() {
-  string poemStr =
-      R"(<strong hidden>杜鹃无语正黄昏，荷锄归去掩重门。青灯照壁人初睡，冷雨敲窗被未温。</strong>)";
-  string line =
-      R"(<a unhidden id="P11L1">11.1</a>&nbsp;&nbsp; <strong unhidden>杜鹃无语正黄昏，荷锄归去掩重门。青灯照壁人初睡，冷雨敲窗被未温。</strong>&nbsp;&nbsp;&nbsp;&nbsp;<samp unhidden font style="font-size: 13.5pt; font-family:楷体; color:#ff00ff">（像杜鹃啼血一样）我泣尽了血泪默默无语，只发现愁惨的黄昏正在降临，只好扛着花锄忍痛归去，一层层带上身后的门。闺中点起青冷的灯光，摇摇曳曳照射着四壁，我才要躺下，拉上尚是冰凉的被裘，却又听见轻寒的春雨敲打着窗棂，更增加了一层寒意。</samp><br>)";
-  unique_ptr<Poem> poem1 = make_unique<Poem>();
-  poem1->loadFirstFromContainedLine(poemStr);
-  FUNCTION_OUTPUT << "display Property: " << endl;
-  FUNCTION_OUTPUT << poem1->displayPropertyAsString() << endl;
-  FUNCTION_OUTPUT << "length: " << poem1->length()
-                  << " display size: " << poem1->displaySize() << endl;
-  FUNCTION_OUTPUT << "whole string: " << endl;
-  FUNCTION_OUTPUT << poem1->getWholeString() << endl;
-  FUNCTION_OUTPUT << "display as:" << endl;
-  FUNCTION_OUTPUT << poem1->getDisplayString() << "||" << endl;
-  poemStr =
-      R"(<strong>杜鹃无语正黄昏，荷锄归去掩重门。青灯照壁人初睡，冷雨敲窗被未温。</strong>)";
-  poem1 = make_unique<Poem>();
-  poem1->loadFirstFromContainedLine(poemStr);
-  FUNCTION_OUTPUT << "display Property: " << endl;
-  FUNCTION_OUTPUT << poem1->displayPropertyAsString() << endl;
-  FUNCTION_OUTPUT << "length: " << poem1->length()
-                  << " display size: " << poem1->displaySize() << endl;
-  FUNCTION_OUTPUT << "whole string: " << endl;
-  FUNCTION_OUTPUT << poem1->getWholeString() << endl;
-  FUNCTION_OUTPUT << "display as:" << endl;
-  FUNCTION_OUTPUT << poem1->getDisplayString() << "||" << endl;
-  unique_ptr<Poem> poem2 = make_unique<Poem>();
-  auto offset = poem2->loadFirstFromContainedLine(line);
-  FUNCTION_OUTPUT << "display Property: " << endl;
-  FUNCTION_OUTPUT << poem2->displayPropertyAsString() << endl;
-  FUNCTION_OUTPUT << "first appearance offset: " << endl;
-  FUNCTION_OUTPUT << offset << endl;
-  FUNCTION_OUTPUT << "length: " << poem2->length()
-                  << " display size: " << poem2->displaySize() << endl;
-  FUNCTION_OUTPUT << "whole string: " << endl;
-  FUNCTION_OUTPUT << poem2->getWholeString() << endl;
-  FUNCTION_OUTPUT << "display as:" << endl;
-  FUNCTION_OUTPUT << poem2->getDisplayString() << "||" << endl;
-}
-
 void testSearchTextIsOnlyPartOfOtherKeys() {
   string line1 =
       R"(弄得（<cite unhidden>宝玉</cite>）情色若痴，语言常乱，似染怔忡之疾，慌得袭人等又不敢回贾母，只百般逗他玩笑（<cite unhidden>指望他早日康复</cite>）。（<u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">怔忡，为病名，首见于《济生方·惊悸怔忡健忘门》中“惊者，心卒动而不宁也；悸者,心跳动而怕惊也；怔忡者，心中躁动不安，惕惕然后人将捕之也”,是心悸的一种，是指多因久病体虚、心脏受损导致气血、阴阳亏虚，或邪毒、痰饮、瘀血阻滞心脉，日久导致心失濡养，心脉不畅，从而引起的心中剔剔不安，不能自控的一种病证，常和惊悸合并称为心悸</u>）)";
@@ -488,22 +414,146 @@ void testLinkOperation() {
   SEPERATE("testLinkFromAttachment", " finished ");
 }
 
-void CoupledBodyTextWithLink::printStringInLines() {
-  getLinesofReferencePage();
-  setInputOutputFiles();
-  //  ifstream infile(m_inputFile);
-  ifstream checkFile(TO_CHECK_FILE);
-  if (not fileExist(checkFile, m_inputFile))
-    return;
-  string line;
-  while (!checkFile.eof()) {
-    getline(checkFile, line);
-    if (debug >= LOG_INFO) {
-      METHOD_OUTPUT << line << endl;
-      METHOD_OUTPUT << utf8length(line) << endl;
-      METHOD_OUTPUT << getLinesOfDisplayText(line) << endl;
-    }
+void testListContainer() {
+  ListContainer container("1_gen");
+  auto link = fixLinkFromMainTemplate(
+      emptyString, "80", DISPLAY_TYPE::UNHIDDEN, "菱角菱花",
+      "第80回1.1节:", "原是老奶奶（薛姨妈）使唤的", "94");
+
+  // to test link to original file
+  link =
+      fixLinkFromOriginalTemplate(originalDirForLinkFromMain, "80", "菱角菱花",
+                                  "第80回1.1节:", annotationToOriginal, "94");
+
+  LinkFromMain lfm(emptyString, link);
+  // second step of construction
+  lfm.readReferFileName(link);
+  lfm.fixFromString(link);
+  link = lfm.asString();
+
+  container.clearExistingBodyText();
+  CoupledParaHeader paraHeader;
+  paraHeader.setStartNumber(LineNumber::getStartNumber());
+  paraHeader.markAsFirstParaHeader();
+  paraHeader.fixFromTemplate();
+  container.appendParagrapHeader(paraHeader.getFixedResult());
+  container.appendParagraphInBodyText(link);
+  container.appendParagraphInBodyText("18 links are found.");
+
+  paraHeader.setCurrentParaNo(1);
+  paraHeader.markAsLastParaHeader();
+  paraHeader.fixFromTemplate();
+  paraHeader.fixFromTemplate();
+  container.appendParagrapHeader(paraHeader.getFixedResult());
+  container.setTitle("test");
+  container.setDisplayTitle("test container");
+  container.assembleBackToHTM();
+  FUNCTION_OUTPUT << "result is in file " << container.getoutputHtmlFilepath()
+                  << endl;
+}
+
+void testAttachmentOperations() {
+  CoupledBodyTextContainer container;
+  container.setFileType(FILE_TYPE::ATTACHMENT);
+  container.setFileAndAttachmentNumber("28");
+  FUNCTION_OUTPUT << "attachments for 28:" << endl;
+  for (const auto &attNo : container.getAttachmentFileList(2, 5)) {
+    FUNCTION_OUTPUT << attNo << endl;
   }
+  FUNCTION_OUTPUT << endl;
+  container.setFileAndAttachmentNumber("22");
+  FUNCTION_OUTPUT << "attachments for 22:" << endl;
+  for (const auto &attNo : container.getAttachmentFileList(5, 2)) {
+    FUNCTION_OUTPUT << attNo << endl;
+  }
+  FUNCTION_OUTPUT << endl;
+}
+
+void testTableContainer() {
+  TableContainer container("2_gen");
+  container.insertFrontParagrapHeader(4, searchUnit);
+  container.appendLeftParagraphInBodyText("line1-left");
+  container.appendRightParagraphInBodyText("line1-right");
+  container.appendLeftParagraphInBodyText("line2-left");
+  // if only 3 is added, patch last right part
+  container.appendRightParagraphInBodyText(emptyString);
+  container.insertBackParagrapHeader(0, 4, searchUnit);
+  container.setTitle("content index table");
+  container.setDisplayTitle("content");
+  container.assembleBackToHTM();
+  FUNCTION_OUTPUT << "result is in file: " << container.getoutputHtmlFilepath()
+                  << endl;
+}
+
+void testContainer(int num) {
+  SEPERATE("testContainer", " started ");
+  switch (num) {
+  case 1:
+    testListContainer();
+    break;
+  case 2:
+    testTableContainer();
+    break;
+  default:
+    FUNCTION_OUTPUT << "invalid test." << endl;
+  }
+}
+
+void testPoem() {
+  string poemStr =
+      R"(<strong hidden>杜鹃无语正黄昏，荷锄归去掩重门。青灯照壁人初睡，冷雨敲窗被未温。</strong>)";
+  string line =
+      R"(<a unhidden id="P11L1">11.1</a>&nbsp;&nbsp; <strong unhidden>杜鹃无语正黄昏，荷锄归去掩重门。青灯照壁人初睡，冷雨敲窗被未温。</strong>&nbsp;&nbsp;&nbsp;&nbsp;<samp unhidden font style="font-size: 13.5pt; font-family:楷体; color:#ff00ff">（像杜鹃啼血一样）我泣尽了血泪默默无语，只发现愁惨的黄昏正在降临，只好扛着花锄忍痛归去，一层层带上身后的门。闺中点起青冷的灯光，摇摇曳曳照射着四壁，我才要躺下，拉上尚是冰凉的被裘，却又听见轻寒的春雨敲打着窗棂，更增加了一层寒意。</samp><br>)";
+  unique_ptr<Poem> poem1 = make_unique<Poem>();
+  poem1->loadFirstFromContainedLine(poemStr);
+  FUNCTION_OUTPUT << "display Property: " << endl;
+  FUNCTION_OUTPUT << poem1->displayPropertyAsString() << endl;
+  FUNCTION_OUTPUT << "length: " << poem1->length()
+                  << " display size: " << poem1->displaySize() << endl;
+  FUNCTION_OUTPUT << "whole string: " << endl;
+  FUNCTION_OUTPUT << poem1->getWholeString() << endl;
+  FUNCTION_OUTPUT << "display as:" << endl;
+  FUNCTION_OUTPUT << poem1->getDisplayString() << "||" << endl;
+  poemStr =
+      R"(<strong>杜鹃无语正黄昏，荷锄归去掩重门。青灯照壁人初睡，冷雨敲窗被未温。</strong>)";
+  poem1 = make_unique<Poem>();
+  poem1->loadFirstFromContainedLine(poemStr);
+  FUNCTION_OUTPUT << "display Property: " << endl;
+  FUNCTION_OUTPUT << poem1->displayPropertyAsString() << endl;
+  FUNCTION_OUTPUT << "length: " << poem1->length()
+                  << " display size: " << poem1->displaySize() << endl;
+  FUNCTION_OUTPUT << "whole string: " << endl;
+  FUNCTION_OUTPUT << poem1->getWholeString() << endl;
+  FUNCTION_OUTPUT << "display as:" << endl;
+  FUNCTION_OUTPUT << poem1->getDisplayString() << "||" << endl;
+  unique_ptr<Poem> poem2 = make_unique<Poem>();
+  auto offset = poem2->loadFirstFromContainedLine(line);
+  FUNCTION_OUTPUT << "display Property: " << endl;
+  FUNCTION_OUTPUT << poem2->displayPropertyAsString() << endl;
+  FUNCTION_OUTPUT << "first appearance offset: " << endl;
+  FUNCTION_OUTPUT << offset << endl;
+  FUNCTION_OUTPUT << "length: " << poem2->length()
+                  << " display size: " << poem2->displaySize() << endl;
+  FUNCTION_OUTPUT << "whole string: " << endl;
+  FUNCTION_OUTPUT << poem2->getWholeString() << endl;
+  FUNCTION_OUTPUT << "display as:" << endl;
+  FUNCTION_OUTPUT << poem2->getDisplayString() << "||" << endl;
+}
+
+void testSpace() {
+  string line =
+      R"(<a unhidden id="P11L1">11.1</a>&nbsp;&nbsp; <strong unhidden>杜鹃无语正黄昏，荷锄归去掩重门。青灯照壁人初睡，冷雨敲窗被未温。</strong>&nbsp;&nbsp;&nbsp;&nbsp;<samp unhidden font style="font-size: 13.5pt; font-family:楷体; color:#ff00ff">（像杜鹃啼血一样）我泣尽了血泪默默无语，只发现愁惨的黄昏正在降临，只好扛着花锄忍痛归去，一层层带上身后的门。闺中点起青冷的灯光，摇摇曳曳照射着四壁，我才要躺下，拉上尚是冰凉的被裘，却又听见轻寒的春雨敲打着窗棂，更增加了一层寒意。</samp><br>)";
+  unique_ptr<Space> sp = make_unique<Space>();
+  auto offset = sp->loadFirstFromContainedLine(line);
+  FUNCTION_OUTPUT << "display Property: " << endl;
+  FUNCTION_OUTPUT << sp->displayPropertyAsString() << endl;
+  FUNCTION_OUTPUT << "first appearance offset: " << endl;
+  FUNCTION_OUTPUT << offset << endl;
+  FUNCTION_OUTPUT << "length: " << sp->length()
+                  << " display size: " << sp->displaySize() << endl;
+  FUNCTION_OUTPUT << "whole string: " << endl;
+  FUNCTION_OUTPUT << sp->getWholeString() << endl;
+  FUNCTION_OUTPUT << "display as:" << sp->getDisplayString() << "||" << endl;
 }
 
 void testMixedObjects() {
@@ -569,98 +619,16 @@ void testMixedObjects() {
   }
 }
 
-void testAddLineNumber() {
-  CoupledBodyTextWithLink bodyText;
-  bodyText.setFilePrefixFromFileType(FILE_TYPE::MAIN);
-  bodyText.setFileAndAttachmentNumber(5);
-  bodyText.addLineNumber();
-}
-
-void renderingBodyText(const string &kind = MAIN) {
-  int minTarget = 49, maxTarget = 49;
-  for (const auto &file : buildFileSet(minTarget, maxTarget, kind)) {
-    CoupledBodyTextWithLink bodyText;
-    bodyText.setFilePrefixFromFileType(getFileTypeFromKind(kind));
-    bodyText.setFileAndAttachmentNumber(file);
-    bodyText.render();
-  }
-}
-
-void testRender() { renderingBodyText(); }
-
 void testNumberingStatistics() {
+  CoupledBodyTextWithLink::setReferFilePrefix(
+      getBodyTextFilePrefixFromFileType(FILE_TYPE::MAIN));
+  CoupledBodyTextWithLink::setStatisticsOutputFilePath(
+      getStatisticsOutputFilePathFromString(MAIN));
+  CoupledBodyTextWithLink::clearExistingNumberingStatistics();
   CoupledBodyTextWithLink bodyText;
   bodyText.setFilePrefixFromFileType(FILE_TYPE::MAIN);
   bodyText.setFileAndAttachmentNumber(72);
   bodyText.doStatisticsByScanningLines();
-}
-
-void testListContainer() {
-  ListContainer container("1_gen");
-  auto link = fixLinkFromMainTemplate(
-      emptyString, "80", DISPLAY_TYPE::UNHIDDEN, "菱角菱花",
-      "第80回1.1节:", "原是老奶奶（薛姨妈）使唤的", "94");
-
-  // to test link to original file
-  link =
-      fixLinkFromOriginalTemplate(originalDirForLinkFromMain, "80", "菱角菱花",
-                                  "第80回1.1节:", annotationToOriginal, "94");
-
-  LinkFromMain lfm(emptyString, link);
-  // second step of construction
-  lfm.readReferFileName(link);
-  lfm.fixFromString(link);
-  link = lfm.asString();
-
-  container.clearExistingBodyText();
-  CoupledParaHeader paraHeader;
-  paraHeader.setStartNumber(LineNumber::getStartNumber());
-  paraHeader.markAsFirstParaHeader();
-  paraHeader.fixFromTemplate();
-  container.appendParagrapHeader(paraHeader.getFixedResult());
-  container.appendParagraphInBodyText(link);
-  container.appendParagraphInBodyText("18 links are found.");
-
-  paraHeader.setCurrentParaNo(1);
-  paraHeader.markAsLastParaHeader();
-  paraHeader.fixFromTemplate();
-  paraHeader.fixFromTemplate();
-  container.appendParagrapHeader(paraHeader.getFixedResult());
-  container.setTitle("test");
-  container.setDisplayTitle("test container");
-  container.assembleBackToHTM();
-  FUNCTION_OUTPUT << "result is in file " << container.getoutputHtmlFilepath()
-                  << endl;
-}
-
-void testTableContainer() {
-  TableContainer container("2_gen");
-  container.insertFrontParagrapHeader(4, searchUnit);
-  container.appendLeftParagraphInBodyText("line1-left");
-  container.appendRightParagraphInBodyText("line1-right");
-  container.appendLeftParagraphInBodyText("line2-left");
-  // if only 3 is added, patch last right part
-  container.appendRightParagraphInBodyText(emptyString);
-  container.insertBackParagrapHeader(0, 4, searchUnit);
-  container.setTitle("content index table");
-  container.setDisplayTitle("content");
-  container.assembleBackToHTM();
-  FUNCTION_OUTPUT << "result is in file: " << container.getoutputHtmlFilepath()
-                  << endl;
-}
-
-void testContainer(int num) {
-  SEPERATE("testContainer", " started ");
-  switch (num) {
-  case 1:
-    testListContainer();
-    break;
-  case 2:
-    testTableContainer();
-    break;
-  default:
-    FUNCTION_OUTPUT << "invalid test." << endl;
-  }
 }
 
 void testFunctions(int num) {
@@ -694,12 +662,6 @@ void testFunctions(int num) {
     testMixedObjects();
     break;
   case 10:
-    testRender();
-    break;
-  case 11:
-    testAddLineNumber();
-    break;
-  case 12:
     testNumberingStatistics();
     break;
   default:

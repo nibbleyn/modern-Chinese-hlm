@@ -309,7 +309,7 @@ void CoupledBodyTextWithLink::getDisplayString(const string &originalString,
   m_poemTranslationStringTable.clear();
 }
 
-void CoupledBodyTextWithLink::render() {
+void CoupledBodyTextWithLink::render(bool removeLinkToOriginalAndAttachment) {
   ifstream infile(m_inputFile);
   if (not fileExist(infile, m_inputFile))
     return;

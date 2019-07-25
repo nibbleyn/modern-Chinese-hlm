@@ -337,6 +337,25 @@ void refreshBodyTexts(const string &kind, int minTarget, int maxTarget) {
   FUNCTION_OUTPUT << "Refreshing " << kind << " BodyTexts finished. " << endl;
 }
 
+void renderingBodyText(const string &kind, int minTarget, int maxTarget) {
+  CoupledBodyTextContainer container;
+  auto fileSet = buildFileSet(minTarget, maxTarget, kind);
+  for (const auto &file : fileSet) {
+    container.setFileType(getFileTypeFromKind(kind));
+    container.setFileAndAttachmentNumber(file);
+    container.dissembleFromHTM();
+  }
+  for (const auto &file : fileSet) {
+    CoupledBodyTextWithLink bodyText;
+    bodyText.setFilePrefixFromFileType(getFileTypeFromKind(kind));
+    bodyText.setFileAndAttachmentNumber(file);
+    bodyText.render();
+    FUNCTION_OUTPUT << "Rendering " << kind << " BodyTexts finished. " << endl;
+    FUNCTION_OUTPUT << "Files are under "
+                    << bodyText.getOutputBodyTextFilePath() << endl;
+  }
+}
+
 void refreshAttachmentBodyTexts(int minTarget, int maxTarget, int minAttachNo,
                                 int maxAttachNo) {
   CoupledBodyTextContainer container;

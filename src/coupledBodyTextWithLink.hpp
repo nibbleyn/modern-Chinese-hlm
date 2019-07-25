@@ -70,7 +70,7 @@ public:
 
   // used by tools
   void printStringInLines();
-  void render();
+  void render(bool removeLinkToOriginalAndAttachment = false);
   void removePersonalCommentsOverNumberedFiles();
 
 private:

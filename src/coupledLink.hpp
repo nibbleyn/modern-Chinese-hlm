@@ -123,7 +123,6 @@ public:
   }
 
 protected:
-  string getKey() { return m_usedKey; }
   void readKey(const string &linkString);
   string getEnclosedStringOfLinkToOrigin() {
     if (m_linkPtrToOrigin != nullptr)

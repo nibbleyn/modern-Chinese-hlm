@@ -83,10 +83,13 @@ int main(int argc, char **argv) {
     appendReverseLinksForMain();
     break;
   case 22:
-    testFunctions(9);
+    testFunctions(10);
     break;
   case 23:
     tools(15);
+    break;
+  case 24:
+    renderingBodyText();
     break;
   default:
     FUNCTION_OUTPUT << "nothing gets executed." << endl;

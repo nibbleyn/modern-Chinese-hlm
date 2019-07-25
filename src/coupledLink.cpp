@@ -74,7 +74,7 @@ string CoupledLink::asString(bool ignoreOriginalPart) {
     part0 += displaySpace;
   // key
   if (m_type != LINK_TYPE::ATTACHMENT and not m_usedKey.empty())
-    part0 += titleStartChars + getKey() + titleEndChars + displaySpace;
+    part0 += titleStartChars + m_usedKey + titleEndChars + displaySpace;
   part0 += referFileMiddleChar;
   // default file name for same page
   string part1{emptyString}, part2{emptyString}, part3{emptyString};

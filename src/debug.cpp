@@ -99,6 +99,7 @@ void CoupledBodyTextWithLink::printObjectTypeToOffset() {
     METHOD_OUTPUT << element.first << displaySpace << element.second << endl;
   }
 }
+
 void CoupledBodyTextWithLink::printLinkStringTable() {
   if (not m_linkStringTable.empty())
     METHOD_OUTPUT << "m_linkStringTable:" << endl;
@@ -138,6 +139,24 @@ void CoupledBodyTextWithLink::printPoemTranslationStringTable() {
     METHOD_OUTPUT << "no entry in m_poemTranslationStringTable." << endl;
   for (const auto &element : m_poemTranslationStringTable) {
     METHOD_OUTPUT << element.first << displaySpace << element.second << endl;
+  }
+}
+
+void CoupledBodyTextWithLink::printStringInLines() {
+  getLinesofReferencePage();
+  setInputOutputFiles();
+  //  ifstream infile(m_inputFile);
+  ifstream checkFile(TO_CHECK_FILE);
+  if (not fileExist(checkFile, m_inputFile))
+    return;
+  string line;
+  while (!checkFile.eof()) {
+    getline(checkFile, line);
+    if (debug >= LOG_INFO) {
+      METHOD_OUTPUT << line << endl;
+      METHOD_OUTPUT << utf8length(line) << endl;
+      METHOD_OUTPUT << getLinesOfDisplayText(line) << endl;
+    }
   }
 }
 

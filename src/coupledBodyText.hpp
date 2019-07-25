@@ -49,6 +49,7 @@ public:
       METHOD_OUTPUT << "output file is: " << m_outputFile << endl;
     }
   }
+  string getOutputBodyTextFilePath() { return m_outputFile; }
 
   void setFileAndAttachmentNumber(const string &file, int attachNo = 0) {
     m_file = file;
