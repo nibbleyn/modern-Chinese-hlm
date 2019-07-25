@@ -1,0 +1,93 @@
+
+插入图片(WHOLE PAGE)
+<style>* { box-sizing: border-box;}.column1 { float: left; width: 100%; padding: 5px;}.column75 { float: left; width: 75%; padding: 5px;}.column70 { float: left; width: 70%; padding: 5px;}.column65 { float: left; width: 65%; padding: 5px;}.column60 { float: left; width: 60%; padding: 5px;}.column50 { float: left; width: 50%; padding: 5px;}.column40 { float: left; width: 40%; padding: 5px;}.column35 { float: left; width: 35%; padding: 5px;}.column30 { float: left; width: 30%; padding: 5px;} .column25 { float: left; width: 25%; padding: 5px;} .column20 { float: left; width: 20%; padding: 5px;}  .row::after { content: ""; clear: both; display: table;}figcaption {text-align:center;} div {text-align:center;}</style><style type="text/css">a {text-decoration: none}</style>
+
+选取其中任何组合编成一行，作为一页显示
+
+<div unhidden class="row" id="imgGrp1.2">
+<div id="nwbt.jpg" class="column50"><img src="pictures\nwbt.jpg" style="width:100%"><figcaption>nwbt</figcaption></div>
+<div id="fg.jpg" class="column50"><img src="pictures\fg.jpg" style="width:100%"><figcaption>fg</figcaption> </div>
+</div>
+
+
+<div unhidden class="row" id="imgGrp1.0">
+<div id="nwbt.jpg" class="column30"><img src="pictures\nwbt.jpg" style="width:100%"><figcaption>nwbt</figcaption></div>
+<div id="fg.jpg" class="column35"><img src="pictures\fg.jpg" style="width:100%"><figcaption>fg</figcaption> </div>
+<div id="lmm.jpg" class="column35"><img src="pictures\lmm.jpg" style="width:100%"><figcaption>lmm</figcaption></div>
+</div>
+
+<div id="lmm.jpg" class="column40"><img src="pictures\lmm.jpg" style="width:100%"><figcaption>lmm</figcaption> <img src="pictures\jdr.jpg" style="width:100%"><figcaption>jdr</figcaption></div>
+
+link to image---> 统一改成
+
+<a title="IMAGE" href="#imgGrp1.0">annotation</a>
+<a title="IMAGE" href="#nwbt.jpg">（图示：女娲补天）</a>
+<a unhidden title="IMAGE" href="#tcf.jpg">（图示：探春房）</a>
+<a unhidden title="IMAGE" href="a019.htm#tcf.jpg">（图示：探春房）</a>
+
+诗歌正文：
+<strong unhidden>
+诗歌译文字体（里面只可以内嵌有link，但是link的annotation里面不能再有注释。所有嵌套只允许二级）：
+</strong>&nbsp;&nbsp;&nbsp;&nbsp;<samp unhidden font style="font-size: 12pt; font-family: 宋体; color:#ff00ff"></samp> 
+</strong>&nbsp;&nbsp;&nbsp;&nbsp;<samp unhidden font style="font-size: 12pt; font-family: 宋体; color:#ff00ff"><a unhidden title="key" href="a019.htm#P94">annotation</a></samp> 
+
+隔段
+XXX<br>
+<br>
+ XXX
+
+ XXX</u><br>
+<br>
+ <u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">XXX
+
+
+可隐藏斜体注释 （里面只可以内嵌有link，但是link的annotation里面不能再有注释。所有嵌套只允许二级）：
+（<cite unhidden></cite>）
+（<cite unhidden><a unhidden title="key" href="a019.htm#P94">annotation</a></cite>）
+
+可隐藏下划线注释（里面只可以内嵌有link，但是link的annotation里面不能再有注释。所有嵌套只允许二级）：
+（<u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4"></u>）
+可隐藏下划线注释加引用：
+（<u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4"><a unhidden title="key" href="a019.htm#P94">annotation</a></u>）
+
+（<u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4"><a unhidden title="key" href="#P94">annotation</a></u>）
+（<u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4"><a unhidden title="key" href="JPM\d019.htm#P94">annotation</a></u>）
+
+同一章节内部对其他处引用 （annotation里面只可以内嵌有注释。所有嵌套只允许二级）：
+<a unhidden title="key" href="#P94">annotation</a>
+<a title="key" href="#P94">annotation</a>
+正文原文对其他处引用：
+<a title="key" href="a019.htm#P94">annotation</a>
+可隐藏注释引用（key必须在引用段落并引用章只出现一次，或是第一次，重了那里的key没关系，P94和不用修改，自动fix）：
+<a unhidden title="key" href="a019.htm#P94">annotation</a>
+正文对附件引用（必须从1开始）：
+（<a unhidden href="attachment\b019_1.htm">你</a>）
+附件引用原文对其他处（如果使用fix，则可以直接用前面正文里面的，忽略..\）：
+<a title="key" href="..\a019.htm#P94">从“你们”到“你”</a>
+附件对附件引用：
+<a href="b019_1.htm">title</a>
+
+正文对金瓶梅引用：
+（<a unhidden title="key" href="JPM\d019.htm#P94">annotation</a>）
+（<a title="key" href="JPM\d019.htm#P94">annotation</a>）
+
+金瓶梅编辑：
+正文原文对其他处引用：
+<a title="key" href="d019.htm#P94">annotation</a>
+<a unhidden title="key" href="d019.htm#P94">annotation</a>
+
+
+附件插入图片
+<img src="..\pictures\by-1.jpg" align="right" width="500">
+
+翻译稿分段：
+<b unhidden> 第1段 </b><a unhidden name= "90" href="#91">v向下</a>&nbsp;&nbsp;&nbsp;&nbsp;<a unhidden name= "top" href="#bottom">页面底部->||</a><hr color="#F0BEC0">
+
+<hr color="#F0BEC0"><b unhidden> 第2段 </b><a unhidden name= "91" href="#92">向下</a>&nbsp;&nbsp;&nbsp;&nbsp;<a unhidden name= "89" href="#90">向上</a><hr color="#F0BEC0">
+
+原稿分段：
+<hr color="#004040">
+
+<b unhidden> 第1段 </b><a unhidden name= "90" href="#91">v向下</a>&nbsp;&nbsp;&nbsp;&nbsp;<a unhidden name= "top" href="#bottom">页面底部->||</a><hr color="#004040">
+
+<hr color="#004040"><b unhidden> 第2段 </b><a unhidden name= "91" href="#92">向下</a>&nbsp;&nbsp;&nbsp;&nbsp;<a unhidden name= "89" href="#90">向上</a><hr color="#004040">
