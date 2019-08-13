@@ -9,15 +9,14 @@ int debug = LOG_INFO;
 // int debug = LOG_EXCEPTION;
 
 int main(int argc, char **argv) {
-
   // change this number to run different functions
-  int num = 22;
+  int num = 1;
   switch (num) {
   case 1:
-    //    search(R"(枕)");
+    //    search(R"(枕)", SEARCH_IN_MAIN, true);
     //    search(R"(邢夫人)", SEARCH_IN_ORIGINAL);
     //    search(R"(闲)", SEARCH_IN_JPM);
-    search(R"(鸳鸯)", SEARCH_IN_MAIN, true);
+    search(R"(砌)");
     break;
   case 2:
     validateMainHtmls();

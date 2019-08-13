@@ -116,7 +116,7 @@ void Link::needToChange() {
   }
 }
 
-string Link::getWholeString() { return m_fullString; }
+string Link::getFormatedFullString() { return m_fullString; }
 
 /**
  * must ensure this is not a lineNumber string, which is a normal link also

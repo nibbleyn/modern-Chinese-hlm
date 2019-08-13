@@ -326,3 +326,10 @@ void CoupledBodyTextWithLink::addLineNumber() {
   if (debug >= LOG_INFO)
     METHOD_OUTPUT << "numbering finished." << endl;
 }
+
+void CoupledBodyTextWithLink::appendReverseLinks() {
+  PersonalComment obj("");
+  obj.setBodytext(R"(邢夫人)");
+  obj.hide();
+  cout << obj.getFormatedFullString() << endl;
+};

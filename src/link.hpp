@@ -125,7 +125,7 @@ public:
   }
   void setTypeThruFileNamePrefix(const string &link);
 
-  string getWholeString() override;
+  string getFormatedFullString() override;
   size_t loadFirstFromContainedLine(const string &containedLine,
                                     size_t after = 0) override;
 

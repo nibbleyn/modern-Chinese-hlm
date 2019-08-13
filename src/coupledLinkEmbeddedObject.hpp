@@ -7,7 +7,7 @@ public:
   string getStartTag() override { return personalCommentStartChars; }
   string getEndTag() override { return personalCommentEndChars; }
   string getName() override { return nameOfPersonalCommentType; }
-  string getWholeString() override;
+  string getFormatedFullString() override;
   size_t loadFirstFromContainedLine(const string &containedLine,
                                     size_t after = 0) override;
 
@@ -21,7 +21,7 @@ public:
   string getStartTag() override { return poemTranslationBeginChars; }
   string getEndTag() override { return poemTranslationEndChars; }
   string getName() override { return nameOfPoemTranslationType; }
-  string getWholeString() override;
+  string getFormatedFullString() override;
   size_t loadFirstFromContainedLine(const string &containedLine,
                                     size_t after = 0) override;
 

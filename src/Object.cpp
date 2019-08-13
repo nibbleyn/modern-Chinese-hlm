@@ -2,6 +2,20 @@
 
 extern int debug;
 
+void replaceDisplayType(string &objStr, const string &beginTag,
+                        DISPLAY_TYPE type) {
+  if (type == DISPLAY_TYPE::UNHIDDEN)
+    return;
+
+  string displayTag = beginTag + displaySpace + unhiddenDisplayProperty;
+  auto displayTagBegin = objStr.find(displayTag);
+  if (displayTagBegin != string::npos)
+    objStr.replace(displayTagBegin, displayTag.length(),
+                   (type == DISPLAY_TYPE::DIRECT)
+                       ? beginTag
+                       : beginTag + displaySpace + hiddenDisplayProperty);
+}
+
 string Object::typeSetAsString(TypeSet typeSet) {
   string result;
   for (const auto &type : typeSet) {
@@ -64,6 +78,7 @@ string Object::getStringWithTags() {
 string Object::getStringFromTemplate(const string &templateStr,
                                      const string &defaultBodyText) {
   string result = templateStr;
+  replaceDisplayType(result, getStartTag(), m_displayType);
   replacePart(result, defaultBodyText, m_bodyText);
   return result;
 }

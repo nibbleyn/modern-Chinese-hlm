@@ -262,7 +262,8 @@ void CoupledBodyTextWithLink::getDisplayString(const string &originalString,
       // so require the string be fixed before
       endOfSubStringOffset = offset + current->length();
       if (debug >= LOG_INFO) {
-        METHOD_OUTPUT << "whole string: " << current->getWholeString() << endl;
+        METHOD_OUTPUT << "whole string: " << current->getFormatedFullString()
+                      << endl;
         METHOD_OUTPUT << "display as:" << current->getDisplayString() << "||"
                       << endl;
         METHOD_OUTPUT << current->length() << displaySpace

@@ -58,6 +58,8 @@ static const string nameOfTextType = R"(TEXT)";
 static const string nameOfCitationType = R"(CITATION)";
 
 enum class DISPLAY_TYPE { DIRECT, HIDDEN, UNHIDDEN };
+void replaceDisplayType(string &objStr, const string &beginTag,
+                        DISPLAY_TYPE type);
 
 class Object {
 public:
@@ -75,20 +77,23 @@ public:
   virtual string getName() = 0;
   virtual size_t loadFirstFromContainedLine(const string &containedLine,
                                             size_t after = 0) = 0;
-  virtual string getWholeString() = 0;
+  virtual string getFormatedFullString() = 0;
   string getDisplayString() {
     if (m_displayType == DISPLAY_TYPE::HIDDEN)
       return emptyString;
     else
       return m_displayText;
   };
+  void setBodytext(const string &text) { m_bodyText = text; }
+
   size_t displaySize() { return getDisplayString().length(); };
   size_t length() {
-    if (m_fullString.length() != getWholeString().length()) {
+    if (m_fullString.length() != getFormatedFullString().length()) {
       METHOD_OUTPUT << " size not match: " << m_fullString.length() << " vs "
-                    << getWholeString().length() << endl;
+                    << getFormatedFullString().length() << endl;
       METHOD_OUTPUT << "m_fullString: " << m_fullString << endl;
-      METHOD_OUTPUT << "getWholeString(): " << getWholeString() << endl;
+      METHOD_OUTPUT << "getFormatedFullString(): " << getFormatedFullString()
+                    << endl;
     }
     return m_fullString.length();
   }
@@ -128,7 +133,7 @@ public:
   string getStartTag() override { return space; }
   string getEndTag() override { return emptyString; }
   string getName() override { return nameOfSpaceType; }
-  string getWholeString() override { return space; };
+  string getFormatedFullString() override { return space; };
   size_t loadFirstFromContainedLine(const string &containedLine,
                                     size_t after = 0) override;
 };
@@ -139,7 +144,7 @@ public:
   string getStartTag() override { return poemBeginChars; }
   string getEndTag() override { return poemEndChars; }
   string getName() override { return nameOfPoemType; }
-  string getWholeString() override { return getStringWithTags(); }
+  string getFormatedFullString() override { return getStringWithTags(); }
   size_t loadFirstFromContainedLine(const string &containedLine,
                                     size_t after = 0) override;
 };

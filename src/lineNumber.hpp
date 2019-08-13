@@ -70,15 +70,15 @@ public:
   LineNumberPlaceholderLink() = default;
   LineNumberPlaceholderLink(const LineNumber &ln)
       : m_paraLineNumber(ln.getParaNumber(), ln.getlineNumber()) {
-    m_fullString = getWholeString();
+    m_fullString = getFormatedFullString();
   }
   LineNumberPlaceholderLink(int paraNumber, int lineNumber)
       : m_paraLineNumber(paraNumber, lineNumber) {
-    m_fullString = getWholeString();
+    m_fullString = getFormatedFullString();
   }
   LineNumberPlaceholderLink(const string &linkString) {
     m_paraLineNumber.readFromString(linkString);
-    m_fullString = getWholeString();
+    m_fullString = getFormatedFullString();
   }
   bool isPartOfParagraphHeader() {
     return m_paraLineNumber.isParagraphHeader();
@@ -89,7 +89,7 @@ public:
   string getStartTag() override { return m_realStartTag; }
   string getEndTag() override { return linkEndChars; }
   string getName() override { return nameOfLineNumberType; }
-  string getWholeString() override;
+  string getFormatedFullString() override;
   size_t loadFirstFromContainedLine(const string &containedLine,
                                     size_t after = 0) override;
   void hide() {

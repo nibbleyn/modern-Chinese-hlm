@@ -123,7 +123,7 @@ size_t LineNumberPlaceholderLink::loadFirstFromContainedLine(
 static const string inBetweenTwoParas = R"(" href=")";
 static const string lastPara = R"(<a unhidden id="bottom" href="#top">)";
 
-string LineNumberPlaceholderLink::getWholeString() {
+string LineNumberPlaceholderLink::getFormatedFullString() {
   if (m_paraLineNumber.isPureTextOnly())
     return emptyString;
   if (m_paraLineNumber.isParagraphHeader()) {

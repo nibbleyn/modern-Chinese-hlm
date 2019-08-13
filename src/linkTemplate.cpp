@@ -1,26 +1,6 @@
 #include "link.hpp"
 extern int debug;
 
-/**
- * there is only one template for all display types supported
- * so this function is to change it into right hidden or unhidden type
- * @param linkString the link with <a unhidden" to replace
- * @param type the display type of the link, visible or not
- * @return the replaced link accordingly
- */
-void replaceDisplayLink(string &linkString, DISPLAY_TYPE type) {
-  if (type == DISPLAY_TYPE::UNHIDDEN)
-    return;
-
-  string displayTag = linkStartChars + displaySpace + unhiddenDisplayProperty;
-  auto displayTagBegin = linkString.find(displayTag);
-  linkString.replace(displayTagBegin, displayTag.length(),
-                     (type == DISPLAY_TYPE::DIRECT)
-                         ? linkStartChars
-                         : linkStartChars + displaySpace +
-                               hiddenDisplayProperty);
-}
-
 static constexpr const char *linkToImageFile =
     R"(<a unhidden title="IMAGE" href="XX#YY">↑（图示：ZZ）</a>)";
 static constexpr const char *linkToAttachmentFile =
@@ -66,7 +46,7 @@ string fixLinkFromSameFileTemplate(DISPLAY_TYPE type, const string &key,
                                    const string &annotation,
                                    const string &referPara) {
   string link = linkToSameFile;
-  replaceDisplayLink(link, type);
+  replaceDisplayType(link, linkStartChars, type);
   if (referPara.empty()) {
     replacePart(link, defaultWholeReferPara, emptyString);
   } else
@@ -105,7 +85,7 @@ string fixLinkFromMainTemplate(const string &path, const string &filename,
                                const string &citation, const string &annotation,
                                const string &referPara) {
   string link = linkToMainFile;
-  replaceDisplayLink(link, type);
+  replaceDisplayType(link, linkStartChars, type);
   replacePart(link, defaultPath, path);
   replacePart(link, defaultMainFilename, filename);
   if (referPara.empty()) {
@@ -131,7 +111,7 @@ string fixLinkFromReverseLinkTemplate(const string &filename, DISPLAY_TYPE type,
                                       const string &annotation,
                                       const string &referPara) {
   string link = reverseLinkToMainFile;
-  replaceDisplayLink(link, type);
+  replaceDisplayType(link, linkStartChars, type);
   replacePart(link, defaultMainFilename, filename);
   if (referPara.empty()) {
     replacePart(link, defaultWholeReferPara, emptyString);

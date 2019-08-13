@@ -32,7 +32,7 @@ string scanForSubObjects(const string &original, const string &fromFile,
   return result;
 }
 
-string CoupledLink::getWholeString() { return asString(); }
+string CoupledLink::getFormatedFullString() { return asString(); }
 
 /**
  * must ensure this is not a lineNumber string, which is a normal link also
@@ -100,13 +100,13 @@ string CoupledLink::asString(bool ignoreOriginalPart) {
   if (isReverseLink()) {
     part7 = downArrow;
     if (m_referSection.isValid())
-      part7 += m_referSection.getWholeString();
+      part7 += m_referSection.getFormatedFullString();
   } else {
     if (isTargetToOtherMainHtm() or isTargetToOriginalHtm() or
         isTargetToJPMHtm())
       part7 = upArrow;
     if (m_type != LINK_TYPE::ATTACHMENT and not m_usedKey.empty())
-      part7 += m_referSection.getWholeString();
+      part7 += m_referSection.getFormatedFullString();
   }
   // annotation
   string part8 = getAnnotation() + linkEndChars;

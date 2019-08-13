@@ -148,7 +148,7 @@ void CoupledBodyText::numberingLine(ofstream &outfile) {
     }
     removeNbspsAndSpaces();
     LineNumberPlaceholderLink newLink(newLn);
-    outfile << newLink.getWholeString() << doubleSpace << displaySpace
+    outfile << newLink.getFormatedFullString() << doubleSpace << displaySpace
             << m_inLine << endl;
   } else
     outfile << m_inLine << endl;

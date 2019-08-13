@@ -34,7 +34,7 @@ void testLineHeader(string lnStr) {
   FUNCTION_OUTPUT << "is paragraph header? " << std::boolalpha
                   << ln.isPartOfParagraphHeader() << endl;
   FUNCTION_OUTPUT << "whole string: " << endl;
-  FUNCTION_OUTPUT << ln.getWholeString() << endl;
+  FUNCTION_OUTPUT << ln.getFormatedFullString() << endl;
   FUNCTION_OUTPUT << "display as:" << ln.getDisplayString() << "||" << endl;
   if (not ln.isPartOfParagraphHeader()) {
     if (not ln.isPureTextOnly()) {
@@ -56,7 +56,7 @@ void testLineHeaderFromContainedLine(string containedLine) {
   FUNCTION_OUTPUT << "is paragraph header? " << std::boolalpha
                   << ln.isPartOfParagraphHeader() << endl;
   FUNCTION_OUTPUT << "whole string: " << endl;
-  FUNCTION_OUTPUT << ln.getWholeString() << endl;
+  FUNCTION_OUTPUT << ln.getFormatedFullString() << endl;
   FUNCTION_OUTPUT << "display as:" << ln.getDisplayString() << "||" << endl;
   if (not ln.isPartOfParagraphHeader()) {
     if (not ln.isPureTextOnly()) {
@@ -77,7 +77,7 @@ void testParagraphHeader(string lnStr) {
   FUNCTION_OUTPUT << "is paragraph header? " << std::boolalpha
                   << ln.isPartOfParagraphHeader() << endl;
   FUNCTION_OUTPUT << "whole string: " << endl;
-  FUNCTION_OUTPUT << ln.getWholeString() << endl;
+  FUNCTION_OUTPUT << ln.getFormatedFullString() << endl;
   FUNCTION_OUTPUT << "display as:" << ln.getDisplayString() << "||" << endl;
   if (not ln.isPartOfParagraphHeader()) {
     if (not ln.isPureTextOnly()) {
@@ -99,7 +99,7 @@ void testParagraphHeaderFromContainedLine(string containedLine) {
   FUNCTION_OUTPUT << "is paragraph header? " << std::boolalpha
                   << ln.isPartOfParagraphHeader() << endl;
   FUNCTION_OUTPUT << "whole string: " << endl;
-  FUNCTION_OUTPUT << ln.getWholeString() << endl;
+  FUNCTION_OUTPUT << ln.getFormatedFullString() << endl;
   FUNCTION_OUTPUT << "display as:" << ln.getDisplayString() << "||" << endl;
   if (not ln.isPartOfParagraphHeader()) {
     if (not ln.isPureTextOnly())
@@ -511,7 +511,7 @@ void testPoem() {
   FUNCTION_OUTPUT << "length: " << poem1->length()
                   << " display size: " << poem1->displaySize() << endl;
   FUNCTION_OUTPUT << "whole string: " << endl;
-  FUNCTION_OUTPUT << poem1->getWholeString() << endl;
+  FUNCTION_OUTPUT << poem1->getFormatedFullString() << endl;
   FUNCTION_OUTPUT << "display as:" << endl;
   FUNCTION_OUTPUT << poem1->getDisplayString() << "||" << endl;
   poemStr =
@@ -523,7 +523,7 @@ void testPoem() {
   FUNCTION_OUTPUT << "length: " << poem1->length()
                   << " display size: " << poem1->displaySize() << endl;
   FUNCTION_OUTPUT << "whole string: " << endl;
-  FUNCTION_OUTPUT << poem1->getWholeString() << endl;
+  FUNCTION_OUTPUT << poem1->getFormatedFullString() << endl;
   FUNCTION_OUTPUT << "display as:" << endl;
   FUNCTION_OUTPUT << poem1->getDisplayString() << "||" << endl;
   unique_ptr<Poem> poem2 = make_unique<Poem>();
@@ -535,7 +535,7 @@ void testPoem() {
   FUNCTION_OUTPUT << "length: " << poem2->length()
                   << " display size: " << poem2->displaySize() << endl;
   FUNCTION_OUTPUT << "whole string: " << endl;
-  FUNCTION_OUTPUT << poem2->getWholeString() << endl;
+  FUNCTION_OUTPUT << poem2->getFormatedFullString() << endl;
   FUNCTION_OUTPUT << "display as:" << endl;
   FUNCTION_OUTPUT << poem2->getDisplayString() << "||" << endl;
 }
@@ -552,7 +552,7 @@ void testSpace() {
   FUNCTION_OUTPUT << "length: " << sp->length()
                   << " display size: " << sp->displaySize() << endl;
   FUNCTION_OUTPUT << "whole string: " << endl;
-  FUNCTION_OUTPUT << sp->getWholeString() << endl;
+  FUNCTION_OUTPUT << sp->getFormatedFullString() << endl;
   FUNCTION_OUTPUT << "display as:" << sp->getDisplayString() << "||" << endl;
 }
 

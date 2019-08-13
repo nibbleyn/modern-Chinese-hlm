@@ -50,7 +50,7 @@ void CoupledBodyTextWithLink::fixLinksWithinOneLine(FileSet referMainFiles,
         auto orglinkBegin = m_inLine.find(link, endOfProcessedSubString);
         m_inLine.replace(orglinkBegin, link.length(), m_linkPtr->asString());
         endOfProcessedSubString =
-            orglinkBegin + m_linkPtr->getWholeString().length();
+            orglinkBegin + m_linkPtr->getFormatedFullString().length();
       }
     }
     if (m_linkPtr->isTargetToOtherMainHtm() and
@@ -94,7 +94,7 @@ void CoupledBodyTextWithLink::fixLinksWithinOneLine(FileSet referMainFiles,
           auto orglinkBegin = m_inLine.find(link, endOfProcessedSubString);
           m_inLine.replace(orglinkBegin, link.length(), m_linkPtr->asString());
           endOfProcessedSubString =
-              orglinkBegin + m_linkPtr->getWholeString().length();
+              orglinkBegin + m_linkPtr->getFormatedFullString().length();
         }
       }
     }
@@ -112,7 +112,7 @@ void CoupledBodyTextWithLink::fixLinksWithinOneLine(FileSet referMainFiles,
             SEPERATE("isTargetToJPMHtm", m_inLine + "\n" + link);
           m_inLine.replace(orglinkBegin, link.length(), m_linkPtr->asString());
           endOfProcessedSubString =
-              orglinkBegin + m_linkPtr->getWholeString().length();
+              orglinkBegin + m_linkPtr->getFormatedFullString().length();
         }
       }
     }
@@ -130,7 +130,7 @@ void CoupledBodyTextWithLink::fixLinksWithinOneLine(FileSet referMainFiles,
             SEPERATE("isTargetToOriginalHtm", m_inLine + "\n" + link);
           m_inLine.replace(orglinkBegin, link.length(), m_linkPtr->asString());
           endOfProcessedSubString =
-              orglinkBegin + m_linkPtr->getWholeString().length();
+              orglinkBegin + m_linkPtr->getFormatedFullString().length();
         }
       }
     }

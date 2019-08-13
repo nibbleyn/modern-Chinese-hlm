@@ -412,7 +412,7 @@ void CoupledBodyText::fixPersonalView() {
         removeOldLineNumber();
       }
       removeNbspsAndSpaces();
-      m_inLine = ln.getWholeString() + doubleSpace + displaySpace +
+      m_inLine = ln.getFormatedFullString() + doubleSpace + displaySpace +
                  personalCommentStartChars + personalCommentStartRestChars +
                  endOfBeginTag + m_inLine;
       if (personalCommentEnd != string::npos) {

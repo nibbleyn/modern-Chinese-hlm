@@ -1,11 +1,11 @@
 #include "coupledLinkEmbeddedObject.hpp"
 
-static constexpr const char *defaultTranslation = R"(XX)";
+static constexpr const char *defaultComment = R"(XX)";
 static const string personalCommentTemplate =
     R"(<u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">XX</u>)";
 
-string PersonalComment::getWholeString() {
-  return getStringFromTemplate(personalCommentTemplate, defaultTranslation);
+string PersonalComment::getFormatedFullString() {
+  return getStringFromTemplate(personalCommentTemplate, defaultComment);
 }
 
 size_t PersonalComment::loadFirstFromContainedLine(const string &containedLine,
@@ -16,12 +16,13 @@ size_t PersonalComment::loadFirstFromContainedLine(const string &containedLine,
   return pos;
 }
 
-static constexpr const char *defaultComment = R"(XX)";
+static constexpr const char *defaultTranslation = R"(XX)";
 static const string poemTranslationTemplate =
     R"(<samp unhidden font style="font-size: 12pt; font-family: 宋体; color:#ff00ff">XX</samp>)";
 
-string PoemTranslation::getWholeString() {
-  return getStringFromTemplate(poemTranslationTemplate, defaultComment);
+string PoemTranslation::getFormatedFullString() {
+  return m_fullString =
+             getStringFromTemplate(poemTranslationTemplate, defaultComment);
 }
 
 size_t PoemTranslation::loadFirstFromContainedLine(const string &containedLine,
@@ -35,8 +36,8 @@ size_t PoemTranslation::loadFirstFromContainedLine(const string &containedLine,
 static const string commentTemplate =
     R"(<cite unhidden>XX</cite>)";
 
-string Comment::getWholeString() {
-  return getStringFromTemplate(commentTemplate, defaultComment);
+string Comment::getFormatedFullString() {
+  return m_fullString = getStringFromTemplate(commentTemplate, defaultComment);
 }
 
 size_t Comment::loadFirstFromContainedLine(const string &containedLine,

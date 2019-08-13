@@ -8,7 +8,7 @@ public:
   string getStartTag() override { return commentBeginChars; }
   string getEndTag() override { return commentEndChars; }
   string getName() override { return nameOfCommentType; }
-  string getWholeString() override;
+  string getFormatedFullString() override;
   size_t loadFirstFromContainedLine(const string &containedLine,
                                     size_t after = 0) override;
 
@@ -40,7 +40,7 @@ public:
   string getStartTag() override { return citationStartChars; }
   string getEndTag() override { return citationEndChars; }
   string getName() override { return nameOfCitationType; }
-  string getWholeString() override { return getStringWithTags(); }
+  string getFormatedFullString() override { return getStringWithTags(); }
   size_t loadFirstFromContainedLine(const string &containedLine,
                                     size_t after = 0) override;
 
@@ -98,7 +98,7 @@ public:
 
   string getStartTag() override { return linkStartChars; }
   string getEndTag() override { return linkEndChars; }
-  string getWholeString() override;
+  string getFormatedFullString() override;
   size_t loadFirstFromContainedLine(const string &containedLine,
                                     size_t after = 0) override;
   string asString(bool ignoreOriginalPart = false);

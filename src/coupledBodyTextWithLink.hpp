@@ -51,7 +51,7 @@ public:
     m_forceRemoveDuplicatedOriginalLinks = true;
   }
   void addLineNumber();
-  void appendReverseLinks(){};
+  void appendReverseLinks();
   void doStatisticsByScanningLines(bool overFixedBodyText = false);
 
   // used for link-fixing
