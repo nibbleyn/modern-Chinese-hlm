@@ -328,8 +328,67 @@ void CoupledBodyTextWithLink::addLineNumber() {
 }
 
 void CoupledBodyTextWithLink::appendReverseLinks() {
-  PersonalComment obj("");
-  obj.setBodytext(R"(邢夫人)");
-  obj.hide();
-  cout << obj.getFormatedFullString() << endl;
+  ifstream infile(m_inputFile);
+  if (not fileExist(infile, m_inputFile))
+    return;
+  ofstream outfile(m_outputFile);
+
+  while (!infile.eof()) {
+    getline(infile, m_inLine);
+    if (debug >= LOG_INFO) {
+      METHOD_OUTPUT << m_inLine << endl;
+    }
+    LineNumberPlaceholderLink ln;
+    ln.loadFirstFromContainedLine(m_inLine);
+    if (ln.isPartOfParagraphHeader() or not ln.get().valid()) {
+      outfile << m_inLine << endl;
+      continue;
+    }
+    auto pln = ln.get().getParaLineNumber();
+    auto linkSet =
+        LinkFromMain::getLinkDetailSet(getFileAndAttachmentNumber(), pln);
+    if (not linkSet.empty()) {
+      string toAddBodyText = returnLinkSetIndicator;
+      bool comma{false};
+      for (const auto &element :
+           LinkFromMain::getLinkDetailSet(getFileAndAttachmentNumber(), pln)) {
+        if (comma) {
+          toAddBodyText += textSeparator;
+        }
+        AttachmentNumber num = element.first.first;
+        ParaLineNumber paraLine = element.first.second;
+        string expectedSection = Citation::getExpectedSection(num, paraLine);
+        LineNumber ln(paraLine.first, paraLine.second);
+        toAddBodyText += fixLinkFromReverseLinkTemplate(
+            getFileNameFromAttachmentNumber(referFilePrefix, num),
+            DISPLAY_TYPE::UNHIDDEN, expectedSection, ln.asString(),
+            emptyString);
+        comma = true;
+      }
+      PersonalComment obj("");
+      obj.setBodytext(toAddBodyText);
+      //  obj.hide();
+      bool reverseLinkSetExisted{false};
+      auto lastPersonalCommentBegin = m_inLine.rfind(obj.getStartTag());
+      PersonalComment lastPersonalComment("");
+      if (lastPersonalCommentBegin != string::npos) {
+        lastPersonalComment.loadFirstFromContainedLine(
+            m_inLine, lastPersonalCommentBegin);
+        if (lastPersonalComment.isBodytextContains(returnLinkSetIndicator))
+          reverseLinkSetExisted = true;
+      }
+      if (reverseLinkSetExisted)
+        m_inLine.replace(lastPersonalCommentBegin, lastPersonalComment.length(),
+                         obj.getFormatedFullString());
+      else {
+        auto lastBr = m_inLine.find(brTab);
+        m_inLine = m_inLine.substr(0, lastBr) + bracketStartChars +
+                   obj.getFormatedFullString() + bracketEndChars + brTab;
+      }
+      if (debug >= LOG_INFO) {
+        METHOD_OUTPUT << "after: " << m_inLine << endl;
+      }
+    }
+    outfile << m_inLine << endl;
+  }
 };

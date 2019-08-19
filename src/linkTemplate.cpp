@@ -15,7 +15,7 @@ static constexpr const char *linkToJPMFile =
     R"(<a unhidden title="QQ" href="PPdXXX.htm#YY">↑<sub hidden>WW</sub>ZZ</a>)";
 // now only support reverse link from main back to main, no key required
 static constexpr const char *reverseLinkToMainFile =
-    R"(<a unhidden href="a0XX.htm#YY">↓<sub>WW</sub>引用</a>)";
+    R"(<a unhidden href="a0XX.htm#YY">↓<sub>WW</sub></a>)";
 
 static constexpr const char *defaultPath = R"(PP)";
 static constexpr const char *defaultMainFilename = R"(XX)";
@@ -27,6 +27,7 @@ static constexpr const char *defaultReferPara = R"(YY)";
 static constexpr const char *defaultWholeReferPara = R"(#YY)";
 static constexpr const char *defaultCitation = R"(WW)";
 static constexpr const char *defaultWholeCitation = R"(↑<sub hidden>WW</sub>)";
+static constexpr const char *defaultEndOfReverseCitation = R"(</sub>)";
 static constexpr const char *defaultAnnotation = R"(ZZ)";
 static constexpr const char *defaultImageAnnotation = R"(（图示：ZZ）)";
 
@@ -108,8 +109,8 @@ string fixLinkFromMainTemplate(const string &path, const string &filename,
 
 string fixLinkFromReverseLinkTemplate(const string &filename, DISPLAY_TYPE type,
                                       const string &citation,
-                                      const string &annotation,
-                                      const string &referPara) {
+                                      const string &referPara,
+                                      const string &annotation) {
   string link = reverseLinkToMainFile;
   replaceDisplayType(link, linkStartChars, type);
   replacePart(link, defaultMainFilename, filename);
@@ -118,6 +119,9 @@ string fixLinkFromReverseLinkTemplate(const string &filename, DISPLAY_TYPE type,
   } else
     replacePart(link, defaultReferPara, referPara);
   replacePart(link, defaultCitation, citation);
+  if (annotation != emptyString)
+    replacePart(link, defaultEndOfReverseCitation + linkEndChars,
+                defaultEndOfReverseCitation + annotation + linkEndChars);
   if (debug >= LOG_INFO)
     FUNCTION_OUTPUT << link << endl;
   return link;

@@ -178,7 +178,7 @@ void Commander::setupLinkFixingStatistics() {
     LinkFromAttachment::clearLinkTable();
   }
   if (m_command == COMMAND::appendReverseLinks) {
-    LinkFromMain::loadLinkTableFromStatisticsFile();
+    LinkFromMain::loadLinkTableFromFile();
   }
 }
 

@@ -41,10 +41,20 @@ void Link::setTypeThruFileNamePrefix(const string &prefix) {
  * @param linkString the link to check
  */
 void Link::readType(const string &linkString) {
+  if (linkString.find(downArrow) != string::npos) {
+    m_type = LINK_TYPE::REVERSE;
+    if (debug >= LOG_INFO)
+      METHOD_OUTPUT << "reverse link type seen from downArrow: " << downArrow
+                    << endl;
+    return;
+  }
   // special link to image, use title to check
   if (linkString.find(titleStartChars + imageTypeChars + titleEndChars) !=
       string::npos) {
     m_type = LINK_TYPE::IMAGE;
+    if (debug >= LOG_INFO)
+      METHOD_OUTPUT << "image type seen from special title: "
+                    << titleStartChars + imageTypeChars + titleEndChars << endl;
     return;
   }
 

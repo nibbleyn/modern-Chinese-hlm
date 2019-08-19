@@ -59,9 +59,6 @@ private:
 static const string returnLinkSetIndicator = R"(被引用：)";
 static const string returnToContentTable = R"(回目录)";
 
-static const string upArrow = R"(↑)";
-static const string downArrow = R"(↓)";
-
 class CoupledLink : public Link {
 public:
   struct LinkDetails {
@@ -82,6 +79,8 @@ public:
   static void clearLinkTable();
   static void loadLinkTableFromStatisticsFile();
   static void outPutStatisticsToFiles();
+  static LinkDetailSet getLinkDetailSet(AttachmentNumber num,
+                                        ParaLineNumber paraLine);
 
 public:
   CoupledLink() = default;
@@ -135,6 +134,8 @@ protected:
       if (not isReverseLink())
         m_referSection.hide();
       m_referSection.setReferSection(num, paraLine);
+      LineNumber ln(paraLine.first, paraLine.second);
+      fixReferPara(ln.asString());
       needToChange();
     }
   }
@@ -167,6 +168,7 @@ public:
   static void updateReferenceAttachmentListIntoFile();
   static void setupStatisticsParameters();
   static void outPutStatisticsToFiles();
+  static void loadLinkTableFromFile();
   static void displayMainFilesOfMissingKey();
 
 public:

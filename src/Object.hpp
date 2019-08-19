@@ -85,6 +85,9 @@ public:
       return m_displayText;
   };
   void setBodytext(const string &text) { m_bodyText = text; }
+  bool isBodytextContains(const string &keyword) {
+    return m_bodyText.find(keyword) != string::npos;
+  }
 
   size_t displaySize() { return getDisplayString().length(); };
   size_t length() {

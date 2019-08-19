@@ -56,7 +56,7 @@ static const string attachmentFileMiddleChar = R"(_)";
 
 static const string bracketStartChars = R"(（)";
 static const string bracketEndChars = R"(）)";
-static const string separator = R"(，)";
+static const string textSeparator = R"(，)";
 
 static const string unhiddenDisplayProperty = R"(unhidden)";
 static const string hiddenDisplayProperty = R"(hidden)";

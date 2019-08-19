@@ -240,14 +240,7 @@ void testLinkOperation() {
 
   //clang-format off
   string linkString =
-      R"(<a unhidden href="a025.htm#P9L1">被<sub>25回</sub>引用</a>)";
-  FUNCTION_OUTPUT << linkString << endl;
-  LinkFromMain link0("05", linkString);
-  testLink(link0, linkString, false);
-  SEPERATE("unhidden invalid reverse link", " finished ");
-
-  linkString =
-      R"(<a unhidden href="a025.htm#P9L1">↓<sub>第3回1.2节:</sub>引用</a>)";
+      R"(<a unhidden href="a025.htm#P9L1">↓<sub>第3回1.2节:</sub></a>)";
   FUNCTION_OUTPUT << linkString << endl;
   LinkFromMain link_1("05", linkString);
   testLink(link_1, linkString, false);

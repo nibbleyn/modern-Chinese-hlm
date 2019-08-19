@@ -6,7 +6,15 @@ static const string originalDirForLinkFromMain = R"(original\)";
 static const string jpmDirForLinkFromMain = R"(JPM\)";
 static const string pictureDirForLinkFromMain = R"(pictures\)";
 
-enum class LINK_TYPE { MAIN, ATTACHMENT, ORIGINAL, SAMEPAGE, JPM, IMAGE };
+enum class LINK_TYPE {
+  MAIN,
+  ATTACHMENT,
+  ORIGINAL,
+  SAMEPAGE,
+  JPM,
+  IMAGE,
+  REVERSE
+};
 
 // links
 static const string imageTypeChars = R"(IMAGE)";
@@ -18,9 +26,11 @@ static const string originalLinkStartChars = R"(（)";
 static const string originalLinkEndChars = R"(）)";
 
 static const string returnLinkFromAttachmentHeader = R"(返回本章原文)";
-static const string returnLink = R"(引用)";
 static const string annotationToOriginal = R"(原文)";
 static const string contentTableFilename = R"(aindex)";
+
+static const string upArrow = R"(↑)";
+static const string downArrow = R"(↓)";
 
 static const string TARGET_FILE_EXT = R"(.htm)";
 
@@ -36,8 +46,8 @@ string fixLinkFromMainTemplate(const string &path, const string &filename,
                                const string &referPara = emptyString);
 string fixLinkFromReverseLinkTemplate(const string &filename, DISPLAY_TYPE type,
                                       const string &citation,
-                                      const string &annotation,
-                                      const string &referPara);
+                                      const string &referPara,
+                                      const string &annotation = emptyString);
 string
 fixLinkFromOriginalTemplate(const string &path, const string &filename,
                             const string &key, const string &citation,
@@ -75,7 +85,7 @@ public:
     readAnnotation(linkString);
   }
   LINK_TYPE getType() { return m_type; }
-  bool isReverseLink() { return (m_annotation == returnLink); };
+  bool isReverseLink() { return m_type == LINK_TYPE::REVERSE; };
   bool isTargetToImage() { return (m_type == LINK_TYPE::IMAGE); };
   bool isTargetToJPMHtm() { return (m_type == LINK_TYPE::JPM); };
   bool isTargetToOriginalHtm() { return (m_type == LINK_TYPE::ORIGINAL); };

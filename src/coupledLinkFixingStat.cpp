@@ -122,6 +122,16 @@ void CoupledLink::loadLinkTableFromStatisticsFile() {
   //	  CoupledLink::outPutStatisticsToFiles();
 }
 
+CoupledLink::LinkDetailSet
+CoupledLink::getLinkDetailSet(AttachmentNumber num, ParaLineNumber paraLine) {
+  LinkDetailSet entry;
+  try {
+    entry = linksTable.at(make_pair(num, paraLine));
+  } catch (exception &) {
+  }
+  return entry;
+}
+
 static const string HTML_OUTPUT_LINKS_FROM_MAIN_LIST =
     "utf8HTML/output/LinksFromMain.txt";
 static const string HTML_OUTPUT_KEY_OF_LINKS_FROM_MAIN_LIST =
@@ -139,6 +149,11 @@ void LinkFromMain::setupStatisticsParameters() {
 void LinkFromMain::outPutStatisticsToFiles() {
   setupStatisticsParameters();
   CoupledLink::outPutStatisticsToFiles();
+}
+
+void LinkFromMain::loadLinkTableFromFile() {
+  setupStatisticsParameters();
+  loadLinkTableFromStatisticsFile();
 }
 
 void LinkFromMain::logLink() {

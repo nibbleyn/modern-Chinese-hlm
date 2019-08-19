@@ -193,7 +193,6 @@ void CoupledLink::readKey(const string &linkString) {
     AttachmentNumber num = make_pair(m_chapterNumber, m_attachmentNumber);
     ParaLineNumber paraLine = ln.getParaLineNumber();
     // will set needChange if found line is different
-    fixReferPara(ln.asString());
     fixReferSection(num, paraLine);
   }
   if (debug >= LOG_INFO)
@@ -212,8 +211,8 @@ void CoupledLink::fixFromString(const string &linkString) {
   readReferPara(linkString);
   fixReferSection(linkString);
   // no need for key for these links
-  if (m_annotation != returnLinkFromAttachmentHeader and
-      m_annotation != returnLink and m_annotation != returnToContentTable)
+  if (not isReverseLink() and m_annotation != returnLinkFromAttachmentHeader and
+      m_annotation != returnToContentTable)
     readKey(linkString); // key would be searched here and replaced,
                          // m_needChange updated
   m_bodyText = m_annotation;
