@@ -57,6 +57,14 @@ void Link::readType(const string &linkString) {
                     << titleStartChars + imageTypeChars + titleEndChars << endl;
     return;
   }
+  // special link to sub Para, use title to check
+  if (linkString.find(titleStartChars + subParaTitle) != string::npos) {
+    m_type = LINK_TYPE::SUBPARA;
+    if (debug >= LOG_INFO)
+      METHOD_OUTPUT << "sub para type seen from special title: "
+                    << titleStartChars + subParaTitle << endl;
+    return;
+  }
 
   m_type = LINK_TYPE::SAMEPAGE;
   if (linkString.find(TARGET_FILE_EXT) == string::npos) {

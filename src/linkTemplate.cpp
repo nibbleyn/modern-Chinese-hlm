@@ -16,6 +16,8 @@ static constexpr const char *linkToJPMFile =
 // now only support reverse link from main back to main, no key required
 static constexpr const char *reverseLinkToMainFile =
     R"(<a unhidden href="a0XX.htm#YY">↓<sub>WW</sub></a>)";
+static constexpr const char *subParaLink =
+    R"(<a unhidden title="子段QQ" id="VV" href="#YYUU">向下</a>)";
 
 static constexpr const char *defaultPath = R"(PP)";
 static constexpr const char *defaultMainFilename = R"(XX)";
@@ -30,6 +32,9 @@ static constexpr const char *defaultWholeCitation = R"(↑<sub hidden>WW</sub>)"
 static constexpr const char *defaultEndOfReverseCitation = R"(</sub>)";
 static constexpr const char *defaultAnnotation = R"(ZZ)";
 static constexpr const char *defaultImageAnnotation = R"(（图示：ZZ）)";
+static constexpr const char *defaultSubParaId = R"(VV)";
+static constexpr const char *defaultReferSubPara = R"(UU)";
+static constexpr const char *defaultWholeSubParaId = R"( id="VV")";
 
 /**
  * generate real correct link within same file
@@ -122,6 +127,30 @@ string fixLinkFromReverseLinkTemplate(const string &filename, DISPLAY_TYPE type,
   if (annotation != emptyString)
     replacePart(link, defaultEndOfReverseCitation + linkEndChars,
                 defaultEndOfReverseCitation + annotation + linkEndChars);
+  if (debug >= LOG_INFO)
+    FUNCTION_OUTPUT << link << endl;
+  return link;
+}
+
+/**
+ * <a unhidden title="子段3" id="P5L1S3" href="#P5L1">向下</a>
+ * <a unhidden title="子段2" id="P5L1S2" href="#P5L1S3">向下</a>
+ * <a unhidden title="子段1" href="#P16L3">向下</a>
+ */
+string fixLinkFromSubParaLinkTemplate(const string &seqenceNumber,
+                                      DISPLAY_TYPE type,
+                                      const string &referPara, const string &id,
+                                      const string &subPara) {
+  string link = subParaLink;
+  replacePart(link, defaultKey, seqenceNumber);
+  replaceDisplayType(link, linkStartChars, type);
+  replacePart(link, defaultReferPara, referPara);
+  if (id.empty()) {
+    replacePart(link, defaultWholeSubParaId, emptyString);
+  } else
+    replacePart(link, defaultSubParaId, id);
+  if (not subPara.empty())
+    replacePart(link, defaultReferSubPara, subPara);
   if (debug >= LOG_INFO)
     FUNCTION_OUTPUT << link << endl;
   return link;

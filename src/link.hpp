@@ -13,7 +13,8 @@ enum class LINK_TYPE {
   SAMEPAGE,
   JPM,
   IMAGE,
-  REVERSE
+  REVERSE,
+  SUBPARA
 };
 
 // links
@@ -31,6 +32,7 @@ static const string contentTableFilename = R"(aindex)";
 
 static const string upArrow = R"(↑)";
 static const string downArrow = R"(↓)";
+static const string subParaTitle = R"(子段)";
 
 static const string TARGET_FILE_EXT = R"(.htm)";
 
@@ -48,6 +50,11 @@ string fixLinkFromReverseLinkTemplate(const string &filename, DISPLAY_TYPE type,
                                       const string &citation,
                                       const string &referPara,
                                       const string &annotation = emptyString);
+string fixLinkFromSubParaLinkTemplate(const string &seqenceNumber,
+                                      DISPLAY_TYPE type,
+                                      const string &referPara,
+                                      const string &id = emptyString,
+                                      const string &subPara = emptyString);
 string
 fixLinkFromOriginalTemplate(const string &path, const string &filename,
                             const string &key, const string &citation,
@@ -85,6 +92,7 @@ public:
     readAnnotation(linkString);
   }
   LINK_TYPE getType() { return m_type; }
+  bool isSubParaLink() { return m_type == LINK_TYPE::SUBPARA; };
   bool isReverseLink() { return m_type == LINK_TYPE::REVERSE; };
   bool isTargetToImage() { return (m_type == LINK_TYPE::IMAGE); };
   bool isTargetToJPMHtm() { return (m_type == LINK_TYPE::JPM); };

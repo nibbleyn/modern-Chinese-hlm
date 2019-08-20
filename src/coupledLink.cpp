@@ -211,7 +211,8 @@ void CoupledLink::fixFromString(const string &linkString) {
   readReferPara(linkString);
   fixReferSection(linkString);
   // no need for key for these links
-  if (not isReverseLink() and m_annotation != returnLinkFromAttachmentHeader and
+  if (not isReverseLink() and not isSubParaLink() and
+      m_annotation != returnLinkFromAttachmentHeader and
       m_annotation != returnToContentTable)
     readKey(linkString); // key would be searched here and replaced,
                          // m_needChange updated
