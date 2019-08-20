@@ -22,6 +22,16 @@ public:
   using RangeTable =
       map<pair<AttachmentNumber, ParaLineNumber>, lineNumberSetByRange>;
   static RangeTable rangeTable;
+  struct PoemTranslationDetails {
+    AttachmentNumber targetFile;
+    ParaLineNumber targetLine;
+    Poem body;
+    PoemTranslation translation{""};
+  };
+  using PoemsTable =
+      map<pair<AttachmentNumber, ParaLineNumber>, PoemTranslationDetails>;
+  static PoemsTable poemsTable;
+  static string poemsDetailFilePath;
   static void setReferFilePrefix(const string &prefix);
   static void setStatisticsOutputFilePath(const string &path);
   static void clearExistingNumberingStatistics();
@@ -162,4 +172,5 @@ private:
 
   static void printLinesTable();
   static void printRangeTable();
+  static void printPoemsTable();
 };

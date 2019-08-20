@@ -1,9 +1,15 @@
 #include "coupledBodyTextWithLink.hpp"
 
+static constexpr const char *HTML_OUTPUT_POEMS_OF_MAIN =
+    R"(utf8HTML/output/Poems.txt)";
+static const string PoemFieldSeparator = R"($$)";
+
 CoupledBodyTextWithLink::LinesTable CoupledBodyTextWithLink::linesTable;
 CoupledBodyTextWithLink::RangeTable CoupledBodyTextWithLink::rangeTable;
+CoupledBodyTextWithLink::PoemsTable CoupledBodyTextWithLink::poemsTable;
 string CoupledBodyTextWithLink::referFilePrefix{emptyString};
 string CoupledBodyTextWithLink::lineDetailFilePath{emptyString};
+string CoupledBodyTextWithLink::poemsDetailFilePath{HTML_OUTPUT_POEMS_OF_MAIN};
 
 void CoupledBodyTextWithLink::setReferFilePrefix(const string &prefix) {
   referFilePrefix = prefix;
@@ -81,7 +87,7 @@ CoupledBodyTextWithLink::getLineNumberMissingObjectType(AttachmentNumber num,
 void CoupledBodyTextWithLink::appendNumberingStatistics() {
   if (linesTable.empty())
     return;
-  FUNCTION_OUTPUT << lineDetailFilePath << " is created." << endl;
+  FUNCTION_OUTPUT << lineDetailFilePath << " is appended." << endl;
   ofstream lineDetailOutfile(lineDetailFilePath, ios_base::app);
   int para = 1;
   auto totalNumberOfLines = 0;
@@ -110,6 +116,30 @@ void CoupledBodyTextWithLink::appendNumberingStatistics() {
   }
   FUNCTION_OUTPUT << "para " << para
                   << " has totalLines: " << totalNumberOfLines << endl;
+  if (poemsTable.empty())
+    return;
+  FUNCTION_OUTPUT << poemsDetailFilePath << " is appended." << endl;
+  ofstream poemsDetailOutfile(poemsDetailFilePath, ios_base::app);
+  for (const auto &element : poemsTable) {
+    auto bodyNum = element.first.first;
+    auto bodyParaLine = element.first.second;
+    LineNumber bodyLn(bodyParaLine.first, bodyParaLine.second);
+    auto detail = element.second;
+    auto translationNum = detail.targetFile;
+    auto translationParaLine = detail.targetLine;
+    LineNumber translationLn(translationParaLine.first,
+                             translationParaLine.second);
+    poemsDetailOutfile
+        << getFileNameFromAttachmentNumber(
+               getHtmlFileNameFromBodyTextFilePrefix(referFilePrefix), bodyNum)
+        << referParaMiddleChar << bodyLn.asString() << PoemFieldSeparator
+        << getFileNameFromAttachmentNumber(
+               getHtmlFileNameFromBodyTextFilePrefix(referFilePrefix),
+               translationNum)
+        << referParaMiddleChar << translationLn.asString() << PoemFieldSeparator
+        << detail.body.getDisplayString() << PoemFieldSeparator
+        << detail.translation.getDisplayString() << endl;
+  }
 }
 
 void CoupledBodyTextWithLink::addEntriesInRangeTable(AttachmentNumber startNum,
@@ -168,6 +198,9 @@ void CoupledBodyTextWithLink::doStatisticsByScanningLines(
   m_numberOfMiddleParaHeader = 0;
   m_numberOfLastParaHeader = 0;
   linesTable.clear();
+  poemsTable.clear();
+  pair<AttachmentNumber, ParaLineNumber> lastPoemPos;
+  Poem lastPoem;
 
   ifstream infile;
   if (overFixedBodyText)
@@ -209,15 +242,37 @@ void CoupledBodyTextWithLink::doStatisticsByScanningLines(
       // record the para it belongs to into linesTable
       int dispLines = 0;
       TypeSet types;
+      auto paraLine = make_pair(m_para, m_lineNo);
       if (not m_disableNumberingStatisticsCalculateLines) {
         auto removeEndingBrStr = m_inLine.substr(0, m_inLine.find(brTab));
         getDisplayString(removeEndingBrStr);
         dispLines = getLinesOfDisplayText(getResultDisplayString());
         getDisplayString(removeEndingBrStr, true);
         types = getResultSet();
+        bool poemExists = Object::isObjectTypeInSet(nameOfPoemType, types);
+        bool poemTranslationExists =
+            Object::isObjectTypeInSet(nameOfPoemTranslationType, types);
+        if (poemExists and poemTranslationExists) {
+          PoemTranslationDetails detail{num, paraLine, Poem(),
+                                        PoemTranslation("")};
+          detail.body.loadFirstFromContainedLine(m_inLine);
+          detail.translation.loadFirstFromContainedLine(m_inLine);
+          poemsTable[make_pair(num, paraLine)] = detail;
+          lastPoemPos.second = make_pair(0, 0);
+        } else if (poemExists) {
+          lastPoemPos.first = num;
+          lastPoemPos.second = paraLine;
+          lastPoem.loadFirstFromContainedLine(m_inLine);
+        } else if (poemTranslationExists) {
+          PoemTranslationDetails detail{num, paraLine, lastPoem,
+                                        PoemTranslation("")};
+          detail.translation.loadFirstFromContainedLine(m_inLine);
+          if (lastPoemPos.second.first != 0)
+            poemsTable[lastPoemPos] = detail;
+          lastPoemPos.second = make_pair(0, 0);
+        }
       }
       LineDetails detail{dispLines, false, types};
-      auto paraLine = make_pair(m_para, m_lineNo);
       linesTable[make_pair(num, paraLine)] = detail;
       m_lineNo++;
     }
@@ -225,6 +280,7 @@ void CoupledBodyTextWithLink::doStatisticsByScanningLines(
 
   if (debug >= LOG_INFO) {
     printLinesTable();
+    printPoemsTable();
   }
   appendNumberingStatistics();
 }

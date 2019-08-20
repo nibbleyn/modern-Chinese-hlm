@@ -36,8 +36,34 @@ void CoupledBodyText::printLineAttrTable() {
                   << "  " << element.second.cap << endl;
   }
 }
+void CoupledBodyTextWithLink::printPoemsTable() {
+  if (not poemsTable.empty()) {
+    FUNCTION_OUTPUT << "poemsTable:" << endl;
+    FUNCTION_OUTPUT << "chapter attachment ParaNumber LineNumber ->  chapter "
+                       "attachment ParaNumber LineNumber"
+                       "body translation"
+                    << endl;
+  } else
+    FUNCTION_OUTPUT << "no entry in poemsTable." << endl;
+  for (const auto &element : poemsTable) {
+    auto bodyNum = element.first.first;
+    auto bodyParaLine = element.first.second;
+    auto detail = element.second;
+    auto translationNum = detail.targetFile;
+    auto translationParaLine = detail.targetLine;
+    FUNCTION_OUTPUT << bodyNum.first << displaySpace << bodyNum.second
+                    << displaySpace << bodyParaLine.first << displaySpace
+                    << bodyParaLine.second << " ->  " << translationNum.first
+                    << displaySpace << translationNum.second << displaySpace
+                    << translationParaLine.first << displaySpace
+                    << translationParaLine.second << endl;
+    FUNCTION_OUTPUT << detail.body.getDisplayString() << endl;
+    FUNCTION_OUTPUT << detail.translation.getDisplayString() << endl;
+  }
+}
 
 void CoupledBodyTextWithLink::printLinesTable() {
+  map<int, pair<AttachmentNumber, ParaLineNumber>, greater<int>> numberSet;
   if (not linesTable.empty()) {
     FUNCTION_OUTPUT << "linesTable:" << endl;
     FUNCTION_OUTPUT << "chapter attachment ParaNumber LineNumber: "
@@ -55,6 +81,14 @@ void CoupledBodyTextWithLink::printLinesTable() {
                     << displaySpace << detail.numberOfDisplayedLines
                     << displaySpace
                     << Object::typeSetAsString(detail.objectContains) << endl;
+    numberSet[detail.numberOfDisplayedLines] = make_pair(num, paraLine);
+  }
+  for (const auto &element : numberSet) {
+    auto num = element.second.first;
+    auto paraLine = element.second.second;
+    FUNCTION_OUTPUT << element.first << ":" << num.first << displaySpace
+                    << num.second << displaySpace << paraLine.first
+                    << displaySpace << paraLine.second << endl;
   }
 }
 
