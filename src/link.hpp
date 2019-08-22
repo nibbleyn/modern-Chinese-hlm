@@ -34,6 +34,7 @@ static const string upArrow = R"(↑)";
 static const string downArrow = R"(↓)";
 static const string subParaTitle = R"(子段)";
 
+static constexpr const char *ImageAnnotationStartChars = R"(↑（图示：)";
 static const string TARGET_FILE_EXT = R"(.htm)";
 
 // operations over link string template initialization

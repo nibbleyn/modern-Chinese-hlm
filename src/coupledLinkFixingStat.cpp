@@ -1,8 +1,10 @@
 #include "coupledLink.hpp"
 
 CoupledLink::LinksTable CoupledLink::linksTable;
+CoupledLink::ImageLinksTable CoupledLink::imageLinksTable;
 string CoupledLink::referFilePrefix{emptyString};
 string CoupledLink::linkDetailFilePath{emptyString};
+string CoupledLink::imageLinkDetailFilePath{emptyString};
 string CoupledLink::keyDetailFilePath{emptyString};
 
 AttachmentList LinkFromMain::attachmentTable;
@@ -15,55 +17,78 @@ static const string FROM_LINK_STRING_SEPARATOR = R"( : )";
 /**
  * reset the general data structure to log info about links
  */
-void CoupledLink::clearLinkTable() { linksTable.clear(); }
+void CoupledLink::clearLinkTable() {
+  linksTable.clear();
+  imageLinksTable.clear();
+}
 
 /**
  * output links to specified file
  * before calling this function, specifying output file
  */
 void CoupledLink::outPutStatisticsToFiles() {
-  if (linksTable.empty())
+  if (linksTable.empty() and imageLinksTable.empty())
     return;
-  FUNCTION_OUTPUT << linkDetailFilePath << " is created." << endl;
-  FUNCTION_OUTPUT << keyDetailFilePath << " is created." << endl;
-  ofstream linkDetailOutfile(linkDetailFilePath);
-  ofstream keyDetailOutfile(keyDetailFilePath);
-  for (const auto &element : linksTable) {
-    auto num = element.first.first;
-    auto paraLine = element.first.second;
-    LineNumber ln(paraLine.first, paraLine.second);
-    auto fromLinks = element.second;
-    // link itself
-    linkDetailOutfile << LINK_TARGET_STARTER << referFilePrefix
-                      << getFileNameFromAttachmentNumber(referFilePrefix, num)
-                      << HTML_SUFFIX << referParaMiddleChar << ln.asString()
-                      << endl;
-    keyDetailOutfile << referFilePrefix
-                     << getFileNameFromAttachmentNumber(referFilePrefix, num)
-                     << HTML_SUFFIX << referParaMiddleChar << ln.asString()
-                     << endl;
-    using KeySet = set<string>;
-    KeySet keySet;
-    for (const auto &from : fromLinks) {
-      auto fromNum = from.first.first;
-      auto fromParaLine = from.first.second;
-      LineNumber fromLn(fromParaLine.first, fromParaLine.second);
-      auto detail = from.second;
-      linkDetailOutfile << FROM_LINK_STARTER << detail.key
-                        << FROM_LINK_KEY_SEPARATOR << referFilePrefix
-                        << getFileNameFromAttachmentNumber(referFilePrefix,
-                                                           fromNum)
-                        << HTML_SUFFIX << referParaMiddleChar
-                        << fromLn.asString() << FROM_LINK_STRING_SEPARATOR
-                        << detail.link << endl;
-      keySet.insert(detail.key);
+  else if (not linksTable.empty()) {
+    FUNCTION_OUTPUT << linkDetailFilePath << " is created." << endl;
+    FUNCTION_OUTPUT << keyDetailFilePath << " is created." << endl;
+    ofstream linkDetailOutfile(linkDetailFilePath);
+    ofstream keyDetailOutfile(keyDetailFilePath);
+    for (const auto &element : linksTable) {
+      auto num = element.first.first;
+      auto paraLine = element.first.second;
+      LineNumber ln(paraLine.first, paraLine.second);
+      auto fromLinks = element.second;
+      // link itself
+      linkDetailOutfile << LINK_TARGET_STARTER << referFilePrefix
+                        << getFileNameFromAttachmentNumber(referFilePrefix, num)
+                        << HTML_SUFFIX << referParaMiddleChar << ln.asString()
+                        << endl;
+      keyDetailOutfile << referFilePrefix
+                       << getFileNameFromAttachmentNumber(referFilePrefix, num)
+                       << HTML_SUFFIX << referParaMiddleChar << ln.asString()
+                       << endl;
+      using KeySet = set<string>;
+      KeySet keySet;
+      for (const auto &from : fromLinks) {
+        auto fromNum = from.first.first;
+        auto fromParaLine = from.first.second;
+        LineNumber fromLn(fromParaLine.first, fromParaLine.second);
+        auto detail = from.second;
+        linkDetailOutfile << FROM_LINK_STARTER << detail.key
+                          << FROM_LINK_KEY_SEPARATOR << referFilePrefix
+                          << getFileNameFromAttachmentNumber(referFilePrefix,
+                                                             fromNum)
+                          << HTML_SUFFIX << referParaMiddleChar
+                          << fromLn.asString() << FROM_LINK_STRING_SEPARATOR
+                          << detail.link << endl;
+        keySet.insert(detail.key);
+      }
+      for (const auto &key : keySet)
+        keyDetailOutfile << key << displaySpace;
+      keyDetailOutfile << endl;
     }
-    for (const auto &key : keySet)
-      keyDetailOutfile << key << displaySpace;
-    keyDetailOutfile << endl;
+    FUNCTION_OUTPUT << "links information are written into: "
+                    << linkDetailFilePath << " and " << keyDetailFilePath
+                    << endl;
+  } else if (not imageLinksTable.empty()) {
+    FUNCTION_OUTPUT << imageLinkDetailFilePath << " is created." << endl;
+    ofstream linkDetailOutfile(imageLinkDetailFilePath);
+
+    for (const auto &element : imageLinksTable) {
+          auto num = element.first.first;
+          auto links = element.second;
+          auto numOfLinks = links.size();
+          linkDetailOutfile << getFileNameFromAttachmentNumber(referFilePrefix, num) << referParaMiddleChar
+        		  << numOfLinks << referParaMiddleChar;
+          for (const auto &link : links){
+        	  linkDetailOutfile << link << referParaMiddleChar;
+          }
+          linkDetailOutfile << endl;
+    }
+    FUNCTION_OUTPUT << "image links information are written into: "
+                    << imageLinkDetailFilePath << endl;
   }
-  FUNCTION_OUTPUT << "links information are written into: "
-                  << linkDetailFilePath << " and " << keyDetailFilePath << endl;
 }
 
 void CoupledLink::loadLinkTableFromStatisticsFile() {
@@ -134,12 +159,15 @@ CoupledLink::getLinkDetailSet(AttachmentNumber num, ParaLineNumber paraLine) {
 
 static const string HTML_OUTPUT_LINKS_FROM_MAIN_LIST =
     "utf8HTML/output/LinksFromMain.txt";
+static const string HTML_OUTPUT_IMAGE_LINKS_FROM_MAIN_LIST =
+    "utf8HTML/output/ImageLinksFromMain.txt";
 static const string HTML_OUTPUT_KEY_OF_LINKS_FROM_MAIN_LIST =
     "utf8HTML/output/KeysOfLinksFromMain.txt";
 
 void LinkFromMain::setupStatisticsParameters() {
   referFilePrefix = MAIN_HTML_PREFIX;
   linkDetailFilePath = HTML_OUTPUT_LINKS_FROM_MAIN_LIST;
+  imageLinkDetailFilePath = HTML_OUTPUT_IMAGE_LINKS_FROM_MAIN_LIST;
   keyDetailFilePath = HTML_OUTPUT_KEY_OF_LINKS_FROM_MAIN_LIST;
 }
 
@@ -156,15 +184,22 @@ void LinkFromMain::loadLinkTableFromFile() {
   loadLinkTableFromStatisticsFile();
 }
 
+string shrinkImageLinkAnnotation(const string & imageLink){
+	string link = imageLink;
+	replacePart(link, ImageAnnotationStartChars, emptyString);
+	replacePart(link, bracketEndChars, emptyString);
+	return link;
+}
+
 void LinkFromMain::logLink() {
-  if (isTargetToOtherMainHtm()) {
-    LinkDetails detail{m_usedKey, asString(true)};
-    AttachmentNumber num = make_pair(m_chapterNumber, 0);
-    LineNumber ln(m_referPara);
-    ParaLineNumber paraLine = ln.getParaLineNumber();
 
     AttachmentNumber fromNum = getAttachmentNumber(m_fromFile);
     ParaLineNumber fromParaLine = m_fromLine.getParaLineNumber();
+  if (isTargetToOtherMainHtm()) {
+	  auto num = make_pair(getchapterNumer(), getattachmentNumber());
+    LinkDetails detail{m_usedKey, asString(true)};
+    LineNumber ln(m_referPara);
+    ParaLineNumber paraLine = ln.getParaLineNumber();
     try {
       auto &entry = linksTable.at(make_pair(num, paraLine));
       entry[make_pair(fromNum, fromParaLine)] = detail;
@@ -175,18 +210,18 @@ void LinkFromMain::logLink() {
                       << m_usedKey << endl;
     } catch (exception &) {
       if (debug >= LOG_INFO)
-        METHOD_OUTPUT << "create vector for : " << getChapterName()
-                      << displaySpace << m_referPara << endl;
+        METHOD_OUTPUT << "create map for : " << getChapterName() << displaySpace
+                      << m_referPara << endl;
       LinkDetailSet entry;
       entry[make_pair(fromNum, fromParaLine)] = detail;
       linksTable[make_pair(num, paraLine)] = entry;
     }
   }
   if (isTargetToOtherAttachmentHtm()) {
+	  auto num = make_pair(getchapterNumer(), getattachmentNumber());
     auto targetFile = getHtmlFileNamePrefix() + getChapterName() +
                       attachmentFileMiddleChar +
                       TurnToString(getattachmentNumber());
-    auto num = make_pair(getchapterNumer(), getattachmentNumber());
     auto title = AttachmentList::getAttachmentTitleFromFile(num);
     auto type = attachmentTable.getAttachmentType(num);
     if (getSourceChapterName() == getChapterName()) {
@@ -203,10 +238,28 @@ void LinkFromMain::logLink() {
                     << " differs from title: " << title << endl;
     }
   }
+  if (isTargetToImage()) {
+	  // ignore fromParaLine
+    ParaLineNumber paraLine{0, 0};
+    string link = shrinkImageLinkAnnotation(asString(true));
+    try {
+      auto &entry = imageLinksTable.at(make_pair(fromNum, paraLine));
+      entry.push_back(link);
+    } catch (exception &) {
+      if (debug >= LOG_INFO)
+        METHOD_OUTPUT << "create vector for image link to: " << getAnnotation()
+                      << endl;
+      vector<string> entry;
+      entry.push_back(link);
+      imageLinksTable[make_pair(fromNum, paraLine)] = entry;
+    }
+  }
 }
 
 static const string HTML_OUTPUT_LINKS_FROM_ATTACHMENT_LIST =
     "utf8HTML/output/LinksFromAttachment.txt";
+static const string HTML_OUTPUT_IMAGE_LINKS_FROM_ATTACHMENT_LIST =
+    "utf8HTML/output/ImageLinksFromAttachment.txt";
 static const string HTML_OUTPUT_KEY_OF_LINKS_FROM_ATTACHMENT_LIST =
     "utf8HTML/output/KeysOfLinksFromAttachment.txt";
 
@@ -218,6 +271,7 @@ void LinkFromAttachment::resetStatisticsAndLoadReferenceAttachmentList() {}
 void LinkFromAttachment::setupStatisticsParameters() {
   referFilePrefix = ATTACHMENT_HTML_PREFIX;
   linkDetailFilePath = HTML_OUTPUT_LINKS_FROM_ATTACHMENT_LIST;
+  imageLinkDetailFilePath = HTML_OUTPUT_IMAGE_LINKS_FROM_ATTACHMENT_LIST;
   keyDetailFilePath = HTML_OUTPUT_KEY_OF_LINKS_FROM_ATTACHMENT_LIST;
 }
 /**

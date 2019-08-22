@@ -66,15 +66,21 @@ public:
     string link{emptyString};
   };
   // (fromFile, fromLine) -> LinkDetails
+  // so if two links pointing from same paragraph have same target paragraph
+  // only the later would be logged.
   using LinkDetailSet =
       map<pair<AttachmentNumber, ParaLineNumber>, LinkDetails>;
   // statistics about links
   // (chapter number, referPara) -> LinkDetailSet
   using LinksTable = map<pair<AttachmentNumber, ParaLineNumber>, LinkDetailSet>;
+  using ImageLinksTable =
+      map<pair<AttachmentNumber, ParaLineNumber>, vector<string>>;
   static string referFilePrefix;
   static string linkDetailFilePath;
   static string keyDetailFilePath;
   static LinksTable linksTable;
+  static string imageLinkDetailFilePath;
+  static ImageLinksTable imageLinksTable;
 
   static void clearLinkTable();
   static void loadLinkTableFromStatisticsFile();
