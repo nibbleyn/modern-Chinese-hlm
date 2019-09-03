@@ -76,15 +76,16 @@ void CoupledLink::outPutStatisticsToFiles() {
     ofstream linkDetailOutfile(imageLinkDetailFilePath);
 
     for (const auto &element : imageLinksTable) {
-          auto num = element.first.first;
-          auto links = element.second;
-          auto numOfLinks = links.size();
-          linkDetailOutfile << getFileNameFromAttachmentNumber(referFilePrefix, num) << referParaMiddleChar
-        		  << numOfLinks << referParaMiddleChar;
-          for (const auto &link : links){
-        	  linkDetailOutfile << link << referParaMiddleChar;
-          }
-          linkDetailOutfile << endl;
+      auto num = element.first.first;
+      auto links = element.second;
+      auto numOfLinks = links.size();
+      linkDetailOutfile << getFileNameFromAttachmentNumber(referFilePrefix, num)
+                        << referParaMiddleChar << numOfLinks
+                        << referParaMiddleChar;
+      for (const auto &link : links) {
+        linkDetailOutfile << link << referParaMiddleChar;
+      }
+      linkDetailOutfile << endl;
     }
     FUNCTION_OUTPUT << "image links information are written into: "
                     << imageLinkDetailFilePath << endl;
@@ -184,19 +185,19 @@ void LinkFromMain::loadLinkTableFromFile() {
   loadLinkTableFromStatisticsFile();
 }
 
-string shrinkImageLinkAnnotation(const string & imageLink){
-	string link = imageLink;
-	replacePart(link, ImageAnnotationStartChars, emptyString);
-	replacePart(link, bracketEndChars, emptyString);
-	return link;
+string shrinkImageLinkAnnotation(const string &imageLink) {
+  string link = imageLink;
+  replacePart(link, ImageAnnotationStartChars, emptyString);
+  replacePart(link, bracketEndChars, emptyString);
+  return link;
 }
 
 void LinkFromMain::logLink() {
 
-    AttachmentNumber fromNum = getAttachmentNumber(m_fromFile);
-    ParaLineNumber fromParaLine = m_fromLine.getParaLineNumber();
+  AttachmentNumber fromNum = getAttachmentNumber(m_fromFile);
+  ParaLineNumber fromParaLine = m_fromLine.getParaLineNumber();
   if (isTargetToOtherMainHtm()) {
-	  auto num = make_pair(getchapterNumer(), getattachmentNumber());
+    auto num = make_pair(getchapterNumer(), getattachmentNumber());
     LinkDetails detail{m_usedKey, asString(true)};
     LineNumber ln(m_referPara);
     ParaLineNumber paraLine = ln.getParaLineNumber();
@@ -218,7 +219,7 @@ void LinkFromMain::logLink() {
     }
   }
   if (isTargetToOtherAttachmentHtm()) {
-	  auto num = make_pair(getchapterNumer(), getattachmentNumber());
+    auto num = make_pair(getchapterNumer(), getattachmentNumber());
     auto targetFile = getHtmlFileNamePrefix() + getChapterName() +
                       attachmentFileMiddleChar +
                       TurnToString(getattachmentNumber());
@@ -239,7 +240,7 @@ void LinkFromMain::logLink() {
     }
   }
   if (isTargetToImage()) {
-	  // ignore fromParaLine
+    // ignore fromParaLine
     ParaLineNumber paraLine{0, 0};
     string link = shrinkImageLinkAnnotation(asString(true));
     try {

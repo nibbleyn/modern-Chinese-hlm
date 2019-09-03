@@ -253,8 +253,9 @@ void CoupledBodyTextWithLink::doStatisticsByScanningLines(
         bool poemTranslationExists =
             Object::isObjectTypeInSet(nameOfPoemTranslationType, types);
         if (poemExists and poemTranslationExists) {
-          PoemTranslationDetails detail{num, paraLine, Poem(),
-                                        PoemTranslation("")};
+          PoemTranslationDetails detail;
+          detail.targetFile = num;
+          detail.targetLine = paraLine;
           detail.body.loadFirstFromContainedLine(m_inLine);
           detail.translation.loadFirstFromContainedLine(m_inLine);
           poemsTable[make_pair(num, paraLine)] = detail;
@@ -264,8 +265,10 @@ void CoupledBodyTextWithLink::doStatisticsByScanningLines(
           lastPoemPos.second = paraLine;
           lastPoem.loadFirstFromContainedLine(m_inLine);
         } else if (poemTranslationExists) {
-          PoemTranslationDetails detail{num, paraLine, lastPoem,
-                                        PoemTranslation("")};
+          PoemTranslationDetails detail;
+          detail.targetFile = num;
+          detail.targetLine = paraLine;
+          detail.body = lastPoem;
           detail.translation.loadFirstFromContainedLine(m_inLine);
           if (lastPoemPos.second.first != 0)
             poemsTable[lastPoemPos] = detail;

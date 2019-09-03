@@ -248,7 +248,7 @@ void testLinkOperation() {
 
   testLinkFromAttachment(
       "07",
-      R"(<a title="IMAGE" href="#nwbt.jpg">（图示：女娲补天）</a>)", false);
+      R"(<a title="IMAGE" href="#nwbt.jpg">↑（图示：女娲补天）</a>)", false);
   SEPERATE("direct image link", " finished ");
 
   testLinkFromAttachment(

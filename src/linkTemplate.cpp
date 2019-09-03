@@ -31,7 +31,7 @@ static constexpr const char *defaultCitation = R"(WW)";
 static constexpr const char *defaultWholeCitation = R"(↑<sub hidden>WW</sub>)";
 static constexpr const char *defaultEndOfReverseCitation = R"(</sub>)";
 static constexpr const char *defaultAnnotation = R"(ZZ)";
-static constexpr const char *defaultImageAnnotation = R"(（图示：ZZ）)";
+static constexpr const char *defaultImageAnnotation = R"(↑（图示：ZZ）)";
 static constexpr const char *defaultSubParaId = R"(VV)";
 static constexpr const char *defaultReferSubPara = R"(UU)";
 static constexpr const char *defaultWholeSubParaId = R"( id="VV")";
@@ -285,6 +285,10 @@ string fixLinkFromImageTemplate(const string &fullReferFilenameWithPathExt,
   }
   replacePart(link, defaultMainFilename, fullReferFilenameWithPathExt);
   replacePart(link, defaultReferPara, picFilename);
-  replacePart(link, defaultImageAnnotation, fullAnnotation);
+  if (fullAnnotation.find(upArrow) != string::npos) {
+    replacePart(link, defaultImageAnnotation, fullAnnotation);
+  } else {
+    replacePart(link, defaultImageAnnotation, upArrow + fullAnnotation);
+  }
   return link;
 }

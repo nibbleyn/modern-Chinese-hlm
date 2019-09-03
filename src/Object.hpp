@@ -78,6 +78,13 @@ public:
   virtual size_t loadFirstFromContainedLine(const string &containedLine,
                                             size_t after = 0) = 0;
   virtual string getFormatedFullString() = 0;
+  virtual bool shouldBeHidden(TypeSet &hiddenTypeSet) {
+    return isObjectTypeInSet(getName(), hiddenTypeSet);
+  }
+  virtual bool shouldBeHiddenFromTypes() { return false; }
+  virtual void shouldHideSubObject(TypeSet &hiddenTypeSet) {
+    m_hideSubObject = false;
+  }
   string getDisplayString() {
     if (m_displayType == DISPLAY_TYPE::HIDDEN)
       return emptyString;
@@ -123,6 +130,7 @@ protected:
   string m_bodyText{emptyString};
   string m_displayText{emptyString};
   DISPLAY_TYPE m_displayType{DISPLAY_TYPE::UNHIDDEN};
+  bool m_hideSubObject{false};
 };
 
 using ObjectPtr = unique_ptr<Object>;

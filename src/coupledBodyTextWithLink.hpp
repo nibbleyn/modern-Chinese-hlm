@@ -77,6 +77,7 @@ public:
   void getDisplayString(const string &originalString, bool onlyTypes = false);
   string getResultDisplayString() { return m_resultDisplayString; }
   TypeSet getResultSet() { return m_resultSet; }
+  void addHiddenType(const string &type) { m_hiddenSet.insert(type); }
 
   // used by tools
   void printStringInLines();
@@ -86,6 +87,7 @@ public:
 private:
   TypeSet m_resultSet;
   string m_resultDisplayString{emptyString};
+  TypeSet m_hiddenSet;
 
   static void addEntriesInRangeTable(AttachmentNumber startNum,
                                      AttachmentNumber endNum,

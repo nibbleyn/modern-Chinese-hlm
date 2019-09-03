@@ -349,6 +349,9 @@ void renderingBodyText(const string &kind, int minTarget, int maxTarget) {
     CoupledBodyTextWithLink bodyText;
     bodyText.setFilePrefixFromFileType(getFileTypeFromKind(kind));
     bodyText.setFileAndAttachmentNumber(file);
+    bodyText.hideParaHeader();
+    bodyText.addHiddenType(nameOfLineNumberType);
+    bodyText.addHiddenType(nameOfLinkFromMainType);
     bodyText.render();
     FUNCTION_OUTPUT << "Rendering " << kind << " BodyTexts finished. " << endl;
     FUNCTION_OUTPUT << "Files are under "

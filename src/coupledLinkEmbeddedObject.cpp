@@ -8,11 +8,15 @@ string PersonalComment::getFormatedFullString() {
   return getStringFromTemplate(personalCommentTemplate, defaultComment);
 }
 
+void PersonalComment::shouldHideSubObject(TypeSet &hiddenTypeSet) {
+  m_hideSubObject = isObjectTypeInSet(nameOfLinkFromMainType, hiddenTypeSet);
+}
+
 size_t PersonalComment::loadFirstFromContainedLine(const string &containedLine,
                                                    size_t after) {
   auto pos = getFullStringAndBodyTextFromContainedLine(containedLine, after);
   if (pos != string::npos)
-    m_displayText = scanForSubObjects(m_bodyText, m_fromFile);
+    m_displayText = scanForSubObjects(m_hideSubObject, m_bodyText, m_fromFile);
   return pos;
 }
 
@@ -25,11 +29,15 @@ string PoemTranslation::getFormatedFullString() {
              getStringFromTemplate(poemTranslationTemplate, defaultComment);
 }
 
+void PoemTranslation::shouldHideSubObject(TypeSet &hiddenTypeSet) {
+  m_hideSubObject = isObjectTypeInSet(nameOfLinkFromMainType, hiddenTypeSet);
+}
+
 size_t PoemTranslation::loadFirstFromContainedLine(const string &containedLine,
                                                    size_t after) {
   auto pos = getFullStringAndBodyTextFromContainedLine(containedLine, after);
   if (pos != string::npos)
-    m_displayText = scanForSubObjects(m_bodyText, m_fromFile);
+    m_displayText = scanForSubObjects(m_hideSubObject, m_bodyText, m_fromFile);
   return pos;
 }
 
@@ -40,11 +48,15 @@ string Comment::getFormatedFullString() {
   return m_fullString = getStringFromTemplate(commentTemplate, defaultComment);
 }
 
+void Comment::shouldHideSubObject(TypeSet &hiddenTypeSet) {
+  m_hideSubObject = isObjectTypeInSet(nameOfLinkFromMainType, hiddenTypeSet);
+}
+
 size_t Comment::loadFirstFromContainedLine(const string &containedLine,
                                            size_t after) {
   auto pos = getFullStringAndBodyTextFromContainedLine(containedLine, after);
   if (pos != string::npos)
-    m_displayText = scanForSubObjects(m_bodyText, m_fromFile);
+    m_displayText = scanForSubObjects(m_hideSubObject, m_bodyText, m_fromFile);
   return pos;
 }
 

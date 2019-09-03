@@ -9,6 +9,7 @@ public:
   string getEndTag() override { return commentEndChars; }
   string getName() override { return nameOfCommentType; }
   string getFormatedFullString() override;
+  void shouldHideSubObject(TypeSet &hiddenTypeSet) override;
   size_t loadFirstFromContainedLine(const string &containedLine,
                                     size_t after = 0) override;
 
@@ -126,6 +127,7 @@ public:
       return m_linkPtrToOrigin->asString();
     return emptyString;
   }
+  void shouldHideSubObject(TypeSet &hiddenTypeSet) override;
 
 protected:
   void readKey(const string &linkString);
@@ -188,6 +190,14 @@ public:
   ~LinkFromMain(){};
   void generateLinkToOrigin();
   string getName() override { return nameOfLinkFromMainType; }
+  bool shouldBeHidden(TypeSet &hiddenTypeSet) override {
+    return (isObjectTypeInSet(getName(), hiddenTypeSet) and
+            shouldBeHiddenFromTypes());
+  }
+  bool shouldBeHiddenFromTypes() override {
+    return (isSubParaLink() or isReverseLink() or isTargetToImage() or
+            isTargetToOriginalHtm() or isTargetToOtherAttachmentHtm());
+  }
 
 private:
   string getPathOfReferenceFile() const override;
@@ -252,5 +262,5 @@ private:
 };
 
 // only support link and comment sub-object
-string scanForSubObjects(const string &original, const string &fromFile,
-                         bool forLink = true);
+string scanForSubObjects(bool shouldHiddenSubObject, const string &original,
+                         const string &fromFile, bool forLink = true);

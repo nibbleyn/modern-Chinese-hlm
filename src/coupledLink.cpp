@@ -1,12 +1,13 @@
 #include "coupledLink.hpp"
 
-string scanForSubObjects(const string &original, const string &fromFile,
-                         bool forLink) {
+string scanForSubObjects(bool shouldHiddenSubObject, const string &original,
+                         const string &fromFile, bool forLink) {
   string result;
   // start offset -> end offset
   using SubStringOffsetTable = map<size_t, size_t>;
   SubStringOffsetTable subStrings;
   ObjectPtr current = nullptr;
+  bool needToHide = shouldHiddenSubObject;
   if (forLink)
     current = make_unique<LinkFromMain>(fromFile);
   else
@@ -25,7 +26,11 @@ string scanForSubObjects(const string &original, const string &fromFile,
     result += original.substr(endOfSubStringOffset,
                               subString.first - endOfSubStringOffset);
     current->loadFirstFromContainedLine(original, endOfSubStringOffset);
-    result += current->getDisplayString();
+    if (forLink and needToHide) {
+      needToHide = current->shouldBeHiddenFromTypes();
+    }
+    if (not needToHide)
+      result += current->getDisplayString();
     endOfSubStringOffset = subString.second + endTag.length();
   }
   result += original.substr(endOfSubStringOffset);
@@ -221,11 +226,17 @@ void CoupledLink::fixFromString(const string &linkString) {
     needToChange();
   if (isReverseLink())
     m_displayText = downArrow;
-  else if (isTargetToImage() or isTargetToOtherMainHtm() or
-           isTargetToOriginalHtm() or isTargetToJPMHtm())
+  else if ((isTargetToImage() and m_annotation.find(upArrow) == string::npos) or
+           isTargetToOtherMainHtm() or isTargetToOriginalHtm() or
+           isTargetToJPMHtm())
     m_displayText = upArrow;
   m_displayText += m_referSection.getDisplayString();
-  m_displayText += scanForSubObjects(m_bodyText, m_fromFile, false);
+  m_displayText +=
+      scanForSubObjects(m_hideSubObject, m_bodyText, m_fromFile, false);
+}
+
+void CoupledLink::shouldHideSubObject(TypeSet &hiddenTypeSet) {
+  m_hideSubObject = isObjectTypeInSet(nameOfCommentType, hiddenTypeSet);
 }
 
 /**
