@@ -257,6 +257,7 @@ void CoupledBodyTextWithLink::doStatisticsByScanningLines(
           detail.targetFile = num;
           detail.targetLine = paraLine;
           detail.body.loadFirstFromContainedLine(m_inLine);
+          detail.translation.setFromFile(m_file);
           detail.translation.loadFirstFromContainedLine(m_inLine);
           poemsTable[make_pair(num, paraLine)] = detail;
           lastPoemPos.second = make_pair(0, 0);

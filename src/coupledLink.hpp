@@ -5,6 +5,7 @@
 class Comment : public Object {
 public:
   Comment(const string &fromFile) : m_fromFile(fromFile) {}
+  void setFromFile(const string &fromFile) { m_fromFile = fromFile; }
   string getStartTag() override { return commentBeginChars; }
   string getEndTag() override { return commentEndChars; }
   string getName() override { return nameOfCommentType; }
@@ -122,6 +123,7 @@ public:
                       referSection.getParaLineNumber());
   }
   virtual void generateLinkToOrigin() = 0;
+  void deleteLinkToOrigin() { m_linkPtrToOrigin = nullptr; }
   string getStringOfLinkToOrigin() {
     if (m_linkPtrToOrigin != nullptr)
       return m_linkPtrToOrigin->asString();

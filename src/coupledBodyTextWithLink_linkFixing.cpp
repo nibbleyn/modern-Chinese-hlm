@@ -32,6 +32,7 @@ void CoupledBodyTextWithLink::fixLinksWithinOneLine(FileSet referMainFiles,
     auto linkEnd = toProcess.find(linkEndChars, toProcess.find(linkStartChars));
     auto link =
         getWholeStringBetweenTags(toProcess, linkStartChars, linkEndChars);
+    m_linkPtr->deleteLinkToOrigin();
     m_linkPtr->readTypeAndAnnotation(link);
     // second step of construction, this is needed to check isTargetToSelfHtm
     m_linkPtr->readReferFileName(link);

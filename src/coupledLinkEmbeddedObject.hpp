@@ -4,6 +4,7 @@
 class PersonalComment : public Object {
 public:
   PersonalComment(const string &fromFile) : m_fromFile(fromFile) {}
+  void setFromFile(const string &fromFile) { m_fromFile = fromFile; }
   string getStartTag() override { return personalCommentStartChars; }
   string getEndTag() override { return personalCommentEndChars; }
   string getName() override { return nameOfPersonalCommentType; }
@@ -19,6 +20,7 @@ private:
 class PoemTranslation : public Object {
 public:
   PoemTranslation(const string &fromFile) : m_fromFile(fromFile) {}
+  void setFromFile(const string &fromFile) { m_fromFile = fromFile; }
   string getStartTag() override { return poemTranslationBeginChars; }
   string getEndTag() override { return poemTranslationEndChars; }
   string getName() override { return nameOfPoemTranslationType; }
