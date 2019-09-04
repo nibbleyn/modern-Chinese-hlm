@@ -182,7 +182,7 @@ void CoupledLink::readKey(const string &linkString) {
     bodyText.addIgnoreLines(m_fromLine.asString());
   }
   bodyText.setFileAndAttachmentNumber(m_chapterNumber, m_attachmentNumber);
-  if (bodyText.isMainBodyText())
+  if (bodyText.isMainBodyText() or bodyText.isOrginialBodyText())
     bodyText.ignorePersonalComments();
   bool found = bodyText.findKey(stringForSearch);
   if (not found) {

@@ -36,6 +36,7 @@ public:
   }
 
   bool isMainBodyText() { return m_filePrefix == MAIN_BODYTEXT_PREFIX; }
+  bool isOrginialBodyText() { return m_filePrefix == ORIGINAL_BODYTEXT_PREFIX; }
 
   void setInputBodyTextFilePath(const string &absolutePath) {
     m_inputFile = absolutePath;
