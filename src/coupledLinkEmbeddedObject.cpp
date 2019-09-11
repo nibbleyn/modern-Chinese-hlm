@@ -1,8 +1,11 @@
 #include "coupledLinkEmbeddedObject.hpp"
 
+bool PersonalComment::m_addSpecialDisplayText = false;
+
 static constexpr const char *defaultComment = R"(XX)";
 static const string personalCommentTemplate =
     R"(<u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">XX</u>)";
+static constexpr const char *specialDisplayPrefix = R"(夹批：)";
 
 string PersonalComment::getFormatedFullString() {
   return getStringFromTemplate(personalCommentTemplate, defaultComment);
@@ -17,6 +20,8 @@ size_t PersonalComment::loadFirstFromContainedLine(const string &containedLine,
   auto pos = getFullStringAndBodyTextFromContainedLine(containedLine, after);
   if (pos != string::npos)
     m_displayText = scanForSubObjects(m_hideSubObject, m_bodyText, m_fromFile);
+  if (m_addSpecialDisplayText)
+    m_displayText = specialDisplayPrefix + m_displayText;
   return pos;
 }
 

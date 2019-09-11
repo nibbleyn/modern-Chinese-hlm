@@ -345,10 +345,12 @@ void renderingBodyText(const string &kind, int minTarget, int maxTarget) {
     container.setFileAndAttachmentNumber(file);
     container.dissembleFromHTM();
   }
+
   for (const auto &file : fileSet) {
     CoupledBodyTextWithLink bodyText;
     bodyText.setFilePrefixFromFileType(getFileTypeFromKind(kind));
     bodyText.setFileAndAttachmentNumber(file);
+    PersonalComment::enableAddSpecialDisplayText();
     bodyText.hideParaHeader();
     bodyText.addHiddenType(nameOfLineNumberType);
     bodyText.addHiddenType(nameOfLinkFromMainType);

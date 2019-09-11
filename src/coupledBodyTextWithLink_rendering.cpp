@@ -252,11 +252,11 @@ void CoupledBodyTextWithLink::getDisplayString(const string &originalString,
             endOfSubStringOffset, offset - endOfSubStringOffset);
         if (debug >= LOG_INFO)
           METHOD_OUTPUT << m_resultDisplayString << "|8|" << endl;
+        current->shouldHideSubObject(m_hiddenSet);
+        current->loadFirstFromContainedLine(originalString, offset);
         if (current->shouldBeHidden(m_hiddenSet)) {
           current->hide();
         } else {
-          current->shouldHideSubObject(m_hiddenSet);
-          current->loadFirstFromContainedLine(originalString, offset);
           m_resultDisplayString += current->getDisplayString();
         }
         if (debug >= LOG_INFO)

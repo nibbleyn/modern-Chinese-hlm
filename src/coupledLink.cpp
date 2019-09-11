@@ -7,7 +7,6 @@ string scanForSubObjects(bool shouldHiddenSubObject, const string &original,
   using SubStringOffsetTable = map<size_t, size_t>;
   SubStringOffsetTable subStrings;
   ObjectPtr current = nullptr;
-  bool needToHide = shouldHiddenSubObject;
   if (forLink)
     current = make_unique<LinkFromMain>(fromFile);
   else
@@ -23,6 +22,7 @@ string scanForSubObjects(bool shouldHiddenSubObject, const string &original,
   } while (true);
   auto endOfSubStringOffset = 0;
   for (const auto &subString : subStrings) {
+    bool needToHide = shouldHiddenSubObject;
     result += original.substr(endOfSubStringOffset,
                               subString.first - endOfSubStringOffset);
     current->loadFirstFromContainedLine(original, endOfSubStringOffset);
