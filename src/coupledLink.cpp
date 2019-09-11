@@ -1,16 +1,21 @@
 #include "coupledLink.hpp"
 
+ObjectPtr createNewPtr(const string &fromFile, bool forLink) {
+  ObjectPtr current = nullptr;
+  if (forLink)
+    current = make_unique<LinkFromMain>(fromFile);
+  else
+    current = make_unique<Comment>(fromFile);
+  return current;
+}
+
 string scanForSubObjects(bool shouldHiddenSubObject, const string &original,
                          const string &fromFile, bool forLink) {
   string result;
   // start offset -> end offset
   using SubStringOffsetTable = map<size_t, size_t>;
   SubStringOffsetTable subStrings;
-  ObjectPtr current = nullptr;
-  if (forLink)
-    current = make_unique<LinkFromMain>(fromFile);
-  else
-    current = make_unique<Comment>(fromFile);
+  ObjectPtr current = createNewPtr(fromFile, forLink);
   string startTag = current->getStartTag();
   string endTag = current->getEndTag();
   auto offset = original.find(startTag);
@@ -22,6 +27,7 @@ string scanForSubObjects(bool shouldHiddenSubObject, const string &original,
   } while (true);
   auto endOfSubStringOffset = 0;
   for (const auto &subString : subStrings) {
+    current = createNewPtr(fromFile, forLink);
     bool needToHide = shouldHiddenSubObject;
     result += original.substr(endOfSubStringOffset,
                               subString.first - endOfSubStringOffset);
