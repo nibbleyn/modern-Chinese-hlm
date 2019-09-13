@@ -23,6 +23,11 @@ private:
 };
 
 class PoemTranslation : public Object {
+  static bool m_addSpecialDisplayText;
+
+public:
+  static void enableAddSpecialDisplayText() { m_addSpecialDisplayText = true; };
+
 public:
   PoemTranslation(const string &fromFile) : m_fromFile(fromFile) {}
   void setFromFile(const string &fromFile) { m_fromFile = fromFile; }

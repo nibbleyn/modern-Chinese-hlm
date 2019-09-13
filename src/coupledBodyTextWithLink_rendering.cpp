@@ -315,6 +315,17 @@ void CoupledBodyTextWithLink::getDisplayString(const string &originalString,
   m_poemTranslationStringTable.clear();
 }
 
+string CoupledBodyText::postProcessLine(const string &originalString) {
+  string line = originalString;
+  std::regex leftBracket(bracketStartChars);
+  line = regex_replace(line, leftBracket, emptyString);
+  std::regex rightBracket(bracketEndChars);
+  line = regex_replace(line, rightBracket, emptyString);
+  std::regex arrow(upArrow);
+  line = regex_replace(line, arrow, emptyString);
+  return line;
+}
+
 void CoupledBodyTextWithLink::render(bool removeLinkToOriginalAndAttachment) {
   ifstream infile(m_inputFile);
   if (not fileExist(infile, m_inputFile))
@@ -346,7 +357,9 @@ void CoupledBodyTextWithLink::render(bool removeLinkToOriginalAndAttachment) {
       if (debug >= LOG_INFO) {
         METHOD_OUTPUT << outputLine.substr(0, lastBr) << endl;
       }
-      outfile << outputLine.substr(0, lastBr) << endl;
+      if (m_postProcessLine)
+        outputLine = postProcessLine(outputLine.substr(0, lastBr));
+      outfile << outputLine << endl;
     }
   }
 }

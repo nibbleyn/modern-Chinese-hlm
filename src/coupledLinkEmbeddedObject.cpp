@@ -1,11 +1,13 @@
 #include "coupledLinkEmbeddedObject.hpp"
 
 bool PersonalComment::m_addSpecialDisplayText = false;
+bool PoemTranslation::m_addSpecialDisplayText = false;
 
 static constexpr const char *defaultComment = R"(XX)";
 static const string personalCommentTemplate =
     R"(<u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">XX</u>)";
-static constexpr const char *specialDisplayPrefix = R"(夹批：)";
+static constexpr const char *specialDisplayPrefixForPersonalComment =
+    R"(夹批：)";
 
 string PersonalComment::getFormatedFullString() {
   return getStringFromTemplate(personalCommentTemplate, defaultComment);
@@ -21,13 +23,16 @@ size_t PersonalComment::loadFirstFromContainedLine(const string &containedLine,
   if (pos != string::npos)
     m_displayText = scanForSubObjects(m_hideSubObject, m_bodyText, m_fromFile);
   if (m_addSpecialDisplayText)
-    m_displayText = specialDisplayPrefix + m_displayText;
+    m_displayText = specialDisplayPrefixForPersonalComment + m_displayText;
   return pos;
 }
 
 static constexpr const char *defaultTranslation = R"(XX)";
 static const string poemTranslationTemplate =
     R"(<samp unhidden font style="font-size: 12pt; font-family: 宋体; color:#ff00ff">XX</samp>)";
+static constexpr const char *specialDisplayPrefixForPoemTranslation =
+    R"(『白话文翻译：)";
+static constexpr const char *specialDisplayPostfixForPoemTranslation = R"(』)";
 
 string PoemTranslation::getFormatedFullString() {
   return m_fullString =
@@ -43,6 +48,9 @@ size_t PoemTranslation::loadFirstFromContainedLine(const string &containedLine,
   auto pos = getFullStringAndBodyTextFromContainedLine(containedLine, after);
   if (pos != string::npos)
     m_displayText = scanForSubObjects(m_hideSubObject, m_bodyText, m_fromFile);
+  if (m_addSpecialDisplayText)
+    m_displayText = specialDisplayPrefixForPoemTranslation + m_displayText +
+                    specialDisplayPostfixForPoemTranslation;
   return pos;
 }
 

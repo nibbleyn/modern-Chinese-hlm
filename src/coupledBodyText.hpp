@@ -124,6 +124,8 @@ public:
   // reformat to smaller paragraphs
   void reformatParagraphToSmallerSize(const string &sampleBlock);
 
+  void enablePostProcessLine() { m_postProcessLine = true; }
+
 protected:
   // used for configuring
   string m_filePrefix{MAIN_BODYTEXT_PREFIX};
@@ -248,7 +250,10 @@ protected:
   size_t m_numberOfMiddleParaHeader{0};
   size_t m_numberOfLastParaHeader{0};
   bool m_hideParaHeader{false};
+  bool m_postProcessLine{false};
   bool m_forceUpdateLineNumber{false};
+
+  string postProcessLine(const string &originalString);
 
   void scanByLines();
   void paraGuidedNumbering();

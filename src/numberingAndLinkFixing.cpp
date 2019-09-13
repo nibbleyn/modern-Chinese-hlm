@@ -351,7 +351,9 @@ void renderingBodyText(const string &kind, int minTarget, int maxTarget) {
     bodyText.setFilePrefixFromFileType(getFileTypeFromKind(kind));
     bodyText.setFileAndAttachmentNumber(file);
     PersonalComment::enableAddSpecialDisplayText();
+    PoemTranslation::enableAddSpecialDisplayText();
     bodyText.hideParaHeader();
+    bodyText.enablePostProcessLine();
     bodyText.addHiddenType(nameOfLineNumberType);
     bodyText.addHiddenType(nameOfLinkFromMainType);
     bodyText.render();
