@@ -352,6 +352,7 @@ void renderingBodyText(const string &kind, int minTarget, int maxTarget) {
     bodyText.setFileAndAttachmentNumber(file);
     PersonalComment::enableAddSpecialDisplayText();
     PoemTranslation::enableAddSpecialDisplayText();
+    LinkFromMain::enableAddSpecialDisplayText();
     bodyText.hideParaHeader();
     bodyText.enablePostProcessLine();
     bodyText.addHiddenType(nameOfLineNumberType);

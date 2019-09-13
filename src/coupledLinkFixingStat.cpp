@@ -2,6 +2,7 @@
 
 CoupledLink::LinksTable CoupledLink::linksTable;
 CoupledLink::ImageLinksTable CoupledLink::imageLinksTable;
+bool CoupledLink::m_addSpecialDisplayText = false;
 string CoupledLink::referFilePrefix{emptyString};
 string CoupledLink::linkDetailFilePath{emptyString};
 string CoupledLink::imageLinkDetailFilePath{emptyString};

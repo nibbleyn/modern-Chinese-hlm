@@ -317,12 +317,15 @@ void CoupledBodyTextWithLink::getDisplayString(const string &originalString,
 
 string CoupledBodyText::postProcessLine(const string &originalString) {
   string line = originalString;
-  std::regex leftBracket(bracketStartChars);
-  line = regex_replace(line, leftBracket, emptyString);
-  std::regex rightBracket(bracketEndChars);
-  line = regex_replace(line, rightBracket, emptyString);
-  std::regex arrow(upArrow);
-  line = regex_replace(line, arrow, emptyString);
+  string pattern = bracketStartChars + "|" + bracketEndChars + "|" + upArrow;
+  std::regex toDelete(pattern);
+  line = regex_replace(line, toDelete, emptyString);
+  std::regex toReplace(specialDisplayPrefixForCoupledLink +
+                       specialDisplayPrefixForCoupledLink);
+  line = regex_replace(line, toReplace, specialDisplayPrefixForCoupledLink);
+  toReplace =
+      specialDisplayPostfixForCoupledLink + specialDisplayPostfixForCoupledLink;
+  line = regex_replace(line, toReplace, specialDisplayPostfixForCoupledLink);
   return line;
 }
 

@@ -239,6 +239,9 @@ void CoupledLink::fixFromString(const string &linkString) {
   m_displayText += m_referSection.getDisplayString();
   m_displayText +=
       scanForSubObjects(m_hideSubObject, m_bodyText, m_fromFile, false);
+  if (m_addSpecialDisplayText)
+    m_displayText = specialDisplayPrefixForCoupledLink + m_displayText +
+                    specialDisplayPostfixForCoupledLink;
 }
 
 void CoupledLink::shouldHideSubObject(TypeSet &hiddenTypeSet) {

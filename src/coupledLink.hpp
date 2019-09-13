@@ -61,6 +61,9 @@ private:
 static const string returnLinkSetIndicator = R"(被引用：)";
 static const string returnToContentTable = R"(回目录)";
 
+static const string specialDisplayPrefixForCoupledLink = R"(“)";
+static const string specialDisplayPostfixForCoupledLink = R"(”)";
+
 class CoupledLink : public Link {
 public:
   struct LinkDetails {
@@ -77,13 +80,10 @@ public:
   using LinksTable = map<pair<AttachmentNumber, ParaLineNumber>, LinkDetailSet>;
   using ImageLinksTable =
       map<pair<AttachmentNumber, ParaLineNumber>, vector<string>>;
-  static string referFilePrefix;
-  static string linkDetailFilePath;
-  static string keyDetailFilePath;
-  static LinksTable linksTable;
-  static string imageLinkDetailFilePath;
-  static ImageLinksTable imageLinksTable;
-
+  static void enableAddSpecialDisplayText() { m_addSpecialDisplayText = true; }
+  static void disableAddSpecialDisplayText() {
+    m_addSpecialDisplayText = false;
+  }
   static void clearLinkTable();
   static void loadLinkTableFromStatisticsFile();
   static void outPutStatisticsToFiles();
@@ -167,6 +167,14 @@ protected:
   using LinkPtr = unique_ptr<CoupledLink>;
   LinkPtr m_linkPtrToOrigin{nullptr};
   string m_imageReferFilename{emptyString};
+
+  static bool m_addSpecialDisplayText;
+  static string referFilePrefix;
+  static string linkDetailFilePath;
+  static string keyDetailFilePath;
+  static LinksTable linksTable;
+  static string imageLinkDetailFilePath;
+  static ImageLinksTable imageLinksTable;
 };
 
 class LinkFromMain : public CoupledLink {
