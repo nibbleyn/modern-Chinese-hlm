@@ -52,6 +52,8 @@ void CoupledBodyTextWithLink::fixLinksWithinOneLine(FileSet referMainFiles,
         m_inLine.replace(orglinkBegin, link.length(), m_linkPtr->asString());
         endOfProcessedSubString =
             orglinkBegin + m_linkPtr->getFormatedFullString().length();
+        if (m_linkPtr->isTargetToImage())
+          m_linkPtr->doFixStatistics();
       }
     }
     if (m_linkPtr->isTargetToOtherMainHtm() and
