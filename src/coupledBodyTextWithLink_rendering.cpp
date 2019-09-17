@@ -351,7 +351,7 @@ void CoupledBodyTextWithLink::render(bool removeLinkToOriginalAndAttachment) {
       }
       if (not m_hideParaHeader)
         outfile << paraHeaderLoaded.getDisplayString() << endl;
-    } else if (isLeadingBr(inLine)) {
+    } else if (isLeadingBr(inLine) or isImageGroupLine(inLine)) {
       outfile << LF;
     } else if (not isEmptyLine(inLine)) {
       getDisplayString(inLine);
