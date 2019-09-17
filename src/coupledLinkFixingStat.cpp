@@ -30,7 +30,7 @@ void CoupledLink::clearLinkTable() {
 void CoupledLink::outPutStatisticsToFiles() {
   if (linksTable.empty() and imageLinksTable.empty())
     return;
-  else if (not linksTable.empty()) {
+  if (not linksTable.empty()) {
     FUNCTION_OUTPUT << linkDetailFilePath << " is created." << endl;
     FUNCTION_OUTPUT << keyDetailFilePath << " is created." << endl;
     ofstream linkDetailOutfile(linkDetailFilePath);
@@ -72,7 +72,8 @@ void CoupledLink::outPutStatisticsToFiles() {
     FUNCTION_OUTPUT << "links information are written into: "
                     << linkDetailFilePath << " and " << keyDetailFilePath
                     << endl;
-  } else if (not imageLinksTable.empty()) {
+  }
+  if (not imageLinksTable.empty()) {
     FUNCTION_OUTPUT << imageLinkDetailFilePath << " is created." << endl;
     ofstream linkDetailOutfile(imageLinkDetailFilePath);
 
