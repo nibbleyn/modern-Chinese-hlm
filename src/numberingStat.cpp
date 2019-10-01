@@ -62,6 +62,75 @@ void CoupledBodyTextWithLink::loadNumberingStatistics() {
 
 LinkStringSet CoupledBodyTextWithLink::loadPoemsLinksFromStatisticsFile() {
   LinkStringSet result;
+  ifstream infile(poemsDetailFilePath);
+  if (not fileExist(infile, poemsDetailFilePath))
+    return result;
+  string lastFile;
+  while (!infile.eof()) {
+    string inLine;
+    getline(infile, inLine);
+    auto bodyTargetFile =
+        getIncludedStringBetweenTags(inLine, emptyString, referParaMiddleChar);
+    if (bodyTargetFile.empty())
+      break;
+    if (bodyTargetFile != lastFile) {
+      auto fullPos =
+          make_pair(make_pair(TurnToInt(bodyTargetFile), 0), make_pair(0, 0));
+      auto link = fixLinkFromMainTemplate(
+          emptyString, bodyTargetFile, DISPLAY_TYPE::UNHIDDEN, emptyString,
+          emptyString, citationChapterNo + bodyTargetFile + defaultUnit,
+          LineNumber(1, 0).asString());
+      result[fullPos] = link;
+      fullPos =
+          make_pair(make_pair(TurnToInt(bodyTargetFile), 0), make_pair(0, 1));
+      link = fixLinkFromMainTemplate(
+          emptyString, bodyTargetFile, DISPLAY_TYPE::UNHIDDEN, emptyString,
+          emptyString, emptyString, LineNumber(1, 0).asString());
+      result[fullPos] = link;
+      lastFile = bodyTargetFile;
+    }
+    cout << bodyTargetFile << endl;
+    auto bodyTargetLine =
+        LineNumber(getIncludedStringBetweenTags(inLine, referParaMiddleChar,
+                                                FieldSeparator))
+            .getParaLineNumber();
+    cout << LineNumber(bodyTargetLine).asString() << endl;
+    auto translationPos =
+        getIncludedStringBetweenTags(inLine, FieldSeparator, FieldSeparator);
+    auto translationTargetFile = getIncludedStringBetweenTags(
+        translationPos, emptyString, referParaMiddleChar);
+    cout << translationTargetFile << endl;
+    auto translationTargetLine =
+        LineNumber(getIncludedStringBetweenTags(
+                       translationPos, referParaMiddleChar, emptyString))
+            .getParaLineNumber();
+    cout << LineNumber(translationTargetLine).asString() << endl;
+    auto after = inLine.find(FieldSeparator + translationPos) +
+                 FieldSeparator.length() + translationPos.length() - 1;
+    auto body = getIncludedStringBetweenTags(inLine, FieldSeparator,
+                                             FieldSeparator, after);
+    after += FieldSeparator.length() + 1;
+    auto translation = getIncludedStringBetweenTags(inLine, FieldSeparator,
+                                                    FieldSeparator, after);
+    // cannot have more than two of bodies or translations in one line
+    auto targetLine = bodyTargetLine;
+    targetLine.second = targetLine.second * 4 - 1;
+    auto fullPos =
+        make_pair(make_pair(TurnToInt(bodyTargetFile), 0), targetLine);
+    auto link = fixLinkFromMainTemplate(
+        emptyString, bodyTargetFile, DISPLAY_TYPE::UNHIDDEN, emptyString,
+        emptyString, body, LineNumber(bodyTargetLine).asString());
+    cout << link << endl;
+    result[fullPos] = link;
+    targetLine = translationTargetLine;
+    targetLine.second = targetLine.second * 4 + 1;
+    fullPos = make_pair(make_pair(TurnToInt(bodyTargetFile), 0), targetLine);
+    link = fixLinkFromMainTemplate(
+        emptyString, translationTargetFile, DISPLAY_TYPE::UNHIDDEN, emptyString,
+        emptyString, translation, LineNumber(translationTargetLine).asString());
+    cout << link << endl;
+    result[fullPos] = link;
+  }
   return result;
 }
 

@@ -164,7 +164,6 @@ void generateContentTableForPoems() {
   outputContainer.assignLinkStringSet(
       CoupledBodyTextWithLink::loadPoemsLinksFromStatisticsFile());
   outputContainer.setMaxTargetAsSetSize();
-  outputContainer.createParaListFrom(18, 22);
   outputContainer.outputToBodyTextFromLinkList();
   outputContainer.setTitle(POEM_TITLE);
   outputContainer.setDisplayTitle(POEM_DISPLAY_TITLE);

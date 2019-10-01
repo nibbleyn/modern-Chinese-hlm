@@ -29,7 +29,10 @@ public:
   }
   void hideParaHeaders() { m_hideParaHeaders = true; }
   void setMaxTarget(int num) { m_maxTarget = num; }
-  void setMaxTargetAsSetSize() { m_maxTarget = m_linkStringSet.size(); }
+  void setMaxTargetAsSetSize() {
+    m_maxTarget = m_linkStringSet.size();
+    addOneParaHeaderPosition(m_maxTarget + 1);
+  }
   size_t getLinkStringSetSize() { return m_linkStringSet.size(); }
   void assignLinkStringSet(LinkStringSet stringSet) {
     m_linkStringSet = stringSet;
