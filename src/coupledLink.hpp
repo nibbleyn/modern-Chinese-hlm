@@ -86,6 +86,7 @@ public:
   }
   static void clearLinkTable();
   static void loadLinkTableFromStatisticsFile();
+  static LinkStringSet loadImagesLinksFromStatisticsFile();
   static void outPutStatisticsToFiles();
   static LinkDetailSet getLinkDetailSet(AttachmentNumber num,
                                         ParaLineNumber paraLine);

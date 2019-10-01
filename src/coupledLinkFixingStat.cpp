@@ -82,16 +82,42 @@ void CoupledLink::outPutStatisticsToFiles() {
       auto links = element.second;
       auto numOfLinks = links.size();
       linkDetailOutfile << getFileNameFromAttachmentNumber(referFilePrefix, num)
-                        << referParaMiddleChar << numOfLinks
-                        << referParaMiddleChar;
+                        << FieldSeparator << numOfLinks << FieldSeparator;
       for (const auto &link : links) {
-        linkDetailOutfile << link << referParaMiddleChar;
+        linkDetailOutfile << link << FieldSeparator;
       }
       linkDetailOutfile << endl;
     }
     FUNCTION_OUTPUT << "image links information are written into: "
                     << imageLinkDetailFilePath << endl;
   }
+}
+
+LinkStringSet CoupledLink::loadImagesLinksFromStatisticsFile() {
+  LinkStringSet result;
+  ifstream infile(imageLinkDetailFilePath);
+  if (not fileExist(infile, imageLinkDetailFilePath))
+    return result;
+  while (!infile.eof()) {
+    string inLine;
+    getline(infile, inLine);
+    auto targetFile =
+        getIncludedStringBetweenTags(inLine, emptyString, FieldSeparator);
+    if (targetFile.empty())
+      break;
+    auto numOfLinks =
+        getIncludedStringBetweenTags(inLine, FieldSeparator, FieldSeparator);
+    auto linkStart = inLine.find(numOfLinks) + numOfLinks.length() - 1;
+    for (auto i = 0; i < TurnToInt(numOfLinks); i++) {
+      auto fullPos =
+          make_pair(make_pair(TurnToInt(targetFile), 0), make_pair(0, i));
+      auto link = getIncludedStringBetweenTags(inLine, FieldSeparator,
+                                               FieldSeparator, linkStart);
+      result[fullPos] = link;
+      linkStart += link.length() + FieldSeparator.length();
+    }
+  }
+  return result;
 }
 
 void CoupledLink::loadLinkTableFromStatisticsFile() {

@@ -10,13 +10,13 @@ int debug = LOG_INFO;
 
 int main(int argc, char **argv) {
   // change this number to run different functions
-  int num = 22;
+  int num = 18;
   switch (num) {
   case 1:
     //    search(R"(枕)", SEARCH_IN_MAIN, true);
     //    search(R"(邢夫人)", SEARCH_IN_ORIGINAL);
     //    search(R"(闲)", SEARCH_IN_JPM);
-    search(R"(砌)");
+    search(R"(风露)");
     break;
   case 2:
     validateMainHtmls();
@@ -70,27 +70,33 @@ int main(int argc, char **argv) {
     generateContentTableForPersonalAttachments();
     break;
   case 18:
-    fixLinksFromAttachment(false);
+    generateContentTableForImages();
     break;
   case 19:
-    validateParaSizeForAutoNumberingJPMHtmls();
+    generateContentTableForPoems();
     break;
   case 20:
-    fixLinksFromJPM(false);
+    fixLinksFromAttachment(false);
     break;
   case 21:
-    appendReverseLinksForMain();
+    validateParaSizeForAutoNumberingJPMHtmls();
     break;
   case 22:
-    testFunctions(3);
+    fixLinksFromJPM(false);
     break;
   case 23:
-    tools(15);
+    appendReverseLinksForMain();
     break;
   case 24:
-    renderingBodyText();
+    testFunctions(3);
     break;
   case 25:
+    tools(15);
+    break;
+  case 26:
+    renderingBodyText();
+    break;
+  case 27:
     removePersonalViewpoints();
     break;
   default:

@@ -98,9 +98,8 @@ void numberAttachmentHtmls(bool forceUpdateLineNumber = true,
 void removePersonalViewpoints(const string &kind = MAIN,
                               int minTarget = MAIN_MIN_CHAPTER_NUMBER,
                               int maxTarget = MAIN_MAX_CHAPTER_NUMBER);
-void renderingBodyText(const string &kind = MAIN,
-                       int minTarget = MAIN_MIN_CHAPTER_NUMBER,
-                       int maxTarget = MAIN_MAX_CHAPTER_NUMBER);
+void renderingBodyText(const string &kind = MAIN, int minTarget = 3,
+                       int maxTarget = 3);
 void refreshBodyTexts(const string &kind,
                       int minTarget = MAIN_MIN_CHAPTER_NUMBER,
                       int maxTarget = MAIN_MAX_CHAPTER_NUMBER);

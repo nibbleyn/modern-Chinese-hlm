@@ -23,6 +23,14 @@ static const string PERSONAL_ATTACHMENT_TITLE = R"(个人感悟 附件目录)";
 static const string PERSONAL_ATTACHMENT_DISPLAY_TITLE =
     R"(个人感悟 附件目录)";
 
+static const string PIC_INDEX = R"(picIndex)";
+static const string PIC_TITLE = R"(图片)";
+static const string PIC_DISPLAY_TITLE = R"(图片 目录)";
+
+static const string POEM_INDEX = R"(poemIndex)";
+static const string POEM_TITLE = R"(诗词翻译)";
+static const string POEM_DISPLAY_TITLE = R"(诗词翻译 目录)";
+
 void generateContentTableForMainHtmls() {
   int minTarget = MAIN_MIN_CHAPTER_NUMBER, maxTarget = MAIN_MAX_CHAPTER_NUMBER;
   CoupledBodyTextContainer container;
@@ -133,7 +141,38 @@ void generateContentTableForReferenceAttachments(
                   << outputContainer.getoutputHtmlFilepath() << endl;
 }
 
-void generateContentTableForImages(bool needToReloadImageLinkList) {}
+void generateContentTableForImages() {
+  TableContainer outputContainer(PIC_INDEX);
+  outputContainer.clearLinkStringSet();
+  LinkFromMain::setupStatisticsParameters();
+  outputContainer.assignLinkStringSet(
+      CoupledLink::loadImagesLinksFromStatisticsFile());
+  outputContainer.setMaxTargetAsSetSize();
+  outputContainer.createParaListFrom(18, 22);
+  outputContainer.outputToBodyTextFromLinkList();
+  outputContainer.setTitle(PIC_TITLE);
+  outputContainer.setDisplayTitle(PIC_DISPLAY_TITLE);
+  outputContainer.assembleBackToHTM();
+  FUNCTION_OUTPUT << "result is in file: "
+                  << outputContainer.getoutputHtmlFilepath() << endl;
+  FUNCTION_OUTPUT << "generateContentTable for images finished. " << endl;
+}
+
+void generateContentTableForPoems() {
+  TableContainer outputContainer(POEM_INDEX);
+  outputContainer.clearLinkStringSet();
+  outputContainer.assignLinkStringSet(
+      CoupledBodyTextWithLink::loadPoemsLinksFromStatisticsFile());
+  outputContainer.setMaxTargetAsSetSize();
+  outputContainer.createParaListFrom(18, 22);
+  outputContainer.outputToBodyTextFromLinkList();
+  outputContainer.setTitle(POEM_TITLE);
+  outputContainer.setDisplayTitle(POEM_DISPLAY_TITLE);
+  outputContainer.assembleBackToHTM();
+  FUNCTION_OUTPUT << "result is in file: "
+                  << outputContainer.getoutputHtmlFilepath() << endl;
+  FUNCTION_OUTPUT << "generateContentTable for poems finished. " << endl;
+}
 
 void generateContentTableForPersonalAttachments(
     bool needToReloadAttachmentList) {

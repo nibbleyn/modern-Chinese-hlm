@@ -132,7 +132,7 @@ void Commander::updateAttachmentContentTableAndfixReturnLink() {
 
     generateContentTableForReferenceAttachments(false);
     generateContentTableForPersonalAttachments(false);
-    generateContentTableForImages(false);
+    generateContentTableForImages();
     if (m_fixReturnLink)
       // fix return links of attachments to output directory
       for (const auto &file : m_fileSet) {

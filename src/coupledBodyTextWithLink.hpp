@@ -37,6 +37,7 @@ public:
   static void clearExistingNumberingStatistics();
   static void appendNumberingStatistics();
   static void loadNumberingStatistics();
+  static LinkStringSet loadPoemsLinksFromStatisticsFile();
   static lineNumberSet getLineNumberMissingObjectType(AttachmentNumber num,
                                                       TypeSet typeSet);
   static void loadRangeTableFromFile(const string &indexFilePath);

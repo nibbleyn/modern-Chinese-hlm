@@ -50,6 +50,7 @@ static const string endOfBeginTag = R"(>)";
 static const string CR{0x0D};
 static const string LF{0x0A};
 static const string CRLF{0x0D, 0x0A};
+static const string FieldSeparator = R"($$)";
 
 static const string keyNotFound = R"(KeyNotFound)";
 static const string attachmentFileMiddleChar = R"(_)";

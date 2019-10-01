@@ -2,7 +2,6 @@
 
 static constexpr const char *HTML_OUTPUT_POEMS_OF_MAIN =
     R"(utf8HTML/output/Poems.txt)";
-static const string PoemFieldSeparator = R"($$)";
 
 CoupledBodyTextWithLink::LinesTable CoupledBodyTextWithLink::linesTable;
 CoupledBodyTextWithLink::RangeTable CoupledBodyTextWithLink::rangeTable;
@@ -59,6 +58,11 @@ void CoupledBodyTextWithLink::loadNumberingStatistics() {
   if (debug >= LOG_INFO) {
     printLinesTable();
   }
+}
+
+LinkStringSet CoupledBodyTextWithLink::loadPoemsLinksFromStatisticsFile() {
+  LinkStringSet result;
+  return result;
 }
 
 CoupledBodyTextWithLink::lineNumberSet
@@ -135,13 +139,13 @@ void CoupledBodyTextWithLink::appendNumberingStatistics() {
     poemsDetailOutfile
         << getFileNameFromAttachmentNumber(
                getHtmlFileNameFromBodyTextFilePrefix(referFilePrefix), bodyNum)
-        << referParaMiddleChar << bodyLn.asString() << PoemFieldSeparator
+        << referParaMiddleChar << bodyLn.asString() << FieldSeparator
         << getFileNameFromAttachmentNumber(
                getHtmlFileNameFromBodyTextFilePrefix(referFilePrefix),
                translationNum)
-        << referParaMiddleChar << translationLn.asString() << PoemFieldSeparator
-        << detail.body.getDisplayString() << PoemFieldSeparator
-        << detail.translation.getDisplayString() << endl;
+        << referParaMiddleChar << translationLn.asString() << FieldSeparator
+        << detail.body.getDisplayString() << FieldSeparator
+        << detail.translation.getDisplayString() << FieldSeparator << endl;
   }
 }
 

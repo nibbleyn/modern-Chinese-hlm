@@ -8,4 +8,5 @@ void generateContentTableForReferenceAttachments(
     bool needToReloadAttachmentList = true);
 void generateContentTableForPersonalAttachments(
     bool needToReloadAttachmentList = true);
-void generateContentTableForImages(bool needToReloadImageLinkList = true);
+void generateContentTableForImages();
+void generateContentTableForPoems();
