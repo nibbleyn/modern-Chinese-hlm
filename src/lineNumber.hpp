@@ -33,8 +33,6 @@ public:
       : m_paraNumber(pln.first), m_lineNumber(pln.second) {}
   LineNumber(int paraNumber, int lineNumber)
       : m_paraNumber(paraNumber), m_lineNumber(lineNumber) {
-    if (lineNumber == 0)
-      m_paraNumber = StartNumber;
   }
   LineNumber(const string &name) { readFromString(name); }
   void readFromString(const string &name);

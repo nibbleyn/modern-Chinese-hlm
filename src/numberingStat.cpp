@@ -73,19 +73,21 @@ LinkStringSet CoupledBodyTextWithLink::loadPoemsLinksFromStatisticsFile() {
         getIncludedStringBetweenTags(inLine, emptyString, referParaMiddleChar);
     if (bodyTargetFile.empty())
       break;
+    // add separator for each file
+    // to manually add poem title
     if (bodyTargetFile != lastFile) {
       auto fullPos =
           make_pair(make_pair(TurnToInt(bodyTargetFile), 0), make_pair(0, 0));
       auto link = fixLinkFromMainTemplate(
           emptyString, bodyTargetFile, DISPLAY_TYPE::UNHIDDEN, emptyString,
           emptyString, citationChapterNo + bodyTargetFile + defaultUnit,
-          LineNumber(1, 0).asString());
+          LineNumber(LineNumber::StartNumber, 0).asString());
       result[fullPos] = link;
       fullPos =
           make_pair(make_pair(TurnToInt(bodyTargetFile), 0), make_pair(0, 1));
       link = fixLinkFromMainTemplate(
           emptyString, bodyTargetFile, DISPLAY_TYPE::UNHIDDEN, emptyString,
-          emptyString, emptyString, LineNumber(1, 0).asString());
+          emptyString, emptyString, LineNumber(LineNumber::StartNumber, 0).asString());
       result[fullPos] = link;
       lastFile = bodyTargetFile;
     }
