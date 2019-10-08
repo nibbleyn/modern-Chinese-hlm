@@ -10,7 +10,7 @@ int debug = LOG_INFO;
 
 int main(int argc, char **argv) {
   // change this number to run different functions
-  int num = 19;
+  int num = 24;
   switch (num) {
   case 1:
     //    search(R"(枕)", SEARCH_IN_MAIN, true);
@@ -88,7 +88,7 @@ int main(int argc, char **argv) {
     appendReverseLinksForMain();
     break;
   case 24:
-    testFunctions(3);
+    testFunctions(2);
     break;
   case 25:
     tools(15);

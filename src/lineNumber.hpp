@@ -55,6 +55,7 @@ public:
   bool isPureTextOnly() { return (m_paraNumber == 0); }
   string generateLinePrefix();
   string asString();
+  string getDisplayText();
   bool isWithinLineRange(int minPara = 0, int maxPara = 0, int minLine = 0,
                          int maxLine = 0);
   ParaLineNumber getParaLineNumber() {
@@ -80,6 +81,7 @@ public:
   LineNumberPlaceholderLink(const string &linkString) {
     m_paraLineNumber.readFromString(linkString);
     m_fullString = getFormatedFullString();
+    m_displayText = m_paraLineNumber.getDisplayText();
   }
   bool isPartOfParagraphHeader() {
     return m_paraLineNumber.isParagraphHeader();

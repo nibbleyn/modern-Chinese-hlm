@@ -8,6 +8,7 @@ int LineNumber::Limit = START_PARA_NUMBER * 2;
 // to try special case like "bottom"
 static const string endOfLineNumber = R"(")";
 static const string endOfGeneratedLineNumber = R"(>)";
+static const string inBetweenParaAndLineNumber = R"(.)";
 
 bool operator>(LineNumber const &ln1, LineNumber const &ln2) {
   return (ln1.getParaNumber() > ln2.getParaNumber() or
@@ -61,6 +62,14 @@ string LineNumber::asString() {
   return result;
 }
 
+string LineNumber::getDisplayText() {
+  if (m_lineNumber == 0)
+    return emptyString;
+  else
+    return TurnToString(m_paraNumber) + inBetweenParaAndLineNumber +
+           TurnToString(m_lineNumber);
+}
+
 bool LineNumber::isWithinLineRange(int minPara, int maxPara, int minLine,
                                    int maxLine) {
   bool biggerThanMin = true;
@@ -74,8 +83,6 @@ bool LineNumber::isWithinLineRange(int minPara, int maxPara, int minLine,
     lessThanMax = m_paraNumber <= maxPara;
   return (biggerThanMin and lessThanMax);
 }
-
-static const string inBetweenParaAndLineNumber = R"(.)";
 
 /**
  * retrieve lineNumber from the link at the beginning of containedLine
@@ -104,18 +111,14 @@ size_t LineNumberPlaceholderLink::loadFirstFromContainedLine(
   auto substr = subStrAfterId.substr(0, subStrAfterId.find(endOfLineNumber));
   if (debug >= LOG_INFO)
     METHOD_OUTPUT << substr << endl;
-  if (substr == bottomParagraphIndicator)
+  if (substr == bottomParagraphIndicator) {
     m_paraLineNumber.readFromString(leadingChar +
                                     TurnToString(LineNumber::Limit - 1));
-  else
+  } else {
     m_paraLineNumber.readFromString(substr);
+  }
 
-  if (m_paraLineNumber.getlineNumber() == 0)
-    m_displayText = emptyString;
-  else
-    m_displayText = TurnToString(m_paraLineNumber.getParaNumber()) +
-                    inBetweenParaAndLineNumber +
-                    TurnToString(m_paraLineNumber.getlineNumber());
+  m_displayText = m_paraLineNumber.getDisplayText();
 
   return beginPos;
 }
