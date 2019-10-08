@@ -18,9 +18,8 @@
 static const int START_PARA_NUMBER = 90;
 
 class LineNumber {
-  static int StartNumber;
-
 public:
+  static int StartNumber;
   static int Limit;
   static void setStartNumber(int num) {
     StartNumber = num;
@@ -32,8 +31,7 @@ public:
   LineNumber(ParaLineNumber pln)
       : m_paraNumber(pln.first), m_lineNumber(pln.second) {}
   LineNumber(int paraNumber, int lineNumber)
-      : m_paraNumber(paraNumber), m_lineNumber(lineNumber) {
-  }
+      : m_paraNumber(paraNumber), m_lineNumber(lineNumber) {}
   LineNumber(const string &name) { readFromString(name); }
   void readFromString(const string &name);
 

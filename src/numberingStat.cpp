@@ -87,7 +87,8 @@ LinkStringSet CoupledBodyTextWithLink::loadPoemsLinksFromStatisticsFile() {
           make_pair(make_pair(TurnToInt(bodyTargetFile), 0), make_pair(0, 1));
       link = fixLinkFromMainTemplate(
           emptyString, bodyTargetFile, DISPLAY_TYPE::UNHIDDEN, emptyString,
-          emptyString, emptyString, LineNumber(LineNumber::StartNumber, 0).asString());
+          emptyString, emptyString,
+          LineNumber(LineNumber::StartNumber, 0).asString());
       result[fullPos] = link;
       lastFile = bodyTargetFile;
     }
