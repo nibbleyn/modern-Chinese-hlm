@@ -33,14 +33,14 @@ testLink              <a unhidden href="a025.htm#P9L1">↓<sub>第3回1.2节:</s
 testLink              display as:↓第3回1.2节:||
 *************************line 247: unhidden valid reverse link finished *************************
 testLinkFromAttachment              original link: 
-testLinkFromAttachment              <a title="IMAGE" href="#nwbt.jpg">（图示：女娲补天）</a>
+testLinkFromAttachment              <a title="IMAGE" href="#nwbt.jpg">↑（图示：女娲补天）</a>
 4Link::readType              image type seen from special title: title="IMAGE"
-4Link::readAnnotation              annotation: （图示：女娲补天）
-18LinkFromAttachment::readDisplayType              m_fullString: <a title="IMAGE" href="#nwbt.jpg">（图示：女娲补天）</a>
+4Link::readAnnotation              annotation: ↑（图示：女娲补天）
+18LinkFromAttachment::readDisplayType              m_fullString: <a title="IMAGE" href="#nwbt.jpg">↑（图示：女娲补天）</a>
 18LinkFromAttachment::readDisplayType              m_objectType: LINKFROMATTACHMENT
 18LinkFromAttachment::readDisplayType              display Type: direct.
 18LinkFromAttachment::readReferFileName              m_imageReferFilename: 
-18LinkFromAttachment::fixFromString              <a title="IMAGE" href="#nwbt.jpg">（图示：女娲补天）</a>
+18LinkFromAttachment::fixFromString              <a title="IMAGE" href="#nwbt.jpg">↑（图示：女娲补天）</a>
 18LinkFromAttachment::readReferPara              m_referPara: nwbt.jpg
 8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
 8Citation::getFullStringAndBodyTextFromContainedLine              
@@ -48,7 +48,7 @@ testLinkFromAttachment              <a title="IMAGE" href="#nwbt.jpg">（图示�
 8Citation::readDisplayType              m_objectType: CITATION
 8Citation::readDisplayType              display Type: direct.
 18LinkFromAttachment::needToChange              need to change
-testLinkFromAttachment              （图示：女娲补天）
+testLinkFromAttachment              ↑（图示：女娲补天）
 testLinkFromAttachment              need Update: 1
 testLinkFromAttachment              after fixed: 
 testLinkFromAttachment              <a title="IMAGE" href="b007.htm#nwbt.jpg">↑（图示：女娲补天）</a>
@@ -233,12 +233,13 @@ testLinkFromMain              <a unhidden title="菱角菱花" href="#94"><sub h
 12LinkFromMain::needToChange              need to change
 15CoupledBodyText::setInputOutputFiles              input file is: bodyTexts/output/Main80.txt
 15CoupledBodyText::setInputOutputFiles              output file is: bodyTexts/afterFix/Main80.txt
-25LineNumberPlaceholderLink::loadFirstFromContainedLine              P1L4
-12LinkFromMain::readKey              line number found: P1L4
+isFoundOutsidePersonalComments               unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">香菱知书达理，然又毫无戒心，否则不会有最后一句。</u>】金桂道：“既这样说（<cite unhidden>，那我便不顾宝钗，依我看</cite>），‘香’字竟不如‘秋’字妥当。
+25LineNumberPlaceholderLink::loadFirstFromContainedLine              P2L1
+12LinkFromMain::readKey              line number found: P2L1
 12LinkFromMain::readKey              key: 菱角菱花
 testLinkFromMain              need Update: 1
 testLinkFromMain              after fixed: 
-testLinkFromMain              <a unhidden title="菱角菱花" href="a080.htm#P1L4"><sub hidden>第80回1.4节:</sub>原是老奶奶（薛姨妈）使唤的</a>
+testLinkFromMain              <a unhidden title="菱角菱花" href="a080.htm#P2L1"><sub hidden>第80回2.1节:</sub>原是老奶奶（薛姨妈）使唤的</a>
 testLinkFromMain              display as:原是老奶奶（薛姨妈）使唤的||
 *************************line 325: fixLinkFromSameFileTemplate finished *************************
 fixLinkFromMainTemplate              <a unhidden title="菱角菱花" href="a080.htm#94">↑<sub hidden>第80回1.1节:</sub>原是老奶奶（薛姨妈）使唤的</a>
@@ -260,12 +261,13 @@ testLink              <a unhidden title="菱角菱花" href="a080.htm#94">↑<su
 12LinkFromMain::needToChange              need to change
 15CoupledBodyText::setInputOutputFiles              input file is: bodyTexts/output/Main80.txt
 15CoupledBodyText::setInputOutputFiles              output file is: bodyTexts/afterFix/Main80.txt
-25LineNumberPlaceholderLink::loadFirstFromContainedLine              P1L4
-12LinkFromMain::readKey              line number found: P1L4
+isFoundOutsidePersonalComments               unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">香菱知书达理，然又毫无戒心，否则不会有最后一句。</u>】金桂道：“既这样说（<cite unhidden>，那我便不顾宝钗，依我看</cite>），‘香’字竟不如‘秋’字妥当。
+25LineNumberPlaceholderLink::loadFirstFromContainedLine              P2L1
+12LinkFromMain::readKey              line number found: P2L1
 12LinkFromMain::readKey              key: 菱角菱花
 testLink              need Update: 1
 testLink              after fixed: 
-testLink              <a unhidden title="菱角菱花" href="a080.htm#P1L4">↑<sub hidden>第80回1.4节:</sub>原是老奶奶（薛姨妈）使唤的</a>
+testLink              <a unhidden title="菱角菱花" href="a080.htm#P2L1">↑<sub hidden>第80回2.1节:</sub>原是老奶奶（薛姨妈）使唤的</a>
 testLink              display as:↑原是老奶奶（薛姨妈）使唤的||
 *************************line 333: fixLinkFromMainTemplate finished *************************
 fixLinkFromMainTemplate              <a unhidden title="菱角菱花" href="a080.htm#94">↑<sub hidden>第80回1.1节:</sub>原是老奶奶（薛姨妈）使唤的</a>
@@ -287,19 +289,20 @@ testLinkFromMain              <a unhidden title="菱角菱花" href="a080.htm#94
 12LinkFromMain::needToChange              need to change
 15CoupledBodyText::setInputOutputFiles              input file is: bodyTexts/output/Main80.txt
 15CoupledBodyText::setInputOutputFiles              output file is: bodyTexts/afterFix/Main80.txt
-25LineNumberPlaceholderLink::loadFirstFromContainedLine              P1L4
-12LinkFromMain::readKey              line number found: P1L4
+isFoundOutsidePersonalComments               unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">香菱知书达理，然又毫无戒心，否则不会有最后一句。</u>】金桂道：“既这样说（<cite unhidden>，那我便不顾宝钗，依我看</cite>），‘香’字竟不如‘秋’字妥当。
+25LineNumberPlaceholderLink::loadFirstFromContainedLine              P2L1
+12LinkFromMain::readKey              line number found: P2L1
 12LinkFromMain::readKey              key: 菱角菱花
 12LinkFromMain::generateLinkToOrigin              create link to original main html thru key: 菱角菱花
-fixLinkFromOriginalTemplate              <a unhidden title="菱角菱花" href="original\c080.htm#P1L4">↑<sub hidden></sub>原文</a>
+fixLinkFromOriginalTemplate              <a unhidden title="菱角菱花" href="original\c080.htm#P2L1">↑<sub hidden></sub>原文</a>
 4Link::readType              type seen from prefix: original\c080
 4Link::readAnnotation              annotation: 原文
-12LinkFromMain::readDisplayType              m_fullString: <a unhidden title="菱角菱花" href="original\c080.htm#P1L4">↑<sub hidden></sub>原文</a>
+12LinkFromMain::readDisplayType              m_fullString: <a unhidden title="菱角菱花" href="original\c080.htm#P2L1">↑<sub hidden></sub>原文</a>
 12LinkFromMain::readDisplayType              m_objectType: LINKFROMMAIN
 12LinkFromMain::readDisplayType              display Type: unhidden
 12LinkFromMain::readReferFileName              chapterNumber: 80, attachmentNumber: 0
-12LinkFromMain::fixFromString              <a unhidden title="菱角菱花" href="original\c080.htm#P1L4">↑<sub hidden></sub>原文</a>
-12LinkFromMain::readReferPara              referPara: P1L4
+12LinkFromMain::fixFromString              <a unhidden title="菱角菱花" href="original\c080.htm#P2L1">↑<sub hidden></sub>原文</a>
+12LinkFromMain::readReferPara              referPara: P2L1
 8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
 8Citation::getFullStringAndBodyTextFromContainedLine              <sub hidden></sub>
 8Citation::readDisplayType              m_fullString: <sub hidden></sub>
@@ -307,13 +310,14 @@ fixLinkFromOriginalTemplate              <a unhidden title="菱角菱花" href="
 8Citation::readDisplayType              display Type: hidden
 15CoupledBodyText::setInputOutputFiles              input file is: bodyTexts/output/Org80.txt
 15CoupledBodyText::setInputOutputFiles              output file is: bodyTexts/afterFix/Org80.txt
+isFoundOutsidePersonalComments               unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">庚辰双行夹批：又虚陪一个兰花，一则是自高身价，二则是诱人犯法。</u>）香菱说到热闹头上，忘了忌讳，便接口道：“兰花桂花的香，又非别花之香可比。”一句未完，金桂的丫鬟名唤宝蟾者，忙指着香菱的脸儿说道：“要死，要死！你怎么真叫起姑娘的名字来！”香菱猛省了，反不好意思，忙陪笑赔罪说：“一时说顺了嘴，奶奶别计较。”金桂笑道：“这有什么，你也太小心了。但只是我想这个‘香’字到底不妥，意思要换一个字，不知你服不服？”香菱忙笑道：“奶奶说那里话，此刻连我一身一体俱属奶奶，何得换一名字反问我服不服，叫我如何当得起。奶奶说那一个字好，就用那一个。”金桂笑道：“你虽说的是，只怕姑娘多心，说：‘我起的名字，反不���你？你能来了几日，就驳我的回了。’”香菱笑道：“奶奶有所不知，当日买了我来时，原是老奶奶使唤的，故此姑娘起得名字。后来我自伏侍了爷，就与姑娘无涉了。如今又有了奶奶，益发不与姑娘相干。况且姑娘又是极明白的人，如何恼得这些呢。”金桂道：“既这样说，‘香’字竟不如‘秋’字妥当。
 25LineNumberPlaceholderLink::loadFirstFromContainedLine              P1L3
 12LinkFromMain::readKey              line number found: P1L3
 12LinkFromMain::needToChange              need to change
 12LinkFromMain::readKey              key: 菱角菱花
 testLinkFromMain              need Update: 1
 testLinkFromMain              after fixed: 
-testLinkFromMain              <a unhidden title="菱角菱花" href="a080.htm#P1L4">↑<sub hidden>第80回1.4节:</sub>原是老奶奶（薛姨妈）使唤的</a>（<a unhidden title="菱角菱花" href="original\c080.htm#P1L3">↑<sub hidden>第80回1.3节:</sub>原文</a>）
+testLinkFromMain              <a unhidden title="菱角菱花" href="a080.htm#P2L1">↑<sub hidden>第80回2.1节:</sub>原是老奶奶（薛姨妈）使唤的</a>（<a unhidden title="菱角菱花" href="original\c080.htm#P1L3">↑<sub hidden>第80回1.3节:</sub>原文</a>）
 testLinkFromMain              display as:↑原是老奶奶（薛姨妈）使唤的（↑原文）||
 *************************line 340: generate original link afterwards finished *************************
 fixLinkFromOriginalTemplate              <a unhidden title="happy" href="original\c018.htm#90101">↑<sub hidden>第80回1.1节:</sub>原文</a>
@@ -451,20 +455,21 @@ testLinkFromAttachment              <a unhidden title="菱角菱花" href="..\a0
 18LinkFromAttachment::needToChange              need to change
 15CoupledBodyText::setInputOutputFiles              input file is: bodyTexts/output/Main80.txt
 15CoupledBodyText::setInputOutputFiles              output file is: bodyTexts/afterFix/Main80.txt
-25LineNumberPlaceholderLink::loadFirstFromContainedLine              P1L4
-18LinkFromAttachment::readKey              line number found: P1L4
+isFoundOutsidePersonalComments               unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">香菱知书达理，然又毫无戒心，否则不会有最后一句。</u>】金桂道：“既这样说（<cite unhidden>，那我便不顾宝钗，依我看</cite>），‘香’字竟不如‘秋’字妥当。
+25LineNumberPlaceholderLink::loadFirstFromContainedLine              P2L1
+18LinkFromAttachment::readKey              line number found: P2L1
 18LinkFromAttachment::readKey              key: 菱角菱花
 testLinkFromAttachment              原是老奶奶（薛姨妈）使唤的
 18LinkFromAttachment::generateLinkToOrigin              create link to original main html thru key: 菱角菱花
-fixLinkFromOriginalTemplate              <a unhidden title="菱角菱花" href="..\original\c080.htm#P1L4">↑<sub hidden></sub>原文</a>
+fixLinkFromOriginalTemplate              <a unhidden title="菱角菱花" href="..\original\c080.htm#P2L1">↑<sub hidden></sub>原文</a>
 4Link::readType              type seen from prefix: ..\original\c080
 4Link::readAnnotation              annotation: 原文
-18LinkFromAttachment::readDisplayType              m_fullString: <a unhidden title="菱角菱花" href="..\original\c080.htm#P1L4">↑<sub hidden></sub>原文</a>
+18LinkFromAttachment::readDisplayType              m_fullString: <a unhidden title="菱角菱花" href="..\original\c080.htm#P2L1">↑<sub hidden></sub>原文</a>
 18LinkFromAttachment::readDisplayType              m_objectType: LINKFROMATTACHMENT
 18LinkFromAttachment::readDisplayType              display Type: unhidden
 18LinkFromAttachment::readReferFileName              chapterNumber: 80, attachmentNumber: 0
-18LinkFromAttachment::fixFromString              <a unhidden title="菱角菱花" href="..\original\c080.htm#P1L4">↑<sub hidden></sub>原文</a>
-18LinkFromAttachment::readReferPara              referPara: P1L4
+18LinkFromAttachment::fixFromString              <a unhidden title="菱角菱花" href="..\original\c080.htm#P2L1">↑<sub hidden></sub>原文</a>
+18LinkFromAttachment::readReferPara              referPara: P2L1
 8Citation::getFullStringAndBodyTextFromContainedLine              m_fullString: 
 8Citation::getFullStringAndBodyTextFromContainedLine              <sub hidden></sub>
 8Citation::readDisplayType              m_fullString: <sub hidden></sub>
@@ -472,13 +477,14 @@ fixLinkFromOriginalTemplate              <a unhidden title="菱角菱花" href="
 8Citation::readDisplayType              display Type: hidden
 15CoupledBodyText::setInputOutputFiles              input file is: bodyTexts/output/Org80.txt
 15CoupledBodyText::setInputOutputFiles              output file is: bodyTexts/afterFix/Org80.txt
+isFoundOutsidePersonalComments               unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">庚辰双行夹批：又虚陪一个兰花，一则是自高身价，二则是诱人犯法。</u>）香菱说到热闹头上，忘了忌讳，便接口道：“兰花桂花的香，又非别花之香可比。”一句未完，金桂的丫鬟名唤宝蟾者，忙指着香菱的脸儿说道：“要死，要死！你怎么真叫起姑娘的名字来！”香菱猛省了，反不好意思，忙陪笑赔罪说：“一时说顺了嘴，奶奶别计较。”金桂笑道：“这有什么，你也太小心了。但只是我想这个‘香’字到底不妥，意思要换一个字，不知你服不服？”香菱忙笑道：“奶奶说那里话，此刻连我一身一体俱属奶奶，何得换一名字反问我服不服，叫我如何当得起。奶奶说那一个字好，就用那一个。”金桂笑道：“你虽说的是，只怕姑娘多心，说：‘我起的名字，反不���你？你能来了几日，就驳我的回了。’”香菱笑道：“奶奶有所不知，当日买了我来时，原是老奶奶使唤的，故此姑娘起得名字。后来我自伏侍了爷，就与姑娘无涉了。如今又有了奶奶，益发不与姑娘相干。况且姑娘又是极明白的人，如何恼得这些呢。”金桂道：“既这样说，‘香’字竟不如‘秋’字妥当。
 25LineNumberPlaceholderLink::loadFirstFromContainedLine              P1L3
 18LinkFromAttachment::readKey              line number found: P1L3
 18LinkFromAttachment::needToChange              need to change
 18LinkFromAttachment::readKey              key: 菱角菱花
 testLinkFromAttachment              need Update: 1
 testLinkFromAttachment              after fixed: 
-testLinkFromAttachment              <a unhidden title="菱角菱花" href="..\a080.htm#P1L4">↑<sub hidden>第80回1.4节:</sub>原是老奶奶（薛姨妈）使唤的</a>（<a unhidden title="菱角菱花" href="..\original\c080.htm#P1L3">↑<sub hidden>第80回1.3节:</sub>原文</a>）
+testLinkFromAttachment              <a unhidden title="菱角菱花" href="..\a080.htm#P2L1">↑<sub hidden>第80回2.1节:</sub>原是老奶奶（薛姨妈）使唤的</a>（<a unhidden title="菱角菱花" href="..\original\c080.htm#P1L3">↑<sub hidden>第80回1.3节:</sub>原文</a>）
 testLinkFromAttachment              display as:↑原是老奶奶（薛姨妈）使唤的（↑原文）||
 *************************line 393: fixLinkFromMainTemplate finished *************************
 fixLinkFromOriginalTemplate              <a unhidden title="菱角菱花" href="..\original\c080.htm#94">↑<sub hidden>第80回1.1节:</sub>原文</a>
@@ -500,6 +506,7 @@ testLinkFromAttachment              <a unhidden title="菱角菱花" href="..\or
 18LinkFromAttachment::needToChange              need to change
 15CoupledBodyText::setInputOutputFiles              input file is: bodyTexts/output/Org80.txt
 15CoupledBodyText::setInputOutputFiles              output file is: bodyTexts/afterFix/Org80.txt
+isFoundOutsidePersonalComments               unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">庚辰双行夹批：又虚陪一个兰花，一则是自高身价，二则是诱人犯法。</u>）香菱说到热闹头上，忘了忌讳，便接口道：“兰花桂花的香，又非别花之香可比。”一句未完，金桂的丫鬟名唤宝蟾者，忙指着香菱的脸儿说道：“要死，要死！你怎么真叫起姑娘的名字来！”香菱猛省了，反不好意思，忙陪笑赔罪说：“一时说顺了嘴，奶奶别计较。”金桂笑道：“这有什么，你也太小心了。但只是我想这个‘香’字到底不妥，意思要换一个字，不知你服不服？”香菱忙笑道：“奶奶说那里话，此刻连我一身一体俱属奶奶，何得换一名字反问我服不服，叫我如何当得起。奶奶说那一个字好，就用那一个。”金桂笑道：“你虽说的是，只怕姑娘多心，说：‘我起的名字，反不���你？你能来了几日，就驳我的回了。’”香菱笑道：“奶奶有所不知，当日买了我来时，原是老奶奶使唤的，故此姑娘起得名字。后来我自伏侍了爷，就与姑娘无涉了。如今又有了奶奶，益发不与姑娘相干。况且姑娘又是极明白的人，如何恼得这些呢。”金桂道：“既这样说，‘香’字竟不如‘秋’字妥当。
 25LineNumberPlaceholderLink::loadFirstFromContainedLine              P1L3
 18LinkFromAttachment::readKey              line number found: P1L3
 18LinkFromAttachment::readKey              key: 菱角菱花

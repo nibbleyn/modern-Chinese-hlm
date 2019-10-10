@@ -1,8 +1,6 @@
-*************************line 656: HLM test started *************************
+*************************line 628: HLM test started *************************
 testLineHeader              original: 
 testLineHeader              P1L4
-readDisplayType               unhidden id="P1L4"
-25LineNumberPlaceholderLink::readDisplayType              display Type: unhidden
 testLineHeader              display Property: 
 testLineHeader              unhidden
 testLineHeader              P1L4
@@ -12,11 +10,9 @@ testLineHeader              <a unhidden id="P1L4">1.4</a>
 testLineHeader              display as:1.4||
 testLineHeader              generate line prefix: 
 testLineHeader              <a unhidden id="P1L4">
-*************************line 185: ln1 finished *************************
+*************************line 116: ln1 finished *************************
 testLineHeader              original: 
 testLineHeader              P13L4
-readDisplayType               unhidden id="P13L4"
-25LineNumberPlaceholderLink::readDisplayType              display Type: unhidden
 testLineHeader              display Property: 
 testLineHeader              unhidden
 testLineHeader              P13L4
@@ -26,14 +22,10 @@ testLineHeader              <a unhidden id="P13L4">13.4</a>
 testLineHeader              display as:13.4||
 testLineHeader              generate line prefix: 
 testLineHeader              <a unhidden id="P13L4">
-*************************line 187: ln2 finished *************************
+*************************line 118: ln2 finished *************************
 testLineHeaderFromContainedLine              original: 
 testLineHeaderFromContainedLine              <a unhidden id="P12L8">12.8</a>　　原来 这一个名唤 贾蔷，也系 宁国府 正派玄孙，父母早亡，从小 跟贾珍过活，如今 长了十六岁，比 贾蓉 生得还 风流俊俏。贾蓉、贾蔷兄弟二人最相亲厚，常相共处。<br>
-25LineNumberPlaceholderLink::loadFirstFromContainedLine              <a unhidden id="P12L8">12.8</a>　　原来 这一个名唤 贾蔷，也系 宁国府 正派玄孙，父母早亡，从小 跟贾珍过活，如今 长了十六岁，比 贾蓉 生得还 风流俊俏。贾蓉、贾蔷兄弟二人最相亲厚，常相共处。<br>
-25LineNumberPlaceholderLink::loadFirstFromContainedLine              <a unhidden id="
 25LineNumberPlaceholderLink::loadFirstFromContainedLine              P12L8
-readDisplayType               unhidden id="P12L8"
-25LineNumberPlaceholderLink::readDisplayType              display Type: unhidden
 testLineHeaderFromContainedLine              display Property: 
 testLineHeaderFromContainedLine              unhidden
 testLineHeaderFromContainedLine              P12L8
@@ -43,14 +35,10 @@ testLineHeaderFromContainedLine              <a unhidden id="P12L8">12.8</a>
 testLineHeaderFromContainedLine              display as:12.8||
 testLineHeaderFromContainedLine              generate line prefix: 
 testLineHeaderFromContainedLine              <a unhidden id="P12L8">
-*************************line 190: ln3 finished *************************
+*************************line 121: ln3 finished *************************
 testParagraphHeaderFromContainedLine              original: 
 testParagraphHeaderFromContainedLine              <b unhidden> 第1段 </b><a unhidden id="P90" href="#P91">v向下</a>&nbsp;&nbsp;&nbsp;&nbsp;<a unhidden id="top" href="#bottom">页面底部->||</a><hr color="#F0BEC0">
-25LineNumberPlaceholderLink::loadFirstFromContainedLine              <b unhidden> 第1段 </b><a unhidden id="P90" href="#P91">v向下</a>&nbsp;&nbsp;&nbsp;&nbsp;<a unhidden id="top" href="#bottom">页面底部->||</a><hr color="#F0BEC0">
-25LineNumberPlaceholderLink::loadFirstFromContainedLine              <a unhidden id="
 25LineNumberPlaceholderLink::loadFirstFromContainedLine              P90
-readDisplayType               unhidden id="P90" href="#P91"
-25LineNumberPlaceholderLink::readDisplayType              display Type: unhidden
 testParagraphHeaderFromContainedLine              display Property: 
 testParagraphHeaderFromContainedLine              unhidden
 testParagraphHeaderFromContainedLine              P90
@@ -66,11 +54,7 @@ testLineNumber              display as:
 testLineNumber              第1段 v向下    页面底部->||
 testParagraphHeaderFromContainedLine              original: 
 testParagraphHeaderFromContainedLine              <hr color="#F0BEC0"><b unhidden> 第8段 </b><a unhidden id="P97" href="#P98">向下</a>&nbsp;&nbsp;&nbsp;&nbsp;<a unhidden id="P83" href="#P84">向上</a><hr color="#F0BEC0">
-25LineNumberPlaceholderLink::loadFirstFromContainedLine              <hr color="#F0BEC0"><b unhidden> 第8段 </b><a unhidden id="P97" href="#P98">向下</a>&nbsp;&nbsp;&nbsp;&nbsp;<a unhidden id="P83" href="#P84">向上</a><hr color="#F0BEC0">
-25LineNumberPlaceholderLink::loadFirstFromContainedLine              <a unhidden id="
 25LineNumberPlaceholderLink::loadFirstFromContainedLine              P97
-readDisplayType               unhidden id="P97" href="#P98"
-25LineNumberPlaceholderLink::readDisplayType              display Type: unhidden
 testParagraphHeaderFromContainedLine              display Property: 
 testParagraphHeaderFromContainedLine              unhidden
 testParagraphHeaderFromContainedLine              P97
@@ -84,14 +68,10 @@ printCompareResult              <hr color="#F0BEC0"><b unhidden> 第8段 </b><a 
 printCompareResult              same
 testLineNumber              display as:
 testLineNumber              第8段 向下    向上
-*************************line 219: ln5 finished *************************
+*************************line 150: ln5 finished *************************
 testParagraphHeaderFromContainedLine              original: 
 testParagraphHeaderFromContainedLine              <hr color="#F0BEC0"><a unhidden id="bottom" href="#top">||<-页面顶部</a>&nbsp;&nbsp;&nbsp;&nbsp;<a unhidden id="P78" href="#P79">^向上</a><hr color="#F0BEC0">
-25LineNumberPlaceholderLink::loadFirstFromContainedLine              <hr color="#F0BEC0"><a unhidden id="bottom" href="#top">||<-页面顶部</a>&nbsp;&nbsp;&nbsp;&nbsp;<a unhidden id="P78" href="#P79">^向上</a><hr color="#F0BEC0">
-25LineNumberPlaceholderLink::loadFirstFromContainedLine              <a unhidden id="
 25LineNumberPlaceholderLink::loadFirstFromContainedLine              bottom
-readDisplayType               unhidden id="bottom" href="#top"
-25LineNumberPlaceholderLink::readDisplayType              display Type: unhidden
 testParagraphHeaderFromContainedLine              display Property: 
 testParagraphHeaderFromContainedLine              unhidden
 testParagraphHeaderFromContainedLine              P179
@@ -105,43 +85,27 @@ printCompareResult              <hr color="#F0BEC0"><a unhidden id="bottom" href
 printCompareResult              same
 testLineNumber              display as:
 testLineNumber              ||<-页面顶部    ^向上
-*************************line 234: ln6 finished *************************
+*************************line 165: ln6 finished *************************
 testLineHeaderFromContainedLine              original: 
 testLineHeaderFromContainedLine              <br>
-25LineNumberPlaceholderLink::loadFirstFromContainedLine              <br>
-25LineNumberPlaceholderLink::loadFirstFromContainedLine              <a unhidden id="
-25LineNumberPlaceholderLink::loadFirstFromContainedLine              <br>
-25LineNumberPlaceholderLink::loadFirstFromContainedLine              <a hidden id="
-25LineNumberPlaceholderLink::loadFirstFromContainedLine              <br>
-25LineNumberPlaceholderLink::loadFirstFromContainedLine              <a id="
-readDisplayType              
-25LineNumberPlaceholderLink::readDisplayType              display Type: direct.
 testLineHeaderFromContainedLine              display Property: 
-testLineHeaderFromContainedLine              
+testLineHeaderFromContainedLine              unhidden
 testLineHeaderFromContainedLine              
 testLineHeaderFromContainedLine              is paragraph header? false
 testLineHeaderFromContainedLine              whole string: 
 testLineHeaderFromContainedLine              
 testLineHeaderFromContainedLine              display as:||
 testLineHeaderFromContainedLine              pure text
-*************************line 237: ln7 finished *************************
+*************************line 168: ln7 finished *************************
 testLineHeaderFromContainedLine              original: 
 testLineHeaderFromContainedLine              anything
-25LineNumberPlaceholderLink::loadFirstFromContainedLine              anything
-25LineNumberPlaceholderLink::loadFirstFromContainedLine              <a unhidden id="
-25LineNumberPlaceholderLink::loadFirstFromContainedLine              anything
-25LineNumberPlaceholderLink::loadFirstFromContainedLine              <a hidden id="
-25LineNumberPlaceholderLink::loadFirstFromContainedLine              anything
-25LineNumberPlaceholderLink::loadFirstFromContainedLine              <a id="
-readDisplayType              
-25LineNumberPlaceholderLink::readDisplayType              display Type: direct.
 testLineHeaderFromContainedLine              display Property: 
-testLineHeaderFromContainedLine              
+testLineHeaderFromContainedLine              unhidden
 testLineHeaderFromContainedLine              
 testLineHeaderFromContainedLine              is paragraph header? false
 testLineHeaderFromContainedLine              whole string: 
 testLineHeaderFromContainedLine              
 testLineHeaderFromContainedLine              display as:||
 testLineHeaderFromContainedLine              pure text
-*************************line 239: ln8 finished *************************
+*************************line 170: ln8 finished *************************
 

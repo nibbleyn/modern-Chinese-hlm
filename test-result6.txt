@@ -1,5 +1,5 @@
-*************************line 647: HLM test started *************************
-*************************line 633: testContainer started *************************
+*************************line 628: HLM test started *************************
+*************************line 482: testContainer started *************************
 14TableContainer::insertFrontParagrapHeader              append content in: container/2.txt
 14TableContainer::insertFrontParagrapHeader              <tr><td width="50%"><b unhidden> 第1条 - 第4条 </b><a unhidden id="P90" href="#P91">v向下4条</a></td><td width="50%"><a unhidden id="top" href="#bottom">页面底部->||</a></td></tr>
 14TableContainer::appendLeftParagraphInBodyText              append Paragraph In BodyText: container/2.txt
