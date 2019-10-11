@@ -22,9 +22,12 @@ void CoupledBodyTextWithLink::clearExistingNumberingStatistics() {
   if (debug >= LOG_INFO)
     FUNCTION_OUTPUT << "clear content in: " << lineDetailFilePath << endl;
   ofstream outfile1(lineDetailFilePath);
-  if (debug >= LOG_INFO)
-    FUNCTION_OUTPUT << "clear content in: " << poemsDetailFilePath << endl;
-  ofstream outfile2(poemsDetailFilePath);
+  // only clear poems for main file
+  if (referFilePrefix == MAIN_BODYTEXT_PREFIX) {
+    if (debug >= LOG_INFO)
+      FUNCTION_OUTPUT << "clear content in: " << poemsDetailFilePath << endl;
+    ofstream outfile2(poemsDetailFilePath);
+  }
 }
 
 void CoupledBodyTextWithLink::loadNumberingStatistics() {
