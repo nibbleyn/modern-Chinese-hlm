@@ -130,10 +130,12 @@ void Commander::updateAttachmentContentTableAndfixReturnLink() {
         OUTPUT_REF_ATTACHMENT_LIST_PATH);
     CoupledBodyTextContainer::refAttachmentTable.loadReferenceAttachmentList();
 
-    generateContentTableForAttachments(ATTACHMENT_TYPE::REFERENCE, false);
-    generateContentTableForAttachments(ATTACHMENT_TYPE::PERSONAL, false);
-    generateContentTable(4);
-    generateContentTable(5);
+    generateContentTable(TABLE_TYPE::ATTACHMENT, ATTACHMENT_TYPE::REFERENCE,
+                         false);
+    generateContentTable(TABLE_TYPE::ATTACHMENT, ATTACHMENT_TYPE::PERSONAL,
+                         false);
+    generateContentTable(TABLE_TYPE::IMAGE);
+    generateContentTable(TABLE_TYPE::POEMS);
     if (m_fixReturnLink)
       // fix return links of attachments to output directory
       for (const auto &file : m_fileSet) {

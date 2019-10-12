@@ -1,8 +1,8 @@
 #pragma once
 #include "libraryInterface.hpp"
 
+enum class TABLE_TYPE { MAIN, ORIGINAL, JPM, IMAGE, POEMS, ATTACHMENT };
 // main entry of calling above functions
-void generateContentTable(int num = 0);
-
-void generateContentTableForAttachments(ATTACHMENT_TYPE type,
-                                        bool needToReloadAttachmentList = true);
+void generateContentTable(TABLE_TYPE type,
+                          ATTACHMENT_TYPE attType = ATTACHMENT_TYPE::PERSONAL,
+                          bool needToReloadAttachmentList = true);

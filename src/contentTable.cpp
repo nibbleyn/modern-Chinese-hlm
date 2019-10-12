@@ -13,16 +13,6 @@ static const string JPM_INDEX = R"(dindex)";
 static const string JPM_TITLE = R"(张竹坡批注金瓶梅)";
 static const string JPM_DISPLAY_TITLE = R"(张竹坡批注金瓶梅 目录)";
 
-static const string REFERENCE_ATTACHMENT_INDEX = R"(bindex1)";
-static const string REFERENCE_ATTACHMENT_TITLE = R"(引经据典 附件目录)";
-static const string REFERENCE_ATTACHMENT_DISPLAY_TITLE =
-    R"(引经据典 附件目录)";
-
-static const string PERSONAL_ATTACHMENT_INDEX = R"(bindex2)";
-static const string PERSONAL_ATTACHMENT_TITLE = R"(个人感悟 附件目录)";
-static const string PERSONAL_ATTACHMENT_DISPLAY_TITLE =
-    R"(个人感悟 附件目录)";
-
 static const string PIC_INDEX = R"(picIndex)";
 static const string PIC_TITLE = R"(图片)";
 static const string PIC_DISPLAY_TITLE = R"(图片 目录)";
@@ -151,29 +141,16 @@ void generateContentTableForPoems() {
   FUNCTION_OUTPUT << "generateContentTable for poems finished. " << endl;
 }
 
-void generateContentTable(int num) {
+static const string REFERENCE_ATTACHMENT_INDEX = R"(bindex1)";
+static const string REFERENCE_ATTACHMENT_TITLE = R"(引经据典 附件目录)";
+static const string REFERENCE_ATTACHMENT_DISPLAY_TITLE =
+    R"(引经据典 附件目录)";
 
-  SEPERATE("generateContentTable", " started ");
-  switch (num) {
-  case 1:
-    generateContentTableForMainHtmls();
-    break;
-  case 2:
-    generateContentTableForOriginalHtmls();
-    break;
-  case 3:
-    generateContentTableForJPMHtmls();
-    break;
-  case 4:
-    generateContentTableForImages();
-    break;
-  case 5:
-    generateContentTableForPoems();
-    break;
-  default:
-    FUNCTION_OUTPUT << "no ContentTable generated." << endl;
-  }
-}
+static const string PERSONAL_ATTACHMENT_INDEX = R"(bindex2)";
+static const string PERSONAL_ATTACHMENT_TITLE = R"(个人感悟 附件目录)";
+static const string PERSONAL_ATTACHMENT_DISPLAY_TITLE =
+    R"(个人感悟 附件目录)";
+
 void generateContentTableForAttachments(ATTACHMENT_TYPE type,
                                         bool needToReloadAttachmentList) {
   if (not(type == ATTACHMENT_TYPE::PERSONAL or
@@ -205,4 +182,31 @@ void generateContentTableForAttachments(ATTACHMENT_TYPE type,
   outputContainer.assembleBackToHTM();
   FUNCTION_OUTPUT << "result is in file "
                   << outputContainer.getoutputHtmlFilepath() << endl;
+}
+
+void generateContentTable(TABLE_TYPE type, ATTACHMENT_TYPE attType,
+                          bool needToReloadAttachmentList) {
+  SEPERATE("generateContentTable", " started ");
+  switch (type) {
+  case TABLE_TYPE::MAIN:
+    generateContentTableForMainHtmls();
+    break;
+  case TABLE_TYPE::ORIGINAL:
+    generateContentTableForOriginalHtmls();
+    break;
+  case TABLE_TYPE::JPM:
+    generateContentTableForJPMHtmls();
+    break;
+  case TABLE_TYPE::IMAGE:
+    generateContentTableForImages();
+    break;
+  case TABLE_TYPE::POEMS:
+    generateContentTableForPoems();
+    break;
+  case TABLE_TYPE::ATTACHMENT:
+    generateContentTableForAttachments(attType, needToReloadAttachmentList);
+    break;
+  default:
+    FUNCTION_OUTPUT << "no ContentTable generated." << endl;
+  }
 }

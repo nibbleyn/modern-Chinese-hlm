@@ -61,30 +61,26 @@ int main(int argc, char **argv) {
     refreshAttachmentBodyTexts();
     break;
   case 15:
-    generateContentTable(1);
+    generateContentTable(TABLE_TYPE::MAIN);
+    generateContentTable(TABLE_TYPE::ATTACHMENT, ATTACHMENT_TYPE::REFERENCE);
+    generateContentTable(TABLE_TYPE::ATTACHMENT, ATTACHMENT_TYPE::PERSONAL);
     break;
   case 16:
-    generateContentTableForAttachments(ATTACHMENT_TYPE::REFERENCE);
-    break;
-  case 17:
-    generateContentTableForAttachments(ATTACHMENT_TYPE::PERSONAL);
-    break;
-  case 18:
     fixLinksFromAttachment(false);
     break;
-  case 19:
+  case 17:
     fixLinksFromJPM(false);
     break;
-  case 20:
+  case 18:
     testFunctions(2);
     break;
-  case 21:
+  case 19:
     validateParaSizeForAutoNumberingJPMHtmls();
     break;
-  case 22:
+  case 20:
     tools(15);
     break;
-  case 23:
+  case 21:
     removePersonalViewpoints();
     break;
   default:
