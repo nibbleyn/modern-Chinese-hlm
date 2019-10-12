@@ -40,63 +40,51 @@ int main(int argc, char **argv) {
     fixLinksFromMain(false);
     break;
   case 9:
+    renderingBodyText();
+    break;
+  case 10:
+    appendReverseLinksForMain();
+    break;
+  case 11:
     reConstructStory(R"(尤二姐)", "story2");
     //    reConstructStory(R"(小红遗帕)", "story", false);
     break;
-  case 10:
+  case 12:
     autoNumberingResultStory("story2", R"(尤二姐)");
     break;
-  case 11:
+  case 13:
     refreshBodyTexts(MAIN);
     refreshBodyTexts(ORIGINAL);
     refreshBodyTexts(JPM, JPM_MIN_CHAPTER_NUMBER, JPM_MAX_CHAPTER_NUMBER);
     break;
-  case 12:
+  case 14:
     refreshAttachmentBodyTexts();
     break;
-  case 13:
-    generateContentTableForMainHtmls();
-    break;
-  case 14:
-    generateContentTableForOriginalHtmls();
-    break;
   case 15:
-    generateContentTableForJPMHtmls();
+    generateContentTable(1);
     break;
   case 16:
-    generateContentTableForReferenceAttachments();
+    generateContentTableForAttachments(ATTACHMENT_TYPE::REFERENCE);
     break;
   case 17:
-    generateContentTableForPersonalAttachments();
+    generateContentTableForAttachments(ATTACHMENT_TYPE::PERSONAL);
     break;
   case 18:
-    generateContentTableForImages();
+    fixLinksFromAttachment(false);
     break;
   case 19:
-    generateContentTableForPoems();
+    fixLinksFromJPM(false);
     break;
   case 20:
-    fixLinksFromAttachment(false);
+    testFunctions(2);
     break;
   case 21:
     validateParaSizeForAutoNumberingJPMHtmls();
     break;
   case 22:
-    fixLinksFromJPM(false);
-    break;
-  case 23:
-    appendReverseLinksForMain();
-    break;
-  case 24:
-    testFunctions(2);
-    break;
-  case 25:
     tools(15);
     break;
-  case 26:
-    renderingBodyText();
-    break;
-  case 27:
+  case 23:
     removePersonalViewpoints();
     break;
   default:

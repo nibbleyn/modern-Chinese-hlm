@@ -119,28 +119,6 @@ void generateContentTableForJPMHtmls() {
   FUNCTION_OUTPUT << "generateContentTable for JPM Htmls finished. " << endl;
 }
 
-void generateContentTableForReferenceAttachments(
-    bool needToReloadAttachmentList) {
-  if (needToReloadAttachmentList) {
-    CoupledBodyTextContainer::refAttachmentTable.setSourceFile(
-        OUTPUT_REF_ATTACHMENT_LIST_PATH);
-    CoupledBodyTextContainer::refAttachmentTable.loadReferenceAttachmentList();
-  }
-  TableContainer outputContainer(REFERENCE_ATTACHMENT_INDEX);
-  outputContainer.clearLinkStringSet();
-  outputContainer.assignLinkStringSet(
-      CoupledBodyTextContainer::refAttachmentTable.allAttachmentsAsLinksByType(
-          ATTACHMENT_TYPE::REFERENCE));
-  outputContainer.setMaxTargetAsSetSize();
-  outputContainer.createParaListFrom(18, 22);
-  outputContainer.outputToBodyTextFromLinkList(attachmentUnit);
-  outputContainer.setTitle(REFERENCE_ATTACHMENT_TITLE);
-  outputContainer.setDisplayTitle(REFERENCE_ATTACHMENT_DISPLAY_TITLE);
-  outputContainer.assembleBackToHTM();
-  FUNCTION_OUTPUT << "result is in file "
-                  << outputContainer.getoutputHtmlFilepath() << endl;
-}
-
 void generateContentTableForImages() {
   TableContainer outputContainer(PIC_INDEX);
   outputContainer.clearLinkStringSet();
@@ -173,23 +151,57 @@ void generateContentTableForPoems() {
   FUNCTION_OUTPUT << "generateContentTable for poems finished. " << endl;
 }
 
-void generateContentTableForPersonalAttachments(
-    bool needToReloadAttachmentList) {
+void generateContentTable(int num) {
+
+  SEPERATE("generateContentTable", " started ");
+  switch (num) {
+  case 1:
+    generateContentTableForMainHtmls();
+    break;
+  case 2:
+    generateContentTableForOriginalHtmls();
+    break;
+  case 3:
+    generateContentTableForJPMHtmls();
+    break;
+  case 4:
+    generateContentTableForImages();
+    break;
+  case 5:
+    generateContentTableForPoems();
+    break;
+  default:
+    FUNCTION_OUTPUT << "no ContentTable generated." << endl;
+  }
+}
+void generateContentTableForAttachments(ATTACHMENT_TYPE type,
+                                        bool needToReloadAttachmentList) {
+  if (not(type == ATTACHMENT_TYPE::PERSONAL or
+          type == ATTACHMENT_TYPE::REFERENCE))
+    return;
+  auto index = (type == ATTACHMENT_TYPE::PERSONAL) ? PERSONAL_ATTACHMENT_INDEX
+                                                   : REFERENCE_ATTACHMENT_INDEX;
+  auto title = (type == ATTACHMENT_TYPE::PERSONAL) ? PERSONAL_ATTACHMENT_TITLE
+                                                   : REFERENCE_ATTACHMENT_TITLE;
+  auto displayTitle = (type == ATTACHMENT_TYPE::PERSONAL)
+                          ? PERSONAL_ATTACHMENT_DISPLAY_TITLE
+                          : REFERENCE_ATTACHMENT_DISPLAY_TITLE;
+
   if (needToReloadAttachmentList) {
     CoupledBodyTextContainer::refAttachmentTable.setSourceFile(
         OUTPUT_REF_ATTACHMENT_LIST_PATH);
     CoupledBodyTextContainer::refAttachmentTable.loadReferenceAttachmentList();
   }
-  TableContainer outputContainer(PERSONAL_ATTACHMENT_INDEX);
+  TableContainer outputContainer(index);
   outputContainer.clearLinkStringSet();
   outputContainer.assignLinkStringSet(
       CoupledBodyTextContainer::refAttachmentTable.allAttachmentsAsLinksByType(
-          ATTACHMENT_TYPE::PERSONAL));
+          type));
   outputContainer.setMaxTargetAsSetSize();
   outputContainer.createParaListFrom(18, 22);
   outputContainer.outputToBodyTextFromLinkList(attachmentUnit);
-  outputContainer.setTitle(PERSONAL_ATTACHMENT_TITLE);
-  outputContainer.setDisplayTitle(PERSONAL_ATTACHMENT_DISPLAY_TITLE);
+  outputContainer.setTitle(title);
+  outputContainer.setDisplayTitle(displayTitle);
   outputContainer.assembleBackToHTM();
   FUNCTION_OUTPUT << "result is in file "
                   << outputContainer.getoutputHtmlFilepath() << endl;
