@@ -1,0 +1,35 @@
+testListContainer              result is in file utf8HTML/output/1_gen.htm
+testListContainer              <html>
+testListContainer              <head>
+testListContainer              <meta http-equiv="Content-Type" content="text/html; charset=utf8">
+testListContainer              <title>test</title>
+testListContainer              </head>
+testListContainer              
+testListContainer              <body text="white" bgcolor="#004040" topmargin="0" leftmargin="0" marginwidth="0" marginheight="0" rightmargin="0" link="#fff000" vlink="#fff000">
+testListContainer              
+testListContainer              <center>
+testListContainer              	<table border="0" cellspacing="1" width="80%" style="font-size: 12pt; font-family: 宋体; line-height:150%">
+testListContainer              		<tbody>
+testListContainer              			<tr>
+testListContainer              				<td height="50" style="font-size: 15pt; font-family: 黑体; letter-spacing:1" align="center">test container</td>
+testListContainer              			</tr>
+testListContainer              			<tr>
+testListContainer              				<td align="center"><hr color="#F0BEC0"></td>
+testListContainer              			</tr>
+testListContainer              			<tr>
+testListContainer              			<td>
+testListContainer              <b unhidden> 第1段 </b><a unhidden id="P90" href="#P91">v向下</a>&nbsp;&nbsp;&nbsp;&nbsp;<a unhidden id="top" href="#bottom">页面底部->||</a><hr color="#F0BEC0">
+testListContainer              <br><a unhidden title="菱角菱花" href="original\c080.htm#P1L3">↑<sub hidden>第80回1.3节:</sub>原文</a></br>
+testListContainer              <br>18 links are found.</br>
+testListContainer              <hr color="#F0BEC0"><a unhidden id="bottom" href="#top">||<-页面顶部</a>&nbsp;&nbsp;&nbsp;&nbsp;<a unhidden id="P89" href="#P90">^向上</a><hr color="#F0BEC0">
+testListContainer              			</td>
+testListContainer              			</tr>
+testListContainer              			<tr>
+testListContainer              				<td><hr color="#F0BEC0"></td>
+testListContainer              			</tr>
+testListContainer              		</tbody>
+testListContainer              	</table>
+testListContainer              </center>
+testListContainer              </body>
+testListContainer              </html>
+testListContainer              

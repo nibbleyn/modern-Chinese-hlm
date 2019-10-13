@@ -136,7 +136,6 @@ void AttachmentSearcher::runSearchingOverEachFile() {
 
 void search(const string &key, int targetKind, bool overSpecificObject,
             const string &outputFilename) {
-  SEPERATE("HLM search", " started ");
   NonAttachmentSearcher searcher;
   searcher.m_key = key;
   searcher.m_overSpecificObject = overSpecificObject;

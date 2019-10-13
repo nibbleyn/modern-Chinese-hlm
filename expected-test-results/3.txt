@@ -1,0 +1,147 @@
+testLinkOperation              *************************line 271: testLinkOperation starts *************************
+testLinkOperation              <111>22>
+testLinkOperation              <a unhidden href="a025.htm#P9L1">↓<sub>第3回1.2节:</sub></a>
+testLink              original link: 
+testLink              <a unhidden href="a025.htm#P9L1">↓<sub>第3回1.2节:</sub></a>
+testLink              display as:↓第3回1.2节:||
+testLinkOperation              *************************line 282: unhidden valid reverse link finished *************************
+testLinkFromAttachment              original link: 
+testLinkFromAttachment              <a title="IMAGE" href="#nwbt.jpg">↑（图示：女娲补天）</a>
+testLinkFromAttachment              ↑（图示：女娲补天）
+testLinkFromAttachment              need Update: 1
+testLinkFromAttachment              after fixed: 
+testLinkFromAttachment              <a title="IMAGE" href="b007.htm#nwbt.jpg">↑（图示：女娲补天）</a>
+testLinkFromAttachment              display as:↑（图示：女娲补天）||
+testLinkOperation              *************************line 287: direct image link finished *************************
+testLinkFromAttachment              original link: 
+testLinkFromAttachment              <a hidden title="IMAGE" href="a019.htm#tcf.jpg">（图示：探春房）</a>
+testLinkFromAttachment              （图示：探春房）
+testLinkFromAttachment              need Update: 0
+testLinkFromAttachment              after fixed: 
+testLinkFromAttachment              <a hidden title="IMAGE" href="a019.htm#tcf.jpg">↑（图示：探春房）</a>
+testLinkFromAttachment              display as:||
+testLinkOperation              *************************line 293: hidden image link finished *************************
+testLinkOperation              original link: 
+testLinkOperation              <a unhidden href="a080.htm#top">原是（<cite unhidden>薛姨妈1</cite>）老奶奶（<cite unhidden>薛姨妈1</cite>）使唤的</a>
+testLinkOperation              change to refer to file 57. 
+testLinkOperation              need Update: 1
+testLinkOperation              after fixed: 
+testLinkOperation              <a unhidden href="a057.htm#top">↑原是（<cite unhidden>薛姨妈1</cite>）老奶奶（<cite unhidden>薛姨妈1</cite>）使唤的</a>
+testLinkOperation              display as:↑原是（薛姨妈1）老奶奶（薛姨妈1）使唤的||
+testLinkOperation              *************************line 316: fixReferFile finished *************************
+testLinkOperation              <a unhidden title="床帐" href="JPM\d017.htm#P1L1">雪梅相妒，无复桂月争辉</a>
+testLink              original link: 
+testLink              <a unhidden title="床帐" href="JPM\d017.htm#P1L1">雪梅相妒，无复桂月争辉</a>
+testLink              need Update: 1
+testLink              after fixed: 
+testLink              <a unhidden title="床帐" href="JPM\d017.htm#P3L5">↑<sub hidden>第17回3.5节:</sub>雪梅相妒，无复桂月争辉</a>
+testLink              display as:↑雪梅相妒，无复桂月争辉||
+testLinkOperation              *************************line 325: JPM link finished *************************
+testLinkOperation              <a unhidden href="a005.htm#P94" title="海棠">海棠春睡</a>
+testLink              original link: 
+testLink              <a unhidden href="a005.htm#P94" title="海棠">海棠春睡</a>
+testLink              need Update: 1
+testLink              after fixed: 
+testLink              <a unhidden title="海棠" href="a005.htm#P5L2">↑<sub hidden>第5回5.2节:</sub>海棠春睡</a>
+testLink              display as:↑海棠春睡||
+testLinkOperation              *************************line 333: title fix finished *************************
+testLinkFromMain              original link: 
+testLinkFromMain              <a hidden href="a080.htm#top">原是（<cite unhidden>薛姨妈1</cite>）老奶奶（<cite unhidden>薛姨妈1</cite>）使唤的</a>
+testLinkFromMain              need Update: 0
+testLinkFromMain              after fixed: 
+testLinkFromMain              <a hidden href="a080.htm#top">↑原是（<cite unhidden>薛姨妈1</cite>）老奶奶（<cite unhidden>薛姨妈1</cite>）使唤的</a>
+testLinkFromMain              display as:||
+testLinkOperation              *************************line 345: #top finished *************************
+testLinkFromMain              original link: 
+testLinkFromMain              <a hidden href="attachment\b003_9.htm#P2L3">原是老奶奶（薛姨妈）使唤的</a>
+testLinkFromMain              need Update: 0
+testLinkFromMain              after fixed: 
+testLinkFromMain              <a hidden href="attachment\b003_9.htm#P2L3">原是老奶奶（薛姨妈）使唤的</a>
+testLinkFromMain              display as:||
+testLinkOperation              *************************line 352: WARNING: SUCH LINK'S REFERPARA WON'T BE FIXED AUTOMATICALLY.*************************
+testLinkOperation              *************************line 354: attachment with referPara finished *************************
+testLinkFromMain              original link: 
+testLinkFromMain              <a unhidden title="菱角菱花" href="#94"><sub hidden>第80回1.1节:</sub>原是老奶奶（薛姨妈）使唤的</a>
+testLinkFromMain              need Update: 1
+testLinkFromMain              after fixed: 
+testLinkFromMain              <a unhidden title="菱角菱花" href="a080.htm#P2L1"><sub hidden>第80回2.1节:</sub>原是老奶奶（薛姨妈）使唤的</a>
+testLinkFromMain              display as:原是老奶奶（薛姨妈）使唤的||
+testLinkOperation              *************************line 361: fixLinkFromSameFileTemplate finished *************************
+testLink              original link: 
+testLink              <a unhidden title="菱角菱花" href="a080.htm#94">↑<sub hidden>第80回1.1节:</sub>原是老奶奶（薛姨妈）使唤的</a>
+testLink              need Update: 1
+testLink              after fixed: 
+testLink              <a unhidden title="菱角菱花" href="a080.htm#P2L1">↑<sub hidden>第80回2.1节:</sub>原是老奶奶（薛姨妈）使唤的</a>
+testLink              display as:↑原是老奶奶（薛姨妈）使唤的||
+testLinkOperation              *************************line 369: fixLinkFromMainTemplate finished *************************
+testLinkFromMain              original link: 
+testLinkFromMain              <a unhidden title="菱角菱花" href="a080.htm#94">↑<sub hidden>第80回1.1节:</sub>原是老奶奶（薛姨妈）使唤的</a>
+testLinkFromMain              need Update: 1
+testLinkFromMain              after fixed: 
+testLinkFromMain              <a unhidden title="菱角菱花" href="a080.htm#P2L1">↑<sub hidden>第80回2.1节:</sub>原是老奶奶（薛姨妈）使唤的</a>（<a unhidden title="菱角菱花" href="original\c080.htm#P1L3">↑<sub hidden>第80回1.3节:</sub>原文</a>）
+testLinkFromMain              display as:↑原是老奶奶（薛姨妈）使唤的（↑原文）||
+testLinkOperation              *************************line 376: generate original link afterwards finished *************************
+testLinkFromMain              original link: 
+testLinkFromMain              <a unhidden title="happy" href="original\c018.htm#90101">↑<sub hidden>第80回1.1节:</sub>原文</a>
+testLinkFromMain              need Update: 1
+testLinkFromMain              after fixed: 
+testLinkFromMain              <a unhidden title="KeyNotFoundhappy" href="original\c018.htm#changeKey">↑<sub hidden>第80回1.1节:</sub>原文</a>
+testLinkFromMain              display as:↑原文||
+testLinkOperation              *************************line 383: fixLinkFromOriginalTemplate finished *************************
+testLinkFromMain              original link: 
+testLinkFromMain              <a unhidden href="attachment\b018_7.htm">happy</a>
+testLinkFromMain              need Update: 0
+testLinkFromMain              after fixed: 
+testLinkFromMain              <a unhidden href="attachment\b018_7.htm">happy</a>
+testLinkFromMain              display as:happy||
+testLinkOperation              *************************line 389: fixLinkFromOriginalTemplate finished *************************
+testLinkOperation              *************************line 391: testLinkFromMain finished *************************
+testLinkOperation              original link: 
+testLinkOperation              <a unhidden href="b018_7.htm">happy</a>
+testLinkOperation              change to refer to file 55_3. 
+testLinkOperation              need Update: 1
+testLinkOperation              after fixed: 
+testLinkOperation              <a unhidden href="b055_3.htm">happy</a>
+testLinkOperation              display as:happy||
+testLinkOperation              *************************line 408: fixReferFile finished *************************
+testLinkFromAttachment              original link: 
+testLinkFromAttachment              <a unhidden href="..\aindex.htm">回目录</a>
+testLinkFromAttachment              回目录
+testLinkFromAttachment              need Update: 0
+testLinkFromAttachment              after fixed: 
+testLinkFromAttachment              <a unhidden href="..\aindex.htm">↑回目录</a>
+testLinkFromAttachment              display as:↑回目录||
+testLinkOperation              *************************line 413: 回目录 finished *************************
+testLinkFromAttachment              original link: 
+testLinkFromAttachment              <a unhidden title="红牌" href="#94"><sub hidden></sub>行祀之日各佩斋戒牌</a>
+testLinkFromAttachment              行祀之日各佩斋戒牌
+testLinkFromAttachment              need Update: 1
+testLinkFromAttachment              after fixed: 
+testLinkFromAttachment              <a unhidden title="红牌" href="b003_9.htm#P1L3"><sub hidden>第3回第9篇1.3节:</sub>行祀之日各佩斋戒牌</a>
+testLinkFromAttachment              display as:行祀之日各佩斋戒牌||
+testLinkOperation              *************************line 421: fixLinkFromSameFileTemplate finished *************************
+testLinkFromAttachment              original link: 
+testLinkFromAttachment              <a unhidden title="菱角菱花" href="..\a080.htm#94">↑<sub hidden>第80回1.1节:</sub>原是老奶奶（薛姨妈）使唤的</a>
+testLinkFromAttachment              原是老奶奶（薛姨妈）使唤的
+testLinkFromAttachment              need Update: 1
+testLinkFromAttachment              after fixed: 
+testLinkFromAttachment              <a unhidden title="菱角菱花" href="..\a080.htm#P2L1">↑<sub hidden>第80回2.1节:</sub>原是老奶奶（薛姨妈）使唤的</a>（<a unhidden title="菱角菱花" href="..\original\c080.htm#P1L3">↑<sub hidden>第80回1.3节:</sub>原文</a>）
+testLinkFromAttachment              display as:↑原是老奶奶（薛姨妈）使唤的（↑原文）||
+testLinkOperation              *************************line 429: fixLinkFromMainTemplate finished *************************
+testLinkFromAttachment              original link: 
+testLinkFromAttachment              <a unhidden title="菱角菱花" href="..\original\c080.htm#94">↑<sub hidden>第80回1.1节:</sub>原文</a>
+testLinkFromAttachment              原文
+testLinkFromAttachment              need Update: 1
+testLinkFromAttachment              after fixed: 
+testLinkFromAttachment              <a unhidden title="菱角菱花" href="..\original\c080.htm#P1L3">↑<sub hidden>第80回1.3节:</sub>原文</a>
+testLinkFromAttachment              display as:↑原文||
+testLinkOperation              *************************line 436: fixLinkFromOriginalTemplate finished *************************
+testLinkFromAttachment              original link: 
+testLinkFromAttachment              <a unhidden href="b018_7.htm">happy</a>
+testLinkFromAttachment              happy
+testLinkFromAttachment              need Update: 0
+testLinkFromAttachment              after fixed: 
+testLinkFromAttachment              <a unhidden href="b018_7.htm">happy</a>
+testLinkFromAttachment              display as:happy||
+testLinkOperation              *************************line 441: fixLinkFromAttachmentTemplate finished *************************
+testLinkOperation              *************************line 443: testLinkFromAttachment finished *************************

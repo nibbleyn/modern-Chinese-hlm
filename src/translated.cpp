@@ -10,7 +10,7 @@ int debug = LOG_INFO;
 
 int main(int argc, char **argv) {
   // change this number to run different functions
-  int num = 24;
+  int num = 18;
   switch (num) {
   case 1:
     //    search(R"(枕)", SEARCH_IN_MAIN, true);
@@ -72,7 +72,8 @@ int main(int argc, char **argv) {
     fixLinksFromJPM(false);
     break;
   case 18:
-    testFunctions(2);
+    regressionTest();
+    testSpecificFunction(10);
     break;
   case 19:
     validateParaSizeForAutoNumberingJPMHtmls();

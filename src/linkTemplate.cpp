@@ -66,8 +66,6 @@ string fixLinkFromSameFileTemplate(DISPLAY_TYPE type, const string &key,
   }
   replacePart(link, defaultCitation, citation);
   replacePart(link, defaultAnnotation, annotation);
-  if (debug >= LOG_INFO)
-    FUNCTION_OUTPUT << link << endl;
   return link;
 }
 
@@ -107,8 +105,6 @@ string fixLinkFromMainTemplate(const string &path, const string &filename,
   }
   replacePart(link, defaultCitation, citation);
   replacePart(link, defaultAnnotation, annotation);
-  if (debug >= LOG_INFO)
-    FUNCTION_OUTPUT << link << endl;
   return link;
 }
 
@@ -127,8 +123,6 @@ string fixLinkFromReverseLinkTemplate(const string &filename, DISPLAY_TYPE type,
   if (annotation != emptyString)
     replacePart(link, defaultEndOfReverseCitation + linkEndChars,
                 defaultEndOfReverseCitation + annotation + linkEndChars);
-  if (debug >= LOG_INFO)
-    FUNCTION_OUTPUT << link << endl;
   return link;
 }
 
@@ -151,8 +145,6 @@ string fixLinkFromSubParaLinkTemplate(const string &seqenceNumber,
     replacePart(link, defaultSubParaId, id);
   if (not subPara.empty())
     replacePart(link, defaultReferSubPara, subPara);
-  if (debug >= LOG_INFO)
-    FUNCTION_OUTPUT << link << endl;
   return link;
 }
 
@@ -190,8 +182,6 @@ string fixLinkFromOriginalTemplate(const string &path, const string &filename,
   }
   replacePart(link, defaultCitation, citation);
   replacePart(link, defaultAnnotation, annotation);
-  if (debug >= LOG_INFO)
-    FUNCTION_OUTPUT << link << endl;
   return link;
 }
 
@@ -232,8 +222,6 @@ string fixLinkFromJPMTemplate(const string &path, const string &filename,
   } else
     replacePart(link, defaultCitation, citation);
   replacePart(link, defaultAnnotation, annotation);
-  if (debug >= LOG_INFO)
-    FUNCTION_OUTPUT << link << endl;
   return link;
 }
 
@@ -263,8 +251,6 @@ string fixLinkFromAttachmentTemplate(const string &path, const string &filename,
   } else
     replacePart(link, defaultReferPara, referPara);
   replacePart(link, defaultAnnotation, annotation);
-  if (debug >= LOG_INFO)
-    FUNCTION_OUTPUT << link << endl;
   return link;
 }
 

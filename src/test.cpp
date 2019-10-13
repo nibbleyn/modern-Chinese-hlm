@@ -1,183 +1,221 @@
 #include "test.hpp"
 #include <array>
 
-void testSearchTextIsOnlyPartOfOtherKeys() {
+static const string TEST_OUTPUT_DIR = R"(test-results/)";
+
+#define PRINTFUNCTION(outfile, x)                                              \
+  outfile << __func__ << "              " << x << endl;
+
+#define SEPERATE(outfile, x, y)                                                \
+  PRINTFUNCTION(outfile,                                                       \
+                "*************************line "                               \
+                    << __LINE__ << ": " << x << y                              \
+                    << "*************************"); //<< __func__<< __FILE__ <<
+                                                     //__LINE__ <<
+
+void testSearchTextIsOnlyPartOfOtherKeys(ofstream &outfile) {
   string line1 =
       R"(弄得（<cite unhidden>宝玉</cite>）情色若痴，语言常乱，似染怔忡之疾，慌得袭人等又不敢回贾母，只百般逗他玩笑（<cite unhidden>指望他早日康复</cite>）。（<u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">怔忡，为病名，首见于《济生方·惊悸怔忡健忘门》中“惊者，心卒动而不宁也；悸者,心跳动而怕惊也；怔忡者，心中躁动不安，惕惕然后人将捕之也”,是心悸的一种，是指多因久病体虚、心脏受损导致气血、阴阳亏虚，或邪毒、痰饮、瘀血阻滞心脉，日久导致心失濡养，心脉不畅，从而引起的心中剔剔不安，不能自控的一种病证，常和惊悸合并称为心悸</u>）)";
   string key = R"(怔忡)";
-  FUNCTION_OUTPUT << line1 << endl;
-  FUNCTION_OUTPUT << isFoundAsNonKeys(line1, key) << endl;
+  PRINTFUNCTION(outfile, line1);
+  PRINTFUNCTION(outfile, isFoundAsNonKeys(line1, key));
   string line2 =
       R"(（<u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">宝玉真病了的时候，不过袭人<a unhidden href="#P94" title="怔忡">瞒着不回贾母</a>，晨昏定省还是去的</u>）。宝玉方（<cite unhidden>放下笔，先</cite>）去请安（<u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">贾母关切，姊妹们则看在眼里</u>）)";
-  FUNCTION_OUTPUT << line2 << endl;
-  FUNCTION_OUTPUT << isFoundAsNonKeys(line2, key) << endl;
+  PRINTFUNCTION(outfile, line2);
+  PRINTFUNCTION(outfile, isFoundAsNonKeys(line2, key));
 
   key = R"(乖滑)";
   string line3 =
       R"(周瑞家的虽不管事（<u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">不过管管<a unhidden title="租子" href="a006.htm#P94"><i hidden>租子</i>出门的事</a></u>），因她素日仗着是王夫人的陪房，原（<cite unhidden>本</cite>）有些体面，（<cite unhidden>又兼</cite>）心性乖滑，专管（<cite unhidden>在</cite>）各处（<cite unhidden>主子面前</cite>）献勤讨好，所以各处房里的主人都喜欢她。（<u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">至此方将两番接待刘姥姥并送宫花等诸事热情之因说明。“体面”对应和费婆子的不同，“陪房和讨好”又对应共同点。</u>）)";
-  FUNCTION_OUTPUT << line3 << endl;
-  FUNCTION_OUTPUT << isFoundOutsidePersonalComments(line3, key) << endl;
+  PRINTFUNCTION(outfile, line3);
+  PRINTFUNCTION(outfile, isFoundOutsidePersonalComments(line3, key));
 
   string line4 =
       R"(周瑞家的听了（<cite unhidden>凤姐的命令</cite>），巴不得一声儿，素日因与这几个人（<cite unhidden>本就</cite>）不睦（<cite unhidden>，越发要趁机公报私仇</cite>），（<cite unhidden>一从凤姐院里</cite>）出来了便（<cite unhidden>一面</cite>）命一个小厮到林之孝家传凤姐的话，立刻叫林之孝家的进（<cite unhidden>园</cite>）来见大奶奶（<cite unhidden>尤氏</cite>），一面又传人立刻捆起（<cite unhidden>犯事的</cite>）这两个婆子来，交到马圈里派人看守。（<u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">凤姐和尤氏本有默契<a unhidden title="宽洪大量" href="#P94"><i hidden>宽洪大量</i>且放着</a>，若不是周瑞家的心性乖滑加上公报私仇，不至于陷害凤姐到众人议论。然而心性乖滑、公报私仇其实恰恰又是说凤姐本人。“素日不睦”已经渐渐带出她们的特殊身份，乃邢夫人陪房，否则也不会跟周瑞家的不睦。</u>）)";
-  FUNCTION_OUTPUT << line4 << endl;
-  FUNCTION_OUTPUT << isFoundOutsidePersonalComments(line4, key) << endl;
+  PRINTFUNCTION(outfile, line4);
+  PRINTFUNCTION(outfile, isFoundOutsidePersonalComments(line4, key));
 }
 
-void testLineHeader(string lnStr) {
-  FUNCTION_OUTPUT << "original: " << endl;
-  FUNCTION_OUTPUT << lnStr << endl;
+void testLineHeader(ofstream &outfile, string lnStr) {
+  PRINTFUNCTION(outfile, "original: ");
+  PRINTFUNCTION(outfile, lnStr);
   LineNumberPlaceholderLink ln(lnStr);
-  FUNCTION_OUTPUT << "display Property: " << endl;
-  FUNCTION_OUTPUT << ln.displayPropertyAsString() << endl;
-  FUNCTION_OUTPUT << ln.getParaLineString() << endl;
-  FUNCTION_OUTPUT << "is paragraph header? " << std::boolalpha
-                  << ln.isPartOfParagraphHeader() << endl;
-  FUNCTION_OUTPUT << "whole string: " << endl;
-  FUNCTION_OUTPUT << ln.getFormatedFullString() << endl;
-  FUNCTION_OUTPUT << "display as:" << ln.getDisplayString() << "||" << endl;
+  PRINTFUNCTION(outfile, "display Property: ");
+  PRINTFUNCTION(outfile, ln.displayPropertyAsString());
+  PRINTFUNCTION(outfile, ln.getParaLineString());
+  PRINTFUNCTION(outfile, "is paragraph header? "
+                             << std::boolalpha << ln.isPartOfParagraphHeader());
+  PRINTFUNCTION(outfile, "whole string: ");
+  PRINTFUNCTION(outfile, ln.getFormatedFullString());
+  PRINTFUNCTION(outfile, "display as:" << ln.getDisplayString() << "||");
   if (not ln.isPartOfParagraphHeader()) {
     if (not ln.isPureTextOnly()) {
-      FUNCTION_OUTPUT << "generate line prefix: " << endl;
-      FUNCTION_OUTPUT << ln.get().generateLinePrefix() << endl;
+      PRINTFUNCTION(outfile, "generate line prefix: ");
+      PRINTFUNCTION(outfile, ln.get().generateLinePrefix());
     } else
-      FUNCTION_OUTPUT << "pure text" << endl;
+      PRINTFUNCTION(outfile, "pure text");
   }
 }
 
-void testLineHeaderFromContainedLine(string containedLine) {
-  FUNCTION_OUTPUT << "original: " << endl;
-  FUNCTION_OUTPUT << containedLine << endl;
+void testLineHeaderFromContainedLine(ofstream &outfile, string containedLine) {
+  PRINTFUNCTION(outfile, "original: ");
+  PRINTFUNCTION(outfile, containedLine);
   LineNumberPlaceholderLink ln;
   ln.loadFirstFromContainedLine(containedLine);
-  FUNCTION_OUTPUT << "display Property: " << endl;
-  FUNCTION_OUTPUT << ln.displayPropertyAsString() << endl;
-  FUNCTION_OUTPUT << ln.getParaLineString() << endl;
-  FUNCTION_OUTPUT << "is paragraph header? " << std::boolalpha
-                  << ln.isPartOfParagraphHeader() << endl;
-  FUNCTION_OUTPUT << "whole string: " << endl;
-  FUNCTION_OUTPUT << ln.getFormatedFullString() << endl;
-  FUNCTION_OUTPUT << "display as:" << ln.getDisplayString() << "||" << endl;
+  PRINTFUNCTION(outfile, "display Property: ");
+  PRINTFUNCTION(outfile, ln.displayPropertyAsString());
+  PRINTFUNCTION(outfile, ln.getParaLineString());
+  PRINTFUNCTION(outfile, "is paragraph header? "
+                             << std::boolalpha << ln.isPartOfParagraphHeader());
+  PRINTFUNCTION(outfile, "whole string: ");
+  PRINTFUNCTION(outfile, ln.getFormatedFullString());
+  PRINTFUNCTION(outfile, "display as:" << ln.getDisplayString() << "||");
   if (not ln.isPartOfParagraphHeader()) {
     if (not ln.isPureTextOnly()) {
-      FUNCTION_OUTPUT << "generate line prefix: " << endl;
-      FUNCTION_OUTPUT << ln.get().generateLinePrefix() << endl;
+      PRINTFUNCTION(outfile, "generate line prefix: ");
+      PRINTFUNCTION(outfile, ln.get().generateLinePrefix());
     } else
-      FUNCTION_OUTPUT << "pure text" << endl;
+      PRINTFUNCTION(outfile, "pure text");
   }
 }
 
-void testParagraphHeader(string lnStr) {
-  FUNCTION_OUTPUT << "original: " << endl;
-  FUNCTION_OUTPUT << lnStr << endl;
+void testParagraphHeader(ofstream &outfile, string lnStr) {
+  PRINTFUNCTION(outfile, "original: ");
+  PRINTFUNCTION(outfile, lnStr);
   LineNumberPlaceholderLink ln(lnStr);
-  FUNCTION_OUTPUT << "display Property: " << endl;
-  FUNCTION_OUTPUT << ln.displayPropertyAsString() << endl;
-  FUNCTION_OUTPUT << ln.getParaLineString() << endl;
-  FUNCTION_OUTPUT << "is paragraph header? " << std::boolalpha
-                  << ln.isPartOfParagraphHeader() << endl;
-  FUNCTION_OUTPUT << "whole string: " << endl;
-  FUNCTION_OUTPUT << ln.getFormatedFullString() << endl;
-  FUNCTION_OUTPUT << "display as:" << ln.getDisplayString() << "||" << endl;
+  PRINTFUNCTION(outfile, "display Property: ");
+  PRINTFUNCTION(outfile, ln.displayPropertyAsString());
+  PRINTFUNCTION(outfile, ln.getParaLineString());
+  PRINTFUNCTION(outfile, "is paragraph header? "
+                             << std::boolalpha << ln.isPartOfParagraphHeader());
+  PRINTFUNCTION(outfile, "whole string: ");
+  PRINTFUNCTION(outfile, ln.getFormatedFullString());
+  PRINTFUNCTION(outfile, "display as:" << ln.getDisplayString() << "||");
   if (not ln.isPartOfParagraphHeader()) {
     if (not ln.isPureTextOnly()) {
-      FUNCTION_OUTPUT << "generate line prefix: " << endl;
-      FUNCTION_OUTPUT << ln.get().generateLinePrefix() << endl;
+      PRINTFUNCTION(outfile, "generate line prefix: ");
+      PRINTFUNCTION(outfile, ln.get().generateLinePrefix());
     } else
-      FUNCTION_OUTPUT << "pure text" << endl;
+      PRINTFUNCTION(outfile, "pure text");
   }
 }
 
-void testParagraphHeaderFromContainedLine(string containedLine) {
-  FUNCTION_OUTPUT << "original: " << endl;
-  FUNCTION_OUTPUT << containedLine << endl;
+void testParagraphHeaderFromContainedLine(ofstream &outfile,
+                                          string containedLine) {
+  PRINTFUNCTION(outfile, "original: ");
+  PRINTFUNCTION(outfile, containedLine);
   LineNumberPlaceholderLink ln;
   ln.loadFirstFromContainedLine(containedLine);
-  FUNCTION_OUTPUT << "display Property: " << endl;
-  FUNCTION_OUTPUT << ln.displayPropertyAsString() << endl;
-  FUNCTION_OUTPUT << ln.getParaLineString() << endl;
-  FUNCTION_OUTPUT << "is paragraph header? " << std::boolalpha
-                  << ln.isPartOfParagraphHeader() << endl;
-  FUNCTION_OUTPUT << "whole string: " << endl;
-  FUNCTION_OUTPUT << ln.getFormatedFullString() << endl;
-  FUNCTION_OUTPUT << "display as:" << ln.getDisplayString() << "||" << endl;
+  PRINTFUNCTION(outfile, "display Property: ");
+  PRINTFUNCTION(outfile, ln.displayPropertyAsString());
+  PRINTFUNCTION(outfile, ln.getParaLineString());
+  PRINTFUNCTION(outfile, "is paragraph header? "
+                             << std::boolalpha << ln.isPartOfParagraphHeader());
+  PRINTFUNCTION(outfile, "whole string: ");
+  PRINTFUNCTION(outfile, ln.getFormatedFullString());
+  PRINTFUNCTION(outfile, "display as:" << ln.getDisplayString() << "||");
   if (not ln.isPartOfParagraphHeader()) {
-    if (not ln.isPureTextOnly())
-      FUNCTION_OUTPUT << "generate line prefix: " << endl
-                      << ln.get().generateLinePrefix() << endl;
+    if (not ln.isPureTextOnly()) {
+      PRINTFUNCTION(outfile,
+                    "generate line prefix: " << ln.get().generateLinePrefix());
+    } else
+      PRINTFUNCTION(outfile, "pure text");
+  }
+}
+
+string markDifference(const string &firstString, const string &secondString,
+                      size_t begin = 0) {
+  if (firstString == secondString)
+    return R"(same)";
+  const char *aStr1 = firstString.c_str();
+  const char *aStr2 = secondString.c_str();
+  size_t firstPos = 0;
+  for (size_t byteIndex = begin;
+       byteIndex < min(firstString.size(), secondString.size()); byteIndex++) {
+    if (aStr1[byteIndex] == aStr2[byteIndex])
+      firstPos++;
     else
-      FUNCTION_OUTPUT << "pure text" << endl;
+      break;
   }
+  return firstString.substr(0, firstPos) + "^";
 }
 
-void testLineNumber() {
+void printCompareResult(ofstream &outfile, const string &firstString,
+                        const string &secondString, size_t begin = 0) {
+  PRINTFUNCTION(outfile, firstString << "||");
+  PRINTFUNCTION(outfile, secondString << "||");
+  PRINTFUNCTION(outfile, markDifference(firstString, secondString, begin));
+}
+
+void testLineNumber(ofstream &outfile) {
   LineNumber::setStartNumber(START_PARA_NUMBER);
-  testLineHeader("P1L4");
-  SEPERATE("ln1", " finished ");
-  testLineHeader("P13L4");
-  SEPERATE("ln2", " finished ");
+  testLineHeader(outfile, "P1L4");
+  SEPERATE(outfile, "ln1", " finished ");
+  testLineHeader(outfile, "P13L4");
+  SEPERATE(outfile, "ln2", " finished ");
   testLineHeaderFromContainedLine(
+      outfile,
       R"(<a unhidden id="P12L8">12.8</a>　　原来 这一个名唤 贾蔷，也系 宁国府 正派玄孙，父母早亡，从小 跟贾珍过活，如今 长了十六岁，比 贾蓉 生得还 风流俊俏。贾蓉、贾蔷兄弟二人最相亲厚，常相共处。<br>)");
-  SEPERATE("ln3", " finished ");
+  SEPERATE(outfile, "ln3", " finished ");
 
   CoupledParaHeader paraHeader;
   paraHeader.setStartNumber(LineNumber::getStartNumber());
   paraHeader.markAsFirstParaHeader();
   paraHeader.fixFromTemplate();
-  testParagraphHeaderFromContainedLine(paraHeader.getFixedResult());
+  testParagraphHeaderFromContainedLine(outfile, paraHeader.getFixedResult());
 
   CoupledParaHeader paraHeaderLoaded;
   paraHeaderLoaded.loadFrom(paraHeader.getFixedResult());
   paraHeaderLoaded.fixFromTemplate();
-  FUNCTION_OUTPUT << paraHeaderLoaded.getFixedResult() << endl;
-  printCompareResult(paraHeader.getFixedResult(),
+  PRINTFUNCTION(outfile, paraHeaderLoaded.getFixedResult());
+  printCompareResult(outfile, paraHeader.getFixedResult(),
                      paraHeaderLoaded.getFixedResult());
-  FUNCTION_OUTPUT << "display as:" << endl;
-  FUNCTION_OUTPUT << paraHeaderLoaded.getDisplayString() << endl;
+  PRINTFUNCTION(outfile, "display as:");
+  PRINTFUNCTION(outfile, paraHeaderLoaded.getDisplayString());
 
   paraHeader.setCurrentParaNo(7);
   paraHeader.markAsMiddleParaHeader();
   paraHeader.fixFromTemplate();
-  testParagraphHeaderFromContainedLine(paraHeader.getFixedResult());
+  testParagraphHeaderFromContainedLine(outfile, paraHeader.getFixedResult());
 
   paraHeaderLoaded.loadFrom(paraHeader.getFixedResult());
   paraHeaderLoaded.fixFromTemplate();
-  FUNCTION_OUTPUT << paraHeaderLoaded.getFixedResult() << endl;
-  printCompareResult(paraHeader.getFixedResult(),
+  PRINTFUNCTION(outfile, paraHeaderLoaded.getFixedResult());
+  printCompareResult(outfile, paraHeader.getFixedResult(),
                      paraHeaderLoaded.getFixedResult());
-  FUNCTION_OUTPUT << "display as:" << endl;
-  FUNCTION_OUTPUT << paraHeaderLoaded.getDisplayString() << endl;
-  SEPERATE("ln5", " finished ");
+  PRINTFUNCTION(outfile, "display as:");
+  PRINTFUNCTION(outfile, paraHeaderLoaded.getDisplayString());
+  SEPERATE(outfile, "ln5", " finished ");
 
   paraHeader.setCurrentParaNo(12);
   paraHeader.markAsLastParaHeader();
   paraHeader.fixFromTemplate();
-  testParagraphHeaderFromContainedLine(paraHeader.getFixedResult());
+  testParagraphHeaderFromContainedLine(outfile, paraHeader.getFixedResult());
 
   paraHeaderLoaded.loadFrom(paraHeader.getFixedResult());
   paraHeaderLoaded.fixFromTemplate();
-  FUNCTION_OUTPUT << paraHeaderLoaded.getFixedResult() << endl;
-  printCompareResult(paraHeader.getFixedResult(),
+  PRINTFUNCTION(outfile, paraHeaderLoaded.getFixedResult());
+  printCompareResult(outfile, paraHeader.getFixedResult(),
                      paraHeaderLoaded.getFixedResult());
-  FUNCTION_OUTPUT << "display as:" << endl;
-  FUNCTION_OUTPUT << paraHeaderLoaded.getDisplayString() << endl;
+  PRINTFUNCTION(outfile, "display as:");
+  PRINTFUNCTION(outfile, paraHeaderLoaded.getDisplayString());
 
-  SEPERATE("ln6", " finished ");
+  SEPERATE(outfile, "ln6", " finished ");
 
-  testLineHeaderFromContainedLine(R"(<br>)");
-  SEPERATE("ln7", " finished ");
-  testLineHeaderFromContainedLine(R"(anything)");
-  SEPERATE("ln8", " finished ");
+  testLineHeaderFromContainedLine(outfile, R"(<br>)");
+  SEPERATE(outfile, "ln7", " finished ");
+  testLineHeaderFromContainedLine(outfile, R"(anything)");
+  SEPERATE(outfile, "ln8", " finished ");
 }
 
 /**
  * this function needs numbering first to get a correct target refer line number
  * or copy .txt files under testData to bodyTexts\output
  */
-void testLinkFromMain(string fromFile, string linkString,
+void testLinkFromMain(ofstream &outfile, string fromFile, string linkString,
                       bool needToGenerateOrgLink) {
-  FUNCTION_OUTPUT << "original link: " << endl;
-  FUNCTION_OUTPUT << linkString << endl;
+  PRINTFUNCTION(outfile, "original link: ");
+  PRINTFUNCTION(outfile, linkString);
   LinkFromMain lfm(fromFile, linkString);
   // second step of construction
   lfm.readReferFileName(linkString);
@@ -185,33 +223,34 @@ void testLinkFromMain(string fromFile, string linkString,
   if (needToGenerateOrgLink)
     lfm.generateLinkToOrigin();
   auto fixed = lfm.asString();
-  FUNCTION_OUTPUT << "need Update: " << lfm.needUpdate() << endl;
-  FUNCTION_OUTPUT << "after fixed: " << endl;
-  FUNCTION_OUTPUT << fixed << endl;
-  FUNCTION_OUTPUT << "display as:" << lfm.getDisplayString() << "||" << endl;
+  PRINTFUNCTION(outfile, "need Update: " << lfm.needUpdate());
+  PRINTFUNCTION(outfile, "after fixed: ");
+  PRINTFUNCTION(outfile, fixed);
+  PRINTFUNCTION(outfile, "display as:" << lfm.getDisplayString() << "||");
 }
 
-void testLinkFromAttachment(string fromFile, string linkString,
-                            bool needToGenerateOrgLink) {
-  FUNCTION_OUTPUT << "original link: " << endl;
-  FUNCTION_OUTPUT << linkString << endl;
+void testLinkFromAttachment(ofstream &outfile, string fromFile,
+                            string linkString, bool needToGenerateOrgLink) {
+  PRINTFUNCTION(outfile, "original link: ");
+  PRINTFUNCTION(outfile, linkString);
   LinkFromAttachment lfm(fromFile, linkString);
   // second step of construction
   lfm.readReferFileName(linkString);
   lfm.fixFromString(linkString);
-  FUNCTION_OUTPUT << lfm.getAnnotation() << endl;
+  PRINTFUNCTION(outfile, lfm.getAnnotation());
   if (needToGenerateOrgLink)
     lfm.generateLinkToOrigin();
   auto fixed = lfm.asString();
-  FUNCTION_OUTPUT << "need Update: " << lfm.needUpdate() << endl;
-  FUNCTION_OUTPUT << "after fixed: " << endl;
-  FUNCTION_OUTPUT << fixed << endl;
-  FUNCTION_OUTPUT << "display as:" << lfm.getDisplayString() << "||" << endl;
+  PRINTFUNCTION(outfile, "need Update: " << lfm.needUpdate());
+  PRINTFUNCTION(outfile, "after fixed: ");
+  PRINTFUNCTION(outfile, fixed);
+  PRINTFUNCTION(outfile, "display as:" << lfm.getDisplayString() << "||");
 }
 
-void testLink(CoupledLink &lfm, string linkString, bool needToGenerateOrgLink) {
-  FUNCTION_OUTPUT << "original link: " << endl;
-  FUNCTION_OUTPUT << linkString << endl;
+void testLink(ofstream &outfile, CoupledLink &lfm, string linkString,
+              bool needToGenerateOrgLink) {
+  PRINTFUNCTION(outfile, "original link: ");
+  PRINTFUNCTION(outfile, linkString);
   // second step of construction
   lfm.readReferFileName(linkString);
   if (not lfm.isReverseLink()) {
@@ -219,9 +258,9 @@ void testLink(CoupledLink &lfm, string linkString, bool needToGenerateOrgLink) {
     if (needToGenerateOrgLink)
       lfm.generateLinkToOrigin();
     auto fixed = lfm.asString();
-    FUNCTION_OUTPUT << "need Update: " << lfm.needUpdate() << endl;
-    FUNCTION_OUTPUT << "after fixed: " << endl;
-    FUNCTION_OUTPUT << fixed << endl;
+    PRINTFUNCTION(outfile, "need Update: " << lfm.needUpdate());
+    PRINTFUNCTION(outfile, "after fixed: ");
+    PRINTFUNCTION(outfile, fixed);
   } else {
     // str would get from fixLinkFromReverseLinkTemplate when generate it
     //	  string str = linkString;
@@ -229,33 +268,33 @@ void testLink(CoupledLink &lfm, string linkString, bool needToGenerateOrgLink) {
     string str = linkString;
     lfm.loadFirstFromContainedLine(str);
   }
-  FUNCTION_OUTPUT << "display as:" << lfm.getDisplayString() << "||" << endl;
+  PRINTFUNCTION(outfile, "display as:" << lfm.getDisplayString() << "||");
 }
 
-void testLinkOperation() {
-  SEPERATE("testLinkOperation", " starts ");
+void testLinkOperation(ofstream &outfile) {
+  SEPERATE(outfile, "testLinkOperation", " starts ");
 
   auto str = getWholeStringBetweenTags("<111>22>", "<111>", ">");
-  FUNCTION_OUTPUT << str << endl;
+  PRINTFUNCTION(outfile, str);
 
   //clang-format off
   string linkString =
       R"(<a unhidden href="a025.htm#P9L1">↓<sub>第3回1.2节:</sub></a>)";
-  FUNCTION_OUTPUT << linkString << endl;
+  PRINTFUNCTION(outfile, linkString);
   LinkFromMain link_1("05", linkString);
-  testLink(link_1, linkString, false);
-  SEPERATE("unhidden valid reverse link", " finished ");
+  testLink(outfile, link_1, linkString, false);
+  SEPERATE(outfile, "unhidden valid reverse link", " finished ");
 
   testLinkFromAttachment(
-      "07",
+      outfile, "07",
       R"(<a title="IMAGE" href="#nwbt.jpg">↑（图示：女娲补天）</a>)", false);
-  SEPERATE("direct image link", " finished ");
+  SEPERATE(outfile, "direct image link", " finished ");
 
   testLinkFromAttachment(
-      "07",
+      outfile, "07",
       R"(<a hidden title="IMAGE" href="a019.htm#tcf.jpg">（图示：探春房）</a>)",
       false);
-  SEPERATE("hidden image link", " finished ");
+  SEPERATE(outfile, "hidden image link", " finished ");
 
   linkString =
       R"(<a unhidden href="a080.htm#top">原是)" + commentStart + displaySpace +
@@ -265,37 +304,37 @@ void testLinkOperation() {
       endOfBeginTag +
       R"(薛姨妈1)" + commentEnd +
       R"(使唤的</a>)";
-  FUNCTION_OUTPUT << "original link: " << endl;
-  FUNCTION_OUTPUT << linkString << endl;
+  PRINTFUNCTION(outfile, "original link: ");
+  PRINTFUNCTION(outfile, linkString);
   LinkFromMain lfm("75", linkString);
   // second step of construction
   lfm.readReferFileName(linkString);
-  FUNCTION_OUTPUT << "change to refer to file 57. " << endl;
+  PRINTFUNCTION(outfile, "change to refer to file 57. ");
   lfm.fixReferFile(57);
   lfm.fixFromString(linkString);
   auto fixed = lfm.asString();
-  FUNCTION_OUTPUT << "need Update: " << lfm.needUpdate() << endl;
-  FUNCTION_OUTPUT << "after fixed: " << endl;
-  FUNCTION_OUTPUT << fixed << endl;
-  FUNCTION_OUTPUT << "display as:" << lfm.getDisplayString() << "||" << endl;
-  SEPERATE("fixReferFile", " finished ");
+  PRINTFUNCTION(outfile, "need Update: " << lfm.needUpdate());
+  PRINTFUNCTION(outfile, "after fixed: ");
+  PRINTFUNCTION(outfile, fixed);
+  PRINTFUNCTION(outfile, "display as:" << lfm.getDisplayString() << "||");
+  SEPERATE(outfile, "fixReferFile", " finished ");
 
   linkString =
       fixLinkFromJPMTemplate(jpmDirForLinkFromMain, "017", R"(床帐)",
                              emptyString, R"(雪梅相妒，无复桂月争辉)", "P1L1");
-  FUNCTION_OUTPUT << linkString << endl;
+  PRINTFUNCTION(outfile, linkString);
   LinkFromMain link1("05", linkString);
-  testLink(link1, linkString, false);
+  testLink(outfile, link1, linkString, false);
 
-  SEPERATE("JPM link", " finished ");
+  SEPERATE(outfile, "JPM link", " finished ");
 
   linkString =
       R"(<a unhidden href="a005.htm#P94" title="海棠">海棠春睡</a>)";
-  FUNCTION_OUTPUT << linkString << endl;
+  PRINTFUNCTION(outfile, linkString);
   LinkFromMain link2("70", linkString);
-  testLink(link2, linkString, false);
+  testLink(outfile, link2, linkString, false);
 
-  SEPERATE("title fix", " finished ");
+  SEPERATE(outfile, "title fix", " finished ");
 
   linkString =
       R"(<a hidden href="a080.htm#top">原是)" + commentStart + displaySpace +
@@ -305,109 +344,109 @@ void testLinkOperation() {
       endOfBeginTag +
       R"(薛姨妈1)" + commentEnd +
       R"(使唤的</a>)";
-  testLinkFromMain("07", linkString, false);
+  testLinkFromMain(outfile, "07", linkString, false);
 
-  SEPERATE("#top", " finished ");
+  SEPERATE(outfile, "#top", " finished ");
 
   testLinkFromMain(
-      "07",
+      outfile, "07",
       R"(<a hidden href="attachment\b003_9.htm#P2L3">原是老奶奶（薛姨妈）使唤的</a>)",
       false);
-  SEPERATE("WARNING:", " SUCH LINK'S REFERPARA WON'T BE FIXED AUTOMATICALLY.");
+  SEPERATE(outfile,
+           "WARNING:", " SUCH LINK'S REFERPARA WON'T BE FIXED AUTOMATICALLY.");
 
-  SEPERATE("attachment with referPara", " finished ");
+  SEPERATE(outfile, "attachment with referPara", " finished ");
 
-  testLinkFromMain("80",
+  testLinkFromMain(outfile, "80",
                    fixLinkFromSameFileTemplate(
                        DISPLAY_TYPE::UNHIDDEN, "菱角菱花",
                        "第80回1.1节:", "原是老奶奶（薛姨妈）使唤的", "94"),
                    false);
-  SEPERATE("fixLinkFromSameFileTemplate", " finished ");
+  SEPERATE(outfile, "fixLinkFromSameFileTemplate", " finished ");
 
   linkString = fixLinkFromMainTemplate(
       emptyString, "80", DISPLAY_TYPE::UNHIDDEN, "菱角菱花",
       "第80回1.1节:", "原是老奶奶（薛姨妈）使唤的", "94");
   LinkFromMain link("07", linkString);
-  testLink(link, linkString, false);
+  testLink(outfile, link, linkString, false);
 
-  SEPERATE("fixLinkFromMainTemplate", " finished ");
+  SEPERATE(outfile, "fixLinkFromMainTemplate", " finished ");
 
-  testLinkFromMain("03",
+  testLinkFromMain(outfile, "03",
                    fixLinkFromMainTemplate(
                        emptyString, "80", DISPLAY_TYPE::UNHIDDEN, "菱角菱花",
                        "第80回1.1节:", "原是老奶奶（薛姨妈）使唤的", "94"),
                    true);
-  SEPERATE("generate original link afterwards", " finished ");
+  SEPERATE(outfile, "generate original link afterwards", " finished ");
 
-  testLinkFromMain("07",
+  testLinkFromMain(outfile, "07",
                    fixLinkFromOriginalTemplate(
                        originalDirForLinkFromMain, "18", "happy",
                        "第80回1.1节:", annotationToOriginal, "90101"),
                    false);
-  SEPERATE("fixLinkFromOriginalTemplate", " finished ");
+  SEPERATE(outfile, "fixLinkFromOriginalTemplate", " finished ");
 
-  testLinkFromMain("07",
+  testLinkFromMain(outfile, "07",
                    fixLinkFromAttachmentTemplate(attachmentDirForLinkFromMain,
                                                  "18", "7", "happy"),
                    false);
-  SEPERATE("fixLinkFromOriginalTemplate", " finished ");
+  SEPERATE(outfile, "fixLinkFromOriginalTemplate", " finished ");
 
-  SEPERATE("testLinkFromMain", " finished ");
+  SEPERATE(outfile, "testLinkFromMain", " finished ");
 
   string linkString2 =
       fixLinkFromAttachmentTemplate(emptyString, "18", "7", "happy");
-  FUNCTION_OUTPUT << "original link: " << endl;
-  FUNCTION_OUTPUT << linkString2 << endl;
+  PRINTFUNCTION(outfile, "original link: ");
+  PRINTFUNCTION(outfile, linkString2);
   LinkFromAttachment lfm1("03_9", linkString2);
   // second step of construction
   lfm1.readReferFileName(linkString2);
-  FUNCTION_OUTPUT << "change to refer to file 55_3. " << endl;
+  PRINTFUNCTION(outfile, "change to refer to file 55_3. ");
   lfm1.fixReferFile(55, 3);
   lfm1.fixFromString(linkString2);
   auto fixed2 = lfm1.asString();
-  FUNCTION_OUTPUT << "need Update: " << lfm1.needUpdate() << endl;
-  FUNCTION_OUTPUT << "after fixed: " << endl;
-  FUNCTION_OUTPUT << fixed2 << endl;
-  FUNCTION_OUTPUT << "display as:" << lfm1.getDisplayString() << "||" << endl;
-  SEPERATE("fixReferFile", " finished ");
+  PRINTFUNCTION(outfile, "need Update: " << lfm1.needUpdate());
+  PRINTFUNCTION(outfile, "after fixed: ");
+  PRINTFUNCTION(outfile, fixed2);
+  PRINTFUNCTION(outfile, "display as:" << lfm1.getDisplayString() << "||");
+  SEPERATE(outfile, "fixReferFile", " finished ");
 
-  testLinkFromAttachment("1_0",
+  testLinkFromAttachment(outfile, "1_0",
                          R"(<a unhidden href="..\aindex.htm">回目录</a>)",
                          false);
-  SEPERATE("回目录", " finished ");
+  SEPERATE(outfile, "回目录", " finished ");
 
   testLinkFromAttachment(
-      "03_9",
-      fixLinkFromSameFileTemplate(DISPLAY_TYPE::UNHIDDEN, "西北",
-                                  "第80回1.1节:", "原是老奶奶（薛姨妈）使唤的",
-                                  "94"),
+      outfile, "03_9",
+      fixLinkFromSameFileTemplate(DISPLAY_TYPE::UNHIDDEN, "红牌", "",
+                                  "行祀之日各佩斋戒牌", "94"),
       false);
-  SEPERATE("fixLinkFromSameFileTemplate", " finished ");
+  SEPERATE(outfile, "fixLinkFromSameFileTemplate", " finished ");
 
-  testLinkFromAttachment("03_9",
+  testLinkFromAttachment(outfile, "03_9",
                          fixLinkFromMainTemplate(
                              R"(..\)", "80", DISPLAY_TYPE::UNHIDDEN, "菱角菱花",
                              "第80回1.1节:", "原是老奶奶（薛姨妈）使唤的",
                              "94"),
                          true);
-  SEPERATE("fixLinkFromMainTemplate", " finished ");
+  SEPERATE(outfile, "fixLinkFromMainTemplate", " finished ");
 
   testLinkFromAttachment(
-      "03_9",
+      outfile, "03_9",
       fixLinkFromOriginalTemplate(R"(..\original\)", "80", "菱角菱花",
                                   "第80回1.1节:", annotationToOriginal, "94"),
       false);
-  SEPERATE("fixLinkFromOriginalTemplate", " finished ");
+  SEPERATE(outfile, "fixLinkFromOriginalTemplate", " finished ");
 
   testLinkFromAttachment(
-      "03_9", fixLinkFromAttachmentTemplate(emptyString, "18", "7", "happy"),
-      false);
-  SEPERATE("fixLinkFromAttachmentTemplate", " finished ");
+      outfile, "03_9",
+      fixLinkFromAttachmentTemplate(emptyString, "18", "7", "happy"), false);
+  SEPERATE(outfile, "fixLinkFromAttachmentTemplate", " finished ");
   //clang-format on
-  SEPERATE("testLinkFromAttachment", " finished ");
+  SEPERATE(outfile, "testLinkFromAttachment", " finished ");
 }
 
-void testListContainer() {
+void testListContainer(ofstream &outfile) {
   ListContainer container("1_gen");
   auto link = fixLinkFromMainTemplate(
       emptyString, "80", DISPLAY_TYPE::UNHIDDEN, "菱角菱花",
@@ -441,28 +480,34 @@ void testListContainer() {
   container.setTitle("test");
   container.setDisplayTitle("test container");
   container.assembleBackToHTM();
-  FUNCTION_OUTPUT << "result is in file " << container.getoutputHtmlFilepath()
-                  << endl;
+  PRINTFUNCTION(outfile,
+                "result is in file " << container.getoutputHtmlFilepath());
+  ifstream inHtmlFile(container.getoutputHtmlFilepath());
+  while (!inHtmlFile.eof()) {
+    string line{emptyString};
+    getline(inHtmlFile, line);
+    PRINTFUNCTION(outfile, line);
+  }
 }
 
-void testAttachmentOperations() {
+void testAttachmentOperations(ofstream &outfile) {
   CoupledBodyTextContainer container;
   container.setFileType(FILE_TYPE::ATTACHMENT);
   container.setFileAndAttachmentNumber("28");
-  FUNCTION_OUTPUT << "attachments for 28:" << endl;
+  PRINTFUNCTION(outfile, "attachments for 28:");
   for (const auto &attNo : container.getAttachmentFileList(2, 5)) {
-    FUNCTION_OUTPUT << attNo << endl;
+    PRINTFUNCTION(outfile, attNo);
   }
-  FUNCTION_OUTPUT << endl;
+  PRINTFUNCTION(outfile, "");
   container.setFileAndAttachmentNumber("22");
-  FUNCTION_OUTPUT << "attachments for 22:" << endl;
+  PRINTFUNCTION(outfile, "attachments for 22:");
   for (const auto &attNo : container.getAttachmentFileList(5, 2)) {
-    FUNCTION_OUTPUT << attNo << endl;
+    PRINTFUNCTION(outfile, attNo);
   }
-  FUNCTION_OUTPUT << endl;
+  PRINTFUNCTION(outfile, "");
 }
 
-void testTableContainer() {
+void testTableContainer(ofstream &outfile) {
   TableContainer container("2_gen");
   container.insertFrontParagrapHeader(4, searchUnit);
   container.appendLeftParagraphInBodyText("line1-left");
@@ -474,82 +519,74 @@ void testTableContainer() {
   container.setTitle("content index table");
   container.setDisplayTitle("content");
   container.assembleBackToHTM();
-  FUNCTION_OUTPUT << "result is in file: " << container.getoutputHtmlFilepath()
-                  << endl;
-}
-
-void testContainer(int num) {
-  SEPERATE("testContainer", " started ");
-  switch (num) {
-  case 1:
-    testListContainer();
-    break;
-  case 2:
-    testTableContainer();
-    break;
-  default:
-    FUNCTION_OUTPUT << "invalid test." << endl;
+  PRINTFUNCTION(outfile,
+                "result is in file: " << container.getoutputHtmlFilepath());
+  ifstream inHtmlFile(container.getoutputHtmlFilepath());
+  while (!inHtmlFile.eof()) {
+    string line{emptyString};
+    getline(inHtmlFile, line);
+    PRINTFUNCTION(outfile, line);
   }
 }
 
-void testPoem() {
+void testPoem(ofstream &outfile) {
   string poemStr =
       R"(<strong hidden>杜鹃无语正黄昏，荷锄归去掩重门。青灯照壁人初睡，冷雨敲窗被未温。</strong>)";
   string line =
       R"(<a unhidden id="P11L1">11.1</a>&nbsp;&nbsp; <strong unhidden>杜鹃无语正黄昏，荷锄归去掩重门。青灯照壁人初睡，冷雨敲窗被未温。</strong>&nbsp;&nbsp;&nbsp;&nbsp;<samp unhidden font style="font-size: 13.5pt; font-family:楷体; color:#ff00ff">（像杜鹃啼血一样）我泣尽了血泪默默无语，只发现愁惨的黄昏正在降临，只好扛着花锄忍痛归去，一层层带上身后的门。闺中点起青冷的灯光，摇摇曳曳照射着四壁，我才要躺下，拉上尚是冰凉的被裘，却又听见轻寒的春雨敲打着窗棂，更增加了一层寒意。</samp><br>)";
   unique_ptr<Poem> poem1 = make_unique<Poem>();
   poem1->loadFirstFromContainedLine(poemStr);
-  FUNCTION_OUTPUT << "display Property: " << endl;
-  FUNCTION_OUTPUT << poem1->displayPropertyAsString() << endl;
-  FUNCTION_OUTPUT << "length: " << poem1->length()
-                  << " display size: " << poem1->displaySize() << endl;
-  FUNCTION_OUTPUT << "whole string: " << endl;
-  FUNCTION_OUTPUT << poem1->getFormatedFullString() << endl;
-  FUNCTION_OUTPUT << "display as:" << endl;
-  FUNCTION_OUTPUT << poem1->getDisplayString() << "||" << endl;
+  PRINTFUNCTION(outfile, "display Property: ");
+  PRINTFUNCTION(outfile, poem1->displayPropertyAsString());
+  PRINTFUNCTION(outfile, "length: " << poem1->length() << " display size: "
+                                    << poem1->displaySize());
+  PRINTFUNCTION(outfile, "whole string: ");
+  PRINTFUNCTION(outfile, poem1->getFormatedFullString());
+  PRINTFUNCTION(outfile, "display as:");
+  PRINTFUNCTION(outfile, poem1->getDisplayString() << "||");
   poemStr =
       R"(<strong>杜鹃无语正黄昏，荷锄归去掩重门。青灯照壁人初睡，冷雨敲窗被未温。</strong>)";
   poem1 = make_unique<Poem>();
   poem1->loadFirstFromContainedLine(poemStr);
-  FUNCTION_OUTPUT << "display Property: " << endl;
-  FUNCTION_OUTPUT << poem1->displayPropertyAsString() << endl;
-  FUNCTION_OUTPUT << "length: " << poem1->length()
-                  << " display size: " << poem1->displaySize() << endl;
-  FUNCTION_OUTPUT << "whole string: " << endl;
-  FUNCTION_OUTPUT << poem1->getFormatedFullString() << endl;
-  FUNCTION_OUTPUT << "display as:" << endl;
-  FUNCTION_OUTPUT << poem1->getDisplayString() << "||" << endl;
+  PRINTFUNCTION(outfile, "display Property: ");
+  PRINTFUNCTION(outfile, poem1->displayPropertyAsString());
+  PRINTFUNCTION(outfile, "length: " << poem1->length() << " display size: "
+                                    << poem1->displaySize());
+  PRINTFUNCTION(outfile, "whole string: ");
+  PRINTFUNCTION(outfile, poem1->getFormatedFullString());
+  PRINTFUNCTION(outfile, "display as:");
+  PRINTFUNCTION(outfile, poem1->getDisplayString() << "||");
   unique_ptr<Poem> poem2 = make_unique<Poem>();
   auto offset = poem2->loadFirstFromContainedLine(line);
-  FUNCTION_OUTPUT << "display Property: " << endl;
-  FUNCTION_OUTPUT << poem2->displayPropertyAsString() << endl;
-  FUNCTION_OUTPUT << "first appearance offset: " << endl;
-  FUNCTION_OUTPUT << offset << endl;
-  FUNCTION_OUTPUT << "length: " << poem2->length()
-                  << " display size: " << poem2->displaySize() << endl;
-  FUNCTION_OUTPUT << "whole string: " << endl;
-  FUNCTION_OUTPUT << poem2->getFormatedFullString() << endl;
-  FUNCTION_OUTPUT << "display as:" << endl;
-  FUNCTION_OUTPUT << poem2->getDisplayString() << "||" << endl;
+  PRINTFUNCTION(outfile, "display Property: ");
+  PRINTFUNCTION(outfile, poem2->displayPropertyAsString());
+  PRINTFUNCTION(outfile, "first appearance offset: ");
+  PRINTFUNCTION(outfile, offset);
+  PRINTFUNCTION(outfile, "length: " << poem2->length() << " display size: "
+                                    << poem2->displaySize());
+  PRINTFUNCTION(outfile, "whole string: ");
+  PRINTFUNCTION(outfile, poem2->getFormatedFullString());
+  PRINTFUNCTION(outfile, "display as:");
+  PRINTFUNCTION(outfile, poem2->getDisplayString() << "||");
 }
 
-void testSpace() {
+void testSpace(ofstream &outfile) {
   string line =
       R"(<a unhidden id="P11L1">11.1</a>&nbsp;&nbsp; <strong unhidden>杜鹃无语正黄昏，荷锄归去掩重门。青灯照壁人初睡，冷雨敲窗被未温。</strong>&nbsp;&nbsp;&nbsp;&nbsp;<samp unhidden font style="font-size: 13.5pt; font-family:楷体; color:#ff00ff">（像杜鹃啼血一样）我泣尽了血泪默默无语，只发现愁惨的黄昏正在降临，只好扛着花锄忍痛归去，一层层带上身后的门。闺中点起青冷的灯光，摇摇曳曳照射着四壁，我才要躺下，拉上尚是冰凉的被裘，却又听见轻寒的春雨敲打着窗棂，更增加了一层寒意。</samp><br>)";
   unique_ptr<Space> sp = make_unique<Space>();
   auto offset = sp->loadFirstFromContainedLine(line);
-  FUNCTION_OUTPUT << "display Property: " << endl;
-  FUNCTION_OUTPUT << sp->displayPropertyAsString() << endl;
-  FUNCTION_OUTPUT << "first appearance offset: " << endl;
-  FUNCTION_OUTPUT << offset << endl;
-  FUNCTION_OUTPUT << "length: " << sp->length()
-                  << " display size: " << sp->displaySize() << endl;
-  FUNCTION_OUTPUT << "whole string: " << endl;
-  FUNCTION_OUTPUT << sp->getFormatedFullString() << endl;
-  FUNCTION_OUTPUT << "display as:" << sp->getDisplayString() << "||" << endl;
+  PRINTFUNCTION(outfile, "display Property: ");
+  PRINTFUNCTION(outfile, sp->displayPropertyAsString());
+  PRINTFUNCTION(outfile, "first appearance offset: ");
+  PRINTFUNCTION(outfile, offset);
+  PRINTFUNCTION(outfile, "length: " << sp->length()
+                                    << " display size: " << sp->displaySize());
+  PRINTFUNCTION(outfile, "whole string: ");
+  PRINTFUNCTION(outfile, sp->getFormatedFullString());
+  PRINTFUNCTION(outfile, "display as:" << sp->getDisplayString() << "||");
 }
 
-void testMixedObjects() {
+void testMixedObjects(ofstream &outfile) {
   string line2 =
       R"(我哥哥（<cite unhidden>其实</cite>）已经相准了（<cite unhidden>媳妇</cite>），只等来家（<cite unhidden>就派人往这边</cite>）就下定了，（<cite unhidden>我</cite>）也不必提出人来（<cite unhidden>明说相准了谁</cite>），我方才说你认不得娘，你细想去。”（<u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">亲兄妹不能做亲，所以相准了黛玉就变成亲妹妹就不能下定了。玩笑必是<a unhidden title="编派" href="a054.htm#P12L1"><sub hidden>第54回12.1节:</sub>编派现场一个人</a>（<a unhidden title="编派" href="original\c054.htm#P8L1"><sub hidden>第54回8.1节:</sub>原文</a>）。想当初，宝玉就借<a unhidden title="真正的" href="a019.htm#P13L3"><sub hidden>第19回13.3节:</sub>林子洞编派过黛玉</a>（<a unhidden title="真正的" href="original\c019.htm#P14L1"><sub hidden>第19回14.1节:</sub>原文</a>）</u>）说着，便和她母亲（<cite unhidden>薛姨妈</cite>）挤眼儿发笑。黛玉听（<cite unhidden>明白了宝钗的玩笑</cite>）了，便也一头伏在薛姨妈身上，说道：“姨妈不打（<cite unhidden>宝钗</cite>）她我不依。”（<u unhidden style="text-decoration-color: #F0BEC0;text-decoration-style: wavy;opacity: 0.4">这句又接到宝玉生日探春让李纨打黛玉，李纨说黛玉<a unhidden title="挨打" href="a063.htm#P14L3"><sub hidden>第63回14.3节:</sub>人家不得贵婿反挨打</a>（<a unhidden title="挨打" href="original\c063.htm#P6L3"><sub hidden>第63回6.3节:</sub>原文</a>），黛玉的婚姻是镜中花，他们二人的一个不能完成的愿望而已。</u>）)";
   string compareTo2 =
@@ -591,8 +628,8 @@ void testMixedObjects() {
     string line = lineSet[i];
     string compareTo = compareToSet[i];
     bodyText.getDisplayString(line);
-    printCompareResult(bodyText.getResultDisplayString(), compareTo);
-    SEPERATE("compare test " + TurnToString(i), " finished ");
+    printCompareResult(outfile, bodyText.getResultDisplayString(), compareTo);
+    SEPERATE(outfile, "compare test " + TurnToString(i), " finished ");
   }
 
   string line10 =
@@ -607,8 +644,8 @@ void testMixedObjects() {
     string line = lineSet2[i];
     bodyText.getDisplayString(line, true);
     auto typeSet = bodyText.getResultSet();
-    FUNCTION_OUTPUT << Object::typeSetAsString(typeSet) << endl;
-    SEPERATE("type test " + TurnToString(i), " finished ");
+    PRINTFUNCTION(outfile, Object::typeSetAsString(typeSet));
+    SEPERATE(outfile, "type test " + TurnToString(i), " finished ");
   }
 }
 
@@ -624,35 +661,44 @@ void testNumberingStatistics() {
   bodyText.doStatisticsByScanningLines();
 }
 
-void testFunctions(int num) {
-  SEPERATE("HLM test", " started ");
+void regressionTest() {
+  for (int i = 1; i <= 9; i++) {
+    FUNCTION_OUTPUT << "to test: " << i << endl;
+    testSpecificFunction(i);
+  }
+}
+
+void testSpecificFunction(int num) {
+  SEPERATE(cout, "HLM test", " started ");
+  auto path = TEST_OUTPUT_DIR + TurnToString(num) + BODY_TEXT_SUFFIX;
+  ofstream testResult(path);
   switch (num) {
   case 1:
-    testSearchTextIsOnlyPartOfOtherKeys();
+    testSearchTextIsOnlyPartOfOtherKeys(testResult);
     break;
   case 2:
-    testLineNumber();
+    testLineNumber(testResult);
     break;
   case 3:
-    testLinkOperation();
+    testLinkOperation(testResult);
     break;
   case 4:
-    testAttachmentOperations();
+    testAttachmentOperations(testResult);
     break;
   case 5:
-    testContainer(1);
+    testListContainer(testResult);
     break;
   case 6:
-    testContainer(2);
+    testTableContainer(testResult);
     break;
   case 7:
-    testPoem();
+    testPoem(testResult);
     break;
   case 8:
-    testSpace();
+    testSpace(testResult);
     break;
   case 9:
-    testMixedObjects();
+    testMixedObjects(testResult);
     break;
   case 10:
     testNumberingStatistics();

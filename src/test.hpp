@@ -1,5 +1,5 @@
 #pragma once
 #include "libraryInterface.hpp"
 
-// main entry of calling above functions
-void testFunctions(int num = 0);
+void testSpecificFunction(int num);
+void regressionTest();

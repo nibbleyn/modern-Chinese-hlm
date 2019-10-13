@@ -186,7 +186,6 @@ void generateContentTableForAttachments(ATTACHMENT_TYPE type,
 
 void generateContentTable(TABLE_TYPE type, ATTACHMENT_TYPE attType,
                           bool needToReloadAttachmentList) {
-  SEPERATE("generateContentTable", " started ");
   switch (type) {
   case TABLE_TYPE::MAIN:
     generateContentTableForMainHtmls();

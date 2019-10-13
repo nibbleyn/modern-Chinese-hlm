@@ -1,0 +1,8 @@
+testSpace              display Property: 
+testSpace              
+testSpace              first appearance offset: 
+testSpace              31
+testSpace              length: 6 display size: 1
+testSpace              whole string: 
+testSpace              &nbsp;
+testSpace              display as: ||

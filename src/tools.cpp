@@ -515,7 +515,6 @@ void reformatTxtFilesForReader() {
 }
 
 void tools(int num) {
-  SEPERATE("HLM tool", " started ");
   switch (num) {
   case 1:
     fixHeaderAndFooterForJPMHtmls();

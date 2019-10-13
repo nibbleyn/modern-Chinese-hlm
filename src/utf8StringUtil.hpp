@@ -23,10 +23,6 @@ static const string topParagraphIndicator = R"(top)";
 // bottom of the body Text file
 static const string bottomParagraphIndicator = R"(bottom)";
 
-#define SEPERATE(x, y)                                                         \
-  cout << "*************************line " << __LINE__ << ": " << x << y       \
-       << "*************************" << endl; //<< __func__<< __FILE__
-
 #define METHOD_OUTPUT                                                          \
   cout << typeid(*this).name() << "::" << __func__ << "              "
 #define FUNCTION_OUTPUT cout << __func__ << "              "
@@ -73,11 +69,6 @@ void replacePart(string &targetString, const string &subStrToReplace,
 int utf8length(const string &originalString);
 string utf8substr(const string &originalString, size_t begin, size_t &end,
                   size_t SubStrLength);
-string markDifference(const string &firstString, const string &secondString,
-                      size_t begin = 0);
-
-void printCompareResult(const string &firstString, const string &secondString,
-                        size_t begin = 0);
 
 string getIncludedStringBetweenTags(const string &originalString,
                                     const string &begin, const string &end,

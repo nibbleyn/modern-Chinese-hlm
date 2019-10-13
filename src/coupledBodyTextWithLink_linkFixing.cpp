@@ -111,8 +111,6 @@ void CoupledBodyTextWithLink::fixLinksWithinOneLine(FileSet referMainFiles,
         // replace old value
         if (m_forceUpdateLink or m_linkPtr->needUpdate()) {
           auto orglinkBegin = m_inLine.find(link, endOfProcessedSubString);
-          if (debug >= LOG_INFO)
-            SEPERATE("isTargetToJPMHtm", m_inLine + "\n" + link);
           m_inLine.replace(orglinkBegin, link.length(), m_linkPtr->asString());
           endOfProcessedSubString =
               orglinkBegin + m_linkPtr->getFormatedFullString().length();
@@ -129,8 +127,6 @@ void CoupledBodyTextWithLink::fixLinksWithinOneLine(FileSet referMainFiles,
         // replace old value
         if (m_forceUpdateLink or m_linkPtr->needUpdate()) {
           auto orglinkBegin = m_inLine.find(link, endOfProcessedSubString);
-          if (debug >= LOG_INFO)
-            SEPERATE("isTargetToOriginalHtm", m_inLine + "\n" + link);
           m_inLine.replace(orglinkBegin, link.length(), m_linkPtr->asString());
           endOfProcessedSubString =
               orglinkBegin + m_linkPtr->getFormatedFullString().length();
