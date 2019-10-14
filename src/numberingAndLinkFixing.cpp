@@ -62,7 +62,7 @@ void Commander::runCommandOverFiles() {
   assembleHtmls();
 
   updateAttachmentListIntoFile();
-  updateAttachmentContentTableAndfixReturnLink();
+  updateContentTableAndfixReturnLink();
   restoreDebugLevel();
   outputLinkFixingStatistics();
   METHOD_OUTPUT << "Done processing. " << endl;
@@ -124,8 +124,12 @@ void AttachmentCommander::runCommandOverEachFile() {
   }
 }
 
-void Commander::updateAttachmentContentTableAndfixReturnLink() {
+void Commander::updateContentTableAndfixReturnLink() {
+  if (m_command == COMMAND::addLineNumber) {
+    generateContentTable(TABLE_TYPE::POEMS);
+  }
   if (m_command == COMMAND::fixLinksFromMainFile) {
+    generateContentTable(TABLE_TYPE::IMAGE);
     CoupledBodyTextContainer::refAttachmentTable.setSourceFile(
         OUTPUT_REF_ATTACHMENT_LIST_PATH);
     CoupledBodyTextContainer::refAttachmentTable.loadReferenceAttachmentList();
@@ -134,10 +138,8 @@ void Commander::updateAttachmentContentTableAndfixReturnLink() {
                          false);
     generateContentTable(TABLE_TYPE::ATTACHMENT, ATTACHMENT_TYPE::PERSONAL,
                          false);
-    generateContentTable(TABLE_TYPE::IMAGE);
-    generateContentTable(TABLE_TYPE::POEMS);
-    if (m_fixReturnLink)
-      // fix return links of attachments to output directory
+    // fix return links of attachments to output directory
+    if (m_fixReturnLink) {
       for (const auto &file : m_fileSet) {
         CoupledBodyTextContainer attachmentContainer;
         attachmentContainer.setFileType(FILE_TYPE::ATTACHMENT);
@@ -147,6 +149,7 @@ void Commander::updateAttachmentContentTableAndfixReturnLink() {
           attachmentContainer.fixReturnLinkForAttachmentFile();
         }
       }
+    }
   }
 }
 

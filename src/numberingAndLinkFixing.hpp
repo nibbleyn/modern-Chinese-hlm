@@ -55,7 +55,7 @@ protected:
   virtual void assembleHtmls() = 0;
   virtual void runCommandOverEachFile() = 0;
   void execute();
-  void updateAttachmentContentTableAndfixReturnLink();
+  void updateContentTableAndfixReturnLink();
   void backupAndOverwriteSrcFiles();
   void setupReferenceFileSet();
   void setupNumberingStatistics();
