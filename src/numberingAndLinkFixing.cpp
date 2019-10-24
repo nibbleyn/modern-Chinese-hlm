@@ -352,11 +352,17 @@ void renderingBodyText(const string &kind, int minTarget, int maxTarget) {
     container.dissembleFromHTM();
   }
 
+  bool hidePersonalComment = true;
   for (const auto &file : fileSet) {
     CoupledBodyTextWithLink bodyText;
     bodyText.setFilePrefixFromFileType(getFileTypeFromKind(kind));
     bodyText.setFileAndAttachmentNumber(file);
+    if(hidePersonalComment){
+    	bodyText.addHiddenType(nameOfPersonalCommentType);
+    }
+    else{
     PersonalComment::enableAddSpecialDisplayText();
+    }
     PoemTranslation::enableAddSpecialDisplayText();
     LinkFromMain::enableAddSpecialDisplayText();
     bodyText.hideParaHeader();
