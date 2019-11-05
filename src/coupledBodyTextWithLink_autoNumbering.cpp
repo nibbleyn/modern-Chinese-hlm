@@ -153,7 +153,7 @@ void CoupledBodyTextWithLink::paraGeneratedNumbering() {
       // only the first and last para headers
       if (isInParaHeaderTable(seqOfLines)) {
         addParaHeader(outfile);
-        if (m_para == m_numberOfMiddleParaHeader + 1) {
+        if (m_para > (m_numberOfMiddleParaHeader + m_numberOfFirstParaHeader)) {
           break;
         }
       } else

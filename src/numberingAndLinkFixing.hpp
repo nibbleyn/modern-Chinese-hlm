@@ -85,6 +85,9 @@ class AttachmentCommander : public Commander {
 void numberJPMHtmls(bool forceUpdateLineNumber = true,
                     bool hideParaHeader = false,
                     bool disableAutoNumbering = false);
+void numberMDTHtmls(bool forceUpdateLineNumber = true,
+                    bool hideParaHeader = false,
+                    bool disableAutoNumbering = false);
 void numberOriginalHtmls(bool forceUpdateLineNumber = true,
                          bool hideParaHeader = false,
                          bool disableAutoNumbering = true);

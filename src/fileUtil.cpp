@@ -5,6 +5,8 @@ FILE_TYPE getFileTypeFromKind(const std::string &kind) {
     return FILE_TYPE::ATTACHMENT;
   if (kind == ORIGINAL)
     return FILE_TYPE::ORIGINAL;
+  if (kind == MDT)
+    return FILE_TYPE::MDT;
   if (kind == JPM)
     return FILE_TYPE::JPM;
   return FILE_TYPE::MAIN;
@@ -26,6 +28,8 @@ std::string getHtmlFileNamePrefixFromFileType(FILE_TYPE type) {
     return ATTACHMENT_HTML_PREFIX;
   if (type == FILE_TYPE::JPM)
     return JPM_HTML_PREFIX;
+  if (type == FILE_TYPE::MDT)
+    return MDT_HTML_PREFIX;
   return MAIN_HTML_PREFIX;
 }
 
@@ -36,6 +40,8 @@ std::string getBodyTextFilePrefixFromFileType(FILE_TYPE type) {
     return ORIGINAL_BODYTEXT_PREFIX;
   if (type == FILE_TYPE::JPM)
     return JPM_BODYTEXT_PREFIX;
+  if (type == FILE_TYPE::MDT)
+    return MDT_BODYTEXT_PREFIX;
   return MAIN_BODYTEXT_PREFIX;
 }
 
@@ -50,15 +56,9 @@ static constexpr const char *ORIGINAL_SEPERATOR_COLOR = R"(004040)";
  * @return corresponding color of separator line between paragraphs
  */
 std::string getSeparateLineColor(FILE_TYPE type) {
-  if (type == FILE_TYPE::MAIN)
-    return MAIN_SEPERATOR_COLOR;
-  if (type == FILE_TYPE::JPM)
-    return MAIN_SEPERATOR_COLOR;
-  if (type == FILE_TYPE::ATTACHMENT)
-    return MAIN_SEPERATOR_COLOR;
   if (type == FILE_TYPE::ORIGINAL)
     return ORIGINAL_SEPERATOR_COLOR;
-  return "unsupported";
+  return MAIN_SEPERATOR_COLOR;
 }
 
 std::string getHtmlFileNameFromBodyTextFilePrefix(const std::string &prefix) {

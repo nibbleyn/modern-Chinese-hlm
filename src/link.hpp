@@ -4,6 +4,7 @@
 static const string attachmentDirForLinkFromMain = R"(attachment\)";
 static const string originalDirForLinkFromMain = R"(original\)";
 static const string jpmDirForLinkFromMain = R"(JPM\)";
+static const string mdtDirForLinkFromMain = R"(MDT\)";
 static const string pictureDirForLinkFromMain = R"(pictures\)";
 
 enum class LINK_TYPE {
@@ -62,6 +63,10 @@ fixLinkFromOriginalTemplate(const string &path, const string &filename,
                             const string &annotation = annotationToOriginal,
                             const string &referPara = emptyString);
 string fixLinkFromJPMTemplate(const string &path, const string &filename,
+                              const string &key, const string &citation,
+                              const string &annotation = annotationToOriginal,
+                              const string &referPara = emptyString);
+string fixLinkFromMDTTemplate(const string &path, const string &filename,
                               const string &key, const string &citation,
                               const string &annotation = annotationToOriginal,
                               const string &referPara = emptyString);

@@ -83,6 +83,7 @@ static const string MAIN_TYPE_HTML_TARGET = R"(a0)";
 static const string ATTACHMENT_TYPE_HTML_TARGET = R"(b0)";
 static const string ORIGINAL_TYPE_HTML_TARGET = R"(c0)";
 static const string JPM_TYPE_HTML_TARGET = R"(d)";
+static const string MDT_TYPE_HTML_TARGET = R"(e0)";
 
 string getChapterNameByTargetKind(const string &targetKind, int chapterNumber);
 

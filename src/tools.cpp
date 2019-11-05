@@ -1,42 +1,52 @@
 #include "tools.hpp"
 
-void fixFooter(string &footer, const string &filename) {
+void fixFooter(string &footer, const string &filename,
+               FILE_TYPE fileType = FILE_TYPE::JPM) {
   string previous =
-      formatIntoZeroPatchedChapterNumber(TurnToInt(filename) - 1, 3);
-  string next = formatIntoZeroPatchedChapterNumber(TurnToInt(filename) + 1, 3);
+      getHtmlFileNamePrefixFromFileType(fileType) +
+      getChapterNameByTargetKind(getHtmlFileNamePrefixFromFileType(fileType),
+                                 TurnToInt(filename) - 1);
+  string next =
+      getHtmlFileNamePrefixFromFileType(fileType) +
+      getChapterNameByTargetKind(getHtmlFileNamePrefixFromFileType(fileType),
+                                 TurnToInt(filename) + 1);
   const string toReplacePrevious = "a077";
   const string toReplaceNext = "a079";
-
   do {
     auto toReplacePreviousBegin = footer.find(toReplacePrevious);
     if (toReplacePreviousBegin == string::npos)
       break;
     footer.replace(toReplacePreviousBegin, toReplacePrevious.length(),
-                   getHtmlFileNamePrefixFromFileType(FILE_TYPE::JPM) +
-                       previous);
+                   previous);
   } while (true);
   do {
     auto toReplaceNextBegin = footer.find(toReplaceNext);
     if (toReplaceNextBegin == string::npos)
       break;
-    footer.replace(toReplaceNextBegin, toReplaceNext.length(),
-                   getHtmlFileNamePrefixFromFileType(FILE_TYPE::JPM) + next);
+    footer.replace(toReplaceNextBegin, toReplaceNext.length(), next);
   } while (true);
   const string toReplaceContentTable = "aindex";
   if (footer.find(toReplaceContentTable) == string::npos)
     return;
-  const string newContentTable =
-      getHtmlFileNamePrefixFromFileType(FILE_TYPE::JPM) + "index";
+  auto contentTableStartWith =
+      getHtmlFileNamePrefixFromFileType(fileType).substr(0, 1);
+  const string newContentTable = contentTableStartWith + "index";
   footer.replace(footer.find(toReplaceContentTable),
                  toReplaceContentTable.length(), newContentTable);
   FUNCTION_OUTPUT << footer << endl;
 }
 
-void fixHeader(string &header, const string &filename) {
+void fixHeader(string &header, const string &filename,
+               FILE_TYPE fileType = FILE_TYPE::JPM) {
 
   string previous =
-      formatIntoZeroPatchedChapterNumber(TurnToInt(filename) - 1, 3);
-  string next = formatIntoZeroPatchedChapterNumber(TurnToInt(filename) + 1, 3);
+      getHtmlFileNamePrefixFromFileType(fileType) +
+      getChapterNameByTargetKind(getHtmlFileNamePrefixFromFileType(fileType),
+                                 TurnToInt(filename) - 1);
+  string next =
+      getHtmlFileNamePrefixFromFileType(fileType) +
+      getChapterNameByTargetKind(getHtmlFileNamePrefixFromFileType(fileType),
+                                 TurnToInt(filename) + 1);
   const string origHeader = header;
   const string originalTitleBeginChars = R"(<b unhidden>)";
   const string originalTitleEndChars = R"(</b>)";
@@ -70,15 +80,13 @@ void fixHeader(string &header, const string &filename) {
     if (toReplacePreviousBegin == string::npos)
       break;
     header.replace(toReplacePreviousBegin, toReplacePrevious.length(),
-                   getHtmlFileNamePrefixFromFileType(FILE_TYPE::JPM) +
-                       previous);
+                   previous);
   } while (true);
   do {
     auto toReplaceNextBegin = header.find(toReplaceNext);
     if (toReplaceNextBegin == string::npos)
       break;
-    header.replace(toReplaceNextBegin, toReplaceNext.length(),
-                   getHtmlFileNamePrefixFromFileType(FILE_TYPE::JPM) + next);
+    header.replace(toReplaceNextBegin, toReplaceNext.length(), next);
   } while (true);
 
   const string toReplaceTranslatedTitle =
@@ -89,8 +97,9 @@ void fixHeader(string &header, const string &filename) {
                  sampTitleBeginChars + originalTitle + sampTitleEndChars);
 
   const string toReplaceContentTable = "aindex";
-  const string newContentTable =
-      getHtmlFileNamePrefixFromFileType(FILE_TYPE::JPM) + "index";
+  auto contentTableStartWith =
+      getHtmlFileNamePrefixFromFileType(fileType).substr(0, 1);
+  const string newContentTable = contentTableStartWith + "index";
   header.replace(header.find(toReplaceContentTable),
                  toReplaceContentTable.length(), newContentTable);
   FUNCTION_OUTPUT << header << endl;
@@ -300,7 +309,7 @@ void CoupledBodyTextContainer::fixHeaderAndFooter() {
     } else
       singleLineHeader += line;
   }
-  fixHeader(singleLineHeader, m_file);
+  fixHeader(singleLineHeader, m_file, m_fileType);
   FUNCTION_OUTPUT << singleLineHeader << endl;
   outHtmlFile << singleLineHeader << endl;
   // output start line
@@ -329,7 +338,7 @@ void CoupledBodyTextContainer::fixHeaderAndFooter() {
     getline(inHtmlFile, line);
     singleLineFooter += line;
   }
-  fixFooter(singleLineFooter, m_file);
+  fixFooter(singleLineFooter, m_file, m_fileType);
   FUNCTION_OUTPUT << singleLineFooter << endl;
   outHtmlFile << singleLineFooter << endl;
   if (debug >= LOG_INFO)
@@ -337,18 +346,25 @@ void CoupledBodyTextContainer::fixHeaderAndFooter() {
                     << getoutputHtmlFilepath() << endl;
 }
 
-void fixHeaderAndFooterForJPMHtml(int minTarget, int maxTarget) {
+void fixHeaderAndFooterForMDTHtmls() {
+  int minTarget = 2, maxTarget = 54;
+  CoupledBodyTextContainer container;
+  container.setFileType(FILE_TYPE::MDT);
+  for (const auto &file : buildFileSet(minTarget, maxTarget, MDT)) {
+    container.setFileAndAttachmentNumber(file);
+    container.fixHeaderAndFooter();
+  }
+  FUNCTION_OUTPUT << "fixHeaderAndFooter for MDT Htmls finished. " << endl;
+}
+
+void fixHeaderAndFooterForJPMHtmls() {
+  int minTarget = 2, maxTarget = 99;
   CoupledBodyTextContainer container;
   container.setFileType(FILE_TYPE::JPM);
   for (const auto &file : buildFileSet(minTarget, maxTarget, JPM)) {
     container.setFileAndAttachmentNumber(file);
     container.fixHeaderAndFooter();
   }
-}
-
-void fixHeaderAndFooterForJPMHtmls() {
-  int minTarget = 2, maxTarget = 99;
-  fixHeaderAndFooterForJPMHtml(minTarget, maxTarget);
   FUNCTION_OUTPUT << "fixHeaderAndFooter for JPM Htmls finished. " << endl;
 }
 
@@ -536,6 +552,9 @@ void tools(int num) {
     break;
   case 8:
     fixTagPairEnd();
+    break;
+  case 9:
+    fixHeaderAndFooterForMDTHtmls();
     break;
   default:
     FUNCTION_OUTPUT << "invalid tool." << endl;

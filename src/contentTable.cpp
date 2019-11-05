@@ -13,6 +13,10 @@ static const string JPM_INDEX = R"(dindex)";
 static const string JPM_TITLE = R"(张竹坡批注金瓶梅)";
 static const string JPM_DISPLAY_TITLE = R"(张竹坡批注金瓶梅 目录)";
 
+static const string MDT_INDEX = R"(eindex)";
+static const string MDT_TITLE = R"(牡丹亭)";
+static const string MDT_DISPLAY_TITLE = R"(牡丹亭 目录)";
+
 static const string PIC_INDEX = R"(picIndex)";
 static const string PIC_TITLE = R"(图片)";
 static const string PIC_DISPLAY_TITLE = R"(图片 目录)";
@@ -109,6 +113,32 @@ void generateContentTableForJPMHtmls() {
   FUNCTION_OUTPUT << "generateContentTable for JPM Htmls finished. " << endl;
 }
 
+void generateContentTableForMDTHtmls() {
+  int minTarget = MDT_MIN_CHAPTER_NUMBER, maxTarget = MDT_MAX_CHAPTER_NUMBER;
+  CoupledBodyTextContainer container;
+  container.setFileType(FILE_TYPE::MDT);
+  TableContainer outputContainer(MDT_INDEX);
+  outputContainer.setMaxTarget(MDT_MAX_CHAPTER_NUMBER);
+  outputContainer.createParaListFrom(18, 22, 90);
+
+  outputContainer.clearLinkStringSet();
+  for (const auto &file : buildFileSet(minTarget, maxTarget, MDT)) {
+    container.setFileAndAttachmentNumber(file);
+    container.fetchOriginalAndTranslatedTitles();
+    AttachmentNumber num(TurnToInt(file), 0);
+    outputContainer.addLinkToLinkStringSet(
+        num, fixLinkFromMDTTemplate(mdtDirForLinkFromMain, file, emptyString,
+                                    emptyString, container.getOriginalTitle()));
+  }
+  outputContainer.outputToBodyTextFromLinkList();
+  outputContainer.setTitle(MDT_TITLE);
+  outputContainer.setDisplayTitle(MDT_DISPLAY_TITLE);
+  outputContainer.assembleBackToHTM();
+  FUNCTION_OUTPUT << "result is in file: "
+                  << outputContainer.getoutputHtmlFilepath() << endl;
+  FUNCTION_OUTPUT << "generateContentTable for MDT Htmls finished. " << endl;
+}
+
 void generateContentTableForImages() {
   TableContainer outputContainer(PIC_INDEX);
   outputContainer.clearLinkStringSet();
@@ -195,6 +225,9 @@ void generateContentTable(TABLE_TYPE type, ATTACHMENT_TYPE attType,
     break;
   case TABLE_TYPE::JPM:
     generateContentTableForJPMHtmls();
+    break;
+  case TABLE_TYPE::MDT:
+    generateContentTableForMDTHtmls();
     break;
   case TABLE_TYPE::IMAGE:
     generateContentTableForImages();

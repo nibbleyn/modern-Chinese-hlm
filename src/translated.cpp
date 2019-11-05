@@ -16,7 +16,7 @@ int main(int argc, char **argv) {
     //    search(R"(枕)", SEARCH_IN_MAIN, true);
     //    search(R"(邢夫人)", SEARCH_IN_ORIGINAL);
     //    search(R"(闲)", SEARCH_IN_JPM);
-    search(R"(风露)");
+    search(R"(学名)");
     break;
   case 2:
     validateMainHtmls();
@@ -25,6 +25,7 @@ int main(int argc, char **argv) {
     validateAttachmentHtmls();
     break;
   case 4:
+    numberMDTHtmls(false);
     numberJPMHtmls(false);
     break;
   case 5:
@@ -47,7 +48,7 @@ int main(int argc, char **argv) {
     break;
   case 11:
     reConstructStory(R"(尤二姐)", "story2");
-    //    reConstructStory(R"(小红遗帕)", "story", false);
+    reConstructStory(R"(小红遗帕)", "story", false);
     break;
   case 12:
     autoNumberingResultStory("story2", R"(尤二姐)");
@@ -61,6 +62,7 @@ int main(int argc, char **argv) {
     refreshAttachmentBodyTexts();
     break;
   case 15:
+    generateContentTable(TABLE_TYPE::MDT);
     generateContentTable(TABLE_TYPE::MAIN);
     generateContentTable(TABLE_TYPE::ATTACHMENT, ATTACHMENT_TYPE::REFERENCE);
     generateContentTable(TABLE_TYPE::ATTACHMENT, ATTACHMENT_TYPE::PERSONAL);
@@ -79,10 +81,13 @@ int main(int argc, char **argv) {
     validateParaSizeForAutoNumberingJPMHtmls();
     break;
   case 20:
-    tools(15);
+    tools(9);
     break;
   case 21:
     removePersonalViewpoints();
+    break;
+  case 22:
+    gb2312FixMDT();
     break;
   default:
     FUNCTION_OUTPUT << "nothing gets executed." << endl;

@@ -50,6 +50,15 @@ void Searcher::execute() {
                 m_key, expectedSection, expectedSection, line),
             make_pair(ln.getParaNumber(), ln.getlineNumber()));
         break;
+      case FILE_TYPE::MDT:
+        m_containerPtr->addLinkToLinkStringSet(
+            num,
+            fixLinkFromMDTTemplate(
+                mdtDirForLinkFromMain,
+                getChapterNameByTargetKind(MDT_TYPE_HTML_TARGET, num.first),
+                m_key, expectedSection, expectedSection, line),
+            make_pair(ln.getParaNumber(), ln.getlineNumber()));
+        break;
       case FILE_TYPE::ATTACHMENT:
       default:
         FUNCTION_OUTPUT << "not supported yet." << endl;

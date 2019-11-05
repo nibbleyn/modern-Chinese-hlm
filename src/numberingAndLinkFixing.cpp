@@ -291,6 +291,19 @@ void numberJPMHtmls(bool forceUpdateLineNumber, bool hideParaHeader,
   commander.runCommandOverFiles();
 }
 
+void numberMDTHtmls(bool forceUpdateLineNumber, bool hideParaHeader,
+                    bool disableAutoNumbering) {
+  NonAttachmentCommander commander;
+  commander.m_command = Commander::COMMAND::addLineNumber;
+  commander.m_disableAutoNumbering = disableAutoNumbering;
+  commander.m_forceUpdateLineNumber = forceUpdateLineNumber;
+  commander.m_hideParaHeader = hideParaHeader;
+  commander.m_kind = MDT;
+  commander.m_minTarget = MDT_MIN_CHAPTER_NUMBER;
+  commander.m_maxTarget = MDT_MAX_CHAPTER_NUMBER;
+  commander.runCommandOverFiles();
+}
+
 void numberAttachmentHtmls(bool forceUpdateLineNumber, bool hideParaHeader,
                            bool disableAutoNumbering) {
 
@@ -357,11 +370,10 @@ void renderingBodyText(const string &kind, int minTarget, int maxTarget) {
     CoupledBodyTextWithLink bodyText;
     bodyText.setFilePrefixFromFileType(getFileTypeFromKind(kind));
     bodyText.setFileAndAttachmentNumber(file);
-    if(hidePersonalComment){
-    	bodyText.addHiddenType(nameOfPersonalCommentType);
-    }
-    else{
-    PersonalComment::enableAddSpecialDisplayText();
+    if (hidePersonalComment) {
+      bodyText.addHiddenType(nameOfPersonalCommentType);
+    } else {
+      PersonalComment::enableAddSpecialDisplayText();
     }
     PoemTranslation::enableAddSpecialDisplayText();
     LinkFromMain::enableAddSpecialDisplayText();

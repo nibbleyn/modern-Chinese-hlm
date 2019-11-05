@@ -43,6 +43,9 @@ public:
     } else if (fileType == FILE_TYPE::JPM) {
       m_inputHtmlDir = HTML_SRC_JPM;
       m_outputHtmlDir = HTML_OUTPUT_JPM;
+    } else if (fileType == FILE_TYPE::MDT) {
+      m_inputHtmlDir = HTML_SRC_MDT;
+      m_outputHtmlDir = HTML_OUTPUT_MDT;
     }
   }
 
@@ -82,6 +85,8 @@ private:
       return ATTACHMENT_BODYTEXT_PREFIX;
     if (m_fileType == FILE_TYPE::JPM)
       return JPM_BODYTEXT_PREFIX;
+    if (m_fileType == FILE_TYPE::MDT)
+      return MDT_BODYTEXT_PREFIX;
     return MAIN_BODYTEXT_PREFIX;
   }
   void setInputHtmlFileName();
