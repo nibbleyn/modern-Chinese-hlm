@@ -48,7 +48,7 @@ int main(int argc, char **argv) {
     break;
   case 11:
     reConstructStory(R"(尤二姐)", "story2");
-    reConstructStory(R"(小红遗帕)", "story", false);
+    reConstructStory(R"(小红遗帕)", "story", MAIN, false);
     break;
   case 12:
     autoNumberingResultStory("story2", R"(尤二姐)");

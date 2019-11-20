@@ -67,6 +67,8 @@ string LinkFromMain::getHtmlFileNamePrefix() {
     prefix = ATTACHMENT_HTML_PREFIX;
   if (m_type == LINK_TYPE::JPM)
     prefix = JPM_HTML_PREFIX;
+  if (m_type == LINK_TYPE::MDT)
+    prefix = MDT_HTML_PREFIX;
   return prefix;
 }
 
@@ -96,6 +98,8 @@ string LinkFromMain::getPathOfReferenceFile() const {
     result = originalDirForLinkFromMain;
   if (m_type == LINK_TYPE::JPM)
     result = jpmDirForLinkFromMain;
+  if (m_type == LINK_TYPE::MDT)
+    result = mdtDirForLinkFromMain;
   return result;
 }
 
@@ -120,5 +124,7 @@ string LinkFromMain::getBodyTextFilePrefix() {
     prefix = ATTACHMENT_BODYTEXT_PREFIX;
   if (m_type == LINK_TYPE::JPM)
     prefix = JPM_BODYTEXT_PREFIX;
+  if (m_type == LINK_TYPE::MDT)
+    prefix = MDT_BODYTEXT_PREFIX;
   return prefix;
 }

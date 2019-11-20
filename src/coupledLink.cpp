@@ -114,7 +114,7 @@ string CoupledLink::asString(bool ignoreOriginalPart) {
       part7 += m_referSection.getFormatedFullString();
   } else {
     if (isTargetToOtherMainHtm() or isTargetToOriginalHtm() or
-        isTargetToJPMHtm())
+        isTargetToJPMHtm() or isTargetToMDTHtm())
       part7 = upArrow;
     if (m_type != LINK_TYPE::ATTACHMENT and not m_usedKey.empty())
       part7 += m_referSection.getFormatedFullString();
@@ -234,7 +234,7 @@ void CoupledLink::fixFromString(const string &linkString) {
     m_displayText = downArrow;
   else if ((isTargetToImage() and m_annotation.find(upArrow) == string::npos) or
            isTargetToOtherMainHtm() or isTargetToOriginalHtm() or
-           isTargetToJPMHtm())
+           isTargetToJPMHtm() or isTargetToMDTHtm())
     m_displayText = upArrow;
   m_displayText += m_referSection.getDisplayString();
   m_displayText +=

@@ -20,6 +20,8 @@ LINK_TYPE getLinKTypeFromReferFileName(const string &refereFileName) {
     type = LINK_TYPE::ORIGINAL;
   } else if (refereFileName.find(JPM_TYPE_HTML_TARGET) != string::npos) {
     type = LINK_TYPE::JPM;
+  } else if (refereFileName.find(MDT_TYPE_HTML_TARGET) != string::npos) {
+    type = LINK_TYPE::MDT;
   }
   return type;
 }

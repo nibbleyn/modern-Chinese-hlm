@@ -3,6 +3,7 @@
 static const string mainDirForLinkFromAttachment = R"(..\)";
 static const string originalDirForLinkFromAttachment = R"(..\original\)";
 static const string jpmDirForLinkFromAttachment = R"(..\JPM\)";
+static const string mdtDirForLinkFromAttachment = R"(..\MDT\)";
 static const string pictureDirForLinkFromAttachment = R"(..\pictures\)";
 
 /**
@@ -34,6 +35,8 @@ string LinkFromAttachment::getHtmlFileNamePrefix() {
   string prefix = ATTACHMENT_HTML_PREFIX;
   if (m_type == LINK_TYPE::JPM)
     prefix = JPM_HTML_PREFIX;
+  if (m_type == LINK_TYPE::MDT)
+    prefix = MDT_HTML_PREFIX;
   if (m_type == LINK_TYPE::ORIGINAL)
     prefix = ORIGINAL_HTML_PREFIX;
   if (m_type == LINK_TYPE::MAIN)
@@ -55,6 +58,8 @@ string LinkFromAttachment::getPathOfReferenceFile() const {
     result = originalDirForLinkFromAttachment;
   if (m_type == LINK_TYPE::JPM)
     result = jpmDirForLinkFromAttachment;
+  if (m_type == LINK_TYPE::MDT)
+    result = mdtDirForLinkFromAttachment;
   return result;
 }
 
@@ -65,6 +70,8 @@ string LinkFromAttachment::getBodyTextFilePrefix() {
   string prefix = ATTACHMENT_BODYTEXT_PREFIX;
   if (m_type == LINK_TYPE::JPM)
     prefix = JPM_BODYTEXT_PREFIX;
+  if (m_type == LINK_TYPE::MDT)
+    prefix = MDT_BODYTEXT_PREFIX;
   if (m_type == LINK_TYPE::ORIGINAL)
     prefix = ORIGINAL_BODYTEXT_PREFIX;
   if (m_type == LINK_TYPE::MAIN)

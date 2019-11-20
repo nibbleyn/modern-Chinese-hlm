@@ -13,6 +13,7 @@ enum class LINK_TYPE {
   ORIGINAL,
   SAMEPAGE,
   JPM,
+  MDT,
   IMAGE,
   REVERSE,
   SUBPARA
@@ -102,6 +103,7 @@ public:
   bool isReverseLink() { return m_type == LINK_TYPE::REVERSE; };
   bool isTargetToImage() { return (m_type == LINK_TYPE::IMAGE); };
   bool isTargetToJPMHtm() { return (m_type == LINK_TYPE::JPM); };
+  bool isTargetToMDTHtm() { return (m_type == LINK_TYPE::MDT); };
   bool isTargetToOriginalHtm() { return (m_type == LINK_TYPE::ORIGINAL); };
   bool isTargetToOtherMainHtm() {
     return (m_type == LINK_TYPE::MAIN and getChapterName() != m_fromFile);

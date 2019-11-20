@@ -3,6 +3,7 @@
 static const string mainDirForLinkFromJPM = R"(..\)";
 static const string originalDirForLinkFromJPM = R"(..\original\)";
 static const string jpmDirForLinkFromJPM = R"(..\JPM\)";
+static const string mdtDirForLinkFromJPM = R"(..\MDT\)";
 static const string pictureDirForLinkFromJPM = R"(..\pictures\)";
 
 /**
@@ -38,6 +39,8 @@ string LinkFromJPM::getPathOfReferenceFile() const {
     result = originalDirForLinkFromJPM;
   if (m_type == LINK_TYPE::JPM)
     result = jpmDirForLinkFromJPM;
+  if (m_type == LINK_TYPE::MDT)
+    result = mdtDirForLinkFromJPM;
   return result;
 }
 
