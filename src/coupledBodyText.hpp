@@ -35,6 +35,8 @@ public:
       m_filePrefix = JPM_BODYTEXT_PREFIX;
     if (type == FILE_TYPE::MDT)
       m_filePrefix = MDT_BODYTEXT_PREFIX;
+    if (type == FILE_TYPE::XXJ)
+      m_filePrefix = XXJ_BODYTEXT_PREFIX;
   }
 
   bool isMainBodyText() { return m_filePrefix == MAIN_BODYTEXT_PREFIX; }

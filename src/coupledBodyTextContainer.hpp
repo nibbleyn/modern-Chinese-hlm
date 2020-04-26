@@ -46,6 +46,9 @@ public:
     } else if (fileType == FILE_TYPE::MDT) {
       m_inputHtmlDir = HTML_SRC_MDT;
       m_outputHtmlDir = HTML_OUTPUT_MDT;
+    } else if (fileType == FILE_TYPE::XXJ) {
+      m_inputHtmlDir = HTML_SRC_XXJ;
+      m_outputHtmlDir = HTML_OUTPUT_XXJ;
     }
   }
 
@@ -87,6 +90,8 @@ private:
       return JPM_BODYTEXT_PREFIX;
     if (m_fileType == FILE_TYPE::MDT)
       return MDT_BODYTEXT_PREFIX;
+    if (m_fileType == FILE_TYPE::XXJ)
+      return XXJ_BODYTEXT_PREFIX;
     return MAIN_BODYTEXT_PREFIX;
   }
   void setInputHtmlFileName();

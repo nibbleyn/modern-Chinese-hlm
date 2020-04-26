@@ -13,6 +13,8 @@ static constexpr const char *linkToOriginalFile =
     R"(<a unhidden title="QQ" href="PPc0XX.htm#YY">↑<sub hidden>WW</sub>ZZ</a>)";
 static constexpr const char *linkToMDTFile =
     R"(<a unhidden title="QQ" href="PPe0XX.htm#YY">↑<sub hidden>WW</sub>ZZ</a>)";
+static constexpr const char *linkToXXJFile =
+    R"(<a unhidden title="QQ" href="PPf0XX.htm#YY">↑<sub hidden>WW</sub>ZZ</a>)";
 static constexpr const char *linkToJPMFile =
     R"(<a unhidden title="QQ" href="PPdXXX.htm#YY">↑<sub hidden>WW</sub>ZZ</a>)";
 // now only support reverse link from main back to main, no key required
@@ -234,6 +236,32 @@ string fixLinkFromMDTTemplate(const string &path, const string &filename,
   string link = linkToMDTFile;
   replacePart(link, defaultPath, path);
   replacePart(link, defaultMainFilename, filename);
+  if (referPara.empty()) {
+    replacePart(link, defaultWholeReferPara, emptyString);
+  } else
+    replacePart(link, defaultReferPara, referPara);
+  // in case use top/bottom as reference name
+  if (key.empty()) {
+    replacePart(link, defaultWholeCitation, emptyString);
+    replacePart(link, defaultWholeKey, emptyString);
+  } else {
+    replacePart(link, defaultKey, key);
+  }
+  if (citation.empty()) {
+    replacePart(link, defaultWholeCitation, emptyString);
+  } else
+    replacePart(link, defaultCitation, citation);
+  replacePart(link, defaultAnnotation, annotation);
+  return link;
+}
+
+string fixLinkFromXXJTemplate(const string &path, const string &filename,
+                              const string &key, const string &citation,
+                              const string &annotation,
+                              const string &referPara) {
+  string link = linkToXXJFile;
+  replacePart(link, defaultMainFilename, filename);
+  replacePart(link, defaultPath, path);
   if (referPara.empty()) {
     replacePart(link, defaultWholeReferPara, emptyString);
   } else

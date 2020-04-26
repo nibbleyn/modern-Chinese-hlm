@@ -9,6 +9,8 @@ FILE_TYPE getFileTypeFromKind(const std::string &kind) {
     return FILE_TYPE::MDT;
   if (kind == JPM)
     return FILE_TYPE::JPM;
+  if (kind == XXJ)
+    return FILE_TYPE::XXJ;
   return FILE_TYPE::MAIN;
 }
 
@@ -30,6 +32,8 @@ std::string getHtmlFileNamePrefixFromFileType(FILE_TYPE type) {
     return JPM_HTML_PREFIX;
   if (type == FILE_TYPE::MDT)
     return MDT_HTML_PREFIX;
+  if (type == FILE_TYPE::XXJ)
+    return XXJ_HTML_PREFIX;
   return MAIN_HTML_PREFIX;
 }
 
@@ -42,6 +46,8 @@ std::string getBodyTextFilePrefixFromFileType(FILE_TYPE type) {
     return JPM_BODYTEXT_PREFIX;
   if (type == FILE_TYPE::MDT)
     return MDT_BODYTEXT_PREFIX;
+  if (type == FILE_TYPE::XXJ)
+    return XXJ_BODYTEXT_PREFIX;
   return MAIN_BODYTEXT_PREFIX;
 }
 

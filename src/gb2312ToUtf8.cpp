@@ -131,6 +131,15 @@ void gb2312FixMDT(int minTarget, int maxTarget) {
   }
 }
 
+void gb2312FixXXJ(int minTarget, int maxTarget) {
+  for (const auto &file : buildFileSet(minTarget, maxTarget)) {
+    string filename = "f0" + file + HTML_SUFFIX;
+    string inputFile = GB2312_HTML_SRC + R"(XXJ/)" + filename;
+    string outputFile = HTML_OUTPUT_XXJ + filename;
+    convertFromGB2312ToUtf8(inputFile, outputFile);
+  }
+}
+
 void gb2312FixAttachment(int minTarget, int maxTarget) {
   for (const auto &file : buildFileSet(minTarget, maxTarget)) {
     CoupledBodyTextContainer container;

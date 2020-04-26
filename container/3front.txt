@@ -4,8 +4,13 @@
 					</tr>
 					
 					<tr>
-					<td width="50%"><a unhidden href=" bindex2.htm">红楼梦感悟</a></td>
-					<td width="50%"><a unhidden href=" bindex1.htm">红楼梦典故</a></td>
+					<td width="50%"><a unhidden href=" eindex.htm">牡丹亭 目录</a></td>
+					<td width="50%"><a unhidden href=" findex.htm">西厢记 目录</a></td>
+					</tr>
+					
+					<tr>
+					<td width="50%"><a unhidden href=" bindex2.htm">红楼梦 感悟</a></td>
+					<td width="50%"><a unhidden href=" bindex1.htm">红楼梦 典故</a></td>
 					</tr>
 					
 					<tr>

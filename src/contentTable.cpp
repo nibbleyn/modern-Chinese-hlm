@@ -17,6 +17,10 @@ static const string MDT_INDEX = R"(eindex)";
 static const string MDT_TITLE = R"(牡丹亭)";
 static const string MDT_DISPLAY_TITLE = R"(牡丹亭 目录)";
 
+static const string XXJ_INDEX = R"(findex)";
+static const string XXJ_TITLE = R"(西厢记)";
+static const string XXJ_DISPLAY_TITLE = R"(西厢记 目录)";
+
 static const string PIC_INDEX = R"(picIndex)";
 static const string PIC_TITLE = R"(图片)";
 static const string PIC_DISPLAY_TITLE = R"(图片 目录)";
@@ -119,7 +123,7 @@ void generateContentTableForMDTHtmls() {
   container.setFileType(FILE_TYPE::MDT);
   TableContainer outputContainer(MDT_INDEX);
   outputContainer.setMaxTarget(MDT_MAX_CHAPTER_NUMBER);
-  outputContainer.createParaListFrom(18, 22, 90);
+  outputContainer.createParaListFrom(18, 22, 54);
 
   outputContainer.clearLinkStringSet();
   for (const auto &file : buildFileSet(minTarget, maxTarget, MDT)) {
@@ -137,6 +141,32 @@ void generateContentTableForMDTHtmls() {
   FUNCTION_OUTPUT << "result is in file: "
                   << outputContainer.getoutputHtmlFilepath() << endl;
   FUNCTION_OUTPUT << "generateContentTable for MDT Htmls finished. " << endl;
+}
+
+void generateContentTableForXXJHtmls() {
+  int minTarget = XXJ_MIN_CHAPTER_NUMBER, maxTarget = XXJ_MAX_CHAPTER_NUMBER;
+  CoupledBodyTextContainer container;
+  container.setFileType(FILE_TYPE::XXJ);
+  TableContainer outputContainer(XXJ_INDEX);
+  outputContainer.setMaxTarget(XXJ_MAX_CHAPTER_NUMBER);
+
+  outputContainer.clearLinkStringSet();
+  for (const auto &file : buildFileSet(minTarget, maxTarget, XXJ)) {
+    container.setFileAndAttachmentNumber(file);
+    container.fetchOriginalAndTranslatedTitles();
+    AttachmentNumber num(TurnToInt(file), 0);
+    outputContainer.addLinkToLinkStringSet(
+        num, fixLinkFromXXJTemplate(xxjDirForLinkFromMain, file, emptyString,
+                                    emptyString, container.getOriginalTitle()));
+  }
+  outputContainer.createParaListFrom(18, 22, 16);
+  outputContainer.outputToBodyTextFromLinkList();
+  outputContainer.setTitle(XXJ_TITLE);
+  outputContainer.setDisplayTitle(XXJ_DISPLAY_TITLE);
+  outputContainer.assembleBackToHTM();
+  FUNCTION_OUTPUT << "result is in file: "
+                  << outputContainer.getoutputHtmlFilepath() << endl;
+  FUNCTION_OUTPUT << "generateContentTable for XXJ Htmls finished. " << endl;
 }
 
 void generateContentTableForImages() {
@@ -228,6 +258,9 @@ void generateContentTable(TABLE_TYPE type, ATTACHMENT_TYPE attType,
     break;
   case TABLE_TYPE::MDT:
     generateContentTableForMDTHtmls();
+    break;
+  case TABLE_TYPE::XXJ:
+    generateContentTableForXXJHtmls();
     break;
   case TABLE_TYPE::IMAGE:
     generateContentTableForImages();

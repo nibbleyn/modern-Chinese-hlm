@@ -16,6 +16,7 @@ static constexpr const char *HTML_SRC_MAIN = R"(utf8HTML/src/)";
 static constexpr const char *HTML_SRC_ORIGINAL = R"(utf8HTML/src/original/)";
 static constexpr const char *HTML_SRC_JPM = R"(utf8HTML/src/JPM/)";
 static constexpr const char *HTML_SRC_MDT = R"(utf8HTML/src/MDT/)";
+static constexpr const char *HTML_SRC_XXJ = R"(utf8HTML/src/XXJ/)";
 
 static constexpr const char *HTML_OUTPUT_MAIN = R"(utf8HTML/output/)";
 static constexpr const char *HTML_OUTPUT_ATTACHMENT =
@@ -24,6 +25,7 @@ static constexpr const char *HTML_OUTPUT_ORIGINAL =
     R"(utf8HTML/output/original/)";
 static constexpr const char *HTML_OUTPUT_JPM = R"(utf8HTML/output/JPM/)";
 static constexpr const char *HTML_OUTPUT_MDT = R"(utf8HTML/output/MDT/)";
+static constexpr const char *HTML_OUTPUT_XXJ = R"(utf8HTML/output/XXJ/)";
 
 static constexpr const char *BODY_TEXT_OUTPUT = R"(bodyTexts/output/)";
 static constexpr const char *BODY_TEXT_FIX = R"(bodyTexts/afterFix/)";
@@ -37,23 +39,26 @@ static constexpr const char *ORIGINAL_HTML_PREFIX = R"(c0)";
 static constexpr const char *ATTACHMENT_HTML_PREFIX = R"(b0)";
 static constexpr const char *JPM_HTML_PREFIX = R"(d)";
 static constexpr const char *MDT_HTML_PREFIX = R"(e0)";
+static constexpr const char *XXJ_HTML_PREFIX = R"(f0)";
 
 static constexpr const char *MAIN_BODYTEXT_PREFIX = R"(Main)";
 static constexpr const char *ORIGINAL_BODYTEXT_PREFIX = R"(Org)";
 static constexpr const char *ATTACHMENT_BODYTEXT_PREFIX = R"(Attach)";
 static constexpr const char *JPM_BODYTEXT_PREFIX = R"(Jpm)";
 static constexpr const char *MDT_BODYTEXT_PREFIX = R"(Mdt)";
+static constexpr const char *XXJ_BODYTEXT_PREFIX = R"(Xxj)";
 
 static constexpr const char *MAIN = R"(main)";
 static constexpr const char *ORIGINAL = R"(original)";
 static constexpr const char *ATTACHMENT = R"(attachment)";
 static constexpr const char *JPM = R"(jpm)";
 static constexpr const char *MDT = R"(mdt)";
+static constexpr const char *XXJ = R"(xxj)";
 
 static constexpr const char *GENERATED = R"(_generated)";
 static constexpr const char *NUMBERED = R"(_numbered)";
 
-enum class FILE_TYPE { MAIN, ATTACHMENT, ORIGINAL, JPM, MDT };
+enum class FILE_TYPE { MAIN, ATTACHMENT, ORIGINAL, JPM, MDT, XXJ };
 static constexpr const char *MAIN_SEPERATOR_COLOR = R"(F0BEC0)";
 
 FILE_TYPE getFileTypeFromKind(const std::string &kind);

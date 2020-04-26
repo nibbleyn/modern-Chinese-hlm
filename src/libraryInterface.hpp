@@ -11,6 +11,8 @@ static const int JPM_MIN_CHAPTER_NUMBER = 1;
 static const int JPM_MAX_CHAPTER_NUMBER = 100;
 static const int MDT_MIN_CHAPTER_NUMBER = 1;
 static const int MDT_MAX_CHAPTER_NUMBER = 55;
+static const int XXJ_MIN_CHAPTER_NUMBER = 1;
+static const int XXJ_MAX_CHAPTER_NUMBER = 16;
 static const int MIN_ATTACHMENT_NUMBER = 1;
 static const int MAX_ATTACHMENT_NUMBER = 99;
 

@@ -39,32 +39,18 @@ void fixFooter(string &footer, const string &filename,
 void fixHeader(string &header, const string &filename,
                FILE_TYPE fileType = FILE_TYPE::JPM) {
 
-  string previous =
-      getHtmlFileNamePrefixFromFileType(fileType) +
-      getChapterNameByTargetKind(getHtmlFileNamePrefixFromFileType(fileType),
-                                 TurnToInt(filename) - 1);
-  string next =
-      getHtmlFileNamePrefixFromFileType(fileType) +
-      getChapterNameByTargetKind(getHtmlFileNamePrefixFromFileType(fileType),
-                                 TurnToInt(filename) + 1);
   const string origHeader = header;
-  const string originalTitleBeginChars = R"(<b unhidden>)";
-  const string originalTitleEndChars = R"(</b>)";
-  string originalTitle;
-  auto originalTitleBegin = header.find(originalTitleBeginChars);
+  // get original title from <samp>..
+  auto originalTitleBegin = header.find(sampTitleBeginChars);
   if (originalTitleBegin == string::npos)
     return;
-  auto originalTitleEnd =
-      header.find(originalTitleEndChars, originalTitleBegin);
-  originalTitle = header.substr(
-      originalTitleBegin + originalTitleBeginChars.length(),
-      originalTitleEnd - originalTitleBegin - originalTitleBeginChars.length());
-  header.replace(originalTitleBegin,
-                 originalTitleBeginChars.length() + originalTitle.length() +
-                     originalTitleEndChars.length(),
-                 strongTitleBeginChars + originalTitle + strongTitleEndChars);
-  string start = htmlTitleStart;
-  string end = htmlTitleEnd;
+  auto originalTitleEnd = header.find(sampTitleEndChars, originalTitleBegin);
+  string originalTitle = header.substr(
+      originalTitleBegin + sampTitleBeginChars.length(),
+      originalTitleEnd - originalTitleBegin - sampTitleBeginChars.length());
+
+  string start = strongTitleBeginChars;
+  string end = strongTitleEndChars;
   auto titleBegin = header.find(start);
   if (titleBegin != string::npos) {
     auto titleEnd = header.find(end, titleBegin);
@@ -73,6 +59,23 @@ void fixHeader(string &header, const string &filename,
                      titleEnd - titleBegin - start.length(), originalTitle);
   }
 
+  start = htmlTitleStart;
+  end = htmlTitleEnd;
+  titleBegin = header.find(start);
+  if (titleBegin != string::npos) {
+    auto titleEnd = header.find(end, titleBegin);
+    if (titleEnd != string::npos)
+      header.replace(titleBegin + start.length(),
+                     titleEnd - titleBegin - start.length(), originalTitle);
+  }
+  string previous =
+      getHtmlFileNamePrefixFromFileType(fileType) +
+      getChapterNameByTargetKind(getHtmlFileNamePrefixFromFileType(fileType),
+                                 TurnToInt(filename) - 1);
+  string next =
+      getHtmlFileNamePrefixFromFileType(fileType) +
+      getChapterNameByTargetKind(getHtmlFileNamePrefixFromFileType(fileType),
+                                 TurnToInt(filename) + 1);
   const string toReplacePrevious = "a077";
   const string toReplaceNext = "a079";
   do {
@@ -88,13 +91,6 @@ void fixHeader(string &header, const string &filename,
       break;
     header.replace(toReplaceNextBegin, toReplaceNext.length(), next);
   } while (true);
-
-  const string toReplaceTranslatedTitle =
-      R"(第七十八回　老学士与贾政闲征姽婳词	痴公子贾宝玉为晴雯杜撰芙蓉诔)";
-  auto toReplaceTranslatedTitleBegin = header.find(toReplaceTranslatedTitle);
-  header.replace(toReplaceTranslatedTitleBegin,
-                 toReplaceTranslatedTitle.length(),
-                 sampTitleBeginChars + originalTitle + sampTitleEndChars);
 
   const string toReplaceContentTable = "aindex";
   auto contentTableStartWith =
@@ -357,6 +353,17 @@ void fixHeaderAndFooterForMDTHtmls() {
   FUNCTION_OUTPUT << "fixHeaderAndFooter for MDT Htmls finished. " << endl;
 }
 
+void fixHeaderAndFooterForXXJHtmls() {
+  int minTarget = 2, maxTarget = 15;
+  CoupledBodyTextContainer container;
+  container.setFileType(FILE_TYPE::XXJ);
+  for (const auto &file : buildFileSet(minTarget, maxTarget, XXJ)) {
+    container.setFileAndAttachmentNumber(file);
+    container.fixHeaderAndFooter();
+  }
+  FUNCTION_OUTPUT << "fixHeaderAndFooter for XXJ Htmls finished. " << endl;
+}
+
 void fixHeaderAndFooterForJPMHtmls() {
   int minTarget = 2, maxTarget = 99;
   CoupledBodyTextContainer container;
@@ -555,6 +562,9 @@ void tools(int num) {
     break;
   case 9:
     fixHeaderAndFooterForMDTHtmls();
+    break;
+  case 10:
+    fixHeaderAndFooterForXXJHtmls();
     break;
   default:
     FUNCTION_OUTPUT << "invalid tool." << endl;

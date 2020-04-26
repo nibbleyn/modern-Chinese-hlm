@@ -365,7 +365,7 @@ void renderingBodyText(const string &kind, int minTarget, int maxTarget) {
     container.dissembleFromHTM();
   }
 
-  bool hidePersonalComment = true;
+  bool hidePersonalComment = false;
   for (const auto &file : fileSet) {
     CoupledBodyTextWithLink bodyText;
     bodyText.setFilePrefixFromFileType(getFileTypeFromKind(kind));

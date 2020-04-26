@@ -4,13 +4,19 @@
 #include "story.hpp"
 #include "test.hpp"
 #include "tools.hpp"
+#include <Poco/Dynamic/Struct.h>
+#include <Poco/Dynamic/Var.h>
+#include <Poco/JSON/JSONException.h>
+#include <Poco/JSON/Object.h>
+#include <Poco/JSON/Parser.h>
+#include <Poco/SharedPtr.h>
 
 int debug = LOG_INFO;
 // int debug = LOG_EXCEPTION;
-
 int main(int argc, char **argv) {
+
   // change this number to run different functions
-  int num = 18;
+  int num = 15;
   switch (num) {
   case 1:
     //    search(R"(枕)", SEARCH_IN_MAIN, true);
@@ -62,6 +68,7 @@ int main(int argc, char **argv) {
     refreshAttachmentBodyTexts();
     break;
   case 15:
+    generateContentTable(TABLE_TYPE::XXJ);
     generateContentTable(TABLE_TYPE::MDT);
     generateContentTable(TABLE_TYPE::MAIN);
     generateContentTable(TABLE_TYPE::ATTACHMENT, ATTACHMENT_TYPE::REFERENCE);
@@ -81,13 +88,13 @@ int main(int argc, char **argv) {
     validateParaSizeForAutoNumberingJPMHtmls();
     break;
   case 20:
-    tools(9);
+    tools(10);
     break;
   case 21:
     removePersonalViewpoints();
     break;
   case 22:
-    gb2312FixMDT();
+    gb2312FixXXJ();
     break;
   default:
     FUNCTION_OUTPUT << "nothing gets executed." << endl;
