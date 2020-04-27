@@ -16,7 +16,7 @@ int debug = LOG_INFO;
 int main(int argc, char **argv) {
 
   // change this number to run different functions
-  int num = 15;
+  int num = 4;
   switch (num) {
   case 1:
     //    search(R"(枕)", SEARCH_IN_MAIN, true);
@@ -31,6 +31,7 @@ int main(int argc, char **argv) {
     validateAttachmentHtmls();
     break;
   case 4:
+    numberXXJHtmls(false);
     numberMDTHtmls(false);
     numberJPMHtmls(false);
     break;

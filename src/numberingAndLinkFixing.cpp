@@ -291,6 +291,19 @@ void numberJPMHtmls(bool forceUpdateLineNumber, bool hideParaHeader,
   commander.runCommandOverFiles();
 }
 
+void numberXXJHtmls(bool forceUpdateLineNumber, bool hideParaHeader,
+                    bool disableAutoNumbering) {
+  NonAttachmentCommander commander;
+  commander.m_command = Commander::COMMAND::addLineNumber;
+  commander.m_disableAutoNumbering = disableAutoNumbering;
+  commander.m_forceUpdateLineNumber = forceUpdateLineNumber;
+  commander.m_hideParaHeader = hideParaHeader;
+  commander.m_kind = XXJ;
+  commander.m_minTarget = XXJ_MIN_CHAPTER_NUMBER;
+  commander.m_maxTarget = XXJ_MAX_CHAPTER_NUMBER;
+  commander.runCommandOverFiles();
+}
+
 void numberMDTHtmls(bool forceUpdateLineNumber, bool hideParaHeader,
                     bool disableAutoNumbering) {
   NonAttachmentCommander commander;
