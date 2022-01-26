@@ -4,20 +4,15 @@
 #include "story.hpp"
 #include "test.hpp"
 #include "tools.hpp"
-#include <Poco/Dynamic/Struct.h>
-#include <Poco/Dynamic/Var.h>
-#include <Poco/JSON/JSONException.h>
-#include <Poco/JSON/Object.h>
-#include <Poco/JSON/Parser.h>
-#include <Poco/SharedPtr.h>
+#include "testCode.hpp"
 
 int debug = LOG_INFO;
 // int debug = LOG_EXCEPTION;
-int main(int argc, char **argv) {
 
-  // change this number to run different functions
-  int num = 4;
+int main(int argc, char **argv) {
+  int num = 0;
   switch (num) {
+  case 0:tryCode();break;
   case 1:
     //    search(R"(枕)", SEARCH_IN_MAIN, true);
     //    search(R"(邢夫人)", SEARCH_IN_ORIGINAL);

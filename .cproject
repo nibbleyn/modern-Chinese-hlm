@@ -11,13 +11,13 @@
                 				
                 <extensions>
                     					
+                    <extension id="org.eclipse.cdt.core.GNU_ELF" point="org.eclipse.cdt.core.BinaryParser"/>
+                    					
                     <extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
                     					
                     <extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
                     					
                     <extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-                    					
-                    <extension id="org.eclipse.cdt.core.VCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
                     					
                     <extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser"/>
                     					
@@ -33,29 +33,43 @@
                     					
                     <folderInfo id="0.588177616." name="/" resourcePath="">
                         						
-                        <toolChain id="org.eclipse.cdt.build.core.prefbase.toolchain.1482571299" name="No ToolChain" resourceTypeBasedDiscovery="false" superClass="org.eclipse.cdt.build.core.prefbase.toolchain">
+                        <toolChain id="cdt.managedbuild.toolchain.gnu.base.614568681" name="Linux GCC" superClass="cdt.managedbuild.toolchain.gnu.base">
                             							
-                            <targetPlatform id="org.eclipse.cdt.build.core.prefbase.toolchain.1482571299.759673311" name=""/>
+                            <targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.GNU_ELF" id="cdt.managedbuild.target.gnu.platform.base.1243227202" name="Debug Platform" osList="linux,hpux,aix,qnx" superClass="cdt.managedbuild.target.gnu.platform.base"/>
                             							
-                            <builder id="org.eclipse.cdt.build.core.settings.default.builder.1947744831" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Gnu Make Builder" superClass="org.eclipse.cdt.build.core.settings.default.builder"/>
+                            <builder id="cdt.managedbuild.target.gnu.builder.base.1503223891" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Gnu Make Builder" superClass="cdt.managedbuild.target.gnu.builder.base"/>
                             							
-                            <tool id="org.eclipse.cdt.build.core.settings.holder.libs.1306218723" name="holder for library settings" superClass="org.eclipse.cdt.build.core.settings.holder.libs"/>
+                            <tool id="cdt.managedbuild.tool.gnu.archiver.base.680726617" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.base"/>
                             							
-                            <tool id="org.eclipse.cdt.build.core.settings.holder.402916989" name="Assembly" superClass="org.eclipse.cdt.build.core.settings.holder">
+                            <tool id="cdt.managedbuild.tool.gnu.cpp.compiler.base.1598056165" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.base">
                                 								
-                                <inputType id="org.eclipse.cdt.build.core.settings.holder.inType.557261136" languageId="org.eclipse.cdt.core.assembly" languageName="Assembly" sourceContentType="org.eclipse.cdt.core.asmSource" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
+                                <inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1545910408" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
                                 							
                             </tool>
                             							
-                            <tool id="org.eclipse.cdt.build.core.settings.holder.80083247" name="GNU C++" superClass="org.eclipse.cdt.build.core.settings.holder">
+                            <tool id="cdt.managedbuild.tool.gnu.c.compiler.base.48824708" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.base">
                                 								
-                                <inputType id="org.eclipse.cdt.build.core.settings.holder.inType.799978387" languageId="org.eclipse.cdt.core.g++" languageName="GNU C++" sourceContentType="org.eclipse.cdt.core.cxxSource,org.eclipse.cdt.core.cxxHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
+                                <inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.700793294" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
                                 							
                             </tool>
                             							
-                            <tool id="org.eclipse.cdt.build.core.settings.holder.485581797" name="GNU C" superClass="org.eclipse.cdt.build.core.settings.holder">
+                            <tool id="cdt.managedbuild.tool.gnu.c.linker.base.1442502301" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.base"/>
+                            							
+                            <tool id="cdt.managedbuild.tool.gnu.cpp.linker.base.970416015" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.base">
                                 								
-                                <inputType id="org.eclipse.cdt.build.core.settings.holder.inType.688706247" languageId="org.eclipse.cdt.core.gcc" languageName="GNU C" sourceContentType="org.eclipse.cdt.core.cSource,org.eclipse.cdt.core.cHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
+                                <inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.2028144911" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
+                                    									
+                                    <additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
+                                    									
+                                    <additionalInput kind="additionalinput" paths="$(LIBS)"/>
+                                    								
+                                </inputType>
+                                							
+                            </tool>
+                            							
+                            <tool id="cdt.managedbuild.tool.gnu.assembler.base.784515955" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.base">
+                                								
+                                <inputType id="cdt.managedbuild.tool.gnu.assembler.input.106802597" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
                                 							
                             </tool>
                             						
@@ -144,6 +158,8 @@
                                     <listOptionValue builtIn="false" value="PocoFoundation"/>
                                     									
                                     <listOptionValue builtIn="false" value="PocoNet"/>
+                                    									
+                                    <listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="PocoJSON"/>
                                     								
                                 </option>
                                 								
