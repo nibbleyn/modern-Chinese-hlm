@@ -284,11 +284,12 @@ void CoupledBodyTextWithLink::doStatisticsByScanningLines(
   pair<AttachmentNumber, ParaLineNumber> lastPoemPos;
   Poem lastPoem;
 
-  ifstream infile;
-  if (overFixedBodyText)
-    infile.open(m_outputFile);
-  else
-    infile.open(m_inputFile);
+  // a stream that failed to open never reaches eof, so the loop below would
+  // not end
+  const auto &scanned = overFixedBodyText ? m_outputFile : m_inputFile;
+  ifstream infile(scanned);
+  if (not fileExist(infile, scanned))
+    return;
 
   auto num = make_pair(TurnToInt(m_file), m_attachNumber);
   if (not m_disableNumberingStatisticsCalculateLines)

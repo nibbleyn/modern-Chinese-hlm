@@ -483,6 +483,11 @@ void testListContainer(ofstream &outfile) {
   PRINTFUNCTION(outfile,
                 "result is in file " << container.getoutputHtmlFilepath());
   ifstream inHtmlFile(container.getoutputHtmlFilepath());
+  // a stream that failed to open never reaches eof: the loop would not end
+  if (!inHtmlFile) {
+    PRINTFUNCTION(outfile, "cannot open " << container.getoutputHtmlFilepath());
+    return;
+  }
   while (!inHtmlFile.eof()) {
     string line{emptyString};
     getline(inHtmlFile, line);
@@ -522,6 +527,11 @@ void testTableContainer(ofstream &outfile) {
   PRINTFUNCTION(outfile,
                 "result is in file: " << container.getoutputHtmlFilepath());
   ifstream inHtmlFile(container.getoutputHtmlFilepath());
+  // a stream that failed to open never reaches eof: the loop would not end
+  if (!inHtmlFile) {
+    PRINTFUNCTION(outfile, "cannot open " << container.getoutputHtmlFilepath());
+    return;
+  }
   while (!inHtmlFile.eof()) {
     string line{emptyString};
     getline(inHtmlFile, line);

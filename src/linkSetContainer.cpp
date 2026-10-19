@@ -197,7 +197,11 @@ void TableContainer::outputToBodyTextFromLinkList(const string &units) {
       auto startParaNo = i + 1;
       int endParaNo = (enterLastPara) ? m_maxTarget : *(start + 1);
       totalPara = endParaNo - startParaNo + 1;
-      int preTotalPara = i - *(start - 1);
+      // entries in the paragraph above; above the first header that is all of
+      // them so far, and there is no header before begin() to subtract
+      int preTotalPara = (start == m_paraHeaderPositionSet.begin())
+                             ? i
+                             : i - *(start - 1);
       if (not m_hideParaHeaders)
         insertMiddleParagrapHeader(enterLastPara, seqOfPara, startParaNo,
                                    endParaNo, totalPara, preTotalPara, units);

@@ -64,15 +64,25 @@ size_t CoupledBodyTextWithLink::getAverageLineLengthFromReferenceFile() {
       totalLines++;
     }
   }
-  return totalSizes / totalLines;
+  // an empty reference file gives no average, which getLinesofReferencePage
+  // refuses
+  return (totalLines == 0) ? 0 : totalSizes / totalLines;
 }
 
 void CoupledBodyTextWithLink::getLinesofReferencePage() {
   m_averageSizeOfOneLine = getAverageLineLengthFromReferenceFile();
+  // checked before measuring the page, which splits its lines by this average:
+  // at 1 character a line the splitting never ends, at 0 every line measures 0
+  if (m_averageSizeOfOneLine < 2) {
+    METHOD_OUTPUT << "no usable reference line in " << REFERENCE_LINES
+                  << ": average line " << m_averageSizeOfOneLine
+                  << " characters" << endl;
+    exit(1);
+  }
   m_SizeOfReferPage = 0;
   ifstream referPageFile(REFERENCE_PAGE);
   if (not fileExist(referPageFile, REFERENCE_PAGE))
-    return;
+    exit(1);
   auto totalLines = 0;
   string line;
   while (!referPageFile.eof()) {
@@ -85,6 +95,13 @@ void CoupledBodyTextWithLink::getLinesofReferencePage() {
     }
   }
   m_SizeOfReferPage = totalLines;
+  // a page of 0 lines would make an image group, a page less one, SIZE_MAX
+  // lines long
+  if (m_SizeOfReferPage < 2) {
+    METHOD_OUTPUT << "no usable reference page in " << REFERENCE_PAGE << ": "
+                  << m_SizeOfReferPage << " lines" << endl;
+    exit(1);
+  }
 }
 
 void CoupledBodyTextWithLink::adjustParaHeaderStartNumber() {
@@ -170,8 +187,11 @@ void CoupledBodyTextWithLink::paraGeneratedNumbering() {
       }
       // needs to append para header afterwards
       if (isInParaHeaderTable(seqOfLines)) {
+        // a paragraph of one line taller than a page is already past the page;
+        // the size_t difference would wrap and pad without end
+        const auto above = m_paraHeaderTable[seqOfLines].totalLinesAbove;
         auto patchBrs =
-            m_SizeOfReferPage - m_paraHeaderTable[seqOfLines].totalLinesAbove;
+            (above < m_SizeOfReferPage) ? m_SizeOfReferPage - above : 0;
         while (patchBrs-- > 0)
           outfile << brTab << endl;
         addParaHeader(outfile);

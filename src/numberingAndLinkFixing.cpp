@@ -359,10 +359,11 @@ void validateParaSizeForAutoNumberingJPMHtmls() {
 void refreshBodyTexts(const string &kind, int minTarget, int maxTarget) {
   CoupledBodyTextContainer container;
   auto fileSet = buildFileSet(minTarget, maxTarget, kind);
+  // the kind first: it decides the names and directories the backup works on
+  container.setFileType(getFileTypeFromKind(kind));
   container.setBackupFilenameList(fileSet);
   container.backupAndOverwriteInputHtmlFiles();
   for (const auto &file : fileSet) {
-    container.setFileType(getFileTypeFromKind(kind));
     container.setFileAndAttachmentNumber(file);
     container.dissembleFromHTM();
   }
@@ -427,10 +428,11 @@ void refreshAttachmentBodyTexts(int minTarget, int maxTarget, int minAttachNo,
                                 int maxAttachNo) {
   CoupledBodyTextContainer container;
   auto fileSet = buildFileSet(minTarget, maxTarget);
+  // the kind first: it decides the names and directories the backup works on
+  container.setFileType(FILE_TYPE::ATTACHMENT);
   container.setBackupFilenameList(fileSet);
   container.backupAndOverwriteInputHtmlFiles();
   for (const auto &file : fileSet) {
-    container.setFileType(FILE_TYPE::ATTACHMENT);
     container.setFileAndAttachmentNumber(file);
     for (const auto &attNo :
          container.getAttachmentFileList(minAttachNo, maxAttachNo)) {

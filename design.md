@@ -299,17 +299,16 @@ are under `src/`.
 | `numberingAndLinkFixing.cpp` `fixLinksFrom{Main,JPM,Attachment}` | the `forceUpdateLink` argument was ignored, the commander always forced; it is passed on now, and main's default is `true`, as the runs always behaved |
 | `translated.cpp` | a wrong search target, true/false value or number fell back to a default silently; it is refused now |
 | `translated.cpp` choice 11 | a title given alone still wrote `story2`; the output now defaults to the title |
+| `coupledBodyTextWithLink_autoNumbering.cpp` `paraGeneratedNumbering` | a line taller than a page left `totalLinesAbove` above the page size; the `size_t` difference wrapped and the padding wrote `<br>` without end, filling the disk. A paragraph is now padded only up to the page |
+| `coupledBodyTextWithLink_autoNumbering.cpp` `getLinesofReferencePage` | a missing `container/referPage.txt` made the page 0 lines, so an image group wrapped to `SIZE_MAX` lines; an empty `referLines.txt` divided by zero, and an average line of 1 character never ended splitting. Both files are checked now, and numbering stops with a message, as it does on a malformed page |
+| `numberingStat.cpp` `doStatisticsByScanningLines` | the input was not checked to have opened, and `while (!infile.eof())` never ended on a missing file; such a file is skipped now |
+| `numberingAndLinkFixing.cpp` `refreshBodyTexts`, `refreshAttachmentBodyTexts` | the backup was made before the kind was set, so choices 13 and 14 backed up and overwrote the main pages whatever the kind, and choice 13 threw at its JPM step; the kind is set first now |
+| `linkSetContainer.cpp` `TableContainer` | `*(start - 1)` read before the start of the header list at the first header, undefined behaviour in every content table (choice 15); the first header counts the entries above it |
+| `test.cpp` tests 5 and 6 | the page they echo was read with `while (!eof())`, which never ended when it did not open, so choice 18 hung and kept the web page locked; they report the file and return now |
 
 ### High
 
-| Where | What happens | |
-| --- | --- | --- |
-| `coupledBodyTextWithLink_autoNumbering.cpp:116, 173-176` | a line taller than a page leaves `totalLinesAbove` above the page size; `m_SizeOfReferPage - totalLinesAbove` wraps around and the padding loop writes `<br>` without end, filling the disk | confirmed |
-| `numberingStat.cpp:287-299` | the input is not checked to have opened; `while (!infile.eof())` never ends on a missing file | confirmed |
-| `numberingAndLinkFixing.cpp:359-366`, `428-431` | `refreshBodyTexts` / `refreshAttachmentBodyTexts` back up before setting the kind, so they back up and overwrite the main pages whatever the kind; choice 13's JPM step looks for `a001…a100.htm` and throws | confirmed |
-| `linkSetContainer.cpp:200` | `*(start - 1)` reads before the start of the header list at the first header: undefined behaviour in every content table (choice 15) | confirmed |
-| `autoNumbering.cpp` `getLinesofReferencePage` | a missing `container/referPage.txt` makes the page size 0, so image lines wrap to `SIZE_MAX` lines; an empty `referLines.txt` divides by zero | |
-| `test.cpp:485-490, 524-529` | tests 5 and 6 echo a file with `while (!eof())`; if it did not open they loop for ever, so choice 18 never ends and the web page stays locked | |
+None open.
 
 ### Medium
 
