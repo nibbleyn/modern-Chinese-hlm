@@ -446,6 +446,7 @@ void refreshAttachmentBodyTexts(int minTarget, int maxTarget, int minAttachNo,
  */
 void fixLinksFromMain(bool forceUpdateLink) {
   NonAttachmentCommander commander;
+  commander.m_forceUpdateLink = forceUpdateLink;
   commander.m_command = Commander::COMMAND::fixLinksFromMainFile;
   commander.m_kind = MAIN;
   commander.m_minTarget = MAIN_MIN_CHAPTER_NUMBER;
@@ -464,6 +465,7 @@ void appendReverseLinksForMain() {
 
 void fixLinksFromJPM(bool forceUpdateLink) {
   NonAttachmentCommander commander;
+  commander.m_forceUpdateLink = forceUpdateLink;
   commander.m_command = Commander::COMMAND::fixLinksFromJPMFile;
   commander.m_kind = JPM;
   commander.m_minTarget = JPM_MIN_CHAPTER_NUMBER;
@@ -473,6 +475,7 @@ void fixLinksFromJPM(bool forceUpdateLink) {
 
 void fixLinksFromAttachment(bool forceUpdateLink) {
   AttachmentCommander commander;
+  commander.m_forceUpdateLink = forceUpdateLink;
   commander.m_command = Commander::COMMAND::fixLinksFromAttachmentFile;
   commander.m_kind = ATTACHMENT;
   commander.m_minTarget = MAIN_MIN_CHAPTER_NUMBER;

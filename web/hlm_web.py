@@ -28,6 +28,10 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_DIR = "utf8HTML"
+# what the program expects in the directory it runs in, none of which it creates:
+# container/ is in the repository, the others have to be made there
+NEEDED_DIRS = ["container", DATA_DIR, "bodyTexts/output", "bodyTexts/afterFix",
+               "test-results"]
 
 STYLE = """
 body { font-family: sans-serif; margin: 1.5em; background: #f6f6f6; }
@@ -57,6 +61,9 @@ class Front:
         self.workdir = workdir
         self.lock = threading.Lock()
         self.running = None  # a description of the run in progress
+
+    def missing_dirs(self):
+        return [d for d in NEEDED_DIRS if not os.path.isdir(os.path.join(self.workdir, d))]
 
     def choices(self):
         """[(num, title, [(name, default)])] as main lists them."""
@@ -106,6 +113,11 @@ class Handler(BaseHTTPRequestHandler):
                  f"run in <code>{html.escape(self.front.workdir)}</code></p>"]
         if busy:
             parts.append(f"<p class='busy'>running now: {html.escape(busy)}</p>")
+        missing = self.front.missing_dirs()
+        if missing:
+            parts.append("<p class='busy'>missing in the run directory, the choices will not "
+                         "work until they exist: "
+                         f"{html.escape(', '.join(missing))}</p>")
         for num, title, params in listed:
             fields = "".join(
                 f"<label>{html.escape(name)} "
@@ -220,8 +232,8 @@ def main():
     parser.add_argument("--binary", default=os.path.join(REPO, "debug", "modern-Chinese-hlm"),
                         help="the built program (default: debug/modern-Chinese-hlm)")
     parser.add_argument("--workdir", default=REPO,
-                        help=f"where the program runs, the directory holding {DATA_DIR} "
-                             "(default: the repository)")
+                        help="where the program runs, which has to hold "
+                             f"{', '.join(NEEDED_DIRS)} (default: the repository)")
     parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", type=int, default=8080)
     args = parser.parse_args()
@@ -230,11 +242,12 @@ def main():
     if not os.access(binary, os.X_OK):
         sys.exit(f"{binary} is not an executable; build the project first, or pass --binary")
     workdir = os.path.abspath(args.workdir)
-    if not os.path.isdir(os.path.join(workdir, DATA_DIR)):
-        print(f"note: {workdir} has no {DATA_DIR}; the choices will not find their htmls",
+    Handler.front = Front(binary, workdir)
+    missing = Handler.front.missing_dirs()
+    if missing:
+        print(f"note: {workdir} has no {', '.join(missing)}; the choices need them",
               file=sys.stderr)
 
-    Handler.front = Front(binary, workdir)
     server = ThreadingHTTPServer((args.host, args.port), Handler)
     print(f"serving http://{args.host}:{args.port}/  ({binary}, in {workdir})")
     try:

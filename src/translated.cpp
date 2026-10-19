@@ -6,9 +6,11 @@
 #include "tools.hpp"
 #include "testCode.hpp"
 
+#include <cctype>
 #include <cstdlib>
 #include <functional>
 #include <iostream>
+#include <stdexcept>
 
 int debug = LOG_INFO;
 // int debug = LOG_EXCEPTION;
@@ -37,19 +39,44 @@ struct Choice {
   }
 };
 
+// a parameter that is none of the values it may take; main reports it and exits 2
+struct BadParameter : std::invalid_argument {
+  using std::invalid_argument::invalid_argument;
+};
+
+std::string lowered(std::string value) {
+  for (auto &ch : value)
+    ch = static_cast<char>(std::tolower(static_cast<unsigned char>(ch)));
+  return value;
+}
+
 bool isTrue(const std::string &value) {
-  return value == "1" || value == "true" || value == "yes";
+  const auto v = lowered(value);
+  if (v == "1" || v == "true" || v == "yes")
+    return true;
+  if (v == "0" || v == "false" || v == "no")
+    return false;
+  throw BadParameter("not true or false: " + value);
 }
 
 int searchTarget(const std::string &target) {
-  if (target == "original")
+  const auto t = lowered(target);
+  if (t == "main")
+    return SEARCH_IN_MAIN;
+  if (t == "original")
     return SEARCH_IN_ORIGINAL;
-  if (target == "jpm")
+  if (t == "jpm")
     return SEARCH_IN_JPM;
-  return SEARCH_IN_MAIN;
+  throw BadParameter("not main, original or jpm: " + target);
 }
 
-int number(const std::string &value) { return std::atoi(value.c_str()); }
+int number(const std::string &value) {
+  char *end = nullptr;
+  const long n = std::strtol(value.c_str(), &end, 10);
+  if (value.empty() || *end != '\0')
+    throw BadParameter("not a number: " + value);
+  return static_cast<int>(n);
+}
 
 // a choice without parameters
 Choice plain(int num, const char *title, std::function<void()> f) {
@@ -83,7 +110,8 @@ const std::vector<Choice> &choices() {
       plain(7, "number attachment htmls", [] { numberAttachmentHtmls(false); }),
       {8,
        "fix links from main",
-       {{"force update link (true/false)", "false"}},
+       // true: the commander always forced the update, though main passed false
+       {{"force update link (true/false)", "true"}},
        [](const Choice &c, const Args &a) {
          fixLinksFromMain(isTrue(c.param(a, 0)));
        }},
@@ -93,7 +121,9 @@ const std::vector<Choice> &choices() {
       {11,
        "reconstruct a story",
        {{"title", R"(尤二姐)"},
-        {"output file", "story2"},
+        // empty: reConstructStory's own default, the title plus GENERATED, so a
+        // new title does not overwrite story2
+        {"output file", ""},
         {"kind (main, original, attachment, jpm)", "main"},
         {"auto numbering (true/false)", "true"}},
        [](const Choice &c, const Args &a) {
@@ -133,13 +163,15 @@ const std::vector<Choice> &choices() {
             }),
       {16,
        "fix links from attachments",
-       {{"force update link (true/false)", "false"}},
+       // true: the commander always forced the update, though main passed false
+       {{"force update link (true/false)", "true"}},
        [](const Choice &c, const Args &a) {
          fixLinksFromAttachment(isTrue(c.param(a, 0)));
        }},
       {17,
        "fix links from JPM",
-       {{"force update link (true/false)", "false"}},
+       // true: the commander always forced the update, though main passed false
+       {{"force update link (true/false)", "true"}},
        [](const Choice &c, const Args &a) {
          fixLinksFromJPM(isTrue(c.param(a, 0)));
        }},
@@ -211,7 +243,12 @@ int main(int argc, char **argv) {
                 << " parameter(s), got " << args.size() << std::endl;
       return 2;
     }
-    choice.run(choice, args);
+    try {
+      choice.run(choice, args);
+    } catch (const BadParameter &e) {
+      std::cout << "choice " << num << ": " << e.what() << std::endl;
+      return 2;
+    }
     return 0;
   }
   FUNCTION_OUTPUT << "nothing gets executed." << endl;
