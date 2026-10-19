@@ -1,74 +1,145 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=GBK">
+# modern-Chinese-hlm
 
-<style><!--
-a {text-decoration:none}
-a:hover {color: blue;text-decoration:underline}
--->
+Tools for translating 《脂砚斋重评石头记》 (the first 80 chapters of 红楼梦) into modern
+Chinese: a C++ program that numbers the paragraphs of the chapter HTMLs, fixes and
+renders the links between them, searches them and rebuilds stories from them, and a
+web page to run it from a browser.
 
-</style>
+- **backend**: `src/`, the C++ program; `main()` in `src/translated.cpp` picks one of
+  its choices from the command line
+- **frontend**: `web/hlm_web.py`, a small web server that lists those choices, runs
+  them and shows their output
 
-</head>
+Both are built and run on Ubuntu.
 
-<body bgcolor="#D5D5D5" topmargin="0" leftmargin="0" marginwidth="0" marginheight="0" rightmargin="0" link="#009191" vlink="#009191">
+## Prerequisites
 
-<center></center>
+```bash
+sudo apt install g++ make libpoco-dev python3
+```
 
-<center>
-		<table border="0" cellspacing="1" width="80%" style="font-size: 12pt; font-family: 宋体; line-height:150%">
-			<tbody><tr>
-			</tr>
-			<tr>
-				<td height="50" style="font-size: 15pt; font-family: 黑体; letter-spacing:1" align="center">
-				翻译红楼梦</td>
-			</tr>
-			<tr>
-				<td align="center">
-<hr color="#FFFFFF">
-</td>
-</tr>
-<tr>
-<td>
-<br>
+The program links PocoFoundation, PocoJSON and PocoNet. The web page needs only the
+Python 3 standard library (3.7 or newer).
 
-　　本人对红楼梦理解浅薄，但是很久以来，渴望做一件事，就是翻译清代白话文版前78回《脂砚斋重评石头记》至现代白话文。想当初，曹雪芹花费十年心血，留后世一部巨著。现代科技发达，不仅有良好的编辑工具，而且github还提供了一个极成熟的版本控制工具。我相信可能只需要一到两年首版翻译版即可完成。<br>
-<br>这件事对很多文学高人实在是没有必要。但是与我却有些意思，不仅因为我对红楼梦有巨大兴趣，希望透过文字和作者本人成为知己，而且也希望能通过这种方式将红楼梦这本书交给亲爱的女儿。我一向认为，读通一本红楼梦，了解相关的人物和典故，可以完全取代现在中国的语文教育，一方面提高汉语理解、表达能力，也能在一定程度上了解中国的传统文化。<br>
+## The data
 
-<br>红楼梦本身文字优美，很多四字成语连成串，诗词歌赋遍布于华锦。但是毕竟语法习惯均和现代白话文有明显的区别，很多时候阅读起来造成了文字方面的障碍。特别是原文惜墨如金，省略了大量的主语和宾语。大家规矩的描写也进一步增加了这个困难。很多人不知道哪个奶奶是哪个人。愿意挑战难度的可以翻翻第二十七回：“怨不得你不懂，这是四五门子的话呢。”。或者第二十九回“凤姐儿笑道：“我们爷儿们不相干。他怎么常常的说我该积阴骘，迟了就短命呢！”
-”翻译的第一部分就是明确所有这些人名。毕竟我们读者不需要叫这个奶奶叫那个爷的。张冠李戴造成了大量的错误。<br>
-<br>另外一部分就是典故和人物。作者信手拈来，但是对我们却常常不知其意，直接跳过。大部分人看的红楼梦，即便是前80回而已，也是不完整的。加上本人也许本来就感性的很，造成了认识其中的人物故事非常的片面。从我梦想做曹雪芹的知己的角度，非常地为此而不自在。红楼梦是曹雪芹的红楼梦。这年头，红楼梦变成了张三的红楼梦，变成了李四的红楼梦，各个据为己有，曲解蹂躏，让人痛心。<br>
-<br>另外，作为脂砚斋的一大特色，文中有很多批语使用了典型的“向后引用”，说此处“伏”什么什么。这是当年一回一回手抄的时候，一个典型的商业手段，制造悬念。但是因为红楼梦没有成稿，这些伏笔却成为人们发挥无限想象力的祸患根源。而于我，大部分的这些伏笔，在已经成书的八十回里面都可以一一做实。将不必要的想象力回归，也是真正尊重和理解作者的当务之急。<br>
-<br>红楼梦过去了300年，我们现代的人很牛，牛到又是人性观，又是心理学的，还有破除迷信。很可惜，现代观看待红楼梦也只是张三李四任意发挥的一个重要组成部分。书中最最重要的梦、幻、神话都变成了“超现实”主义写法，让人唏嘘。<br>
-<br>
-另外一个目的就是还原人家当年写这个的角度。百善孝为先，万恶淫为首。作者明显是有这方面的基本观点。无论你现代人同意不同意，你必须认可。<br>
-<br>
-翻译伊始，兴趣盎然。故写了一些文字。等全稿完成，再重新概括心得体会，完成我写一本《我是怎么看红楼梦》的心愿。<br>
-<br>
-2016年10月于奥斯丁<br>
-</td></tr>
-			<tr>
-				<td>
-				<hr color="#FFFFFF"></td>
-			</tr>
-			<tr>
-				<td align="center"><a href="a00001.html">戚蓼生序</a>&nbsp;<a href="..\aindex.htm">回目录</a>&nbsp;<a href="a001.htm">第一回</a>&nbsp;</td>
-			</tr>
-		</tbody></table>
-		</center>
+Every path in the program is relative to the directory it runs in, which has to hold
+the HTMLs under `utf8HTML/`:
 
+| Directory | Holds |
+| --- | --- |
+| `utf8HTML/src/` | the main chapters, the input |
+| `utf8HTML/src/original/`, `JPM/`, `MDT/`, `XXJ/` | the original text, 金瓶梅 and the other inputs |
+| `utf8HTML/output/` and its `attachment/`, `original/`, `JPM/`, `MDT/`, `XXJ/` | what the program writes |
 
+`utf8HTML` is not in this repository. Run the program, or point the web page, at the
+directory that has it.
 
-<center><div align="center">
-	<table border="0" width="760" cellspacing="0" cellpadding="0" height="10">
-		<tbody><tr>
-			<td align="center"></td>
-		</tr>
-	</tbody></table>
-</div>
+## Build the backend
 
-</center>
-<div style="display:&quot;none&quot;"></div>
+**With Eclipse CDT**, as the project is set up (`.project`, `.cproject`): import the
+directory as an existing project and build the Debug configuration. The program is
+`debug/modern-Chinese-hlm`.
 
+**Without Eclipse**, the same thing from a shell, from the repository root:
 
+```bash
+mkdir -p debug
+g++ -std=c++14 -g -O0 -o debug/modern-Chinese-hlm src/*.cpp \
+    -lPocoFoundation -lPocoJSON -lPocoNet -pthread
+```
 
+`debug/` is ignored by git.
 
-</body></html>
+## Run the backend
+
+```bash
+cd <the directory holding utf8HTML>
+<repo>/debug/modern-Chinese-hlm --list           # every choice and its parameters
+<repo>/debug/modern-Chinese-hlm <choice> [parameter...]
+<repo>/debug/modern-Chinese-hlm                  # no choice: choice 0
+```
+
+Parameters are given in order. A parameter left out takes its default, and a choice
+given no parameters at all does what it always did, so `11` alone still makes both of
+its stories. An unknown choice, or more parameters than it takes, exits with 2.
+
+| Choice | Does | Parameters (default) |
+| --- | --- | --- |
+| 0 | try code under development | |
+| 1 | search a key | key (学名), target `main`/`original`/`jpm` (main), over specific object (false), output file |
+| 2 | validate main htmls | |
+| 3 | validate attachment htmls | |
+| 4 | number XXJ, MDT and JPM htmls | |
+| 5 | number original htmls | |
+| 6 | number main htmls | |
+| 7 | number attachment htmls | |
+| 8 | fix links from main | force update link (false) |
+| 9 | render body text | |
+| 10 | append reverse links for main | |
+| 11 | reconstruct a story | title (尤二姐), output file (story2), kind `main`/`original`/`attachment`/`jpm` (main), auto numbering (true); none: 尤二姐 and 小红遗帕 |
+| 12 | auto number a result story | story html file (story2), output html file (尤二姐) |
+| 13 | refresh body texts of main, original and JPM | |
+| 14 | refresh attachment body texts | |
+| 15 | generate content tables | |
+| 16 | fix links from attachments | force update link (false) |
+| 17 | fix links from JPM | force update link (false) |
+| 18 | regression test, then one specific test | specific test number (10) |
+| 19 | validate paragraph sizes for auto numbering JPM htmls | |
+| 20 | run a tool | tool number (10) |
+| 21 | remove personal viewpoints | |
+| 22 | fix GB2312 characters of XXJ | |
+
+`--list` prints the same, one choice per line, tab separated: the number, the title,
+then `name=default` for each parameter.
+
+```bash
+modern-Chinese-hlm 1 枕 main true          # search 枕 over the main text, per object
+modern-Chinese-hlm 1 邢夫人 original        # search the original text
+modern-Chinese-hlm 11 小红遗帕 story main false
+modern-Chinese-hlm 8 true                  # fix the links from main, forcing updates
+```
+
+## Run the frontend
+
+Build the backend first, then from the repository root:
+
+```bash
+python3 web/hlm_web.py --workdir <the directory holding utf8HTML>
+```
+
+and open <http://127.0.0.1:8080/>.
+
+| Option | Default |
+| --- | --- |
+| `--binary` | `debug/modern-Chinese-hlm` in this repository |
+| `--workdir` | the repository root; the program runs there, so it has to hold `utf8HTML` |
+| `--host` | `127.0.0.1` |
+| `--port` | `8080` |
+
+The page asks the program for its choices (`--list`), so it always shows what
+`main()` has:
+
+- **Choices**: each is a box to open, with a field per parameter filled with its
+  default. **run** starts the program with the choice and the fields as separate
+  arguments, never through a shell. Left as they are, the fields are not passed at
+  all, so the choice does what it does without parameters.
+- **Output**: printed into the page as the program writes it, then its exit code and
+  how long it took.
+- **One run at a time**: the choices rewrite the HTMLs, so a second run is refused
+  while one is going. Closing the page does not stop a run.
+- **utf8HTML**: the link at the top browses the HTMLs read only, to look at what a
+  run wrote. Nothing outside `utf8HTML` is served.
+
+It listens on 127.0.0.1 only. Anyone who can reach the page can rewrite the HTMLs, so
+give `--host 0.0.0.0` only on a network you trust.
+
+## Troubleshooting
+
+| Seen | Because |
+| --- | --- |
+| `... is not an executable; build the project first` | the backend is not built, or `--binary` points elsewhere |
+| `note: ... has no utf8HTML` | `--workdir` is not the directory with the HTMLs; the choices will find nothing |
+| the page shows no choices | a program built before `--list` existed, which runs choice 0 instead: rebuild it |
+| `cannot run ... --list` on the page | the program could not be started, or failed; the message says why |
+| `another run is in progress` | wait for the run shown at the top of the page to finish |
